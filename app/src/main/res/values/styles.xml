@@ -1,0 +1,393 @@
+<resources xmlns:http="http://schemas.android.com/apk/res-auto">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:navigationBarColor">@color/gray11</item>
+        <item name="android:statusBarColor">@color/gray11</item>
+        <item name="android:colorEdgeEffect">@color/gray80</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="splash_screen_color">@color/gray11</item>
+        <item name="splash_screen_text_color">@color/white34</item>
+    </style>
+
+    <style name="LightTheme" parent="AppTheme">
+        <item name="main_blocks_color">@color/black6</item>
+        <item name="next_level_color">@color/black6</item>
+        <item name="progress_bar_color">@color/black8</item>
+        <item name="primary_color">@color/black87</item>
+        <item name="blue_transparent_button_color">@color/blue10</item>
+        <item name="colorControlHighlight">@color/black6</item>
+        <item name="divider_color">@color/black8</item>
+        <item name="secondary_color">@color/black50</item>
+        <item name="page_background_color">@color/white</item>
+        <item name="navigation_color">@color/white80</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="task_variant_button">@color/black20</item>
+        <item name="edit_text_line_color">@color/black8</item>
+    </style>
+
+    <style name="DarkTheme" parent="AppTheme">
+        <item name="secondary_color">@color/white50</item>
+        <item name="primary_color">@color/white87</item>
+        <item name="progress_bar_color">@color/white12</item>
+        <item name="next_level_color">@color/white12</item>
+        <item name="android:statusBarColor">@color/gray11</item>
+        <item name="page_background_color">@color/gray11</item>
+        <item name="blue_transparent_button_color">@color/blue12</item>
+        <item name="main_blocks_color">@color/white8</item>
+        <item name="divider_color">@color/white10</item>
+        <item name="navigation_color">@color/gray11_80</item>
+        <item name="colorControlHighlight">@color/white8</item>
+        <item name="android:navigationBarColor">@color/gray11</item>
+        <item name="task_variant_button">@color/white24</item>
+        <item name="edit_text_line_color">@color/white10</item>
+    </style>
+
+    <!-- Fonts -->
+    <style name="Bold32" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="Bold28" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="Bold24" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Regular14" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Regular20" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Regular16_50" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?attr/secondary_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Regular18White" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/white87</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Regular18_87" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?attr/primary_color</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Regular12_50" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?attr/secondary_color</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Regular13_50" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?attr/secondary_color</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="Regular12_50_Selector" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/navigation_color</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Regular14_50" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?attr/secondary_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Regular16" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Regular16White87" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/white87</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Medium16" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Medium16White87" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/white87</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Medium16White" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Medium24" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Medium16_50" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">?attr/secondary_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Medium18" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+
+    <style name="Medium20" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Medium18White" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/white87</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Medium14Blue" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Medium16Blue" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Medium20Blue" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Regular16Red" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Regular16Green" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ErrorText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Buttons -->
+    <style name="Button" parent="android:Widget.TextView">
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:background">@drawable/button_blue_8</item>
+        <item name="android:textAppearance">@style/Medium16White87</item>
+        <item name="android:textColor">@color/blue_button_8_text_color</item>
+    </style>
+
+    <style name="GreenButton" parent="android:Widget.TextView">
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:background">@drawable/button_green_8</item>
+        <item name="android:textAppearance">@style/Medium16White87</item>
+        <item name="android:textColor">@color/blue_button_8_text_color</item>
+    </style>
+
+    <style name="WithGoogleButton" parent="android:Widget.TextView">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:drawableStart">@drawable/ic_google</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:drawablePadding">-36dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:background">@drawable/button_blue_8</item>
+        <item name="android:textAppearance">@style/Medium16White87</item>
+        <item name="android:textColor">@color/blue_button_8_text_color</item>
+    </style>
+
+    <style name="ExerciseVariant" parent="android:Widget.TextView">
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:background">@drawable/exercise_variant</item>
+        <item name="android:textAppearance">@style/Medium16</item>
+    </style>
+
+    <style name="Button12" parent="android:Widget.TextView">
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:background">@drawable/button_blue_press_transparent</item>
+        <item name="android:textAppearance">@style/Medium16Blue</item>
+    </style>
+
+    <style name="ShareButton" parent="Button12">
+        <item name="android:drawableStart">@drawable/ic_share_blue</item>
+        <item name="android:drawablePadding">-40dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:text">@string/share</item>
+    </style>
+
+    <style name="TextButton" parent="android:Widget.TextView">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextButton16" parent="TextButton">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextButton14" parent="TextButton">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Level" parent="android:Widget.TextView">
+        <item name="android:paddingTop">7dp</item>
+        <item name="android:paddingBottom">7dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/level_drawable</item>
+        <item name="android:textAppearance">@style/Regular12_50</item>
+        <item name="android:textColor">@color/level_item_text_color</item>
+    </style>
+
+    <style name="UserCurrentLevel" parent="android:Widget.TextView">
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:background">@drawable/oval_blue</item>
+        <item name="android:textAppearance">@style/Medium16White87</item>
+    </style>
+
+    <style name="UserNextLevel" parent="android:Widget.TextView">
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:background">@drawable/rectangle_next_level</item>
+        <item name="android:textAppearance">@style/Medium16</item>
+    </style>
+    <!-- EditTexts -->
+    <style name="EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColorHint">?attr/secondary_color</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:background">@drawable/edit_text_background</item>
+    </style>
+
+    <style name="CharacterEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:background">@drawable/edit_text_background</item>
+    </style>
+
+    <style name="CustomProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:max">1000</item>
+        <item name="android:progressDrawable">@drawable/progress_bar</item>
+    </style>
+
+    <style name="CustomCircleProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:max">1000</item>
+        <item name="android:scaleX">1.33</item>
+        <item name="android:scaleY">1.33</item>
+        <item name="android:progressDrawable">@drawable/progress_bar_circle</item>
+    </style>
+
+    <style name="FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="rippleColor">@android:color/transparent</item>
+        <item name="backgroundTint">@color/blue</item>
+        <item name="tint">@color/white</item>
+        <item name="elevation">0dp</item>
+        <item name="pressedTranslationZ">0dp</item>
+    </style>
+
+    <style name="TaskCardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">@dimen/defRadius</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="cardBackgroundColor">?page_background_color</item>
+        <item name="rippleColor">?colorControlHighlight</item>
+        <item name="strokeColor">?attr/divider_color</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="android:colorEdgeEffect">@color/gray80</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_sheet_rectangle</item>
+    </style>
+
+    <style name="BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:foreground">?selectableItemBackground</item>
+        <item name="itemRippleColor">?colorControlHighlight</item>
+        <item name="menu">@menu/bottom_navigation_bar_menu</item>
+        <item name="itemIconTint">@color/navigation_color</item>
+        <item name="elevation">0dp</item>
+        <item name="itemTextColor">@color/navigation_color</item>
+    </style>
+
+</resources>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal">
+
+    <include
+        layout="@layout/toolbar_layout"/>
+
+    <ScrollView
+        android:id="@+id/exercisesDetailedStatLayoutScrollView"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:clipToPadding="false">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/exercisesDetailedStatLayoutLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_marginEnd="@dimen/defaultRLMargin"
+            android:background="@drawable/main_blocks_rectangle"
+            android:padding="@dimen/defaultRLMargin">
+
+            <TextView
+                android:id="@+id/exercisesDetailedStatLayoutXPTitle"
+                style="@style/Regular16_50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detailed_stat_title1"/>
+
+            <TextView
+                android:id="@+id/exercisesDetailedStatLayoutXPSubtitle"
+                style="@style/Medium18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"/>
+
+            <TextView
+                android:id="@+id/exercisesDetailedStatLayoutTimeTitle"
+                style="@style/Regular16_50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detailed_stat_title2"
+                android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:id="@+id/exercisesDetailedStatLayoutTimeSubtitle"
+                style="@style/Medium18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"/>
+
+            <TextView
+                android:id="@+id/exercisesDetailedStatLayoutTrueAnswersTitle"
+                style="@style/Regular16Green"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detailed_stat_title3"
+                android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:id="@+id/exercisesDetailedStatLayoutTrueAnswersSubtitle"
+                style="@style/Medium18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"/>
+
+            <TextView
+                android:id="@+id/exercisesDetailedStatLayoutFalseAnswersTitle"
+                style="@style/Regular16Red"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detailed_stat_title4"
+                android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:id="@+id/exercisesDetailedStatLayoutFalseAnswersSubtitle"
+                style="@style/Medium18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/exercisesDetailedStatLayoutShareButton"
+            style="@style/ShareButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_marginEnd="@dimen/defaultRLMargin"
+            android:text="@string/share" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

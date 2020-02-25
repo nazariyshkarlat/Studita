@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/authorizationConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/defaultRLMargin"
+    android:layout_marginEnd="@dimen/defaultRLMargin">
+
+    <LinearLayout
+        android:id="@+id/authorizationCenterLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/authorizationBottomLinearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <com.example.studita.presentation.views.ErrorEditText
+            android:id="@+id/authorizationEmailEditText"
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_message_50"
+            android:drawablePadding="12dp"
+            android:hint="@string/authorization_email_hint"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:singleLine="true" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <com.example.studita.presentation.views.ErrorEditText
+                android:id="@+id/authorizationPasswordEditText"
+                style="@style/EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_lock_50"
+                android:drawablePadding="12dp"
+                android:hint="@string/authorization_password_hint"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+
+            <ImageView
+                android:id="@+id/authorizationVisible"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|end"
+                android:background="@drawable/circle_background_12dp"
+                android:padding="12dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/eye_back_anim" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/authorizationBottomLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/authorizationCenterLinearLayout"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <com.example.studita.presentation.views.PressTextView
+            android:id="@+id/authorizationLogInButton"
+            style="@style/Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/log_in"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.example.studita.presentation.views.PressTextView
+            android:id="@+id/authorizationForgotPassword"
+            style="@style/TextButton16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="@string/forgot_password" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/authorizationErrorText"
+        style="@style/ErrorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:visibility="visible"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/authorizationSignUpButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/authorizationBottomLinearLayout"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.example.studita.presentation.views.PressTextView
+        android:id="@+id/authorizationSignUpButton"
+        style="@style/GreenButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/defaultRLMargin"
+        android:text="@string/create_new_account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/authorizationBottomLinearLayout"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tabIndicatorLRPadding">4dp</dimen>
+    <dimen name="tabIndicatorTBPadding">8dp</dimen>
+    <dimen name="tabIndicatorCircleSize">8dp</dimen>
+    <dimen name="buttonBottomMargin">24dp</dimen>
+    <dimen name="buttonRLMargin">16dp</dimen>
+    <dimen name="tabIndicatorBottomMargin">16dp</dimen>
+    <dimen name="defaultRLMargin">16dp</dimen>
+    <dimen name="textItemMinRLMargin">36dp</dimen>
+    <dimen name="titleSubtitleMargin">16dp</dimen>
+    <dimen name="defRadius">8dp</dimen>
+    <dimen name="appBarDividerHeight">1dp</dimen>
+    <dimen name="dialogAlertMargin">48dp</dimen>
+    <dimen name="splashScreenTextMarginBottom">108dp</dimen>
+</resources>

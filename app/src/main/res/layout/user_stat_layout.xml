@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <include
+        layout="@layout/toolbar_layout"/>
+
+    <ScrollView
+        android:id="@+id/userStatLayoutScrollView"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.example.studita.presentation.views.CustomTabLayout
+                android:id="@+id/userStatLayoutTabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.example.studita.presentation.views.EnhancedWrapContentViewPager
+                android:id="@+id/userStatLayoutViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/userStatLayoutShareButton"
+                style="@style/ShareButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="@dimen/defaultRLMargin"
+                android:layout_marginEnd="@dimen/defaultRLMargin" />
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="20dp"
+    android:paddingStart="16dp"
+    android:paddingBottom="12dp"
+    android:paddingEnd="6dp">
+
+    <TextView
+        android:id="@+id/exercisesCloseDialogAlertTitle"
+        style="@style/Medium18"
+        android:layout_marginEnd="10dp"
+        android:text="@string/exercises_close_dialog_alert_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/exercisesCloseDialogAlertSubtitle"
+        style="@style/Regular16_50"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/exercises_close_dialog_alert_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:layout_gravity="end">
+
+        <com.example.studita.presentation.views.PressTextView
+            android:id="@+id/exercisesCloseDialogLeftButton"
+            style="@style/TextButton16"
+            android:text="@string/exercises_close_dialog_alert_left_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.example.studita.presentation.views.PressTextView
+            android:id="@+id/exercisesCloseDialogRightButton"
+            style="@style/TextButton16"
+            android:text="@string/exercises_close_dialog_alert_right_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

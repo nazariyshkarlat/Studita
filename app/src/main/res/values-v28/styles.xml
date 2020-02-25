@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:colorEdgeEffect">@color/gray80</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="splash_screen_color">@color/white</item>
+        <item name="splash_screen_text_color">@color/black34</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>

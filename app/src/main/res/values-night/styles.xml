@@ -1,0 +1,13 @@
+<resources xmlns:http="http://schemas.android.com/apk/res-auto">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:navigationBarColor">@color/gray11</item>
+        <item name="android:statusBarColor">@color/gray11</item>
+        <item name="android:colorEdgeEffect">@color/gray80</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="splash_screen_color">@color/gray11</item>
+        <item name="splash_screen_text_color">@color/white34</item>
+    </style>
+</resources>

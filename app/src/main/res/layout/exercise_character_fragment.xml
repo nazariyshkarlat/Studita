@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/defaultRLMargin"
+    android:paddingEnd="@dimen/defaultRLMargin"
+    android:gravity="center"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/exerciseCharacterFragmentLeftTextView"
+            style="@style/Bold32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"/>
+
+        <EditText
+            android:id="@+id/exerciseCharacterFragmentEditText"
+            android:textAlignment="center"
+            style="@style/CharacterEditText"
+            android:textAppearance="@style/Bold32"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:maxLength="1"
+            android:digits="+-*:÷×/"/>
+
+        <TextView
+            android:id="@+id/exerciseCharacterFragmentRightTextView"
+            style="@style/Bold32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/exerciseCharacterFragmentBottomTextView"
+        style="@style/Regular16_50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:textAlignment="center"/>
+
+
+</LinearLayout>

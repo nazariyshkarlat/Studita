@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleProgress">
+        <attr name="circle_progress" format="integer"/>
+        <attr name="circle_unfinished_color" format="color"/>
+        <attr name="circle_finished_color" format="color"/>
+        <attr name="rightLeftPadding" format="dimension"/>
+        <attr name="topBottomPadding" format="dimension"/>
+        <attr name="timerDuration" format="float"/>
+    </declare-styleable>
+    <declare-styleable name="ErrorEditText">
+        <attr name="state_error" format="boolean" />
+    </declare-styleable>
+    <attr name="page_background_color" format="reference"/>
+    <attr name="navigation_color" format="reference"/>
+    <attr name="divider_color" format="reference"/>
+    <attr name="blue_transparent_button_color" format="reference"/>
+    <attr name="secondary_color" format="reference"/>
+    <attr name="primary_color" format="reference"/>
+    <attr name="progress_bar_color" format="reference"/>
+    <attr name="next_level_color" format="reference"/>
+    <attr name="edit_text_line_color" format="reference"/>
+    <attr name="main_blocks_color" format="reference"/>
+    <attr name="splash_screen_color" format="reference"/>
+    <attr name="splash_screen_text_color" format="reference"/>
+    <attr name="task_variant_button" format="reference"/>
+</resources>

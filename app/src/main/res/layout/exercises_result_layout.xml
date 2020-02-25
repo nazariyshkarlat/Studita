@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/exercisesResultLayoutScrollView"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:clipToPadding="false"
+    android:layout_gravity="center"
+    android:gravity="center">
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/exercisesResultLayoutLevelTextView"
+            style="@style/Medium18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/level"/>
+
+        <TextView
+            android:id="@+id/exercisesResultLayoutCurrentLevel"
+            style="@style/Regular14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="9"/>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <TextView
+                android:id="@+id/exercisesResultLayoutProgressBarText"
+                style="@style/Medium20Blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="+100 XP"/>
+
+            <com.example.studita.presentation.views.CustomProgressBar
+                android:id="@+id/exercisesResultLayoutProgressBar"
+                style="@style/CustomCircleProgressBar"
+                android:layout_width="162dp"
+                android:layout_height="162dp"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/exercisesResultLayoutNextLevel"
+            style="@style/Regular14_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="10"/>
+
+        <TextView
+           android:id="@+id/exercisesResultLayoutGoodJob"
+            style="@style/Bold24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/good_job"/>
+
+        <TextView
+            android:id="@+id/exercisesResultLayoutAnswersPercent"
+            style="@style/Regular16_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"/>
+
+    </LinearLayout>
+</ScrollView>

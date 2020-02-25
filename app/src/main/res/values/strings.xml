@@ -1,0 +1,79 @@
+<!DOCTYPE resources [
+    <!ENTITY app_name "Studita">]>
+<resources>
+    <string name="app_name">&app_name;</string>
+    <string name="no_connection">No connection to the server!</string>
+    <string name="server_unavailable">Server is unavailable!</string>
+    <string name="with_google">Продолжить с Google</string>
+    <string name="use_email">Использовать эл. почту</string>
+    <string name="log_in">Войти</string>
+    <string name="main_menu_authorization_method">Выберите способ авторизации</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="create_new_account">Создать новый аккаунт</string>
+    <string name="false_password">Пароль введён неверно</string>
+    <string name="to_short_password">Длина пароля меньше 6-и символов</string>
+    <string name="user_already_exists">Данный аккаунт уже существует</string>
+    <string name="user_already_exists_button_text">Войти в аккаунт</string>
+    <string name="incorrect_mail">Проверьте правильность ввода эл. почты</string>
+    <string name="incorrect_password">Пароль неверный, проверьте правильность ввода</string>
+    <string name="no_user_with_mail">Данный аккаунт не найден, проверьте правильность эл. почты</string>
+    <string name="account_already_exists">Введите электронную почту</string>
+    <string name="server_error">На сервере произошла ошибка</string>
+    <string name="sign_up_success">Аккаунт успешно зарегистрирован!</string>
+    <string name="log_in_success">Добро пожаловать!</string>
+    <string name="authorization_email_hint">Электронная почта</string>
+    <string name="authorization_password_hint">Пароль</string>
+    <string name="navigation_bar_first">Обучение</string>
+    <string name="navigation_bar_second">Состязания</string>
+    <string name="navigation_bar_third">Ачивки</string>
+    <string name="settings">Настройки</string>
+    <string name="help">Помощь</string>
+    <string name="learning">Обучение</string>
+    <string name="chapter_progress">Прогресс: %1$d задания из %2$d</string>
+    <string name="chapter_completed_progress">Прогресс: Завершено</string>
+    <string name="tasks_toolbar_title">Задания</string>
+    <string name="level_number">%1$d Уровень</string>
+    <string name="level">Уровень</string>
+    <string name="true_answer">Вы ответили верно!</string>
+    <string name="false_answer">Правильный ответ:</string>
+    <string name="exercise_type_3_false_snackbar_title">Ваш результат:</string>
+    <string name="true_variant">Правда</string>
+    <string name="false_variant">Неправда</string>
+    <string name="check">Проверить</string>
+    <string name="authorization">Авторизация</string>
+    <string name="exercises_close_dialog_alert_title">Покинуть урок?</string>
+    <string name="exercises_close_dialog_alert_subtitle">Весь прогресс будет утерян</string>
+    <string name="exercises_close_dialog_alert_left_button">Отменить</string>
+    <string name="exercises_close_dialog_alert_right_button">Покинуть</string>
+    <string name="exercise_type_1_title">%1$s=%2$s</string>
+    <string name="exercise_type_2_3_title">%1$s=?</string>
+    <string name="exercise_type_4_right_text">%1$s=%2$s</string>
+    <string name="exercise_type_6_result">=%1$s</string>
+    <string name="exercise_type_5_title">%1$s … %2$s=%3$s</string>
+    <string name="exercise_type_7_title">%1$s%2$s … =%3$s</string>
+    <string name="exercise_type_3_hint">Введите правильный ответ</string>
+    <string name="exercise_type_8_9_hint">Сколько %1$s вы видите?</string>
+    <string name="exercise_type_4_bottom_text">Вставьте пропущенный символ</string>
+    <string name="exercise_type_6_bottom_text">Введите любое уравнение, чтобы получился данный результат</string>
+    <string name="next">Далее</string>
+    <string name="good_job">Хорошая работа!</string>
+    <string name="complete">Завершить</string>
+    <string name="stat">Статистика</string>
+    <string name="detailed_stat">Подробная статистика</string>
+    <string name="detailed_stat_title1">Получено опыта</string>
+    <string name="detailed_stat_title2">Затраченное время</string>
+    <string name="detailed_stat_time">Затраченное время</string>
+    <string name="detailed_stat_title3">Правильных ответов</string>
+    <string name="detailed_stat_title4">Совершено ошибок</string>
+    <string name="user_stat_title1">Получено опыта</string>
+    <string name="user_stat_title2">Потрачено времени</string>
+    <string name="user_stat_title3">Пройдено уроков</string>
+    <string name="user_stat_title4">Количество тренировок</string>
+    <string name="user_stat_title5">Выполнено ачивок</string>
+    <string name="answers_percent">%1$s%% правильных ответов</string>
+    <string name="share">Поделиться</string>
+    <string name="division_by_0">Деление на ноль невозможно</string>
+    <string name="hours">ч</string>
+    <string name="minutes">мин</string>
+    <string name="seconds">сек</string>
+</resources>

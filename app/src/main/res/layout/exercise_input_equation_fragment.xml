@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/defaultRLMargin"
+    android:paddingEnd="@dimen/defaultRLMargin"
+    android:gravity="center"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingStart="@dimen/defaultRLMargin"
+        android:paddingEnd="@dimen/defaultRLMargin">
+
+        <EditText
+            android:id="@+id/exerciseInputEquationFragmentEditText"
+            android:textAlignment="center"
+            style="@style/CharacterEditText"
+            android:textAppearance="@style/Bold32"
+            android:minWidth="106dp"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:digits="0123456789+-*:÷×/" />
+
+        <TextView
+            android:id="@+id/exerciseInputEquationFragmentResultTextView"
+            style="@style/Bold32"
+            android:layout_weight="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/exerciseInputEquationFragmentBottomTextView"
+        style="@style/Regular16_50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="32dp"
+        android:textAlignment="center"/>
+
+
+</LinearLayout>
