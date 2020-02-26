@@ -24,8 +24,8 @@
 
         <EditText
             android:id="@+id/exerciseCharacterFragmentEditText"
-            android:textAlignment="center"
             style="@style/CharacterEditText"
+            android:textAlignment="center"
             android:textAppearance="@style/Bold32"
             android:layout_width="32dp"
             android:layout_height="wrap_content"

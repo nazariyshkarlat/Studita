@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/defaultRLMargin"
         android:layout_marginEnd="@dimen/defaultRLMargin"
-        android:layout_marginBottom="@dimen/defaultRLMargin"
+        android:layout_marginBottom="16dp"
         android:text="@string/check"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

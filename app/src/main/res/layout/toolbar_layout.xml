@@ -10,7 +10,7 @@
         android:id="@+id/toolbarLayoutBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="@dimen/defaultRLMargin"
         android:background="@drawable/circle_background_16dp"
         app:srcCompat="@drawable/ic_arrow_back" />
 

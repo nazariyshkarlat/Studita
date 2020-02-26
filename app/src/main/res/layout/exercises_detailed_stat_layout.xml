@@ -28,7 +28,7 @@
             android:layout_marginStart="@dimen/defaultRLMargin"
             android:layout_marginEnd="@dimen/defaultRLMargin"
             android:background="@drawable/main_blocks_rectangle"
-            android:padding="@dimen/defaultRLMargin">
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/exercisesDetailedStatLayoutXPTitle"
