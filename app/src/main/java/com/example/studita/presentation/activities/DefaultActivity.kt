@@ -24,11 +24,7 @@ open class DefaultActivity : AppCompatActivity(), HomeFragment.OnThemeChangeList
         if(themeIndex == -1)
             themeIndex = 0
         setTheme(themes[themeIndex])
-        val typedValue = TypedValue()
-        val theme = this.theme
-        theme.resolveAttribute(R.attr.page_background_color, typedValue, true)
-        @ColorInt val color = typedValue.data
-        window.decorView.setBackgroundColor(color)
+        window.setBackgroundDrawable(resources.getDrawable(R.drawable.page_background, theme))
         super.onCreate(savedInstanceState)
     }
 
