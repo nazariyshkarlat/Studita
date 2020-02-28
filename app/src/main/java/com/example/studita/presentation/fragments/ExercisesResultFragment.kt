@@ -37,8 +37,8 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
         val trueAnswers : Int? = arguments?.getInt("TRUE_ANSWERS")
         percent?.let{
             Handler().postDelayed( {
-                exercisesResultLayoutProgressBar.animateProgress(percent, duration = 1500L)
-            }, 200)
+                exercisesResultLayoutProgressBar.animateProgress(percent, duration = resources.getInteger(R.integer.exercises_progress_XP_duration).toLong())
+            }, resources.getInteger(R.integer.exercises_progress_XP_delay).toLong())
         }
         trueAnswers?.let{
             exercisesResultLayoutAnswersPercent.text = resources.getString(R.string.answers_percent, (it*10).toString())

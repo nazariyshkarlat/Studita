@@ -34,7 +34,7 @@
 
     <com.example.studita.presentation.views.PressTextView
         android:id="@+id/exerciseLayoutButton"
-        style="@style/Button"
+        style="@style/TransitionButton"
         android:enabled="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

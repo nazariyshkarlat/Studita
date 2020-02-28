@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -97,8 +97,9 @@ class MainFragment : BaseFragment(R.layout.main_layout){
         })
 
         mainLayoutFAB.onViewCreated {
+            val params = mainLayoutFAB.layoutParams as RelativeLayout.LayoutParams
             transValue =
-                mainLayoutFAB.height.toFloat() + mainLayoutFAB.marginBottom + bottomNavigationView.height
+                mainLayoutFAB.height.toFloat() + params.bottomMargin + bottomNavigationView.height
         }
 
         if(savedInstanceState != null){

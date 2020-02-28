@@ -60,7 +60,6 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
         changeLayoutIfScrollable()
 
         exercisesDetailedStatLayoutShareButton.setOnClickListener {
-            activity?.shareImg(exercisesDetailedStatLayoutLinearLayout)
         }
 
     }

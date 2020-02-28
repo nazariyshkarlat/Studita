@@ -29,7 +29,6 @@ class UserStatFragment : NavigatableFragment(R.layout.user_stat_layout), ViewTre
         }
 
         userStatLayoutShareButton.setOnClickListener {
-            activity?.shareImg((userStatLayoutViewPager.getChildAt(0) as FrameLayout).getChildAt(0))
         }
 
     }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="snackbar_anim_duration">300</integer>
+    <integer name="button_transition_duration">130</integer>
+    <integer name="exercises_progress_XP_delay">200</integer>
+    <integer name="exercises_progress_XP_duration">1500</integer>
+</resources>

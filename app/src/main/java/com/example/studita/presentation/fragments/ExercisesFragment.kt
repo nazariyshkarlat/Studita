@@ -1,15 +1,14 @@
 package com.example.studita.presentation.fragments
 
-import android.animation.Animator
-import android.animation.AnimatorInflater
+import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.OneShotPreDrawListener
-import androidx.core.view.marginBottom
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -80,6 +79,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             (activity as AppCompatActivity).onBackPressed()
         }
 
+        exerciseBottomSnackbarIcon.setOnClickListener {  }
+
         setSnackbarTranslationY()
     }
 
@@ -107,15 +108,14 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         formSnackBarView(exerciseUiModel, exercisesResponseData.exerciseResult, exercisesResponseData.description)
 
         exerciseLayoutSnackbar
-        exerciseLayoutSnackbar.animate().translationY(0F)
-            .setInterpolator(FastOutSlowInInterpolator()).start()
+        exerciseLayoutSnackbar.animate().translationY(0F).setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong()).setInterpolator(FastOutSlowInInterpolator()).start()
 
         changeButton(true)
     }
 
     private fun hideSnackBar(){
         if (exerciseLayoutFrameLayout.translationY != 0F)
-            exerciseLayoutFrameLayout.animate().translationY(0F).setInterpolator(
+            exerciseLayoutFrameLayout.animate().translationY(0F).setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong()).setInterpolator(
                 FastOutSlowInInterpolator()
             ).start()
 
@@ -127,12 +127,14 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
 
     private fun setSnackbarTranslationY(){
         OneShotPreDrawListener.add(exerciseLayoutButton){
+            val buttonParams =
+                exerciseLayoutButton.layoutParams as ConstraintLayout.LayoutParams
             val snackbarLinearLayoutBottomMargin =
-                exerciseLayoutButton.height + exerciseLayoutButton.marginBottom
-            val params =
-                exerciseBottomSnackbarLinearLayout.layoutParams as ConstraintLayout.LayoutParams
-            params.bottomMargin = snackbarLinearLayoutBottomMargin
-            exerciseBottomSnackbarLinearLayout.layoutParams = params
+                exerciseLayoutButton.height + buttonParams.bottomMargin
+            val snackBarParams =
+                exerciseBottomSnackbarLinearLayout.layoutParams as RelativeLayout.LayoutParams
+            snackBarParams.bottomMargin = snackbarLinearLayoutBottomMargin
+            exerciseBottomSnackbarLinearLayout.layoutParams = snackBarParams
             exerciseLayoutSnackbar.translationY =
                 exerciseLayoutSnackbar.height + snackbarLinearLayoutBottomMargin.toFloat()
             exerciseLayoutSnackbar.visibility = View.VISIBLE
@@ -168,11 +170,11 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
     private fun changeButton(onSnackbarShow: Boolean){
         view?.let {
             Handler().postDelayed({
+                val drawable = it.exerciseLayoutButton.background as TransitionDrawable
                 if (onSnackbarShow) {
                     it.exerciseLayoutButton.setTextColor(
                         ContextCompat.getColor(it.context, R.color.blue))
-                    it.exerciseLayoutButton.background =
-                        ContextCompat.getDrawable(it.context, R.drawable.button_white_8)
+                    drawable.startTransition(resources.getInteger(R.integer.button_transition_duration))
                     it.exerciseLayoutButton.text = resources.getString(R.string.next)
                     it.exerciseLayoutButton.setOnClickListener {
                         hideSnackBar()
@@ -187,10 +189,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                             R.color.blue_button_8_text_color
                         )
                     )
-                    it.exerciseLayoutButton.background = ContextCompat.getDrawable(
-                        exerciseLayoutButton.context,
-                        R.drawable.button_blue_8
-                    )
+                    drawable.resetTransition()
                     it.exerciseLayoutButton.text = resources.getString(R.string.check)
                 }
             }, buttonChangeDelay)
