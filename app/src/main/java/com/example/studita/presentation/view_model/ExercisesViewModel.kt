@@ -68,7 +68,7 @@ class ExercisesViewModel : ViewModel(){
                 is ExercisesStatus.Success -> {
                     exercisesState.postValue(true)
                     results = ExercisesUiModelMapper()
-                        .map(status.result)
+                        .map(status.result.exercises)
                     }
             }
         }

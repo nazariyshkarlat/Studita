@@ -41,7 +41,7 @@ sealed class ExercisesStatus{
     object ServiceUnavailable : ExercisesStatus()
     object NoConnection : ExercisesStatus()
     object NoChapterPartFound: ExercisesStatus()
-    data class Success(val result: List<ExerciseData>): ExercisesStatus()
+    data class Success(val result: ExercisesResponseData): ExercisesStatus()
 }
 
 sealed class ExerciseResultStatus{

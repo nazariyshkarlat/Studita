@@ -2,6 +2,8 @@ package com.example.studita.data.repository.datasource.exercises
 
 import com.example.studita.data.entity.exercise.ExerciseDeserializer
 import com.example.studita.data.entity.exercise.ExerciseEntity
+import com.example.studita.data.entity.exercise.ExercisesRawResponse
+import com.example.studita.data.entity.exercise.ExercisesResponse
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.data.net.ExercisesService
 import com.example.studita.domain.exception.NetworkConnectionException
@@ -26,14 +28,15 @@ class CloudExercisesDataStore(
         type = object : TypeToken<List<ExerciseEntity>>() {}.type
     }
 
-    override suspend fun getExercises(chapterPartNumber: Int): Pair<Int, List<ExerciseEntity>> =
+    override suspend fun getExercises(chapterPartNumber: Int): Pair<Int, ExercisesResponse> =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         } else {
             val exercises: List<ExerciseEntity>
             val exercisesAsync = exercisesService.getExercisesAsync(chapterPartNumber)
             val result = exercisesAsync.await()
-            exercises = exercisesGson.fromJson(result.body()?.string(), type)
-            result.code() to exercises
+            val body = result.body()!!
+            exercises = exercisesGson.fromJson(body.exercisesRaw.toString(), type)
+            result.code() to ExercisesResponse(body.exercisesStartScreen, body.exercisesDescription, exercises)
         }
 }

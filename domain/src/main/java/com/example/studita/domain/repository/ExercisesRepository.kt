@@ -6,6 +6,6 @@ import com.example.studita.domain.entity.exercise.ExercisesResponseData
 
 interface ExercisesRepository {
 
-    suspend fun getExercises(chapterPartNumber: Int): Pair<Int, List<ExerciseData>>
+    suspend fun getExercises(chapterPartNumber: Int): Pair<Int, ExercisesResponseData>
 
 }
