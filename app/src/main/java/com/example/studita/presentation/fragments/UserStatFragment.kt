@@ -18,7 +18,7 @@ class UserStatFragment : NavigatableFragment(R.layout.user_stat_layout), ViewTre
 
         userStatLayoutTabs.setItems(listOf("Сегодня", "Вчера", "Неделя", "Месяц"))
 
-        fragmentManager?.let { userStatLayoutTabs.syncWithViewPager(userStatLayoutViewPager, it) }
+        userStatLayoutTabs.syncWithViewPager(userStatLayoutViewPager, childFragmentManager)
 
         userStatLayoutScrollView.viewTreeObserver
             .addOnScrollChangedListener(this)
