@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.toolbar_layout.*
 class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_detailed_stat_layout){
 
     var exercisesViewModel: ExercisesViewModel? = null
-    var exercisesEndFragmentViewModel: ExercisesEndFragmentViewModel? = null
+    private var exercisesEndFragmentViewModel: ExercisesEndFragmentViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

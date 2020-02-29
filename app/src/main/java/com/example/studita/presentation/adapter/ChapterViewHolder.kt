@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
+import com.example.studita.presentation.extensions.createSpannableString
 import com.example.studita.presentation.model.LevelUiModel
 import com.example.studita.presentation.fragments.ChapterPartsBottomSheetFragment
 import com.example.studita.presentation.view_model.ChapterPartsViewModel
@@ -24,14 +25,7 @@ class ChapterViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelChapter
                 0,
                 chapter.tasksCount
             )
-            val mediumWord = SpannableString(text.substring(0, text.indexOf(" ")))
-            mediumWord.setSpan(
-                CustomTypefaceSpan(
-                    " ",
-                    ResourcesCompat.getFont(context, R.font.roboto_medium)
-                ), 0, mediumWord.length, 0
-            )
-            builder.append(mediumWord)
+            builder.append(text.substring(0, text.indexOf(" ")).createSpannableString(typeFace = ResourcesCompat.getFont(context, R.font.roboto_medium)))
             builder.append(text.substring(text.indexOf(" ")))
             return builder
         }

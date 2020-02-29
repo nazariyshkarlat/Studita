@@ -4,7 +4,9 @@ import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -14,10 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
-import com.example.studita.presentation.extensions.addFragment
-import com.example.studita.presentation.extensions.animateProgress
-import com.example.studita.presentation.extensions.navigateTo
-import com.example.studita.presentation.extensions.replaceWithAnim
+import com.example.studita.presentation.extensions.*
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
@@ -25,9 +24,10 @@ import kotlinx.android.synthetic.main.exercise_bottom_snackbar.*
 import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.android.synthetic.main.exercise_layout.view.*
 import kotlinx.android.synthetic.main.exercise_toolbar.*
+import kotlinx.android.synthetic.main.exercises_detailed_stat_layout.*
 
 
-class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
+class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescriptionFragment.OnExercisesDescriptionFragmentCreatedListener{
 
     private val buttonChangeDelay = 80L
     var exercisesViewModel: ExercisesViewModel? = null
@@ -41,7 +41,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         exercisesViewModel?.let{viewModel ->
             viewModel.navigationState.observe(viewLifecycleOwner, Observer{ fragment->
                 when(fragment.first){
-                    ExercisesViewModel.ExercisesNavigationState.FIRST -> (activity as AppCompatActivity).addFragment(fragment.second, R.id.exerciseLayoutFrameLayout)
+                    ExercisesViewModel.ExercisesNavigationState.FIRST -> (activity as AppCompatActivity).navigateTo(fragment.second, R.id.exerciseLayoutFrameLayout)
                     ExercisesViewModel.ExercisesNavigationState.REPLACE -> (activity as AppCompatActivity).replaceWithAnim(fragment.second, R.id.exerciseLayoutFrameLayout, R.animator.slide_in_left, R.animator.slide_out_right)
                 }
                 exerciseLayoutButton.setOnClickListener {
@@ -67,13 +67,19 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                 })
             })
 
-            if(savedInstanceState == null)
-                viewModel.initFragment()
-
             exerciseLayoutButton.setOnClickListener {
-                viewModel.checkExerciseResult()
+                initDescription()
+                exerciseLayoutButton.setOnClickListener{
+                    startExercises()
+                    exerciseLayoutButton.setOnClickListener {
+                        viewModel.checkExerciseResult()
+                    }
+                }
             }
         }
+
+        if(savedInstanceState == null)
+            (activity as AppCompatActivity).addFragment(ExercisesStartScreenFragment(), R.id.exerciseLayoutFrameLayout)
 
         exerciseToolbarCloseButton.setOnClickListener {
             (activity as AppCompatActivity).onBackPressed()
@@ -82,6 +88,14 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         exerciseBottomSnackbarIcon.setOnClickListener {  }
 
         setSnackbarTranslationY()
+    }
+
+    override fun onExercisesDescriptionFragmentCreated() {
+        if (exerciseLayoutScrollView.height < exerciseLayoutScrollView.getChildAt(
+                0
+            ).height + exerciseLayoutScrollView.paddingTop + exerciseLayoutScrollView.paddingBottom) {
+            exerciseLayoutButtonFrameLayout.background = resources.getDrawable(R.drawable.divider_top_drawable, context?.theme)
+        }
     }
 
     fun onWindowFocusChanged(hasFocus: Boolean){
@@ -128,7 +142,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
     private fun setSnackbarTranslationY(){
         OneShotPreDrawListener.add(exerciseLayoutButton){
             val buttonParams =
-                exerciseLayoutButton.layoutParams as ConstraintLayout.LayoutParams
+                exerciseLayoutButton.layoutParams as FrameLayout.LayoutParams
             val snackbarLinearLayoutBottomMargin =
                 exerciseLayoutButton.height + buttonParams.bottomMargin
             val snackBarParams =
@@ -194,6 +208,20 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                 }
             }, buttonChangeDelay)
         }
+    }
+
+    private fun initDescription(){
+        val descriptionFragment = ExercisesDescriptionFragment()
+        descriptionFragment.onExercisesDescriptionFragmentCreatedListener = this
+        (activity as AppCompatActivity).navigateTo(descriptionFragment, R.id.exerciseLayoutFrameLayout)
+        exerciseLayoutButton.text = resources.getString(R.string.continue_string)
+    }
+
+    private fun startExercises(){
+        exerciseLayoutButtonFrameLayout.background = null
+        exerciseLayoutButton.isEnabled = false
+        (exerciseLayoutButton as TextView).text = resources.getString(R.string.check)
+        exercisesViewModel?.initFragment()
     }
 
 }

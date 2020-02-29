@@ -41,10 +41,7 @@ class UserStatFragment : NavigatableFragment(R.layout.user_stat_layout), ViewTre
 
     override fun onScrollChanged() {
         val scrollY: Int = userStatLayoutScrollView.scrollY
-        if (scrollY != 0)
-            toolbarLayout.background = context?.getDrawable(R.drawable.divider_bottom_drawable)
-        else
-            toolbarLayout.background = null
+        toolbarLayout.background = if (scrollY != 0) context?.getDrawable(R.drawable.divider_bottom_drawable) else null
     }
 
 }

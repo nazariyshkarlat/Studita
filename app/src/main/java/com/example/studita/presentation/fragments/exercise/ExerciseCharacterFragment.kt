@@ -10,6 +10,7 @@ import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.presentation.extensions.hideKeyboard
 import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercise_character_fragment.*
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.exercise_input_collection_fragment.*
 import kotlinx.android.synthetic.main.exercise_input_fragment.*
 import kotlinx.android.synthetic.main.exercise_input_fragment.exerciseInputEditText
 
-class ExerciseCharacterFragment : BaseFragment(R.layout.exercise_character_fragment), TextWatcher {
+class ExerciseCharacterFragment : NavigatableFragment(R.layout.exercise_character_fragment), TextWatcher {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 

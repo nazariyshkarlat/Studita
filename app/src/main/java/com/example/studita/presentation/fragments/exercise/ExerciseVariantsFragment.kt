@@ -10,13 +10,14 @@ import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.presentation.extensions.makeView
 import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercise_variant.view.*
 import kotlinx.android.synthetic.main.exercise_variants_fragment.*
 
 
-class ExerciseVariantsFragment : BaseFragment(R.layout.exercise_variants_fragment) {
+class ExerciseVariantsFragment : NavigatableFragment(R.layout.exercise_variants_fragment) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 

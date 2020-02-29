@@ -12,9 +12,11 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
+import com.example.studita.presentation.extensions.createSpannableString
 import com.example.studita.presentation.extensions.hideKeyboard
 import com.example.studita.presentation.extensions.makeView
 import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.presentation.views.CustomTypefaceSpan
@@ -23,7 +25,7 @@ import kotlinx.android.synthetic.main.exercise_input_collection_text_view.view.*
 import kotlinx.android.synthetic.main.exercise_input_equation_fragment.*
 import java.io.IOException
 
-class ExerciseInputCollectionFragment : BaseFragment(R.layout.exercise_input_collection_fragment), TextWatcher {
+class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_input_collection_fragment), TextWatcher {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -85,13 +87,7 @@ class ExerciseInputCollectionFragment : BaseFragment(R.layout.exercise_input_col
 
     private fun makeMediumWord(word: String): SpannableStringBuilder{
         val builder = SpannableStringBuilder()
-        val mediumWord = SpannableString(word)
-        mediumWord.setSpan(
-            CustomTypefaceSpan(
-                " ",
-                context?.let { ResourcesCompat.getFont(it, R.font.roboto_medium) }
-            ), 0, mediumWord.length, 0
-        )
+        val mediumWord = word.createSpannableString(typeFace = context?.let { ResourcesCompat.getFont(it, R.font.roboto_medium) })
         val str = resources.getString(R.string.exercise_type_8_9_hint).split("%1\$s")
         builder.append(str[0])
         builder.append(mediumWord)

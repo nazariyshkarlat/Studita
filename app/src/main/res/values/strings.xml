@@ -40,6 +40,7 @@
     <string name="true_variant">Правда</string>
     <string name="false_variant">Неправда</string>
     <string name="check">Проверить</string>
+    <string name="begin">Начать</string>
     <string name="authorization">Авторизация</string>
     <string name="exercises_close_dialog_alert_title">Покинуть урок?</string>
     <string name="exercises_close_dialog_alert_subtitle">Весь прогресс будет утерян</string>
@@ -76,4 +77,6 @@
     <string name="hours">ч</string>
     <string name="minutes">мин</string>
     <string name="seconds">сек</string>
+    <string name="exercises_description_title">Введение в задание</string>
+    <string name="continue_string">Продолжить</string>
 </resources>

@@ -9,6 +9,7 @@ import com.example.studita.di.exercise.ExerciseResultModule
 import com.example.studita.di.exercise.ExercisesModule
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
+import com.example.studita.domain.entity.exercise.ExercisesResponseData
 import com.example.studita.domain.interactor.ExerciseResultStatus
 import com.example.studita.domain.interactor.ExercisesStatus
 import com.example.studita.presentation.extensions.launchExt
@@ -16,15 +17,9 @@ import com.example.studita.presentation.fragments.ExercisesEndFragment
 import com.example.studita.presentation.fragments.exercise.*
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.model.mapper.ExercisesUiModelMapper
-import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.coroutines.Job
-import java.sql.Time
-import java.text.SimpleDateFormat
-import java.time.Duration
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.time.ExperimentalTime
-import kotlin.time.seconds
 
 class ExercisesViewModel : ViewModel(){
 
@@ -43,7 +38,8 @@ class ExercisesViewModel : ViewModel(){
     private var exerciseIndex = 0
     private var score = 0
 
-    private lateinit var results: List<ExerciseUiModel>
+    lateinit var exercisesResponseData: ExercisesResponseData
+    private lateinit var exercises: List<ExerciseUiModel>
     private val exercisesInteractor = ExercisesModule.getExercisesInteractorImpl()
     private val exerciseResultInteractor = ExerciseResultModule.getExerciseResultInteractorImpl()
 
@@ -67,8 +63,8 @@ class ExercisesViewModel : ViewModel(){
                 is ExercisesStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is ExercisesStatus.Success -> {
                     exercisesState.postValue(true)
-                    results = ExercisesUiModelMapper()
-                        .map(status.result.exercises)
+                    exercisesResponseData = status.result
+                    exercises = ExercisesUiModelMapper().map(exercisesResponseData.exercises)
                     }
             }
         }
@@ -87,14 +83,14 @@ class ExercisesViewModel : ViewModel(){
         selectedPos = -1
         answered.value = false
 
-        if(score == results.size){
+        if(score == exercises.size){
             score++
             progressBarState.value = getProgressBarPercent() to true
         }else {
-            val exerciseUiModel = if (exerciseIndex < results.size) {
-                results[exerciseIndex]
+            val exerciseUiModel = if (exerciseIndex < exercises.size) {
+                exercises[exerciseIndex]
             } else {
-                results[exercisesToRetry[0]]
+                exercises[exercisesToRetry[0]]
             }
             val exerciseFragment = getFragmentToAdd(exerciseUiModel)
             val bundle = Bundle()
@@ -112,10 +108,10 @@ class ExercisesViewModel : ViewModel(){
 
     fun checkExerciseResult(){
         answered.value = true
-        val exerciseUiModel =if(exerciseIndex < results.size) {
-            results[exerciseIndex]
+        val exerciseUiModel =if(exerciseIndex < exercises.size) {
+            exercises[exerciseIndex]
         }else{
-            results[exercisesToRetry[0]]
+            exercises[exercisesToRetry[0]]
         }
         job = viewModelScope.launchExt(job){
             when(val status = exerciseResultInteractor.getExerciseResult(exerciseUiModel.exerciseNumber, exerciseRequestData)){
@@ -125,20 +121,20 @@ class ExercisesViewModel : ViewModel(){
                     snackbarState.postValue(exerciseUiModel to status.result)
                     if (status.result.exerciseResult) {
                         score++
-                        if(score == results.size)
+                        if(score == exercises.size)
                             stopSecondsCounter()
                         progressBarState.value =getProgressBarPercent() to false
                     } else {
-                        if (exerciseIndex < results.size) {
+                        if (exerciseIndex < exercises.size) {
                             exercisesToRetry.add(exerciseIndex)
                         }else {
                             exercisesToRetry.add(exercisesToRetry[0])
                         }
                     }
-                    if(exerciseIndex >= results.size){
+                    if(exerciseIndex >= exercises.size){
                         exercisesToRetry.removeAt(0)
                     }else
-                        if(exerciseIndex == results.size-1)
+                        if(exerciseIndex == exercises.size-1)
                             falseAnswers = exercisesToRetry.size
 
                     exerciseIndex++
@@ -152,15 +148,15 @@ class ExercisesViewModel : ViewModel(){
             is ExerciseUiModel.ExerciseUi1, is ExerciseUiModel.ExerciseUi2, is ExerciseUiModel.ExerciseUi5, is ExerciseUiModel.ExerciseUi7 -> ExerciseVariantsFragment()
             is ExerciseUiModel.ExerciseUi3 -> ExerciseInputFragment()
             is ExerciseUiModel.ExerciseUi4 -> ExerciseCharacterFragment()
-            is ExerciseUiModel.ExerciseUi6 -> ExerciseInputEquationFrament()
+            is ExerciseUiModel.ExerciseUi6 -> ExerciseInputEquationFragment()
             is ExerciseUiModel.ExerciseUi8, is ExerciseUiModel.ExerciseUi9 -> ExerciseInputCollectionFragment()
         }
 
-    private fun getProgressBarPercent(): Int =  ((score / results.size.toFloat())*100).toInt()
+    private fun getProgressBarPercent(): Int =  ((score / exercises.size.toFloat())*100).toInt()
 
     private fun getAnswersPercent(): Int = ((score/(exerciseIndex+1).toFloat())*100).toInt()
 
-    private fun getTrueAnswers(): Int = results.size - getFalseAnswers()
+    private fun getTrueAnswers(): Int = exercises.size - getFalseAnswers()
 
     private fun getFalseAnswers(): Int = falseAnswers
 

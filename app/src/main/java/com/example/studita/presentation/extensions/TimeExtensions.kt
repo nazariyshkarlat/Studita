@@ -23,16 +23,7 @@ fun styleTimeText(context: Context, text: String): SpannableStringBuilder {
     val secondaryWords = words.filterIndexed{index, _ -> index % 2 != 0 }.toTypedArray()
     val secondarySpans = ArrayList<SpannableString>()
     for(secondaryWord in secondaryWords){
-        val secondarySpan = SpannableString(secondaryWord)
-        secondarySpan.setSpan(AbsoluteSizeSpan(16.spToPx()), 0, secondarySpan.length, 0)
-        secondarySpan.setSpan(
-            CustomTypefaceSpan(
-                " ",
-                ResourcesCompat.getFont(context, R.font.roboto_regular)
-            ), 0, secondaryWord.length, 0
-        )
-        secondarySpan.setSpan(ForegroundColorSpan(secondaryColor), 0, secondarySpan.length, 0)
-        secondarySpans.add(secondarySpan)
+        secondarySpans.add(secondaryWord.createSpannableString(secondaryColor, 16, ResourcesCompat.getFont(context, R.font.roboto_regular)))
     }
     primaryWords.forEachIndexed{index, primaryWord ->
         builder.append(primaryWord)

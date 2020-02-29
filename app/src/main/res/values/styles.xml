@@ -87,7 +87,7 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="Regular18_87" parent="TextAppearance.AppCompat">
+    <style name="Regular18" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textColor">?attr/primary_color</item>
         <item name="android:textSize">18sp</item>
@@ -175,6 +175,12 @@
     <style name="Medium18White" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textColor">@color/white87</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Medium18Green" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/green</item>
         <item name="android:textSize">18sp</item>
     </style>
 

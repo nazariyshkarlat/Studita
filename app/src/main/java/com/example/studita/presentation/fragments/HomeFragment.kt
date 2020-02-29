@@ -29,7 +29,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
     private var levelsViewModel: HomeFragmentViewModel? = null
     private var chapterPartsViewModel: ChapterPartsViewModel? = null
     private var fabViewModel: HomeFragmentMainActivityFABViewModel? = null
-    lateinit var onThemeChangeListener: OnThemeChangeListener
+    var onThemeChangeListener: OnThemeChangeListener? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -87,16 +87,14 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         homeLayoutAppBar.addOnOffsetChangedListener(this)
         homeLayoutRecyclerView.addOnScrollListener(FabRecyclerImpl(this))
 
-        homeLayoutBarTitle.setOnClickListener{onThemeChangeListener.onThemeChanged()}
+        homeLayoutBarTitle.setOnClickListener{onThemeChangeListener?.onThemeChanged()}
     }
 
     override fun onScroll(
         scrollY: Int
     ) {
         if (scrollY != 0)
-            homeLayoutBar.background = context?.getDrawable(R.drawable.divider_bottom_drawable)
-        else
-            homeLayoutBar.background = null
+            homeLayoutBar.background = if (scrollY != 0) context?.getDrawable(R.drawable.divider_bottom_drawable) else null
     }
 
     override fun show() {
