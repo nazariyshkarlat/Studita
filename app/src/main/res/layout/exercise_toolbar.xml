@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/toolbarHeight">
+
+    <com.github.mmin18.widget.RealtimeBlurView
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        app:realtimeBlurRadius="20dp"
+        app:realtimeOverlayColor="?navigation_color"/>
 
     <ImageView
         android:id="@+id/exerciseToolbarCloseButton"

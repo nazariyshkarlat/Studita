@@ -2,6 +2,7 @@ package com.example.studita.presentation.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
@@ -11,8 +12,9 @@ import com.example.studita.presentation.view_model.ExercisesEndFragmentViewModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercises_detailed_stat_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import kotlinx.android.synthetic.main.user_stat_layout.*
 
-class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_detailed_stat_layout){
+class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_detailed_stat_layout), ViewTreeObserver.OnScrollChangedListener{
 
     var exercisesViewModel: ExercisesViewModel? = null
     private var exercisesEndFragmentViewModel: ExercisesEndFragmentViewModel? = null
@@ -62,6 +64,8 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
         exercisesDetailedStatLayoutShareButton.setOnClickListener {
         }
 
+        exercisesDetailedStatLayoutScrollView.viewTreeObserver.addOnScrollChangedListener(this)
+
     }
 
     private fun changeLayoutIfScrollable(){
@@ -73,6 +77,17 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
                 exercisesEndFragmentViewModel?.setScrollViewDividerAndPadding(R.drawable.divider_top_drawable, 16.dpToPx())
             }
         }
+    }
+
+    override fun onDestroyView() {
+        exercisesDetailedStatLayoutScrollView.viewTreeObserver
+            .removeOnScrollChangedListener(this)
+        super.onDestroyView()
+    }
+
+    override fun onScrollChanged() {
+        val scrollY: Int = exercisesDetailedStatLayoutScrollView.scrollY
+        toolbarLayout.background = if (scrollY != 0) context?.getDrawable(R.drawable.divider_bottom_drawable) else null
     }
 
 }

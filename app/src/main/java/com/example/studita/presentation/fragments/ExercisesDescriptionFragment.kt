@@ -6,6 +6,7 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -21,13 +22,13 @@ import com.example.studita.presentation.extensions.dpToPx
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercises_description_1_layout.*
+import kotlinx.android.synthetic.main.main_menu_layout.*
 import java.util.regex.Pattern
 
 
-class ExercisesDescriptionFragment : NavigatableFragment(R.layout.exercises_description_1_layout){
+class ExercisesDescriptionFragment : NavigatableFragment(R.layout.exercises_description_1_layout), ViewTreeObserver.OnScrollChangedListener{
 
     var exercisesViewModel: ExercisesViewModel? = null
-    var onExercisesDescriptionFragmentCreatedListener : OnExercisesDescriptionFragmentCreatedListener? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,17 +39,18 @@ class ExercisesDescriptionFragment : NavigatableFragment(R.layout.exercises_desc
             val exercisesDescriptionModel = it.exercisesResponseData.exercisesDescription
             OneShotPreDrawListener.add(exercisesDescription1ParentLinearLayout){
                 formView(exercisesDescriptionModel)
-                onExercisesDescriptionFragmentCreatedListener?.onExercisesDescriptionFragmentCreated()
             }
-
+            exercisesDescription1LayoutScrollView.viewTreeObserver.addOnScrollChangedListener(this)
+            OneShotPreDrawListener.add(exercisesDescription1LayoutScrollView) {
+                if(exercisesDescription1LayoutScrollView.height < exercisesDescription1LayoutScrollView.getChildAt(0).height
+                    + exercisesDescription1LayoutScrollView.paddingTop + exercisesDescription1LayoutScrollView.paddingBottom){
+                    exercisesViewModel?.showButtonDivider(true)
+                }
+            }
         }
     }
 
-    interface OnExercisesDescriptionFragmentCreatedListener{
-        fun onExercisesDescriptionFragmentCreated()
-    }
-
-    fun formView(exercisesDescriptionModel: ExercisesDescriptionData){
+    private fun formView(exercisesDescriptionModel: ExercisesDescriptionData){
         var childIndex = -1
         var insideBrackets = "0"
         for(child in exercisesDescription1ParentLinearLayout.children){
@@ -94,6 +96,26 @@ class ExercisesDescriptionFragment : NavigatableFragment(R.layout.exercises_desc
                 }
             }
         }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            checkScrollY()
+        }else {
+            exercisesViewModel?.showToolbarDivider(false)
+            exercisesViewModel?.showButtonDivider(false)
+            exercisesDescription1LayoutScrollView.viewTreeObserver.removeOnScrollChangedListener(this)
+        }
+    }
+
+    override fun onScrollChanged() {
+        checkScrollY()
+    }
+
+    private fun checkScrollY(){
+        val scrollY: Int = exercisesDescription1LayoutScrollView.scrollY
+        exercisesViewModel?.showToolbarDivider(scrollY != 0)
     }
 
 }

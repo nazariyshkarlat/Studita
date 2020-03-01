@@ -1,87 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/exercisesDescription1ParentLinearLayout"
+    android:id="@+id/exercisesDescription1LayoutScrollView"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="@dimen/defaultRLMargin"
-    android:layout_marginEnd="32dp">
-
-    <TextView
-        style="@style/Medium24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/exercises_description_title"
-        android:layout_marginTop="8dp"/>
-
-    <TextView
-        style="@style/Regular18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
-
-    <TextView
-        style="@style/Regular18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+    android:paddingTop="@dimen/toolbarHeight"
+    android:clipToPadding="false">
 
     <LinearLayout
-        android:id="@+id/exercisesDescription1LayoutLinearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"/>
-
-    <TextView
-        style="@style/Regular18"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"/>
+        android:id="@+id/exercisesDescription1ParentLinearLayout"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/defaultRLMargin"
+        android:layout_marginEnd="32dp">
 
-    <LinearLayout
-        android:id="@+id/exercisesDescription1LayoutLinearLayout2"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"/>
+        <TextView
+            style="@style/Medium24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exercises_description_title"
+            android:layout_marginTop="8dp"/>
 
-    <TextView
-        style="@style/Regular18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"/>
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
 
-    <TextView
-        style="@style/Medium18Green"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
 
-    <TextView
-        style="@style/Regular18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"/>
+        <LinearLayout
+            android:id="@+id/exercisesDescription1LayoutLinearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"/>
 
-    <TextView
-        style="@style/Regular18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"/>
 
-    <TextView
-        style="@style/Regular18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        <LinearLayout
+            android:id="@+id/exercisesDescription1LayoutLinearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"/>
 
-    <TextView
-        style="@style/Regular18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"/>
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"/>
 
-</LinearLayout>
+        <TextView
+            style="@style/Medium18Green"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"/>
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -23,9 +23,10 @@ import kotlinx.android.synthetic.main.exercise_bottom_snackbar.*
 import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.android.synthetic.main.exercise_layout.view.*
 import kotlinx.android.synthetic.main.exercise_toolbar.*
+import kotlinx.android.synthetic.main.toolbar_layout.*
 
 
-class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescriptionFragment.OnExercisesDescriptionFragmentCreatedListener{
+class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
 
     private val buttonChangeDelay = 80L
     var exercisesViewModel: ExercisesViewModel? = null
@@ -42,9 +43,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescr
                     ExercisesViewModel.ExercisesNavigationState.FIRST -> (activity as AppCompatActivity).navigateTo(fragment.second, R.id.exerciseLayoutFrameLayout)
                     ExercisesViewModel.ExercisesNavigationState.REPLACE -> (activity as AppCompatActivity).replaceWithAnim(fragment.second, R.id.exerciseLayoutFrameLayout, R.animator.slide_in_left, R.animator.slide_out_right)
                 }
-                exerciseLayoutButton.setOnClickListener {
-                    viewModel.checkExerciseResult()
-                }
             })
 
             viewModel.snackbarState.observe(viewLifecycleOwner, Observer { response ->
@@ -53,6 +51,17 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescr
 
             viewModel.exercisesButtonState.observe(viewLifecycleOwner, Observer { enabled ->
                 exerciseLayoutButton.isEnabled = enabled
+                exerciseLayoutButton.setOnClickListener {
+                    viewModel.checkExerciseResult()
+                }
+            })
+
+            viewModel.toolbarDividerState.observe(viewLifecycleOwner, Observer { show ->
+                exerciseLayoutToolbar.background =  if(show) resources.getDrawable(R.drawable.divider_bottom_drawable, exerciseLayoutToolbar.context.theme) else null
+            })
+
+            viewModel.buttonDividerState.observe(viewLifecycleOwner, Observer { show ->
+                exerciseLayoutButtonFrameLayout.background =  if(show) resources.getDrawable(R.drawable.divider_top_drawable, exerciseLayoutToolbar.context.theme) else null
             })
 
             viewModel.progressBarState.observe(viewLifecycleOwner, Observer { pair ->
@@ -64,7 +73,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescr
                     }
                 })
             })
-
 
             when (viewModel.exercisesProgress) {
                 ExercisesViewModel.ExercisesState.START_PAGE -> {
@@ -93,14 +101,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescr
         setSnackbarTranslationY()
     }
 
-    override fun onExercisesDescriptionFragmentCreated() {
-        if (exerciseLayoutScrollView.height < exerciseLayoutScrollView.getChildAt(
-                0
-            ).height + exerciseLayoutScrollView.paddingTop + exerciseLayoutScrollView.paddingBottom) {
-            exerciseLayoutButtonFrameLayout.background = resources.getDrawable(R.drawable.divider_top_drawable, context?.theme)
-        }
-    }
-
     fun onWindowFocusChanged(hasFocus: Boolean){
         if(hasFocus)
             exercisesViewModel?.startSecondsCounter()
@@ -118,16 +118,24 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescr
         }
     }
 
-    private fun showSnackbar(data: Pair<ExerciseUiModel, ExerciseResponseData>){
+    private fun showSnackbar(data: Pair<ExerciseUiModel, ExerciseResponseData>?){
 
-        val exercisesResponseData = data.second
-        val exerciseUiModel = data.first
-        formSnackBarView(exerciseUiModel, exercisesResponseData.exerciseResult, exercisesResponseData.description)
+        data?.let {
+            val exercisesResponseData = data.second
+            val exerciseUiModel = data.first
+            formSnackBarView(
+                exerciseUiModel,
+                exercisesResponseData.exerciseResult,
+                exercisesResponseData.description
+            )
 
-        exerciseLayoutSnackbar
-        exerciseLayoutSnackbar.animate().translationY(0F).setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong()).setInterpolator(FastOutSlowInInterpolator()).start()
+            exerciseLayoutSnackbar
+            exerciseLayoutSnackbar.animate().translationY(0F)
+                .setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong())
+                .setInterpolator(FastOutSlowInInterpolator()).start()
 
-        changeButton(true)
+            changeButton(true)
+        }
     }
 
     private fun hideSnackBar(){
@@ -216,7 +224,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescr
     private fun formDescriptionView(){
         exercisesViewModel?.exercisesProgress = ExercisesViewModel.ExercisesState.DESCRIPTION
         val descriptionFragment = ExercisesDescriptionFragment()
-        descriptionFragment.onExercisesDescriptionFragmentCreatedListener = this
         (activity as AppCompatActivity).navigateTo(descriptionFragment, R.id.exerciseLayoutFrameLayout)
         exerciseLayoutButton.text = resources.getString(R.string.continue_string)
         exerciseLayoutButton.setOnClickListener{
@@ -232,11 +239,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescr
         (exerciseLayoutButton as TextView).text = resources.getString(R.string.check)
         exerciseLayoutButton.setOnClickListener{
             exercisesViewModel?.checkExerciseResult()
-        }
-        OneShotPreDrawListener.add(exerciseLayoutScrollView){
-            val params = exerciseLayoutFrameLayout.layoutParams
-            params.height = exerciseLayoutScrollView.measuredHeight - exerciseLayoutToolbar.measuredHeight
-            exerciseLayoutFrameLayout.layoutParams = params
         }
     }
 

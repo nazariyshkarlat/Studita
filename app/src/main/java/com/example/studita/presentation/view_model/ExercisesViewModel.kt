@@ -2,6 +2,7 @@ package com.example.studita.presentation.view_model
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
@@ -27,11 +28,13 @@ class ExercisesViewModel : ViewModel(){
     val exercisesEndTextButtonState = SingleLiveEvent<Boolean>()
     val navigationState = SingleLiveEvent<Pair<ExercisesNavigationState, Fragment>>()
     val progressBarState = SingleLiveEvent<Pair<Int, Boolean>>()
-    val answered = SingleLiveEvent<Boolean>()
-    val snackbarState = SingleLiveEvent<Pair<ExerciseUiModel, ExerciseResponseData>>()
+    val answered = MutableLiveData<Boolean>()
+    val snackbarState = MutableLiveData<Pair<ExerciseUiModel, ExerciseResponseData>?>()
     val errorState = SingleLiveEvent<Int>()
-    val exercisesButtonState = SingleLiveEvent<Boolean>()
+    val exercisesButtonState = MutableLiveData<Boolean>()
     var exercisesProgress: ExercisesState = ExercisesState.START_PAGE
+    var toolbarDividerState = SingleLiveEvent<Boolean>()
+    var buttonDividerState = SingleLiveEvent<Boolean>()
 
     lateinit var exerciseRequestData: ExerciseRequestData
     private val exercisesToRetry = ArrayList<Int>()
@@ -51,8 +54,6 @@ class ExercisesViewModel : ViewModel(){
     private var job: Job? = null
 
     var selectedPos = -1
-
-    var scrollViewHeight = 0
 
     init{
         getExercises(1)
@@ -85,6 +86,7 @@ class ExercisesViewModel : ViewModel(){
 
         selectedPos = -1
         answered.value = false
+        snackbarState.value = null
 
         if(score == exercises.size){
             score++
@@ -189,6 +191,14 @@ class ExercisesViewModel : ViewModel(){
             secondsCounter!!.purge()
             secondsCounter = null
         }
+    }
+
+    fun showToolbarDivider(show: Boolean){
+        toolbarDividerState.value = show
+    }
+
+    fun showButtonDivider(show: Boolean){
+        buttonDividerState.value = show
     }
 
     enum class ExercisesNavigationState{

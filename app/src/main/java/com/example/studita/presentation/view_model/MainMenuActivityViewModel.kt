@@ -8,9 +8,14 @@ class MainMenuActivityViewModel : ViewModel(){
     var toolbarHeight = 0
 
     val toolbarTextState = SingleLiveEvent<String>()
+    val toolbarDividerState = SingleLiveEvent<Boolean>()
 
     fun setToolbarText(text: String){
         toolbarTextState.value = text
+    }
+
+    fun showToolbarDivider(show: Boolean){
+        toolbarDividerState.value = show
     }
 
 }

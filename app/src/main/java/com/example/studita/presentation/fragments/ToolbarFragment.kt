@@ -33,6 +33,11 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
                 androidx.lifecycle.Observer { text ->
                     toolbarLayoutTitle.text = text
                 })
+            it.toolbarDividerState.observe(
+                viewLifecycleOwner,
+                androidx.lifecycle.Observer { show ->
+                    toolbarLayout.background =  if(show) resources.getDrawable(R.drawable.divider_bottom_drawable, toolbarLayoutTitle.context.theme) else null
+                })
         }
 
         (view as ViewGroup).toolbarLayoutBackButton.setOnClickListener { activity?.onBackPressed() }

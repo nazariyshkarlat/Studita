@@ -93,8 +93,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
     override fun onScroll(
         scrollY: Int
     ) {
-        if (scrollY != 0)
-            homeLayoutBar.background = if (scrollY != 0) context?.getDrawable(R.drawable.divider_bottom_drawable) else null
+        homeLayoutBar.background = if (scrollY != 0) context?.getDrawable(R.drawable.divider_bottom_drawable) else null
     }
 
     override fun show() {

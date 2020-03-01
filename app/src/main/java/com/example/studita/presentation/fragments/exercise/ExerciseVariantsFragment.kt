@@ -21,19 +21,6 @@ import kotlinx.android.synthetic.main.exercise_variants_fragment.*
 class ExerciseVariantsFragment : NavigatableFragment(R.layout.exercise_variants_fragment) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
-    private var scrollViewPreDrawListener: ViewTreeObserver.OnPreDrawListener = object : ViewTreeObserver.OnPreDrawListener{
-        override fun onPreDraw(): Boolean {
-            if (exerciseVariantsFragmentScrollView.height < exerciseVariantsFragmentScrollView.getChildAt(
-                    0
-                ).height + exerciseVariantsFragmentScrollView.paddingTop + exerciseVariantsFragmentScrollView.paddingBottom) {
-                exerciseVariantsFragmentScrollView.background =
-                    context?.getDrawable(R.drawable.divider_top_bottom_drawable)
-                exerciseVariantsFragmentScrollView.viewTreeObserver.removeOnPreDrawListener(this)
-                return true
-            }
-            return true
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,18 +73,12 @@ class ExerciseVariantsFragment : NavigatableFragment(R.layout.exercise_variants_
             }
         }
 
-        exerciseVariantsFragmentScrollView.viewTreeObserver.addOnPreDrawListener(scrollViewPreDrawListener)
-
         exercisesViewModel?.selectedPos?.let {
             if(it != -1)
                 selectVariant(it)
         }
     }
 
-    override fun onDestroyView() {
-        exerciseVariantsFragmentScrollView.viewTreeObserver.removeOnPreDrawListener(scrollViewPreDrawListener)
-        super.onDestroyView()
-    }
 
     private fun View.refreshVariants() {
         this.isEnabled = true

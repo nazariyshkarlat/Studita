@@ -3,6 +3,7 @@ package com.example.studita.presentation.fragments
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
@@ -13,8 +14,10 @@ import com.example.studita.presentation.view_model.MainMenuActivityViewModel
 import com.example.studita.presentation.view_model.MainMenuFragmentViewModel
 import kotlinx.android.synthetic.main.exercise_variants_fragment.*
 import kotlinx.android.synthetic.main.main_menu_layout.*
+import kotlinx.android.synthetic.main.toolbar_layout.*
+import kotlinx.android.synthetic.main.user_stat_layout.*
 
-class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
+class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout), ViewTreeObserver.OnScrollChangedListener{
 
     private var fragmentViewModel: MainMenuFragmentViewModel? = null
     private var activityViewModel: MainMenuActivityViewModel? = null
@@ -43,6 +46,8 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
             mainMenuUseEmailButton.setOnClickListener {viewModel.onSignUpLogInClick(it.id)}
         }
 
+        mainMenuScrollView.viewTreeObserver.addOnScrollChangedListener(this)
+
         checkScrollable()
     }
 
@@ -51,18 +56,31 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
         super.onHiddenChanged(hidden)
         if (!hidden) {
             checkScrollable()
+            checkScrollY()
+        }else {
+            activityViewModel?.showToolbarDivider(false)
         }
     }
 
     private fun checkScrollable() {
+        mainMenuTitle.visibility = View.VISIBLE
         OneShotPreDrawListener.add(mainMenuScrollView) {
             if(mainMenuScrollView.height < mainMenuScrollView.getChildAt(0).height
                 + mainMenuScrollView.paddingTop + mainMenuScrollView.paddingBottom){
                 mainMenuTitle.visibility = View.GONE
                 activityViewModel?.setToolbarText(mainMenuTitle.text.toString())
             }
-
         }
     }
+
+    override fun onScrollChanged() {
+        checkScrollY()
+    }
+
+    private fun checkScrollY(){
+        val scrollY: Int = mainMenuScrollView.scrollY
+        activityViewModel?.showToolbarDivider(scrollY != 0)
+    }
+
 
 }
