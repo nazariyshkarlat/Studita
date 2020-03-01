@@ -117,7 +117,6 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
 
     override fun onDestroyView() {
         super.onDestroyView()
-        onNavigateFragment?.onNavigate(null)
         contentView.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
     }
 

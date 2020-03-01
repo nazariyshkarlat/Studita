@@ -38,7 +38,6 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if((activity as AppCompatActivity).supportFragmentManager.backStackEntryCount > 0) {
             listener = object : Animator.AnimatorListener{
                 override fun onAnimationRepeat(animation: Animator?) {}
                 override fun onAnimationCancel(animation: Animator?) {}
@@ -50,10 +49,14 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
             }
             view.alpha = 0F
             view.animate().alpha(1F).setDuration(200).setListener(listener).start()
-        }
     }
 
     interface OnNavigateFragment {
         fun onNavigate(fragment: NavigatableFragment?)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        onNavigateFragment?.onNavigate(null)
     }
 }
