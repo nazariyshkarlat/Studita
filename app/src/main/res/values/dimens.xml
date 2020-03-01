@@ -11,7 +11,7 @@
     <dimen name="titleSubtitleMargin">16dp</dimen>
     <dimen name="defRadius">8dp</dimen>
     <dimen name="appBarDividerHeight">1dp</dimen>
-    <dimen name="dialogAlertMargin">48dp</dimen>
+    <dimen name="dialogAlertMargin">32dp</dimen>
     <dimen name="splashScreenTextMarginTop">420dp</dimen>
     <dimen name="splashScreenPortraitTextMarginTop">220dp</dimen>
     <dimen name="splashScreenLogoMarginBottom">72dp</dimen>

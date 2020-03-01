@@ -49,13 +49,13 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
         onNavigateFragment = null
     }
 
-    override fun onNavigate(fragment: NavigatableFragment) {
-        if(fragment is AuthorizationFragment)
+    override fun onNavigate(fragment: NavigatableFragment?) {
+        if (fragment is AuthorizationFragment)
             toolbarLayoutTitle.text = resources.getString(R.string.authorization)
         else
             toolbarLayoutTitle.text = null
         viewModel?.let {
-            if(view?.height != 0)
+            if (view?.height != 0)
                 it.toolbarHeight = view?.height ?: 0
         }
     }

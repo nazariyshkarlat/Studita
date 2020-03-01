@@ -54,6 +54,6 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
     }
 
     interface OnNavigateFragment {
-        fun onNavigate(fragment: NavigatableFragment)
+        fun onNavigate(fragment: NavigatableFragment?)
     }
 }

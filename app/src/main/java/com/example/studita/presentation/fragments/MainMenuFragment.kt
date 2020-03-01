@@ -9,6 +9,7 @@ import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.extensions.navigateTo
+import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.MainMenuActivityViewModel
 import com.example.studita.presentation.view_model.MainMenuFragmentViewModel
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.main_menu_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.android.synthetic.main.user_stat_layout.*
 
-class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout), ViewTreeObserver.OnScrollChangedListener{
+class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserver.OnScrollChangedListener{
 
     private var fragmentViewModel: MainMenuFragmentViewModel? = null
     private var activityViewModel: MainMenuActivityViewModel? = null
