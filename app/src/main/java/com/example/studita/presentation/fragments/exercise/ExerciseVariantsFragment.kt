@@ -77,6 +77,16 @@ class ExerciseVariantsFragment : NavigatableFragment(R.layout.exercise_variants_
             if(it != -1)
                 selectVariant(it)
         }
+
+        OneShotPreDrawListener.add(exerciseVariantsFragmentScrollView){
+            if (exerciseVariantsFragmentScrollView.height < exerciseVariantsFragmentScrollView.getChildAt(
+                    0
+                ).height + exerciseVariantsFragmentScrollView.paddingTop + exerciseVariantsFragmentScrollView.paddingBottom) {
+                exerciseVariantsFragmentScrollView.background =
+                    context?.getDrawable(R.drawable.divider_top_bottom_drawable)
+            }
+        }
+
     }
 
 
