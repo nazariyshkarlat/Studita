@@ -4,7 +4,7 @@
     <item android:bottom="@dimen/splashScreenLogoMarginBottom">
         <bitmap android:src="@drawable/logo" android:gravity="center"/>
     </item>
-    <item android:top="@dimen/splashScreenTextMarginTop">
+    <item android:top="@dimen/splashScreenPortraitLogoMarginBottom">
         <bitmap android:src="@drawable/splash_screen_text" android:gravity="center" android:tint="?splash_screen_text_color"/>
     </item>
 </layer-list>

@@ -2,5 +2,5 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="?splash_screen_color"/>
     <item android:drawable="@drawable/logo_svg" android:gravity="center" android:bottom="@dimen/splashScreenLogoMarginBottom"/>
-    <item android:drawable="@drawable/splash_screen_text_svg" android:gravity="center_horizontal|bottom" android:bottom="@dimen/splashScreenTextMarginBottom"/>
+    <item android:drawable="@drawable/splash_screen_text_svg" android:gravity="center" android:top="@dimen/splashScreenTextMarginTop"/>
 </layer-list>

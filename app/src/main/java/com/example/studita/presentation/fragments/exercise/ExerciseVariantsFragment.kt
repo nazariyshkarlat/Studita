@@ -3,6 +3,7 @@ package com.example.studita.presentation.fragments.exercise
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
@@ -20,6 +21,19 @@ import kotlinx.android.synthetic.main.exercise_variants_fragment.*
 class ExerciseVariantsFragment : NavigatableFragment(R.layout.exercise_variants_fragment) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
+    private var scrollViewPreDrawListener: ViewTreeObserver.OnPreDrawListener = object : ViewTreeObserver.OnPreDrawListener{
+        override fun onPreDraw(): Boolean {
+            if (exerciseVariantsFragmentScrollView.height < exerciseVariantsFragmentScrollView.getChildAt(
+                    0
+                ).height + exerciseVariantsFragmentScrollView.paddingTop + exerciseVariantsFragmentScrollView.paddingBottom) {
+                exerciseVariantsFragmentScrollView.background =
+                    context?.getDrawable(R.drawable.divider_top_bottom_drawable)
+                exerciseVariantsFragmentScrollView.viewTreeObserver.removeOnPreDrawListener(this)
+                return true
+            }
+            return true
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,20 +86,17 @@ class ExerciseVariantsFragment : NavigatableFragment(R.layout.exercise_variants_
             }
         }
 
-        OneShotPreDrawListener.add(exerciseVariantsFragmentScrollView) {
-            val isScrollable: Boolean =
-                exerciseVariantsFragmentScrollView.height < exerciseVariantsFragmentScrollView.getChildAt(
-                    0
-                ).height + exerciseVariantsFragmentScrollView.paddingTop + exerciseVariantsFragmentScrollView.paddingBottom
-            if (isScrollable)
-                exerciseVariantsFragmentScrollView.background =
-                    context?.getDrawable(R.drawable.divider_top_bottom_drawable)
-        }
+        exerciseVariantsFragmentScrollView.viewTreeObserver.addOnPreDrawListener(scrollViewPreDrawListener)
 
         exercisesViewModel?.selectedPos?.let {
             if(it != -1)
                 selectVariant(it)
         }
+    }
+
+    override fun onDestroyView() {
+        exerciseVariantsFragmentScrollView.viewTreeObserver.removeOnPreDrawListener(scrollViewPreDrawListener)
+        super.onDestroyView()
     }
 
     private fun View.refreshVariants() {

@@ -31,6 +31,7 @@ class ExercisesViewModel : ViewModel(){
     val snackbarState = SingleLiveEvent<Pair<ExerciseUiModel, ExerciseResponseData>>()
     val errorState = SingleLiveEvent<Int>()
     val exercisesButtonState = SingleLiveEvent<Boolean>()
+    var exercisesProgress: ExercisesState = ExercisesState.START_PAGE
 
     lateinit var exerciseRequestData: ExerciseRequestData
     private val exercisesToRetry = ArrayList<Int>()
@@ -50,6 +51,8 @@ class ExercisesViewModel : ViewModel(){
     private var job: Job? = null
 
     var selectedPos = -1
+
+    var scrollViewHeight = 0
 
     init{
         getExercises(1)
@@ -191,5 +194,11 @@ class ExercisesViewModel : ViewModel(){
     enum class ExercisesNavigationState{
         FIRST,
         REPLACE,
+    }
+
+    enum class ExercisesState{
+        START_PAGE,
+        DESCRIPTION,
+        EXERCISES
     }
 }

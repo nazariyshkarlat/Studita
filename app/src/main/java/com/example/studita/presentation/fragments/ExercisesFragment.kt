@@ -8,7 +8,6 @@ import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.OneShotPreDrawListener
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
@@ -24,7 +23,6 @@ import kotlinx.android.synthetic.main.exercise_bottom_snackbar.*
 import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.android.synthetic.main.exercise_layout.view.*
 import kotlinx.android.synthetic.main.exercise_toolbar.*
-import kotlinx.android.synthetic.main.exercises_detailed_stat_layout.*
 
 
 class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescriptionFragment.OnExercisesDescriptionFragmentCreatedListener{
@@ -67,13 +65,18 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescr
                 })
             })
 
-            exerciseLayoutButton.setOnClickListener {
-                initDescription()
-                exerciseLayoutButton.setOnClickListener{
-                    startExercises()
+
+            when (viewModel.exercisesProgress) {
+                ExercisesViewModel.ExercisesState.START_PAGE -> {
                     exerciseLayoutButton.setOnClickListener {
-                        viewModel.checkExerciseResult()
+                        formDescriptionView()
                     }
+                }
+                ExercisesViewModel.ExercisesState.DESCRIPTION -> {
+                    formDescriptionView()
+                }
+                else -> {
+                    formExercisesView()
                 }
             }
         }
@@ -210,18 +213,31 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), ExercisesDescr
         }
     }
 
-    private fun initDescription(){
+    private fun formDescriptionView(){
+        exercisesViewModel?.exercisesProgress = ExercisesViewModel.ExercisesState.DESCRIPTION
         val descriptionFragment = ExercisesDescriptionFragment()
         descriptionFragment.onExercisesDescriptionFragmentCreatedListener = this
         (activity as AppCompatActivity).navigateTo(descriptionFragment, R.id.exerciseLayoutFrameLayout)
         exerciseLayoutButton.text = resources.getString(R.string.continue_string)
+        exerciseLayoutButton.setOnClickListener{
+            formExercisesView()
+            exercisesViewModel?.initFragment()
+        }
     }
 
-    private fun startExercises(){
+    private fun formExercisesView(){
+        exercisesViewModel?.exercisesProgress = ExercisesViewModel.ExercisesState.EXERCISES
         exerciseLayoutButtonFrameLayout.background = null
         exerciseLayoutButton.isEnabled = false
         (exerciseLayoutButton as TextView).text = resources.getString(R.string.check)
-        exercisesViewModel?.initFragment()
+        exerciseLayoutButton.setOnClickListener{
+            exercisesViewModel?.checkExerciseResult()
+        }
+        OneShotPreDrawListener.add(exerciseLayoutScrollView){
+            val params = exerciseLayoutFrameLayout.layoutParams
+            params.height = exerciseLayoutScrollView.measuredHeight - exerciseLayoutToolbar.measuredHeight
+            exerciseLayoutFrameLayout.layoutParams = params
+        }
     }
 
 }
