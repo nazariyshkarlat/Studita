@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.toolbar_layout.*
 
 class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
 
-    private val buttonChangeDelay = 80L
     var exercisesViewModel: ExercisesViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -118,7 +117,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         }
     }
 
-    private fun showSnackbar(data: Pair<ExerciseUiModel, ExerciseResponseData>?){
+    private fun showSnackbar(data: Pair<ExerciseUiModel, ExerciseResponseData>?, animate: Boolean = true) {
 
         data?.let {
             val exercisesResponseData = data.second
@@ -129,12 +128,15 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                 exercisesResponseData.description
             )
 
-            exerciseLayoutSnackbar
-            exerciseLayoutSnackbar.animate().translationY(0F)
-                .setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong())
-                .setInterpolator(FastOutSlowInInterpolator()).start()
+            if (animate) {
+                exerciseLayoutSnackbar.animate().translationY(0F)
+                    .setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong())
+                    .setInterpolator(FastOutSlowInInterpolator()).start()
+            } else {
+                exerciseLayoutSnackbar.translationY = 0F
+            }
 
-            changeButton(true)
+            changeButton(true, animate)
         }
     }
 
@@ -151,7 +153,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
     }
 
     private fun setSnackbarTranslationY(){
-        OneShotPreDrawListener.add(exerciseLayoutButton){
+        OneShotPreDrawListener.add(exerciseLayoutButton) {
             val buttonParams =
                 exerciseLayoutButton.layoutParams as FrameLayout.LayoutParams
             val snackbarLinearLayoutBottomMargin =
@@ -163,12 +165,16 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             exerciseLayoutSnackbar.translationY =
                 exerciseLayoutSnackbar.height + snackbarLinearLayoutBottomMargin.toFloat()
             exerciseLayoutSnackbar.visibility = View.VISIBLE
+
+            if (exercisesViewModel?.answered?.value == true)
+                showSnackbar(exercisesViewModel?.snackbarState?.value, animate = false)
         }
     }
 
 
     private fun formSnackBarView(exerciseUiModel: ExerciseUiModel, answerIsCorrect: Boolean, subtitleText: String?) {
         context?.let {
+            println(answerIsCorrect)
             if (answerIsCorrect) {
                 exerciseBottomSnackbarTitle.text = resources.getString(R.string.true_answer)
                 exerciseLayoutSnackbar.setBackgroundColor(
@@ -192,32 +198,31 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         }
     }
 
-    private fun changeButton(onSnackbarShow: Boolean){
+    private fun changeButton(onSnackbarShow: Boolean, animate: Boolean){
         view?.let {
-            Handler().postDelayed({
-                val drawable = it.exerciseLayoutButton.background as TransitionDrawable
-                if (onSnackbarShow) {
-                    it.exerciseLayoutButton.setTextColor(
-                        ContextCompat.getColor(it.context, R.color.blue))
-                    drawable.startTransition(resources.getInteger(R.integer.button_transition_duration))
-                    it.exerciseLayoutButton.text = resources.getString(R.string.next)
-                    it.exerciseLayoutButton.setOnClickListener {
-                        hideSnackBar()
-                        exerciseLayoutButton.isEnabled = false
-                        changeButton(false)
-                        exercisesViewModel?.initFragment()
-                    }
-                } else {
-                    it.exerciseLayoutButton.setTextColor(
-                        ContextCompat.getColorStateList(
-                            exerciseLayoutButton.context,
-                            R.color.blue_button_8_text_color
-                        )
-                    )
-                    drawable.resetTransition()
-                    it.exerciseLayoutButton.text = resources.getString(R.string.check)
+            val drawable = it.exerciseLayoutButton.background as TransitionDrawable
+            if (onSnackbarShow) {
+                it.exerciseLayoutButton.setTextColor(
+                    ContextCompat.getColor(it.context, R.color.blue)
+                )
+                drawable.startTransition(if(animate) resources.getInteger(R.integer.button_transition_duration) else 0)
+                it.exerciseLayoutButton.text = resources.getString(R.string.next)
+                it.exerciseLayoutButton.setOnClickListener {
+                    hideSnackBar()
+                    exerciseLayoutButton.isEnabled = false
+                    changeButton(false, animate)
+                    exercisesViewModel?.initFragment()
                 }
-            }, buttonChangeDelay)
+            } else {
+                it.exerciseLayoutButton.setTextColor(
+                    ContextCompat.getColorStateList(
+                        exerciseLayoutButton.context,
+                        R.color.blue_button_8_text_color
+                    )
+                )
+                drawable.resetTransition()
+                it.exerciseLayoutButton.text = resources.getString(R.string.check)
+            }
         }
     }
 
@@ -237,9 +242,9 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         exerciseLayoutButtonFrameLayout.background = null
         exerciseLayoutButton.isEnabled = false
         (exerciseLayoutButton as TextView).text = resources.getString(R.string.check)
-        exerciseLayoutButton.setOnClickListener{
+        exerciseLayoutButton.setOnClickListener {
             exercisesViewModel?.checkExerciseResult()
-        }
+            }
     }
 
 }

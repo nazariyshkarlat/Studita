@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studita.presentation.extensions.navigateBack
-import com.example.studita.presentation.fragments.currentFragment
 
 open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
     lateinit var listener: Animator.AnimatorListener
@@ -24,14 +23,12 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        currentFragment = this
         onNavigateFragment?.onNavigate(this)
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if(!hidden){
-            currentFragment = this
             onNavigateFragment?.onNavigate(this)
         }
     }

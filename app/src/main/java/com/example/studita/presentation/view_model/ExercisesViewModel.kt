@@ -29,7 +29,7 @@ class ExercisesViewModel : ViewModel(){
     val navigationState = SingleLiveEvent<Pair<ExercisesNavigationState, Fragment>>()
     val progressBarState = SingleLiveEvent<Pair<Int, Boolean>>()
     val answered = MutableLiveData<Boolean>()
-    val snackbarState = MutableLiveData<Pair<ExerciseUiModel, ExerciseResponseData>?>()
+    val snackbarState = SingleLiveEvent<Pair<ExerciseUiModel, ExerciseResponseData>?>()
     val errorState = SingleLiveEvent<Int>()
     val exercisesButtonState = MutableLiveData<Boolean>()
     var exercisesProgress: ExercisesState = ExercisesState.START_PAGE

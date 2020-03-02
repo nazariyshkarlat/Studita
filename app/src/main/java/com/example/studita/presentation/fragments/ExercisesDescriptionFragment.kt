@@ -40,12 +40,17 @@ class ExercisesDescriptionFragment : NavigatableFragment(R.layout.exercises_desc
             OneShotPreDrawListener.add(exercisesDescription1ParentLinearLayout){
                 formView(exercisesDescriptionModel)
             }
+            if(!this.isHidden){
             exercisesDescription1LayoutScrollView.viewTreeObserver.addOnScrollChangedListener(this)
             OneShotPreDrawListener.add(exercisesDescription1LayoutScrollView) {
-                if(exercisesDescription1LayoutScrollView.height < exercisesDescription1LayoutScrollView.getChildAt(0).height
-                    + exercisesDescription1LayoutScrollView.paddingTop + exercisesDescription1LayoutScrollView.paddingBottom){
+                if (exercisesDescription1LayoutScrollView.height < exercisesDescription1LayoutScrollView.getChildAt(
+                        0
+                    ).height
+                    + exercisesDescription1LayoutScrollView.paddingTop + exercisesDescription1LayoutScrollView.paddingBottom
+                ) {
                     exercisesViewModel?.showButtonDivider(true)
                 }
+            }
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.example.studita.presentation.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
@@ -10,18 +9,14 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.extensions.navigateTo
 import com.example.studita.presentation.fragments.base.BaseFragment
-import com.example.studita.presentation.fragments.base.NavigatableFragment
-import com.example.studita.presentation.view_model.MainMenuActivityViewModel
+import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.example.studita.presentation.view_model.MainMenuFragmentViewModel
-import kotlinx.android.synthetic.main.exercise_variants_fragment.*
 import kotlinx.android.synthetic.main.main_menu_layout.*
-import kotlinx.android.synthetic.main.toolbar_layout.*
-import kotlinx.android.synthetic.main.user_stat_layout.*
 
 class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserver.OnScrollChangedListener{
 
     private var fragmentViewModel: MainMenuFragmentViewModel? = null
-    private var activityViewModel: MainMenuActivityViewModel? = null
+    private var activityViewModel: ToolbarFragmentViewModel? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -30,7 +25,7 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
         }
 
         activityViewModel = activity?.run {
-            ViewModelProviders.of(this).get(MainMenuActivityViewModel::class.java)
+            ViewModelProviders.of(this).get(ToolbarFragmentViewModel::class.java)
         }
 
         fragmentViewModel?.let{viewModel->
@@ -49,7 +44,8 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
 
         mainMenuScrollView.viewTreeObserver.addOnScrollChangedListener(this)
 
-        checkScrollable()
+        if(!isHidden)
+            checkScrollable()
     }
 
 
@@ -66,10 +62,13 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
     private fun checkScrollable() {
         mainMenuTitle.visibility = View.VISIBLE
         OneShotPreDrawListener.add(mainMenuScrollView) {
-            if(mainMenuScrollView.height < mainMenuScrollView.getChildAt(0).height
-                + mainMenuScrollView.paddingTop + mainMenuScrollView.paddingBottom){
+            if (mainMenuScrollView.height < mainMenuScrollView.getChildAt(0).height
+                + mainMenuScrollView.paddingTop + mainMenuScrollView.paddingBottom
+            ) {
                 mainMenuTitle.visibility = View.GONE
                 activityViewModel?.setToolbarText(mainMenuTitle.text.toString())
+            }else{
+                activityViewModel?.setToolbarText(null)
             }
         }
     }

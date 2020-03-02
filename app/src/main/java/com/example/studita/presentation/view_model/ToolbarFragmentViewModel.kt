@@ -3,14 +3,14 @@ package com.example.studita.presentation.view_model
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class MainMenuActivityViewModel : ViewModel(){
+class ToolbarFragmentViewModel : ViewModel(){
 
     var toolbarHeight = 0
 
-    val toolbarTextState = SingleLiveEvent<String>()
+    val toolbarTextState = MutableLiveData<String?>()
     val toolbarDividerState = SingleLiveEvent<Boolean>()
 
-    fun setToolbarText(text: String){
+    fun setToolbarText(text: String?){
         toolbarTextState.value = text
     }
 

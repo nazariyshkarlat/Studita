@@ -18,13 +18,13 @@ import com.example.studita.presentation.extensions.setOnViewSizeChangeListener
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.presentation.view_model.AuthorizationFragmentViewModel
-import com.example.studita.presentation.view_model.MainMenuActivityViewModel
+import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import kotlinx.android.synthetic.main.authorization_layout.*
 
 class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout), TextWatcher,
     OnViewSizeChangeListener {
 
-    private var mainActivityViewModel: MainMenuActivityViewModel? = null
+    private var mainActivityViewModel: ToolbarFragmentViewModel? = null
     private var authorizationFragmentViewModel: AuthorizationFragmentViewModel? = null
     private lateinit var signUpOnClick: () -> Unit
     private val set = ConstraintSet()
@@ -40,7 +40,7 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
         contentView = authorizationConstraintLayout
 
         mainActivityViewModel = activity?.run {
-            ViewModelProviders.of(this).get(MainMenuActivityViewModel::class.java)
+            ViewModelProviders.of(this).get(ToolbarFragmentViewModel::class.java)
         }
         authorizationFragmentViewModel = activity?.run {
             ViewModelProviders.of(this).get(AuthorizationFragmentViewModel::class.java)
