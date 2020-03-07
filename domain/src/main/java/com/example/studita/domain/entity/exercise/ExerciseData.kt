@@ -18,7 +18,7 @@ sealed class ExerciseData{
     }
     sealed class ExerciseDataScreen: ExerciseData() {
         data class ScreenType1Data(
-            val title: String, val subtitle: String, val partsToInject: List<String>
+            val title: String, val subtitle: String, val partsToInject: List<String>, val image: String
         ) : ExerciseDataScreen()
 
         data class ScreenType2Data(val title: String) : ExerciseDataScreen()

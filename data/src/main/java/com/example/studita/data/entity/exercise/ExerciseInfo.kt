@@ -19,7 +19,10 @@ sealed class ScreenInfo{
     data class ScreenType1Info(
         @SerializedName("title") val title: String, @SerializedName("subtitle") val subtitle: String, @SerializedName(
             "parts_to_inject"
-        ) val partsToInject: List<String>
+        ) val partsToInject: List<String>,
+        @SerializedName(
+            "image"
+        ) val image: String
     ): ScreenInfo()
 
     data class ScreenType2Info(@SerializedName("title") val title: String) : ScreenInfo()

@@ -26,7 +26,8 @@ sealed class ExerciseUiModel {
             data class ScreenType1UiModel(
                 val title: String,
                 val subtitle: String,
-                val partsToInject: List<String>
+                val partsToInject: List<String>,
+                @IdRes val image: Int
             ) : ExerciseUiModelScreen()
 
             data class ScreenType2UiModel(val title: String) : ExerciseUiModelScreen()

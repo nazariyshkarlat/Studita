@@ -18,7 +18,7 @@ class ExercisesDataMapper :
                 }
                 is ExerciseArrayEntity.ScreenEntity ->{
                     when(val screenInfo = it.screenInfo){
-                        is ScreenInfo.ScreenType1Info -> ExerciseData.ExerciseDataScreen.ScreenType1Data(screenInfo.title, screenInfo.subtitle, screenInfo.partsToInject)
+                        is ScreenInfo.ScreenType1Info -> ExerciseData.ExerciseDataScreen.ScreenType1Data(screenInfo.title, screenInfo.subtitle, screenInfo.partsToInject, screenInfo.image)
                         is ScreenInfo.ScreenType2Info -> ExerciseData.ExerciseDataScreen.ScreenType2Data(screenInfo.title)
                     }
                 }
