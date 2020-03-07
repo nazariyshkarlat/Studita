@@ -1,6 +1,5 @@
 package com.example.studita.data.repository.datasource.exercises
 
-import com.example.studita.data.entity.exercise.ExerciseEntity
 import com.example.studita.data.entity.exercise.ExercisesResponse
 
 interface ExercisesDataStore {

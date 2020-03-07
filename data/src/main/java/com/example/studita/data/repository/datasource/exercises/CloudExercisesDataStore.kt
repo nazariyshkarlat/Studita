@@ -1,8 +1,7 @@
 package com.example.studita.data.repository.datasource.exercises
 
-import com.example.studita.data.entity.exercise.ExerciseDeserializer
-import com.example.studita.data.entity.exercise.ExerciseEntity
-import com.example.studita.data.entity.exercise.ExercisesRawResponse
+import com.example.studita.data.entity.exercise.ExerciseArrayEntity
+import com.example.studita.data.entity.exercise.ExerciseArrayEntityDeserializer
 import com.example.studita.data.entity.exercise.ExercisesResponse
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.data.net.ExercisesService
@@ -18,21 +17,21 @@ class CloudExercisesDataStore(
 ) : ExercisesDataStore {
 
     private val gsonBuilder = GsonBuilder()
-    private val deserializer: ExerciseDeserializer  = ExerciseDeserializer()
+    private val deserializer: ExerciseArrayEntityDeserializer  = ExerciseArrayEntityDeserializer()
     private val exercisesGson: Gson
     private val type: Type
 
     init {
-        gsonBuilder.registerTypeAdapter(ExerciseEntity::class.java, deserializer)
+        gsonBuilder.registerTypeAdapter(ExerciseArrayEntity::class.java, deserializer)
         exercisesGson = gsonBuilder.create()
-        type = object : TypeToken<List<ExerciseEntity>>() {}.type
+        type = object : TypeToken<List<ExerciseArrayEntity>>() {}.type
     }
 
     override suspend fun getExercises(chapterPartNumber: Int): Pair<Int, ExercisesResponse> =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         } else {
-            val exercises: List<ExerciseEntity>
+            val exercises: List<ExerciseArrayEntity>
             val exercisesAsync = exercisesService.getExercisesAsync(chapterPartNumber)
             val result = exercisesAsync.await()
             val body = result.body()!!

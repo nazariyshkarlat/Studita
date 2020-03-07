@@ -8,7 +8,7 @@ data class ExercisesRawResponse(@SerializedName("exercises_start_screen")val exe
 
 data class ExercisesResponse(val exercisesStartScreen: ExercisesStartScreen,
                              val exercisesDescription: ExercisesDescription,
-                             val exercises: List<ExerciseEntity>)
+                             val exercises: List<ExerciseArrayEntity>)
 
 data class ExercisesStartScreen(@SerializedName("title")val title: String,
                                 @SerializedName("subtitle")val subtitle: String)
