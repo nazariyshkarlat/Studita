@@ -1,10 +1,11 @@
 package com.example.studita.data.entity.exercise
 
+import com.google.gson.JsonArray
 import com.google.gson.annotations.SerializedName
 
 data class ExercisesRawResponse(@SerializedName("exercises_start_screen")val exercisesStartScreen: ExercisesStartScreen,
                                 @SerializedName("exercises_description")val exercisesDescription: ExercisesDescription,
-                                @SerializedName("exercises")val exercisesRaw: Any)
+                                @SerializedName("exercises")val exercisesRaw: JsonArray)
 
 data class ExercisesResponse(val exercisesStartScreen: ExercisesStartScreen,
                              val exercisesDescription: ExercisesDescription,

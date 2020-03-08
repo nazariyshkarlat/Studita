@@ -8,6 +8,7 @@ import com.example.studita.data.net.ExercisesService
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
@@ -35,7 +36,15 @@ class CloudExercisesDataStore(
             val exercisesAsync = exercisesService.getExercisesAsync(chapterPartNumber)
             val result = exercisesAsync.await()
             val body = result.body()!!
-            exercises = exercisesGson.fromJson(body.exercisesRaw.toString(), type)
+            val exercisesArrayFlatten: JsonArray = JsonArray()
+            for(jsonElement in body.exercisesRaw){
+                if(jsonElement.isJsonArray){
+                    for(element in jsonElement.asJsonArray)
+                        exercisesArrayFlatten.add(element)
+                }else
+                    exercisesArrayFlatten.add(jsonElement)
+            }
+            exercises = exercisesGson.fromJson(exercisesArrayFlatten, type)
             result.code() to ExercisesResponse(body.exercisesStartScreen, body.exercisesDescription, exercises)
         }
 }
