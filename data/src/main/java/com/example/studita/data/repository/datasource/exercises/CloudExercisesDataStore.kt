@@ -2,6 +2,7 @@ package com.example.studita.data.repository.datasource.exercises
 
 import com.example.studita.data.entity.exercise.ExerciseArrayEntity
 import com.example.studita.data.entity.exercise.ExerciseArrayEntityDeserializer
+import com.example.studita.data.entity.exercise.ExercisesJsonArrayMapper
 import com.example.studita.data.entity.exercise.ExercisesResponse
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.data.net.ExercisesService
@@ -36,15 +37,7 @@ class CloudExercisesDataStore(
             val exercisesAsync = exercisesService.getExercisesAsync(chapterPartNumber)
             val result = exercisesAsync.await()
             val body = result.body()!!
-            val exercisesArrayFlatten: JsonArray = JsonArray()
-            for(jsonElement in body.exercisesRaw){
-                if(jsonElement.isJsonArray){
-                    for(element in jsonElement.asJsonArray)
-                        exercisesArrayFlatten.add(element)
-                }else
-                    exercisesArrayFlatten.add(jsonElement)
-            }
-            exercises = exercisesGson.fromJson(exercisesArrayFlatten, type)
+            exercises = exercisesGson.fromJson(ExercisesJsonArrayMapper.map(body.exercisesRaw), type)
             result.code() to ExercisesResponse(body.exercisesStartScreen, body.exercisesDescription, exercises)
         }
 }
