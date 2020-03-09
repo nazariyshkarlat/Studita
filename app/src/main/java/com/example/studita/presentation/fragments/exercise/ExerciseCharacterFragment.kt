@@ -40,12 +40,14 @@ class ExerciseCharacterFragment : NavigatableFragment(R.layout.exercise_characte
                 })
         }
 
+        /*
         val exerciseUiModel = arguments?.getParcelable<ExerciseUiModel>("EXERCISE")
         if (exerciseUiModel is ExerciseUiModel.ExerciseUi4) {
             exerciseCharacterFragmentLeftTextView.text = exerciseUiModel.expressionParts[0]
             exerciseCharacterFragmentRightTextView.text = resources.getString(R.string.exercise_type_4_right_text, exerciseUiModel.expressionParts[1], exerciseUiModel.expressionResult)
             exerciseCharacterFragmentBottomTextView.text = resources.getString(R.string.exercise_type_4_bottom_text)
         }
+         */
         exerciseCharacterFragmentEditText.addTextChangedListener(this)
     }
 

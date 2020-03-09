@@ -182,14 +182,10 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                 )
                 exerciseBottomSnackbarSubtitle.visibility = View.GONE
             } else {
-                if(exerciseUiModel is ExerciseUiModel.ExerciseUi6)
-                    exerciseBottomSnackbarTitle.text = resources.getString(R.string.exercise_type_3_false_snackbar_title)
-                else
-                    exerciseBottomSnackbarTitle.text = resources.getString(R.string.false_answer)
+                exerciseBottomSnackbarTitle.text = resources.getString(R.string.false_answer)
                 exerciseBottomSnackbarSubtitle.text = when (subtitleText) {
                     "true" ->  resources.getString(R.string.true_variant)
                     "false" ->  resources.getString(R.string.false_variant)
-                    "division by 0" -> resources.getString(R.string.division_by_0)
                     else ->  subtitleText
                 }
                 exerciseLayoutSnackbar.setBackgroundColor(ContextCompat.getColor(it, R.color.red))

@@ -14,7 +14,7 @@ import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercise_input_fragment.*
-import kotlinx.android.synthetic.main.exercise_variants_fragment.*
+import kotlinx.android.synthetic.main.exercise_variants_title_fragment.*
 
 class ExerciseInputFragment : NavigatableFragment(R.layout.exercise_input_fragment), TextWatcher{
 
@@ -38,11 +38,13 @@ class ExerciseInputFragment : NavigatableFragment(R.layout.exercise_input_fragme
                 })
         }
 
+        /*
         val exerciseUiModel = arguments?.getParcelable<ExerciseUiModel>("EXERCISE")
         if (exerciseUiModel is ExerciseUiModel.ExerciseUi3) {
             exerciseInputFragmentTextView.text = resources.getString(R.string.exercise_type_2_3_title, exerciseUiModel.equation)
             exerciseInputEditText.hint = resources.getString(R.string.exercise_type_3_hint)
         }
+         */
         exerciseInputEditText.addTextChangedListener(this)
     }
 

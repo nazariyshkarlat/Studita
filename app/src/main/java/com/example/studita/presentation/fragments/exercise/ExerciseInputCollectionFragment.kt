@@ -47,6 +47,7 @@ class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_in
                 })
         }
 
+        /*
         when(val exerciseUiModel = arguments?.getParcelable<ExerciseUiModel>("EXERCISE")){
             is ExerciseUiModel.ExerciseUi8 ->{
                 for(shape in exerciseUiModel.shapes) {
@@ -82,6 +83,7 @@ class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_in
 
             }
         }
+         */
         exerciseInputCollectionFragmentEditText.addTextChangedListener(this)
     }
 

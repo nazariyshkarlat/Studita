@@ -88,14 +88,14 @@ class ExercisesDescriptionFragment : NavigatableFragment(R.layout.exercises_desc
                 val insideBracketsInt = insideBrackets.toInt()
                 if(child is LinearLayout){
                     for(i in 0 until insideBracketsInt) {
-                        val shapeView = ImageView(child.context)
+                        val shapeView = View(child.context)
                         val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                         params.height = child.height
                         params.width = child.height
                         if(i != insideBracketsInt-1)
                             params.marginEnd = 16.dpToPx()
                         shapeView.layoutParams = params
-                        shapeView.setImageResource(R.drawable.exercise_rectangle)
+                        shapeView.background =  ContextCompat.getDrawable(child.context, R.drawable.exercise_rectangle)
                         child.addView(shapeView)
                     }
                 }

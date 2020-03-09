@@ -12,7 +12,7 @@ import com.example.studita.presentation.extensions.dpToPx
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.view_model.ExercisesEndFragmentViewModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import kotlinx.android.synthetic.main.exercise_variants_fragment.*
+import kotlinx.android.synthetic.main.exercise_variants_title_fragment.*
 import kotlinx.android.synthetic.main.exercises_result_layout.*
 import kotlinx.android.synthetic.main.home_layout.*
 

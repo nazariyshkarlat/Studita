@@ -42,6 +42,7 @@ class ExercisesViewModel : ViewModel(){
     private var exerciseIndex = 0
     private var score = 0
 
+    lateinit var exerciseUiModel: ExerciseUiModel
     lateinit var exercisesResponseData: ExercisesResponseData
     private lateinit var exercises: List<ExerciseUiModel>
     private val exercisesInteractor = ExercisesModule.getExercisesInteractorImpl()
@@ -113,7 +114,7 @@ class ExercisesViewModel : ViewModel(){
 
     fun checkExerciseResult(){
         answered.value = true
-        val exerciseUiModel =if(exerciseIndex < exercises.size) {
+        exerciseUiModel =if(exerciseIndex < exercises.size) {
             exercises[exerciseIndex]
         }else{
             exercises[exercisesToRetry[0]]
@@ -150,7 +151,7 @@ class ExercisesViewModel : ViewModel(){
 
     private fun getFragmentToAdd(exerciseUiModel: ExerciseUiModel) =
         when(exerciseUiModel){
-            is ExerciseUiModel.ExerciseUi1, is ExerciseUiModel.ExerciseUi2, is ExerciseUiModel.ExerciseUi5, is ExerciseUiModel.ExerciseUi7 -> ExerciseVariantsFragment()
+            is ExerciseUiModel.ExerciseUi1, is ExerciseUiModel.ExerciseUi2, is ExerciseUiModel.ExerciseUi5, is ExerciseUiModel.ExerciseUi7 -> ExerciseVariantsTitleFragment()
             is ExerciseUiModel.ExerciseUi3 -> ExerciseInputFragment()
             is ExerciseUiModel.ExerciseUi4 -> ExerciseCharacterFragment()
             is ExerciseUiModel.ExerciseUi6 -> ExerciseInputEquationFragment()

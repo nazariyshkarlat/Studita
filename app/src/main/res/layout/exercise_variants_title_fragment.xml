@@ -8,19 +8,26 @@
     android:paddingTop="@dimen/toolbarHeight">
 
     <TextView
-        android:id="@+id/exerciseVariantsFragmentTextView"
+        android:id="@+id/exerciseVariantsTitleFragmentTitle"
         style="@style/Bold32"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/exerciseVariantsTitleFragmentSubtitle"
+        style="@style/Regular16_50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"/>
+
     <ScrollView
-        android:id="@+id/exerciseVariantsFragmentScrollView"
+        android:id="@+id/exerciseVariantsTitleFragmentScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="24dp">
 
         <LinearLayout
-            android:id="@+id/exerciseVariantsFragmentLinearLayout"
+            android:id="@+id/exerciseVariantsTitleFragmentLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
@@ -28,6 +35,5 @@
             android:orientation="vertical" />
 
     </ScrollView>
-
 
 </LinearLayout>
