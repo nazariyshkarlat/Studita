@@ -13,6 +13,7 @@
         android:layout_marginStart="16dp"
         android:orientation="vertical"
         android:paddingTop="24dp"
+        android:layout_toStartOf="@id/exerciseBottomSnackbarIconLayout"
         android:paddingBottom="24dp">
 
         <TextView
@@ -24,13 +25,25 @@
         <TextView
             android:id="@+id/exerciseBottomSnackbarSubtitle"
             style="@style/Regular18White"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/exerciseBottomSnackbarFlexbox"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:showDivider="middle"
+            app:dividerDrawable="@drawable/exercises_flexbox_divider_16"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"/>
+
     </LinearLayout>
 
 
     <FrameLayout
+        android:id="@+id/exerciseBottomSnackbarIconLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/exerciseBottomSnackbarLinearLayout"

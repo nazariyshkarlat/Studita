@@ -2,7 +2,6 @@ package com.example.studita.presentation.fragments
 
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
@@ -14,16 +13,19 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
+import com.example.studita.data.entity.exercise.ExerciseResponseDescriptionContent
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
+import com.example.studita.domain.entity.exercise.ExerciseResponseDescriptionContentData
 import com.example.studita.presentation.extensions.*
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.google.android.flexbox.FlexboxLayout
 import kotlinx.android.synthetic.main.exercise_bottom_snackbar.*
 import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.android.synthetic.main.exercise_layout.view.*
+import kotlinx.android.synthetic.main.exercise_screen_type_1.*
 import kotlinx.android.synthetic.main.exercise_toolbar.*
-import kotlinx.android.synthetic.main.toolbar_layout.*
 
 
 class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
@@ -39,20 +41,32 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         exercisesViewModel?.let{viewModel ->
             viewModel.navigationState.observe(viewLifecycleOwner, Observer{ fragment->
                 when(fragment.first){
-                    ExercisesViewModel.ExercisesNavigationState.FIRST -> (activity as AppCompatActivity).navigateTo(fragment.second, R.id.exerciseLayoutFrameLayout)
+                    ExercisesViewModel.ExercisesNavigationState.FIRST -> {
+                        exercisesViewModel?.exercisesProgress?.value =
+                            ExercisesViewModel.ExercisesState.EXERCISES
+                        (activity as AppCompatActivity).navigateTo(
+                            fragment.second,
+                            R.id.exerciseLayoutFrameLayout
+                        )
+                    }
                     ExercisesViewModel.ExercisesNavigationState.REPLACE -> (activity as AppCompatActivity).replaceWithAnim(fragment.second, R.id.exerciseLayoutFrameLayout, R.animator.slide_in_left, R.animator.slide_out_right)
                 }
+                setButtonText()
             })
 
             viewModel.snackbarState.observe(viewLifecycleOwner, Observer { response ->
                 showSnackbar(response)
             })
 
-            viewModel.exercisesButtonState.observe(viewLifecycleOwner, Observer { enabled ->
+            viewModel.exercisesButtonEnabledState.observe(viewLifecycleOwner, Observer { enabled ->
                 exerciseLayoutButton.isEnabled = enabled
                 exerciseLayoutButton.setOnClickListener {
-                    viewModel.checkExerciseResult()
+                    exercisesViewModel?.checkExerciseResult()
                 }
+            })
+
+            viewModel.exercisesButtonTextState.observe(viewLifecycleOwner, Observer { text ->
+                exerciseLayoutButton.text = text
             })
 
             viewModel.toolbarDividerState.observe(viewLifecycleOwner, Observer { show ->
@@ -73,19 +87,22 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                 })
             })
 
-            when (viewModel.exercisesProgress) {
-                ExercisesViewModel.ExercisesState.START_PAGE -> {
-                    exerciseLayoutButton.setOnClickListener {
+            viewModel.exercisesProgress.observe(viewLifecycleOwner, Observer { state ->
+                when (state) {
+                    ExercisesViewModel.ExercisesState.START_SCREEN -> {
+                        exerciseToolbarProgressBar.alpha = 0F
+                        exerciseLayoutButton.setOnClickListener {
+                            viewModel.exercisesProgress.value = ExercisesViewModel.ExercisesState.DESCRIPTION
+                        }
+                    }
+                    ExercisesViewModel.ExercisesState.DESCRIPTION -> {
                         formDescriptionView()
                     }
+                    else -> {
+                        formExercisesView()
+                    }
                 }
-                ExercisesViewModel.ExercisesState.DESCRIPTION -> {
-                    formDescriptionView()
-                }
-                else -> {
-                    formExercisesView()
-                }
-            }
+            })
         }
 
         if(savedInstanceState == null)
@@ -97,7 +114,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
 
         exerciseBottomSnackbarIcon.setOnClickListener {  }
 
-        setSnackbarTranslationY()
+        if (exercisesViewModel?.answered?.value == true)
+            showSnackbar(exercisesViewModel?.snackbarState?.value, animate = false)
     }
 
     fun onWindowFocusChanged(hasFocus: Boolean){
@@ -121,12 +139,11 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
 
         data?.let {
             val exercisesResponseData = data.second
-            val exerciseUiModel = data.first
             formSnackBarView(
-                exerciseUiModel,
-                exercisesResponseData.exerciseResult,
-                exercisesResponseData.description
+                exercisesResponseData
             )
+
+            setSnackbarTranslationY()
 
             if (animate) {
                 exerciseLayoutSnackbar.animate().translationY(0F)
@@ -141,11 +158,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
     }
 
     private fun hideSnackBar(){
-        if (exerciseLayoutFrameLayout.translationY != 0F)
-            exerciseLayoutFrameLayout.animate().translationY(0F).setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong()).setInterpolator(
-                FastOutSlowInInterpolator()
-            ).start()
-
         exerciseLayoutSnackbar.animate().translationY(exerciseLayoutSnackbar.height.toFloat())
             .setInterpolator(
                 FastOutSlowInInterpolator()
@@ -153,43 +165,64 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
     }
 
     private fun setSnackbarTranslationY(){
-        OneShotPreDrawListener.add(exerciseLayoutButton) {
-            val buttonParams =
-                exerciseLayoutButton.layoutParams as FrameLayout.LayoutParams
-            val snackbarLinearLayoutBottomMargin =
-                exerciseLayoutButton.height + buttonParams.bottomMargin
-            val snackBarParams =
-                exerciseBottomSnackbarLinearLayout.layoutParams as RelativeLayout.LayoutParams
-            snackBarParams.bottomMargin = snackbarLinearLayoutBottomMargin
-            exerciseBottomSnackbarLinearLayout.layoutParams = snackBarParams
-            exerciseLayoutSnackbar.translationY =
-                exerciseLayoutSnackbar.height + snackbarLinearLayoutBottomMargin.toFloat()
-            exerciseLayoutSnackbar.visibility = View.VISIBLE
-
-            if (exercisesViewModel?.answered?.value == true)
-                showSnackbar(exercisesViewModel?.snackbarState?.value, animate = false)
-        }
+        val buttonParams =
+            exerciseLayoutButton.layoutParams as FrameLayout.LayoutParams
+        val snackbarLinearLayoutBottomMargin =
+            exerciseLayoutButton.height + buttonParams.bottomMargin
+        val snackBarParams =
+            exerciseBottomSnackbarLinearLayout.layoutParams as RelativeLayout.LayoutParams
+        snackBarParams.bottomMargin = snackbarLinearLayoutBottomMargin
+        exerciseBottomSnackbarLinearLayout.layoutParams = snackBarParams
+        exerciseLayoutSnackbar.translationY =
+            exerciseLayoutSnackbar.height + snackbarLinearLayoutBottomMargin.toFloat()
+        exerciseLayoutSnackbar.visibility = View.VISIBLE
     }
 
 
-    private fun formSnackBarView(exerciseUiModel: ExerciseUiModel, answerIsCorrect: Boolean, subtitleText: String?) {
+    private fun formSnackBarView(responseData: ExerciseResponseData) {
         context?.let {
-            println(answerIsCorrect)
-            if (answerIsCorrect) {
+            if (responseData.exerciseResult) {
                 exerciseBottomSnackbarTitle.text = resources.getString(R.string.true_answer)
                 exerciseLayoutSnackbar.setBackgroundColor(
                     ContextCompat.getColor(it, R.color.green)
                 )
+                exerciseBottomSnackbarFlexbox.visibility = View.GONE
                 exerciseBottomSnackbarSubtitle.visibility = View.GONE
             } else {
-                exerciseBottomSnackbarTitle.text = resources.getString(R.string.false_answer)
-                exerciseBottomSnackbarSubtitle.text = when (subtitleText) {
-                    "true" ->  resources.getString(R.string.true_variant)
-                    "false" ->  resources.getString(R.string.false_variant)
-                    else ->  subtitleText
+                responseData.description?.let {description->
+                    exerciseBottomSnackbarTitle.text = resources.getString(R.string.false_answer)
+                    exerciseLayoutSnackbar.setBackgroundColor(
+                        ContextCompat.getColor(
+                            it,
+                            R.color.red
+                        )
+                    )
+                    if (description.descriptionContent is ExerciseResponseDescriptionContentData.DescriptionContentString) {
+                        exerciseBottomSnackbarSubtitle.visibility = View.VISIBLE
+                        exerciseBottomSnackbarFlexbox.visibility = View.GONE
+                        exerciseBottomSnackbarSubtitle.text = (description.descriptionContent as ExerciseResponseDescriptionContentData.DescriptionContentString).descriptionContent
+                    }else if(description.descriptionContent is ExerciseResponseDescriptionContentData.DescriptionContentArray){
+                        val count = (description.descriptionContent as ExerciseResponseDescriptionContentData.DescriptionContentArray).descriptionContent.count
+                        if(count == 0){
+                            exerciseBottomSnackbarSubtitle.visibility = View.VISIBLE
+                            exerciseBottomSnackbarFlexbox.visibility = View.GONE
+                            exerciseBottomSnackbarSubtitle.text = resources.getString(R.string.exercise_shape_0_rect)
+                        }else{
+                            exerciseBottomSnackbarFlexbox.removeAllViews()
+                            exerciseBottomSnackbarSubtitle.visibility = View.GONE
+                            exerciseBottomSnackbarFlexbox.visibility = View.VISIBLE
+                            for(i in 0 until count) {
+                                val shapeView = View(exerciseBottomSnackbarFlexbox.context)
+                                val params = FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT)
+                                params.height = 20.dpToPx()
+                                params.width = 20.dpToPx()
+                                shapeView.layoutParams = params
+                                shapeView.background =  ContextCompat.getDrawable(exerciseBottomSnackbarFlexbox.context, R.drawable.exercise_rectangle_white)
+                                exerciseBottomSnackbarFlexbox.addView(shapeView)
+                            }
+                        }
+                    }
                 }
-                exerciseLayoutSnackbar.setBackgroundColor(ContextCompat.getColor(it, R.color.red))
-                exerciseBottomSnackbarSubtitle.visibility = View.VISIBLE
             }
         }
     }
@@ -205,7 +238,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                 it.exerciseLayoutButton.text = resources.getString(R.string.next)
                 it.exerciseLayoutButton.setOnClickListener {
                     hideSnackBar()
-                    exerciseLayoutButton.isEnabled = false
                     changeButton(false, animate)
                     exercisesViewModel?.initFragment()
                 }
@@ -216,31 +248,35 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                         R.color.blue_button_8_text_color
                     )
                 )
-                drawable.resetTransition()
+                drawable.reverseTransition(resources.getInteger(R.integer.button_transition_duration))
                 it.exerciseLayoutButton.text = resources.getString(R.string.check)
             }
         }
     }
 
     private fun formDescriptionView(){
-        exercisesViewModel?.exercisesProgress = ExercisesViewModel.ExercisesState.DESCRIPTION
+        exerciseToolbarProgressBar.alpha = 0F
         val descriptionFragment = ExercisesDescriptionFragment()
         (activity as AppCompatActivity).navigateTo(descriptionFragment, R.id.exerciseLayoutFrameLayout)
         exerciseLayoutButton.text = resources.getString(R.string.continue_string)
         exerciseLayoutButton.setOnClickListener{
-            formExercisesView()
             exercisesViewModel?.initFragment()
         }
     }
 
     private fun formExercisesView(){
-        exercisesViewModel?.exercisesProgress = ExercisesViewModel.ExercisesState.EXERCISES
+        exerciseToolbarProgressBar.animate().alpha(1F).start()
         exerciseLayoutButtonFrameLayout.background = null
-        exerciseLayoutButton.isEnabled = false
-        (exerciseLayoutButton as TextView).text = resources.getString(R.string.check)
         exerciseLayoutButton.setOnClickListener {
             exercisesViewModel?.checkExerciseResult()
-            }
+        }
+    }
+
+    private fun setButtonText(){
+        exercisesViewModel?.exercisesButtonTextState?.value =  if(exercisesViewModel?.exerciseUiModel is ExerciseUiModel.ExerciseUiModelExercise)
+            resources.getString(R.string.check)
+        else
+            resources.getString(R.string.continue_string)
     }
 
 }

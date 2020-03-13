@@ -39,9 +39,10 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
             Handler().postDelayed( {
                 exercisesResultLayoutProgressBar.animateProgress(percent, duration = resources.getInteger(R.integer.exercises_progress_XP_duration).toLong())
             }, resources.getInteger(R.integer.exercises_progress_XP_delay).toLong())
+            exercisesResultLayoutAnswersPercent.text = resources.getString(R.string.answers_percent, percent)
         }
         trueAnswers?.let{
-            exercisesResultLayoutAnswersPercent.text = resources.getString(R.string.answers_percent, (it*10).toString())
+            exercisesResultLayoutProgressBarText.text = resources.getString(R.string.exercises_XP_result, it*10)
         }
 
         checkScrollable()

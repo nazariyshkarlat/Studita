@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/exerciseVariantTextItem"
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/exerciseVariantFlexboxItem"
     android:orientation="horizontal"
     style="@style/ExerciseVariant"
-    android:layout_weight="1"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="14dp"/>
+    android:layout_height="48dp"
+    app:showDivider="middle"
+    app:alignContent="center"
+    app:alignItems="center"
+    app:justifyContent="center"
+    app:dividerDrawable="@drawable/exercises_flexbox_divider_16"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:layout_margin="8dp"/>

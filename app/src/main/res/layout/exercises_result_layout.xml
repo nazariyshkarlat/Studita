@@ -36,8 +36,7 @@
                 style="@style/Medium20Blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="+100 XP"/>
+                android:layout_gravity="center"/>
 
             <com.example.studita.presentation.views.CustomProgressBar
                 android:id="@+id/exercisesResultLayoutProgressBar"

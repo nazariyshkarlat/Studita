@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
@@ -15,6 +16,8 @@ import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseShape
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.example.studita.presentation.views.SquareView
+import com.google.android.flexbox.FlexboxLayout
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
 import kotlinx.android.synthetic.main.exercise_variants_title_fragment.*
 
@@ -42,6 +45,7 @@ class ExerciseVariantsTitleFragment : NavigatableFragment(R.layout.exercise_vari
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel -> {
                     val exerciseUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel
                     exerciseVariantsTitleFragmentTitle.text = exerciseUiModel.title
+                    exerciseVariantsTitleFragmentSubtitle.text = exerciseUiModel.subtitle
                     fillLinearLayout(exerciseUiModel.variants)
                 }
             }
@@ -84,22 +88,32 @@ class ExerciseVariantsTitleFragment : NavigatableFragment(R.layout.exercise_vari
 
     private fun fillLinearLayout(variants: List<ExerciseShape>){
         for(variant in variants) {
-            val variantView = exerciseVariantsTitleFragmentLinearLayout.makeView(R.layout.exercise_variant_linear_item) as LinearLayout
-            for(i in 0 until variant.count) {
-                val shapeView = View(exerciseVariantsTitleFragmentLinearLayout.context)
-                val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                params.height = 20.dpToPx()
-                params.width = 20.dpToPx()
-                params.leftMargin = 8.dpToPx()
-                params.rightMargin = 8.dpToPx()
-                shapeView.layoutParams = params
-                shapeView.background =  ContextCompat.getDrawable(exerciseVariantsTitleFragmentLinearLayout.context, R.drawable.exercise_rectangle)
-                variantView.addView(shapeView)
+            val variantView: View
+            if(variant.count == 0){
+                variantView = exerciseVariantsTitleFragmentLinearLayout.makeView(R.layout.exercise_variant_text_item) as TextView
+                variantView.exerciseVariantFlexboxItem.text = resources.getString(R.string.exercise_shape_0_rect)
+            }else {
+                variantView = exerciseVariantsTitleFragmentLinearLayout.makeView(R.layout.exercise_variant_linear_item) as FlexboxLayout
+                for (i in 0 until variant.count) {
+                    val shapeView = SquareView(exerciseVariantsTitleFragmentLinearLayout.context)
+                    val params = FlexboxLayout.LayoutParams(
+                        FlexboxLayout.LayoutParams.WRAP_CONTENT,
+                        FlexboxLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    params.height = 20.dpToPx()
+                    params.width = 20.dpToPx()
+                    shapeView.layoutParams = params
+                    shapeView.background = ContextCompat.getDrawable(
+                        exerciseVariantsTitleFragmentLinearLayout.context,
+                        R.drawable.exercise_rectangle
+                    )
+                    variantView.addView(shapeView)
+                }
             }
             variantView.setOnClickListener {
                 exercisesViewModel?.selectedPos = exerciseVariantsTitleFragmentLinearLayout.indexOfChild(it)
                 exercisesViewModel?.selectedPos?.let { it1 -> selectVariant(it1) }
-                ExerciseRequestData(variant.count.toString())
+                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant.count.toString())
             }
             exerciseVariantsTitleFragmentLinearLayout.addView(variantView)
         }

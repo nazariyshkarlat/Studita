@@ -1,26 +1,27 @@
 package com.example.studita.domain.entity.exercise
 
-sealed class ExerciseData{
-    sealed class ExerciseDataExercise(open val exerciseNumber: Int): ExerciseData() {
+sealed class ExerciseData(open val exerciseNumber: Int?){
+    sealed class ExerciseDataExercise(override val exerciseNumber: Int?): ExerciseData(exerciseNumber) {
         data class ExerciseType1Data(
-            override val exerciseNumber: Int,
+            override val exerciseNumber: Int?,
             val title: String,
             val subtitle: String,
             val variants: List<ExerciseShapeData>
         ) : ExerciseDataExercise(exerciseNumber)
 
         data class ExerciseType2Data(
-            override val exerciseNumber: Int,
+            override val exerciseNumber: Int?,
             val title: ExerciseShapeData,
             val subtitle: String,
             val variants: List<String>
         ) : ExerciseDataExercise(exerciseNumber)
     }
-    sealed class ExerciseDataScreen: ExerciseData() {
+    sealed class ExerciseDataScreen(override val exerciseNumber: Int?): ExerciseData(exerciseNumber) {
         data class ScreenType1Data(
+            override val exerciseNumber: Int?,
             val title: String, val subtitle: String, val partsToInject: List<String>, val image: String
-        ) : ExerciseDataScreen()
+        ) : ExerciseDataScreen(exerciseNumber)
 
-        data class ScreenType2Data(val title: String) : ExerciseDataScreen()
+        data class ScreenType2Data(override val exerciseNumber: Int?, val title: String) : ExerciseDataScreen(exerciseNumber)
     }
 }

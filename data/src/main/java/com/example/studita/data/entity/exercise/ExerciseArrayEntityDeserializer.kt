@@ -24,7 +24,7 @@ class ExerciseArrayEntityDeserializer : JsonDeserializer<ExerciseArrayEntity> {
                 )
             }
             "screen" -> {
-                ExerciseArrayEntity.ScreenEntity(
+                ExerciseArrayEntity.ScreenEntity(if(!jsonObject.has("exercise_number")) null else jsonObject.get("exercise_number").asInt,
                     when (jsonObject.get("screen_type").asInt) {
                         1 -> context.deserialize<ScreenInfo.ScreenType1Info>(
                             jsonObject.get("screen_info"),

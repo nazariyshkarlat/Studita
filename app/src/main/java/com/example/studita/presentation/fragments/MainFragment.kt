@@ -85,7 +85,6 @@ class MainFragment : BaseFragment(R.layout.main_layout){
         })
 
         FABViewModel?.fabState?.observe(this, Observer<HomeFragment.FABState> { state ->
-            println(state)
             when (state) {
                 HomeFragment.FABState.HIDE -> mainLayoutFAB.animate().translationY(transValue).alpha(
                     0F
@@ -105,11 +104,10 @@ class MainFragment : BaseFragment(R.layout.main_layout){
         if(savedInstanceState != null){
             val homeFragment: HomeFragment? = (activity as AppCompatActivity).supportFragmentManager.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment?
             homeFragment?.onThemeChangeListener = activity as DefaultActivity
-            showHideFabOnNavigation((activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.mainLayoutFrameLayout))
         }
+        showHideFabOnNavigation((activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.mainLayoutFrameLayout))
 
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationViewModel)
-        mainLayoutFrameLayout.setOnClickListener{ println((activity as AppCompatActivity).supportFragmentManager.fragments) }
     }
 
     private fun showHideFabOnNavigation(fragment: Fragment?){

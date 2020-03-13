@@ -12,15 +12,13 @@ import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.presentation.extensions.dpToPx
 import com.example.studita.presentation.extensions.makeView
 import com.example.studita.presentation.fragments.base.NavigatableFragment
-import com.example.studita.presentation.model.ExerciseShape
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
 import kotlinx.android.synthetic.main.exercise_variants_linear_fragment.*
-import kotlinx.android.synthetic.main.exercise_variants_title_fragment.*
 
 
-class ExerciseVariantsLienarLayoutFragment : NavigatableFragment(R.layout.exercise_variants_linear_fragment) {
+class ExerciseVariantsLinearLayoutFragment : NavigatableFragment(R.layout.exercise_variants_linear_fragment) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -36,23 +34,24 @@ class ExerciseVariantsLienarLayoutFragment : NavigatableFragment(R.layout.exerci
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { answered ->
                     if (answered)
-                        exerciseVariantsTitleFragmentLinearLayout.disableAllItems()
+                        exerciseVariantsLinearFragmentCenterLinearLayout.disableAllItems()
                 })
 
             when (it.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel -> {
                     val exerciseUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel
                     for(i in 0 until exerciseUiModel.title.count) {
-                        val shapeView = View(exerciseVariantsTitleFragmentLinearLayout.context)
+                        val shapeView = View(exerciseVariantsLinearFragmentTopLinearLayout.context)
                         val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                         params.height = 32.dpToPx()
                         params.width = 32.dpToPx()
                         params.leftMargin = 8.dpToPx()
                         params.rightMargin = 8.dpToPx()
                         shapeView.layoutParams = params
-                        shapeView.background =  ContextCompat.getDrawable(exerciseVariantsTitleFragmentLinearLayout.context, R.drawable.exercise_rectangle)
+                        shapeView.background =  ContextCompat.getDrawable(exerciseVariantsLinearFragmentTopLinearLayout.context, R.drawable.exercise_rectangle)
                         exerciseVariantsLinearFragmentTopLinearLayout.addView(shapeView)
                     }
+                    exerciseVariantsLinearFragmentSubtitle.text = exerciseUiModel.subtitle
                     fillLinearLayout(exerciseUiModel.variants)
                 }
             }
@@ -61,11 +60,11 @@ class ExerciseVariantsLienarLayoutFragment : NavigatableFragment(R.layout.exerci
                 selectVariant(it.selectedPos)
         }
 
-        OneShotPreDrawListener.add(exerciseVariantsTitleFragmentScrollView){
-            if (exerciseVariantsTitleFragmentScrollView.height < exerciseVariantsTitleFragmentScrollView.getChildAt(
+        OneShotPreDrawListener.add(exerciseVariantsLinearFragmentScrollView){
+            if (exerciseVariantsLinearFragmentScrollView.height < exerciseVariantsLinearFragmentScrollView.getChildAt(
                     0
-                ).height + exerciseVariantsTitleFragmentScrollView.paddingTop + exerciseVariantsTitleFragmentScrollView.paddingBottom) {
-                exerciseVariantsTitleFragmentScrollView.background =
+                ).height + exerciseVariantsLinearFragmentScrollView.paddingTop + exerciseVariantsLinearFragmentScrollView.paddingBottom) {
+                exerciseVariantsLinearFragmentScrollView.background =
                     context?.getDrawable(R.drawable.divider_top_bottom_drawable)
             }
         }
@@ -96,20 +95,20 @@ class ExerciseVariantsLienarLayoutFragment : NavigatableFragment(R.layout.exerci
     private fun fillLinearLayout(variants: List<String>){
         for(variant in variants) {
             val variantView = exerciseVariantsLinearFragmentCenterLinearLayout.makeView(R.layout.exercise_variant_text_item)
-            variantView.exerciseVariantTextItem.text = variant
+            variantView.exerciseVariantFlexboxItem.text = variant
             variantView.setOnClickListener {
                 exercisesViewModel?.selectedPos = exerciseVariantsLinearFragmentCenterLinearLayout.indexOfChild(it)
                 exercisesViewModel?.selectedPos?.let { it1 -> selectVariant(it1) }
-                ExerciseRequestData(variant)
+                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant)
             }
             exerciseVariantsLinearFragmentCenterLinearLayout.addView(variantView)
         }
     }
 
     private fun selectVariant(position: Int){
-        val childView = exerciseVariantsTitleFragmentLinearLayout.getChildAt(position)
+        val childView = exerciseVariantsLinearFragmentCenterLinearLayout.getChildAt(position)
         exercisesViewModel?.setButtonEnabled(true)
-        exerciseVariantsTitleFragmentLinearLayout.refreshVariants()
+        exerciseVariantsLinearFragmentCenterLinearLayout.refreshVariants()
         childView.isEnabled = false
         childView.isSelected = true
     }

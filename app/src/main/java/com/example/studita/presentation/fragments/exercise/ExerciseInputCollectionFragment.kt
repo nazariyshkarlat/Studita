@@ -2,11 +2,9 @@ package com.example.studita.presentation.fragments.exercise
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProviders
@@ -14,16 +12,9 @@ import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.presentation.extensions.createSpannableString
 import com.example.studita.presentation.extensions.hideKeyboard
-import com.example.studita.presentation.extensions.makeView
-import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
-import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import com.example.studita.presentation.views.CustomTypefaceSpan
 import kotlinx.android.synthetic.main.exercise_input_collection_fragment.*
-import kotlinx.android.synthetic.main.exercise_input_collection_text_view.view.*
-import kotlinx.android.synthetic.main.exercise_input_equation_fragment.*
-import java.io.IOException
 
 class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_input_collection_fragment), TextWatcher {
 
@@ -110,11 +101,11 @@ class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_in
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         val str = s.toString()
         if(str.isNotEmpty()) {
-            exercisesViewModel?.exercisesButtonState?.value = true
+            exercisesViewModel?.exercisesButtonEnabledState?.value = true
             exercisesViewModel?.exerciseRequestData =
                 ExerciseRequestData(s.toString())
         }else{
-            exercisesViewModel?.exercisesButtonState?.value = false
+            exercisesViewModel?.exercisesButtonEnabledState?.value = false
         }
     }
 

@@ -261,8 +261,6 @@
     </style>
 
     <style name="ExerciseVariant" parent="android:Widget.TextView">
-        <item name="android:paddingTop">14dp</item>
-        <item name="android:paddingBottom">14dp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:background">@drawable/exercise_variant</item>
         <item name="android:textAppearance">@style/Medium16</item>

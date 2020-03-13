@@ -71,7 +71,7 @@
     <string name="user_stat_title3">Пройдено уроков</string>
     <string name="user_stat_title4">Количество тренировок</string>
     <string name="user_stat_title5">Выполнено ачивок</string>
-    <string name="answers_percent">%1$s%% правильных ответов</string>
+    <string name="answers_percent">%1$d%% правильных ответов</string>
     <string name="share">Поделиться</string>
     <string name="division_by_0">Деление на ноль невозможно</string>
     <string name="hours">ч</string>
@@ -79,4 +79,6 @@
     <string name="seconds">сек</string>
     <string name="exercises_description_title">Введение в задание</string>
     <string name="continue_string">Продолжить</string>
+    <string name="exercise_shape_0_rect">Ни один квадрат</string>
+    <string name="exercises_XP_result">+%1$d XP</string>
 </resources>

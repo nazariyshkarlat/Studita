@@ -7,12 +7,10 @@ open class FabRecyclerImpl(private val fabScrollListener: FabScrollListener) : R
     private var scrollDist = 0
     private var isVisible = true
     private val MINIMUM = 0
-    private var scrollY = 0
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
-        scrollY += dy
-        fabScrollListener.onScroll(scrollY)
+        fabScrollListener.onScroll(recyclerView.computeVerticalScrollOffset())
         if (isVisible && scrollDist > MINIMUM) {
             fabScrollListener.hide()
             scrollDist = 0

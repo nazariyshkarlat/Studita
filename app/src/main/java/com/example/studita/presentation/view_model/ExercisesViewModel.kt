@@ -16,6 +16,8 @@ import com.example.studita.domain.interactor.ExercisesStatus
 import com.example.studita.presentation.extensions.launchExt
 import com.example.studita.presentation.fragments.ExercisesEndFragment
 import com.example.studita.presentation.fragments.exercise.*
+import com.example.studita.presentation.fragments.exercise_screen.ExerciseScreenType1
+import com.example.studita.presentation.fragments.exercise_screen.ExerciseScreenType2
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.model.mapper.ExercisesUiModelMapper
 import kotlinx.coroutines.Job
@@ -31,16 +33,17 @@ class ExercisesViewModel : ViewModel(){
     val answered = MutableLiveData<Boolean>()
     val snackbarState = SingleLiveEvent<Pair<ExerciseUiModel, ExerciseResponseData>?>()
     val errorState = SingleLiveEvent<Int>()
-    val exercisesButtonState = MutableLiveData<Boolean>()
-    var exercisesProgress: ExercisesState = ExercisesState.START_PAGE
+    val exercisesButtonEnabledState = MutableLiveData<Boolean>()
+    val exercisesButtonTextState = MutableLiveData<String>()
+    var exercisesProgress =  MutableLiveData<ExercisesState>(ExercisesState.START_SCREEN)
     var toolbarDividerState = SingleLiveEvent<Boolean>()
     var buttonDividerState = SingleLiveEvent<Boolean>()
 
     lateinit var exerciseRequestData: ExerciseRequestData
-    private val exercisesToRetry = ArrayList<Int>()
+    private val exercisesToRetry = ArrayList<ExerciseUiModel>()
 
+    var arrayIndex = 0
     private var exerciseIndex = 0
-    private var score = 0
 
     lateinit var exerciseUiModel: ExerciseUiModel
     lateinit var exercisesResponseData: ExercisesResponseData
@@ -79,31 +82,32 @@ class ExercisesViewModel : ViewModel(){
         exercisesEndTextButtonState.value = show
     }
 
+    fun setButtonText(text: String){
+        exercisesButtonTextState.value = text
+    }
+
     fun setButtonEnabled(enabled: Boolean){
-        exercisesButtonState.value = enabled
+        exercisesButtonEnabledState.value = enabled
     }
 
     fun initFragment(){
-
         selectedPos = -1
         answered.value = false
         snackbarState.value = null
-
-        if(score == exercises.size){
-            score++
-            progressBarState.value = getProgressBarPercent() to true
+        if(exerciseIndex == exercises.count{it is ExerciseUiModel.ExerciseUiModelExercise}){
+            progressBarState.value = getProgressPercent() to true
         }else {
-            val exerciseUiModel = if (exerciseIndex < exercises.size) {
-                exercises[exerciseIndex]
+            exerciseUiModel = if (arrayIndex < exercises.size) {
+                exercises[arrayIndex]
             } else {
-                exercises[exercisesToRetry[0]]
+                exercisesToRetry[0]
             }
+            setButtonEnabled(exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen)
             val exerciseFragment = getFragmentToAdd(exerciseUiModel)
-            val bundle = Bundle()
-            bundle.putParcelable("EXERCISE", exerciseUiModel)
-            exerciseFragment.arguments = bundle
-            navigationState.value = when (exerciseIndex) {
-                0 -> ExercisesNavigationState.FIRST
+            navigationState.value = when (arrayIndex) {
+                0 -> {
+                    ExercisesNavigationState.FIRST
+                }
                 else -> {
                     ExercisesNavigationState.REPLACE
                 }
@@ -114,55 +118,61 @@ class ExercisesViewModel : ViewModel(){
 
     fun checkExerciseResult(){
         answered.value = true
-        exerciseUiModel =if(exerciseIndex < exercises.size) {
-            exercises[exerciseIndex]
-        }else{
-            exercises[exercisesToRetry[0]]
-        }
         job = viewModelScope.launchExt(job){
-            when(val status = exerciseResultInteractor.getExerciseResult(exerciseUiModel.exerciseNumber, exerciseRequestData)){
-                is ExerciseResultStatus.NoConnection -> errorState.postValue(R.string.no_connection)
-                is ExerciseResultStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
-                is ExerciseResultStatus.Success -> {
-                    snackbarState.postValue(exerciseUiModel to status.result)
-                    if (status.result.exerciseResult) {
-                        score++
-                        if(score == exercises.size)
-                            stopSecondsCounter()
-                        progressBarState.value =getProgressBarPercent() to false
-                    } else {
-                        if (exerciseIndex < exercises.size) {
-                            exercisesToRetry.add(exerciseIndex)
-                        }else {
-                            exercisesToRetry.add(exercisesToRetry[0])
-                        }
-                    }
-                    if(exerciseIndex >= exercises.size){
-                        exercisesToRetry.removeAt(0)
-                    }else
-                        if(exerciseIndex == exercises.size-1)
-                            falseAnswers = exercisesToRetry.size
+            if(exerciseUiModel is ExerciseUiModel.ExerciseUiModelExercise){
+                when(val status = (exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise).exerciseNumber?.let {
+                    exerciseResultInteractor.getExerciseResult(
+                        it, exerciseRequestData)
+                }) {
+                    is ExerciseResultStatus.NoConnection -> errorState.postValue(R.string.no_connection)
+                    is ExerciseResultStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
+                    is ExerciseResultStatus.Success -> {
+                        snackbarState.postValue(exerciseUiModel to status.result)
+                        if (status.result.exerciseResult) {
 
-                    exerciseIndex++
+                            exerciseIndex++
+
+                            if (exerciseIndex == exercises.count { it is ExerciseUiModel.ExerciseUiModelExercise }) {
+                                stopSecondsCounter()
+                            }
+                            progressBarState.value = getProgressPercent() to false
+                        } else {
+                            exercisesToRetry.addAll(exercises.filter{it.exerciseNumber == exerciseUiModel.exerciseNumber })
+                        }
+
+                        if (arrayIndex >= exercises.size) {
+                            exercisesToRetry.removeAt(0)
+                        }
+
+                        if (arrayIndex == exercises.size - 1)
+                            falseAnswers = exercisesToRetry.count { it is ExerciseUiModel.ExerciseUiModelExercise }
+                        arrayIndex++
+                    }
                 }
+            }else{
+                if (arrayIndex >= exercises.size) {
+                    exercisesToRetry.removeAt(0)
+                }
+                arrayIndex++
+                initFragment()
             }
         }
     }
 
     private fun getFragmentToAdd(exerciseUiModel: ExerciseUiModel) =
         when(exerciseUiModel){
-            is ExerciseUiModel.ExerciseUi1, is ExerciseUiModel.ExerciseUi2, is ExerciseUiModel.ExerciseUi5, is ExerciseUiModel.ExerciseUi7 -> ExerciseVariantsTitleFragment()
-            is ExerciseUiModel.ExerciseUi3 -> ExerciseInputFragment()
-            is ExerciseUiModel.ExerciseUi4 -> ExerciseCharacterFragment()
-            is ExerciseUiModel.ExerciseUi6 -> ExerciseInputEquationFragment()
-            is ExerciseUiModel.ExerciseUi8, is ExerciseUiModel.ExerciseUi9 -> ExerciseInputCollectionFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel -> ExerciseVariantsTitleFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel  -> ExerciseVariantsLinearLayoutFragment()
+            is ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel -> ExerciseScreenType1()
+            is ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel -> ExerciseScreenType2()
         }
 
-    private fun getProgressBarPercent(): Int =  ((score / exercises.size.toFloat())*100).toInt()
 
-    private fun getAnswersPercent(): Int = ((score/(exerciseIndex+1).toFloat())*100).toInt()
+    private fun getProgressPercent(): Int = ((exerciseIndex/(exercises.count { it is ExerciseUiModel.ExerciseUiModelExercise }).toFloat())*100).toInt()
 
-    private fun getTrueAnswers(): Int = exercises.size - getFalseAnswers()
+    private fun getAnswersPercent(): Int = (((getTrueAnswers()-getFalseAnswers())/getTrueAnswers().toFloat())*100).toInt()
+
+    private fun getTrueAnswers(): Int = exercises.count { it is ExerciseUiModel.ExerciseUiModelExercise } - getFalseAnswers()
 
     private fun getFalseAnswers(): Int = falseAnswers
 
@@ -208,7 +218,7 @@ class ExercisesViewModel : ViewModel(){
     }
 
     enum class ExercisesState{
-        START_PAGE,
+        START_SCREEN,
         DESCRIPTION,
         EXERCISES
     }
