@@ -85,21 +85,24 @@ class ExercisesDescriptionFragment : NavigatableFragment(R.layout.exercises_desc
                 }
                 childIndex++
             }else{
-                val insideBracketsInt = insideBrackets.toInt()
                 if(child is LinearLayout){
-                    for(i in 0 until insideBracketsInt) {
-                        val shapeView = View(child.context)
-                        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                        params.height = child.height
-                        params.width = child.height
-                        if(i != insideBracketsInt-1)
-                            params.marginEnd = 16.dpToPx()
-                        shapeView.layoutParams = params
-                        shapeView.background =  ContextCompat.getDrawable(child.context, R.drawable.exercise_rectangle)
-                        child.addView(shapeView)
-                    }
+                    fillLinearLayout(child, insideBrackets.toInt())
                 }
             }
+        }
+    }
+
+    private fun fillLinearLayout(child: LinearLayout, imgCount: Int){
+        for(i in 0 until imgCount) {
+            val shapeView = View(child.context)
+            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            params.height = child.height
+            params.width = child.height
+            if(i != imgCount-1)
+                params.marginEnd = 16.dpToPx()
+            shapeView.layoutParams = params
+            shapeView.background =  ContextCompat.getDrawable(child.context, R.drawable.exercise_rectangle)
+            child.addView(shapeView)
         }
     }
 

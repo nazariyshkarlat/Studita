@@ -24,6 +24,7 @@ class ExerciseVariantsLinearLayoutFragment : ExerciseVariantsFragment(R.layout.e
         super.onViewCreated(view, savedInstanceState)
 
         exercisesViewModel?.let {
+            observeAnswered(it, exerciseVariantsLinearFragmentCenterLinearLayout)
             when (it.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel -> {
                     val exerciseUiModel =
@@ -33,7 +34,6 @@ class ExerciseVariantsLinearLayoutFragment : ExerciseVariantsFragment(R.layout.e
                     fillVariants(exerciseUiModel.variants)
                 }
             }
-
             if (it.selectedPos != -1)
                 selectVariant(exerciseVariantsLinearFragmentCenterLinearLayout, it.selectedPos)
         }

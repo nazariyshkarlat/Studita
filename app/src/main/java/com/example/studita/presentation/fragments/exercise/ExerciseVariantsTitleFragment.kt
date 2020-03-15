@@ -13,6 +13,7 @@ import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.views.SquareView
 import com.google.android.flexbox.FlexboxLayout
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
+import kotlinx.android.synthetic.main.exercise_variants_linear_fragment.*
 import kotlinx.android.synthetic.main.exercise_variants_title_fragment.*
 
 
@@ -22,6 +23,7 @@ class ExerciseVariantsTitleFragment : ExerciseVariantsFragment(R.layout.exercise
         super.onViewCreated(view, savedInstanceState)
 
         exercisesViewModel?.let {
+            observeAnswered(it, exerciseVariantsTitleFragmentLinearLayout)
             when (it.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel -> {
                     val exerciseUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel

@@ -3,6 +3,7 @@ package com.example.studita.presentation.fragments.exercise
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
@@ -24,14 +25,6 @@ open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
             ViewModelProviders.of(this).get(ExercisesViewModel::class.java)
         }
 
-        exercisesViewModel?.let {
-            it.answered.observe(
-                viewLifecycleOwner,
-                androidx.lifecycle.Observer { answered ->
-                    if (answered)
-                        exerciseVariantsLinearFragmentCenterLinearLayout.disableAllItems()
-                })
-        }
     }
 
     protected fun onPreDraw(scrollView: ScrollView){
@@ -67,6 +60,15 @@ open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
                 child.disableAllItems()
             }
         }
+    }
+
+    protected fun observeAnswered(viewModel: ExercisesViewModel, variantsLayout: LinearLayout){
+        viewModel.answered.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer { answered ->
+                if (answered)
+                    variantsLayout.disableAllItems()
+            })
     }
 
     fun selectVariant(centerLayout: ViewGroup, position: Int){

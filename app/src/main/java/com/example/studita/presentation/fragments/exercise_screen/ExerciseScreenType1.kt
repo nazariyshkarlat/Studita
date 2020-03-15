@@ -49,7 +49,7 @@ class ExerciseScreenType1 :  NavigatableFragment(R.layout.exercise_screen_type_1
 
     }
 
-    fun injectParts(screenUiModel: ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel){
+    private fun injectParts(screenUiModel: ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel){
         val text = screenUiModel.subtitle
         val m =
             Pattern.compile("\\{.*?\\}").matcher(text)
