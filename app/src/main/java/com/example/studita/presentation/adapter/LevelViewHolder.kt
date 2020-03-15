@@ -10,8 +10,7 @@ class LevelViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelNumber>(v
     override fun bind(model: Any) {
         val modelData = (model as LevelUiModel.LevelNumber)
         itemView.levelLayoutLevel.text = itemView.context.resources.getString(R.string.level_number, modelData.value)
-        if(layoutPosition == 1)
-            itemView.isActivated = true
+        itemView.isActivated = modelData.value == 1
     }
 
 }

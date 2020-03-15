@@ -105,17 +105,25 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             })
         }
 
-        if(savedInstanceState == null)
-            (activity as AppCompatActivity).addFragment(ExercisesStartScreenFragment(), R.id.exerciseLayoutFrameLayout)
+        if(savedInstanceState == null) {
+            (activity as AppCompatActivity).addFragment(
+                ExercisesStartScreenFragment(),
+                R.id.exerciseLayoutFrameLayout
+            )
+        }else{
+            if (exercisesViewModel?.answered?.value == true) {
+                OneShotPreDrawListener.add(exerciseLayoutSnackbar){
+                    setSnackbarTranslationY()
+                    showSnackbar(exercisesViewModel?.snackbarState?.value, animate = false)
+                }
+            }
+        }
 
         exerciseToolbarCloseButton.setOnClickListener {
             (activity as AppCompatActivity).onBackPressed()
         }
 
         exerciseBottomSnackbarIcon.setOnClickListener {  }
-
-        if (exercisesViewModel?.answered?.value == true)
-            showSnackbar(exercisesViewModel?.snackbarState?.value, animate = false)
     }
 
     fun onWindowFocusChanged(hasFocus: Boolean){

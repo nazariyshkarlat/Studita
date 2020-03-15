@@ -18,98 +18,59 @@ import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
 import kotlinx.android.synthetic.main.exercise_variants_linear_fragment.*
 
 
-class ExerciseVariantsLinearLayoutFragment : NavigatableFragment(R.layout.exercise_variants_linear_fragment) {
-
-    private var exercisesViewModel: ExercisesViewModel? = null
+class ExerciseVariantsLinearLayoutFragment : ExerciseVariantsFragment(R.layout.exercise_variants_linear_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        exercisesViewModel = activity?.run {
-            ViewModelProviders.of(this).get(ExercisesViewModel::class.java)
-        }
-
         exercisesViewModel?.let {
-            it.answered.observe(
-                viewLifecycleOwner,
-                androidx.lifecycle.Observer { answered ->
-                    if (answered)
-                        exerciseVariantsLinearFragmentCenterLinearLayout.disableAllItems()
-                })
-
             when (it.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel -> {
-                    val exerciseUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel
-                    for(i in 0 until exerciseUiModel.title.count) {
-                        val shapeView = View(exerciseVariantsLinearFragmentTopLinearLayout.context)
-                        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                        params.height = 32.dpToPx()
-                        params.width = 32.dpToPx()
-                        params.leftMargin = 8.dpToPx()
-                        params.rightMargin = 8.dpToPx()
-                        shapeView.layoutParams = params
-                        shapeView.background =  ContextCompat.getDrawable(exerciseVariantsLinearFragmentTopLinearLayout.context, R.drawable.exercise_rectangle)
-                        exerciseVariantsLinearFragmentTopLinearLayout.addView(shapeView)
-                    }
+                    val exerciseUiModel =
+                        it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel
+                    fillLinearLayout(exerciseUiModel)
                     exerciseVariantsLinearFragmentSubtitle.text = exerciseUiModel.subtitle
-                    fillLinearLayout(exerciseUiModel.variants)
+                    fillVariants(exerciseUiModel.variants)
                 }
             }
 
-            if(it.selectedPos != -1)
-                selectVariant(it.selectedPos)
+            if (it.selectedPos != -1)
+                selectVariant(exerciseVariantsLinearFragmentCenterLinearLayout, it.selectedPos)
         }
 
-        OneShotPreDrawListener.add(exerciseVariantsLinearFragmentScrollView){
-            if (exerciseVariantsLinearFragmentScrollView.height < exerciseVariantsLinearFragmentScrollView.getChildAt(
-                    0
-                ).height + exerciseVariantsLinearFragmentScrollView.paddingTop + exerciseVariantsLinearFragmentScrollView.paddingBottom) {
-                exerciseVariantsLinearFragmentScrollView.background =
-                    context?.getDrawable(R.drawable.divider_top_bottom_drawable)
-            }
-        }
-
+        onPreDraw(exerciseVariantsLinearFragmentScrollView)
     }
 
-    private fun View.refreshVariants() {
-        this.isEnabled = true
-        this.isSelected = false
-        if (this is ViewGroup) {
-            for (i in 0 until this.childCount) {
-                val child = this.getChildAt(i)
-                child.refreshVariants()
-            }
-        }
-    }
-
-    private fun View.disableAllItems(){
-        this.isEnabled = false
-        if (this is ViewGroup) {
-            for (i in 0 until this.childCount) {
-                val child = this.getChildAt(i)
-                child.disableAllItems()
-            }
-        }
-    }
-
-    private fun fillLinearLayout(variants: List<String>){
+    private fun fillVariants(variants: List<String>){
         for(variant in variants) {
             val variantView = exerciseVariantsLinearFragmentCenterLinearLayout.makeView(R.layout.exercise_variant_text_item)
-            variantView.exerciseVariantFlexboxItem.text = variant
+            variantView.exerciseVariantTextItem.text = variant
             variantView.setOnClickListener {
                 exercisesViewModel?.selectedPos = exerciseVariantsLinearFragmentCenterLinearLayout.indexOfChild(it)
-                exercisesViewModel?.selectedPos?.let { it1 -> selectVariant(it1) }
+                exercisesViewModel?.selectedPos?.let { it1 -> selectVariant(exerciseVariantsLinearFragmentCenterLinearLayout, it1) }
                 exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant)
             }
             exerciseVariantsLinearFragmentCenterLinearLayout.addView(variantView)
         }
     }
 
-    private fun selectVariant(position: Int){
-        val childView = exerciseVariantsLinearFragmentCenterLinearLayout.getChildAt(position)
-        exercisesViewModel?.setButtonEnabled(true)
-        exerciseVariantsLinearFragmentCenterLinearLayout.refreshVariants()
-        childView.isEnabled = false
-        childView.isSelected = true
+    private fun fillLinearLayout(exerciseUiModel: ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel){
+        for (i in 0 until exerciseUiModel.title.count) {
+            val shapeView = View(exerciseVariantsLinearFragmentTopLinearLayout.context)
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.height = 32.dpToPx()
+            params.width = 32.dpToPx()
+            params.leftMargin = 8.dpToPx()
+            params.rightMargin = 8.dpToPx()
+            shapeView.layoutParams = params
+            shapeView.background = ContextCompat.getDrawable(
+                exerciseVariantsLinearFragmentTopLinearLayout.context,
+                R.drawable.exercise_rectangle
+            )
+            exerciseVariantsLinearFragmentTopLinearLayout.addView(shapeView)
+        }
     }
 }

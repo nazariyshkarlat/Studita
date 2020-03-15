@@ -36,4 +36,4 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
     }
 }
 
-data class ExerciseShape(@IdRes val shapeId: Int, val count: Int)
+data class ExerciseShape(val shapeId: Int, val count: Int)
