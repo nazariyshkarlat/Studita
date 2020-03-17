@@ -10,7 +10,7 @@
         <item name="blue_transparent_button_color">@color/blue12</item>
         <item name="main_blocks_color">@color/white8</item>
         <item name="divider_color">@color/white10</item>
-        <item name="navigation_color">@color/gray11_80</item>
+        <item name="blur_color">@color/gray11_80</item>
         <item name="colorControlHighlight">@color/white8</item>
         <item name="android:navigationBarColor">@color/gray11</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -29,7 +29,7 @@
         <item name="divider_color">@color/black8</item>
         <item name="secondary_color">@color/black50</item>
         <item name="page_background_color">@color/white</item>
-        <item name="navigation_color">@color/white80</item>
+        <item name="blur_color">@color/white80</item>
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>

@@ -12,7 +12,7 @@
         <attr name="state_error" format="boolean" />
     </declare-styleable>
     <attr name="page_background_color" format="reference"/>
-    <attr name="navigation_color" format="reference"/>
+    <attr name="blur_color" format="reference"/>
     <attr name="divider_color" format="reference"/>
     <attr name="blue_transparent_button_color" format="reference"/>
     <attr name="secondary_color" format="reference"/>

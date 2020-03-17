@@ -8,4 +8,4 @@ data class ExercisesStartScreenData(val title: String,
                                 val subtitle: String)
 
 data class ExercisesDescriptionData(val textParts: List<String>,
-                                val partsToInject: List<String>)
+                                val partsToInject: List<String>?)

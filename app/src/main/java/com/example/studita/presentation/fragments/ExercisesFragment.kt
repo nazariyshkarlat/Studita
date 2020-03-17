@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.OneShotPreDrawListener
@@ -13,7 +12,6 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.data.entity.exercise.ExerciseResponseDescriptionContent
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.domain.entity.exercise.ExerciseResponseDescriptionContentData
 import com.example.studita.presentation.extensions.*
@@ -24,8 +22,8 @@ import com.google.android.flexbox.FlexboxLayout
 import kotlinx.android.synthetic.main.exercise_bottom_snackbar.*
 import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.android.synthetic.main.exercise_layout.view.*
-import kotlinx.android.synthetic.main.exercise_screen_type_1.*
 import kotlinx.android.synthetic.main.exercise_toolbar.*
+import java.io.IOException
 
 
 class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
@@ -264,7 +262,11 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
 
     private fun formDescriptionView(){
         exerciseToolbarProgressBar.alpha = 0F
-        val descriptionFragment = ExercisesDescriptionFragment()
+        val descriptionFragment = when(exercisesViewModel?.chapterPartNumber){
+            1 -> ExercisesDescription1Fragment()
+            2 -> ExercisesDescription2Fragment()
+            else -> throw IOException("Unknown chapter part number")
+        }
         (activity as AppCompatActivity).navigateTo(descriptionFragment, R.id.exerciseLayoutFrameLayout)
         exerciseLayoutButton.text = resources.getString(R.string.continue_string)
         exerciseLayoutButton.setOnClickListener{
@@ -281,10 +283,19 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
     }
 
     private fun setButtonText(){
-        exercisesViewModel?.exercisesButtonTextState?.value =  if(exercisesViewModel?.exerciseUiModel is ExerciseUiModel.ExerciseUiModelExercise)
-            resources.getString(R.string.check)
-        else
-            resources.getString(R.string.continue_string)
+        exercisesViewModel?.apply {
+            setButtonText(
+                when (val exerciseUiModel = this.exerciseUiModel) {
+                    is ExerciseUiModel.ExerciseUiModelExercise -> resources.getString(R.string.check)
+                    is ExerciseUiModel.ExerciseUiModelScreen -> {
+                        if (exerciseUiModel.exerciseNumber == null)
+                            resources.getString(R.string.continue_string)
+                        else
+                            resources.getString(R.string.next)
+                    }
+                }
+            )
+        }
     }
 
 }

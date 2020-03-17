@@ -2,14 +2,18 @@ package com.example.studita.presentation.adapter
 
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.domain.entity.ChapterPartData
 import com.example.studita.presentation.activities.ExercisesActivity
 import com.example.studita.presentation.extensions.getAppCompatActivity
 import com.example.studita.presentation.extensions.startActivity
-import com.example.studita.presentation.fragments.ExercisesLoadFragment
 import com.example.studita.presentation.model.ChapterPartUiModel
+import com.example.studita.presentation.model.LevelUiModel
+import com.example.studita.presentation.view_model.ChapterPartsViewModel
+import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.chapter_part_item.view.*
+
 
 class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view){
     override fun bind(model: ChapterPartUiModel) {
@@ -19,7 +23,8 @@ class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view){
             chapterPartItemButton.background =
                 itemView.resources.getDrawable(R.drawable.oval_blue, context.theme)
             chapterPartItemButton.setImageResource(R.drawable.ic_play_arrow_white87)
-            chapterPartItemButton.setOnClickListener { getAppCompatActivity()?.startActivity<ExercisesActivity>() }
+            chapterPartItemButton.setOnClickListener {
+                getAppCompatActivity()?.startActivity<ExercisesActivity>("CHAPTER_PART_NUMBER" to model.chapterPartNumber) }
         }
     }
 

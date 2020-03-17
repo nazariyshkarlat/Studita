@@ -18,9 +18,13 @@ class ExercisesUiModelMapper : Mapper<List<ExerciseData>, List<ExerciseUiModel>>
             when (it) {
                 is ExerciseData.ExerciseDataExercise.ExerciseType1Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel(it.exerciseNumber, it.title, it.subtitle, ExerciseUiShapesMapper().map(it.variants))
                 is ExerciseData.ExerciseDataExercise.ExerciseType2Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel(it.exerciseNumber, ExerciseUiShapeMapper().map(it.title), it.subtitle, it.variants)
+                is ExerciseData.ExerciseDataExercise.ExerciseType3Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel(it.exerciseNumber, it.title, it.subtitle, it.variants)
+                is ExerciseData.ExerciseDataExercise.ExerciseType4Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel(it.exerciseNumber, it.title, it.subtitle, it.variants)
+
 
                 is ExerciseData.ExerciseDataScreen.ScreenType1Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel(it.exerciseNumber, it.title, it.subtitle, it.partsToInject, getShapeByName(it.image))
                 is ExerciseData.ExerciseDataScreen.ScreenType2Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel(it.exerciseNumber, it.title)
+                is ExerciseData.ExerciseDataScreen.ScreenType3Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel(it.exerciseNumber, it.title, it.subtitle, it.partsToInject)
             }
         }
     }

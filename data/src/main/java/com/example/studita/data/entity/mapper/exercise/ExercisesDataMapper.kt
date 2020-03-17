@@ -14,12 +14,15 @@ class ExercisesDataMapper :
                     when(val exerciseInfo = it.exerciseInfo){
                         is ExerciseInfo.ExerciseType1Info -> ExerciseData.ExerciseDataExercise.ExerciseType1Data(it.exerciseNumber, exerciseInfo.title, exerciseInfo.subtitle, ExerciseShapesMapper().map(exerciseInfo.variants))
                         is ExerciseInfo.ExerciseType2Info -> ExerciseData.ExerciseDataExercise.ExerciseType2Data(it.exerciseNumber, ExerciseShapeMapper().map(exerciseInfo.title), exerciseInfo.subtitle, exerciseInfo.variants)
+                        is ExerciseInfo.ExerciseType3Info -> ExerciseData.ExerciseDataExercise.ExerciseType3Data(it.exerciseNumber, ExerciseNumberMapper().map(exerciseInfo.title), exerciseInfo.subtitle,ExerciseNumbersMapper().map(exerciseInfo.variants))
+                        is ExerciseInfo.ExerciseType4Info -> ExerciseData.ExerciseDataExercise.ExerciseType4Data(it.exerciseNumber, ExerciseNumberMapper().map(exerciseInfo.title), exerciseInfo.subtitle, exerciseInfo.variants)
                     }
                 }
                 is ExerciseArrayEntity.ScreenEntity ->{
                     when(val screenInfo = it.screenInfo){
                         is ScreenInfo.ScreenType1Info -> ExerciseData.ExerciseDataScreen.ScreenType1Data(it.exerciseNumber, screenInfo.title, screenInfo.subtitle, screenInfo.partsToInject, screenInfo.image)
                         is ScreenInfo.ScreenType2Info -> ExerciseData.ExerciseDataScreen.ScreenType2Data(it.exerciseNumber, screenInfo.title)
+                        is ScreenInfo.ScreenType3Info -> ExerciseData.ExerciseDataScreen.ScreenType3Data(it.exerciseNumber, screenInfo.title, screenInfo.subtitle, screenInfo.partsToInject)
                     }
                 }
             }
@@ -42,6 +45,14 @@ class ExercisesDescriptionMapper:
 
 class ExerciseShapesMapper: Mapper<List<List<String>>, List<ExerciseShapeData>> {
     override fun map(source: List<List<String>>): List<ExerciseShapeData>  = source.map { ExerciseShapeMapper().map(it) }
+}
+
+class ExerciseNumbersMapper: Mapper<List<List<String>>, List<ExerciseNumberData>> {
+    override fun map(source: List<List<String>>): List<ExerciseNumberData>  = source.map { ExerciseNumberMapper().map(it) }
+}
+
+class ExerciseNumberMapper: Mapper<List<String>, ExerciseNumberData>{
+    override fun map(source: List<String>): ExerciseNumberData = ExerciseNumberData(source[0], source[1].toInt())
 }
 
 class ExerciseShapeMapper: Mapper<List<String>, ExerciseShapeData> {

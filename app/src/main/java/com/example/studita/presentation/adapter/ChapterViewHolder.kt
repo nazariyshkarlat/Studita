@@ -9,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.extensions.createSpannableString
+import com.example.studita.presentation.extensions.getAppCompatActivity
 import com.example.studita.presentation.model.LevelUiModel
 import com.example.studita.presentation.fragments.ChapterPartsBottomSheetFragment
 import com.example.studita.presentation.view_model.ChapterPartsViewModel
@@ -45,10 +46,10 @@ class ChapterViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelChapter
     }
 
     private fun getChapterParts(chapterModel: LevelUiModel.LevelChapter){
-        val viewModel = itemView.context?.run {
+        val viewModel = itemView.getAppCompatActivity().run{
             ViewModelProviders.of(this as AppCompatActivity).get(ChapterPartsViewModel::class.java)
         }
-        viewModel?.getChapterParts(chapterModel)
+        viewModel.getChapterParts(chapterModel)
     }
 
 }

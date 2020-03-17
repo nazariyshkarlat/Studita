@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.annotation.IdRes
+import com.example.studita.domain.entity.exercise.ExerciseData
+import com.example.studita.domain.entity.exercise.ExerciseNumberData
 import com.example.studita.domain.entity.exercise.ExerciseShapeData
 
 sealed class ExerciseUiModel(open val exerciseNumber: Int?){
@@ -21,6 +23,20 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
             val subtitle: String,
             val variants: List<String>
         ) : ExerciseUiModelExercise(exerciseNumber)
+
+        data class ExerciseType3UiModel(
+            override val exerciseNumber: Int?,
+            val title: ExerciseNumberData,
+            val subtitle: String,
+            val variants: List<ExerciseNumberData>
+        ) : ExerciseUiModelExercise(exerciseNumber)
+
+        data class ExerciseType4UiModel(
+            override val exerciseNumber: Int?,
+            val title: ExerciseNumberData,
+            val subtitle: String,
+            val variants: List<String>
+        ) : ExerciseUiModelExercise(exerciseNumber)
     }
 
     sealed class ExerciseUiModelScreen(override val exerciseNumber: Int?) : ExerciseUiModel(exerciseNumber) {
@@ -33,6 +49,11 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
         ) : ExerciseUiModelScreen(exerciseNumber)
 
         data class ScreenType2UiModel(override val exerciseNumber: Int?, val title: String) : ExerciseUiModelScreen(exerciseNumber)
+
+        data class ScreenType3UiModel(
+            override val exerciseNumber: Int?,
+            val title: String, val subtitle: String, val partsToInject: List<String>
+        ) : ExerciseUiModelScreen(exerciseNumber)
     }
 }
 

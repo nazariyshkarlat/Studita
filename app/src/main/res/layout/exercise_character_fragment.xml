@@ -6,9 +6,9 @@
     android:layout_height="wrap_content"
     android:paddingStart="@dimen/defaultRLMargin"
     android:paddingEnd="@dimen/defaultRLMargin"
+    android:paddingTop="@dimen/toolbarHeight"
     android:gravity="center"
-    android:layout_gravity="center"
-    android:paddingTop="@dimen/toolbarHeight">
+    android:layout_gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"

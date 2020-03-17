@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.exercise_variants_linear_fragment.*
 import kotlinx.android.synthetic.main.exercise_variants_title_fragment.*
 
 
-class ExerciseVariantsTitleFragment : ExerciseVariantsFragment(R.layout.exercise_variants_title_fragment) {
+class ExerciseVariantsType1Fragment : ExerciseVariantsFragment(R.layout.exercise_variants_title_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

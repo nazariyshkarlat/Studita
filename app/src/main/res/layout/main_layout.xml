@@ -24,7 +24,7 @@
         android:id="@+id/mainLayoutBottomBar"
         layout="@layout/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/bottomNavigationHeight"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

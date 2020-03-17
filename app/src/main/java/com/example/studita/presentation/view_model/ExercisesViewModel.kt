@@ -18,6 +18,7 @@ import com.example.studita.presentation.fragments.ExercisesEndFragment
 import com.example.studita.presentation.fragments.exercise.*
 import com.example.studita.presentation.fragments.exercise_screen.ExerciseScreenType1
 import com.example.studita.presentation.fragments.exercise_screen.ExerciseScreenType2
+import com.example.studita.presentation.fragments.exercise_screen.ExerciseScreenType3
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.model.mapper.ExercisesUiModelMapper
 import kotlinx.coroutines.Job
@@ -42,6 +43,7 @@ class ExercisesViewModel : ViewModel(){
     lateinit var exerciseRequestData: ExerciseRequestData
     private val exercisesToRetry = ArrayList<ExerciseUiModel>()
 
+    var chapterPartNumber: Int = 0
     var arrayIndex = 0
     private var exerciseIndex = 0
 
@@ -59,13 +61,8 @@ class ExercisesViewModel : ViewModel(){
 
     var selectedPos = -1
 
-    init{
-        getExercises(1)
-    }
-
-    private fun getExercises(chapterPartNumber: Int){
+    fun getExercises(chapterPartNumber: Int){
         job = viewModelScope.launchExt(job){
-            exercisesState.postValue(false)
             when(val status = exercisesInteractor.getExercises(chapterPartNumber)){
                 is ExercisesStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is ExercisesStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
@@ -73,7 +70,8 @@ class ExercisesViewModel : ViewModel(){
                     exercisesState.postValue(true)
                     exercisesResponseData = status.result
                     exercises = ExercisesUiModelMapper().map(exercisesResponseData.exercises)
-                    }
+                    this@ExercisesViewModel.chapterPartNumber = chapterPartNumber
+                }
             }
         }
     }
@@ -161,10 +159,13 @@ class ExercisesViewModel : ViewModel(){
 
     private fun getFragmentToAdd(exerciseUiModel: ExerciseUiModel) =
         when(exerciseUiModel){
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel -> ExerciseVariantsTitleFragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel  -> ExerciseVariantsLinearLayoutFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel -> ExerciseVariantsType1Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel  -> ExerciseVariantsType2Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel  -> ExerciseVariantsType3Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel  -> ExerciseVariantsType4Fragment()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel -> ExerciseScreenType1()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel -> ExerciseScreenType2()
+            is ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel -> ExerciseScreenType3()
         }
 
 

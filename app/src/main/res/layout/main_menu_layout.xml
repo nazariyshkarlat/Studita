@@ -41,7 +41,7 @@
                     android:id="@+id/mainMenuWithGoogleButton"
                     style="@style/WithGoogleButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/buttonHeight"
                     android:layout_marginTop="36dp"
                     android:text="@string/with_google" />
 
@@ -49,7 +49,7 @@
                     android:id="@+id/mainMenuUseEmailButton"
                     style="@style/Button12"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/buttonHeight"
                     android:layout_marginTop="16dp"
                     android:text="@string/use_email" />
 

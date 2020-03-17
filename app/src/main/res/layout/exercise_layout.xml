@@ -19,7 +19,7 @@
         <include
             android:id="@+id/exerciseLayoutToolbar"
             layout="@layout/exercise_toolbar"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/toolbarHeight"
             android:layout_width="match_parent" />
 
     </RelativeLayout>
@@ -27,9 +27,9 @@
     <include
         android:id="@+id/exerciseLayoutSnackbar"
         layout="@layout/exercise_bottom_snackbar"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
         android:layout_alignParentBottom="true" />
 
     <FrameLayout
@@ -42,7 +42,7 @@
             android:id="@+id/exerciseLayoutButton"
             style="@style/TransitionButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/buttonHeight"
             android:layout_marginStart="@dimen/defaultRLMargin"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/defaultRLMargin"
