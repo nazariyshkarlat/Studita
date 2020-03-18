@@ -1,9 +1,9 @@
 package com.example.studita.data.entity.mapper
 
-import com.example.studita.data.entity.LevelChapterEntity
-import com.example.studita.data.entity.LevelEntity
+import com.example.studita.data.entity.level.LevelChildEntity
+import com.example.studita.data.entity.level.LevelEntity
+import com.example.studita.domain.entity.LevelChildData
 import com.example.studita.domain.entity.LevelData
-import com.example.studita.domain.entity.LevelDataTask
 
 class LevelDataMapper : Mapper<List<LevelEntity>, List<LevelData>> {
 
@@ -14,21 +14,19 @@ class LevelDataMapper : Mapper<List<LevelEntity>, List<LevelData>> {
     private fun mapLevel(source: LevelEntity): LevelData {
         return LevelData(
             source.levelNumber,
-            getLevelTasks(source.levelChapters)
+            mapChildren(source.levelChildren)
         )
     }
 
-    private fun getLevelTasks(source: List<LevelChapterEntity>) : List<LevelDataTask>{
-        return source.map { mapTask(it) }
+    private fun mapChildren(source: List<LevelChildEntity>) : List<LevelChildData>{
+        return source.map { mapChild(it) }
     }
 
-    private fun mapTask(source: LevelChapterEntity): LevelDataTask {
-        return LevelDataTask(
-            source.chapterNumber,
-            source.chapterTitle,
-            source.chapterSubtitle,
-            source.tasksCount
-        )
+    private fun mapChild(source: LevelChildEntity): LevelChildData {
+        return when(source) {
+            is LevelChildEntity.LevelChapterEntity -> LevelChildData.LevelChapterData(source.chapterNumber, source.chapterTitle, source.chapterSubtitle, source.tasksCount)
+            is LevelChildEntity.LevelInterestingEntity -> LevelChildData.LevelInterestingData(source.interestingNumber, source.title, source.subtitle, source.tags)
+        }
     }
 
 }

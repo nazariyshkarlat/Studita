@@ -1,9 +1,7 @@
 package com.example.studita.presentation.adapter
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.presentation.extensions.makeView
@@ -15,16 +13,15 @@ class LevelsAdapter(private val items: List<LevelUiModel>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LevelsViewHolder<*>  = when (viewType) {
         LevelsViewType.USER_STATE.ordinal -> UserStateViewHolder(parent.makeView(R.layout.home_layout_user_state))
-        LevelsViewType.LEVEL.ordinal -> LevelViewHolder(parent.makeView(R.layout.level_layout))
-        LevelsViewType.CHAPTER.ordinal -> ChapterViewHolder(parent.makeView(R.layout.chapter_layout))
+        LevelsViewType.LEVEL.ordinal -> LevelViewHolder(parent.makeView(R.layout.level_item))
+        LevelsViewType.CHAPTER.ordinal -> ChapterViewHolder(parent.makeView(R.layout.chapter_item))
+        LevelsViewType.INTERESTING.ordinal -> InterestingViewHolder(parent.makeView(R.layout.interesting_item))
         else -> throw UnsupportedOperationException("unknown type of item")
     }
 
     override fun onBindViewHolder(holder: LevelsViewHolder<*>, position: Int) {
         if(position != 0)
             holder.bind(items[position-1])
-        else
-            holder.bind(Any())
     }
 
     override fun getItemViewType(position: Int): Int =
@@ -33,7 +30,8 @@ class LevelsAdapter(private val items: List<LevelUiModel>) :
             }else{
                 when (items[position-1]) {
                     is LevelUiModel.LevelNumber -> LevelsViewType.LEVEL.ordinal
-                    is LevelUiModel.LevelChapter -> LevelsViewType.CHAPTER.ordinal
+                    is LevelUiModel.LevelChapterUiModel -> LevelsViewType.CHAPTER.ordinal
+                    is LevelUiModel.LevelInterestingUiModel -> LevelsViewType.INTERESTING.ordinal
                 }
         }
 
@@ -44,11 +42,12 @@ class LevelsAdapter(private val items: List<LevelUiModel>) :
 
 abstract class LevelsViewHolder<T : LevelUiModel?>(view: View) : RecyclerView.ViewHolder(view) {
 
-    abstract fun bind(model: Any)
+    abstract fun bind(model: LevelUiModel)
 }
 
 private enum class LevelsViewType {
     USER_STATE,
     LEVEL,
-    CHAPTER
+    CHAPTER,
+    INTERESTING
 }

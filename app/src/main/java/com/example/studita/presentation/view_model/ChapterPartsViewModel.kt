@@ -19,12 +19,12 @@ class ChapterPartsViewModel : ViewModel(){
     val errorState = SingleLiveEvent<Int>()
     private val chapterPartUiModelMapper = ChapterPartUiModelMapper()
 
-    lateinit var results: Pair<LevelUiModel.LevelChapter, List<ChapterPartUiModel>>
+    lateinit var results: Pair<LevelUiModel.LevelChapterUiModel, List<ChapterPartUiModel>>
     private val interactor = ChapterPartsModule.getChapterPartsInteractorImpl()
 
     private var job: Job? = null
 
-    fun getChapterParts(chapterModel: LevelUiModel.LevelChapter){
+    fun getChapterParts(chapterModel: LevelUiModel.LevelChapterUiModel){
         job = viewModelScope.launchExt(job){
             progressState.postValue(false)
             when(val status = interactor.getChapterParts(chapterModel.chapterNumber)){

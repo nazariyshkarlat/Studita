@@ -3,6 +3,7 @@ package com.example.studita.presentation.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.ChapterPartData
 import com.example.studita.presentation.adapter.ChapterPartsAdapter
@@ -10,23 +11,32 @@ import com.example.studita.presentation.adapter.ChapterViewHolder.Companion.retu
 import com.example.studita.presentation.fragments.base.BaseBottomSheetDialogFragment
 import com.example.studita.presentation.model.ChapterPartUiModel
 import com.example.studita.presentation.model.LevelUiModel
+import com.example.studita.presentation.view_model.ChapterPartsViewModel
+import com.example.studita.presentation.view_model.HomeFragmentViewModel
 import kotlinx.android.synthetic.main.chapter_parts_layout.*
 import kotlinx.android.synthetic.main.chapter_parts_layout_info.*
 
 class ChapterPartsBottomSheetFragment : BaseBottomSheetDialogFragment(R.layout.chapter_parts_layout){
 
-    private var chapterModel: LevelUiModel.LevelChapter? = null
+    private var chapterModel: LevelUiModel.LevelChapterUiModel? = null
     private var chapterParts: List<ChapterPartUiModel>? = null
+    private var chapterPartsViewModel: ChapterPartsViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        chapterModel = arguments?.getParcelable("CHAPTER_MODEL")
-        chapterParts = arguments?.getParcelableArrayList("CHAPTER_PATS")
-        chapterPartsLayoutRecyclerView.adapter = chapterParts?.let { ChapterPartsAdapter(it) }
+        chapterPartsViewModel = activity?.run {
+            ViewModelProviders.of(this).get(ChapterPartsViewModel::class.java)
+        }
 
-        chapterPartsLayoutTitle.text = chapterModel?.chapterTitle
-        setProgressText(chapterPartsLayoutInfoTextView)
+        chapterPartsViewModel?.let{
+            chapterModel = it.results.first
+            chapterParts =  it.results.second
+            chapterPartsLayoutRecyclerView.adapter = chapterParts?.let {parts -> ChapterPartsAdapter(parts) }
+
+            chapterPartsLayoutTitle.text = chapterModel?.chapterTitle
+            setProgressText(chapterPartsLayoutInfoTextView)
+        }
 
     }
 

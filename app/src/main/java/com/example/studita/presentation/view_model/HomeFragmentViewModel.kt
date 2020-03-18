@@ -35,6 +35,7 @@ class HomeFragmentViewModel : ViewModel(){
                     progressState.postValue(true)
                     results = LevelUiModelMapper()
                         .map(status.result)
+                    println(results)
                 }
             }
         }

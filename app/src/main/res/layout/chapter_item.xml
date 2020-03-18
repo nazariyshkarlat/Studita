@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/TaskCardView"
-    android:id="@+id/chapterLayoutCardView"
+    android:id="@+id/chapterItemCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -17,27 +17,27 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/chapterLayoutTitle"
+                android:id="@+id/chapterItemTitle"
                 style="@style/Medium18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:id="@+id/chapterLayoutSubtitle"
+                android:id="@+id/chapterItemSubtitle"
                 style="@style/Regular14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/titleSubtitleMargin" />
 
             <TextView
-                android:id="@+id/chapterLayoutProgressText"
+                android:id="@+id/chapterItemProgressText"
                 style="@style/Regular13_50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp" />
 
             <com.example.studita.presentation.views.CustomProgressBar
-                android:id="@+id/chapterLayoutProgressBar"
+                android:id="@+id/chapterItemProgressBar"
                 style="@style/CustomProgressBar"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"

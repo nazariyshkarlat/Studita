@@ -14,12 +14,12 @@ import com.example.studita.presentation.model.LevelUiModel
 import com.example.studita.presentation.fragments.ChapterPartsBottomSheetFragment
 import com.example.studita.presentation.view_model.ChapterPartsViewModel
 import com.example.studita.presentation.views.CustomTypefaceSpan
-import kotlinx.android.synthetic.main.chapter_layout.view.*
+import kotlinx.android.synthetic.main.chapter_item.view.*
 
-class ChapterViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelChapter>(view){
+class ChapterViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelChapterUiModel>(view){
 
     companion object{
-        fun returnProgressText(chapter: LevelUiModel.LevelChapter, context: Context): SpannableStringBuilder {
+        fun returnProgressText(chapter: LevelUiModel.LevelChapterUiModel, context: Context): SpannableStringBuilder {
             val builder = SpannableStringBuilder()
             val text = context.resources.getString(
                 R.string.chapter_progress,
@@ -32,12 +32,12 @@ class ChapterViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelChapter
         }
     }
 
-    override fun bind(model: Any) {
-        val modelData = (model as LevelUiModel.LevelChapter)
+    override fun bind(model: LevelUiModel) {
+        val modelData = (model as LevelUiModel.LevelChapterUiModel)
         with(itemView) {
-            chapterLayoutTitle.text = modelData.chapterTitle
-            chapterLayoutSubtitle.text = modelData.chapterSubtitle
-            chapterLayoutProgressText.text =
+            chapterItemTitle.text = modelData.chapterTitle
+            chapterItemSubtitle.text = modelData.chapterSubtitle
+            chapterItemProgressText.text =
                 returnProgressText(modelData, context)
             setOnClickListener {
                 getChapterParts(model)
@@ -45,7 +45,7 @@ class ChapterViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelChapter
         }
     }
 
-    private fun getChapterParts(chapterModel: LevelUiModel.LevelChapter){
+    private fun getChapterParts(chapterModel: LevelUiModel.LevelChapterUiModel){
         val viewModel = itemView.getAppCompatActivity().run{
             ViewModelProviders.of(this as AppCompatActivity).get(ChapterPartsViewModel::class.java)
         }

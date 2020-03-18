@@ -3,6 +3,6 @@ package com.example.studita.data.entity
 import com.google.gson.annotations.SerializedName
 
 data class ChapterPartEntity(
-    @SerializedName("part_number") val partNumber: Int,
-    @SerializedName("part_name") val partName: String
+    @SerializedName("number") val partNumber: Int,
+    @SerializedName("name") val partName: String
 )

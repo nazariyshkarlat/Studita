@@ -117,6 +117,18 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="Regular14White50" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/white50</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Regular14White" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/white87</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="Regular16" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textColor">?primary_color</item>
@@ -376,6 +388,13 @@
         <item name="strokeColor">?attr/divider_color</item>
         <item name="cardElevation">0dp</item>
         <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="InterestingCardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">@dimen/defRadius</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="rippleColor">@color/white8</item>
+        <item name="cardElevation">0dp</item>
     </style>
 
     <style name="AppBottomSheetDialogTheme"

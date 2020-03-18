@@ -53,12 +53,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer<Boolean> { done ->
                     if(done){
-                        val bundle = Bundle()
-                        bundle.putParcelable("CHAPTER_MODEL", it.results.first)
-                        bundle.putParcelableArrayList("CHAPTER_PATS", it.results.second as ArrayList<out Parcelable>)
-                        val bottomSheet = ChapterPartsBottomSheetFragment()
-                        bottomSheet.arguments = bundle
-                        bottomSheet.show(
+                        ChapterPartsBottomSheetFragment().show(
                             (context as AppCompatActivity).supportFragmentManager,
                             null
                         )
