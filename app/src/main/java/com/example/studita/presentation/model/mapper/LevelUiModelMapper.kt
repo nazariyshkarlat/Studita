@@ -24,7 +24,7 @@ class LevelUiModelMapper : Mapper<List<LevelData>, List<LevelUiModel>> {
 
     private fun mapChild(source: LevelChildData): LevelUiModel {
         return when(source) {
-            is LevelChildData.LevelChapterData -> LevelUiModel.LevelChapterUiModel(source.chapterNumber, source.chapterTitle, source.chapterSubtitle, source.tasksCount)
+            is LevelChildData.LevelChapterData -> LevelUiModel.LevelChapterUiModel(source.chapterNumber, source.chapterTitle, source.chapterSubtitle, source.chapterPartsCount)
             is LevelChildData.LevelInterestingData -> LevelUiModel.LevelInterestingUiModel(source.interestingNumber, source.title, source.subtitle, source.tags)
         }
     }

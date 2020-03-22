@@ -26,6 +26,7 @@ class MainActivity : DefaultActivity(){
 
     override fun onBackPressed() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
+        hideKeyboard()
         if(currentFragment is NavigatableFragment)
             currentFragment.onBackClick()
         else if(currentFragment is MainFragment)

@@ -1,17 +1,12 @@
 package com.example.studita.presentation.adapter
 
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.activities.ExercisesActivity
+import com.example.studita.presentation.adapter.chapters.ChapterPartsViewHolder
 import com.example.studita.presentation.extensions.getAppCompatActivity
 import com.example.studita.presentation.extensions.startActivity
 import com.example.studita.presentation.model.ChapterPartUiModel
-import com.example.studita.presentation.model.LevelUiModel
-import com.example.studita.presentation.view_model.ChapterPartsViewModel
-import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.chapter_part_item.view.*
 
 

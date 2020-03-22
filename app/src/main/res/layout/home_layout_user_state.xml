@@ -113,7 +113,7 @@
             android:singleLine="true"
             android:text="6 дней подряд" />
 
-        <com.example.studita.presentation.views.PressTextView
+        <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/homeLayoutUserStateXPLayoutMoreButton"
             style="@style/TextButton16"
             android:layout_width="wrap_content"

@@ -22,7 +22,7 @@
         android:layout_toEndOf="@+id/chapterPartItemIcon"
         android:layout_centerVertical="true"/>
 
-    <com.example.myapplication.ui.custom_views.PressImageView
+    <com.example.studita.presentation.views.press_view.PressImageView
         android:id="@+id/chapterPartItemButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

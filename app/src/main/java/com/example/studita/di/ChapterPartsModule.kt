@@ -1,6 +1,6 @@
 package com.example.studita.di
 
-import com.example.studita.data.entity.mapper.ChapterPartDataMapper
+import com.example.studita.data.entity.mapper.ChapterDataMapper
 import com.example.studita.data.net.ChapterPartsService
 import com.example.studita.data.repository.ChapterPartsRepositoryImpl
 import com.example.studita.data.repository.datasource.chapter_parts.ChapterPartsDataStoreFactoryImpl
@@ -30,7 +30,7 @@ object ChapterPartsModule {
 
     private fun getChapterPartsRepository(): ChapterPartsRepository {
         if (repository == null)
-            repository = ChapterPartsRepositoryImpl(getChapterPartsDataStoreFactory(), ChapterPartDataMapper())
+            repository = ChapterPartsRepositoryImpl(getChapterPartsDataStoreFactory(), ChapterDataMapper())
         return repository!!
     }
 

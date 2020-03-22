@@ -24,16 +24,16 @@ class ExercisesActivity : DefaultActivity() {
 
         exercisesViewModel = ViewModelProviders.of(this).get(ExercisesViewModel::class.java)
 
-        val extras = intent.extras
-        if(extras != null){
-            val chapterPartNumber = extras.getInt("CHAPTER_PART_NUMBER")
-            if(chapterPartNumber != 0){
-                exercisesViewModel?.getExercises(chapterPartNumber)
+        if(savedInstanceState == null) {
+            val extras = intent.extras
+            if(extras != null){
+                val chapterPartNumber = extras.getInt("CHAPTER_PART_NUMBER")
+                if(chapterPartNumber != 0){
+                    exercisesViewModel?.getExercises(chapterPartNumber)
+                }
             }
-        }
-
-        if(savedInstanceState == null)
             navigateTo(ExercisesLoadFragment(), R.id.frameLayout)
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

@@ -23,4 +23,13 @@ class AuthorizationRepositoryImpl(private val authorizationDataStoreFactory: Aut
         }
     }
 
+    override suspend fun signInWithGoogle(idToken: String): Pair<Int, LogInResponseData?> {
+        return authorizationDataStoreFactory.create(
+            AuthorizationDataStoreFactory.Priority.CLOUD).trySignInWithGoogle(idToken).let{
+            it.first to it.second?.let{ second->
+                logInResultDataMapper.map(second)
+            }
+        }
+    }
+
 }

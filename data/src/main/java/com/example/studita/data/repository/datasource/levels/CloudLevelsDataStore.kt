@@ -8,8 +8,6 @@ import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
@@ -20,12 +18,12 @@ class CloudLevelsDataStore(
 
     private val gsonBuilder = GsonBuilder()
     private val deserializer: LevelsDeserializer = LevelsDeserializer()
-    private val exercisesGson: Gson
+    private val childrenGson: Gson
     private val type: Type
 
     init {
         gsonBuilder.registerTypeAdapter(LevelEntity::class.java, deserializer)
-        exercisesGson = gsonBuilder.create()
+        childrenGson = gsonBuilder.create()
         type = object : TypeToken<List<LevelEntity>>() {}.type
     }
 
@@ -38,7 +36,7 @@ class CloudLevelsDataStore(
                 val launchesAsync = levelsService.getLevelsAsync()
                 val result = launchesAsync.await()
                 val body = result.body()!!
-                exercisesGson.fromJson<List<LevelEntity>>(body, type)
+                childrenGson.fromJson<List<LevelEntity>>(body, type)
             } catch (exception: Exception) {
                 throw ServerUnavailableException()
             }

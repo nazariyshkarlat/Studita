@@ -15,7 +15,7 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
         var onNavigateFragment: OnNavigateFragment? = null
     }
 
-    fun onBackClick() {
+    open fun onBackClick() {
         (activity as AppCompatActivity).navigateBack(this)
         (view?.parent as ViewGroup).alpha = 0F
         (view?.parent as ViewGroup).animate().alpha(1F).setListener(null).setDuration(200).start()

@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import com.example.studita.R
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetDialogFragment
 
-open class BaseBottomSheetDialogFragment(@LayoutRes private val layoutResId: Int) : BottomSheetDialogFragment() {
+open class BaseBottomSheetDialogFragment(@LayoutRes private val layoutResId: Int) : CustomBottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

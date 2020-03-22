@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <com.example.studita.presentation.views.PressFab
+    <com.example.studita.presentation.views.press_view.PressFab
         android:id="@+id/mainLayoutFAB"
         style="@style/FloatingActionButton"
         android:layout_width="wrap_content"

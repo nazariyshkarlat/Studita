@@ -10,7 +10,7 @@ sealed class LevelChildData {
         val chapterNumber: Int,
         val chapterTitle: String,
         val chapterSubtitle: String,
-        val tasksCount: Int
+        val chapterPartsCount: Int
     ): LevelChildData()
     data class LevelInterestingData(
         val interestingNumber: Int,

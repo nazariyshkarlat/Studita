@@ -1,4 +1,4 @@
-package com.example.studita.presentation.fragments
+package com.example.studita.presentation.fragments.description
 
 import android.os.Bundle
 import android.view.View
@@ -7,11 +7,9 @@ import android.view.ViewTreeObserver
 import android.widget.ScrollView
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
-import com.example.studita.data.entity.exercise.ExercisesDescription
 import com.example.studita.domain.entity.exercise.ExercisesDescriptionData
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import kotlinx.android.synthetic.main.exercises_description_1_layout.*
 
 open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewId), ViewTreeObserver.OnScrollChangedListener{
 
@@ -27,15 +25,6 @@ open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewI
             exercisesDescriptionModel = it.exercisesResponseData.exercisesDescription
             if(!this.isHidden){
                 view.viewTreeObserver.addOnScrollChangedListener(this)
-                OneShotPreDrawListener.add(view) {
-                    if (view.height < (view as ViewGroup).getChildAt(
-                            0
-                        ).height
-                        + view.paddingTop + view.paddingBottom
-                    ) {
-                        exercisesViewModel?.showButtonDivider(true)
-                    }
-                }
             }
         }
 
@@ -54,6 +43,18 @@ open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewI
 
     override fun onScrollChanged() {
         checkScrollY()
+    }
+
+    protected fun checkButtonDivider(view: View){
+        OneShotPreDrawListener.add(view) {
+            if (view.height < (view as ViewGroup).getChildAt(
+                    0
+                ).height
+                + view.paddingTop + view.paddingBottom
+            ) {
+                exercisesViewModel?.showButtonDivider(true)
+            }
+        }
     }
 
     private fun checkScrollY(){

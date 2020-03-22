@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/toolbarHeight"
+    android:gravity="center"
+    android:layout_gravity="center">
+
+    <TextView
+        android:id="@+id/exerciseVariantsTrueFalseTitle"
+        style="@style/Bold32"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:id="@+id/exerciseVariantsTrueFalseScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp">
+
+        <LinearLayout
+            android:id="@+id/exerciseVariantsTrueFalseLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:orientation="vertical" >
+
+            <include
+                android:id="@+id/exerciseVariantsTrueFalseTrue"
+                layout="@layout/exercise_variant_text_item"/>
+
+            <include
+                android:id="@+id/exerciseVariantsTrueFalseFalse"
+                layout="@layout/exercise_variant_text_item"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

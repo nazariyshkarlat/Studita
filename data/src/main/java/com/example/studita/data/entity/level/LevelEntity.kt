@@ -12,7 +12,7 @@ sealed class LevelChildEntity {
         @SerializedName("chapter_number") val chapterNumber: Int,
         @SerializedName("title") val chapterTitle: String,
         @SerializedName("subtitle") val chapterSubtitle: String,
-        @SerializedName("tasks_count") val tasksCount: Int
+        @SerializedName("chapter_parts_count") val chapterPartsCount: Int
     ): LevelChildEntity()
     data class LevelInterestingEntity(
         @SerializedName("interesting_number") val interestingNumber: Int,

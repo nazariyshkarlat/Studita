@@ -3,6 +3,7 @@ package com.example.studita.domain.interactor.authorization
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.interactor.LogInStatus
+import com.example.studita.domain.interactor.SignInWithGoogleStatus
 import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.repository.AuthorizationRepository
 
@@ -41,6 +42,25 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
                 LogInStatus.NoConnection
             else
                 LogInStatus.ServiceUnavailable
+        }
+
+    override suspend fun signInWithGoogle(idToken: String): SignInWithGoogleStatus =
+        try {
+            val result = authorizationRepository.signInWithGoogle(idToken)
+            when (result.first) {
+                400 -> SignInWithGoogleStatus.Failure
+                else -> result.second?.let {
+                    SignInWithGoogleStatus.Success(
+                        it
+                    )
+                } ?: SignInWithGoogleStatus.Failure
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (e is NetworkConnectionException)
+                SignInWithGoogleStatus.NoConnection
+            else
+                SignInWithGoogleStatus.ServiceUnavailable
         }
 
 }

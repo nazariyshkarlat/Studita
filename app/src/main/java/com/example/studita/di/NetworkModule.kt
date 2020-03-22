@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 
 object NetworkModule {
 
-    private const val BASE_URL = "http:/37.53.93.223:5037/"
+    private const val BASE_URL = "http://37.53.93.223:5037/"
 
     lateinit var connectionManager: ConnectionManager
     private lateinit var retrofit: Retrofit

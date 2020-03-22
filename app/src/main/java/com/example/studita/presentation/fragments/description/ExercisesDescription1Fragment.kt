@@ -1,28 +1,20 @@
-package com.example.studita.presentation.fragments
+package com.example.studita.presentation.fragments.description
 
-import android.R.attr.x
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.OneShotPreDrawListener
 import androidx.core.view.children
-import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExercisesDescriptionData
 import com.example.studita.presentation.extensions.createSpannableString
 import com.example.studita.presentation.extensions.dpToPx
-import com.example.studita.presentation.fragments.base.NavigatableFragment
-import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercises_description_1_layout.*
-import kotlinx.android.synthetic.main.main_menu_layout.*
 import java.util.regex.Pattern
 
 
@@ -33,6 +25,7 @@ class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exer
         exercisesDescriptionModel?.let {
             OneShotPreDrawListener.add(exercisesDescription1ParentLinearLayout) {
                 formView(it)
+                checkButtonDivider(view)
             }
         }
     }

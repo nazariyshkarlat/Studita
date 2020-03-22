@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
 
-        <com.example.studita.presentation.views.PressTextView
+        <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/exerciseLayoutButton"
             style="@style/TransitionButton"
             android:layout_width="match_parent"

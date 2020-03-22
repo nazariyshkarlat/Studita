@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/authorizationConstraintLayout"
+    android:id="@+id/authorizationRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginStart="@dimen/defaultRLMargin"
     android:layout_marginEnd="@dimen/defaultRLMargin">
 
     <LinearLayout
+        android:gravity="center"
         android:id="@+id/authorizationCenterLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/authorizationBottomLinearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed">
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
 
         <com.example.studita.presentation.views.ErrorEditText
             android:id="@+id/authorizationEmailEditText"
@@ -62,31 +56,15 @@
 
         </FrameLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/authorizationBottomLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/authorizationCenterLinearLayout"
-        app:layout_constraintVertical_chainStyle="packed">
-
-        <com.example.studita.presentation.views.PressTextView
+        <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/authorizationLogInButton"
             style="@style/Button"
             android:layout_width="match_parent"
             android:layout_height="@dimen/buttonHeight"
-            android:text="@string/log_in"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="32dp"
+            android:text="@string/log_in" />
 
-        <com.example.studita.presentation.views.PressTextView
+        <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/authorizationForgotPassword"
             style="@style/TextButton16"
             android:layout_width="wrap_content"
@@ -102,27 +80,20 @@
         style="@style/ErrorText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:visibility="visible"
+        android:layout_above="@+id/authorizationSignUpButton"
+        android:layout_centerHorizontal="true"
         android:paddingTop="8dp"
         android:paddingBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/authorizationSignUpButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/authorizationBottomLinearLayout"
-        app:layout_constraintVertical_bias="1.0" />
+        android:textAlignment="center"
+        android:visibility="visible" />
 
-    <com.example.studita.presentation.views.PressTextView
+    <com.example.studita.presentation.views.press_view.PressTextView
         android:id="@+id/authorizationSignUpButton"
         style="@style/GreenButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/buttonHeight"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
-        android:text="@string/create_new_account"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/authorizationBottomLinearLayout"
-        app:layout_constraintVertical_bias="1.0" />
+        android:text="@string/create_new_account" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

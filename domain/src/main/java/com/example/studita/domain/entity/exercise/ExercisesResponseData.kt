@@ -1,7 +1,7 @@
 package com.example.studita.domain.entity.exercise
 
 data class ExercisesResponseData(val exercisesStartScreen: ExercisesStartScreenData,
-                                 val exercisesDescription: ExercisesDescriptionData,
+                                 val exercisesDescription: ExercisesDescriptionData?,
                                  val exercises: List<ExerciseData>)
 
 data class ExercisesStartScreenData(val title: String,

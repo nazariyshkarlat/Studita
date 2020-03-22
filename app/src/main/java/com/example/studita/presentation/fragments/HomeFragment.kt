@@ -1,7 +1,6 @@
 package com.example.studita.presentation.fragments
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,8 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.activities.MainMenuActivity
-import com.example.studita.presentation.adapter.LevelsAdapter
-import com.example.studita.presentation.extensions.addFragment
+import com.example.studita.presentation.adapter.levels.LevelsAdapter
 import com.example.studita.presentation.extensions.startActivity
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.listeners.FabRecyclerImpl
@@ -21,8 +19,6 @@ import com.example.studita.presentation.view_model.HomeFragmentViewModel
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.home_layout_bar.*
-import kotlinx.android.synthetic.main.home_layout_user_state.*
-import java.util.ArrayList
 
 class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetChangedListener, FabScrollListener{
 

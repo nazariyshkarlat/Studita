@@ -9,7 +9,7 @@ import com.example.studita.R
 class ErrorEditText @JvmOverloads constructor(context: Context,
 attrs: AttributeSet? = null,
 defStyleAttr: Int = 0
-) : EditText(context, attrs, defStyleAttr) {
+) : androidx.appcompat.widget.AppCompatEditText(context, attrs, defStyleAttr) {
     private val stateError = intArrayOf(R.attr.state_error)
     var isError = false
         set(value){

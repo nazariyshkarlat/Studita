@@ -1,5 +1,6 @@
 package com.example.studita.domain.interactor
 
+import com.example.studita.domain.entity.ChapterData
 import com.example.studita.domain.entity.ChapterPartData
 import com.example.studita.domain.entity.exercise.ExerciseData
 import com.example.studita.domain.entity.LevelData
@@ -30,11 +31,18 @@ sealed class LogInStatus{
     data class Success(val result: LogInResponseData): LogInStatus()
 }
 
+sealed class SignInWithGoogleStatus{
+    object ServiceUnavailable : SignInWithGoogleStatus()
+    object NoConnection : SignInWithGoogleStatus()
+    object Failure: SignInWithGoogleStatus()
+    data class Success(val result: LogInResponseData): SignInWithGoogleStatus()
+}
+
 sealed class ChapterPartsStatus{
     object ServiceUnavailable : ChapterPartsStatus()
     object NoConnection : ChapterPartsStatus()
     object NoChapterFound: ChapterPartsStatus()
-    data class Success(val result: List<ChapterPartData>): ChapterPartsStatus()
+    data class Success(val result: ChapterData): ChapterPartsStatus()
 }
 
 sealed class ExercisesStatus{

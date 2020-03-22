@@ -6,6 +6,8 @@ import com.example.studita.data.net.AuthorizationService
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
+import okhttp3.ResponseBody
+import retrofit2.Response
 
 class CloudAuthorizationDataStore(private val connectionManager: ConnectionManager, private val authorizationService: AuthorizationService) :
     AuthorizationDataStore {
@@ -38,6 +40,23 @@ class CloudAuthorizationDataStore(private val connectionManager: ConnectionManag
                 throw ServerUnavailableException()
             }
             responseCode
+        }
+
+    override suspend fun trySignInWithGoogle(idToken: String): Pair<Int, LogInResponseEntity?> =
+        if (connectionManager.isNetworkAbsent()) {
+            throw NetworkConnectionException()
+        }else {
+            val logInResult: LogInResponseEntity?
+            try {
+                val logInAsync =
+                    authorizationService.signInWithGoogleAsync(hashMapOf("id_token" to idToken))
+                val result = logInAsync.await()
+                logInResult = result.body()
+                val statusCode = result.code()
+                statusCode to logInResult
+            } catch (exception: Exception) {
+                throw ServerUnavailableException()
+            }
         }
 
 }

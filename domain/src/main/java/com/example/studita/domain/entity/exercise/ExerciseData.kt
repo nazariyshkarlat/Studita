@@ -30,6 +30,16 @@ sealed class ExerciseData(open val exerciseNumber: Int?){
             val variants: List<String>
         ) : ExerciseDataExercise(exerciseNumber)
 
+        data class ExerciseType5and6Data(
+            override val exerciseNumber: Int?,
+            val title: String,
+            val subtitle: String,
+            val variants: List<String>
+        ) : ExerciseDataExercise(exerciseNumber)
+
+        data class ExerciseType7Data( override val exerciseNumber: Int?,
+                                                 val title: String) : ExerciseDataExercise(exerciseNumber)
+
     }
     sealed class ExerciseDataScreen(override val exerciseNumber: Int?): ExerciseData(exerciseNumber) {
         data class ScreenType1Data(

@@ -16,7 +16,7 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <com.example.studita.presentation.views.PressTextView
+        <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/exercisesEndLayoutTextButton"
             style="@style/TextButton16"
             android:text="@string/detailed_stat"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"/>
 
-        <com.example.studita.presentation.views.PressTextView
+        <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/exercisesEndLayoutButton"
             style="@style/Button"
             android:layout_width="match_parent"

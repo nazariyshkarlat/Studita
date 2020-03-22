@@ -11,7 +11,7 @@ sealed class LevelUiModel{
         val chapterNumber: Int,
         val chapterTitle: String,
         val chapterSubtitle: String,
-        val tasksCount: Int
+        val chapterPartsCount: Int
     ): LevelUiModel()
     data class LevelInterestingUiModel(
         val interestingNumber: Int,

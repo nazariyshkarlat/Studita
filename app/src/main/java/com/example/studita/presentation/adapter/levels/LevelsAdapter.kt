@@ -1,9 +1,11 @@
-package com.example.studita.presentation.adapter
+package com.example.studita.presentation.adapter.levels
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
+import com.example.studita.presentation.adapter.InterestingViewHolder
+import com.example.studita.presentation.adapter.LevelViewHolder
 import com.example.studita.presentation.extensions.makeView
 import com.example.studita.presentation.model.LevelUiModel
 import java.lang.UnsupportedOperationException
@@ -11,7 +13,7 @@ import java.lang.UnsupportedOperationException
 class LevelsAdapter(private val items: List<LevelUiModel>) :
     RecyclerView.Adapter<LevelsViewHolder<*>>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LevelsViewHolder<*>  = when (viewType) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LevelsViewHolder<*> = when (viewType) {
         LevelsViewType.USER_STATE.ordinal -> UserStateViewHolder(parent.makeView(R.layout.home_layout_user_state))
         LevelsViewType.LEVEL.ordinal -> LevelViewHolder(parent.makeView(R.layout.level_item))
         LevelsViewType.CHAPTER.ordinal -> ChapterViewHolder(parent.makeView(R.layout.chapter_item))
@@ -22,6 +24,8 @@ class LevelsAdapter(private val items: List<LevelUiModel>) :
     override fun onBindViewHolder(holder: LevelsViewHolder<*>, position: Int) {
         if(position != 0)
             holder.bind(items[position-1])
+        else
+            holder.bind(null)
     }
 
     override fun getItemViewType(position: Int): Int =
@@ -42,7 +46,7 @@ class LevelsAdapter(private val items: List<LevelUiModel>) :
 
 abstract class LevelsViewHolder<T : LevelUiModel?>(view: View) : RecyclerView.ViewHolder(view) {
 
-    abstract fun bind(model: LevelUiModel)
+    abstract fun bind(model: LevelUiModel?)
 }
 
 private enum class LevelsViewType {

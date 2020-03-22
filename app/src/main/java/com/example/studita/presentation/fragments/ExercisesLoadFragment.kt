@@ -3,10 +3,8 @@ package com.example.studita.presentation.fragments
 import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.graphics.drawable.Animatable2
-import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,17 +14,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.studita.R
-import com.example.studita.presentation.adapter.LevelsAdapter
-import com.example.studita.presentation.extensions.addFragment
-import com.example.studita.presentation.extensions.removeFragment
 import com.example.studita.presentation.extensions.replaceWithAnim
 import com.example.studita.presentation.fragments.base.BaseFragment
-import com.example.studita.presentation.view_model.ChapterPartsViewModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercises_load_layout.view.*
-import kotlinx.android.synthetic.main.home_layout.*
-import kotlinx.coroutines.*
-import java.util.ArrayList
 
 class ExercisesLoadFragment : BaseFragment(R.layout.exercises_load_layout){
 

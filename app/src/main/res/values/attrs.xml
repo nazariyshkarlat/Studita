@@ -24,4 +24,7 @@
     <attr name="splash_screen_color" format="reference"/>
     <attr name="splash_screen_text_color" format="reference"/>
     <attr name="task_variant_button" format="reference"/>
+    <attr name="bottom_sheet_color" format="reference"/>
+    <attr name="press_view_press_alpha_lighter" format="float"/>
+    <attr name="press_view_press_alpha" format="float"/>
 </resources>

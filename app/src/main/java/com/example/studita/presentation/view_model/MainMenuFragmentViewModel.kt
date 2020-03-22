@@ -1,24 +1,58 @@
 package com.example.studita.presentation.view_model
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.studita.R
+import com.example.studita.authenticator.AccountAuthenticator
+import com.example.studita.di.AuthorizationModule
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.lang.UnsupportedOperationException
 
 class MainMenuFragmentViewModel : ViewModel(){
 
-    val signUpMethodState = SingleLiveEvent<SignUpMehod>()
+    val signUpMethodState = SingleLiveEvent<SignUpMethod>()
 
     fun onSignUpLogInClick(viewId: Int){
         when(viewId) {
-            R.id.mainMenuWithGoogleButton -> signUpMethodState.postValue(SignUpMehod.WITH_GOOGLE)
-            R.id.mainMenuUseEmailButton -> signUpMethodState.postValue(SignUpMehod.USE_EMAIL)
+            R.id.mainMenuWithGoogleButton -> signUpMethodState.postValue(SignUpMethod.WITH_GOOGLE)
+            R.id.mainMenuUseEmailButton -> signUpMethodState.postValue(SignUpMethod.USE_EMAIL)
             else -> throw UnsupportedOperationException("unknown view id")
         }
     }
 
-    enum class SignUpMehod{
+    fun signIn(context: Context): GoogleSignInClient{
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(context.resources.getString(R.string.server_client_id))
+            .requestEmail()
+            .build()
+
+        return GoogleSignIn.getClient(context, gso)
+    }
+
+    fun handleSignInResult(task: Task<GoogleSignInAccount>, context: Context){
+        try{
+            val account = task.getResult(ApiException::class.java)
+            viewModelScope.launch {
+                account?.let {
+                    val result = AuthorizationModule.getAuthorizationInteractorImpl()
+                        .signInWithGoogle(account.idToken.toString())
+                    AccountAuthenticator.addAccount(context, it.email.toString())
+                }
+            }
+        }catch (e: ApiException){
+            throw e
+        }
+    }
+
+    enum class SignUpMethod{
         WITH_GOOGLE,
         USE_EMAIL
     }

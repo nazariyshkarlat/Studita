@@ -31,14 +31,14 @@
         android:orientation="horizontal"
         android:layout_gravity="end">
 
-        <com.example.studita.presentation.views.PressTextView
+        <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/exercisesCloseDialogLeftButton"
             style="@style/TextButton16"
             android:text="@string/exercises_close_dialog_alert_left_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <com.example.studita.presentation.views.PressTextView
+        <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/exercisesCloseDialogRightButton"
             style="@style/TextButton16"
             android:text="@string/exercises_close_dialog_alert_right_button"

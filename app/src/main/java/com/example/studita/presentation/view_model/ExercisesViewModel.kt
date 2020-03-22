@@ -76,6 +76,10 @@ class ExercisesViewModel : ViewModel(){
         }
     }
 
+    fun setExercisesProgress(state: ExercisesState){
+        exercisesProgress.value = state
+    }
+
     fun showExercisesEndTextButton(show: Boolean){
         exercisesEndTextButtonState.value = show
     }
@@ -127,7 +131,6 @@ class ExercisesViewModel : ViewModel(){
                     is ExerciseResultStatus.Success -> {
                         snackbarState.postValue(exerciseUiModel to status.result)
                         if (status.result.exerciseResult) {
-
                             exerciseIndex++
 
                             if (exerciseIndex == exercises.count { it is ExerciseUiModel.ExerciseUiModelExercise }) {
@@ -163,6 +166,8 @@ class ExercisesViewModel : ViewModel(){
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel  -> ExerciseVariantsType2Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel  -> ExerciseVariantsType3Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel  -> ExerciseVariantsType4Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5and6UiModel  -> ExerciseVariantsType5and6Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel  -> ExerciseVariantsType7Fragment()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel -> ExerciseScreenType1()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel -> ExerciseScreenType2()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel -> ExerciseScreenType3()
@@ -193,17 +198,21 @@ class ExercisesViewModel : ViewModel(){
         secondsCounter?.schedule(object : TimerTask() {
             override fun run() {
                 seconds++
+                println("EXERCISE TIME IS $seconds SECONDS")
             }
         }, 1000, 1000)
     }
 
     fun stopSecondsCounter(){
-        if(secondsCounter != null) {
+        if(!secondsCounterIsStopped()) {
             secondsCounter!!.cancel()
             secondsCounter!!.purge()
             secondsCounter = null
+            println("EXERCISE TIME STOP")
         }
     }
+
+    fun secondsCounterIsStopped() = secondsCounter == null
 
     fun showToolbarDivider(show: Boolean){
         toolbarDividerState.value = show

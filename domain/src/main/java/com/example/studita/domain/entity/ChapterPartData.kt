@@ -1,3 +1,8 @@
 package com.example.studita.domain.entity
 
-data class ChapterPartData( val chapterPartNumber: Int, val chapterPartName: String)
+data class ChapterData(val title : String, val parts: List<ChapterPartData>)
+
+data class ChapterPartData(
+    val number: Int,
+    val name: String
+)

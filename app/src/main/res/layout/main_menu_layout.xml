@@ -37,7 +37,7 @@
                     android:text="@string/main_menu_authorization_method"
                     android:textAlignment="center" />
 
-                <com.example.studita.presentation.views.PressTextView
+                <com.example.studita.presentation.views.press_view.PressTextView
                     android:id="@+id/mainMenuWithGoogleButton"
                     style="@style/WithGoogleButton"
                     android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.example.studita.presentation.views.PressLinearLayout
+                <com.example.studita.presentation.views.press_view.PressLinearLayout
                     android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -95,9 +95,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:text="@string/settings"/>
-                </com.example.studita.presentation.views.PressLinearLayout>
+                </com.example.studita.presentation.views.press_view.PressLinearLayout>
 
-                <com.example.studita.presentation.views.PressLinearLayout
+                <com.example.studita.presentation.views.press_view.PressLinearLayout
                     android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
                         android:layout_marginStart="16dp"
                         android:text="@string/help"/>
 
-                </com.example.studita.presentation.views.PressLinearLayout>
+                </com.example.studita.presentation.views.press_view.PressLinearLayout>
 
             </LinearLayout>
 

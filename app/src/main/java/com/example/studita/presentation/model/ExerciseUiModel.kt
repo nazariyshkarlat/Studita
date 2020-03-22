@@ -37,6 +37,16 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
             val subtitle: String,
             val variants: List<String>
         ) : ExerciseUiModelExercise(exerciseNumber)
+
+        data class ExerciseType5and6UiModel(
+            override val exerciseNumber: Int?,
+            val title: String,
+            val subtitle: String,
+            val variants: List<String>
+        ) : ExerciseUiModelExercise(exerciseNumber)
+
+        data class ExerciseType7UiModel(override val exerciseNumber: Int?,
+                                      val title: String) : ExerciseUiModelExercise(exerciseNumber)
     }
 
     sealed class ExerciseUiModelScreen(override val exerciseNumber: Int?) : ExerciseUiModel(exerciseNumber) {

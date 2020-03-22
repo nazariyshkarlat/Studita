@@ -20,4 +20,5 @@
     <dimen name="bottomNavigationHeight">56dp</dimen>
     <dimen name="buttonHeight">48dp</dimen>
     <dimen name="buttonWithPaddingHeight">80dp</dimen>
+    <dimen name="homeLayoutToolbarHeight">74dp</dimen>
 </resources>

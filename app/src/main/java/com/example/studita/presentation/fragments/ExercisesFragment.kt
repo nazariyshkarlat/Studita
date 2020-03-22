@@ -16,6 +16,9 @@ import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.domain.entity.exercise.ExerciseResponseDescriptionContentData
 import com.example.studita.presentation.extensions.*
 import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.fragments.description.ExercisesDescription1Fragment
+import com.example.studita.presentation.fragments.description.ExercisesDescription2Fragment
+import com.example.studita.presentation.fragments.description.ExercisesDescription4Fragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.google.android.flexbox.FlexboxLayout
@@ -40,8 +43,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             viewModel.navigationState.observe(viewLifecycleOwner, Observer{ fragment->
                 when(fragment.first){
                     ExercisesViewModel.ExercisesNavigationState.FIRST -> {
-                        exercisesViewModel?.exercisesProgress?.value =
-                            ExercisesViewModel.ExercisesState.EXERCISES
                         (activity as AppCompatActivity).navigateTo(
                             fragment.second,
                             R.id.exerciseLayoutFrameLayout
@@ -90,7 +91,12 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                     ExercisesViewModel.ExercisesState.START_SCREEN -> {
                         exerciseToolbarProgressBar.alpha = 0F
                         exerciseLayoutButton.setOnClickListener {
-                            viewModel.exercisesProgress.value = ExercisesViewModel.ExercisesState.DESCRIPTION
+                            if(viewModel.exercisesResponseData.exercisesDescription != null)
+                                viewModel.setExercisesProgress(ExercisesViewModel.ExercisesState.DESCRIPTION)
+                            else {
+                                exercisesViewModel?.setExercisesProgress(ExercisesViewModel.ExercisesState.EXERCISES)
+                                exercisesViewModel?.initFragment()
+                            }
                         }
                     }
                     ExercisesViewModel.ExercisesState.DESCRIPTION -> {
@@ -125,10 +131,12 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
     }
 
     fun onWindowFocusChanged(hasFocus: Boolean){
-        if(hasFocus)
-            exercisesViewModel?.startSecondsCounter()
-        else
-            exercisesViewModel?.stopSecondsCounter()
+        if(hasFocus) {
+            if (exercisesViewModel?.secondsCounterIsStopped() == true)
+                exercisesViewModel?.startSecondsCounter()
+        }else {
+                exercisesViewModel?.stopSecondsCounter()
+            }
     }
 
     fun onBackClick(){
@@ -206,7 +214,16 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                     if (description.descriptionContent is ExerciseResponseDescriptionContentData.DescriptionContentString) {
                         exerciseBottomSnackbarSubtitle.visibility = View.VISIBLE
                         exerciseBottomSnackbarFlexbox.visibility = View.GONE
-                        exerciseBottomSnackbarSubtitle.text = (description.descriptionContent as ExerciseResponseDescriptionContentData.DescriptionContentString).descriptionContent
+                        val descriptionSubtitle = (description.descriptionContent as ExerciseResponseDescriptionContentData.DescriptionContentString).descriptionContent
+                        exerciseBottomSnackbarSubtitle.text = when (descriptionSubtitle) {
+                            "true" -> {
+                                resources.getString(R.string.true_variant)
+                            }
+                            "false" -> {
+                                resources.getString(R.string.false_variant)
+                            }
+                            else -> descriptionSubtitle
+                        }
                     }else if(description.descriptionContent is ExerciseResponseDescriptionContentData.DescriptionContentArray){
                         val count = (description.descriptionContent as ExerciseResponseDescriptionContentData.DescriptionContentArray).descriptionContent.count
                         if(count == 0){
@@ -265,11 +282,13 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         val descriptionFragment = when(exercisesViewModel?.chapterPartNumber){
             1 -> ExercisesDescription1Fragment()
             2 -> ExercisesDescription2Fragment()
+            4 -> ExercisesDescription4Fragment()
             else -> throw IOException("Unknown chapter part number")
         }
         (activity as AppCompatActivity).navigateTo(descriptionFragment, R.id.exerciseLayoutFrameLayout)
         exerciseLayoutButton.text = resources.getString(R.string.continue_string)
         exerciseLayoutButton.setOnClickListener{
+            exercisesViewModel?.setExercisesProgress(ExercisesViewModel.ExercisesState.EXERCISES)
             exercisesViewModel?.initFragment()
         }
     }

@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel
 
 class ToolbarFragmentViewModel : ViewModel(){
 
-    var toolbarHeight = 0
-
     val toolbarTextState = MutableLiveData<String?>()
     val toolbarDividerState = SingleLiveEvent<Boolean>()
 

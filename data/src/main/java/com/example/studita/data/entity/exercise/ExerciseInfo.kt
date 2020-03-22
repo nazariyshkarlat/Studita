@@ -25,6 +25,14 @@ import com.google.gson.annotations.SerializedName
              "subtitle"
          ) val subtitle: String, @SerializedName("variants") val variants: List<String>
      ) : ExerciseInfo()
+
+     data class ExerciseType5and6Info(
+         @SerializedName("title") val title: String, @SerializedName(
+             "subtitle"
+         ) val subtitle: String, @SerializedName("variants") val variants: List<String>
+     ) : ExerciseInfo()
+
+     data class ExerciseType7Info(@SerializedName("title") val title: String) : ExerciseInfo()
     }
 
 sealed class ScreenInfo{

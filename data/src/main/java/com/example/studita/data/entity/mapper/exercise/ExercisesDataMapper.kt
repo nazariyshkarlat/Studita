@@ -16,6 +16,8 @@ class ExercisesDataMapper :
                         is ExerciseInfo.ExerciseType2Info -> ExerciseData.ExerciseDataExercise.ExerciseType2Data(it.exerciseNumber, ExerciseShapeMapper().map(exerciseInfo.title), exerciseInfo.subtitle, exerciseInfo.variants)
                         is ExerciseInfo.ExerciseType3Info -> ExerciseData.ExerciseDataExercise.ExerciseType3Data(it.exerciseNumber, ExerciseNumberMapper().map(exerciseInfo.title), exerciseInfo.subtitle,ExerciseNumbersMapper().map(exerciseInfo.variants))
                         is ExerciseInfo.ExerciseType4Info -> ExerciseData.ExerciseDataExercise.ExerciseType4Data(it.exerciseNumber, ExerciseNumberMapper().map(exerciseInfo.title), exerciseInfo.subtitle, exerciseInfo.variants)
+                        is ExerciseInfo.ExerciseType5and6Info -> ExerciseData.ExerciseDataExercise.ExerciseType5and6Data(it.exerciseNumber, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants)
+                        is ExerciseInfo.ExerciseType7Info -> ExerciseData.ExerciseDataExercise.ExerciseType7Data(it.exerciseNumber,exerciseInfo.title)
                     }
                 }
                 is ExerciseArrayEntity.ScreenEntity ->{
@@ -38,9 +40,9 @@ class ExercisesStartScreenDataMapper:
 }
 
 class ExercisesDescriptionMapper:
-    Mapper<ExercisesDescription, ExercisesDescriptionData> {
-    override fun map(source: ExercisesDescription): ExercisesDescriptionData
-            = ExercisesDescriptionData(source.textParts, source.partsToInject)
+    Mapper<ExercisesDescription?, ExercisesDescriptionData?> {
+    override fun map(source: ExercisesDescription?): ExercisesDescriptionData?
+            = source?.let{ExercisesDescriptionData(source.textParts, source.partsToInject)}
 }
 
 class ExerciseShapesMapper: Mapper<List<List<String>>, List<ExerciseShapeData>> {

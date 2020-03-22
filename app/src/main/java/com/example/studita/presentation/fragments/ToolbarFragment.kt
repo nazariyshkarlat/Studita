@@ -52,9 +52,6 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
                 it.setToolbarText(resources.getString(R.string.authorization))
             else
                 it.setToolbarText(null)
-
-            if (view?.height != 0)
-                it.toolbarHeight = view?.height ?: 0
         }
     }
 

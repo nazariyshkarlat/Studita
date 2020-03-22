@@ -9,6 +9,7 @@ import com.example.studita.domain.entity.ChapterPartData
 import com.example.studita.domain.interactor.ChapterPartsStatus
 import com.example.studita.presentation.extensions.launchExt
 import com.example.studita.presentation.model.ChapterPartUiModel
+import com.example.studita.presentation.model.ChapterUiModel
 import com.example.studita.presentation.model.LevelUiModel
 import com.example.studita.presentation.model.mapper.ChapterPartUiModelMapper
 import kotlinx.coroutines.Job
@@ -19,20 +20,20 @@ class ChapterPartsViewModel : ViewModel(){
     val errorState = SingleLiveEvent<Int>()
     private val chapterPartUiModelMapper = ChapterPartUiModelMapper()
 
-    lateinit var results: Pair<LevelUiModel.LevelChapterUiModel, List<ChapterPartUiModel>>
+    lateinit var results: ChapterUiModel
     private val interactor = ChapterPartsModule.getChapterPartsInteractorImpl()
 
     private var job: Job? = null
 
-    fun getChapterParts(chapterModel: LevelUiModel.LevelChapterUiModel){
+    fun getChapterParts(chapterNumber: Int){
         job = viewModelScope.launchExt(job){
             progressState.postValue(false)
-            when(val status = interactor.getChapterParts(chapterModel.chapterNumber)){
+            when(val status = interactor.getChapterParts(chapterNumber)){
                 is ChapterPartsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is ChapterPartsStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is ChapterPartsStatus.Success -> {
                     progressState.postValue(true)
-                    results = chapterModel to chapterPartUiModelMapper.map(status.result)
+                    results = chapterPartUiModelMapper.map(status.result)
                 }
             }
         }

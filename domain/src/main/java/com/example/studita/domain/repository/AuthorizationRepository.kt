@@ -8,4 +8,6 @@ interface AuthorizationRepository {
     suspend fun signUp(authorizationRequestData: AuthorizationRequestData): Int
 
     suspend fun logIn(authorizationRequestData: AuthorizationRequestData): Pair<Int, LogInResponseData?>
+
+    suspend fun signInWithGoogle(idToken: String) : Pair<Int, LogInResponseData?>
 }

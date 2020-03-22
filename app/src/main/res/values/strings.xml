@@ -81,4 +81,8 @@
     <string name="continue_string">Продолжить</string>
     <string name="exercise_shape_0_rect">Ни один квадрат</string>
     <string name="exercises_XP_result">+%1$d XP</string>
+    <string name="server_client_id">563230539724-1j3osvmuqtuovqr0am2qj2evm7l7cln8.apps.googleusercontent.com</string>
+    <string name="custom_bottom_sheet_behavior" translatable="false">com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior</string>
+    <string name="studita_account">Studita</string>
+    <string name="account_type">com.example.studita.authentication.StuditaAccount</string>
 </resources>
