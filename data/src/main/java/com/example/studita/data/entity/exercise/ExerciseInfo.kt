@@ -33,7 +33,21 @@ import com.google.gson.annotations.SerializedName
      ) : ExerciseInfo()
 
      data class ExerciseType7Info(@SerializedName("title") val title: String) : ExerciseInfo()
-    }
+
+     data class ExerciseType8Info(
+         @SerializedName("title") val title: String, @SerializedName(
+             "subtitle"
+         ) val subtitle: String, @SerializedName("variants") val variants: List<String>
+     ) : ExerciseInfo()
+
+     data class ExerciseType9Info(@SerializedName("title") val title: String) : ExerciseInfo()
+
+     data class ExerciseType10Info(@SerializedName("title_parts") val titleParts: List<String>, @SerializedName(
+         "subtitle"
+     ) val subtitle: String ) : ExerciseInfo()
+
+     data class ExerciseType11Info(@SerializedName("title_parts") val titleParts: List<String>, @SerializedName("filter") val filter: String, @SerializedName("compare_number") val compareNumber: String) : ExerciseInfo()
+ }
 
 sealed class ScreenInfo{
     data class ScreenType1Info(

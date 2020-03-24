@@ -22,6 +22,10 @@ class ExercisesUiModelMapper : Mapper<List<ExerciseData>, List<ExerciseUiModel>>
                 is ExerciseData.ExerciseDataExercise.ExerciseType4Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel(it.exerciseNumber, it.title, it.subtitle, it.variants)
                 is ExerciseData.ExerciseDataExercise.ExerciseType5and6Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5and6UiModel(it.exerciseNumber, it.title, it.subtitle, it.variants)
                 is ExerciseData.ExerciseDataExercise.ExerciseType7Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel(it.exerciseNumber,it.title)
+                is ExerciseData.ExerciseDataExercise.ExerciseType8Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8UiModel(it.exerciseNumber, it.title, it.subtitle, it.variants)
+                is ExerciseData.ExerciseDataExercise.ExerciseType9Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel(it.exerciseNumber,it.title)
+                is ExerciseData.ExerciseDataExercise.ExerciseType10Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType10UiModel(it.exerciseNumber,it.titleParts, it.subtitle)
+                is ExerciseData.ExerciseDataExercise.ExerciseType11Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType11UiModel(it.exerciseNumber,it.titleParts, it.filter, it.compareNumber)
 
                 is ExerciseData.ExerciseDataScreen.ScreenType1Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel(it.exerciseNumber, it.title, it.subtitle, it.partsToInject, getShapeByName(it.image))
                 is ExerciseData.ExerciseDataScreen.ScreenType2Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel(it.exerciseNumber, it.title)

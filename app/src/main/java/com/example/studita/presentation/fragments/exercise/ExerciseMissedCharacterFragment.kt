@@ -3,6 +3,7 @@ package com.example.studita.presentation.fragments.exercise
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.DigitsKeyListener
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -11,9 +12,10 @@ import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.presentation.extensions.hideKeyboard
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import kotlinx.android.synthetic.main.exercise_character_fragment.*
+import kotlinx.android.synthetic.main.exercise_input_equation_layout.*
+import kotlinx.android.synthetic.main.exercise_input_missed_part_layout.*
 
-class ExerciseCharacterFragment : NavigatableFragment(R.layout.exercise_character_fragment), TextWatcher {
+class ExerciseMissedCharacterFragment : NavigatableFragment(R.layout.exercise_input_missed_part_layout), TextWatcher {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -30,7 +32,7 @@ class ExerciseCharacterFragment : NavigatableFragment(R.layout.exercise_characte
                 androidx.lifecycle.Observer{ answered ->
                     if(answered) {
                         (activity as AppCompatActivity).hideKeyboard()
-                        exerciseCharacterFragmentEditText.isFocusable = false
+                        exerciseMissedPartLayoutEditText.isFocusable = false
                     }
                 })
         }
@@ -43,7 +45,8 @@ class ExerciseCharacterFragment : NavigatableFragment(R.layout.exercise_characte
             exerciseCharacterFragmentBottomTextView.text = resources.getString(R.string.exercise_type_4_bottom_text)
         }
          */
-        exerciseCharacterFragmentEditText.addTextChangedListener(this)
+        exerciseMissedPartLayoutEditText.keyListener = DigitsKeyListener.getInstance("+-*:÷×/")
+        exerciseMissedPartLayoutEditText.addTextChangedListener(this)
     }
 
     override fun afterTextChanged(s: Editable?) {
@@ -55,9 +58,17 @@ class ExerciseCharacterFragment : NavigatableFragment(R.layout.exercise_characte
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         val str = s.toString()
         if(str.isNotEmpty()){
-            exercisesViewModel?.exercisesButtonEnabledState?.value = true
-            exercisesViewModel?.exerciseRequestData =
-                ExerciseRequestData(str)
+            if (str[0] == '0')
+                exerciseMissedPartLayoutEditText.setText(
+                    exerciseMissedPartLayoutEditText.text.substring(
+                        1,
+                        exerciseMissedPartLayoutEditText.text.length
+                    )
+                )else {
+                exercisesViewModel?.exercisesButtonEnabledState?.value = true
+                exercisesViewModel?.exerciseRequestData =
+                    ExerciseRequestData(str)
+            }
         }else
             exercisesViewModel?.exercisesButtonEnabledState?.value = false
     }

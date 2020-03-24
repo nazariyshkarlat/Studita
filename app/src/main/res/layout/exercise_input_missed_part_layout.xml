@@ -13,41 +13,48 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
         android:paddingStart="@dimen/defaultRLMargin"
-        android:paddingEnd="@dimen/defaultRLMargin">
-
-        <EditText
-            android:id="@+id/exerciseInputEquationFragmentEditText"
-            style="@style/CharacterEditText"
-            android:textAlignment="center"
-            android:textAppearance="@style/Bold32"
-            android:minWidth="106dp"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
-            android:digits="0123456789+-*:÷×/" />
+        android:paddingEnd="@dimen/defaultRLMargin"
+        android:gravity="center">
 
         <TextView
-            android:id="@+id/exerciseInputEquationFragmentResultTextView"
-            style="@style/Bold32"
-            android:layout_weight="0"
+            android:id="@+id/exerciseMissedPartLayoutLeftTextView"
+            style="@style/Medium32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"/>
+            android:layout_weight="0"
+            android:layout_marginEnd="4dp"/>
+
+        <EditText
+            android:id="@+id/exerciseMissedPartLayoutEditText"
+            style="@style/CharacterEditText"
+            android:textAlignment="center"
+            android:textAppearance="@style/Medium32"
+            android:minWidth="66dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:imeOptions="actionDone"
+            android:singleLine="true"/>
+
+        <TextView
+            android:id="@+id/exerciseMissedPartLayoutRightTextView"
+            style="@style/Medium32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:layout_marginStart="4dp"/>
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/exerciseInputEquationFragmentBottomTextView"
+        android:id="@+id/exerciseMissedPartLayoutBottomTextView"
         style="@style/Regular16_50"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginTop="32dp"
         android:textAlignment="center"/>
 
 

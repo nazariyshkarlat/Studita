@@ -10,18 +10,18 @@
     android:gravity="center"
     android:layout_gravity="center">
 
-    <LinearLayout
-        android:id="@+id/exerciseInputCollectionFragmentLinearLayout"
+    <TextView
+        android:id="@+id/exerciseInputLayoutTextView"
+        style="@style/Medium32"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"/>
+        android:layout_height="wrap_content"/>
 
     <EditText
-        android:id="@+id/exerciseInputCollectionFragmentEditText"
+        android:id="@+id/exerciseInputLayoutEditText"
+        style="@style/EditText"
         android:layout_marginTop="32dp"
         android:textAlignment="center"
-        style="@style/EditText"
-        android:maxLength="2"
+        android:maxLength="6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:imeOptions="actionDone"

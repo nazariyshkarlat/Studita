@@ -18,7 +18,14 @@ fun getSecondaryColor(context: Context): Int{
 }
 
 @ColorInt
-fun getPageBackroundColor(context: Context): Int{
+fun getPrimaryColor(context: Context): Int{
+    val typedValue = TypedValue()
+    context.theme.resolveAttribute(R.attr.primary_color, typedValue, true)
+    return  ContextCompat.getColor(context, typedValue.resourceId)
+}
+
+@ColorInt
+fun getPageBackgroundColor(context: Context): Int{
     val typedValue = TypedValue()
     context.theme.resolveAttribute(R.attr.page_background_color, typedValue, true)
     return  ContextCompat.getColor(context, typedValue.resourceId)

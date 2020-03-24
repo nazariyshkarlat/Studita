@@ -36,7 +36,7 @@
     <string name="level">Уровень</string>
     <string name="true_answer">Вы ответили верно!</string>
     <string name="false_answer">Правильный ответ:</string>
-    <string name="exercise_type_3_false_snackbar_title">Ваш результат:</string>
+    <string name="exercise_type_9_false_snackbar_title">Ваш результат:</string>
     <string name="true_variant">Правда</string>
     <string name="false_variant">Неправда</string>
     <string name="check">Проверить</string>
@@ -53,13 +53,15 @@
     <string name="exercise_type_5_title">%1$s … %2$s=%3$s</string>
     <string name="exercise_type_7_title">%1$s%2$s … =%3$s</string>
     <string name="exercise_type_3_hint">Введите правильный ответ</string>
-    <string name="exercise_type_8_9_hint">Сколько %1$s вы видите?</string>
-    <string name="exercise_type_4_bottom_text">Вставьте пропущенный символ</string>
-    <string name="exercise_type_6_bottom_text">Введите любое уравнение, чтобы получился данный результат</string>
+    <string name="exercise_type_11_hint">Сколько чисел %1$s вы видите?</string>
+    <string name="exercise_type_9_bottom_text">Введите любое уравнение, чтобы получился данный результат</string>
+    <string name="exercise_type_10_bottom_text">Вставьте пропущенный символ</string>
     <string name="next">Далее</string>
     <string name="good_job">Хорошая работа!</string>
     <string name="complete">Завершить</string>
     <string name="stat">Статистика</string>
+    <string name="bigger">больше</string>
+    <string name="lower">меньше</string>
     <string name="detailed_stat">Подробная статистика</string>
     <string name="detailed_stat_title1">Получено опыта</string>
     <string name="detailed_stat_title2">Затраченное время</string>

@@ -10,13 +10,18 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
+import com.example.studita.domain.entity.exercise.ExerciseType11Filter
 import com.example.studita.presentation.extensions.createSpannableString
 import com.example.studita.presentation.extensions.hideKeyboard
+import com.example.studita.presentation.extensions.makeView
 import com.example.studita.presentation.fragments.base.NavigatableFragment
+import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import kotlinx.android.synthetic.main.exercise_input_collection_fragment.*
+import kotlinx.android.synthetic.main.exercise_input_collection_layout.*
+import kotlinx.android.synthetic.main.exercise_input_collection_text_view.view.*
+import kotlinx.android.synthetic.main.exercise_input_equation_layout.*
 
-class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_input_collection_fragment), TextWatcher {
+class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_input_collection_layout), TextWatcher {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -33,9 +38,19 @@ class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_in
                 androidx.lifecycle.Observer{ answered ->
                     if(answered) {
                         (activity as AppCompatActivity).hideKeyboard()
-                        exerciseInputCollectionFragmentEditText.isFocusable = false
+                        exerciseInputCollectionLayoutEditText.isFocusable = false
                     }
                 })
+
+            if(it.exerciseUiModel is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType11UiModel){
+                val exerciseUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType11UiModel
+                for(number in exerciseUiModel.titleParts) {
+                    val numberView = exerciseInputCollectionLayoutLinearLayout.makeView(R.layout.exercise_input_collection_text_view)
+                    numberView.exerciseInputCollectionTextView.text = number
+                    exerciseInputCollectionLayoutLinearLayout.addView(numberView)
+            }
+            exerciseInputCollectionLayoutEditText.hint = formTextViewHint(exerciseUiModel.filter, exerciseUiModel.compareNumber)
+            }
         }
 
         /*
@@ -75,17 +90,22 @@ class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_in
             }
         }
          */
-        exerciseInputCollectionFragmentEditText.addTextChangedListener(this)
+        exerciseInputCollectionLayoutEditText.addTextChangedListener(this)
     }
 
-    private fun makeMediumWord(word: String): SpannableStringBuilder{
+    private fun formTextViewHint(filter: ExerciseType11Filter, compareNumber: String): SpannableStringBuilder{
         val builder = SpannableStringBuilder()
-        val mediumWord = word.createSpannableString(typeFace = context?.let { ResourcesCompat.getFont(it, R.font.roboto_medium) })
-        val str = resources.getString(R.string.exercise_type_8_9_hint).split("%1\$s")
+        val filterText = when(filter){
+            ExerciseType11Filter.BIGGER -> resources.getString(R.string.bigger)
+            ExerciseType11Filter.LOWER -> resources.getString(R.string.lower)
+        }
+
+        val mediumText = "$filterText $compareNumber"
+
+        val mediumSpan = mediumText.createSpannableString(typeFace = context?.let { ResourcesCompat.getFont(it, R.font.roboto_medium) })
+        val str = resources.getString(R.string.exercise_type_11_hint).split("%1\$s")
         builder.append(str[0])
-        builder.append(mediumWord)
-        if((word == "натуральных") or (word == "ненатуральных"))
-            builder.append(" чисел")
+        builder.append(mediumSpan)
         builder.append(str[1])
         return builder
     }
@@ -101,9 +121,17 @@ class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_in
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         val str = s.toString()
         if(str.isNotEmpty()) {
-            exercisesViewModel?.exercisesButtonEnabledState?.value = true
-            exercisesViewModel?.exerciseRequestData =
-                ExerciseRequestData(s.toString())
+            if (str[0] == '0')
+                exerciseInputCollectionLayoutEditText.setText(
+                exerciseInputCollectionLayoutEditText.text.substring(
+                    1,
+                    exerciseInputCollectionLayoutEditText.text.length
+                )
+            )else {
+                exercisesViewModel?.exercisesButtonEnabledState?.value = true
+                exercisesViewModel?.exerciseRequestData =
+                    ExerciseRequestData(s.toString())
+            }
         }else{
             exercisesViewModel?.exercisesButtonEnabledState?.value = false
         }

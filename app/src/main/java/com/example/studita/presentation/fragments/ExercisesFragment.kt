@@ -18,7 +18,8 @@ import com.example.studita.presentation.extensions.*
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.description.ExercisesDescription1Fragment
 import com.example.studita.presentation.fragments.description.ExercisesDescription2Fragment
-import com.example.studita.presentation.fragments.description.ExercisesDescription4Fragment
+import com.example.studita.presentation.fragments.description.ExercisesDescription7Fragment
+import com.example.studita.presentation.fragments.description.ExercisesDescriptionPureFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.google.android.flexbox.FlexboxLayout
@@ -204,7 +205,10 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                 exerciseBottomSnackbarSubtitle.visibility = View.GONE
             } else {
                 responseData.description?.let {description->
-                    exerciseBottomSnackbarTitle.text = resources.getString(R.string.false_answer)
+                    if(exercisesViewModel?.exerciseUiModel is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel)
+                        exerciseBottomSnackbarTitle.text = resources.getString(R.string.exercise_type_9_false_snackbar_title)
+                    else
+                        exerciseBottomSnackbarTitle.text = resources.getString(R.string.false_answer)
                     exerciseLayoutSnackbar.setBackgroundColor(
                         ContextCompat.getColor(
                             it,
@@ -282,7 +286,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         val descriptionFragment = when(exercisesViewModel?.chapterPartNumber){
             1 -> ExercisesDescription1Fragment()
             2 -> ExercisesDescription2Fragment()
-            4 -> ExercisesDescription4Fragment()
+            4,5 -> ExercisesDescriptionPureFragment()
+            7 -> ExercisesDescription7Fragment()
             else -> throw IOException("Unknown chapter part number")
         }
         (activity as AppCompatActivity).navigateTo(descriptionFragment, R.id.exerciseLayoutFrameLayout)

@@ -4,6 +4,7 @@ import android.graphics.drawable.shapes.Shape
 import com.example.studita.data.entity.exercise.*
 import com.example.studita.data.entity.mapper.Mapper
 import com.example.studita.domain.entity.exercise.*
+import java.io.IOException
 
 class ExercisesDataMapper :
     Mapper<ExercisesResponse, ExercisesResponseData> {
@@ -12,12 +13,19 @@ class ExercisesDataMapper :
             when (it) {
                 is ExerciseArrayEntity.ExerciseEntity ->{
                     when(val exerciseInfo = it.exerciseInfo){
-                        is ExerciseInfo.ExerciseType1Info -> ExerciseData.ExerciseDataExercise.ExerciseType1Data(it.exerciseNumber, exerciseInfo.title, exerciseInfo.subtitle, ExerciseShapesMapper().map(exerciseInfo.variants))
-                        is ExerciseInfo.ExerciseType2Info -> ExerciseData.ExerciseDataExercise.ExerciseType2Data(it.exerciseNumber, ExerciseShapeMapper().map(exerciseInfo.title), exerciseInfo.subtitle, exerciseInfo.variants)
-                        is ExerciseInfo.ExerciseType3Info -> ExerciseData.ExerciseDataExercise.ExerciseType3Data(it.exerciseNumber, ExerciseNumberMapper().map(exerciseInfo.title), exerciseInfo.subtitle,ExerciseNumbersMapper().map(exerciseInfo.variants))
-                        is ExerciseInfo.ExerciseType4Info -> ExerciseData.ExerciseDataExercise.ExerciseType4Data(it.exerciseNumber, ExerciseNumberMapper().map(exerciseInfo.title), exerciseInfo.subtitle, exerciseInfo.variants)
-                        is ExerciseInfo.ExerciseType5and6Info -> ExerciseData.ExerciseDataExercise.ExerciseType5and6Data(it.exerciseNumber, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants)
-                        is ExerciseInfo.ExerciseType7Info -> ExerciseData.ExerciseDataExercise.ExerciseType7Data(it.exerciseNumber,exerciseInfo.title)
+                        is ExerciseInfo.ExerciseType1Info -> ExerciseData.ExerciseDataExercise.ExerciseType1Data(
+                            it.exerciseNumber!!, exerciseInfo.title, exerciseInfo.subtitle, ExerciseShapesMapper().map(exerciseInfo.variants))
+                        is ExerciseInfo.ExerciseType2Info -> ExerciseData.ExerciseDataExercise.ExerciseType2Data(
+                            it.exerciseNumber!!, ExerciseShapeMapper().map(exerciseInfo.title), exerciseInfo.subtitle, exerciseInfo.variants)
+                        is ExerciseInfo.ExerciseType3Info -> ExerciseData.ExerciseDataExercise.ExerciseType3Data(
+                            it.exerciseNumber!!, ExerciseNumberMapper().map(exerciseInfo.title), exerciseInfo.subtitle,ExerciseNumbersMapper().map(exerciseInfo.variants))
+                        is ExerciseInfo.ExerciseType4Info -> ExerciseData.ExerciseDataExercise.ExerciseType4Data(it.exerciseNumber!!, ExerciseNumberMapper().map(exerciseInfo.title), exerciseInfo.subtitle, exerciseInfo.variants)
+                        is ExerciseInfo.ExerciseType5and6Info -> ExerciseData.ExerciseDataExercise.ExerciseType5and6Data(it.exerciseNumber!!, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants)
+                        is ExerciseInfo.ExerciseType7Info -> ExerciseData.ExerciseDataExercise.ExerciseType7Data(it.exerciseNumber!!,exerciseInfo.title)
+                        is ExerciseInfo.ExerciseType8Info -> ExerciseData.ExerciseDataExercise.ExerciseType8Data(it.exerciseNumber!!, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants)
+                        is ExerciseInfo.ExerciseType9Info -> ExerciseData.ExerciseDataExercise.ExerciseType9Data(it.exerciseNumber!!,exerciseInfo.title)
+                        is ExerciseInfo.ExerciseType10Info -> ExerciseData.ExerciseDataExercise.ExerciseType10Data(it.exerciseNumber!!,exerciseInfo.titleParts, exerciseInfo.subtitle)
+                        is ExerciseInfo.ExerciseType11Info -> ExerciseData.ExerciseDataExercise.ExerciseType11Data(it.exerciseNumber!!,exerciseInfo.titleParts, ExerciseType11FilterMapper().map(exerciseInfo.filter), exerciseInfo.compareNumber)
                     }
                 }
                 is ExerciseArrayEntity.ScreenEntity ->{
@@ -59,4 +67,13 @@ class ExerciseNumberMapper: Mapper<List<String>, ExerciseNumberData>{
 
 class ExerciseShapeMapper: Mapper<List<String>, ExerciseShapeData> {
     override fun map(source: List<String>): ExerciseShapeData = ExerciseShapeData(source[0], source[1].toInt())
+}
+
+class ExerciseType11FilterMapper: Mapper<String, ExerciseType11Filter> {
+    override fun map(source: String): ExerciseType11Filter =
+        when(source){
+            "bigger" -> ExerciseType11Filter.BIGGER
+            "lower" -> ExerciseType11Filter.LOWER
+            else -> throw IOException("unexpected exercise type 11 filter")
+        }
 }

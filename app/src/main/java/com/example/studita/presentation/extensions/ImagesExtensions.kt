@@ -36,7 +36,7 @@ private fun loadBitmapFromScreen(view: View): Bitmap? {
 
     val c2 = Canvas(screenBitmap)
 
-    c2.drawColor(getPageBackroundColor(view.context))
+    c2.drawColor(getPageBackgroundColor(view.context))
 
     c2.drawBitmap(viewBitmap, 0F, 0F, null)
     return screenBitmap
