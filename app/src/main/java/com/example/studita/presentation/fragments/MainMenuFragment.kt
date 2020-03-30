@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.extensions.navigateTo
+import com.example.studita.presentation.utils.navigateTo
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.view_model.MainMenuFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel

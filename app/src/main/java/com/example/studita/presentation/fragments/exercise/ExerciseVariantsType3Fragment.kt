@@ -5,7 +5,7 @@ import android.view.View
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseNumberData
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.presentation.extensions.makeView
+import com.example.studita.presentation.utils.makeView
 import com.example.studita.presentation.model.ExerciseUiModel
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
 import kotlinx.android.synthetic.main.exercise_variants_title_fragment.*

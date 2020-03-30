@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.example.studita.presentation.extensions.navigateBack
+import com.example.studita.presentation.utils.navigateBack
 
 open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
     lateinit var listener: Animator.AnimatorListener

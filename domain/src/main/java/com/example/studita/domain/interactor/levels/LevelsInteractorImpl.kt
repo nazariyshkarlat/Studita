@@ -10,15 +10,15 @@ class LevelsInteractorImpl(
 ): LevelsInteractor {
 
      override suspend fun getLevels(): LevelsStatus =
-        try {
-            val results = repository.getLevels()
-            LevelsStatus.Success(results)
-        } catch (e: Exception) {
-        e.printStackTrace()
-            if (e is NetworkConnectionException)
-                LevelsStatus.NoConnection
-            else
-                LevelsStatus.ServiceUnavailable
-        }
+         try {
+             val results = repository.getLevels()
+             LevelsStatus.Success(results)
+         } catch (e: Exception) {
+             e.printStackTrace()
+             if (e is NetworkConnectionException)
+                 LevelsStatus.NoConnection
+             else
+                 LevelsStatus.ServiceUnavailable
+         }
 
 }

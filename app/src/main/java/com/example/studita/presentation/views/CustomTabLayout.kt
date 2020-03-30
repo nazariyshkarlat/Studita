@@ -1,7 +1,6 @@
 package com.example.studita.presentation.views
 
 import android.content.Context
-import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.LinearLayout
@@ -9,15 +8,13 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
-import androidx.core.view.forEachIndexed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.studita.R
-import com.example.studita.presentation.extensions.*
+import com.example.studita.presentation.utils.*
 import com.example.studita.presentation.fragments.UserStatPageFragment
-import kotlinx.android.synthetic.main.user_stat_layout.*
 
 
 class CustomTabLayout @JvmOverloads constructor(
@@ -25,13 +22,13 @@ class CustomTabLayout @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr), ViewPager.OnPageChangeListener{
 
     private val padding = 8.dpToPx()
-    private val textColor = getSecondaryColor(context)
+    private val textColor = ColorUtils.getSecondaryColor(context)
     private val typeface = ResourcesCompat.getFont(context, R.font.roboto_regular)
     private val textSize = 16F
-    private val itemsBackground = getSelectableItemBackground(context)
+    private val itemsBackground = ColorUtils.getSelectableItemBackground(context)
 
     private var viewPager: ViewPager? = null
-    private var tabColor: Pair<Int, Int> = getSecondaryColor(context) to ContextCompat.getColor(context, R.color.blue)
+    private var tabColor: Pair<Int, Int> = ColorUtils.getSecondaryColor(context) to ContextCompat.getColor(context, R.color.blue)
     private var selectedPos = 0
     private var click: Boolean = false
 
@@ -80,11 +77,11 @@ class CustomTabLayout @JvmOverloads constructor(
         if(!click) {
             if (position != childCount - 1) {
                 (getChildAt(position + 1) as TextView).setTextColor(
-                    compositeColors(tabColor.first, tabColor.second, positionOffset)
+                    ColorUtils.compositeColors(tabColor.first, tabColor.second, positionOffset)
                 )
             }
             (getChildAt(position) as TextView).setTextColor(
-                compositeColors(tabColor.first, tabColor.second, 1F - positionOffset)
+                ColorUtils.compositeColors(tabColor.first, tabColor.second, 1F - positionOffset)
             )
         }
         if((position == selectedPos) and (positionOffset == 0.0F))

@@ -9,13 +9,14 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.presentation.adapter.levels.LevelsAdapter
-import com.example.studita.presentation.extensions.startActivity
+import com.example.studita.presentation.draw.AwaDrawer
+import com.example.studita.presentation.utils.startActivity
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.listeners.FabRecyclerImpl
 import com.example.studita.presentation.listeners.FabScrollListener
-import com.example.studita.presentation.view_model.ChapterPartsViewModel
-import com.example.studita.presentation.view_model.HomeFragmentMainActivityFABViewModel
+import com.example.studita.presentation.view_model.ChapterViewModel
 import com.example.studita.presentation.view_model.HomeFragmentViewModel
+import com.example.studita.presentation.view_model.MainFragmentViewModel
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.home_layout_bar.*
@@ -23,8 +24,8 @@ import kotlinx.android.synthetic.main.home_layout_bar.*
 class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetChangedListener, FabScrollListener{
 
     private var levelsViewModel: HomeFragmentViewModel? = null
-    private var chapterPartsViewModel: ChapterPartsViewModel? = null
-    private var fabViewModel: HomeFragmentMainActivityFABViewModel? = null
+    private var chapterPartsViewModel: ChapterViewModel? = null
+    private var mainFragmentViewModel: MainFragmentViewModel? = null
     var onThemeChangeListener: OnThemeChangeListener? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,11 +34,11 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         levelsViewModel = activity?.run {
             ViewModelProviders.of(this).get(HomeFragmentViewModel::class.java)
         }
-        fabViewModel = activity?.run {
-            ViewModelProviders.of(this).get(HomeFragmentMainActivityFABViewModel::class.java)
+        mainFragmentViewModel = activity?.run {
+            ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
         }
         chapterPartsViewModel = activity?.run {
-            ViewModelProviders.of(this).get(ChapterPartsViewModel::class.java)
+            ViewModelProviders.of(this).get(ChapterViewModel::class.java)
         }
 
         chapterPartsViewModel?.let{
@@ -49,7 +50,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer<Boolean> { done ->
                     if(done){
-                        ChapterPartsBottomSheetFragment().show(
+                        ChapterBottomSheetFragment().show(
                             (context as AppCompatActivity).supportFragmentManager,
                             null
                         )
@@ -62,6 +63,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer<Boolean> { done ->
                     if (done) {
+                        mainFragmentViewModel?.showProgress(false)
                         homeLayoutRecyclerView.adapter =
                             LevelsAdapter(it.results)
                         homeLayoutRecyclerView.visibility = View.VISIBLE
@@ -88,21 +90,16 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
     }
 
     override fun show() {
-        fabViewModel?.showFab(true)
+        mainFragmentViewModel?.showFab(true)
     }
 
     override fun hide() {
-        fabViewModel?.showFab(false)
+        mainFragmentViewModel?.showFab(false)
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
         homeLayoutAppBar.alpha =
             (homeLayoutAppBar.height + verticalOffset * 2) / homeLayoutAppBar.height.toFloat()
-    }
-
-    enum class FABState{
-        SHOW,
-        HIDE,
     }
 
     interface OnThemeChangeListener{

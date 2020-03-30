@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.studita.R
-import com.example.studita.presentation.extensions.replaceWithAnim
+import com.example.studita.presentation.utils.replaceWithAnim
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercises_load_layout.view.*

@@ -4,24 +4,29 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import com.example.studita.BuildConfig
-import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.data.net.ConnectionManagerImpl
+import com.example.studita.data.net.connection.ConnectionManager
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import okhttp3.Interceptor
+import okhttp3.Cache
+import okhttp3.CacheControl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 object NetworkModule {
 
-    private const val BASE_URL = "http://10.0.2.2:5001/"
+    private const val BASE_URL = "http:/10.0.2.2:5001/"
 
     lateinit var connectionManager: ConnectionManager
     private lateinit var retrofit: Retrofit
 
+    lateinit var context: Context
+
     fun initialize(app: Application) {
+        context = app
         connectionManager = ConnectionManagerImpl(getConnectivityManager(app))
         retrofit = getRetrofit(getOkHttpClient(getInterceptor()))
     }
@@ -39,7 +44,7 @@ object NetworkModule {
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
 
-    private fun getOkHttpClient(interceptor: Interceptor) =
+    private fun getOkHttpClient(interceptor: okhttp3.Interceptor) =
         OkHttpClient().newBuilder()
             .addInterceptor(interceptor)
             .readTimeout(1, TimeUnit.MINUTES)
@@ -47,7 +52,7 @@ object NetworkModule {
             .build()
 
 
-    private fun getInterceptor(): Interceptor =
+    private fun getInterceptor(): okhttp3.Interceptor =
         HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG)
                 HttpLoggingInterceptor.Level.BODY

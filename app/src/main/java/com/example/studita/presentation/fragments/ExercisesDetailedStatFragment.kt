@@ -6,13 +6,13 @@ import android.view.ViewTreeObserver
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.extensions.*
+import com.example.studita.presentation.utils.*
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesEndFragmentViewModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercises_detailed_stat_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
-import kotlinx.android.synthetic.main.user_stat_layout.*
+import java.sql.Time
 
 class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_detailed_stat_layout), ViewTreeObserver.OnScrollChangedListener{
 
@@ -39,11 +39,11 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
         println(falseAnswers)
         timeInSeconds?.let{ time ->
             exercisesDetailedStatLayoutTimeSubtitle.text = context?.let {context->
-                styleTimeText(
+                TimeUtils.styleTimeText(
                     context,
-                    getTimeText(getHours(time) to resources.getString(R.string.hours),
-                        getMinutes(time) to resources.getString(R.string.minutes),
-                        getSeconds(time) to  resources.getString(R.string.seconds))
+                    TimeUtils.getTimeText(TimeUtils.getHours(time) to resources.getString(R.string.hours),
+                        TimeUtils.getMinutes(time) to resources.getString(R.string.minutes),
+                        TimeUtils.getSeconds(time) to  resources.getString(R.string.seconds))
                 )
             }
         }

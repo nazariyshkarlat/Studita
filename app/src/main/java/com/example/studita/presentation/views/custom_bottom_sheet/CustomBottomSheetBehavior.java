@@ -4,9 +4,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -29,7 +26,6 @@ import androidx.annotation.StyleableRes;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
@@ -38,8 +34,6 @@ import androidx.customview.view.AbsSavedState;
 import androidx.customview.widget.ViewDragHelper;
 
 import com.example.studita.R;
-import com.example.studita.presentation.extensions.ColorExtensionsKt;
-import com.example.studita.presentation.extensions.NumberExtensionsKt;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 

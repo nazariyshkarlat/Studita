@@ -1,7 +1,5 @@
 package com.example.studita.presentation.fragments
 
-import android.accounts.Account
-import android.accounts.AccountManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,8 +16,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.studita.R
 import com.example.studita.authenticator.AccountAuthenticator
-import com.example.studita.presentation.extensions.dpToPx
-import com.example.studita.presentation.extensions.setOnViewSizeChangeListener
+import com.example.studita.presentation.utils.dpToPx
+import com.example.studita.presentation.utils.setOnViewSizeChangeListener
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.presentation.view_model.AuthorizationFragmentViewModel

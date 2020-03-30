@@ -4,18 +4,15 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
-import android.text.method.DigitsKeyListener
 import android.view.View
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.presentation.extensions.hideKeyboard
+import com.example.studita.presentation.utils.hideKeyboard
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import kotlinx.android.synthetic.main.exercise_input_equation_layout.*
 import kotlinx.android.synthetic.main.exercise_input_missed_part_layout.*
 
 class ExerciseMissedNumberFragment : NavigatableFragment(R.layout.exercise_input_missed_part_layout),

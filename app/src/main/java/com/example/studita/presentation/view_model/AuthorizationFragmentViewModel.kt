@@ -1,9 +1,5 @@
 package com.example.studita.presentation.view_model
 
-import android.accounts.Account
-import android.accounts.AccountManager
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +10,7 @@ import com.example.studita.domain.entity.authorization.LogInResponseData
 import com.example.studita.domain.interactor.LogInStatus
 import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.validator.AuthorizationValidator
-import com.example.studita.presentation.extensions.launchExt
+import com.example.studita.presentation.utils.launchExt
 import kotlinx.coroutines.Job
 import java.lang.UnsupportedOperationException
 

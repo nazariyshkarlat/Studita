@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.di.LevelsModule
 import com.example.studita.domain.interactor.LevelsStatus
-import com.example.studita.presentation.extensions.launchExt
+import com.example.studita.presentation.utils.launchExt
 import com.example.studita.presentation.model.LevelUiModel
 import com.example.studita.presentation.model.mapper.LevelUiModelMapper
 import kotlinx.coroutines.Job

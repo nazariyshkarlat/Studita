@@ -31,6 +31,19 @@
         <activity android:name=".presentation.activities.ExercisesActivity"
             android:windowSoftInputMode="adjustResize">
         </activity>
+        <activity android:name=".presentation.activities.ShareActivity">
+            <intent-filter>
+                <data android:scheme="https"
+                    android:host="studita.com"
+                    android:pathPrefix="/user_stat" />
+                <data android:scheme="https"
+                    android:host="studita.com"
+                    android:pathPrefix="/exercise_stat" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.studita.fileprovider"

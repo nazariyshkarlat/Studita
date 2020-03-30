@@ -30,6 +30,7 @@
     <string name="help">Помощь</string>
     <string name="learning">Обучение</string>
     <string name="chapter_progress">Прогресс: %1$d задания из %2$d</string>
+    <string name="chapter_full_progress">Прогресс: Завершено</string>
     <string name="chapter_completed_progress">Прогресс: Завершено</string>
     <string name="tasks_toolbar_title">Задания</string>
     <string name="level_number">%1$d Уровень</string>
@@ -86,5 +87,7 @@
     <string name="server_client_id">563230539724-1j3osvmuqtuovqr0am2qj2evm7l7cln8.apps.googleusercontent.com</string>
     <string name="custom_bottom_sheet_behavior" translatable="false">com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior</string>
     <string name="studita_account">Studita</string>
-    <string name="account_type">com.example.studita.authentication.StuditaAccount</string>
+    <string name="account_type" translatable="false">com.example.studita.authentication.StuditaAccount</string>
+    <string name="network_absent">Нет подключения. Вы оффлайн</string>
+    <string name="back_online">Подключение восстановлено</string>
 </resources>

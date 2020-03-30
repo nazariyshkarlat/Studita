@@ -3,18 +3,15 @@ package com.example.studita.presentation.fragments
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.view.ViewTreeObserver.OnScrollChangedListener
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.extensions.animateProgress
-import com.example.studita.presentation.extensions.dpToPx
+import com.example.studita.presentation.utils.animateProgress
+import com.example.studita.presentation.utils.dpToPx
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.view_model.ExercisesEndFragmentViewModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import kotlinx.android.synthetic.main.exercise_variants_title_fragment.*
 import kotlinx.android.synthetic.main.exercises_result_layout.*
-import kotlinx.android.synthetic.main.home_layout.*
 
 
 class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){

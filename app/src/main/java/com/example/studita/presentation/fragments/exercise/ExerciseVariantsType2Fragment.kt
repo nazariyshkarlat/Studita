@@ -2,18 +2,13 @@ package com.example.studita.presentation.fragments.exercise
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.OneShotPreDrawListener
-import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.presentation.extensions.dpToPx
-import com.example.studita.presentation.extensions.makeView
-import com.example.studita.presentation.fragments.base.NavigatableFragment
+import com.example.studita.presentation.utils.dpToPx
+import com.example.studita.presentation.utils.makeView
 import com.example.studita.presentation.model.ExerciseUiModel
-import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
 import kotlinx.android.synthetic.main.exercise_variants_linear_fragment.*
 

@@ -8,12 +8,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.extensions.createSpannableString
+import com.example.studita.presentation.utils.createSpannableString
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import kotlinx.android.synthetic.main.exercise_screen_type_1.*
-import kotlinx.android.synthetic.main.exercise_screen_type_2.*
 import kotlinx.android.synthetic.main.exercise_screen_type_3.*
 import java.util.regex.Pattern
 

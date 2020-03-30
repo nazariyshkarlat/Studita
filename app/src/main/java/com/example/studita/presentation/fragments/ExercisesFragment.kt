@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.domain.entity.exercise.ExerciseResponseDescriptionContentData
-import com.example.studita.presentation.extensions.*
+import com.example.studita.presentation.utils.*
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.description.ExercisesDescription1Fragment
 import com.example.studita.presentation.fragments.description.ExercisesDescription2Fragment

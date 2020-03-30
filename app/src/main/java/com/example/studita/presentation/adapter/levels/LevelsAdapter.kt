@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.presentation.adapter.InterestingViewHolder
 import com.example.studita.presentation.adapter.LevelViewHolder
-import com.example.studita.presentation.extensions.makeView
+import com.example.studita.presentation.utils.makeView
 import com.example.studita.presentation.model.LevelUiModel
 import java.lang.UnsupportedOperationException
 

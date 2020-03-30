@@ -12,8 +12,8 @@ import androidx.core.view.OneShotPreDrawListener
 import androidx.core.view.children
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExercisesDescriptionData
-import com.example.studita.presentation.extensions.createSpannableString
-import com.example.studita.presentation.extensions.dpToPx
+import com.example.studita.presentation.utils.createSpannableString
+import com.example.studita.presentation.utils.dpToPx
 import kotlinx.android.synthetic.main.exercises_description_1_layout.*
 import java.util.regex.Pattern
 

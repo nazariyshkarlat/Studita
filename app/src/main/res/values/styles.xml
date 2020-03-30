@@ -13,18 +13,17 @@
 
     <style name="LightTheme" parent="AppTheme">
         <item name="main_blocks_color">@color/black6</item>
-        <item name="next_level_color">@color/black6</item>
-        <item name="progress_bar_color">@color/black8</item>
+        <item name="next_level_color">@color/black10</item>
+        <item name="progress_bar_color">@color/black10</item>
         <item name="primary_color">@color/black87</item>
         <item name="blue_transparent_button_color">@color/blue10</item>
         <item name="colorControlHighlight">@color/black6</item>
-        <item name="divider_color">@color/black8</item>
+        <item name="divider_color">@color/black10</item>
         <item name="secondary_color">@color/black50</item>
         <item name="page_background_color">@color/white</item>
         <item name="blur_color">@color/white80</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="task_variant_button">@color/black20</item>
-        <item name="edit_text_line_color">@color/black8</item>
         <item name="bottom_sheet_color">@color/white</item>
         <item name="press_view_press_alpha">0.64</item>
         <item name="press_view_press_alpha_lighter">0.3</item>
@@ -39,12 +38,11 @@
         <item name="page_background_color">@color/gray11</item>
         <item name="blue_transparent_button_color">@color/blue14</item>
         <item name="main_blocks_color">@color/white8</item>
-        <item name="divider_color">@color/white10</item>
+        <item name="divider_color">@color/white12</item>
         <item name="blur_color">@color/gray11_80</item>
         <item name="colorControlHighlight">@color/white8</item>
         <item name="android:navigationBarColor">@color/gray11</item>
         <item name="task_variant_button">@color/white24</item>
-        <item name="edit_text_line_color">@color/white10</item>
         <item name="bottom_sheet_color">@color/gray20</item>
         <item name="press_view_press_alpha">0.68</item>
         <item name="press_view_press_alpha_lighter">0.34</item>

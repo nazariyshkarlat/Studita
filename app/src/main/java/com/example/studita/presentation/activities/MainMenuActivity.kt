@@ -2,8 +2,8 @@ package com.example.studita.presentation.activities
 
 import android.os.Bundle
 import com.example.studita.R
-import com.example.studita.presentation.extensions.addFragment
-import com.example.studita.presentation.extensions.navigateTo
+import com.example.studita.presentation.utils.addFragment
+import com.example.studita.presentation.utils.navigateTo
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.MainMenuFragment
 import com.example.studita.presentation.fragments.ToolbarFragment

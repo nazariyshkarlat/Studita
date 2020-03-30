@@ -1,10 +1,7 @@
 package com.example.studita.domain.interactor.exercises
 
 import com.example.studita.domain.exception.NetworkConnectionException
-import com.example.studita.domain.interactor.ChapterPartsStatus
 import com.example.studita.domain.interactor.ExercisesStatus
-import com.example.studita.domain.interactor.chapter_parts.ChapterPartsInteractor
-import com.example.studita.domain.repository.ChapterPartsRepository
 import com.example.studita.domain.repository.ExercisesRepository
 import java.lang.Exception
 

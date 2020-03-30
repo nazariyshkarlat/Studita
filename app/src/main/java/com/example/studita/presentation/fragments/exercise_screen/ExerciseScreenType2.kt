@@ -2,16 +2,11 @@ package com.example.studita.presentation.fragments.exercise_screen
 
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.extensions.dpToPx
-import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import kotlinx.android.synthetic.main.exercise_screen_type_1.*
 import kotlinx.android.synthetic.main.exercise_screen_type_2.*
 
 

@@ -11,15 +11,14 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.domain.entity.exercise.ExerciseType11Filter
-import com.example.studita.presentation.extensions.createSpannableString
-import com.example.studita.presentation.extensions.hideKeyboard
-import com.example.studita.presentation.extensions.makeView
+import com.example.studita.presentation.utils.createSpannableString
+import com.example.studita.presentation.utils.hideKeyboard
+import com.example.studita.presentation.utils.makeView
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercise_input_collection_layout.*
 import kotlinx.android.synthetic.main.exercise_input_collection_text_view.view.*
-import kotlinx.android.synthetic.main.exercise_input_equation_layout.*
 
 class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_input_collection_layout), TextWatcher {
 

@@ -5,8 +5,8 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.studita.R
-import com.example.studita.presentation.extensions.dpToPx
-import com.example.studita.presentation.extensions.getPrimaryColor
+import com.example.studita.presentation.utils.ColorUtils
+import com.example.studita.presentation.utils.dpToPx
 import kotlinx.android.synthetic.main.exercises_description_pure_layout.*
 
 class ExercisesDescription7Fragment : ExercisesDescriptionFragment(R.layout.exercises_description_pure_layout) {
@@ -20,7 +20,7 @@ class ExercisesDescription7Fragment : ExercisesDescriptionFragment(R.layout.exer
     }
 
     private fun formView(textParts: List<String>) {
-        val textColor = context?.let { getPrimaryColor(it) } ?: 0
+        val textColor = context?.let { ColorUtils.getPrimaryColor(it) } ?: 0
         val margin = 16.dpToPx()
         textParts.forEachIndexed { index, s ->
             val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -29,7 +29,7 @@ class ExercisesDescription7Fragment : ExercisesDescriptionFragment(R.layout.exer
             textView.textSize = 18F
             textView.setTextColor(textColor)
             params.topMargin = if((index == 7) or (index == 8))
-                32.dpToPx()
+                24.dpToPx()
             else
                 margin
             if(index == textParts.lastIndex)

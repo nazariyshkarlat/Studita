@@ -13,7 +13,7 @@ import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.domain.entity.exercise.ExercisesResponseData
 import com.example.studita.domain.interactor.ExerciseResultStatus
 import com.example.studita.domain.interactor.ExercisesStatus
-import com.example.studita.presentation.extensions.launchExt
+import com.example.studita.presentation.utils.launchExt
 import com.example.studita.presentation.fragments.ExercisesEndFragment
 import com.example.studita.presentation.fragments.exercise.*
 import com.example.studita.presentation.fragments.exercise_screen.ExerciseScreenType1
@@ -90,6 +90,14 @@ class ExercisesViewModel : ViewModel(){
 
     fun setButtonEnabled(enabled: Boolean){
         exercisesButtonEnabledState.value = enabled
+    }
+
+    fun showToolbarDivider(show: Boolean){
+        toolbarDividerState.value = show
+    }
+
+    fun showButtonDivider(show: Boolean){
+        buttonDividerState.value = show
     }
 
     fun initFragment(){
@@ -217,14 +225,6 @@ class ExercisesViewModel : ViewModel(){
     }
 
     fun secondsCounterIsStopped() = secondsCounter == null
-
-    fun showToolbarDivider(show: Boolean){
-        toolbarDividerState.value = show
-    }
-
-    fun showButtonDivider(show: Boolean){
-        buttonDividerState.value = show
-    }
 
     enum class ExercisesNavigationState{
         FIRST,

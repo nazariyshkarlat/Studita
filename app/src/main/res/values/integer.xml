@@ -4,4 +4,5 @@
     <integer name="button_transition_duration">200</integer>
     <integer name="exercises_progress_XP_delay">200</integer>
     <integer name="exercises_progress_XP_duration">1500</integer>
+    <integer name="back_online_snackbar_duration">3000</integer>
 </resources>

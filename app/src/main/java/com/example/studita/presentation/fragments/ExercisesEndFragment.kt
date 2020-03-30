@@ -7,9 +7,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.extensions.addFragment
-import com.example.studita.presentation.extensions.navigateTo
-import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.utils.addFragment
+import com.example.studita.presentation.utils.navigateTo
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesEndFragmentViewModel
 import com.example.studita.presentation.view_model.ExercisesViewModel

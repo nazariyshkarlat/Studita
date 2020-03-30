@@ -2,8 +2,8 @@ package com.example.studita.presentation.adapter.levels
 
 import android.view.View
 import com.example.studita.R
-import com.example.studita.presentation.extensions.getAppCompatActivity
-import com.example.studita.presentation.extensions.navigateTo
+import com.example.studita.presentation.utils.getAppCompatActivity
+import com.example.studita.presentation.utils.navigateTo
 import com.example.studita.presentation.fragments.UserStatFragment
 import com.example.studita.presentation.model.LevelUiModel
 import kotlinx.android.synthetic.main.home_layout_user_state.view.*

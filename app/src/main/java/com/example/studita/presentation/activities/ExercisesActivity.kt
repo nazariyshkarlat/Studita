@@ -1,18 +1,14 @@
 package com.example.studita.presentation.activities
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.extensions.getAppCompatActivity
-import com.example.studita.presentation.extensions.navigateTo
-import com.example.studita.presentation.fragments.ExercisesCloseDialogAlertFragment
+import com.example.studita.presentation.utils.navigateTo
 import com.example.studita.presentation.fragments.ExercisesFragment
 import com.example.studita.presentation.fragments.ExercisesLoadFragment
 import com.example.studita.presentation.fragments.ExercisesResultFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
 
 class ExercisesActivity : DefaultActivity() {
 

@@ -4,27 +4,47 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <ProgressBar
+        android:id="@+id/mainLayoutProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
     <FrameLayout
         android:id="@+id/mainLayoutFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <com.example.studita.presentation.views.press_view.PressFab
-        android:id="@+id/mainLayoutFAB"
-        style="@style/FloatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/mainLayoutBottomBar"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="@dimen/defaultRLMargin"
-        android:layout_marginBottom="24dp"
-        app:srcCompat="@drawable/ic_fitness_center_white87"/>
-
-    <include
-        android:id="@+id/mainLayoutBottomBar"
-        layout="@layout/bottom_navigation"
+    <LinearLayout
+        android:id="@+id/mainLayoutBottomSection"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bottomNavigationHeight"
-        android:layout_alignParentBottom="true"/>
+        android:layout_height="wrap_content"
+        android:translationY="@dimen/connectionSnackbarHeight"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <com.example.studita.presentation.views.press_view.PressFab
+            android:id="@+id/mainLayoutFAB"
+            style="@style/FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/defaultRLMargin"
+            android:layout_marginBottom="24dp"
+            app:srcCompat="@drawable/ic_fitness_center_white87" />
+
+        <include
+            android:id="@+id/mainLayoutBottomBar"
+            layout="@layout/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottomNavigationHeight" />
+
+        <include
+            android:id="@+id/connectionSnackbarLayout"
+            layout="@layout/connection_snackbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/connectionSnackbarHeight" />
+
+    </LinearLayout>
 
 </RelativeLayout>

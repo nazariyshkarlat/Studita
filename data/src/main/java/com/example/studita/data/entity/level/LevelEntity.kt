@@ -2,6 +2,7 @@ package com.example.studita.data.entity.level
 
 import com.google.gson.annotations.SerializedName
 
+
 data class LevelEntity(
     val levelNumber: Int,
     val levelChildren: List<LevelChildEntity>

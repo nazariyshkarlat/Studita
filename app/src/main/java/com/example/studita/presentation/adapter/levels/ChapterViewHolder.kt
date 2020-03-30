@@ -4,27 +4,41 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.extensions.createSpannableString
-import com.example.studita.presentation.extensions.getAppCompatActivity
+import com.example.studita.presentation.utils.createSpannableString
+import com.example.studita.presentation.utils.getAppCompatActivity
 import com.example.studita.presentation.model.LevelUiModel
-import com.example.studita.presentation.view_model.ChapterPartsViewModel
+import com.example.studita.presentation.view_model.ChapterViewModel
 import kotlinx.android.synthetic.main.chapter_item.view.*
 
 class ChapterViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelChapterUiModel>(view){
 
     companion object{
         fun returnProgressText(chapterPartsCount: Int, context: Context): SpannableStringBuilder {
+            val completedParts = 0
             val builder = SpannableStringBuilder()
-            val text = context.resources.getString(
-                R.string.chapter_progress,
-                0,
-                chapterPartsCount
-            )
-            builder.append(text.substring(0, text.indexOf(" ")).createSpannableString(typeFace = ResourcesCompat.getFont(context, R.font.roboto_medium)))
-            builder.append(text.substring(text.indexOf(" ")))
+            if(completedParts != chapterPartsCount) {
+                val text = context.resources.getString(
+                    R.string.chapter_progress,
+                    0,
+                    chapterPartsCount
+                )
+                builder.append(text)
+            }else {
+                val text = context.resources.getString(
+                    R.string.chapter_full_progress
+                )
+                builder.append(text.substring(0, text.indexOf(" ")))
+                builder.append(
+                    text.substring(
+                        text.indexOf(" ")
+                    ).createSpannableString(
+                        color = ContextCompat.getColor(context, R.color.green)
+                    )
+                )
+            }
             return builder
         }
     }
@@ -44,9 +58,9 @@ class ChapterViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelChapter
 
     private fun getChapterParts(chapterNumber: Int){
         val viewModel = itemView.getAppCompatActivity().run{
-            ViewModelProviders.of(this as AppCompatActivity).get(ChapterPartsViewModel::class.java)
+            ViewModelProviders.of(this as AppCompatActivity).get(ChapterViewModel::class.java)
         }
-        viewModel.getChapterParts(chapterNumber)
+        viewModel.getChapter(chapterNumber)
     }
 
 }

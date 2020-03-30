@@ -8,10 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.presentation.extensions.hideKeyboard
+import com.example.studita.presentation.utils.hideKeyboard
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import kotlinx.android.synthetic.main.exercise_input_equation_layout.*
 import kotlinx.android.synthetic.main.exercise_input_layout.*
 
 class ExerciseInputFragment : NavigatableFragment(R.layout.exercise_input_layout), TextWatcher{

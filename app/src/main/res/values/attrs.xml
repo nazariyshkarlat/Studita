@@ -19,7 +19,6 @@
     <attr name="primary_color" format="reference"/>
     <attr name="progress_bar_color" format="reference"/>
     <attr name="next_level_color" format="reference"/>
-    <attr name="edit_text_line_color" format="reference"/>
     <attr name="main_blocks_color" format="reference"/>
     <attr name="splash_screen_color" format="reference"/>
     <attr name="splash_screen_text_color" format="reference"/>
