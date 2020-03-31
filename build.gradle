@@ -24,6 +24,7 @@ allprojects {
 }
 
 ext {
+    glide_version='4.11.0'
     room_version='2.2.5'
     kotlin_version = '1.3.61'
     navigation_version = "2.0.0"

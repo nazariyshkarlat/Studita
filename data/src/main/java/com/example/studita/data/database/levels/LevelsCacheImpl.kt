@@ -6,14 +6,18 @@ import android.content.SharedPreferences
 class LevelsCacheImpl(private val sharedPreferences: SharedPreferences) :
     LevelsCache {
 
-    override fun putLevelsJson(json: String) {
-        sharedPreferences.edit().putString("levels_cache", json).apply()
+    companion object{
+        const val LEVELS_PREFS = "levels_cache"
     }
 
-    override fun getLevelsJson(): String? = sharedPreferences.getString("levels_cache", null) ?: null
+    override fun putLevelsJson(json: String) {
+        sharedPreferences.edit().putString(LEVELS_PREFS, json).apply()
+    }
+
+    override fun getLevelsJson(): String? = sharedPreferences.getString(LEVELS_PREFS, null) ?: null
 
     override fun isCached(): Boolean {
-        val value = sharedPreferences.getString("levels_cache", null)
+        val value = sharedPreferences.getString(LEVELS_PREFS, null)
         return value?.isNotEmpty() ?: false
     }
 

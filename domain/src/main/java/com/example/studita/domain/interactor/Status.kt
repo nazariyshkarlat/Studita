@@ -2,6 +2,7 @@ package com.example.studita.domain.interactor
 
 import com.example.studita.domain.entity.ChapterData
 import com.example.studita.domain.entity.LevelData
+import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.authorization.LogInResponseData
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.domain.entity.exercise.ExercisesResponseData
@@ -55,4 +56,11 @@ sealed class ExerciseResultStatus{
     object NoConnection : ExerciseResultStatus()
     object NoExerciseFound: ExerciseResultStatus()
     data class Success(val result: ExerciseResponseData): ExerciseResultStatus()
+}
+
+sealed class UserDataStatus{
+    object ServiceUnavailable : UserDataStatus()
+    object NoConnection : UserDataStatus()
+    object Failure: UserDataStatus()
+    data class Success(val result: UserDataData): UserDataStatus()
 }

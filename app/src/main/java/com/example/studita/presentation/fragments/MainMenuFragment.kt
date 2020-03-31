@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
+import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.utils.navigateTo
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.view_model.MainMenuFragmentViewModel
@@ -47,6 +48,14 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
                             R.id.doubleConstraintFrameLayout
                         )
                     }
+                })
+
+            viewModel.googleSignInState.observe(
+                viewLifecycleOwner,
+                androidx.lifecycle.Observer { signIn ->
+                    if(signIn)
+                        MainActivity.needsRecreate = true
+                        activity?.finish()
                 })
             mainMenuWithGoogleButton.setOnClickListener { viewModel.onSignUpLogInClick(it.id) }
             mainMenuUseEmailButton.setOnClickListener { viewModel.onSignUpLogInClick(it.id) }

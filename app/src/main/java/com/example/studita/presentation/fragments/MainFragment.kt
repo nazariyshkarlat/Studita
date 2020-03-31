@@ -134,7 +134,8 @@ class MainFragment : BaseFragment(R.layout.main_layout){
         NetworkUtils.getNetworkLiveData(view.context)
             .observe(this, Observer { isConnected ->
                 val snackbar = connectionSnackbarLayout as TextView
-                if (!isConnected) {
+                snackbar.textSize = resources.getDimension(R.dimen.connectionSnackbarTextSize).toInt().pxToSp().toFloat()
+                    if (!isConnected) {
                     snackbar.text = resources.getString(R.string.network_absent)
                     snackbar.setBackgroundColor(ContextCompat.getColor(view.context, R.color.gray88))
                     mainLayoutBottomSection.animate().translationY(0F).start()

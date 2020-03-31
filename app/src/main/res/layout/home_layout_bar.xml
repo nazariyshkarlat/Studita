@@ -24,7 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="6dp"
-        android:visibility="gone"
         android:text="@string/log_in"
         android:textAllCaps="true"
         app:layout_constraintBaseline_toBaselineOf="@+id/homeLayoutBarTitle"
@@ -32,7 +31,6 @@
 
     <com.example.studita.presentation.views.press_view.PressImageView
         android:id="@+id/homeLayoutBarAccountImageView"
-        style="@style/Medium16White87"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginEnd="16dp"
@@ -40,7 +38,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="visible"
+        android:visibility="gone"
         android:gravity="center"
         android:textAlignment="center" />
 

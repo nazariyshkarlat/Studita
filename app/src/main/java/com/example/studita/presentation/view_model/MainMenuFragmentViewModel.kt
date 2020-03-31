@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.authenticator.AccountAuthenticator
 import com.example.studita.di.AuthorizationModule
+import com.example.studita.di.DiskModule
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -19,6 +20,7 @@ import java.lang.UnsupportedOperationException
 class MainMenuFragmentViewModel : ViewModel(){
 
     val signUpMethodState = SingleLiveEvent<SignUpMethod>()
+    val googleSignInState= SingleLiveEvent<Boolean>()
 
     fun onSignUpLogInClick(viewId: Int){
         when(viewId) {
@@ -45,6 +47,7 @@ class MainMenuFragmentViewModel : ViewModel(){
                     val result = AuthorizationModule.getAuthorizationInteractorImpl()
                         .signInWithGoogle(account.idToken.toString())
                     AccountAuthenticator.addAccount(context, it.email.toString())
+                    googleSignInState.postValue(true)
                 }
             }
         }catch (e: ApiException){

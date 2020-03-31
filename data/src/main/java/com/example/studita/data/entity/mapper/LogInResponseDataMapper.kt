@@ -6,8 +6,8 @@ import com.example.studita.domain.entity.authorization.LogInResponseData
 class LogInResponseDataMapper : Mapper<LogInResponseEntity, LogInResponseData>{
     override fun map(source: LogInResponseEntity): LogInResponseData {
         return LogInResponseData(
-            source.userToken,
-            source.userTokenId
+            source.userId,
+            source.userToken
         )
     }
 }

@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.studita.R
 import com.example.studita.authenticator.AccountAuthenticator
+import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.utils.dpToPx
 import com.example.studita.presentation.utils.setOnViewSizeChangeListener
 import com.example.studita.presentation.fragments.base.NavigatableFragment
@@ -96,8 +97,18 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                         is AuthorizationFragmentViewModel.AuthorizationResult.SignUpSuccess -> {
                             Toast.makeText(context, resources.getString(R.string.sign_up_success), Toast.LENGTH_LONG).show()
                             AccountAuthenticator.addAccount(view.context, result.email)
+                            MainActivity.needsRecreate = true
+                            activity?.finish()
                         }
-                        is AuthorizationFragmentViewModel.AuthorizationResult.LogInSuccess -> Toast.makeText(context, resources.getString(R.string.log_in_success), Toast.LENGTH_LONG).show()
+                        is AuthorizationFragmentViewModel.AuthorizationResult.LogInSuccess -> {
+                            Toast.makeText(
+                                context,
+                                resources.getString(R.string.log_in_success),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            MainActivity.needsRecreate = true
+                            activity?.finish()
+                        }
                         null ->{}
                         else -> Toast.makeText(context, resources.getString(R.string.server_error), Toast.LENGTH_LONG).show()
                     }

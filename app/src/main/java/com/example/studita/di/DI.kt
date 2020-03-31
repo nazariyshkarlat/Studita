@@ -3,6 +3,9 @@ package com.example.studita.di
 import android.app.Application
 import com.example.studita.di.exercise.ExerciseResultModule
 import com.example.studita.di.exercise.ExercisesModule
+import com.example.studita.presentation.utils.PrefsUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 object DI{
 
@@ -20,6 +23,7 @@ object DI{
         AuthorizationModule.initialize(configuration)
         ExercisesModule.initialize(configuration)
         ExerciseResultModule.initialize(configuration)
+        UserDataModule.initialize(configuration)
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.studita.di
 
+import com.example.studita.data.database.authentication.LogInCacheImpl
 import com.example.studita.data.entity.mapper.AuthorizationRequestMapper
 import com.example.studita.data.entity.mapper.LogInResponseDataMapper
 import com.example.studita.data.net.AuthorizationService
@@ -45,11 +46,15 @@ object AuthorizationModule {
     private fun getCloudAuthorizationDataStore() =
         CloudAuthorizationDataStore(
             NetworkModule.connectionManager,
-            NetworkModule.getService(AuthorizationService::class.java)
+            NetworkModule.getService(AuthorizationService::class.java),
+            getLogInCacheImpl()
         )
 
     private fun getAuthorizationDataStoreFactory() =
         AuthorizationDataStoreFactoryImpl(
             getCloudAuthorizationDataStore()
         )
+
+    private fun getLogInCacheImpl() =
+        LogInCacheImpl(DiskModule.sharedPreferences)
 }

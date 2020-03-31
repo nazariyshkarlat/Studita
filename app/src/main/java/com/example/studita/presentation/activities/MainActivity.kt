@@ -10,6 +10,10 @@ import com.example.studita.presentation.view_model.MainActivityNavigationViewMod
 
 class MainActivity : DefaultActivity(){
 
+    companion object{
+        var needsRecreate = false
+    }
+
     lateinit var navigationViewModel : MainActivityNavigationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +35,16 @@ class MainActivity : DefaultActivity(){
             currentFragment.onBackClick()
         else if(currentFragment is MainFragment)
             navigationViewModel.onBackPressed()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(needsRecreate){
+            needsRecreate = false
+            startActivity<MainActivity>()
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
+        }
     }
 
 }

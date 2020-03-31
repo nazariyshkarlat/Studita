@@ -1,16 +1,13 @@
 package com.example.studita.presentation.draw
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.widget.ImageView
 import com.example.studita.presentation.utils.dpToPx
 import com.example.studita.presentation.utils.spToPx
-import java.lang.reflect.Array
 import kotlin.random.Random
 
-object AwaDrawer{
+
+object AvaDrawer{
     private val imageSize = 36.dpToPx()
     private val textPaint = Paint()
     private val circlePaint = Paint()
@@ -31,9 +28,8 @@ object AwaDrawer{
         "#BA68C8",
         "#A1887F"
     )
-    private var color = 0
 
-    var r = Random
+    var random = Random
 
     init {
         textPaint.setARGB(255, 255, 255, 255)
@@ -41,20 +37,31 @@ object AwaDrawer{
 
     fun drawAwa(image: ImageView, name: String) {
 
+        val text = name.first().toString()
+
+        val r = Rect()
+        canvas.getClipBounds(r)
+        val cHeight = r.height()
+        val cWidth = r.width()
+
         circlePaint.color = Color.parseColor(
-            colors[r.nextInt(
+            colors[random.nextInt(
                 colors.size - 1)])
 
-        textPaint.textAlign = Paint.Align.CENTER
+        textPaint.textAlign = Paint.Align.LEFT
         textPaint.textSize = 16.spToPx().toFloat()
 
         canvas.drawCircle(
             imageSize / 2F, imageSize / 2F, imageSize / 2F,
             circlePaint
         )
-        canvas.drawText(name.first().toString().toUpperCase(), imageSize / 2F, ((canvas.height/ 2) - ((textPaint.descent() + textPaint.ascent()) / 2)),
-            textPaint
-        )
+
+        textPaint.getTextBounds(text, 0, text.length, r)
+
+        val x: Float = cWidth / 2f - r.width() / 2f - r.left
+        val y: Float = cHeight / 2f + r.height() / 2f - r.bottom
+
+        canvas.drawText(text, x, y, textPaint)
 
         image.setImageBitmap(roundBitmap)
     }

@@ -1,5 +1,6 @@
 package com.example.studita.data.repository.datasource.authorization
 
+import com.example.studita.data.database.authentication.LogInCache
 import com.example.studita.data.entity.AuthorizationRequestEntity
 import com.example.studita.data.entity.LogInResponseEntity
 import com.example.studita.data.net.AuthorizationService
@@ -9,7 +10,7 @@ import com.example.studita.domain.exception.ServerUnavailableException
 import okhttp3.ResponseBody
 import retrofit2.Response
 
-class CloudAuthorizationDataStore(private val connectionManager: ConnectionManager, private val authorizationService: AuthorizationService) :
+class CloudAuthorizationDataStore(private val connectionManager: ConnectionManager, private val authorizationService: AuthorizationService, private val logInCache: LogInCache) :
     AuthorizationDataStore {
     override suspend fun tryLogIn(authorizationRequestEntity: AuthorizationRequestEntity): Pair<Int, LogInResponseEntity?> =
         if (connectionManager.isNetworkAbsent()) {
@@ -21,6 +22,8 @@ class CloudAuthorizationDataStore(private val connectionManager: ConnectionManag
                 val result = logInAsync.await()
                 logInResult = result.body()
                 val statusCode = result.code()
+                if(logInResult != null)
+                    logInCache.saveUserAuthenticationInfo(logInResult.userId, logInResult.userToken)
                 statusCode to logInResult
             } catch (exception: Exception) {
                 throw ServerUnavailableException()
@@ -52,6 +55,8 @@ class CloudAuthorizationDataStore(private val connectionManager: ConnectionManag
                     authorizationService.signInWithGoogleAsync(hashMapOf("id_token" to idToken))
                 val result = logInAsync.await()
                 logInResult = result.body()
+                if(logInResult != null)
+                    logInCache.saveUserAuthenticationInfo(logInResult.userId, logInResult.userToken)
                 val statusCode = result.code()
                 statusCode to logInResult
             } catch (exception: Exception) {
