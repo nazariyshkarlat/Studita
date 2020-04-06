@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.studita.R
 import com.example.studita.presentation.utils.*
-import com.example.studita.presentation.fragments.UserStatPageFragment
+import com.example.studita.presentation.fragments.user_statistics.pages.UserStatPageFragment
 
 
 class CustomTabLayout @JvmOverloads constructor(
@@ -26,6 +26,8 @@ class CustomTabLayout @JvmOverloads constructor(
     private val typeface = ResourcesCompat.getFont(context, R.font.roboto_regular)
     private val textSize = 16F
     private val itemsBackground = ColorUtils.getSelectableItemBackground(context)
+
+    private var fragments: List<Fragment>? = null
 
     private var viewPager: ViewPager? = null
     private var tabColor: Pair<Int, Int> = ColorUtils.getSecondaryColor(context) to ContextCompat.getColor(context, R.color.blue)
@@ -96,10 +98,14 @@ class CustomTabLayout @JvmOverloads constructor(
         selectedPos = position
     }
 
+    fun setFragments(fragments: List<Fragment>){
+        this.fragments = fragments
+    }
+
     private inner class TabsPagerAdapter(fm: FragmentManager) :
         FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
-            return UserStatPageFragment()
+            return fragments!![position]
         }
 
         override fun getCount(): Int {

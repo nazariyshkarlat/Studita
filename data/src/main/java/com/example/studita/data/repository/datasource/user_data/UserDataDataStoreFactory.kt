@@ -3,7 +3,7 @@ package com.example.studita.data.repository.datasource.user_data
 import com.example.studita.data.repository.datasource.levels.LevelsJsonDataStore
 import com.example.studita.data.repository.datasource.levels.LevelsJsonDataStoreFactory
 
-class UserDataDataStoreFactoryImpl(
+class UserDataJsonDataStoreFactoryImpl(
     private val cloudUserDataDataStore: CloudUserDataJsonDataStore,
     private val diskUserDataJsonDataStore: DiskUserDataJsonDataStore
 ) : UserDataDataStoreFactory {

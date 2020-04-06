@@ -1,5 +1,6 @@
 package com.example.studita.presentation.fragments
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -45,7 +46,7 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
                     } else {
                         (activity as AppCompatActivity).navigateTo(
                             AuthorizationFragment(),
-                            R.id.doubleConstraintFrameLayout
+                            R.id.doubleFrameLayoutFrameLayout
                         )
                     }
                 })
@@ -70,7 +71,7 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGN_IN) {
+        if ((requestCode == RC_SIGN_IN) and (resultCode == RESULT_OK)) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             context?.let { fragmentViewModel?.handleSignInResult(task, it) }
         }

@@ -36,7 +36,7 @@ class CloudLevelsJsonDataStore(
             val launchesAsync = levelsService.getLevelsAsync()
             val result = launchesAsync.await()
             val body = result.body()!!
-            levelsCache.putLevelsJson(body.toString())
+            levelsCache.saveLevelsJson(body.toString())
             body.toString()
         }
 }

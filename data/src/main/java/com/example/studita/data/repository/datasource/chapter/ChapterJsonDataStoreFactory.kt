@@ -1,6 +1,6 @@
 package com.example.studita.data.repository.datasource.chapter
 
-class ChapterDataStoreFactoryImpl(
+class ChapterJsonDataStoreFactoryImpl(
     private val cloudChapterJsonDataStore: CloudChapterJsonDataStore,
     private val diskChapterJsonDataStore: DiskChapterJsonDataStore
 ) : ChapterJsonDataStoreFactory{

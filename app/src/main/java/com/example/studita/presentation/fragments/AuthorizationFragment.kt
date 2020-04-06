@@ -4,47 +4,42 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.WindowManager
-import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.studita.R
 import com.example.studita.authenticator.AccountAuthenticator
 import com.example.studita.presentation.activities.MainActivity
-import com.example.studita.presentation.utils.dpToPx
-import com.example.studita.presentation.utils.setOnViewSizeChangeListener
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
+import com.example.studita.presentation.utils.setOnViewSizeChangeListener
 import com.example.studita.presentation.view_model.AuthorizationFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import kotlinx.android.synthetic.main.authorization_layout.*
 
 
-class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout), TextWatcher,
-    OnViewSizeChangeListener {
+class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout), TextWatcher, OnViewSizeChangeListener{
 
     private var toolbarFragmentViewModel: ToolbarFragmentViewModel? = null
     private var authorizationFragmentViewModel: AuthorizationFragmentViewModel? = null
     private lateinit var signUpOnClick: () -> Unit
-    private var secondBorder = 0
-    private var centerLinearLayoutTopMargin = 0
-    private var firstBorder = 0
-    private lateinit var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener
-    lateinit var contentView: View
+    private lateinit var onViewSizeChangeListener: View.OnLayoutChangeListener
+    lateinit var contentView: ViewGroup
+    private var buttonHidden = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-        globalLayoutListener = authorizationRelativeLayout.setOnViewSizeChangeListener(this)
-        contentView = authorizationRelativeLayout
+        onViewSizeChangeListener = view.setOnViewSizeChangeListener(this)
+        contentView = view as ViewGroup
 
         toolbarFragmentViewModel = activity?.run {
             ViewModelProviders.of(this).get(ToolbarFragmentViewModel::class.java)
@@ -87,7 +82,6 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
             viewModel.authorizationState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer<AuthorizationFragmentViewModel.AuthorizationResult> {result ->
-                    hideError()
                     when(result){
                         is AuthorizationFragmentViewModel.AuthorizationResult.IncorrectEmail -> showError(R.string.incorrect_mail, true)
                         is AuthorizationFragmentViewModel.AuthorizationResult.PasswordLess6 -> showError(R.string.to_short_password, false)
@@ -97,8 +91,7 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                         is AuthorizationFragmentViewModel.AuthorizationResult.SignUpSuccess -> {
                             Toast.makeText(context, resources.getString(R.string.sign_up_success), Toast.LENGTH_LONG).show()
                             AccountAuthenticator.addAccount(view.context, result.email)
-                            MainActivity.needsRecreate = true
-                            activity?.finish()
+                            viewModel.logIn(result.email to result.password)
                         }
                         is AuthorizationFragmentViewModel.AuthorizationResult.LogInSuccess -> {
                             Toast.makeText(
@@ -110,7 +103,7 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                             activity?.finish()
                         }
                         null ->{}
-                        else -> Toast.makeText(context, resources.getString(R.string.server_error), Toast.LENGTH_LONG).show()
+                        else -> Toast.makeText(context, resources.getString(R.string.server_failure), Toast.LENGTH_LONG).show()
                     }
                 })
 
@@ -125,9 +118,11 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
         }
 
         authorizationPasswordEditText.addTextChangedListener(this)
-
-        centerLinearLayoutTopMargin = resources.getDimension(R.dimen.toolbarHeight).toInt() + 8.dpToPx()
-        calculateBorders()
+        authorizationEmailEditText.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { if(authorizationEmailEditText.hasError) hideError()}
+        })
     }
 
 
@@ -141,72 +136,64 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        if(authorizationPasswordEditText.hasError)
+            hideError()
+    }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
-        contentView.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
+        contentView.removeOnLayoutChangeListener(onViewSizeChangeListener)
     }
 
     override fun onViewSizeChanged(view: View) {
 
-        val currentHeight = view.height
+        val viewHeight = view.height
 
-        val errorTextParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        val centerLayoutParams = authorizationCenterLinearLayout.layoutParams as RelativeLayout.LayoutParams
-
-        errorTextParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
-
-        if(currentHeight < firstBorder){
-            centerLayoutParams.setMargins(0, centerLinearLayoutTopMargin, 0 , 0)
-            centerLayoutParams.removeRule(RelativeLayout.CENTER_VERTICAL)
-            centerLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP)
-            if(currentHeight < secondBorder) {
-                errorTextParams.addRule(RelativeLayout.BELOW, R.id.authorizationCenterLinearLayout)
-            }else{
-                errorTextParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+        println(viewHeight)
+        println(getScreenHeight())
+        if((viewHeight < getScreenHeight()*0.75)){
+            if(!buttonHidden) {
+                authorizationBottomSection.removeView(authorizationSignUpButton)
+                authorizationForgotPassword.text = resources.getString(R.string.create_new_account)
+                authorizationForgotPassword.setOnClickListener { signUpOnClick }
+                buttonHidden = true
             }
-            authorizationForgotPassword.text = resources.getText(R.string.create_new_account)
-            authorizationForgotPassword.setOnClickListener{signUpOnClick.invoke()}
-            authorizationSignUpButton.visibility = View.GONE
         }else{
-            centerLayoutParams.setMargins(0, 0, 0 , 0)
-            centerLayoutParams.removeRule(RelativeLayout.ALIGN_PARENT_TOP)
-            centerLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
-            errorTextParams.addRule(RelativeLayout.ABOVE, R.id.authorizationSignUpButton)
-            authorizationForgotPassword.text = resources.getText(R.string.forgot_password)
-            authorizationForgotPassword.setOnClickListener{}
-            authorizationSignUpButton.visibility = View.VISIBLE
+            if(buttonHidden) {
+                authorizationBottomSection.addView(authorizationSignUpButton, 0)
+                authorizationForgotPassword.text = resources.getString(R.string.forgot_password)
+                authorizationForgotPassword.setOnClickListener {}
+                buttonHidden = false
+            }
         }
 
-        authorizationCenterLinearLayout.layoutParams = centerLayoutParams
-        authorizationErrorText.layoutParams = errorTextParams
-    }
-
-    private fun calculateBorders(){
-        OneShotPreDrawListener.add(contentView) {
-            secondBorder =
-                authorizationCenterLinearLayout.height + authorizationErrorText.height + centerLinearLayoutTopMargin + 8.dpToPx()
-            firstBorder = secondBorder + authorizationSignUpButton.height + (authorizationSignUpButton.layoutParams as RelativeLayout.LayoutParams).bottomMargin
-        }
     }
 
     private fun showError(resId: Int, email: Boolean){
         if(email) {
-            authorizationEmailEditText.isError = true
+            authorizationEmailEditText.hasError = true
             authorizationEmailEditText.requestFocus()
         }else {
-            authorizationPasswordEditText.isError = true
+            authorizationPasswordEditText.hasError = true
             authorizationPasswordEditText.requestFocus()
         }
-        authorizationErrorText.text = resources.getString(resId)
+        (authorizationErrorSnackbar as TextView).text = resources.getString(resId)
+        authorizationBottomSection.animate().translationY(-resources.getDimension(R.dimen.errorSnackbarHeight)).setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong()).start()
     }
 
     private fun hideError(){
-        authorizationEmailEditText.isError = false
-        authorizationPasswordEditText.isError = false
-        authorizationErrorText.text = null
+        authorizationEmailEditText.hasError = false
+        authorizationPasswordEditText.hasError = false
+        authorizationBottomSection.animate().translationY(0F).setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong()).start()
+    }
+
+    private fun getScreenHeight() : Int {
+        val display = contentView.display
+        val outMetrics = DisplayMetrics()
+        display.getRealMetrics(outMetrics)
+        return outMetrics.heightPixels
     }
 
 

@@ -10,6 +10,7 @@ object DiskModule {
     const val PREFS_NAME = "studita_cache"
 
     fun initialize(app: Application) {
-        sharedPreferences = app.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        sharedPreferences = app.getSharedPreferences(
+            PREFS_NAME, Context.MODE_PRIVATE)
     }
 }

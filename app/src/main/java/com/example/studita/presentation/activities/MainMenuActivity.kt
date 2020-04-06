@@ -12,11 +12,11 @@ class MainMenuActivity : DefaultActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.double_constraint_frame_layout)
+        setContentView(R.layout.double_center_frame_layout)
 
         if(savedInstanceState == null) {
-            addFragment(ToolbarFragment(), R.id.doubleTopConstraintFrameLayout)
-            navigateTo(MainMenuFragment(), R.id.doubleConstraintFrameLayout)
+            addFragment(ToolbarFragment(), R.id.doubleTopFrameLayoutFrameLayout)
+            navigateTo(MainMenuFragment(), R.id.doubleFrameLayoutFrameLayout)
         }
     }
 
@@ -25,7 +25,7 @@ class MainMenuActivity : DefaultActivity(){
         if(supportFragmentManager.backStackEntryCount == 1)
             this.finish()
         else{
-            val f = supportFragmentManager.findFragmentById(R.id.doubleConstraintFrameLayout) as NavigatableFragment
+            val f = supportFragmentManager.findFragmentById(R.id.doubleFrameLayoutFrameLayout) as NavigatableFragment
             f.onBackClick()
         }
     }

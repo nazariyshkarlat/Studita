@@ -41,7 +41,7 @@
 
         <include
             android:id="@+id/connectionSnackbarLayout"
-            layout="@layout/connection_snackbar_layout"
+            layout="@layout/snackbar_connection"
             android:layout_width="match_parent"
             android:layout_height="@dimen/connectionSnackbarHeight" />
 

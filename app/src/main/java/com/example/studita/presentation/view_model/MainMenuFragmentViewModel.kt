@@ -5,15 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.authenticator.AccountAuthenticator
-import com.example.studita.di.AuthorizationModule
-import com.example.studita.di.DiskModule
+import com.example.studita.di.data.AuthorizationModule
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.UnsupportedOperationException
 

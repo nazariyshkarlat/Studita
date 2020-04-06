@@ -80,6 +80,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             viewModel.progressBarState.observe(viewLifecycleOwner, Observer { pair ->
                 val progress = pair.first
                 val last = pair.second
+                if(last)
+                    exerciseLayoutButton.setOnClickListener {  }
                 exerciseToolbarProgressBar.animateProgress(percent = progress, onAnimEnd = {
                     if(last){
                         (activity as AppCompatActivity).navigateTo(viewModel.getExercisesEndFragment(), R.id.frameLayout)

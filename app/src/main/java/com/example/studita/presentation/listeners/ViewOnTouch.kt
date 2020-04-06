@@ -17,12 +17,12 @@ abstract class ViewOnTouch : OnTouchListener {
         return when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 touchStayedWithinViewBounds = true
-                onDownTouchAction()
+                onDownTouchAction(event.x, event.y)
                 true
             }
             MotionEvent.ACTION_UP -> {
                 if (touchStayedWithinViewBounds) {
-                    onUpTouchAction()
+                    onUpTouchAction(event.x, event.y)
                 }
                 true
             }
@@ -30,13 +30,15 @@ abstract class ViewOnTouch : OnTouchListener {
                 if (touchStayedWithinViewBounds
                     && !isMotionEventInsideView(view, event)
                 ) {
-                    onCancelTouchAction()
+                    onCancelTouchAction(event.x, event.y)
                     touchStayedWithinViewBounds = false
+                }else{
+                    onMoveTouchAction(event.x, event.y)
                 }
                 true
             }
             MotionEvent.ACTION_CANCEL -> {
-                onCancelTouchAction()
+                onCancelTouchAction(event.x, event.y)
                 true
             }
             else -> false
@@ -46,18 +48,24 @@ abstract class ViewOnTouch : OnTouchListener {
     /**
      * Method which is called when the [View] is touched down.
      */
-    abstract fun onDownTouchAction()
+    abstract fun onDownTouchAction(x: Float, y: Float)
 
     /**
      * Method which is called when the down touch is released on the [View].
      */
-    abstract fun onUpTouchAction()
+    abstract fun onUpTouchAction(x: Float, y: Float)
 
     /**
      * Method which is called when the down touch is canceled,
      * e.g. because the down touch moved outside the bounds of the [View].
      */
-    abstract fun onCancelTouchAction()
+    abstract fun onCancelTouchAction(x: Float, y: Float)
+
+    /**
+     * Method which is called when the down touch is moved on the [View]
+    */
+
+    abstract fun onMoveTouchAction(x: Float, y: Float)
 
     /**
      * Determines whether the provided [MotionEvent] represents a touch event

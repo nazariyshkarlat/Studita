@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
-import com.example.studita.di.AuthorizationModule
+import com.example.studita.di.data.AuthorizationModule
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
 import com.example.studita.domain.entity.authorization.LogInResponseData
 import com.example.studita.domain.interactor.LogInStatus
@@ -83,7 +83,7 @@ class AuthorizationFragmentViewModel : ViewModel(){
                     is SignUpStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                     is SignUpStatus.Failure -> authorizationState.value = AuthorizationResult.SignUpFailure
                     is SignUpStatus.UserAlreadyExists -> authorizationState.value = AuthorizationResult.UserAlreadyExists
-                    is SignUpStatus.Success -> authorizationState.value = AuthorizationResult.SignUpSuccess(dates.first)
+                    is SignUpStatus.Success -> authorizationState.value = AuthorizationResult.SignUpSuccess(dates.first, dates.second)
                 }}
         }
     }
@@ -97,7 +97,7 @@ class AuthorizationFragmentViewModel : ViewModel(){
         object NoUserFound : AuthorizationResult()
         object UserAlreadyExists : AuthorizationResult()
         data class LogInSuccess(val result: LogInResponseData) : AuthorizationResult()
-        data class  SignUpSuccess(val email: String) : AuthorizationResult()
+        data class  SignUpSuccess(val email: String, val password: String) : AuthorizationResult()
 
     }
 

@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
-import com.example.studita.presentation.adapter.ChapterPartViewHolder
 import com.example.studita.presentation.utils.makeView
 import com.example.studita.presentation.model.ChapterPartUiModel
 import com.example.studita.presentation.model.ChapterUiModel

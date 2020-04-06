@@ -105,7 +105,7 @@
 
     <style name="Regular12_50_Selector" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">@color/navigation_color</item>
+        <item name="android:textColor">@color/secondary_blue_color</item>
         <item name="android:textSize">12sp</item>
     </style>
 
@@ -127,13 +127,19 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="Regular12White" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/white87</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="Regular16" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textColor">?primary_color</item>
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="Regular16White87" parent="TextAppearance.AppCompat">
+    <style name="Regular16White" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textColor">@color/white87</item>
         <item name="android:textSize">16sp</item>
@@ -145,15 +151,9 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="Medium16White87" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">@color/white87</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
     <style name="Medium16White" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/white87</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -235,7 +235,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
         <item name="android:background">@drawable/button_blue_8</item>
-        <item name="android:textAppearance">@style/Medium16White87</item>
+        <item name="android:textAppearance">@style/Medium16White</item>
         <item name="android:textColor">@color/blue_button_8_text_color</item>
     </style>
 
@@ -243,7 +243,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
         <item name="android:background">@drawable/button_blue_8_transition</item>
-        <item name="android:textAppearance">@style/Medium16White87</item>
+        <item name="android:textAppearance">@style/Medium16White</item>
         <item name="android:textColor">@color/blue_button_8_text_color</item>
     </style>
 
@@ -251,7 +251,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
         <item name="android:background">@drawable/button_green_8</item>
-        <item name="android:textAppearance">@style/Medium16White87</item>
+        <item name="android:textAppearance">@style/Medium16White</item>
         <item name="android:textColor">@color/blue_button_8_text_color</item>
     </style>
 
@@ -262,7 +262,7 @@
         <item name="android:drawablePadding">-36dp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:background">@drawable/button_blue_8</item>
-        <item name="android:textAppearance">@style/Medium16White87</item>
+        <item name="android:textAppearance">@style/Medium16White</item>
         <item name="android:textColor">@color/blue_button_8_text_color</item>
     </style>
 
@@ -324,7 +324,7 @@
         <item name="android:paddingEnd">10dp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:background">@drawable/oval_blue</item>
-        <item name="android:textAppearance">@style/Medium16White87</item>
+        <item name="android:textAppearance">@style/Medium16White</item>
     </style>
 
     <style name="UserNextLevel" parent="android:Widget.TextView">
@@ -417,9 +417,15 @@
         <item name="android:foreground">?selectableItemBackground</item>
         <item name="itemRippleColor">?colorControlHighlight</item>
         <item name="menu">@menu/bottom_navigation_bar_menu</item>
-        <item name="itemIconTint">@color/navigation_color</item>
+        <item name="itemIconTint">@color/secondary_blue_color</item>
         <item name="elevation">0dp</item>
-        <item name="itemTextColor">@color/navigation_color</item>
+        <item name="itemTextColor">@color/secondary_blue_color</item>
     </style>
+
+    <style name="RatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/raiting_bar_drawable</item>
+        <item name="android:numStars">5</item>
+    </style>
+
 
 </resources>

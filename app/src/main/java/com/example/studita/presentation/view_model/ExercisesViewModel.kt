@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
-import com.example.studita.di.exercise.ExerciseResultModule
-import com.example.studita.di.exercise.ExercisesModule
+import com.example.studita.di.data.exercise.ExerciseResultModule
+import com.example.studita.di.data.exercise.ExercisesModule
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.domain.entity.exercise.ExercisesResponseData
@@ -30,7 +30,7 @@ class ExercisesViewModel : ViewModel(){
     val exercisesState = SingleLiveEvent<Boolean>()
     val exercisesEndTextButtonState = SingleLiveEvent<Boolean>()
     val navigationState = SingleLiveEvent<Pair<ExercisesNavigationState, Fragment>>()
-    val progressBarState = SingleLiveEvent<Pair<Int, Boolean>>()
+    val progressBarState = SingleLiveEvent<Pair<Float, Boolean>>()
     val answered = MutableLiveData<Boolean>()
     val snackbarState = SingleLiveEvent<Pair<ExerciseUiModel, ExerciseResponseData>?>()
     val errorState = SingleLiveEvent<Int>()
@@ -104,9 +104,10 @@ class ExercisesViewModel : ViewModel(){
         selectedPos = -1
         answered.value = false
         snackbarState.value = null
-        if(exerciseIndex == exercises.count{it is ExerciseUiModel.ExerciseUiModelExercise}){
-            progressBarState.value = getProgressPercent() to true
-        }else {
+        if (exerciseIndex == exercises.count { it is ExerciseUiModel.ExerciseUiModelExercise }) {
+            if(progressBarState.value?.second == false)
+                progressBarState.value = 1F to true
+        } else {
             exerciseUiModel = if (arrayIndex < exercises.size) {
                 exercises[arrayIndex]
             } else {
@@ -144,6 +145,7 @@ class ExercisesViewModel : ViewModel(){
                             if (exerciseIndex == exercises.count { it is ExerciseUiModel.ExerciseUiModelExercise }) {
                                 stopSecondsCounter()
                             }
+
                             progressBarState.value = getProgressPercent() to false
                         } else {
                             exercisesToRetry.addAll(exercises.filter{it.exerciseNumber == exerciseUiModel.exerciseNumber })
@@ -186,9 +188,9 @@ class ExercisesViewModel : ViewModel(){
         }
 
 
-    private fun getProgressPercent(): Int = ((exerciseIndex/(exercises.count { it is ExerciseUiModel.ExerciseUiModelExercise }).toFloat())*100).toInt()
+    private fun getProgressPercent(): Float = exerciseIndex/(exercises.count { it is ExerciseUiModel.ExerciseUiModelExercise }).toFloat()
 
-    private fun getAnswersPercent(): Int = (((getTrueAnswers()-getFalseAnswers())/getTrueAnswers().toFloat())*100).toInt()
+    private fun getAnswersPercent(): Float =(getTrueAnswers()-getFalseAnswers())/getTrueAnswers().toFloat()
 
     private fun getTrueAnswers(): Int = exercises.count { it is ExerciseUiModel.ExerciseUiModelExercise } - getFalseAnswers()
 
@@ -199,7 +201,7 @@ class ExercisesViewModel : ViewModel(){
         val bundle = Bundle()
         bundle.putInt("TRUE_ANSWERS", getTrueAnswers())
         bundle.putInt("FALSE_ANSWERS", getFalseAnswers())
-        bundle.putInt("ANSWERS_PERCENT", getAnswersPercent())
+        bundle.putFloat("ANSWERS_PERCENT", getAnswersPercent())
         bundle.putInt("PROCESS_SECONDS", seconds)
         fragment.arguments = bundle
         return fragment

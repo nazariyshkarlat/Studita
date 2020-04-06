@@ -3,7 +3,7 @@ package com.example.studita.presentation.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
-import com.example.studita.di.ChapterModule
+import com.example.studita.di.data.ChapterModule
 import com.example.studita.domain.interactor.ChapterStatus
 import com.example.studita.presentation.utils.launchExt
 import com.example.studita.presentation.model.ChapterUiModel

@@ -3,16 +3,16 @@
 
     <item
         android:id="@+id/bottomNavigationFirstItem"
-        android:icon="@drawable/ic_school_50"
+        android:icon="@drawable/ic_school"
         android:title="@string/navigation_bar_first" />
 
     <item
         android:id="@+id/bottomNavigationSecondItem"
-        android:icon="@drawable/ic_people_50"
+        android:icon="@drawable/ic_emoji_events"
         android:title="@string/navigation_bar_second" />
     <item
         android:id="@+id/bottomNavigationThirdItem"
-        android:icon="@drawable/ic_star_border_50"
+        android:icon="@drawable/ic_star_border"
         android:title="@string/navigation_bar_third" />
 
 </menu>

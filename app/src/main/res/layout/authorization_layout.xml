@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/authorizationRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="@dimen/defaultRLMargin"
-    android:layout_marginEnd="@dimen/defaultRLMargin">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:gravity="center"
         android:id="@+id/authorizationCenterLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:paddingTop="8dp"
+        android:layout_marginTop="@dimen/toolbarHeight"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/defaultRLMargin"
+        android:layout_marginEnd="@dimen/defaultRLMargin">
 
         <com.example.studita.presentation.views.ErrorEditText
             android:id="@+id/authorizationEmailEditText"
@@ -75,25 +78,28 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/authorizationErrorText"
-        style="@style/ErrorText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/authorizationSignUpButton"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="8dp"
-        android:paddingBottom="16dp"
-        android:textAlignment="center"
-        android:visibility="visible" />
 
-    <com.example.studita.presentation.views.press_view.PressTextView
-        android:id="@+id/authorizationSignUpButton"
-        style="@style/GreenButton"
+    <LinearLayout
+        android:id="@+id/authorizationBottomSection"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/buttonHeight"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:text="@string/create_new_account" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/negativeErrorSnackbarHeight">
 
-</RelativeLayout>
+        <com.example.studita.presentation.views.press_view.PressTextView
+            android:id="@+id/authorizationSignUpButton"
+            style="@style/GreenButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/buttonHeight"
+            android:text="@string/create_new_account"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
+
+        <include
+            android:id="@+id/authorizationErrorSnackbar"
+            layout="@layout/snackbar_error"/>
+
+    </LinearLayout>
+
+</LinearLayout>

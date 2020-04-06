@@ -7,13 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
+import com.example.studita.presentation.model.HomeRecyclerUiModel
 import com.example.studita.presentation.utils.createSpannableString
 import com.example.studita.presentation.utils.getAppCompatActivity
-import com.example.studita.presentation.model.LevelUiModel
 import com.example.studita.presentation.view_model.ChapterViewModel
 import kotlinx.android.synthetic.main.chapter_item.view.*
 
-class ChapterViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelChapterUiModel>(view){
+class ChapterViewHolder(view: View) : LevelsViewHolder<HomeRecyclerUiModel.LevelChapterUiModel>(view){
 
     companion object{
         fun returnProgressText(chapterPartsCount: Int, context: Context): SpannableStringBuilder {
@@ -35,7 +35,7 @@ class ChapterViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelChapter
                     text.substring(
                         text.indexOf(" ")
                     ).createSpannableString(
-                        color = ContextCompat.getColor(context, R.color.green)
+                        color = ContextCompat.getColor(context, R.color.blue)
                     )
                 )
             }
@@ -43,8 +43,8 @@ class ChapterViewHolder(view: View) : LevelsViewHolder<LevelUiModel.LevelChapter
         }
     }
 
-    override fun bind(model: LevelUiModel?) {
-        val modelData = (model as LevelUiModel.LevelChapterUiModel)
+    override fun bind(model: HomeRecyclerUiModel) {
+        val modelData = (model as HomeRecyclerUiModel.LevelChapterUiModel)
         with(itemView) {
             chapterItemTitle.text = modelData.chapterTitle
             chapterItemSubtitle.text = modelData.chapterSubtitle

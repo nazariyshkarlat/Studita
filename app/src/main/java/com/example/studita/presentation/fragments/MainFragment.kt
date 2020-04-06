@@ -1,31 +1,31 @@
 package com.example.studita.presentation.fragments
 
-import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.example.studita.R
-import com.example.studita.data.net.connection.ConnectionManager
-import com.example.studita.di.NetworkModule
 import com.example.studita.presentation.activities.DefaultActivity
 import com.example.studita.presentation.utils.*
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.example.studita.presentation.view_model.MainFragmentViewModel
+import com.example.studita.presentation.views.CustomSnackbar
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.bottom_navigation.*
+import kotlinx.android.synthetic.main.interesting_start_screen_layout.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -127,6 +127,7 @@ class MainFragment : BaseFragment(R.layout.main_layout){
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationViewModel)
 
         handleNetworkChanges(view)
+
     }
 
 
@@ -134,11 +135,10 @@ class MainFragment : BaseFragment(R.layout.main_layout){
         NetworkUtils.getNetworkLiveData(view.context)
             .observe(this, Observer { isConnected ->
                 val snackbar = connectionSnackbarLayout as TextView
-                snackbar.textSize = resources.getDimension(R.dimen.connectionSnackbarTextSize).toInt().pxToSp().toFloat()
                     if (!isConnected) {
                     snackbar.text = resources.getString(R.string.network_absent)
                     snackbar.setBackgroundColor(ContextCompat.getColor(view.context, R.color.gray88))
-                    mainLayoutBottomSection.animate().translationY(0F).start()
+                    mainLayoutBottomSection.animate().translationY(0F).setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong()).start()
                 } else {
                     snackbar.text = resources.getString(R.string.back_online)
                     snackbar.setBackgroundColor(
@@ -149,7 +149,7 @@ class MainFragment : BaseFragment(R.layout.main_layout){
                     )
                     viewLifecycleOwner.lifecycleScope.launch {
                         delay(resources.getInteger(R.integer.back_online_snackbar_duration).toLong())
-                        mainLayoutBottomSection.animate().translationY(resources.getDimension(R.dimen.connectionSnackbarHeight)).start()
+                        mainLayoutBottomSection.animate().translationY(resources.getDimension(R.dimen.connectionSnackbarHeight)).setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong()).start()
                     }
                 }
             })

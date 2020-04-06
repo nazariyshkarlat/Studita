@@ -17,23 +17,26 @@ class PressView(val view: View){
 
     init {
         view.setOnTouchListener(object: ViewOnTouch(){
-            override fun onDownTouchAction() {
+            override fun onDownTouchAction(x: Float, y: Float)  {
                 onDown()
             }
 
-            override fun onUpTouchAction() {
+            override fun onUpTouchAction(x: Float, y: Float)  {
                 if (view.isEnabled) {
                     onUp()
                     onClick(view)
                 }
             }
 
-            override fun onCancelTouchAction() {
+            override fun onCancelTouchAction(x: Float, y: Float)  {
                 if (view.isEnabled) {
                     onUp()
                 }
             }
-    })
+
+            override fun onMoveTouchAction(x: Float, y: Float) {
+            }
+        })
     }
 
     fun setPressAlpha(@AttrRes attr: Int){

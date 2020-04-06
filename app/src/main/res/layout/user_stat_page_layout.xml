@@ -23,7 +23,6 @@
                 style="@style/Medium18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="410"
                 android:layout_marginTop="12dp"/>
 
             <TextView
@@ -39,11 +38,10 @@
                 style="@style/Medium18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="16 мин"
                 android:layout_marginTop="12dp"/>
 
             <TextView
-                android:id="@+id/userStatPageLayoutExercisesTitle"
+                android:id="@+id/userStatPageLayoutLessonsTitle"
                 style="@style/Regular16_50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,11 +49,10 @@
                 android:layout_marginTop="24dp"/>
 
             <TextView
-                android:id="@+id/userStatPageLayoutExercisesSubtitle"
+                android:id="@+id/userStatPageLayoutLessonsSubtitle"
                 style="@style/Medium18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="100"
                 android:layout_marginTop="12dp"/>
 
             <TextView
@@ -71,7 +68,6 @@
                 style="@style/Medium18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2"
                 android:layout_marginTop="12dp"/>
 
             <TextView
@@ -87,7 +83,6 @@
                 style="@style/Medium18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5"
                 android:layout_marginTop="12dp"/>
 
     </LinearLayout>

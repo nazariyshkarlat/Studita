@@ -30,13 +30,13 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
             ViewModelProviders.of(this).get(ExercisesEndFragmentViewModel::class.java)
         }
 
-        val percent : Int? = arguments?.getInt("ANSWERS_PERCENT")
+        val percent : Float? = arguments?.getFloat("ANSWERS_PERCENT")
         val trueAnswers : Int? = arguments?.getInt("TRUE_ANSWERS")
         percent?.let{
             Handler().postDelayed( {
                 exercisesResultLayoutProgressBar.animateProgress(percent, duration = resources.getInteger(R.integer.exercises_progress_XP_duration).toLong())
             }, resources.getInteger(R.integer.exercises_progress_XP_delay).toLong())
-            exercisesResultLayoutAnswersPercent.text = resources.getString(R.string.answers_percent, percent)
+            exercisesResultLayoutAnswersPercent.text = resources.getString(R.string.answers_percent, (percent*100).toInt())
         }
         trueAnswers?.let{
             exercisesResultLayoutProgressBarText.text = resources.getString(R.string.exercises_XP_result, it*10)

@@ -4,39 +4,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
-import com.example.studita.presentation.adapter.InterestingViewHolder
-import com.example.studita.presentation.adapter.LevelViewHolder
+import com.example.studita.presentation.model.HomeRecyclerUiModel
 import com.example.studita.presentation.utils.makeView
-import com.example.studita.presentation.model.LevelUiModel
 import java.lang.UnsupportedOperationException
 
-class LevelsAdapter(private val items: List<LevelUiModel>) :
+class LevelsAdapter(private val items: List<HomeRecyclerUiModel>) :
     RecyclerView.Adapter<LevelsViewHolder<*>>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LevelsViewHolder<*> = when (viewType) {
-        LevelsViewType.USER_STATE.ordinal -> UserStateViewHolder(parent.makeView(R.layout.home_layout_user_state))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LevelsViewHolder<out HomeRecyclerUiModel> = when (viewType) {
+        LevelsViewType.USER_STATE.ordinal -> HomeUserDataViewHolder(parent.makeView(R.layout.home_layout_user_data))
         LevelsViewType.LEVEL.ordinal -> LevelViewHolder(parent.makeView(R.layout.level_item))
         LevelsViewType.CHAPTER.ordinal -> ChapterViewHolder(parent.makeView(R.layout.chapter_item))
         LevelsViewType.INTERESTING.ordinal -> InterestingViewHolder(parent.makeView(R.layout.interesting_item))
         else -> throw UnsupportedOperationException("unknown type of item")
     }
 
-    override fun onBindViewHolder(holder: LevelsViewHolder<*>, position: Int) {
-        if(position != 0)
-            holder.bind(items[position-1])
-        else
-            holder.bind(null)
+    override fun onBindViewHolder(holder: LevelsViewHolder<out HomeRecyclerUiModel>, position: Int) {
+        holder.bind(items[position])
     }
 
     override fun getItemViewType(position: Int): Int =
-        if(position == 0){
-                LevelsViewType.USER_STATE.ordinal
-            }else{
-                when (items[position-1]) {
-                    is LevelUiModel.LevelNumber -> LevelsViewType.LEVEL.ordinal
-                    is LevelUiModel.LevelChapterUiModel -> LevelsViewType.CHAPTER.ordinal
-                    is LevelUiModel.LevelInterestingUiModel -> LevelsViewType.INTERESTING.ordinal
-                }
+        when (items[position]) {
+            is HomeRecyclerUiModel.HomeUserDataUiModel -> LevelsViewType.USER_STATE.ordinal
+            is HomeRecyclerUiModel.LevelNumber -> LevelsViewType.LEVEL.ordinal
+            is HomeRecyclerUiModel.LevelChapterUiModel -> LevelsViewType.CHAPTER.ordinal
+            is HomeRecyclerUiModel.LevelInterestingUiModel -> LevelsViewType.INTERESTING.ordinal
         }
 
     override fun getItemCount() = items.size+1
@@ -44,9 +36,9 @@ class LevelsAdapter(private val items: List<LevelUiModel>) :
 }
 
 
-abstract class LevelsViewHolder<T : LevelUiModel?>(view: View) : RecyclerView.ViewHolder(view) {
+abstract class LevelsViewHolder<T : HomeRecyclerUiModel>(view: View) : RecyclerView.ViewHolder(view) {
 
-    abstract fun bind(model: LevelUiModel?)
+    abstract fun bind(model: HomeRecyclerUiModel)
 }
 
 private enum class LevelsViewType {

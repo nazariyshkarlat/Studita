@@ -1,9 +1,11 @@
 package com.example.studita.di
 
 import android.app.Application
-import com.example.studita.di.exercise.ExerciseResultModule
-import com.example.studita.di.exercise.ExercisesModule
-import com.example.studita.presentation.utils.PrefsUtils
+import com.example.studita.di.data.*
+import com.example.studita.di.data.exercise.ExerciseResultModule
+import com.example.studita.di.data.exercise.ExercisesModule
+import com.example.studita.domain.enum.UserStatisticsTime
+import com.example.studita.domain.interactor.user_statistics.UserStatisticsInteractorImpl
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -24,6 +26,8 @@ object DI{
         ExercisesModule.initialize(configuration)
         ExerciseResultModule.initialize(configuration)
         UserDataModule.initialize(configuration)
+        UserStatisticsModule.initialize(configuration)
+        InterestingModule.initialize(configuration)
     }
 
 }

@@ -1,12 +1,10 @@
 package com.example.studita.presentation.activities
 
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studita.R
 import com.example.studita.di.DiskModule
-import com.example.studita.di.DiskModule.PREFS_NAME
 import com.example.studita.presentation.utils.startActivity
 import com.example.studita.presentation.fragments.HomeFragment
 

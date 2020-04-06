@@ -2,7 +2,9 @@ package com.example.studita
 
 import android.app.Application
 import com.example.studita.di.DI
-import com.example.studita.di.LevelsModule
+import com.example.studita.di.data.InterestingModule
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class App : Application(){
 

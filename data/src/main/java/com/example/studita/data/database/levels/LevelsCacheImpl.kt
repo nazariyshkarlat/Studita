@@ -10,7 +10,7 @@ class LevelsCacheImpl(private val sharedPreferences: SharedPreferences) :
         const val LEVELS_PREFS = "levels_cache"
     }
 
-    override fun putLevelsJson(json: String) {
+    override fun saveLevelsJson(json: String) {
         sharedPreferences.edit().putString(LEVELS_PREFS, json).apply()
     }
 

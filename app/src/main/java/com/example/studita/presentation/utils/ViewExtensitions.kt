@@ -20,9 +20,9 @@ fun NestedScrollView.setOnScrollChangeFabListener(fabScrollListener: FabScrollLi
     this.setOnScrollChangeListener(FabScrollImpl(fabScrollListener))
 }
 
-fun View.setOnViewSizeChangeListener(viewSizeChangeListener: OnViewSizeChangeListener): ViewTreeObserver.OnGlobalLayoutListener {
+fun View.setOnViewSizeChangeListener(viewSizeChangeListener: OnViewSizeChangeListener): View.OnLayoutChangeListener {
     val listener = OnViewSizeChangeListenerImpl(viewSizeChangeListener, this)
-    this.viewTreeObserver.addOnGlobalLayoutListener(listener)
+    this.addOnLayoutChangeListener(listener)
     return listener
 }
 
@@ -49,7 +49,7 @@ fun View.getAppCompatActivity(): AppCompatActivity?{
     return null
 }
 
-fun CustomProgressBar.animateProgress(percent: Int, onAnimEnd: ()->Unit = {}, duration: Long = 300L) {
+fun CustomProgressBar.animateProgress(percent: Float, onAnimEnd: ()->Unit = {}, duration: Long = 300L) {
     val progressAnimation = ProgressBarAnimation(
         this,
         this.percentProgress,

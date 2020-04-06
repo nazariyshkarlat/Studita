@@ -1,9 +1,8 @@
-package com.example.studita.presentation.adapter
+package com.example.studita.presentation.adapter.chapter_parts
 
 import android.view.View
 import com.example.studita.R
 import com.example.studita.presentation.activities.ExercisesActivity
-import com.example.studita.presentation.adapter.chapter_parts.ChapterPartsViewHolder
 import com.example.studita.presentation.utils.getAppCompatActivity
 import com.example.studita.presentation.utils.startActivity
 import com.example.studita.presentation.model.ChapterPartUiModel

@@ -1,6 +1,6 @@
 package com.example.studita.data.repository.datasource.levels
 
-class LevelsDataStoreFactoryImpl(
+class LevelsJsonDataStoreFactoryImpl(
     private val cloudLaunchesDataStore: CloudLevelsJsonDataStore,
     private val diskLevelsDataStore: DiskLevelsJsonDataStore
 ) : LevelsJsonDataStoreFactory {

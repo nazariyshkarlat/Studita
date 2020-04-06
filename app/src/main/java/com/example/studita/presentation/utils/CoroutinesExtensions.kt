@@ -2,6 +2,7 @@ package com.example.studita.presentation.utils
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 fun CoroutineScope.launchExt(job: Job?,

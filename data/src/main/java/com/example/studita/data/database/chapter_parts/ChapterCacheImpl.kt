@@ -10,7 +10,7 @@ class ChapterCacheImpl(private val sharedPreferences: SharedPreferences) :
         const val CHAPTER_PREFS = "chapter_cache"
     }
 
-    override fun putLevelsJson(chapterNumber: Int, json: String) {
+    override fun saveChapterJson(chapterNumber: Int, json: String) {
         sharedPreferences.edit().putString("${CHAPTER_PREFS}_$chapterNumber", json).apply()
     }
 

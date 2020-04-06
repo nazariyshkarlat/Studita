@@ -1,12 +1,9 @@
 package com.example.studita.presentation.activities
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
 import com.example.studita.R
-import com.example.studita.presentation.fragments.UserStatFragment
+import com.example.studita.presentation.fragments.user_statistics.UserStatFragment
 import com.example.studita.presentation.utils.navigateTo
 
 class ShareActivity : DefaultActivity(){
