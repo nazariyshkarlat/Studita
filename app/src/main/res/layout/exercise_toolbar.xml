@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/toolbarHeight">
 
-    <com.github.mmin18.widget.RealtimeBlurView
+    <View
+        android:id="@+id/exerciseToolbarViewTransparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/dividerHeight"
-        app:realtimeBlurRadius="20dp"
-        app:realtimeOverlayColor="?attr/blur_color"/>
+        android:alpha="@dimen/bars_alpha"
+        android:background="?page_background_color"/>
 
     <ImageView
         android:id="@+id/exerciseToolbarCloseButton"

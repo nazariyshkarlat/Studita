@@ -15,7 +15,6 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.widget.FrameLayout
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
@@ -25,12 +24,10 @@ import com.example.studita.R
 import com.example.studita.presentation.draw.draw
 import com.example.studita.presentation.draw.getMultilineTextLayout
 import com.example.studita.presentation.utils.dpToPx
+import com.example.studita.presentation.utils.getAlphaAnimator
+import com.example.studita.presentation.utils.getScaleAnimator
 import com.google.android.material.animation.AnimationUtils
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 class CustomSnackbar @JvmOverloads constructor(
@@ -42,7 +39,8 @@ class CustomSnackbar @JvmOverloads constructor(
     private var desiredHeight = 0
     private val radius = 8.dpToPx().toFloat()
     private val innerPadding = 16.dpToPx()
-    private val margin = 16.dpToPx()
+    private val margin = 8.dpToPx()
+    private var bottomMarginExtra = 0
 
     private lateinit var textLayout: StaticLayout
     private var textY = 0F
@@ -59,10 +57,7 @@ class CustomSnackbar @JvmOverloads constructor(
     private val ANIMATION_SCALE_FROM_VALUE = 0.8f
     private val ANIMATION_FADE_IN_DURATION = 150
 
-    private val params =  FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
-        setMargins(margin, margin, margin, margin)
-        gravity = Gravity.BOTTOM
-    }
+    private var params: FrameLayout.LayoutParams? = null
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -85,13 +80,20 @@ class CustomSnackbar @JvmOverloads constructor(
         setMeasuredDimension(width, desiredHeight)
     }
 
-    fun show (text: String,@ColorRes colorId: Int, duration: Long = 3000L){
-        val rootView = ((context as Activity).window.decorView.rootView.findViewById(android.R.id.content) as ViewGroup)
+    fun show (text: String,@ColorRes colorId: Int, duration: Long = 3000L, delay: Long = 0L, bottomMarginExtra: Int = 0, contentView: ViewGroup? = null){
+        this.bottomMarginExtra = bottomMarginExtra
+        val rootView = contentView
+            ?: (context as Activity).window.decorView.rootView.findViewById(android.R.id.content) as ViewGroup
+        val oldSnackbar: CustomSnackbar? = rootView.findViewById(R.id.customSnackbar)
+        oldSnackbar?.let{
+            rootView.removeView(it)
+        }
         if(!rootView.contains(this)) {
             initView(text, colorId)
+            this.id = R.id.customSnackbar
             rootView.addView(this)
-            setAnimation(duration){
-                rootView.removeView(this@CustomSnackbar)
+            startAnimation(duration, delay = delay){
+                rootView.removeView(this)
             }
         }
     }
@@ -99,21 +101,27 @@ class CustomSnackbar @JvmOverloads constructor(
     private fun initView(text: String,@ColorRes colorId: Int){
         backgroundPaint.color = ContextCompat.getColor(context, colorId)
         this.text = text
+        setViewParams()
         this.layoutParams = params
     }
 
-    private fun setAnimation(duration: Long, onAnimationEnd: () -> Unit) {
+    private fun startAnimation(duration: Long, delay: Long, onAnimationEnd: () -> Unit) {
+        alpha = 0F
         val alphaAnimator: ValueAnimator? = getAlphaAnimator(0f, 1f)
         val scaleAnimator: ValueAnimator? =
             getScaleAnimator(ANIMATION_SCALE_FROM_VALUE, 1f)
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(alphaAnimator, scaleAnimator)
         animatorSet.duration = ANIMATION_FADE_IN_DURATION.toLong()
-        animatorSet.addListener(object  : AnimatorListenerAdapter(){})
+        animatorSet.startDelay = delay
+        animatorSet.start()
+        startAnimationCoroutine(duration, onAnimationEnd)
+    }
+
+    private fun View.startAnimationCoroutine (duration: Long, onAnimationEnd: () -> Unit){
         GlobalScope.launch(Dispatchers.Main) {
-            animatorSet.start()
             delay(duration)
-            this@CustomSnackbar.animate().alpha(0F).setListener(object : AnimatorListenerAdapter() {
+            this@startAnimationCoroutine.animate().alpha(0F).setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     onAnimationEnd.invoke()
                 }
@@ -121,23 +129,11 @@ class CustomSnackbar @JvmOverloads constructor(
         }
     }
 
-
-    private fun getAlphaAnimator(vararg alphaValues: Float): ValueAnimator? {
-        val animator = ValueAnimator.ofFloat(*alphaValues)
-        animator.interpolator = AnimationUtils.LINEAR_INTERPOLATOR
-        animator.addUpdateListener { valueAnimator -> this.alpha = valueAnimator.animatedValue as Float }
-        return animator
-    }
-
-    private fun getScaleAnimator(vararg scaleValues: Float): ValueAnimator? {
-        val animator = ValueAnimator.ofFloat(*scaleValues)
-        animator.interpolator = AnimationUtils.LINEAR_OUT_SLOW_IN_INTERPOLATOR
-        animator.addUpdateListener { valueAnimator ->
-            val scale = valueAnimator.animatedValue as Float
-            scaleX = scale
-            scaleY = scale
+    private fun setViewParams(){
+        params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+            setMargins(margin, margin, margin, margin+bottomMarginExtra)
+            gravity = Gravity.BOTTOM
         }
-        return animator
     }
 
 }

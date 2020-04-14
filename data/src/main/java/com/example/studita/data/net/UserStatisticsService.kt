@@ -1,16 +1,14 @@
 package com.example.studita.data.net
 
+import com.example.studita.data.entity.UserTokenId
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface UserStatisticsService {
 
     @POST("user_statistics/{time}")
-    fun getUserStatisticsAsync(@Path("time")time: String, @Body IDandToken: HashMap<String, String>) : Deferred<Response<JsonObject>>
+    fun getUserStatisticsAsync(@Header("Date") dateTime: String, @Path("time")time: String, @Body userTokenId: UserTokenId) : Deferred<Response<JsonObject>>
 }

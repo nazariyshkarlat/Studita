@@ -14,8 +14,8 @@ class LevelsRepositoryImpl(
     private val connectionManager: ConnectionManager
 ) : LevelsRepository{
 
-    override suspend fun getLevels(): List<LevelData> {
-        return levelDataMapper.map(LevelsDataStoreImpl(levelsDataStoreFactory.create(if(connectionManager.isNetworkAbsent()) LevelsJsonDataStoreFactory.Priority.CACHE else LevelsJsonDataStoreFactory.Priority.CLOUD)).getLevelsEntityList())
+    override suspend fun getLevels(isLoggedIn: Boolean): List<LevelData> {
+        return levelDataMapper.map(LevelsDataStoreImpl(levelsDataStoreFactory.create(if(connectionManager.isNetworkAbsent()) LevelsJsonDataStoreFactory.Priority.CACHE else LevelsJsonDataStoreFactory.Priority.CLOUD)).getLevelsEntityList(isLoggedIn))
     }
 
 }

@@ -1,6 +1,6 @@
 package com.example.studita.di.data
 
-import com.example.studita.data.database.interesting.InterestingCacheImpl
+import com.example.studita.data.cache.interesting.InterestingCacheImpl
 import com.example.studita.data.entity.mapper.InterestingDataMapper
 import com.example.studita.data.net.InterestingService
 import com.example.studita.data.repository.InterestingRepositoryImpl

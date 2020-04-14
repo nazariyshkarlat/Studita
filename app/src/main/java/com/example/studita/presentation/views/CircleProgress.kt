@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.custom_views
+package com.example.studita.presentation.views
 
 import android.animation.Animator
 import android.animation.ValueAnimator

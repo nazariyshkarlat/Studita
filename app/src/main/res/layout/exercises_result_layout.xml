@@ -24,19 +24,23 @@
             style="@style/Regular14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="9"/>
+            android:layout_marginTop="24dp"/>
 
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="162dp"
+            android:layout_height="162dp"
             android:layout_marginTop="8dp">
+
             <TextView
                 android:id="@+id/exercisesResultLayoutProgressBarText"
                 style="@style/Medium20Blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textAllCaps="true" />
 
             <com.example.studita.presentation.views.CustomProgressBar
                 android:id="@+id/exercisesResultLayoutProgressBar"
@@ -51,8 +55,7 @@
             style="@style/Regular14_50"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="10"/>
+            android:layout_marginTop="8dp"/>
 
         <TextView
            android:id="@+id/exercisesResultLayoutGoodJob"

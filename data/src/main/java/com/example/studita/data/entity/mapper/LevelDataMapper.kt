@@ -26,6 +26,7 @@ class LevelDataMapper : Mapper<List<LevelEntity>, List<LevelData>> {
         return when(source) {
             is LevelChildEntity.LevelChapterEntity -> LevelChildData.LevelChapterData(source.chapterNumber, source.chapterTitle, source.chapterSubtitle, source.chapterPartsCount)
             is LevelChildEntity.LevelInterestingEntity -> LevelChildData.LevelInterestingData(source.interestingNumber, source.title, source.subtitle, source.tags)
+            is LevelChildEntity.LevelSubscribeEntity -> LevelChildData.LevelSubscribeData(source.title, source.button)
         }
     }
 

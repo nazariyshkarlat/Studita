@@ -18,4 +18,8 @@ sealed class LevelChildData {
         val subtitle: String,
         val tags: List<String>
     ): LevelChildData()
+    data class LevelSubscribeData(
+        val title: String,
+        val button: List<String>
+    ): LevelChildData()
 }

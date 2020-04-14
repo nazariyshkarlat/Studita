@@ -31,6 +31,10 @@ class LevelsDeserializer : JsonDeserializer<LevelEntity> {
                     it,
                     LevelChildEntity.LevelInterestingEntity::class.java
                 )
+                "subscribe" -> context.deserialize<LevelChildEntity.LevelSubscribeEntity>(
+                    it,
+                    LevelChildEntity.LevelSubscribeEntity::class.java
+                )
                 else -> {
                     throw IOException("Unexpected type")
                 }

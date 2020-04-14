@@ -21,6 +21,7 @@ class UserStatFragment : NavigatableFragment(R.layout.user_stat_layout), ViewTre
         userStatLayoutTabs.setFragments(listOf(UserStatTodayFragment(), UserStatYesterdayFragment(), UserStatWeekFragment(), UserStatMonthFragment()))
         userStatLayoutTabs.setItems(listOf(resources.getString(R.string.today), resources.getString(R.string.yesterday), resources.getString(R.string.week), resources.getString(R.string.month)))
 
+        userStatLayoutViewPager.offscreenPageLimit = 3
         userStatLayoutTabs.syncWithViewPager(userStatLayoutViewPager, childFragmentManager)
 
         userStatLayoutScrollView.viewTreeObserver

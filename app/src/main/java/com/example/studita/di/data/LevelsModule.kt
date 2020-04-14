@@ -1,7 +1,7 @@
 package com.example.studita.di.data
 
 import com.example.studita.di.DiskModule
-import com.example.studita.data.database.levels.LevelsCacheImpl
+import com.example.studita.data.cache.levels.LevelsCacheImpl
 import com.example.studita.data.entity.mapper.LevelDataMapper
 import com.example.studita.data.net.LevelsService
 import com.example.studita.data.repository.LevelsRepositoryImpl

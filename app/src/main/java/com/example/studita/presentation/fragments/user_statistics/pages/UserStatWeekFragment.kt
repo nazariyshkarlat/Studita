@@ -4,30 +4,25 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.example.studita.domain.enum.UserStatisticsTime
 import com.example.studita.domain.interactor.UserStatisticsStatus
-import com.example.studita.presentation.fragments.user_statistics.UserStatFragment
-import com.example.studita.presentation.utils.PrefsUtils
-import com.example.studita.presentation.view_model.UserStatisticsViewModel
+import com.example.studita.presentation.utils.UserUtils
 
 class UserStatWeekFragment : UserStatPageFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel?.let{
+        viewModel?.let{viewModel->
             if(savedInstanceState == null){
-                PrefsUtils.getUserId()?.let { userId ->
-                    PrefsUtils.getUserToken()?.let { userToken ->
-                        it.getUserStatistics(userId, userToken, UserStatisticsTime.WEEK)
-                    }
+                UserUtils.getUserTokenIdData()?.let{
+                    viewModel.getUserStatistics(it, UserStatisticsTime.WEEK)
                 }
             }
-            it.userStatisticsWeekState.observe(viewLifecycleOwner, Observer { state ->
+            viewModel.userStatisticsWeekState.observe(viewLifecycleOwner, Observer { state ->
                 if(state is UserStatisticsStatus.Success)
                     formView(state.result)
             })
-            it.errorState.observe(viewLifecycleOwner, Observer{ message->
+            viewModel.errorState.observe(viewLifecycleOwner, Observer{ message->
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             })
         }

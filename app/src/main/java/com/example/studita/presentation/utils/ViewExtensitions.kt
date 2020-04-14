@@ -49,21 +49,20 @@ fun View.getAppCompatActivity(): AppCompatActivity?{
     return null
 }
 
-fun CustomProgressBar.animateProgress(percent: Float, onAnimEnd: ()->Unit = {}, duration: Long = 300L) {
+fun CustomProgressBar.animateProgress(percent: Float, onAnimEnd: ()->Unit = {}, duration: Long = 300L, delay: Long = 0L) {
     val progressAnimation = ProgressBarAnimation(
         this,
         this.percentProgress,
         percent
     )
+    progressAnimation.startOffset = delay
     progressAnimation.interpolator =
-        androidx.interpolator.view.animation.LinearOutSlowInInterpolator()
+        androidx.interpolator.view.animation.FastOutSlowInInterpolator()
     progressAnimation.duration = duration
     progressAnimation.setAnimationListener(object : Animation.AnimationListener{
         override fun onAnimationRepeat(animation: Animation?) {}
         override fun onAnimationEnd(animation: Animation?) {onAnimEnd.invoke()}
         override fun onAnimationStart(animation: Animation?) {}
     })
-    postDelayed({
         this.startAnimation(progressAnimation)
-    }, 100)
 }

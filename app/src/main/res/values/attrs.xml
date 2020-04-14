@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="page_background_color" format="reference"/>
-    <attr name="blur_color" format="reference"/>
+    <attr name="transparent_bar_color" format="reference"/>
     <attr name="divider_color" format="reference"/>
     <attr name="blue_transparent_button_color" format="reference"/>
     <attr name="secondary_color" format="reference"/>
@@ -31,6 +31,19 @@
 
     <declare-styleable name="CustomRatingBar">
         <attr name="selectedStar" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="AlphaGradientView">
+        <attr name="fel_edge" format="integer">
+            <flag name="top" value="1"/>
+            <flag name="bottom" value="2"/>
+            <flag name="left" value="4"/>
+            <flag name="right" value="8"/>
+        </attr>
+        <attr name="fel_size_top" format="dimension"/>
+        <attr name="fel_size_bottom" format="dimension"/>
+        <attr name="fel_size_left" format="dimension"/>
+        <attr name="fel_size_right" format="dimension"/>
     </declare-styleable>
 
 </resources>

@@ -1,17 +1,37 @@
 package com.example.studita.presentation.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import androidx.core.content.res.ResourcesCompat
 import com.example.studita.R
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 object TimeUtils {
-    fun getHours(timeInSeconds: Int) = ((timeInSeconds % 604800) % 86400) / 3600
 
-    fun getMinutes(timeInSeconds: Int) = (((timeInSeconds % 604800) % 86400) % 3600) / 60
+    @SuppressLint("SimpleDateFormat")
+    private val simpleDateFormat = SimpleDateFormat("MM/dd/yyyy")
 
-    fun getSeconds(timeInSeconds: Int) = (((timeInSeconds % 604800) % 86400) % 3600) % 60
+    fun getCalendarDayCount(startDateTime: Date, endDateTime: Date): Long {
+        val dateStartStr = simpleDateFormat.format(startDateTime)
+        val dateEndStr = simpleDateFormat.format(endDateTime)
+
+        val dateStart = simpleDateFormat.parse(dateStartStr)
+        val dateEnd = simpleDateFormat.parse(dateEndStr)
+
+        return ((dateEnd.time - dateStart.time) / 86400000.toDouble()).roundToLong()
+    }
+
+    fun getHours(timeInSeconds: Long) = timeInSeconds/3600
+
+    fun getMinutes(timeInSeconds: Long) = (((timeInSeconds % 604800) % 86400) % 3600) / 60
+
+    fun getSeconds(timeInSeconds: Long) = (((timeInSeconds % 604800) % 86400) % 3600) % 60
 
     fun styleTimeText(context: Context, text: String): SpannableStringBuilder {
         val secondaryColor = ColorUtils.getSecondaryColor(context)
@@ -39,9 +59,9 @@ object TimeUtils {
     }
 
     fun getTimeText(
-        hours: Pair<Int, String>,
-        minutes: Pair<Int, String>,
-        seconds: Pair<Int, String>
+        hours: Pair<Long, String>,
+        minutes: Pair<Long, String>,
+        seconds: Pair<Long, String>
     ): String =
         when {
             hours.first > 0 -> {
@@ -61,5 +81,5 @@ object TimeUtils {
             else -> {
                 "${seconds.first} ${seconds.second}"
             }
-        }
+        }.trim()
 }

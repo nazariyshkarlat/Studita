@@ -9,7 +9,7 @@ import com.example.studita.presentation.model.ChapterUiModel
 
 class ChapterUiModelMapper : Mapper<ChapterData, ChapterUiModel>{
 
-    override fun map(source: ChapterData) = ChapterUiModel(source.title, mapChapterParts(source.parts))
+    override fun map(source: ChapterData) = ChapterUiModel(source.chapterNumber, source.title, mapChapterParts(source.parts))
 
     private fun mapChapterParts(source: List<ChapterPartData>) : List<ChapterPartUiModel>{
         return source.map { mapChapterPart(it) }

@@ -5,27 +5,27 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 
 fun AppCompatActivity.addFragment(fragment: Fragment, container: Int) {
-    val fragmentTransaction = supportFragmentManager.beginTransaction()
-    fragmentTransaction.add(container, fragment, fragment::class.java.name)
-    fragmentTransaction.commit()
+    supportFragmentManager.beginTransaction()
+        .add(container, fragment, fragment::class.java.name)
+        .commit()
 }
 
 fun AppCompatActivity.showFragment(fragment: Fragment){
-    val fragmentTransaction =supportFragmentManager.beginTransaction()
-    fragmentTransaction.show(fragment)
-    fragmentTransaction.commit()
+    supportFragmentManager.beginTransaction()
+        .show(fragment)
+        .commit()
 }
 
 fun AppCompatActivity.removeFragment(fragment: Fragment){
-    val fragmentTransaction =supportFragmentManager.beginTransaction()
-    fragmentTransaction.remove(fragment)
-    fragmentTransaction.commit()
+    supportFragmentManager.beginTransaction()
+        .remove(fragment)
+        .commit()
 }
 
 fun AppCompatActivity.hideFragment(fragment: Fragment){
-    val fragmentTransaction =supportFragmentManager.beginTransaction()
-    fragmentTransaction.hide(fragment)
-    fragmentTransaction.commit()
+    supportFragmentManager.beginTransaction()
+        .hide(fragment)
+        .commit()
 }
 
 fun AppCompatActivity.navigateTo(fragment: Fragment, container: Int) {
@@ -40,7 +40,6 @@ fun AppCompatActivity.navigateTo(fragment: Fragment, container: Int) {
 }
 
 fun AppCompatActivity.navigateBack(fragment: Fragment){
-    println(fragment)
     val fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
     fragmentTransaction.remove(fragment)
     supportFragmentManager.popBackStack()
@@ -50,8 +49,8 @@ fun AppCompatActivity.navigateBack(fragment: Fragment){
 }
 
 fun AppCompatActivity.replaceWithAnim(fragment: Fragment, container: Int, startAnim: Int, endAnim: Int) {
-    val fragmentTransaction =supportFragmentManager.beginTransaction()
-    fragmentTransaction.setCustomAnimations(startAnim, endAnim, 0, 0)
-    fragmentTransaction.replace(container, fragment)
-    fragmentTransaction.commit()
+    supportFragmentManager.beginTransaction()
+        .setCustomAnimations(startAnim, endAnim, 0, 0)
+        .replace(container, fragment)
+        .commit()
 }

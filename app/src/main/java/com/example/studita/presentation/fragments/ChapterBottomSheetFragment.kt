@@ -1,43 +1,112 @@
 package com.example.studita.presentation.fragments
 
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.view.View
-import android.widget.TextView
+import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.adapter.chapter_parts.ChapterPartsAdapter
-import com.example.studita.presentation.adapter.levels.ChapterViewHolder.Companion.returnProgressText
+import com.example.studita.presentation.adapter.chapter.ChapterPartsAdapter
 import com.example.studita.presentation.fragments.base.BaseBottomSheetDialogFragment
 import com.example.studita.presentation.model.ChapterUiModel
+import com.example.studita.presentation.utils.LevelUtils
+import com.example.studita.presentation.utils.UserUtils
 import com.example.studita.presentation.view_model.ChapterViewModel
+import com.example.studita.presentation.views.CustomSnackbar
 import kotlinx.android.synthetic.main.chapter_layout.*
-import kotlinx.android.synthetic.main.chapter_layout_info.*
+import kotlinx.android.synthetic.main.chapter_layout_header.*
 
 
 class ChapterBottomSheetFragment : BaseBottomSheetDialogFragment(R.layout.chapter_layout){
 
-    private var chapterModel: ChapterUiModel? = null
     private var chapterViewModel: ChapterViewModel? = null
+    private var chapterUiModel: ChapterUiModel? = null
+
+    companion object{
+        var needsRefresh = false
+        var snackbarShowReason = SnackbarShowReason.NONE
+
+        enum class SnackbarShowReason{
+            NONE,
+            CHAPTER_COMPLETED,
+            BAD_RESULT
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        chapterViewModel = activity?.run {
-            ViewModelProviders.of(this).get(ChapterViewModel::class.java)
+        chapterViewModel = ViewModelProviders.of(this).get(ChapterViewModel::class.java)
+
+        chapterViewModel?.let {
+            arguments?.getInt("CHAPTER_NUMBER")
+                ?.let { chapterNumber -> it.getChapter(chapterNumber) }
+            it.progressState.observe(viewLifecycleOwner, Observer { progress ->
+                if (progress) {
+                    chapterUiModel =  it.results
+                    chapterLayoutRecyclerView.adapter = chapterUiModel?.let {model -> ChapterPartsAdapter(model) }
+                    (chapterLayoutLayoutProgressBar.parent as ViewGroup).removeView(
+                        chapterLayoutLayoutProgressBar
+                    )
+                    chapterLayoutNestedScrollView.visibility = View.VISIBLE
+                    chapterHeaderTitle.text = chapterUiModel?.title
+                    chapterHeaderProgressText.text = getProgressText()
+                    chapterHeaderProgressBar.percentProgress = getProgressPercent() ?: 0F
+                }
+            })
         }
-
-        chapterViewModel?.let{
-            chapterModel =  it.results
-            chapterLayoutRecyclerView.adapter = chapterModel?.let {model -> ChapterPartsAdapter(model) }
-
-            chapterLayoutTitle.text = chapterModel?.title
-            setProgressText(chapterLayoutInfoTextView)
-        }
-
     }
 
-    private fun setProgressText(textView: TextView){
-        textView.text  = context?.let { chapterModel?.let { it1 -> returnProgressText(it1.parts.size, it) } }
+    override fun onResume() {
+        super.onResume()
+        if(needsRefresh) {
+            updateView()
+
+            if(snackbarShowReason != SnackbarShowReason.NONE){
+                activity?.let {
+                    val snackbar = CustomSnackbar(it)
+                    snackbar.show(resources.getString(if(snackbarShowReason == SnackbarShowReason.BAD_RESULT) R.string.exercise_snackbar_bad_result_reason else R.string.exercise_snackbar_chapter_completed_reason),
+                        R.color.green,
+                        contentView = chapterLayoutFrameLayout,
+                        duration = 5000L,
+                        delay = 1000L)
+                }
+            }
+        }
+    }
+
+
+    private fun updateView(){
+        chapterHeaderProgressText.text = getProgressText()
+        chapterHeaderProgressBar.percentProgress = getProgressPercent() ?: 0F
+        chapterLayoutRecyclerView.adapter?.notifyDataSetChanged()
+    }
+
+    private fun getProgressText(): SpannableStringBuilder?{
+        return context?.let { chapterUiModel?.let { chapterUiModel ->
+                UserUtils.userData?.completedParts?.get(chapterUiModel.chapterNumber-1)?.let { completedNumber ->
+                    LevelUtils.getProgressText(
+                        completedNumber,
+                        chapterUiModel.parts.size,
+                        it
+                    )
+                }
+            }
+        }
+    }
+
+    private fun getProgressPercent(): Float?{
+        return context?.let { chapterUiModel?.let { chapterUiModel ->
+            UserUtils.userData?.completedParts?.get(chapterUiModel.chapterNumber-1)?.let { completedNumber ->
+                LevelUtils.getChapterProgressPercent(
+                    completedNumber,
+                    chapterUiModel.parts.size
+                )
+            }
+        }
+        }
     }
 
 }

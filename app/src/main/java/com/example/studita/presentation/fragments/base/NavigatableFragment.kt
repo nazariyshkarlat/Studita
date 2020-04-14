@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import com.example.studita.R
 import com.example.studita.presentation.utils.navigateBack
 
 open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
@@ -18,7 +19,8 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
     open fun onBackClick() {
         (activity as AppCompatActivity).navigateBack(this)
         (view?.parent as ViewGroup).alpha = 0F
-        (view?.parent as ViewGroup).animate().alpha(1F).setListener(null).setDuration(200).start()
+        (view?.parent as ViewGroup).animate().alpha(1F).setDuration(resources.getInteger(
+            R.integer.navigatable_fragment_anim_duration).toLong()).start()
     }
 
     override fun onAttach(context: Context) {
@@ -35,17 +37,9 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-            listener = object : Animator.AnimatorListener{
-                override fun onAnimationRepeat(animation: Animator?) {}
-                override fun onAnimationCancel(animation: Animator?) {}
-                override fun onAnimationStart(animation: Animator?) {}
-
-                override fun onAnimationEnd(animation: Animator?) {
-                }
-
-            }
-            view.alpha = 0F
-            view.animate().alpha(1F).setDuration(200).setListener(listener).start()
+        view.alpha = 0F
+        view.animate().alpha(1F).setDuration(resources.getInteger(
+            R.integer.navigatable_fragment_anim_duration).toLong()).start()
     }
 
     interface OnNavigateFragment {

@@ -7,11 +7,11 @@ import com.example.studita.domain.interactor.SignInWithGoogleStatus
 import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.repository.AuthorizationRepository
 
-class AuthorizationInteractorImpl(private val authorizationRepository: AuthorizationRepository) :
+class AuthorizationInteractorImpl(private val repository: AuthorizationRepository) :
     AuthorizationInteractor {
     override suspend fun signUp(authorizationRequestData: AuthorizationRequestData): SignUpStatus =
         try {
-             when (authorizationRepository.signUp(authorizationRequestData)) {
+             when (repository.signUp(authorizationRequestData)) {
                 200 -> SignUpStatus.Success
                 409 -> SignUpStatus.UserAlreadyExists
                 else -> SignUpStatus.Failure
@@ -26,7 +26,7 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
 
     override suspend fun logIn(authorizationRequestData: AuthorizationRequestData): LogInStatus =
         try {
-            val logInResult = authorizationRepository.logIn(authorizationRequestData)
+            val logInResult = repository.logIn(authorizationRequestData)
             when (logInResult.first) {
                 400 -> LogInStatus.Failure
                 404 -> LogInStatus.NoUserFound
@@ -46,7 +46,7 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
 
     override suspend fun signInWithGoogle(idToken: String): SignInWithGoogleStatus =
         try {
-            val result = authorizationRepository.signInWithGoogle(idToken)
+            val result = repository.signInWithGoogle(idToken)
             when (result.first) {
                 400 -> SignInWithGoogleStatus.Failure
                 else -> result.second?.let {

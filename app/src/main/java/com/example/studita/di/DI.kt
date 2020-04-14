@@ -28,6 +28,8 @@ object DI{
         UserDataModule.initialize(configuration)
         UserStatisticsModule.initialize(configuration)
         InterestingModule.initialize(configuration)
+        SubscribeEmailModule.initialize(configuration)
+        ObtainedExerciseDataModule.initialize(configuration)
     }
 
 }

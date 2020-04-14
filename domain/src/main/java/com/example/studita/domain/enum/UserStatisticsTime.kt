@@ -6,3 +6,10 @@ enum class UserStatisticsTime{
     WEEK,
     MONTH
 }
+
+fun UserStatisticsTime.timeToString() =  when(this){
+    UserStatisticsTime.TODAY -> "today"
+    UserStatisticsTime.YESTERDAY -> "yesterday"
+    UserStatisticsTime.WEEK -> "week"
+    UserStatisticsTime.MONTH -> "month"
+}

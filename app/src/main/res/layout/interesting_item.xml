@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/InterestingCardView"
-    android:id="@+id/interestingItemLayoutCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp">
+    android:layout_marginEnd="16dp"
+    app:cardBackgroundColor="?page_background_color"
+    app:rippleColor="@null">
+
+    <com.example.studita.presentation.views.press_view.PressFrameLayout
+        android:id="@+id/interestingItemLayoutCardView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/interesting_item_background"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/defaultRLMargin"
-        android:orientation="vertical"
-        android:background="@drawable/interesting_item_background">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/interestingItemTagsTextView"

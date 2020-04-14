@@ -1,7 +1,7 @@
 package com.example.studita.di.data
 
 import com.example.studita.di.DiskModule
-import com.example.studita.data.database.authentication.LogInCacheImpl
+import com.example.studita.data.cache.authentication.LogInCacheImpl
 import com.example.studita.data.entity.mapper.AuthorizationRequestMapper
 import com.example.studita.data.entity.mapper.LogInResponseDataMapper
 import com.example.studita.data.net.AuthorizationService

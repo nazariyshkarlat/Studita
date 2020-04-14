@@ -1,6 +1,6 @@
 package com.example.studita.data.repository.datasource.levels
 
-import com.example.studita.data.database.levels.LevelsCache
+import com.example.studita.data.cache.levels.LevelsCache
 import com.example.studita.data.entity.level.LevelsDeserializer
 import com.example.studita.data.entity.level.LevelEntity
 import com.example.studita.data.net.connection.ConnectionManager
@@ -29,11 +29,11 @@ class CloudLevelsJsonDataStore(
     }
 
 
-    override suspend fun getLevelsJson(): String =
+    override suspend fun getLevelsJson(isLoggedIn: Boolean): String =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         }else{
-            val launchesAsync = levelsService.getLevelsAsync()
+            val launchesAsync = levelsService.getLevelsAsync(isLoggedIn)
             val result = launchesAsync.await()
             val body = result.body()!!
             levelsCache.saveLevelsJson(body.toString())

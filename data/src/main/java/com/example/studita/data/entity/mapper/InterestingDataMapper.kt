@@ -4,21 +4,24 @@ import com.example.studita.data.entity.interesting.InterestingEntity
 import com.example.studita.data.entity.interesting.InterestingEntityStepEntity
 import com.example.studita.domain.entity.InterestingData
 import com.example.studita.domain.entity.InterestingDataScreen
-import com.example.studita.domain.entity.InterestingDataSpecific
 import java.io.IOException
 
 class InterestingDataMapper : Mapper<InterestingEntity, InterestingData>{
     override fun map(source: InterestingEntity): InterestingData =
-        InterestingData(source.number, listOf(InterestingDataScreen.InterestingDataStartScreen(source.title, source.subtitle, source.difficultyLevel), InterestingDataScreen.InterestingDataExplanationScreen(source.explanationParts), *mapInterestingSteps(source.steps).toTypedArray()))
+        InterestingData(source.number, listOf(InterestingDataScreen.InterestingDataStartScreen(source.title, source.subtitle, source.difficultyLevel), *mapInterestingSteps(source.steps).toTypedArray(), InterestingDataScreen.InterestingDataExplanationScreen(source.explanationParts)))
 
 
-    private fun mapInterestingSteps(source: List<InterestingEntityStepEntity>): List<InterestingDataScreen.InterestingDataStepScreen> =
-        source.map { InterestingDataScreen.InterestingDataStepScreen(it.title, it.subtitle, mapInterestingSpecific(it.specific)) }
+    private fun mapInterestingSteps(source: List<InterestingEntityStepEntity>): List<InterestingDataScreen> =
+        source.map {
+            if (it.specific != null)
+                mapInterestingSpecific(it.specific)
+            else
+                InterestingDataScreen.InterestingDataStepScreen(it.title, it.subtitle)
+        }
 
-    private fun mapInterestingSpecific(string: String?) =
+    private fun mapInterestingSpecific(string: String): InterestingDataScreen =
         when(string){
-            "drumroll" -> InterestingDataSpecific.DRUMROLL
-            null -> null
+            "drum_roll" -> InterestingDataScreen.InterestingDataSpecificDrumRollScreen
             else -> throw IOException("unknown type of interesting specific")
         }
 

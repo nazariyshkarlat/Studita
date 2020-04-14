@@ -15,4 +15,8 @@ class CustomProgressBar @JvmOverloads constructor(
         get() {
             return progress/max.toFloat()
         }
+
+    fun clearProgress(){
+        this.progress = 0
+    }
 }

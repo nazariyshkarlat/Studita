@@ -3,6 +3,7 @@ package com.example.studita.presentation.listeners
 import android.graphics.Rect
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
+import android.view.SoundEffectConstants
 import android.view.View
 import android.view.View.OnTouchListener
 
@@ -22,6 +23,7 @@ abstract class ViewOnTouch : OnTouchListener {
             }
             MotionEvent.ACTION_UP -> {
                 if (touchStayedWithinViewBounds) {
+                    view.playSoundEffect(SoundEffectConstants.CLICK);
                     onUpTouchAction(event.x, event.y)
                 }
                 true

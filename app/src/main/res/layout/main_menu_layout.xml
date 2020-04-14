@@ -87,7 +87,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_outline_settings_50" />
+                        app:srcCompat="@drawable/ic_outline_settings_secondary" />
 
                     <TextView
                         style="@style/Medium16_50"
@@ -112,7 +112,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_outline_help_50" />
+                        app:srcCompat="@drawable/ic_outline_help_secondary" />
 
                     <TextView
                         style="@style/Medium16_50"

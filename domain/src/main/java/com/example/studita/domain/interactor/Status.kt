@@ -76,3 +76,17 @@ sealed class InterestingStatus{
     object NoInterestingFound: InterestingStatus()
     data class Success(val result: InterestingData): InterestingStatus()
 }
+
+sealed class SubscribeEmailStatus{
+    object ServiceUnavailable : SubscribeEmailStatus()
+    object NoConnection : SubscribeEmailStatus()
+    object Failure: SubscribeEmailStatus()
+    data class Success(val result: String): SubscribeEmailStatus()
+}
+
+sealed class SaveObtainedExerciseDataStatus{
+    object ServiceUnavailable : SaveObtainedExerciseDataStatus()
+    object NoConnection : SaveObtainedExerciseDataStatus()
+    object Failure: SaveObtainedExerciseDataStatus()
+    object Success: SaveObtainedExerciseDataStatus()
+}

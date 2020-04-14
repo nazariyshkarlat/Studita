@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import com.example.studita.BuildConfig
-import com.example.studita.data.net.ConnectionManagerImpl
+import com.example.studita.data.net.connection.ConnectionManagerImpl
 import com.example.studita.data.net.connection.ConnectionManager
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 object NetworkModule {
 
-    private const val BASE_URL = "http://10.0.2.2:5000"
+    private const val BASE_URL = "http://192.168.1.143:5000"
 
     lateinit var connectionManager: ConnectionManager
     private lateinit var retrofit: Retrofit
@@ -24,9 +24,10 @@ object NetworkModule {
 
     fun initialize(app: Application) {
         context = app
-        connectionManager = ConnectionManagerImpl(
-            getConnectivityManager(app)
-        )
+        connectionManager =
+            ConnectionManagerImpl(
+                getConnectivityManager(app)
+            )
         retrofit =
             getRetrofit(
                 getOkHttpClient(

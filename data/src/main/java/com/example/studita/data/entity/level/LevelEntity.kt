@@ -21,4 +21,8 @@ sealed class LevelChildEntity {
         @SerializedName("subtitle") val subtitle: String,
         @SerializedName("tags") val tags: List<String>
     ): LevelChildEntity()
+    data class LevelSubscribeEntity(
+        @SerializedName("title") val title: String,
+        @SerializedName("button") val button: List<String>
+    ): LevelChildEntity()
 }

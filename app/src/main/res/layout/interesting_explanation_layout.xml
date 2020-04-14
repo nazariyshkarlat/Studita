@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="@dimen/toolbarHeight"
+    android:paddingBottom="@dimen/buttonWithPaddingHeight"
     android:clipToPadding="false">
 
     <LinearLayout
@@ -14,7 +15,7 @@
         android:id="@+id/interestingExplanationLayoutParentLinearLayout"
         android:orientation="vertical"
         android:layout_marginStart="@dimen/defaultRLMargin"
-        android:layout_marginEnd="32dp">
+        android:layout_marginEnd="@dimen/defaultRLMargin">
 
         <TextView
             style="@style/Medium24"
@@ -29,6 +30,7 @@
             android:orientation="vertical"
             android:background="@drawable/main_blocks_rectangle"
             android:layout_marginTop="24dp"
+            android:paddingTop="16dp"
             android:gravity="center">
 
             <TextView
@@ -38,10 +40,12 @@
                 android:layout_height="wrap_content"/>
 
             <LinearLayout
+                android:id="@+id/interestingExplanationLayoutThumbsLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:gravity="center">
                 <ImageView
                     android:id="@+id/interestingExplanationLayoutThumbUp"

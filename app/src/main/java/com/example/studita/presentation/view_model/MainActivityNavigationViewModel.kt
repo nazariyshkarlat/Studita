@@ -1,13 +1,10 @@
 package com.example.studita.presentation.view_model
 
 import android.view.MenuItem
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.studita.R
 import com.example.studita.presentation.fragments.AchievementsFragment
 import com.example.studita.presentation.fragments.CompetitionsFragment
-import com.example.studita.presentation.fragments.ExercisesResultFragment
 import com.example.studita.presentation.fragments.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.lang.UnsupportedOperationException
@@ -17,7 +14,7 @@ class MainActivityNavigationViewModel: ViewModel(), BottomNavigationView.OnNavig
     val navigationSelectedIdState = SingleLiveEvent<Int>()
     val navigationState = SingleLiveEvent<Pair<BottomNavigationEnum, String>>()
 
-    val homeFragment = HomeFragment()
+    private val homeFragment = HomeFragment()
     private val backStack : ArrayList<Pair<Int, String>> = arrayListOf(R.id.bottomNavigationFirstItem to homeFragment.javaClass.name)
 
     init{

@@ -2,6 +2,7 @@ package com.example.studita.data.repository.datasource.user_statistics
 
 import com.example.studita.data.entity.UserDataEntity
 import com.example.studita.data.entity.UserStatisticsEntity
+import com.example.studita.data.entity.UserTokenId
 import com.example.studita.data.repository.datasource.user_data.UserDataJsonDataStore
 import com.example.studita.domain.enum.UserStatisticsTime
 import com.google.gson.Gson
@@ -12,8 +13,8 @@ class UserStatisticsDataStoreImpl(private val useStatisticsJsonDataStore: UserSt
 
     private val type: Type = object : TypeToken<UserStatisticsEntity>() {}.type
 
-    override suspend fun getUserStatisticsEntity(userId: String, userToken: String, time: UserStatisticsTime): Pair<Int, UserStatisticsEntity>{
-        val pair = useStatisticsJsonDataStore.getUserStatisticsJson(userId, userToken, time)
+    override suspend fun getUserStatisticsEntity(userTokenId: UserTokenId, time: UserStatisticsTime): Pair<Int, UserStatisticsEntity>{
+        val pair = useStatisticsJsonDataStore.getUserStatisticsJson(userTokenId, time)
         return pair.first to Gson().fromJson<UserStatisticsEntity>(pair.second, type)
     }
 

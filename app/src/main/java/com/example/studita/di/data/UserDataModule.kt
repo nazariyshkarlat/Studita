@@ -1,6 +1,6 @@
 package com.example.studita.di.data
 
-import com.example.studita.data.database.user_data.UserDataCacheImpl
+import com.example.studita.data.cache.user_data.UserDataCacheImpl
 import com.example.studita.data.entity.mapper.UserDataDataMapper
 import com.example.studita.data.net.UserDataService
 import com.example.studita.data.repository.UserDataRepositoryImpl
@@ -49,18 +49,18 @@ object UserDataModule {
 
     private fun getUserDataJsonDataStoreFactory() =
         UserDataJsonDataStoreFactoryImpl(
-            getCloudUserDataDataStore(),
-            getDiskUserDataDataStore()
+            getCloudUserDataJsonDataStore(),
+            getDiskUserDataJsonDataStore()
         )
 
-    private fun getCloudUserDataDataStore() =
+    private fun getCloudUserDataJsonDataStore() =
         CloudUserDataJsonDataStore(
             NetworkModule.connectionManager,
             NetworkModule.getService(UserDataService::class.java),
             getUserDataCacheImpl()
         )
 
-    private fun getDiskUserDataDataStore() =
+    private fun getDiskUserDataJsonDataStore() =
         DiskUserDataJsonDataStore(getUserDataCacheImpl())
 
 

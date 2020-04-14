@@ -1,9 +1,6 @@
 package com.example.studita.data.repository.datasource.interesting
 
-import com.example.studita.data.database.chapter_parts.ChapterCache
-import com.example.studita.data.database.interesting.InterestingCache
-import com.example.studita.data.entity.interesting.InterestingEntity
-import com.example.studita.data.net.ChapterService
+import com.example.studita.data.cache.interesting.InterestingCache
 import com.example.studita.data.net.InterestingService
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.domain.exception.NetworkConnectionException

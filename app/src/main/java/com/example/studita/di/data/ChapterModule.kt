@@ -1,7 +1,7 @@
 package com.example.studita.di.data
 
 import com.example.studita.di.DiskModule
-import com.example.studita.data.database.chapter_parts.ChapterCacheImpl
+import com.example.studita.data.cache.chapter.ChapterCacheImpl
 import com.example.studita.data.entity.mapper.ChapterDataMapper
 import com.example.studita.data.net.ChapterService
 import com.example.studita.data.repository.ChapterRepositoryImpl

@@ -9,7 +9,7 @@ import com.example.studita.domain.entity.LevelChildData
 
 class ChapterDataMapper : Mapper<ChapterEntity, ChapterData>{
     override fun map(source: ChapterEntity): ChapterData
-        = ChapterData(source.title, mapChapterParts(source.parts))
+        = ChapterData(source.chapterNumber, source.title, mapChapterParts(source.parts))
 
     private fun mapChapterParts(source: List<ChapterPartEntity>) : List<ChapterPartData>{
         return source.map { mapChapterPart(it) }

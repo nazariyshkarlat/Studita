@@ -27,4 +27,5 @@
     <dimen name="negativeErrorSnackbarHeight">-37dp</dimen>
     <dimen name="connectionSnackbarTextSize">12sp</dimen>
     <dimen name="errorSnackbarTextSize">14sp</dimen>
+    <item name="bars_alpha" type="dimen" format="float">0.96</item>
 </resources>

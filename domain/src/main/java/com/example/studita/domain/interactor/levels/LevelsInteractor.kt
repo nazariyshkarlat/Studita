@@ -4,6 +4,6 @@ import com.example.studita.domain.interactor.LevelsStatus
 
 interface LevelsInteractor{
 
-    suspend fun getLevels(): LevelsStatus
+    suspend fun getLevels(isLoggedIn: Boolean): LevelsStatus
 
 }

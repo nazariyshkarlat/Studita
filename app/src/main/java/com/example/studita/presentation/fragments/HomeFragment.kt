@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.studita.R
 import com.example.studita.domain.entity.UserDataData
+import com.example.studita.domain.interactor.SubscribeEmailStatus
 import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.presentation.adapter.levels.LevelsAdapter
 import com.example.studita.presentation.draw.AvaDrawer
@@ -17,15 +18,24 @@ import com.example.studita.presentation.utils.startActivity
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.listeners.FabRecyclerImpl
 import com.example.studita.presentation.listeners.FabScrollListener
-import com.example.studita.presentation.model.mapper.HomeUserDataUiModelMapper
+import com.example.studita.presentation.model.HomeRecyclerUiModel
+import com.example.studita.presentation.utils.TextUtils
+import com.example.studita.presentation.utils.TimeUtils
+import com.example.studita.presentation.utils.UserUtils
 import com.example.studita.presentation.view_model.ChapterViewModel
 import com.example.studita.presentation.view_model.HomeFragmentViewModel
 import com.example.studita.presentation.view_model.MainFragmentViewModel
+import com.example.studita.presentation.views.CustomSnackbar
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.home_layout_bar.*
+import java.util.*
 
 class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetChangedListener, FabScrollListener{
+
+    companion object{
+        var needsRefresh = false
+    }
 
     private var homeFragmentViewModel: HomeFragmentViewModel? = null
     private var chapterPartsViewModel: ChapterViewModel? = null
@@ -54,10 +64,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer<Boolean> { done ->
                     if (done) {
-                        ChapterBottomSheetFragment().show(
-                            (context as AppCompatActivity).supportFragmentManager,
-                            null
-                        )
                     }
                 })
         }
@@ -65,14 +71,13 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         homeFragmentViewModel?.let {
             it.progressState.observe(
                 viewLifecycleOwner,
-                androidx.lifecycle.Observer<Boolean> { done ->
+                androidx.lifecycle.Observer { done ->
                     if (done) {
                         mainFragmentViewModel?.showProgress(false)
-                        val userDataResult = it.userDataState.value
                         homeLayoutRecyclerView.adapter =
                             LevelsAdapter(
-                                it.getRecyclerItems(HomeUserDataUiModelMapper().map(userDataResult ?: UserDataData("", "",  1, 0, 0)), it.results)
-                            )
+                                it.getRecyclerItems(HomeRecyclerUiModel.HomeUserDataUiModel, it.results),
+                                it)
                         homeLayoutRecyclerView.visibility = View.VISIBLE
                     } else {
                         homeLayoutRecyclerView.visibility = View.GONE
@@ -87,6 +92,12 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 homeLayoutBarLogInButton.visibility = View.GONE
                 homeLayoutBarAccountImageView.visibility = View.VISIBLE
 
+                UserUtils.userData = data
+
+                if(TimeUtils.getCalendarDayCount(Date(), data.streakDate) > 1F){
+                    data.streakDays = 0
+                }
+
                 if (data.avatarLink == null) {
                     AvaDrawer.drawAwa(homeLayoutBarAccountImageView, data.userName)
                 } else {
@@ -99,7 +110,21 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 }
             })
 
-            if(loggedIn(it.userToken, it.userId)){
+            it.subscribeEmailState.observe(viewLifecycleOwner, androidx.lifecycle.Observer { pair ->
+                val subscribe = pair.first
+                val status = pair.second
+                status as SubscribeEmailStatus.Success
+                UserUtils.userData!!.isSubscribed = subscribe
+                homeLayoutRecyclerView.adapter?.notifyItemChanged(homeLayoutRecyclerView.adapter!!.itemCount-2)
+                val snackbar = CustomSnackbar(view.context)
+                if(subscribe){
+                    snackbar.show(resources.getString(R.string.subscribe_email, TextUtils.encryptEmail(status.result)), R.color.blue, 5000, bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight).toInt())
+                }else{
+                    snackbar.show(resources.getString(R.string.unsubscribe_email), R.color.blue, 3000, bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight).toInt())
+                }
+            })
+
+            if(UserUtils.isLoggedIn()){
                 homeLayoutBarLogInButton.visibility = View.GONE
                 homeLayoutBarAccountImageView.visibility = View.VISIBLE
             }
@@ -110,14 +135,14 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         homeLayoutRecyclerView.addOnScrollListener(FabRecyclerImpl(this))
 
         homeLayoutBarTitle.setOnClickListener { onThemeChangeListener?.onThemeChanged() }
-
     }
 
-    private fun loggedIn(userToken: String?, userId: String?): Boolean{
-        if((userToken != null) and (userId != null)){
-            return true
+    override fun onResume() {
+        super.onResume()
+        if(needsRefresh) {
+            homeLayoutRecyclerView.adapter?.notifyDataSetChanged()
+            needsRefresh = false
         }
-        return false
     }
 
     override fun onScroll(

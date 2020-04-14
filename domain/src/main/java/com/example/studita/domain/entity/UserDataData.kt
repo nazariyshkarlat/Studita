@@ -1,3 +1,5 @@
 package com.example.studita.domain.entity
 
-data class UserDataData(val userName: String, val avatarLink: String?, val currentLevel: Int, val currentLevelXP: Int, val streakDays: Int)
+import java.util.*
+
+data class UserDataData(var userName: String, var avatarLink: String?, var currentLevel: Int, var currentLevelXP: Int, var streakDays: Int, var isSubscribed: Boolean, val completedParts: ArrayList<Int>, var streakDate: Date)

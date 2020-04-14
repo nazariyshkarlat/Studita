@@ -1,6 +1,6 @@
 package com.example.studita.di.data
 
-import com.example.studita.data.database.user_statistics.UserStatisticsCacheImpl
+import com.example.studita.data.cache.user_statistics.UserStatisticsCacheImpl
 import com.example.studita.data.entity.mapper.UserStatisticsDataMapper
 import com.example.studita.data.net.UserStatisticsService
 import com.example.studita.data.repository.UserStatisticsRepositoryImpl

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/defaultRLMargin"
+    android:paddingEnd="@dimen/defaultRLMargin"
+    android:paddingTop="24dp"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/chapterHeaderTitle"
+        style="@style/Medium24"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
+
+    <com.example.studita.presentation.views.CustomProgressBar
+        android:id="@+id/chapterHeaderProgressBar"
+        style="@style/CustomProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_marginTop="26dp"/>
+
+    <TextView
+        android:id="@+id/chapterHeaderProgressText"
+        style="@style/Regular14_50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="4dp"/>
+
+</LinearLayout>

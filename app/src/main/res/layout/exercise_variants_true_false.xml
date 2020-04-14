@@ -3,7 +3,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/toolbarHeight"
     android:gravity="center"
     android:layout_gravity="center">
 
@@ -15,30 +14,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <ScrollView
-        android:id="@+id/exerciseVariantsTrueFalseScrollView"
+    <LinearLayout
+        android:id="@+id/exerciseVariantsTrueFalseLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp">
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/exerciseVariantsTrueFalseLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:orientation="vertical" >
+        <include
+            android:id="@+id/exerciseVariantsTrueFalseTrue"
+            layout="@layout/exercise_variant_text_item"/>
 
-            <include
-                android:id="@+id/exerciseVariantsTrueFalseTrue"
-                layout="@layout/exercise_variant_text_item"/>
+        <include
+            android:id="@+id/exerciseVariantsTrueFalseFalse"
+            layout="@layout/exercise_variant_text_item"/>
 
-            <include
-                android:id="@+id/exerciseVariantsTrueFalseFalse"
-                layout="@layout/exercise_variant_text_item"/>
+    </LinearLayout>
 
-        </LinearLayout>
-
-    </ScrollView>
 
 </LinearLayout>

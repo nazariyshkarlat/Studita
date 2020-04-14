@@ -1,6 +1,6 @@
 package com.example.studita.data.repository.datasource.chapter
 
-import com.example.studita.data.database.chapter_parts.ChapterCache
+import com.example.studita.data.cache.chapter.ChapterCache
 import com.example.studita.domain.exception.NetworkConnectionException
 
 class DiskChapterJsonDataStore(

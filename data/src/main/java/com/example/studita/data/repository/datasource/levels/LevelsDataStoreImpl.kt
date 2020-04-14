@@ -20,8 +20,8 @@ class LevelsDataStoreImpl(private val levelsJsonDataStore: LevelsJsonDataStore) 
         type = object : TypeToken<List<LevelEntity>>() {}.type
     }
 
-    override suspend fun getLevelsEntityList(): List<LevelEntity>{
-        val json = levelsJsonDataStore.getLevelsJson()
+    override suspend fun getLevelsEntityList(isLoggedIn: Boolean): List<LevelEntity>{
+        val json = levelsJsonDataStore.getLevelsJson(isLoggedIn)
         return gson.fromJson<List<LevelEntity>>(json, type)
     }
 

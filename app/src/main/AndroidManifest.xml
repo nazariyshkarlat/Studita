@@ -31,6 +31,9 @@
         <activity android:name=".presentation.activities.ExercisesActivity"
             android:windowSoftInputMode="adjustResize">
         </activity>
+        <activity android:name=".presentation.activities.InterestingActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
         <activity android:name=".presentation.activities.ShareActivity">
             <intent-filter>
                 <data android:scheme="https"

@@ -3,7 +3,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/toolbarHeight"
     android:gravity="center"
     android:layout_gravity="center">
 
@@ -24,20 +23,13 @@
         android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"/>
 
-    <ScrollView
-        android:id="@+id/exerciseVariantsTitleFragmentScrollView"
+    <LinearLayout
+        android:id="@+id/exerciseVariantsTitleFragmentLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp">
-
-        <LinearLayout
-            android:id="@+id/exerciseVariantsTitleFragmentLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:orientation="vertical" />
-
-    </ScrollView>
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical" />
 
 </LinearLayout>

@@ -5,85 +5,101 @@
     android:paddingStart="@dimen/defaultRLMargin"
     android:paddingEnd="@dimen/defaultRLMargin">
 
-    <LinearLayout android:layout_width="match_parent"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/main_blocks_rectangle"
+            android:padding="@dimen/defaultRLMargin">
+
+            <LinearLayout
+                android:id="@+id/userStatPageContentView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/userStatPageLayoutXPTitle"
+                        style="@style/Regular16_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_stat_title1"/>
+
+                    <TextView
+                        android:id="@+id/userStatPageLayoutXPSubtitle"
+                        style="@style/Medium18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"/>
+
+                    <TextView
+                        android:id="@+id/userStatPageLayoutTimeTitle"
+                        style="@style/Regular16_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_stat_title2"
+                        android:layout_marginTop="24dp"/>
+
+                    <TextView
+                        android:id="@+id/userStatPageLayoutTimeSubtitle"
+                        style="@style/Medium18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"/>
+
+                    <TextView
+                        android:id="@+id/userStatPageLayoutLessonsTitle"
+                        style="@style/Regular16_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_stat_title3"
+                        android:layout_marginTop="24dp"/>
+
+                    <TextView
+                        android:id="@+id/userStatPageLayoutLessonsSubtitle"
+                        style="@style/Medium18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"/>
+
+                    <TextView
+                        android:id="@+id/userStatPageLayoutTrainingsTitle"
+                        style="@style/Regular16_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_stat_title4"
+                        android:layout_marginTop="24dp"/>
+
+                    <TextView
+                        android:id="@+id/userStatPageLayoutTrainingsSubtitle"
+                        style="@style/Medium18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"/>
+
+                    <TextView
+                        android:id="@+id/userStatPageLayoutAchievementsTitle"
+                        style="@style/Regular16_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_stat_title5"
+                        android:layout_marginTop="24dp"/>
+
+                    <TextView
+                        android:id="@+id/userStatPageLayoutAchievementsSubtitle"
+                        style="@style/Medium18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    <ProgressBar
+       android:id="@+id/userStatPageLayoutProgressBar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/main_blocks_rectangle"
-        android:padding="@dimen/defaultRLMargin">
+        android:layout_gravity="center"/>
 
-            <TextView
-                android:id="@+id/userStatPageLayoutXPTitle"
-                style="@style/Regular16_50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/user_stat_title1"/>
-
-            <TextView
-                android:id="@+id/userStatPageLayoutXPSubtitle"
-                style="@style/Medium18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"/>
-
-            <TextView
-                android:id="@+id/userStatPageLayoutTimeTitle"
-                style="@style/Regular16_50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/user_stat_title2"
-                android:layout_marginTop="24dp"/>
-
-            <TextView
-                android:id="@+id/userStatPageLayoutTimeSubtitle"
-                style="@style/Medium18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"/>
-
-            <TextView
-                android:id="@+id/userStatPageLayoutLessonsTitle"
-                style="@style/Regular16_50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/user_stat_title3"
-                android:layout_marginTop="24dp"/>
-
-            <TextView
-                android:id="@+id/userStatPageLayoutLessonsSubtitle"
-                style="@style/Medium18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"/>
-
-            <TextView
-                android:id="@+id/userStatPageLayoutTrainingsTitle"
-                style="@style/Regular16_50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/user_stat_title4"
-                android:layout_marginTop="24dp"/>
-
-            <TextView
-                android:id="@+id/userStatPageLayoutTrainingsSubtitle"
-                style="@style/Medium18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"/>
-
-            <TextView
-                android:id="@+id/userStatPageLayoutAchievementsTitle"
-                style="@style/Regular16_50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/user_stat_title5"
-                android:layout_marginTop="24dp"/>
-
-            <TextView
-                android:id="@+id/userStatPageLayoutAchievementsSubtitle"
-                style="@style/Medium18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"/>
-
-    </LinearLayout>
 </FrameLayout>

@@ -6,7 +6,7 @@ import android.widget.ProgressBar
 
 class ProgressBarAnimation(private val progressBar: ProgressBar, from: Float, to: Float) : Animation() {
     private val from: Float = from * progressBar.max.toFloat()
-    private val to: Float = to * progressBar.max.toFloat()
+    private val to: Float = if((to * progressBar.max.toFloat()) < progressBar.max) to * progressBar.max.toFloat() else progressBar.max.toFloat()
     override fun applyTransformation(
         interpolatedTime: Float,
         t: Transformation

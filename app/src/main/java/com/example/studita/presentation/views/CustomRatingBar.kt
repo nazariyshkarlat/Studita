@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.example.studita.R
@@ -17,7 +16,7 @@ class CustomRatingBar @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr){
 
-    private var selectedStar = 0
+    var selectedStar = 0
 
     private val starsCount = 5
 
@@ -31,7 +30,7 @@ class CustomRatingBar @JvmOverloads constructor(
     private var onRatingSelected: (Int) -> Unit  = {}
 
     private val starEmpty: VectorDrawableCompat =
-        VectorDrawableCompat.create(context.resources, R.drawable.ic_star_border_50, context.theme)!!.apply {
+        VectorDrawableCompat.create(context.resources, R.drawable.ic_star_border_secondary, context.theme)!!.apply {
             setBounds(0, 0, starHeight, starWidth)
             println(starHeight)
         }

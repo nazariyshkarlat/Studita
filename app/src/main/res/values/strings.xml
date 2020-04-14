@@ -84,14 +84,20 @@
     <string name="minutes">мин</string>
     <string name="seconds">сек</string>
     <string name="exercises_description_title">Введение в задание</string>
-    <string name="interesting_explanation_title">Интересное</string>
+    <string name="interesting_explanation_title">Объяснение</string>
     <string name="interesting_explanation_rating">Понравился фокус?</string>
     <string name="continue_string">Продолжить</string>
     <string name="exercise_shape_0_rect">Ни один квадрат</string>
     <string name="exercises_XP_result">+%1$d XP</string>
+    <string name="exercises_XP_bonus">+%1$d XP бонус</string>
+    <string name="new_level">Уровень повышен</string>
     <string name="server_client_id">563230539724-1j3osvmuqtuovqr0am2qj2evm7l7cln8.apps.googleusercontent.com</string>
     <string name="custom_bottom_sheet_behavior" translatable="false">com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior</string>
     <string name="studita_account">Studita</string>
+    <string name="exercise_snackbar_chapter_completed_reason">Поздравляем! Вы полностью завершили всю тему!</string>
+    <string name="exercise_snackbar_bad_result_reason">Мы советуем пройти это задание ещё раз, чтобы закрепить свои знания</string>
+    <string name="drum_roll_title">Барабанная дробь!</string>
+    <string name="drum_roll_subtitle">Воспроизвести барабанную дробь</string>
     <string name="account_type" translatable="false">com.example.studita.authentication.StuditaAccount</string>
     <string name="network_absent">Нет подключения. Вы оффлайн</string>
     <string name="back_online">Подключение восстановлено</string>
@@ -100,4 +106,6 @@
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <string name="difficulty_level">Уровень сложности</string>
+    <string name="subscribe_email">Вы успешно подписались! Когда новые задания будут доступны, вы получите письмо на почту %1$s</string>
+    <string name="unsubscribe_email">Вы отписались от обновлений</string>
 </resources>

@@ -4,6 +4,6 @@ import com.example.studita.data.entity.level.LevelEntity
 
 interface LevelsJsonDataStore {
 
-    suspend fun getLevelsJson(): String
+    suspend fun getLevelsJson(isLoggedIn: Boolean): String
 
 }
