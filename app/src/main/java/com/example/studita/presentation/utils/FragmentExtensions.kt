@@ -48,7 +48,7 @@ fun AppCompatActivity.navigateBack(fragment: Fragment){
     fragmentTransaction.commit()
 }
 
-fun AppCompatActivity.replaceWithAnim(fragment: Fragment, container: Int, startAnim: Int, endAnim: Int) {
+fun AppCompatActivity.replace(fragment: Fragment, container: Int, startAnim: Int = 0, endAnim: Int = 0) {
     supportFragmentManager.beginTransaction()
         .setCustomAnimations(startAnim, endAnim, 0, 0)
         .replace(container, fragment)

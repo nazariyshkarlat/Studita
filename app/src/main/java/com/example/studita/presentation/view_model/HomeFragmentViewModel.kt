@@ -45,7 +45,6 @@ class HomeFragmentViewModel : ViewModel(){
 
     private fun getLevels(userTokenIdData: UserTokenIdData?){
         levelsJob = viewModelScope.launchExt(levelsJob){
-            progressState.postValue(false)
             getUserData(userTokenIdData)
             when(val status = levelsInteractor.getLevels(UserUtils.isLoggedIn())){
                 is LevelsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
@@ -54,7 +53,6 @@ class HomeFragmentViewModel : ViewModel(){
                     progressState.postValue(true)
                     results = LevelUiModelMapper()
                         .map(status.result)
-                    println(results)
                 }
             }
         }

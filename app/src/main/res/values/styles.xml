@@ -8,7 +8,7 @@
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
         <item name="splash_screen_color">@color/gray11</item>
-        <item name="splash_screen_text_color">@color/white34</item>
+        <item name="colorControlNormal">?secondary_color</item>
     </style>
 
     <style name="LightTheme" parent="AppTheme">
@@ -161,6 +161,12 @@
         <item name="android:textSize">24sp</item>
     </style>
 
+    <style name="Regular24" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
     <style name="Medium16_50" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textColor">?attr/secondary_color</item>
@@ -183,6 +189,12 @@
     <style name="Medium18White" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textColor">@color/white87</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Regular18Green" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/green</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -262,6 +274,14 @@
         <item name="android:background">@drawable/button_blue_8</item>
         <item name="android:textAppearance">@style/Medium16White</item>
         <item name="android:textColor">@color/blue_button_8_text_color</item>
+    </style>
+
+    <style name="TryAgainButton" parent="Button12">
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/Medium16Blue</item>
+        <item name="android:drawableLeft">@drawable/refresh_animation</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:text">@string/try_again</item>
     </style>
 
     <style name="ExerciseVariant" parent="android:Widget.TextView">

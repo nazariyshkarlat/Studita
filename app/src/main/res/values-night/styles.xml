@@ -9,5 +9,6 @@
         <item name="android:splitMotionEvents">false</item>
         <item name="splash_screen_color">@color/gray11</item>
         <item name="splash_screen_text_color">@color/white34</item>
+        <item name="colorControlNormal">?secondary_color</item>
     </style>
 </resources>

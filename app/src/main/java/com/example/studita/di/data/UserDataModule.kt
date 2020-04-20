@@ -1,12 +1,11 @@
 package com.example.studita.di.data
 
-import com.example.studita.data.cache.user_data.UserDataCacheImpl
 import com.example.studita.data.entity.mapper.UserDataDataMapper
 import com.example.studita.data.net.UserDataService
 import com.example.studita.data.repository.UserDataRepositoryImpl
 import com.example.studita.data.repository.datasource.user_data.*
 import com.example.studita.di.DI
-import com.example.studita.di.DiskModule
+import com.example.studita.di.DatabaseModule
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.user_data.UserDataInteractor
 import com.example.studita.domain.interactor.user_data.UserDataInteractorImpl
@@ -49,23 +48,21 @@ object UserDataModule {
 
     private fun getUserDataJsonDataStoreFactory() =
         UserDataJsonDataStoreFactoryImpl(
-            getCloudUserDataJsonDataStore(),
-            getDiskUserDataJsonDataStore()
+            getCloudUserDataDataStore(),
+            getDiskUserDataDataStore()
         )
 
-    private fun getCloudUserDataJsonDataStore() =
-        CloudUserDataJsonDataStore(
+    private fun getCloudUserDataDataStore() =
+        CloudUserDataDataStore(
             NetworkModule.connectionManager,
             NetworkModule.getService(UserDataService::class.java),
-            getUserDataCacheImpl()
+            getUserDataDao()
         )
 
-    private fun getDiskUserDataJsonDataStore() =
-        DiskUserDataJsonDataStore(getUserDataCacheImpl())
+    private fun getDiskUserDataDataStore() =
+        DiskUserDataDataStore(getUserDataDao())
 
-
-    private fun getUserDataCacheImpl() =
-        UserDataCacheImpl(DiskModule.sharedPreferences)
+    private fun getUserDataDao() = DatabaseModule.studitaDatabase!!.getUserDataDao()
 
 
 }

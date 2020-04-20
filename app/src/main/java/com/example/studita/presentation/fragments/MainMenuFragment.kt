@@ -23,6 +23,7 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
     private val RC_SIGN_IN: Int = 0
     private var fragmentViewModel: MainMenuFragmentViewModel? = null
     private var activityViewModel: ToolbarFragmentViewModel? = null
+    lateinit var onThemeChangeListener: MainMenuThemeDialogAlertFragment.OnThemeChangeListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,6 +64,16 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
         }
 
         mainMenuScrollView.viewTreeObserver.addOnScrollChangedListener(this)
+
+        mainMenuLayoutThemeView.setOnClickListener {
+            val dialogFragment = MainMenuThemeDialogAlertFragment()
+            dialogFragment.onThemeChangeListener = onThemeChangeListener
+            dialogFragment.show((activity as AppCompatActivity).supportFragmentManager, null)
+        }
+
+        mainMenuLayoutLanguageView.setOnClickListener {
+            MainMenuLanguageDialogAlertFragment().show((activity as AppCompatActivity).supportFragmentManager, "")
+        }
 
         if (!isHidden)
             checkScrollable()

@@ -1,5 +1,6 @@
 package com.example.studita.domain.interactor.user_data
 
+import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.UserTokenIdData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.interactor.SignUpStatus
@@ -22,5 +23,9 @@ class UserDataInteractorImpl(private val repository: UserDataRepository) : UserD
             else
                 UserDataStatus.ServiceUnavailable
         }
+
+    override suspend fun saveUserData(userDataData: UserDataData) {
+        repository.saveUserData(userDataData)
+    }
 
 }

@@ -6,10 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
+import com.example.studita.di.DatabaseModule
 import com.example.studita.di.data.ObtainedExerciseDataModule
+import com.example.studita.di.data.UserDataModule
 import com.example.studita.di.data.exercise.ExerciseResultModule
 import com.example.studita.di.data.exercise.ExercisesModule
 import com.example.studita.domain.entity.ObtainedExerciseDataData
+import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.domain.entity.exercise.ExercisesResponseData
@@ -68,6 +71,7 @@ class ExercisesViewModel : ViewModel(){
     lateinit var exercisesResponseData: ExercisesResponseData
     private lateinit var exercises: List<ExerciseUiModel>
 
+    private val userDataInteractor = UserDataModule.getUserDataInteractorImpl()
     private val exercisesInteractor = ExercisesModule.getExercisesInteractorImpl()
     private val exerciseResultInteractor = ExerciseResultModule.getExerciseResultInteractorImpl()
     private val obtainedExerciseDataInteractor = ObtainedExerciseDataModule.getObtainedExerciseDataInteractorImpl()
@@ -94,33 +98,39 @@ class ExercisesViewModel : ViewModel(){
         }
     }
 
+    private fun saveUserData(userDataData: UserDataData){
+        viewModelScope.launch {
+            userDataInteractor.saveUserData(userDataData)
+        }
+    }
+
     private fun saveObtainedExercisesResult(){
         UserUtils.userData?.let {
 
             oldUserData = it.copy()
 
-            obtainedXP = LevelUtils.getObtainedXPWithBonuses(
+            obtainedXP = LevelUtils.getObtainedXP(
                 it,
-                if(isTraining) LevelUtils.TRAINING_XP else LevelUtils.getXPFromPercent(getAnswersPercent())
+                getAnswersPercent(),
+                isTraining
             )
 
-            val updateLevel = LevelUtils.isNewLevel(it, obtainedXP)
+            val newLevelsCount = LevelUtils.getNewLevelsCount(it, obtainedXP)
             val newLevelXP = LevelUtils.getNewLevelXP(it, obtainedXP)
 
             val data = ObtainedExerciseDataData(
                 training = isTraining,
                 obtainedXP = obtainedXP,
                 obtainedTime = seconds,
-                updateLevel = LevelUtils.isNewLevel(it, obtainedXP),
+                newLevelsCount = newLevelsCount,
                 newLevelXP = LevelUtils.getNewLevelXP(it, obtainedXP),
                 chapterNumber = chapterNumber
             )
 
-            it.currentLevel = if(updateLevel) it.currentLevel +1 else it.currentLevel
-
+            it.currentLevel += newLevelsCount
             it.currentLevelXP = newLevelXP
 
-            val daysDiff = TimeUtils.getCalendarDayCount(Date(), it.streakDate)
+            val daysDiff = TimeUtils.getCalendarDayCount(it.streakDate, Date())
             if(daysDiff != 0L){
                 if(it.streakDays == 0)
                     it.streakDays = 1
@@ -132,15 +142,22 @@ class ExercisesViewModel : ViewModel(){
             if(!isTraining) {
                 it.completedParts[chapterNumber - 1] = chapterPartNumber
 
-                if(getAnswersPercent() < 60F)
-                    ChapterBottomSheetFragment.snackbarShowReason = ChapterBottomSheetFragment.Companion.SnackbarShowReason.BAD_RESULT
-                else if(chapterPartNumber == chapterPartsCount)
+                if(chapterPartNumber == chapterPartsCount)
                     ChapterBottomSheetFragment.snackbarShowReason = ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED
 
+                if(getAnswersPercent() < 0.6F){
+                    ChapterBottomSheetFragment.snackbarShowReason =
+                        if(ChapterBottomSheetFragment.snackbarShowReason == ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED)
+                            ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED_AND_BAD_RESULT
+                        else
+                            ChapterBottomSheetFragment.Companion.SnackbarShowReason.BAD_RESULT
+                }
                 ChapterBottomSheetFragment.needsRefresh = true
             }
 
             HomeFragment.needsRefresh = true
+
+            saveUserData(it)
 
             viewModelScope.launch{
                 UserUtils.getUserTokenIdData()?.let { it1 ->
@@ -239,8 +256,9 @@ class ExercisesViewModel : ViewModel(){
                             exercisesToRetry.removeAt(0)
                         }
 
-                        if (arrayIndex == exercises.size - 1)
+                        if (arrayIndex == exercises.size - 1) {
                             falseAnswers = exercisesToRetry.count { it is ExerciseUiModel.ExerciseUiModelExercise }
+                        }
                         arrayIndex++
                     }
                 }

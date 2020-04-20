@@ -6,7 +6,7 @@ import com.example.studita.domain.entity.ObtainedExerciseDataData
 class ObtainedExerciseDataMapper : Mapper<ObtainedExerciseDataData, ObtainedExerciseDataEntity>{
     override fun map(source: ObtainedExerciseDataData): ObtainedExerciseDataEntity =
         ObtainedExerciseDataEntity(
-            source.updateLevel,
+            source.newLevelsCount,
             source.training,
             source.newLevelXP,
             source.obtainedXP,

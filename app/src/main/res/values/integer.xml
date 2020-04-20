@@ -4,8 +4,9 @@
     <integer name="snackbar_error_anim_duration">150</integer>
     <integer name="button_transition_duration">200</integer>
     <integer name="exercises_progress_XP_delay">200</integer>
-    <integer name="exercises_progress_XP_duration">1500</integer>
+    <integer name="exercises_progress_XP_duration">750</integer>
     <integer name="back_online_snackbar_duration">3000</integer>
     <integer name="navigatable_fragment_anim_duration">200</integer>
     <integer name="exercises_slide_anim_time">300</integer>
+    <integer name="refresh_animation_time">1000</integer>
 </resources>

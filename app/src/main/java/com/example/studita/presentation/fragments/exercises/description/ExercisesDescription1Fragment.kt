@@ -49,7 +49,7 @@ class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exer
                             ).toInt()]
                         val textSpanParts: ArrayList<SpannableString> = ArrayList(text.split(
                             "\\{.*?\\}".toRegex()).map{span -> SpannableString(span) })
-                        textSpanParts.add(spanIndex, insideBrackets.createSpannableString(color = ContextCompat.getColor(child.context, R.color.green), typeFace = ResourcesCompat.getFont(child.context, R.font.roboto_medium)))
+                        textSpanParts.add(spanIndex, insideBrackets.createSpannableString(color = ContextCompat.getColor(child.context, R.color.green)))
                         textSpanParts.forEach{part-> builder.append(part)}
                         spanIndex++
                     }

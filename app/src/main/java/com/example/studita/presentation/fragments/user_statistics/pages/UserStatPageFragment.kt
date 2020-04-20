@@ -17,7 +17,9 @@ open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(UserStatisticsViewModel::class.java)
+        viewModel = activity?.run{
+            ViewModelProviders.of(this).get(UserStatisticsViewModel::class.java)
+        }
     }
 
     fun formView(userStatisticsData: UserStatisticsData){

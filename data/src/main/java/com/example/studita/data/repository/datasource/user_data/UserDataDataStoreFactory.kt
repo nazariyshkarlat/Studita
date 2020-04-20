@@ -1,18 +1,15 @@
 package com.example.studita.data.repository.datasource.user_data
 
-import com.example.studita.data.repository.datasource.levels.LevelsJsonDataStore
-import com.example.studita.data.repository.datasource.levels.LevelsJsonDataStoreFactory
-
 class UserDataJsonDataStoreFactoryImpl(
-    private val cloudUserDataDataStore: CloudUserDataJsonDataStore,
-    private val diskUserDataJsonDataStore: DiskUserDataJsonDataStore
+    private val cloudUserDataDataStore: CloudUserDataDataStore,
+    private val diskUserDataDataStore: DiskUserDataDataStore
 ) : UserDataDataStoreFactory {
 
     override fun create(priority: UserDataDataStoreFactory.Priority) =
         if (priority == UserDataDataStoreFactory.Priority.CLOUD)
             cloudUserDataDataStore
         else
-            diskUserDataJsonDataStore
+            diskUserDataDataStore
 }
 
 interface UserDataDataStoreFactory {
@@ -22,5 +19,5 @@ interface UserDataDataStoreFactory {
         CACHE
     }
 
-    fun create(priority: Priority): UserDataJsonDataStore
+    fun create(priority: Priority): UserDataDataStore
 }

@@ -46,4 +46,10 @@
         <attr name="fel_size_right" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="CenterIconTextView">
+        <attr name="drawableTint" format="color"/>
+        <attr name="drawableSize" format="dimension"/>
+        <attr name="android:drawablePadding"/>
+    </declare-styleable>
+
 </resources>

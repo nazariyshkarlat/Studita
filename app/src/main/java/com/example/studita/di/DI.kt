@@ -19,6 +19,7 @@ object DI{
 
     fun initialize(app: Application, configuration: Config = DI.Config.RELEASE) {
         NetworkModule.initialize(app)
+        DatabaseModule.initialize(app)
         DiskModule.initialize(app)
         LevelsModule.initialize(configuration)
         ChapterModule.initialize(configuration)

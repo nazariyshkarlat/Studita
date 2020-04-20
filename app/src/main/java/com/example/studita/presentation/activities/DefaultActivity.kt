@@ -1,5 +1,6 @@
 package com.example.studita.presentation.activities
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,10 +8,16 @@ import com.example.studita.R
 import com.example.studita.di.DiskModule
 import com.example.studita.presentation.utils.startActivity
 import com.example.studita.presentation.fragments.HomeFragment
+import com.example.studita.presentation.fragments.MainMenuThemeDialogAlertFragment
 
+@SuppressLint("Registered")
+open class DefaultActivity : AppCompatActivity(),
+    MainMenuThemeDialogAlertFragment.OnThemeChangeListener {
 
-open class DefaultActivity : AppCompatActivity(), HomeFragment.OnThemeChangeListener {
-    private var themeState = Theme.DARK
+    companion object {
+        var themeState = Theme.DARK
+    }
+
     private val themes = mutableListOf(R.style.DarkTheme, R.style.LightTheme)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,10 +41,10 @@ open class DefaultActivity : AppCompatActivity(), HomeFragment.OnThemeChangeList
             Theme.DARK
     }
 
-    override fun onThemeChanged() {
-        themeState = if(themeState == Theme.DARK) Theme.LIGHT else Theme.DARK
+    override fun onThemeChanged(theme: Theme) {
+        themeState = theme
         DiskModule.sharedPreferences.edit()?.putInt("theme", themeState.ordinal)?.apply()
-        startActivity<MainActivity>()
+        startActivity<MainMenuActivity>()
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         finish()
     }

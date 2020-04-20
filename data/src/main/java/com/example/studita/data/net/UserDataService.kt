@@ -14,5 +14,5 @@ import retrofit2.http.POST
 
 interface UserDataService {
     @POST("user_data")
-    fun getUserDataAsync(@Header("Date")date: String, @Body userTokenId: UserTokenId): Deferred<Response<JsonObject>>
+    fun getUserDataAsync(@Header("Date")date: String, @Body userTokenId: UserTokenId): Deferred<Response<UserDataEntity>>
 }

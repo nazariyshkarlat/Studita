@@ -40,9 +40,15 @@ class ExerciseVariantsType2Fragment : ExerciseVariantsFragment(R.layout.exercise
             val variantView = exerciseVariantsLinearFragmentCenterLinearLayout.makeView(R.layout.exercise_variant_text_item)
             variantView.exerciseVariantTextItem.text = variant
             variantView.setOnClickListener {
-                exercisesViewModel?.selectedPos = exerciseVariantsLinearFragmentCenterLinearLayout.indexOfChild(it)
-                exercisesViewModel?.selectedPos?.let { it1 -> selectVariant(exerciseVariantsLinearFragmentCenterLinearLayout, it1) }
-                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant)
+                exercisesViewModel?.let {viewModel->
+                    viewModel.selectedPos =
+                        exerciseVariantsLinearFragmentCenterLinearLayout.indexOfChild(it)
+                        selectVariant(
+                            exerciseVariantsLinearFragmentCenterLinearLayout,
+                            viewModel.selectedPos
+                        )
+                    viewModel.exerciseRequestData = ExerciseRequestData(variant)
+                }
             }
             exerciseVariantsLinearFragmentCenterLinearLayout.addView(variantView)
         }

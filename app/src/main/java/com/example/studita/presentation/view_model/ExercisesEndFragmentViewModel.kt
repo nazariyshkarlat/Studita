@@ -19,11 +19,14 @@ class ExercisesEndFragmentViewModel : ViewModel(){
             val fragment =
                 ExercisesDetailedStatFragment()
             val bundle = Bundle()
-            arguments?.getInt("TRUE_ANSWERS")?.let { bundle.putInt("TRUE_ANSWERS", it) }
-            arguments?.getInt("FALSE_ANSWERS")?.let { bundle.putInt("FALSE_ANSWERS", it) }
-            arguments?.getInt("OBTAINED_XP")?.let { bundle.putInt("OBTAINED_XP", it) }
-            arguments?.getLong("PROCESS_SECONDS")?.let { bundle.putLong("PROCESS_SECONDS", it) }
-            fragment.arguments = bundle
+
+            arguments?.let {
+                bundle.putInt("TRUE_ANSWERS", it.getInt("TRUE_ANSWERS"))
+                bundle.putInt("FALSE_ANSWERS",  it.getInt("FALSE_ANSWERS"))
+                bundle.putInt("OBTAINED_XP", it.getInt("OBTAINED_XP"))
+                bundle.putLong("PROCESS_SECONDS",  it.getLong("PROCESS_SECONDS"))
+                arguments = bundle
+            }
             fragment
         }
 

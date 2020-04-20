@@ -1,10 +1,8 @@
-package com.example.studita.presentation.fragments.user_statistics
+package com.example.studita.presentation.activities
 
 import android.os.Bundle
-import android.view.View
 import android.view.ViewTreeObserver
 import com.example.studita.R
-import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.user_statistics.pages.UserStatMonthFragment
 import com.example.studita.presentation.fragments.user_statistics.pages.UserStatTodayFragment
 import com.example.studita.presentation.fragments.user_statistics.pages.UserStatWeekFragment
@@ -12,40 +10,38 @@ import com.example.studita.presentation.fragments.user_statistics.pages.UserStat
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.android.synthetic.main.user_stat_layout.*
 
+class UserStatActivity : DefaultActivity(), ViewTreeObserver.OnScrollChangedListener{
 
-class UserStatFragment : NavigatableFragment(R.layout.user_stat_layout), ViewTreeObserver.OnScrollChangedListener{
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.user_stat_layout)
 
         userStatLayoutTabs.setFragments(listOf(UserStatTodayFragment(), UserStatYesterdayFragment(), UserStatWeekFragment(), UserStatMonthFragment()))
         userStatLayoutTabs.setItems(listOf(resources.getString(R.string.today), resources.getString(R.string.yesterday), resources.getString(R.string.week), resources.getString(R.string.month)))
 
         userStatLayoutViewPager.offscreenPageLimit = 3
-        userStatLayoutTabs.syncWithViewPager(userStatLayoutViewPager, childFragmentManager)
+        userStatLayoutTabs.syncWithViewPager(userStatLayoutViewPager, supportFragmentManager)
 
         userStatLayoutScrollView.viewTreeObserver
             .addOnScrollChangedListener(this)
 
         toolbarLayoutTitle.text = resources.getString(R.string.stat)
         toolbarLayoutBackButton.setOnClickListener {
-            activity?.onBackPressed()
+            onBackPressed()
         }
-
-        userStatLayoutShareButton.setOnClickListener {
-        }
-
     }
 
-    override fun onDestroyView() {
+
+    override fun onDestroy() {
         userStatLayoutScrollView.viewTreeObserver
             .removeOnScrollChangedListener(this)
-        super.onDestroyView()
+        super.onDestroy()
+
     }
 
     override fun onScrollChanged() {
         val scrollY: Int = userStatLayoutScrollView.scrollY
-        toolbarLayout.background = if (scrollY != 0) context?.getDrawable(R.drawable.divider_bottom_drawable) else null
+        toolbarLayout.background = if (scrollY != 0) getDrawable(R.drawable.divider_bottom_drawable) else null
     }
 
 }

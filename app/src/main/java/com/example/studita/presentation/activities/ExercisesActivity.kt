@@ -23,14 +23,13 @@ class ExercisesActivity : DefaultActivity() {
         if(savedInstanceState == null) {
             val extras = intent.extras
             if(extras != null){
-                val chapterPartNumber = extras.getInt("CHAPTER_PART_NUMBER")
-                val chapterPartsCount = extras.getInt("CHAPTER_PARTS_COUNT")
-                val chapterNumber = extras.getInt("CHAPTER_NUMBER")
-                exercisesViewModel?.chapterPartsCount = chapterPartsCount
-                exercisesViewModel?.chapterPartNumber = chapterPartNumber
-                exercisesViewModel?.chapterNumber = chapterNumber
-                exercisesViewModel?.isTraining = extras.getBoolean("IS_TRAINING")
-                exercisesViewModel?.getExercises(chapterPartNumber)
+                exercisesViewModel?.let {
+                    it.chapterPartsCount = extras.getInt("CHAPTER_PARTS_COUNT")
+                    it.chapterPartNumber = extras.getInt("CHAPTER_PART_NUMBER")
+                    it.chapterNumber = extras.getInt("CHAPTER_NUMBER")
+                    it.isTraining = extras.getBoolean("IS_TRAINING")
+                    it.getExercises(it.chapterPartNumber)
+                }
             }
             navigateTo(ExercisesLoadFragment(), R.id.frameLayout)
         }

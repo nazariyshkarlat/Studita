@@ -16,7 +16,9 @@ class MainMenuActivity : DefaultActivity(){
 
         if(savedInstanceState == null) {
             addFragment(ToolbarFragment(), R.id.doubleTopFrameLayoutFrameLayout)
-            navigateTo(MainMenuFragment(), R.id.doubleFrameLayoutFrameLayout)
+            val mainMenuFragment = MainMenuFragment()
+            mainMenuFragment.onThemeChangeListener = this
+            navigateTo(mainMenuFragment, R.id.doubleFrameLayoutFrameLayout)
         }
     }
 

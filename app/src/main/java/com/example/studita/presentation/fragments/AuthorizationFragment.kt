@@ -1,5 +1,6 @@
 package com.example.studita.presentation.fragments
 
+import android.graphics.Interpolator
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
@@ -151,8 +153,6 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
 
         val viewHeight = view.height
 
-        println(viewHeight)
-        println(getScreenHeight())
         if((viewHeight < getScreenHeight()*0.75)){
             if(!buttonHidden) {
                 authorizationBottomSection.removeView(authorizationSignUpButton)
@@ -180,13 +180,13 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
             authorizationPasswordEditText.requestFocus()
         }
         (authorizationErrorSnackbar as TextView).text = resources.getString(resId)
-        authorizationBottomSection.animate().translationY(-resources.getDimension(R.dimen.errorSnackbarHeight)).setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong()).start()
+        authorizationBottomSection.animate().translationY(-resources.getDimension(R.dimen.errorSnackbarHeight)).setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong()).setInterpolator(FastOutSlowInInterpolator()).start()
     }
 
     private fun hideError(){
         authorizationEmailEditText.hasError = false
         authorizationPasswordEditText.hasError = false
-        authorizationBottomSection.animate().translationY(0F).setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong()).start()
+        authorizationBottomSection.animate().translationY(0F).setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong()).setInterpolator(FastOutSlowInInterpolator()).start()
     }
 
     private fun getScreenHeight() : Int {

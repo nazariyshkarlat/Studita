@@ -44,8 +44,7 @@ class ExercisesDescription2Fragment : ExercisesDescriptionFragment(R.layout.exer
                             color = ContextCompat.getColor(
                                 child.context,
                                 R.color.green
-                            ),
-                            typeFace = ResourcesCompat.getFont(child.context, R.font.roboto_medium)
+                            )
                         )
                     )
                     textSpanParts.forEach { textPartPart -> builder.append(textPartPart) }

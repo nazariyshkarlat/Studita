@@ -27,9 +27,10 @@
     <string name="navigation_bar_second">Состязания</string>
     <string name="navigation_bar_third">Ачивки</string>
     <string name="settings">Настройки</string>
+    <string name="app_theme">Тема приложения</string>
+    <string name="language">Язык</string>
     <string name="help">Помощь</string>
     <string name="learning">Обучение</string>
-    <string name="chapter_progress">Прогресс: %1$d задания из %2$d</string>
     <string name="chapter_full_progress">Прогресс: Завершено</string>
     <string name="chapter_completed_progress">Прогресс: Завершено</string>
     <string name="tasks_toolbar_title">Задания</string>
@@ -39,6 +40,10 @@
     <string name="true_answer">Вы ответили верно!</string>
     <string name="false_answer">Правильный ответ:</string>
     <string name="exercise_type_9_false_snackbar_title">Ваш результат:</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="in_settings">Перейти в настройки</string>
+    <string name="incorrect_time_layout_title">Упс! Кажется, время на вашем телефоне установлено неправильно (%1$s)</string>
+    <string name="incorrect_time_layout_subtitle">Пожалуйста, сделайте ваше время автоматическим и нажмите "Попробовать снова"</string>
     <string name="true_variant">Правда</string>
     <string name="false_variant">Неправда</string>
     <string name="check">Проверить</string>
@@ -46,8 +51,13 @@
     <string name="authorization">Авторизация</string>
     <string name="exercises_close_dialog_alert_title">Покинуть урок?</string>
     <string name="exercises_close_dialog_alert_subtitle">Весь прогресс будет утерян</string>
-    <string name="exercises_close_dialog_alert_left_button">Отменить</string>
-    <string name="exercises_close_dialog_alert_right_button">Покинуть</string>
+    <string name="cancel">Отменить</string>
+    <string name="leave">Покинуть</string>
+    <string name="apply">Применить</string>
+    <string name="russian">Русский</string>
+    <string name="english">English</string>
+    <string name="light_theme">Светлая</string>
+    <string name="dark_theme">Тёмная</string>
     <string name="exercise_type_1_title">%1$s=%2$s</string>
     <string name="exercise_type_2_3_title">%1$s=?</string>
     <string name="exercise_type_4_right_text">%1$s=%2$s</string>
@@ -61,7 +71,6 @@
     <string name="next">Далее</string>
     <string name="good_job">Хорошая работа!</string>
     <string name="more">Подробнее</string>
-    <string name="streak_days">%1$d дней подряд</string>
     <string name="complete">Завершить</string>
     <string name="stat">Статистика</string>
     <string name="bigger">больше</string>
@@ -93,10 +102,11 @@
     <string name="new_level">Уровень повышен</string>
     <string name="server_client_id">563230539724-1j3osvmuqtuovqr0am2qj2evm7l7cln8.apps.googleusercontent.com</string>
     <string name="custom_bottom_sheet_behavior" translatable="false">com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior</string>
-    <string name="studita_account">Studita</string>
+    <string name="studita_account">&app_name;</string>
     <string name="exercise_snackbar_chapter_completed_reason">Поздравляем! Вы полностью завершили всю тему!</string>
     <string name="exercise_snackbar_bad_result_reason">Мы советуем пройти это задание ещё раз, чтобы закрепить свои знания</string>
     <string name="drum_roll_title">Барабанная дробь!</string>
+    <string name="main_menu_bottom_text">© 2020 &app_name;. Сделано с любовью</string>
     <string name="drum_roll_subtitle">Воспроизвести барабанную дробь</string>
     <string name="account_type" translatable="false">com.example.studita.authentication.StuditaAccount</string>
     <string name="network_absent">Нет подключения. Вы оффлайн</string>
@@ -108,4 +118,20 @@
     <string name="difficulty_level">Уровень сложности</string>
     <string name="subscribe_email">Вы успешно подписались! Когда новые задания будут доступны, вы получите письмо на почту %1$s</string>
     <string name="unsubscribe_email">Вы отписались от обновлений</string>
+    <plurals name="streak_plurals">
+        <item quantity="zero">%1$d дней подряд</item>
+        <item quantity="one">%1$d день подряд</item>
+        <item quantity="two">%1$d дня подряд</item>
+        <item quantity="few">%1$d дня подряд</item>
+        <item quantity="many">%1$d дней подряд</item>
+        <item quantity="other">%1$d дней подряд</item>
+    </plurals>
+    <plurals name="chapter_progress_plurals">
+        <item quantity="zero">Прогресс: %1$d заданий из %2$d</item>
+        <item quantity="one">Прогресс: %1$d задание из %2$d</item>
+        <item quantity="two">Прогресс: %1$d задания из %2$d</item>
+        <item quantity="few">Прогресс: %1$d задания из %2$d</item>
+        <item quantity="many">Прогресс: %1$d заданий из %2$d</item>
+        <item quantity="other">%Прогресс: %1$d заданий из %2$d</item>
+    </plurals>
 </resources>

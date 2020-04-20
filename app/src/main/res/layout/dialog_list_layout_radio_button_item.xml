@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:background="?selectableItemBackground">
+
+    <TextView
+        android:id="@+id/dialogListLayoutRadioButtonItemTextView"
+        style="@style/Regular16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:layout_centerVertical="true"/>
+
+    <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/dialogListLayoutRadioButtonItemRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:layout_centerVertical="true"/>
+
+</RelativeLayout>

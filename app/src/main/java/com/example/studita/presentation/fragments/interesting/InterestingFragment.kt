@@ -5,22 +5,15 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseFragment
-import com.example.studita.presentation.fragments.exercises.ExercisesStartScreenFragment
 import com.example.studita.presentation.utils.addFragment
 import com.example.studita.presentation.utils.animateProgress
 import com.example.studita.presentation.utils.navigateTo
-import com.example.studita.presentation.utils.replaceWithAnim
-import com.example.studita.presentation.view_model.ExercisesViewModel
-import com.example.studita.presentation.view_model.HomeFragmentViewModel
+import com.example.studita.presentation.utils.replace
 import com.example.studita.presentation.view_model.InterestingViewModel
 import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.android.synthetic.main.exercise_toolbar.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.io.IOException
 
 class InterestingFragment : BaseFragment(R.layout.exercise_layout){
@@ -47,7 +40,7 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout){
                         pair.second,
                         R.id.exerciseLayoutFrameLayout
                     )
-                    InterestingViewModel.InterestingNavigationState.REPLACE -> (activity as AppCompatActivity).replaceWithAnim(
+                    InterestingViewModel.InterestingNavigationState.REPLACE -> (activity as AppCompatActivity).replace(
                         pair.second,
                         R.id.exerciseLayoutFrameLayout,
                         R.anim.slide_in_left,
@@ -73,7 +66,7 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout){
             viewModel.progressBarState.observe(viewLifecycleOwner, Observer { pair ->
                 val percent = pair.first
                 val last = pair.second
-                exerciseToolbarProgressBar.animateProgress(percent = percent, delay = (if((exerciseToolbarProgressBar.animation == null) || this.exerciseToolbarProgressBar.animation.hasEnded()) 100L else 0L))
+                exerciseToolbarProgressBar.animateProgress(toPercent = percent, delay = (if((exerciseToolbarProgressBar.animation == null) || this.exerciseToolbarProgressBar.animation.hasEnded()) 100L else 0L))
                 if(last)
                     exerciseLayoutButton.setOnClickListener {
                         activity?.finish()

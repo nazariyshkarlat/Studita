@@ -17,6 +17,6 @@ class CustomProgressBar @JvmOverloads constructor(
         }
 
     fun clearProgress(){
-        this.progress = 0
+        this.percentProgress = 0F
     }
 }

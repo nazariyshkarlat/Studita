@@ -33,9 +33,17 @@ class ExerciseVariantsType7Fragment : ExerciseVariantsFragment(R.layout.exercise
         (exerciseVariantsTrueFalseFalse as TextView).text = resources.getString(R.string.false_variant)
         for(variantView in exerciseVariantsTrueFalseLinearLayout.children) {
             variantView.setOnClickListener {
-                exercisesViewModel?.selectedPos = exerciseVariantsTrueFalseLinearLayout.indexOfChild(it)
-                exercisesViewModel?.selectedPos?.let { it1 -> selectVariant(exerciseVariantsTrueFalseLinearLayout, it1) }
-                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(if(exerciseVariantsTrueFalseLinearLayout.indexOfChild(variantView) == 0) "true" else "false")
+                exercisesViewModel?.let {viewModel->
+                    viewModel.selectedPos =
+                        exerciseVariantsTrueFalseLinearLayout.indexOfChild(it)
+                    selectVariant(
+                        exerciseVariantsTrueFalseLinearLayout,
+                        viewModel.selectedPos
+                    )
+                    viewModel.exerciseRequestData = ExerciseRequestData(
+                        if (exerciseVariantsTrueFalseLinearLayout.indexOfChild(variantView) == 0) "true" else "false"
+                    )
+                }
             }
         }
     }

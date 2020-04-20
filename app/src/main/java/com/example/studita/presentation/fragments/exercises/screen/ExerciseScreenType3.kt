@@ -15,7 +15,7 @@ import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercise_screen_type_3.*
 import java.util.regex.Pattern
 
-class ExerciseScreenType3 : NavigatableFragment(R.layout.exercise_screen_type_3){
+class ExerciseScreenType3 : ExerciseScreen(R.layout.exercise_screen_type_3){
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -30,30 +30,9 @@ class ExerciseScreenType3 : NavigatableFragment(R.layout.exercise_screen_type_3)
             if(it.exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel){
                 val screenUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel
                 exerciseScreenType3Title.text = screenUiModel.title
-                injectParts(screenUiModel)
+                exerciseScreenType3Subtitle.text = injectParts(screenUiModel.subtitle, screenUiModel.partsToInject)
             }
         }
-    }
-
-    private fun injectParts(screenUiModel: ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel){
-        val text = screenUiModel.subtitle
-        val m =
-            Pattern.compile("\\{.*?\\}").matcher(text)
-        var spanIndex = 1
-        val builder = SpannableStringBuilder()
-        while (m.find()) {
-            val insideBrackets =
-                screenUiModel.partsToInject[m.group(0).replace(
-                    """[{}]""".toRegex(),
-                    ""
-                ).toInt()]
-            val textSpanParts: ArrayList<SpannableString> = ArrayList(text.split(
-                "\\{.*?\\}".toRegex()).map{span -> SpannableString(span) })
-            textSpanParts.add(spanIndex, insideBrackets.createSpannableString(color = ContextCompat.getColor(exerciseScreenType3Subtitle.context, R.color.green), typeFace = ResourcesCompat.getFont(exerciseScreenType3Subtitle.context, R.font.roboto_medium)))
-            textSpanParts.forEach{part-> builder.append(part)}
-            spanIndex++
-        }
-        exerciseScreenType3Subtitle.text = builder
     }
 
 }

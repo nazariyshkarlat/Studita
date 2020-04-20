@@ -43,6 +43,8 @@ class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view){
     private fun setItemSelected(){
         itemView.chapterPartItemIcon.isSelected = true
         itemView.chapterPartItemButton.isSelected = true
+        itemView.chapterPartItemIcon.isEnabled = true
+        itemView.chapterPartItemButton.isEnabled = true
     }
 
     private fun setItemEnabled(){

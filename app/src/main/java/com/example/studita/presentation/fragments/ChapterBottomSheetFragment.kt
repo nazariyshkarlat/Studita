@@ -12,10 +12,12 @@ import com.example.studita.presentation.fragments.base.BaseBottomSheetDialogFrag
 import com.example.studita.presentation.model.ChapterUiModel
 import com.example.studita.presentation.utils.LevelUtils
 import com.example.studita.presentation.utils.UserUtils
+import com.example.studita.presentation.utils.getAppCompatActivity
 import com.example.studita.presentation.view_model.ChapterViewModel
 import com.example.studita.presentation.views.CustomSnackbar
 import kotlinx.android.synthetic.main.chapter_layout.*
 import kotlinx.android.synthetic.main.chapter_layout_header.*
+import java.io.IOException
 
 
 class ChapterBottomSheetFragment : BaseBottomSheetDialogFragment(R.layout.chapter_layout){
@@ -30,7 +32,8 @@ class ChapterBottomSheetFragment : BaseBottomSheetDialogFragment(R.layout.chapte
         enum class SnackbarShowReason{
             NONE,
             CHAPTER_COMPLETED,
-            BAD_RESULT
+            BAD_RESULT,
+            CHAPTER_COMPLETED_AND_BAD_RESULT
         }
     }
 
@@ -67,16 +70,20 @@ class ChapterBottomSheetFragment : BaseBottomSheetDialogFragment(R.layout.chapte
             if(snackbarShowReason != SnackbarShowReason.NONE){
                 activity?.let {
                     val snackbar = CustomSnackbar(it)
-                    snackbar.show(resources.getString(if(snackbarShowReason == SnackbarShowReason.BAD_RESULT) R.string.exercise_snackbar_bad_result_reason else R.string.exercise_snackbar_chapter_completed_reason),
-                        R.color.green,
-                        contentView = chapterLayoutFrameLayout,
-                        duration = 5000L,
-                        delay = 1000L)
+
+                    val text = when(snackbarShowReason){
+                        SnackbarShowReason.BAD_RESULT -> resources.getString(R.string.exercise_snackbar_bad_result_reason)
+                        SnackbarShowReason.CHAPTER_COMPLETED -> resources.getString(R.string.exercise_snackbar_chapter_completed_reason)
+                        SnackbarShowReason.CHAPTER_COMPLETED_AND_BAD_RESULT -> "${resources.getString(R.string.exercise_snackbar_chapter_completed_reason)} ${resources.getString(R.string.exercise_snackbar_bad_result_reason)}"
+                        else -> throw IOException("unknown show snackbar reason")
+                    }
+
+                    snackbar.show(text, R.color.green, contentView = chapterLayoutFrameLayout.parent.parent.parent as ViewGroup, duration = 5000L, delay = 1000L)
+                    snackbarShowReason = SnackbarShowReason.NONE
                 }
             }
         }
     }
-
 
     private fun updateView(){
         chapterHeaderProgressText.text = getProgressText()

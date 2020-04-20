@@ -8,4 +8,5 @@ interface UserDataRepository{
 
     suspend fun getUserData(userTokenIdData: UserTokenIdData): Pair<Int, UserDataData>
 
+    suspend fun saveUserData(userDataData: UserDataData)
 }

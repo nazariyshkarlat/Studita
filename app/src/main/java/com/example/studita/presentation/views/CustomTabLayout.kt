@@ -15,6 +15,8 @@ import androidx.viewpager.widget.ViewPager
 import com.example.studita.R
 import com.example.studita.presentation.utils.*
 import com.example.studita.presentation.fragments.user_statistics.pages.UserStatPageFragment
+import com.example.studita.presentation.views.press_view.PressTextView
+import com.example.studita.presentation.views.press_view.PressView
 
 
 class CustomTabLayout @JvmOverloads constructor(
@@ -25,7 +27,6 @@ class CustomTabLayout @JvmOverloads constructor(
     private val textColor = ColorUtils.getSecondaryColor(context)
     private val typeface = ResourcesCompat.getFont(context, R.font.roboto_regular)
     private val textSize = 16F
-    private val itemsBackground = ColorUtils.getSelectableItemBackground(context)
 
     private var fragments: List<Fragment>? = null
 
@@ -41,7 +42,7 @@ class CustomTabLayout @JvmOverloads constructor(
     fun setItems(items: List<String>){
         for(item in items){
 
-            val textView = TextView(context)
+            val textView = PressTextView(context)
 
             textView.textSize = textSize
             textView.typeface = typeface
@@ -50,8 +51,6 @@ class CustomTabLayout @JvmOverloads constructor(
             textView.text = item
 
             textView.setPadding(padding, padding, padding, padding)
-
-            textView.setBackgroundResource(itemsBackground)
 
             addView(textView)
         }
@@ -62,7 +61,7 @@ class CustomTabLayout @JvmOverloads constructor(
         viewPager.adapter = TabsPagerAdapter(fragmentManager)
         viewPager.addOnPageChangeListener(this)
         children.forEachIndexed { index, child ->
-            child.setOnClickListener {
+            (child as PressTextView).setOnClickListener {
                 click = true
                 viewPager.currentItem = index
             }
@@ -103,7 +102,7 @@ class CustomTabLayout @JvmOverloads constructor(
     }
 
     private inner class TabsPagerAdapter(fm: FragmentManager) :
-        FragmentPagerAdapter(fm) {
+        FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
         override fun getItem(position: Int): Fragment {
             return fragments!![position]
         }

@@ -40,7 +40,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
     private var homeFragmentViewModel: HomeFragmentViewModel? = null
     private var chapterPartsViewModel: ChapterViewModel? = null
     private var mainFragmentViewModel: MainFragmentViewModel? = null
-    var onThemeChangeListener: OnThemeChangeListener? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,13 +58,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             it.errorState.observe(viewLifecycleOwner, Observer { message ->
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             })
-
-            it.progressState.observe(
-                viewLifecycleOwner,
-                androidx.lifecycle.Observer<Boolean> { done ->
-                    if (done) {
-                    }
-                })
         }
 
         homeFragmentViewModel?.let {
@@ -73,7 +65,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { done ->
                     if (done) {
-                        mainFragmentViewModel?.showProgress(false)
+                        mainFragmentViewModel?.hideProgress(true)
                         homeLayoutRecyclerView.adapter =
                             LevelsAdapter(
                                 it.getRecyclerItems(HomeRecyclerUiModel.HomeUserDataUiModel, it.results),
@@ -118,9 +110,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 homeLayoutRecyclerView.adapter?.notifyItemChanged(homeLayoutRecyclerView.adapter!!.itemCount-2)
                 val snackbar = CustomSnackbar(view.context)
                 if(subscribe){
-                    snackbar.show(resources.getString(R.string.subscribe_email, TextUtils.encryptEmail(status.result)), R.color.blue, 5000, bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight).toInt())
+                    snackbar.show(resources.getString(R.string.subscribe_email, TextUtils.encryptEmail(status.result)), R.color.blue, 5000L, bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight).toInt())
                 }else{
-                    snackbar.show(resources.getString(R.string.unsubscribe_email), R.color.blue, 3000, bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight).toInt())
+                    snackbar.show(resources.getString(R.string.unsubscribe_email), R.color.blue, 3000L, bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight).toInt())
                 }
             })
 
@@ -133,8 +125,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         homeLayoutBarAccountImageView.setOnClickListener { (activity as AppCompatActivity).startActivity<MainMenuActivity>() }
         homeLayoutAppBar.addOnOffsetChangedListener(this)
         homeLayoutRecyclerView.addOnScrollListener(FabRecyclerImpl(this))
-
-        homeLayoutBarTitle.setOnClickListener { onThemeChangeListener?.onThemeChanged() }
     }
 
     override fun onResume() {
@@ -162,9 +152,5 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
         homeLayoutAppBar.alpha =
             (homeLayoutAppBar.height + verticalOffset * 2) / homeLayoutAppBar.height.toFloat()
-    }
-
-    interface OnThemeChangeListener{
-        fun onThemeChanged()
     }
 }

@@ -2,16 +2,12 @@ package com.example.studita.presentation.adapter.levels
 
 import android.view.View
 import com.example.studita.R
-import com.example.studita.presentation.utils.getAppCompatActivity
-import com.example.studita.presentation.utils.navigateTo
-import com.example.studita.presentation.fragments.user_statistics.UserStatFragment
+import com.example.studita.presentation.activities.UserStatActivity
 import com.example.studita.presentation.model.HomeRecyclerUiModel
+import com.example.studita.presentation.utils.*
 import com.example.studita.presentation.utils.LevelUtils.getLevelXP
 import com.example.studita.presentation.utils.LevelUtils.getNextLevel
-import com.example.studita.presentation.utils.TimeUtils
-import com.example.studita.presentation.utils.UserUtils
 import kotlinx.android.synthetic.main.home_layout_user_data.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class HomeUserDataViewHolder(view: View) : LevelsViewHolder<HomeRecyclerUiModel.HomeUserDataUiModel>(view){
@@ -23,7 +19,7 @@ class HomeUserDataViewHolder(view: View) : LevelsViewHolder<HomeRecyclerUiModel.
         with(itemView) {
             UserUtils.userData?.let {
                 homeLayoutUserDataXPLayoutMoreButton.setOnClickListener {
-                    getAppCompatActivity()?.navigateTo(UserStatFragment(), R.id.frameLayout)
+                    getAppCompatActivity()?.startActivity<UserStatActivity>()
                 }
                 homeLayoutUserDataLevelLayoutCurrentLevel.text = it.currentLevel.toString()
                 homeLayoutUserDataLevelLayoutNextLevel.text =
@@ -36,7 +32,7 @@ class HomeUserDataViewHolder(view: View) : LevelsViewHolder<HomeRecyclerUiModel.
                 homeLayoutUserDataLevelLayoutProgressBar.percentProgress =
                     it.currentLevelXP / getLevelXP(it.currentLevel).toFloat()
                 homeLayoutUserDataXPLayoutStreakDays.text =
-                    itemView.context.resources.getString(R.string.streak_days, it.streakDays)
+                        LanguageUtils.getResourcesRussianLocale(itemView.context)?.getQuantityString(R.plurals.streak_plurals, it.streakDays, it.streakDays)
                 homeLayoutUserDataXPLayoutFireIcon.isActivated = streakActivated(it.streakDate)
             }
         }

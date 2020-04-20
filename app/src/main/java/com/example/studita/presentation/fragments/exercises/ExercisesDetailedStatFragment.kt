@@ -35,8 +35,6 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
         val falseAnswers : Int? = arguments?.getInt("FALSE_ANSWERS")
         val timeInSeconds : Long? = arguments?.getLong("PROCESS_SECONDS")
         val obtainedXP : Int? = arguments?.getInt("OBTAINED_XP")
-        println(trueAnswers)
-        println(falseAnswers)
         timeInSeconds?.let{ time ->
             exercisesDetailedStatLayoutTimeSubtitle.text = context?.let {context->
                 TimeUtils.styleTimeText(
@@ -56,15 +54,13 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
         obtainedXP?.let{
             exercisesDetailedStatLayoutXPSubtitle.text = (obtainedXP).toString()
         }
-        toolbarLayoutTitle.text = resources.getString(R.string.stat)
         toolbarLayoutBackButton.setOnClickListener {
             activity?.onBackPressed()
         }
 
         changeLayoutIfScrollable()
 
-        exercisesDetailedStatLayoutShareButton.setOnClickListener {
-        }
+        toolbarLayoutTitle.text = resources.getString(R.string.stat)
 
         exercisesDetailedStatLayoutScrollView.viewTreeObserver.addOnScrollChangedListener(this)
 

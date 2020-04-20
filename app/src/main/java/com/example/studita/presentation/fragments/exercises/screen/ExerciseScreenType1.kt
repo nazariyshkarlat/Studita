@@ -15,9 +15,10 @@ import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.google.android.flexbox.FlexboxLayout
 import kotlinx.android.synthetic.main.exercise_screen_type_1.*
+import kotlinx.android.synthetic.main.exercise_screen_type_3.*
 import java.util.regex.Pattern
 
-class ExerciseScreenType1 :  NavigatableFragment(R.layout.exercise_screen_type_1){
+class ExerciseScreenType1 :  ExerciseScreen(R.layout.exercise_screen_type_1){
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -42,31 +43,10 @@ class ExerciseScreenType1 :  NavigatableFragment(R.layout.exercise_screen_type_1
                     shapeView.background =  ContextCompat.getDrawable(exerciseScreenType1FlexboxLayout.context, R.drawable.exercise_rectangle)
                     exerciseScreenType1FlexboxLayout.addView(shapeView)
                 }
-                injectParts(screenUiModel)
+                exerciseScreenType1Subtitle.text = injectParts(screenUiModel.subtitle, screenUiModel.partsToInject)
             }
         }
 
-    }
-
-    private fun injectParts(screenUiModel: ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel){
-        val text = screenUiModel.subtitle
-        val m =
-            Pattern.compile("\\{.*?\\}").matcher(text)
-        var spanIndex = 1
-        val builder = SpannableStringBuilder()
-        while (m.find()) {
-            val insideBrackets =
-                screenUiModel.partsToInject[m.group(0).replace(
-                    """[{}]""".toRegex(),
-                    ""
-                ).toInt()]
-            val textSpanParts: ArrayList<SpannableString> = ArrayList(text.split(
-                "\\{.*?\\}".toRegex()).map{span -> SpannableString(span) })
-            textSpanParts.add(spanIndex, insideBrackets.createSpannableString(typeFace = ResourcesCompat.getFont(exerciseScreenType1Subtitle.context, R.font.roboto_medium)))
-            textSpanParts.forEach{part-> builder.append(part)}
-            spanIndex++
-        }
-        exerciseScreenType1Subtitle.text = builder
     }
 
 }

@@ -14,11 +14,10 @@ class MainActivityNavigationViewModel: ViewModel(), BottomNavigationView.OnNavig
     val navigationSelectedIdState = SingleLiveEvent<Int>()
     val navigationState = SingleLiveEvent<Pair<BottomNavigationEnum, String>>()
 
-    private val homeFragment = HomeFragment()
-    private val backStack : ArrayList<Pair<Int, String>> = arrayListOf(R.id.bottomNavigationFirstItem to homeFragment.javaClass.name)
+    private val backStack : ArrayList<Pair<Int, String>> = arrayListOf(R.id.bottomNavigationFirstItem to HomeFragment::class.java.name)
 
     init{
-        navigationState.value = BottomNavigationEnum.ADD to homeFragment.javaClass.name
+        navigationState.value = BottomNavigationEnum.ADD to HomeFragment::class.java.name
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

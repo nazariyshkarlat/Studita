@@ -14,6 +14,8 @@ import kotlin.math.roundToLong
 
 object TimeUtils {
 
+    class IncorrectTimeDateTimeFormat : SimpleDateFormat("hh:mm, dd MMMM, yyyy", Locale("ru"))
+
     @SuppressLint("SimpleDateFormat")
     private val simpleDateFormat = SimpleDateFormat("MM/dd/yyyy")
 
@@ -82,4 +84,6 @@ object TimeUtils {
                 "${seconds.first} ${seconds.second}"
             }
         }.trim()
+
+    fun timeIsAutomatically(context: Context) = android.provider.Settings.Global.getInt(context.contentResolver, android.provider.Settings.Global.AUTO_TIME, 0) == 1
 }

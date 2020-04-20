@@ -25,4 +25,5 @@ class ExerciseResponseDataMapper : Mapper<ExerciseResponseEntity, ExerciseRespon
                 ExerciseShapeData( it.descriptionContent.descriptionContent[0], it.descriptionContent.descriptionContent[1].toInt()))
         })}
     }
+
 }
