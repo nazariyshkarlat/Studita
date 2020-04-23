@@ -6,11 +6,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.studita.R
 import com.example.studita.domain.entity.UserDataData
-import com.example.studita.domain.interactor.SubscribeEmailStatus
+import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.presentation.adapter.levels.LevelsAdapter
 import com.example.studita.presentation.draw.AvaDrawer
@@ -29,6 +30,8 @@ import com.example.studita.presentation.views.CustomSnackbar
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.home_layout_bar.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetChangedListener, FabScrollListener{
@@ -81,40 +84,86 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             })
 
             it.userDataState.observe(viewLifecycleOwner, androidx.lifecycle.Observer<UserDataData>{data->
-                homeLayoutBarLogInButton.visibility = View.GONE
-                homeLayoutBarAccountImageView.visibility = View.VISIBLE
-
                 UserUtils.userData = data
 
-                if(TimeUtils.getCalendarDayCount(Date(), data.streakDate) > 1F){
+                if(TimeUtils.getCalendarDayCount(Date(), data.streakDatetime) > 1F){
                     data.streakDays = 0
                 }
 
-                if (data.avatarLink == null) {
-                    AvaDrawer.drawAwa(homeLayoutBarAccountImageView, data.userName)
-                } else {
-                    Glide
-                        .with(this@HomeFragment)
-                        .load(data.avatarLink)
-                        .centerCrop()
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(homeLayoutBarAccountImageView)
+                if(UserUtils.isLoggedIn()) {
+                    if (data.avatarLink == null) {
+                        AvaDrawer.drawAwa(homeLayoutBarAccountImageView, data.userName!!)
+                    } else {
+                        Glide
+                            .with(this@HomeFragment)
+                            .load(data.avatarLink)
+                            .centerCrop()
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(homeLayoutBarAccountImageView)
+                    }
                 }
             })
 
-            it.subscribeEmailState.observe(viewLifecycleOwner, androidx.lifecycle.Observer { pair ->
-                val subscribe = pair.first
-                val status = pair.second
-                status as SubscribeEmailStatus.Success
-                UserUtils.userData!!.isSubscribed = subscribe
-                homeLayoutRecyclerView.adapter?.notifyItemChanged(homeLayoutRecyclerView.adapter!!.itemCount-2)
-                val snackbar = CustomSnackbar(view.context)
-                if(subscribe){
-                    snackbar.show(resources.getString(R.string.subscribe_email, TextUtils.encryptEmail(status.result)), R.color.blue, 5000L, bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight).toInt())
-                }else{
-                    snackbar.show(resources.getString(R.string.unsubscribe_email), R.color.blue, 3000L, bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight).toInt())
-                }
-            })
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(1000L)
+                it.subscribeEmailState.observe(
+                    viewLifecycleOwner,
+                    androidx.lifecycle.Observer { status ->
+                        val snackbar = CustomSnackbar(view.context)
+                        when (status) {
+                            is SubscribeEmailResultStatus.Success -> {
+                                val subscribe = status.result.subscribe
+                                UserUtils.userData.isSubscribed = subscribe
+                                homeLayoutRecyclerView.adapter?.notifyItemChanged(
+                                    homeLayoutRecyclerView.adapter!!.itemCount - 2
+                                )
+                                if (subscribe) {
+                                    snackbar.show(
+                                        resources.getString(
+                                            R.string.subscribe_email,
+                                            TextUtils.encryptEmail(status.result.email!!)
+                                        ),
+                                        R.color.blue,
+                                        resources.getInteger(R.integer.subscribe_email_snackbar_duration)
+                                            .toLong(),
+                                        bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
+                                            .toInt()
+                                    )
+                                } else {
+                                    snackbar.show(
+                                        resources.getString(R.string.unsubscribe_email),
+                                        R.color.blue,
+                                        resources.getInteger(R.integer.unsubscribe_email_snackbar_duration)
+                                            .toLong(),
+                                        bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
+                                            .toInt()
+                                    )
+                                }
+                            }
+                            is SubscribeEmailResultStatus.NoConnection -> {
+                                if (!UserUtils.userData.isSubscribed) {
+                                    snackbar.show(
+                                        resources.getString(R.string.offline_subscribe_email),
+                                        R.color.blue,
+                                        resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
+                                            .toLong(),
+                                        bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
+                                            .toInt()
+                                    )
+                                } else {
+                                    snackbar.show(
+                                        resources.getString(R.string.offline_unsubscribe_email),
+                                        R.color.blue,
+                                        resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
+                                            .toLong(),
+                                        bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
+                                            .toInt()
+                                    )
+                                }
+                            }
+                        }
+                    })
+            }
 
             if(UserUtils.isLoggedIn()){
                 homeLayoutBarLogInButton.visibility = View.GONE

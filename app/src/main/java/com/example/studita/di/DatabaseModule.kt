@@ -9,7 +9,6 @@ import androidx.room.TypeConverters
 import com.example.studita.data.database.StuditaDatabase
 import com.example.studita.data.database.user_data.UserDataCompletedPartsTypeConverter
 import com.example.studita.data.database.user_data.UserDataDao
-import com.example.studita.data.database.user_statistics.UserStatisticsDao
 import com.example.studita.data.entity.UserDataEntity
 import com.example.studita.data.entity.UserStatisticsEntity
 

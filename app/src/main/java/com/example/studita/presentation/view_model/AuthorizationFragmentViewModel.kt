@@ -10,6 +10,7 @@ import com.example.studita.domain.entity.authorization.LogInResponseData
 import com.example.studita.domain.interactor.LogInStatus
 import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.validator.AuthorizationValidator
+import com.example.studita.presentation.utils.UserUtils
 import com.example.studita.presentation.utils.launchExt
 import kotlinx.coroutines.Job
 import java.lang.UnsupportedOperationException
@@ -18,7 +19,7 @@ class AuthorizationFragmentViewModel : ViewModel(){
 
     val passwordFieldIsEmptyState = MutableLiveData<Boolean>()
     val passwordIsVisibleState = MutableLiveData<Boolean>()
-    val authorizationState = MutableLiveData<AuthorizationResult>()
+    val authorizationState = SingleLiveEvent<AuthorizationResult>()
     val errorState = SingleLiveEvent<Int>()
 
     private var job: Job? = null
@@ -58,7 +59,8 @@ class AuthorizationFragmentViewModel : ViewModel(){
             when(val result = interactor.logIn(
                 AuthorizationRequestData(
                     dates.first,
-                    dates.second
+                    dates.second,
+                    UserUtils.userData
                 )
             )){
                 is LogInStatus.NoConnection -> errorState.postValue(R.string.no_connection)
@@ -73,10 +75,11 @@ class AuthorizationFragmentViewModel : ViewModel(){
     fun signUp(dates : Pair<String, String>){
         if(validate(dates) == AuthorizationResult.Valid){
             job = viewModelScope.launchExt(job){
-                when(val result = interactor.signUp(
+                when(interactor.signUp(
                     AuthorizationRequestData(
                         dates.first,
-                        dates.second
+                        dates.second,
+                        if(!UserUtils.isLoggedIn()) UserUtils.userData else null
                     )
                 )){
                     is SignUpStatus.NoConnection -> errorState.postValue(R.string.no_connection)

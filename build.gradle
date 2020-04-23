@@ -38,7 +38,7 @@ ext {
     material_version="1.2.0-alpha05"
     core_ktx_version="1.2.0"
     app_compat_version="1.1.0"
-    work_version = "2.3.2"
+    work_version = "2.3.4"
 }
 
 task clean(type: Delete) {

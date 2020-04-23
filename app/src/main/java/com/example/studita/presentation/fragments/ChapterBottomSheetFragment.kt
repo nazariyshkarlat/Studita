@@ -92,28 +92,24 @@ class ChapterBottomSheetFragment : BaseBottomSheetDialogFragment(R.layout.chapte
     }
 
     private fun getProgressText(): SpannableStringBuilder?{
-        return context?.let { chapterUiModel?.let { chapterUiModel ->
-                UserUtils.userData?.completedParts?.get(chapterUiModel.chapterNumber-1)?.let { completedNumber ->
-                    LevelUtils.getProgressText(
-                        completedNumber,
-                        chapterUiModel.parts.size,
-                        it
-                    )
-                }
+        return context?.let {context->
+            chapterUiModel?.let { chapterUiModel ->
+                LevelUtils.getProgressText(
+                    UserUtils.userData.completedParts[chapterUiModel.chapterNumber-1],
+                    chapterUiModel.parts.size,
+                    context
+                )
             }
         }
     }
 
     private fun getProgressPercent(): Float?{
-        return context?.let { chapterUiModel?.let { chapterUiModel ->
-            UserUtils.userData?.completedParts?.get(chapterUiModel.chapterNumber-1)?.let { completedNumber ->
+        return chapterUiModel?.let { chapterUiModel ->
                 LevelUtils.getChapterProgressPercent(
-                    completedNumber,
+                    UserUtils.userData.completedParts[chapterUiModel.chapterNumber-1],
                     chapterUiModel.parts.size
                 )
             }
-        }
-        }
     }
 
 }

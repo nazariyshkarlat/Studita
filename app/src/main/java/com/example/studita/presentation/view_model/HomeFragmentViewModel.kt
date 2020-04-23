@@ -4,13 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
+import com.example.studita.SyncSubscribeEmailImpl
 import com.example.studita.di.data.LevelsModule
 import com.example.studita.di.data.SubscribeEmailModule
 import com.example.studita.di.data.UserDataModule
 import com.example.studita.domain.entity.UserDataData
-import com.example.studita.domain.entity.UserTokenIdData
+import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.interactor.LevelsStatus
-import com.example.studita.domain.interactor.SubscribeEmailStatus
+import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.domain.interactor.UserDataStatus
 import com.example.studita.presentation.model.HomeRecyclerUiModel
 import com.example.studita.presentation.model.mapper.LevelUiModelMapper
@@ -22,8 +23,8 @@ class HomeFragmentViewModel : ViewModel(){
 
     val progressState = MutableLiveData<Boolean>()
     val errorState = SingleLiveEvent<Int>()
-    val userDataState = MutableLiveData<UserDataData>()
-    val subscribeEmailState =  SingleLiveEvent<Pair<Boolean, SubscribeEmailStatus>>()
+    val userDataState = SingleLiveEvent<UserDataData>()
+    val subscribeEmailState =  SingleLiveEvent<SubscribeEmailResultStatus>()
 
     lateinit var results: List<HomeRecyclerUiModel>
 
@@ -34,18 +35,17 @@ class HomeFragmentViewModel : ViewModel(){
     private var levelsJob: Job? = null
     private var subscribeJob: Job? = null
 
-    var userTokenIdData: UserTokenIdData? = null
-
-
+    var userIdTokenData: UserIdTokenData? = null
 
     init{
-        userTokenIdData = UserUtils.getUserTokenIdData()
-        getLevels(userTokenIdData)
+        initSubscribeEmailState()
+        userIdTokenData = UserUtils.getUserTokenIdData()
+        getLevels(userIdTokenData)
     }
 
-    private fun getLevels(userTokenIdData: UserTokenIdData?){
+    private fun getLevels(userIdTokenData: UserIdTokenData?){
         levelsJob = viewModelScope.launchExt(levelsJob){
-            getUserData(userTokenIdData)
+            getUserData(userIdTokenData)
             when(val status = levelsInteractor.getLevels(UserUtils.isLoggedIn())){
                 is LevelsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is LevelsStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
@@ -58,25 +58,25 @@ class HomeFragmentViewModel : ViewModel(){
         }
     }
 
-    fun subscribeEmail(userTokenIdData: UserTokenIdData, subscribe: Boolean){
+    fun subscribeEmail(userIdTokenData: UserIdTokenData, subscribe: Boolean){
         subscribeJob = viewModelScope.launchExt(subscribeJob){
-            when(val status = if(subscribe) subscribeEmailInteractor.subscribe(userTokenIdData) else  subscribeEmailInteractor.unsubscribe(userTokenIdData)){
-                is SubscribeEmailStatus.NoConnection -> errorState.postValue(R.string.no_connection)
-                is SubscribeEmailStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
-                is SubscribeEmailStatus.Success -> {
-                    subscribeEmailState.postValue(subscribe to status)
+            when(val status = if(subscribe) subscribeEmailInteractor.subscribe(userIdTokenData) else  subscribeEmailInteractor.unsubscribe(userIdTokenData)){
+                is SubscribeEmailResultStatus.NoConnection ->{
+                    subscribeEmailState.postValue(status)
+                }
+                is SubscribeEmailResultStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
+                is SubscribeEmailResultStatus.Success -> {
+                    subscribeEmailState.postValue(status)
                 }
             }
         }
     }
 
 
-    private suspend fun getUserData(userTokenIdData: UserTokenIdData?){
-        userTokenIdData?.let {
-            val userData = userDataInteractor.getUserData(userTokenIdData)
-            if (userData is UserDataStatus.Success) {
-                userDataState.postValue(userData.result)
-            }
+    private suspend fun getUserData(userIdTokenData: UserIdTokenData?){
+        val userData = userDataInteractor.getUserData(userIdTokenData)
+        if (userData is UserDataStatus.Success) {
+            userDataState.postValue(userData.result)
         }
     }
 
@@ -85,5 +85,14 @@ class HomeFragmentViewModel : ViewModel(){
         adapterItems.add(userDataUiModel)
         adapterItems.addAll(levels)
         return adapterItems
+    }
+
+    private fun initSubscribeEmailState(){
+        SyncSubscribeEmailImpl.syncSubscribeEmailLiveData = subscribeEmailState
+        subscribeEmailState.value = subscribeEmailInteractor.getSyncedResult()?.let {
+            SubscribeEmailResultStatus.Success(
+                it
+            )
+        }
     }
 }

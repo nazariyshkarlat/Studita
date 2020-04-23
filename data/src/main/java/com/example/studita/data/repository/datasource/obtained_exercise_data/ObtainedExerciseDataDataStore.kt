@@ -1,10 +1,10 @@
 package com.example.studita.data.repository.datasource.obtained_exercise_data
 
 import com.example.studita.data.entity.obtained_exercise_data.ObtainedExerciseDataEntity
-import com.example.studita.data.entity.UserTokenId
+import com.example.studita.data.entity.UserIdToken
 
 interface ObtainedExerciseDataDataStore {
 
-    suspend fun trySaveData(userTokenId: UserTokenId, obtainedExerciseDataEntity: ObtainedExerciseDataEntity): Int
+    suspend fun trySaveData(userIdToken: UserIdToken, obtainedExerciseDataEntity: ObtainedExerciseDataEntity): Int
 
 }

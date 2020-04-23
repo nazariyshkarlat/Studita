@@ -1,7 +1,7 @@
 package com.example.studita.data.repository.datasource.obtained_exercise_data
 
 import com.example.studita.data.entity.obtained_exercise_data.ObtainedExerciseDataEntity
-import com.example.studita.data.entity.UserTokenId
+import com.example.studita.data.entity.UserIdToken
 import com.example.studita.data.entity.obtained_exercise_data.ObtainedExerciseDataRequestEntity
 import com.example.studita.data.net.ObtainedExerciseDataService
 import com.example.studita.data.net.connection.ConnectionManager
@@ -12,7 +12,7 @@ import java.util.*
 
 class CloudObtainedExerciseDataDataStore(private val connectionManager: ConnectionManager, private val obtainedExerciseDataService: ObtainedExerciseDataService) : ObtainedExerciseDataDataStore{
     override suspend fun trySaveData(
-        userTokenId: UserTokenId,
+        userIdToken: UserIdToken,
         obtainedExerciseDataEntity: ObtainedExerciseDataEntity
     ): Int =
         if (connectionManager.isNetworkAbsent()) {
@@ -21,9 +21,8 @@ class CloudObtainedExerciseDataDataStore(private val connectionManager: Connecti
             val responseCode: Int
             try {
                 val saveDataAsync = obtainedExerciseDataService.saveObtainedExerciseDataAsync(
-                    DateTimeFormat().format(Date()),
                     ObtainedExerciseDataRequestEntity(
-                    userTokenId,
+                    userIdToken,
                     obtainedExerciseDataEntity
                     )
                 )

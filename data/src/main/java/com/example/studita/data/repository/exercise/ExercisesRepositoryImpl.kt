@@ -10,7 +10,7 @@ class ExercisesRepositoryImpl(private val exercisesDataStoreFactory: ExercisesDa
     ExercisesRepository {
 
     override suspend fun getExercises(chapterPartNumber: Int): Pair<Int, ExercisesResponseData> =
-        with(exercisesDataStoreFactory.create(ExercisesDataStoreFactory.Priority.CLOUD).getExercises(chapterPartNumber)){
+        with(exercisesDataStoreFactory.create().getExercises(chapterPartNumber)){
             this.first to exerciseDataMapper.map(this.second)
         }
 }

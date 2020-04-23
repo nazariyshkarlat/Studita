@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="snackbar_anim_duration">300</integer>
-    <integer name="snackbar_error_anim_duration">150</integer>
+    <integer name="snackbar_error_anim_duration">200</integer>
     <integer name="button_transition_duration">200</integer>
     <integer name="exercises_progress_XP_delay">200</integer>
     <integer name="exercises_progress_XP_duration">750</integer>
     <integer name="back_online_snackbar_duration">3000</integer>
     <integer name="navigatable_fragment_anim_duration">200</integer>
     <integer name="exercises_slide_anim_time">300</integer>
-    <integer name="refresh_animation_time">1000</integer>
+    <integer name="refresh_animation_time">500</integer>
+    <integer name="authorization_error_duration">4000</integer>
+    <integer name="subscribe_email_snackbar_duration">5000</integer>
+    <integer name="unsubscribe_email_snackbar_duration">3000</integer>
+    <integer name="offline_subscribe_email_snackbar_duration">5000</integer>
 </resources>

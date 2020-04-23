@@ -1,13 +1,15 @@
 package com.example.studita.di.data
 
-import com.example.studita.di.DiskModule
+import com.example.studita.di.CacheModule
 import com.example.studita.data.cache.authentication.LogInCacheImpl
 import com.example.studita.data.entity.mapper.AuthorizationRequestMapper
 import com.example.studita.data.entity.mapper.LogInResponseDataMapper
+import com.example.studita.data.entity.mapper.SignInWithGoogleRequestMapper
+import com.example.studita.data.entity.mapper.UserDataEntityMapper
 import com.example.studita.data.net.AuthorizationService
 import com.example.studita.data.repository.AuthorizationRepositoryImpl
 import com.example.studita.data.repository.datasource.authorization.AuthorizationDataStoreFactoryImpl
-import com.example.studita.data.repository.datasource.authorization.CloudAuthorizationDataStore
+import com.example.studita.data.repository.datasource.authorization.AuthorizationDataStoreImpl
 import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.authorization.AuthorizationInteractor
@@ -39,7 +41,8 @@ object AuthorizationModule {
             repository = AuthorizationRepositoryImpl(
                 getAuthorizationDataStoreFactory(),
                 LogInResponseDataMapper(),
-                AuthorizationRequestMapper()
+               getAuthorizationRequestMapper(),
+                getSignInWithGoogleRequestMapper()
             )
         return repository!!
     }
@@ -50,7 +53,7 @@ object AuthorizationModule {
         )
 
     private fun getCloudAuthorizationDataStore() =
-        CloudAuthorizationDataStore(
+        AuthorizationDataStoreImpl(
             NetworkModule.connectionManager,
             NetworkModule.getService(AuthorizationService::class.java),
             getLogInCacheImpl()
@@ -61,6 +64,13 @@ object AuthorizationModule {
             getCloudAuthorizationDataStore()
         )
 
+    private fun getUserDataEntityMapper() = UserDataEntityMapper()
+
+    private fun getSignInWithGoogleRequestMapper() = SignInWithGoogleRequestMapper(
+        getUserDataEntityMapper())
+
     private fun getLogInCacheImpl() =
-        LogInCacheImpl(DiskModule.sharedPreferences)
+        LogInCacheImpl(CacheModule.sharedPreferences)
+
+    private fun getAuthorizationRequestMapper() =  AuthorizationRequestMapper(UserDataEntityMapper())
 }

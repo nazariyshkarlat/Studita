@@ -5,8 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import com.example.studita.R
-import com.example.studita.di.DiskModule
-import com.example.studita.presentation.activities.DefaultActivity
 import com.example.studita.presentation.fragments.base.BaseDialogFragment
 import com.example.studita.presentation.utils.makeView
 import kotlinx.android.synthetic.main.dialog_list_layout.*

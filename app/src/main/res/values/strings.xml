@@ -7,7 +7,7 @@
     <string name="server_failure">Failure!</string>
     <string name="with_google">Продолжить с Google</string>
     <string name="use_email">Использовать эл. почту</string>
-    <string name="log_in">Войти</string>
+    <string name="sign_in">Войти</string>
     <string name="main_menu_authorization_method">Выберите способ авторизации</string>
     <string name="forgot_password">Забыли пароль?</string>
     <string name="create_new_account">Создать новый аккаунт</string>
@@ -116,8 +116,11 @@
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <string name="difficulty_level">Уровень сложности</string>
-    <string name="subscribe_email">Вы успешно подписались! Когда новые задания будут доступны, вы получите письмо на почту %1$s</string>
-    <string name="unsubscribe_email">Вы отписались от обновлений</string>
+    <string name="subscribe_email">Вы успешно подписались на рассылку! Когда новые задания будут доступны, вы получите письмо на почту %1$s</string>
+    <string name="offline_subscribe_email">Мы получили ваш запрос на подписку. Как только вы подключитесь к интернету, вы получите дополнительное сообщение об успешности.</string>
+    <string name="offline_unsubscribe_email">Мы получили ваш запрос на отмену рассылки. Как только вы подключитесь к интернету, вы получите дополнительное сообщение об успешности.</string>
+    <string name="unsubscribe_email">Вы отписались от рассылки на почту</string>
+    <string name="un_logged_statistics_text">Войдите, чтобы получить доступ к деталям и другим функциям</string>
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>

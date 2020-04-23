@@ -1,13 +1,11 @@
 package com.example.studita.di.data
 
-import com.example.studita.data.cache.authentication.LogInCacheImpl
-import com.example.studita.data.entity.mapper.LogInResponseDataMapper
+import com.example.studita.data.entity.mapper.UserIdTokenMapper
 import com.example.studita.data.net.ObtainedExerciseDataService
 import com.example.studita.data.repository.ObtainedExerciseDataRepositoryImpl
 import com.example.studita.data.repository.datasource.obtained_exercise_data.CloudObtainedExerciseDataDataStore
 import com.example.studita.data.repository.datasource.obtained_exercise_data.ObtainedExerciseDataDataStoreFactoryImpl
 import com.example.studita.di.DI
-import com.example.studita.di.DiskModule
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.obtained_exercise_data.ObtainedExerciseDataInteractor
 import com.example.studita.domain.interactor.obtained_exercise_data.ObtainedExerciseDataInteractorImpl
@@ -36,7 +34,8 @@ object ObtainedExerciseDataModule {
     private fun getObtainedExerciseDataRepository(): ObtainedExerciseDataRepository {
         if (repository == null)
             repository = ObtainedExerciseDataRepositoryImpl(
-                getObtainedExerciseDataDataStoreFactory()
+                getObtainedExerciseDataDataStoreFactory(),
+                UserIdTokenMapper()
             )
         return repository!!
     }

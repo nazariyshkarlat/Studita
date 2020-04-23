@@ -1,6 +1,6 @@
 package com.example.studita.di.data
 
-import com.example.studita.di.DiskModule
+import com.example.studita.di.CacheModule
 import com.example.studita.data.cache.levels.LevelsCacheImpl
 import com.example.studita.data.entity.mapper.LevelDataMapper
 import com.example.studita.data.net.LevelsService
@@ -59,7 +59,7 @@ object LevelsModule {
         DiskLevelsJsonDataStore(getLevelsCacheImpl())
 
     private fun getLevelsCacheImpl() =
-        LevelsCacheImpl(DiskModule.sharedPreferences)
+        LevelsCacheImpl(CacheModule.sharedPreferences)
 
     private fun getLevelsJsonDataStoreFactory() =
         LevelsJsonDataStoreFactoryImpl(

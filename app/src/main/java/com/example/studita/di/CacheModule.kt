@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 
-object DiskModule {
+object CacheModule {
 
     lateinit var sharedPreferences: SharedPreferences
     const val PREFS_NAME = "studita_cache"

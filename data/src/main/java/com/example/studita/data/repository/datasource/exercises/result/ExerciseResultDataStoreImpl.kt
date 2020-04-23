@@ -9,7 +9,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-class CloudExerciseResultDataStore(
+class ExerciseResultDataStoreImpl(
     private val connectionManager: ConnectionManager,
     private val  exerciseResultService: ExerciseResultService
 ) : ExerciseResultDataStore {

@@ -48,7 +48,7 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
 
     override fun onNavigate(fragment: NavigatableFragment?) {
         toolbarFragmentViewModel?.let {
-            if (fragment is AuthorizationFragment)
+            if (fragment is AuthenticationFragment)
                 it.setToolbarText(resources.getString(R.string.authorization))
             else
                 it.setToolbarText(null)

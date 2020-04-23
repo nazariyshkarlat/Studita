@@ -15,7 +15,7 @@ object LevelUtils {
 
     const val ALL_CORRECT_BONUS = 50
 
-    const val TRAINING_XP = 50
+    private const val TRAINING_XP = 50
 
     private const val FIRST_LEVEL_XP = 500
 

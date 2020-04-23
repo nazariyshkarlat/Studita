@@ -8,7 +8,7 @@ import com.example.studita.data.repository.datasource.interesting.CloudInteresti
 import com.example.studita.data.repository.datasource.interesting.DiskInterestingJsonDataStore
 import com.example.studita.data.repository.datasource.interesting.InterestingJsonDataStoreFactoryImpl
 import com.example.studita.di.DI
-import com.example.studita.di.DiskModule
+import com.example.studita.di.CacheModule
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.interesting.InterestingInteractor
 import com.example.studita.domain.interactor.interesting.InterestingInteractorImpl
@@ -60,7 +60,7 @@ object InterestingModule {
         DiskInterestingJsonDataStore(getInterestingCacheImpl())
 
     private fun getInterestingCacheImpl() =
-        InterestingCacheImpl(DiskModule.sharedPreferences)
+        InterestingCacheImpl(CacheModule.sharedPreferences)
 
     private fun getInterestingJsonDataStoreFactory() =
         InterestingJsonDataStoreFactoryImpl(

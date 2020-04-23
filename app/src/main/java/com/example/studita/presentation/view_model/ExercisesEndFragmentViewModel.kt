@@ -1,6 +1,7 @@
 package com.example.studita.presentation.view_model
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import com.example.studita.presentation.fragments.exercises.ExercisesDetailedStatFragment
 import com.example.studita.presentation.fragments.exercises.ExercisesEndFragment
@@ -18,13 +19,12 @@ class ExercisesEndFragmentViewModel : ViewModel(){
         with(exercisesEndFragment) {
             val fragment =
                 ExercisesDetailedStatFragment()
-            val bundle = Bundle()
 
             arguments?.let {
-                bundle.putInt("TRUE_ANSWERS", it.getInt("TRUE_ANSWERS"))
-                bundle.putInt("FALSE_ANSWERS",  it.getInt("FALSE_ANSWERS"))
-                bundle.putInt("OBTAINED_XP", it.getInt("OBTAINED_XP"))
-                bundle.putLong("PROCESS_SECONDS",  it.getLong("PROCESS_SECONDS"))
+                val bundle = bundleOf("TRUE_ANSWERS" to it.getInt("TRUE_ANSWERS"),
+                    "FALSE_ANSWERS" to  it.getInt("FALSE_ANSWERS"),
+                    "OBTAINED_XP" to it.getInt("OBTAINED_XP"),
+                    "PROCESS_SECONDS" to it.getLong("PROCESS_SECONDS"))
                 arguments = bundle
             }
             fragment
@@ -34,9 +34,10 @@ class ExercisesEndFragmentViewModel : ViewModel(){
         with(exercisesEndFragment) {
             val fragment =
                 ExercisesResultFragment()
-            val bundle = Bundle()
-            arguments?.getFloat("ANSWERS_PERCENT")?.let { bundle.putFloat("ANSWERS_PERCENT", it) }
-            fragment.arguments = bundle
+            arguments?.let {
+                val bundle =  bundleOf("ANSWERS_PERCENT" to it.getFloat("ANSWERS_PERCENT"))
+                fragment.arguments = bundle
+            }
             fragment
         }
 

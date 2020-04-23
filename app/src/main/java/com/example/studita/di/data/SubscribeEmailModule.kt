@@ -1,11 +1,15 @@
 package com.example.studita.di.data
 
+import com.example.studita.SyncSubscribeEmailImpl
+import com.example.studita.data.cache.subscribe_email.SubscribeEmailCache
+import com.example.studita.data.cache.subscribe_email.SubscribeEmailCacheImpl
+import com.example.studita.data.entity.mapper.SubscribeEmailDataMapper
 import com.example.studita.data.net.SubscribeEmailService
 import com.example.studita.data.repository.SubscribeEmailRepositoryImpl
-import com.example.studita.data.repository.subscribe_mail.CloudSubscribeEmailDataStore
-import com.example.studita.data.repository.subscribe_mail.SubscribeEmailDataStoreFactoryImpl
+import com.example.studita.data.repository.datasource.subscribe_mail.SubscribeEmailDataStoreImpl
+import com.example.studita.data.repository.datasource.subscribe_mail.SubscribeEmailDataStoreFactoryImpl
+import com.example.studita.di.CacheModule
 import com.example.studita.di.DI
-import com.example.studita.di.DiskModule
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.subscribe_email.SubscribeEmailInteractor
 import com.example.studita.domain.interactor.subscribe_email.SubscribeEmailInteractorImpl
@@ -34,14 +38,17 @@ object SubscribeEmailModule {
     private fun getSubscribeEmailRepository(): SubscribeEmailRepository {
         if (repository == null)
             repository = SubscribeEmailRepositoryImpl(
-                getSubscribeEmailDataStoreFactory()
+                getSubscribeEmailDataStoreFactory(),
+                getSubscribeEmailCacheImpl(),
+                SubscribeEmailDataMapper()
             )
         return repository!!
     }
 
     private fun makeSubscribeEmailIntercator(repository: SubscribeEmailRepository) =
         SubscribeEmailInteractorImpl(
-            repository
+            repository,
+            SyncSubscribeEmailImpl()
         )
 
 
@@ -50,9 +57,10 @@ object SubscribeEmailModule {
             getCloudSubscribeEmailDataStore())
 
     private fun getCloudSubscribeEmailDataStore() =
-        CloudSubscribeEmailDataStore(
+        SubscribeEmailDataStoreImpl(
             NetworkModule.connectionManager,
             NetworkModule.getService(SubscribeEmailService::class.java))
 
+    private fun getSubscribeEmailCacheImpl() = SubscribeEmailCacheImpl(CacheModule.sharedPreferences)
 
 }

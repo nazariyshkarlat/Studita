@@ -1,18 +1,15 @@
 package com.example.studita.di.data
 
+import com.example.studita.data.cache.user_statistics.UserStatisticsCacheImpl
+import com.example.studita.data.entity.mapper.UserIdTokenMapper
 import com.example.studita.data.entity.mapper.UserStatisticsDataMapper
-import com.example.studita.data.net.UserDataService
 import com.example.studita.data.net.UserStatisticsService
 import com.example.studita.data.repository.UserStatisticsRepositoryImpl
-import com.example.studita.data.repository.datasource.user_data.CloudUserDataDataStore
-import com.example.studita.data.repository.datasource.user_data.DiskUserDataDataStore
-import com.example.studita.data.repository.datasource.user_data.UserDataJsonDataStoreFactoryImpl
-import com.example.studita.data.repository.datasource.user_statistics.CloudUserStatisticsDataStore
-import com.example.studita.data.repository.datasource.user_statistics.DiskUserStatisticsDataStore
-import com.example.studita.data.repository.datasource.user_statistics.UserStatisticsDataStoreFactoryImpl
+import com.example.studita.data.repository.datasource.user_statistics.CloudUserStatisticsJsonDataStore
+import com.example.studita.data.repository.datasource.user_statistics.DiskUserStatisticsJsonDataStore
+import com.example.studita.data.repository.datasource.user_statistics.UserStatisticsJsonDataStoreFactoryImpl
 import com.example.studita.di.DI
-import com.example.studita.di.DatabaseModule
-import com.example.studita.di.DiskModule
+import com.example.studita.di.CacheModule
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.user_statistics.UserStatisticsInteractor
 import com.example.studita.domain.interactor.user_statistics.UserStatisticsInteractorImpl
@@ -41,8 +38,9 @@ object UserStatisticsModule {
     private fun getUserStatisticsRepository(): UserStatisticsRepository {
         if (repository == null)
             repository = UserStatisticsRepositoryImpl(
-                getUserStatisticsDataStoreFactory(), UserStatisticsDataMapper(),
-                NetworkModule.connectionManager
+                getUserStatisticsJsonDataStoreFactory(), UserStatisticsDataMapper(),
+                NetworkModule.connectionManager,
+                UserIdTokenMapper()
             )
         return repository!!
     }
@@ -53,23 +51,25 @@ object UserStatisticsModule {
         )
 
 
-    private fun getUserStatisticsDataStoreFactory() =
-        UserStatisticsDataStoreFactoryImpl(
+    private fun getUserStatisticsJsonDataStoreFactory() =
+        UserStatisticsJsonDataStoreFactoryImpl(
             getCloudUserStatisticsDataStore(),
             getDiskUserStatisticsDataStore()
         )
 
     private fun getCloudUserStatisticsDataStore() =
-        CloudUserStatisticsDataStore(
+        CloudUserStatisticsJsonDataStore(
             NetworkModule.connectionManager,
             NetworkModule.getService(UserStatisticsService::class.java),
-            getUserStatisticsDao()
+            getUserStatisticsCacheImpl()
         )
 
     private fun getDiskUserStatisticsDataStore() =
-        DiskUserStatisticsDataStore(getUserStatisticsDao())
+        DiskUserStatisticsJsonDataStore(getUserStatisticsCacheImpl())
 
-    private fun getUserStatisticsDao() = DatabaseModule.studitaDatabase!!.getUserStatisticsDao()
+
+    private fun getUserStatisticsCacheImpl() =
+        UserStatisticsCacheImpl(CacheModule.sharedPreferences)
 
 
 }

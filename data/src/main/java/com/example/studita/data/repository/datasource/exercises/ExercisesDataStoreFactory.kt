@@ -1,22 +1,13 @@
 package com.example.studita.data.repository.datasource.exercises
 
 class ExercisesDataStoreFactoryImpl(
-    private val exercisesDataStore: ExercisesDataStore
+    private val exercisesDataStoreImpl: ExercisesDataStoreImpl
 ) : ExercisesDataStoreFactory {
 
-    override fun create(priority: ExercisesDataStoreFactory.Priority) =
-        if (priority == ExercisesDataStoreFactory.Priority.CLOUD)
-            exercisesDataStore
-        else
-            exercisesDataStore
+    override fun create() =
+        exercisesDataStoreImpl
 }
 
 interface ExercisesDataStoreFactory {
-
-    enum class Priority {
-        CLOUD,
-        CACHE
-    }
-
-    fun create(priority: Priority): ExercisesDataStore
+    fun create(): ExercisesDataStore
 }

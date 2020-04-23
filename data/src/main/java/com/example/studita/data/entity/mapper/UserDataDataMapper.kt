@@ -7,12 +7,12 @@ import kotlin.collections.ArrayList
 
 class UserDataDataMapper : Mapper<UserDataEntity, UserDataData>{
 
-    override fun map(source: UserDataEntity) = UserDataData(source.userName, source.userPublicId, source.avatarLink, source.currentLevel, source.currentLevelXP, source.streakDays, source.isSubscribed, ArrayList(source.completedParts), DateTimeFormat().parse(source.streakDate))
+    override fun map(source: UserDataEntity) = UserDataData(source.userName, source.userPublicId, source.avatarLink, source.currentLevel, source.currentLevelXP, source.streakDays, source.isSubscribed, ArrayList(source.completedParts), DateTimeFormat().parse(source.streakDatetime))
 
 }
 
 class UserDataEntityMapper : Mapper<UserDataData, UserDataEntity>{
 
-    override fun map(source: UserDataData) = UserDataEntity(source.userName, source.userPublicId, source.avatarLink, source.currentLevel, source.currentLevelXP, source.streakDays, source.isSubscribed, ArrayList(source.completedParts), DateTimeFormat().format(source.streakDate))
+    override fun map(source: UserDataData) = UserDataEntity(source.userName, source.userPublicId, source.avatarLink, source.currentLevel, source.currentLevelXP, source.streakDays, source.isSubscribed, ArrayList(source.completedParts), DateTimeFormat().format(source.streakDatetime))
 
 }

@@ -46,7 +46,7 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
                         }
                     } else {
                         (activity as AppCompatActivity).navigateTo(
-                            AuthorizationFragment(),
+                            AuthenticationFragment(),
                             R.id.doubleFrameLayoutFrameLayout
                         )
                     }

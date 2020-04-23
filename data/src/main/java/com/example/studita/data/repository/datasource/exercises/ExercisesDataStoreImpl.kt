@@ -13,7 +13,7 @@ import com.google.gson.JsonArray
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-class CloudExercisesDataStore(
+class ExercisesDataStoreImpl(
     private val connectionManager: ConnectionManager,
     private val  exercisesService: ExercisesService
 ) : ExercisesDataStore {

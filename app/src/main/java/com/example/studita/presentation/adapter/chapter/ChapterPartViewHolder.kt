@@ -17,24 +17,22 @@ class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view){
         with(itemView) {
             this as ViewGroup
             chapterPartItemText.text = model.chapterPartName
-            UserUtils.userData?.completedParts?.let { completedParts->
-                when {
-                    (model.chapterPartNumber - 1) <= completedParts[chapterUiModel.chapterNumber-1] -> {
-                        if ((model.chapterPartNumber - 1) == completedParts[chapterUiModel.chapterNumber - 1]) {
-                            setItemSelected()
-                        }else{
-                            setItemEnabled()
-                        }
-                        chapterPartItemButton.setOnClickListener {
-                            getAppCompatActivity()?.startActivity<ExercisesActivity>("CHAPTER_NUMBER" to chapterUiModel.chapterNumber,
-                                "CHAPTER_PART_NUMBER" to model.chapterPartNumber,
-                                "CHAPTER_PARTS_COUNT" to chapterUiModel.parts.size,
-                                "IS_TRAINING" to ((model.chapterPartNumber - 1) != completedParts[chapterUiModel.chapterNumber - 1]))
-                        }
+            when {
+                (model.chapterPartNumber - 1) <= UserUtils.userData.completedParts[chapterUiModel.chapterNumber-1] -> {
+                    if ((model.chapterPartNumber - 1) == UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1]) {
+                        setItemSelected()
+                    }else{
+                        setItemEnabled()
                     }
-                    else -> {
-                        setItemDisabled()
+                    chapterPartItemButton.setOnClickListener {
+                        getAppCompatActivity()?.startActivity<ExercisesActivity>("CHAPTER_NUMBER" to chapterUiModel.chapterNumber,
+                            "CHAPTER_PART_NUMBER" to model.chapterPartNumber,
+                            "CHAPTER_PARTS_COUNT" to chapterUiModel.parts.size,
+                            "IS_TRAINING" to ((model.chapterPartNumber - 1) != UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1]))
                     }
+                }
+                else -> {
+                    setItemDisabled()
                 }
             }
         }

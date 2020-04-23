@@ -1,9 +1,8 @@
 package com.example.studita.domain.repository
 
 import com.example.studita.domain.entity.LevelsDataData
-import com.example.studita.domain.entity.UserDataData
-import com.example.studita.domain.entity.UserTokenIdData
+import com.example.studita.domain.entity.UserIdTokenData
 
 interface LevelsDataRepository{
-    suspend fun getLevelsData(userTokenIdData: UserTokenIdData): Pair<Int, LevelsDataData>
+    suspend fun getLevelsData(userIdTokenData: UserIdTokenData): Pair<Int, LevelsDataData>
 }

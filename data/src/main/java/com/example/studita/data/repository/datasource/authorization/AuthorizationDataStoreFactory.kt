@@ -1,22 +1,14 @@
 package com.example.studita.data.repository.datasource.authorization
 
 class AuthorizationDataStoreFactoryImpl(
-    private val cloudAuthorizationDataStore: CloudAuthorizationDataStore
+    private val authorizationDataStoreImpl: AuthorizationDataStoreImpl
 ) : AuthorizationDataStoreFactory {
 
-    override fun create(priority: AuthorizationDataStoreFactory.Priority) =
-        if (priority == AuthorizationDataStoreFactory.Priority.CLOUD)
-            cloudAuthorizationDataStore
-        else
-            cloudAuthorizationDataStore
+    override fun create() =
+        authorizationDataStoreImpl
 }
 
 interface AuthorizationDataStoreFactory{
 
-    enum class Priority {
-        CLOUD,
-        CACHE
-    }
-
-    fun  create(priority: Priority): AuthorizationDataStore
+    fun  create(): AuthorizationDataStore
 }

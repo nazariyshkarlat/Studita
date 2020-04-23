@@ -1,12 +1,11 @@
 package com.example.studita.presentation.view_model
 
-import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
-import com.example.studita.di.DatabaseModule
 import com.example.studita.di.data.ObtainedExerciseDataModule
 import com.example.studita.di.data.UserDataModule
 import com.example.studita.di.data.exercise.ExerciseResultModule
@@ -33,9 +32,9 @@ import com.example.studita.presentation.utils.LevelUtils
 import com.example.studita.presentation.utils.TimeUtils
 import com.example.studita.presentation.utils.UserUtils
 import com.example.studita.presentation.utils.UserUtils.oldUserData
+import com.example.studita.presentation.utils.UserUtils.userData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -101,11 +100,13 @@ class ExercisesViewModel : ViewModel(){
     private fun saveUserData(userDataData: UserDataData){
         viewModelScope.launch {
             userDataInteractor.saveUserData(userDataData)
+            if(!UserUtils.isLoggedIn())
+                saveObtainedExerciseDataState.postValue( true)
         }
     }
 
     private fun saveObtainedExercisesResult(){
-        UserUtils.userData?.let {
+        userData.let {
 
             oldUserData = it.copy()
 
@@ -119,6 +120,7 @@ class ExercisesViewModel : ViewModel(){
             val newLevelXP = LevelUtils.getNewLevelXP(it, obtainedXP)
 
             val data = ObtainedExerciseDataData(
+                datetime = Date(),
                 training = isTraining,
                 obtainedXP = obtainedXP,
                 obtainedTime = seconds,
@@ -130,24 +132,25 @@ class ExercisesViewModel : ViewModel(){
             it.currentLevel += newLevelsCount
             it.currentLevelXP = newLevelXP
 
-            val daysDiff = TimeUtils.getCalendarDayCount(it.streakDate, Date())
-            if(daysDiff != 0L){
-                if(it.streakDays == 0)
+            val daysDiff = TimeUtils.getCalendarDayCount(it.streakDatetime, Date())
+            if (daysDiff != 0L) {
+                if (it.streakDays == 0)
                     it.streakDays = 1
-                else if(daysDiff == 1L)
-                    it.streakDays = it.streakDays+1
-                it.streakDate = Date()
+                else if (daysDiff == 1L)
+                    it.streakDays = it.streakDays + 1
+                it.streakDatetime = Date()
             }
 
-            if(!isTraining) {
+            if (!isTraining) {
                 it.completedParts[chapterNumber - 1] = chapterPartNumber
 
-                if(chapterPartNumber == chapterPartsCount)
-                    ChapterBottomSheetFragment.snackbarShowReason = ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED
-
-                if(getAnswersPercent() < 0.6F){
+                if (chapterPartNumber == chapterPartsCount)
                     ChapterBottomSheetFragment.snackbarShowReason =
-                        if(ChapterBottomSheetFragment.snackbarShowReason == ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED)
+                        ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED
+
+                if (getAnswersPercent() < 0.6F) {
+                    ChapterBottomSheetFragment.snackbarShowReason =
+                        if (ChapterBottomSheetFragment.snackbarShowReason == ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED)
                             ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED_AND_BAD_RESULT
                         else
                             ChapterBottomSheetFragment.Companion.SnackbarShowReason.BAD_RESULT
@@ -159,13 +162,16 @@ class ExercisesViewModel : ViewModel(){
 
             saveUserData(it)
 
-            viewModelScope.launch{
-                UserUtils.getUserTokenIdData()?.let { it1 ->
-                    if(obtainedExerciseDataInteractor.saveObtainedData(
-                        it1,
-                        data
-                    ) is SaveObtainedExerciseDataStatus.Success){
-                        saveObtainedExerciseDataState.postValue(true)
+            if (UserUtils.isLoggedIn()) {
+                viewModelScope.launch {
+                    UserUtils.getUserTokenIdData()?.let { it1 ->
+                        if (obtainedExerciseDataInteractor.saveObtainedData(
+                                it1,
+                                data
+                            ) is SaveObtainedExerciseDataStatus.Success
+                        ) {
+                            saveObtainedExerciseDataState.postValue(true)
+                        }
                     }
                 }
             }
@@ -303,12 +309,11 @@ class ExercisesViewModel : ViewModel(){
     fun getExercisesEndFragment(): Fragment{
         val fragment =
             ExercisesEndFragment()
-        val bundle = Bundle()
-        bundle.putInt("TRUE_ANSWERS", getTrueAnswers())
-        bundle.putInt("FALSE_ANSWERS", getFalseAnswers())
-        bundle.putFloat("ANSWERS_PERCENT", getAnswersPercent())
-        bundle.putInt("OBTAINED_XP", obtainedXP)
-        bundle.putLong("PROCESS_SECONDS", seconds)
+        val bundle = bundleOf("TRUE_ANSWERS" to getTrueAnswers(),
+            "FALSE_ANSWERS" to getFalseAnswers(),
+            "ANSWERS_PERCENT" to getAnswersPercent(),
+            "OBTAINED_XP" to obtainedXP,
+            "PROCESS_SECONDS" to seconds)
         fragment.arguments = bundle
         return fragment
     }

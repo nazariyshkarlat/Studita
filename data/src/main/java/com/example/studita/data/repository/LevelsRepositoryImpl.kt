@@ -9,7 +9,7 @@ import com.example.studita.domain.entity.LevelData
 import com.example.studita.domain.repository.LevelsRepository
 
 class LevelsRepositoryImpl(
-    private val levelsDataStoreFactory: LevelsJsonDataStoreFactoryImpl,
+    private val levelsDataStoreFactory: LevelsJsonDataStoreFactory,
     private val levelDataMapper: LevelDataMapper,
     private val connectionManager: ConnectionManager
 ) : LevelsRepository{

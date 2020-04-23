@@ -14,9 +14,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.studita.R
 import com.example.studita.presentation.utils.*
-import com.example.studita.presentation.fragments.user_statistics.pages.UserStatPageFragment
 import com.example.studita.presentation.views.press_view.PressTextView
-import com.example.studita.presentation.views.press_view.PressView
 
 
 class CustomTabLayout @JvmOverloads constructor(

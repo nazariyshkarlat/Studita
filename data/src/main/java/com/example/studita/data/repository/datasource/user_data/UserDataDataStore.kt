@@ -1,8 +1,8 @@
 package com.example.studita.data.repository.datasource.user_data
 
 import com.example.studita.data.entity.UserDataEntity
-import com.example.studita.data.entity.UserTokenId
+import com.example.studita.data.entity.UserIdToken
 
 interface UserDataDataStore {
-    suspend fun getUserDataEntity(userTokenId: UserTokenId): Pair<Int, UserDataEntity>
+    suspend fun getUserDataEntity(userIdToken: UserIdToken?): Pair<Int, UserDataEntity>
 }

@@ -1,6 +1,5 @@
 package com.example.studita.presentation.fragments
 
-import android.graphics.Interpolator
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,9 +10,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.OneShotPreDrawListener
+import androidx.core.view.marginBottom
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.studita.R
 import com.example.studita.authenticator.AccountAuthenticator
@@ -23,10 +25,13 @@ import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.presentation.utils.setOnViewSizeChangeListener
 import com.example.studita.presentation.view_model.AuthorizationFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
-import kotlinx.android.synthetic.main.authorization_layout.*
+import kotlinx.android.synthetic.main.authentication_layout.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
-class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout), TextWatcher, OnViewSizeChangeListener{
+class AuthenticationFragment : NavigatableFragment(R.layout.authentication_layout), TextWatcher, OnViewSizeChangeListener{
 
     private var toolbarFragmentViewModel: ToolbarFragmentViewModel? = null
     private var authorizationFragmentViewModel: AuthorizationFragmentViewModel? = null
@@ -34,6 +39,7 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
     private lateinit var onViewSizeChangeListener: View.OnLayoutChangeListener
     lateinit var contentView: ViewGroup
     private var buttonHidden = false
+    private var errorJob: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -120,11 +126,10 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
         }
 
         authorizationPasswordEditText.addTextChangedListener(this)
-        authorizationEmailEditText.addTextChangedListener(object : TextWatcher{
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { if(authorizationEmailEditText.hasError) hideError()}
-        })
+
+        OneShotPreDrawListener.add(authorizationBottomSection) {
+            initErrorSnackbar()
+        }
     }
 
 
@@ -138,10 +143,7 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        if(authorizationPasswordEditText.hasError)
-            hideError()
-    }
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
 
     override fun onDestroyView() {
@@ -151,18 +153,21 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
 
     override fun onViewSizeChanged(view: View) {
 
-        val viewHeight = view.height
+        val viewHeight = authorizationCenterLinearLayout.height + authorizationBottomSection.height + resources.getDimension(R.dimen.toolbarHeight)
 
-        if((viewHeight < getScreenHeight()*0.75)){
+        println(getScreenHeight())
+        if((viewHeight > getScreenHeight())){
             if(!buttonHidden) {
-                authorizationBottomSection.removeView(authorizationSignUpButton)
+                authorizationCenterLinearLayout.setPadding(0, resources.getDimension(R.dimen.toolbarHeight).toInt(), 0, 0)
+                authorizationSignUpButton.visibility = View.GONE
                 authorizationForgotPassword.text = resources.getString(R.string.create_new_account)
-                authorizationForgotPassword.setOnClickListener { signUpOnClick }
+                authorizationForgotPassword.setOnClickListener { signUpOnClick.invoke() }
                 buttonHidden = true
             }
         }else{
             if(buttonHidden) {
-                authorizationBottomSection.addView(authorizationSignUpButton, 0)
+                authorizationCenterLinearLayout.setPadding(0, 0, 0, 0)
+                authorizationSignUpButton.visibility = View.VISIBLE
                 authorizationForgotPassword.text = resources.getString(R.string.forgot_password)
                 authorizationForgotPassword.setOnClickListener {}
                 buttonHidden = false
@@ -180,20 +185,30 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
             authorizationPasswordEditText.requestFocus()
         }
         (authorizationErrorSnackbar as TextView).text = resources.getString(resId)
-        authorizationBottomSection.animate().translationY(-resources.getDimension(R.dimen.errorSnackbarHeight)).setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong()).setInterpolator(FastOutSlowInInterpolator()).start()
+        initErrorSnackbar()
+        authorizationBottomSection.animate()
+            .translationY(0F)
+            .setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong())
+            .setInterpolator(FastOutSlowInInterpolator()).start()
+        errorJob?.cancel()
+        errorJob = viewLifecycleOwner.lifecycleScope.launch {
+            delay(resources.getInteger(R.integer.authorization_error_duration).toLong())
+            hideError()
+        }
     }
 
     private fun hideError(){
         authorizationEmailEditText.hasError = false
         authorizationPasswordEditText.hasError = false
-        authorizationBottomSection.animate().translationY(0F).setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong()).setInterpolator(FastOutSlowInInterpolator()).start()
+        authorizationBottomSection.animate().translationY(authorizationErrorSnackbar.measuredHeight.toFloat()).setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong()).setInterpolator(FastOutSlowInInterpolator()).start()
+    }
+
+    private fun initErrorSnackbar(){
+        authorizationBottomSection.translationY = authorizationErrorSnackbar.height.toFloat()
     }
 
     private fun getScreenHeight() : Int {
-        val display = contentView.display
-        val outMetrics = DisplayMetrics()
-        display.getRealMetrics(outMetrics)
-        return outMetrics.heightPixels
+        return authorizationRelativeLayout.height
     }
 
 

@@ -5,9 +5,8 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studita.R
-import com.example.studita.di.DiskModule
+import com.example.studita.di.CacheModule
 import com.example.studita.presentation.utils.startActivity
-import com.example.studita.presentation.fragments.HomeFragment
 import com.example.studita.presentation.fragments.MainMenuThemeDialogAlertFragment
 
 @SuppressLint("Registered")
@@ -26,7 +25,7 @@ open class DefaultActivity : AppCompatActivity(),
     }
 
     private fun setTheme(){
-        themeState = Theme.values()[DiskModule.sharedPreferences.getInt("theme", Theme.DEFAULT.ordinal)]
+        themeState = Theme.values()[CacheModule.sharedPreferences.getInt("theme", Theme.DEFAULT.ordinal)]
         if(themeState == Theme.DEFAULT)
             themeState = getDefaultTheme()
         setTheme(themes[themeState.ordinal])
@@ -43,7 +42,7 @@ open class DefaultActivity : AppCompatActivity(),
 
     override fun onThemeChanged(theme: Theme) {
         themeState = theme
-        DiskModule.sharedPreferences.edit()?.putInt("theme", themeState.ordinal)?.apply()
+        CacheModule.sharedPreferences.edit()?.putInt("theme", themeState.ordinal)?.apply()
         startActivity<MainMenuActivity>()
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         finish()

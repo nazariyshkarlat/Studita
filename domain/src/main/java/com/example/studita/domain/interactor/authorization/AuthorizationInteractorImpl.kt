@@ -1,6 +1,8 @@
 package com.example.studita.domain.interactor.authorization
 
+import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
+import com.example.studita.domain.entity.authorization.SignInWithGoogleRequestData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.interactor.LogInStatus
 import com.example.studita.domain.interactor.SignInWithGoogleStatus
@@ -44,9 +46,9 @@ class AuthorizationInteractorImpl(private val repository: AuthorizationRepositor
                 LogInStatus.ServiceUnavailable
         }
 
-    override suspend fun signInWithGoogle(idToken: String): SignInWithGoogleStatus =
+    override suspend fun signInWithGoogle(signInWithGoogleRequestData: SignInWithGoogleRequestData): SignInWithGoogleStatus =
         try {
-            val result = repository.signInWithGoogle(idToken)
+            val result = repository.signInWithGoogle(signInWithGoogleRequestData)
             when (result.first) {
                 400 -> SignInWithGoogleStatus.Failure
                 else -> result.second?.let {

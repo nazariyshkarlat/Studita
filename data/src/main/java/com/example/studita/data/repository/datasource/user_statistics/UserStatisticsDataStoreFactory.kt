@@ -1,23 +1,23 @@
 package com.example.studita.data.repository.datasource.user_statistics
 
-class UserStatisticsDataStoreFactoryImpl(
-    private val cloudUserStatisticsDataStore: CloudUserStatisticsDataStore,
-    private val diskUserStatisticsDataStore: DiskUserStatisticsDataStore
-) : UserStatisticsDataStoreFactory {
+class UserStatisticsJsonDataStoreFactoryImpl(
+    private val cloudUserStatisticsStatisticsStore: CloudUserStatisticsJsonDataStore,
+    private val diskUserStatisticsJsonStatisticsStore: DiskUserStatisticsJsonDataStore
+) : UserStatisticsJsonDataStoreFactory {
 
-    override fun create(priority: UserStatisticsDataStoreFactory.Priority) =
-        if (priority == UserStatisticsDataStoreFactory.Priority.CLOUD)
-            cloudUserStatisticsDataStore
+    override fun create(priority: UserStatisticsJsonDataStoreFactory.Priority) =
+        if (priority == UserStatisticsJsonDataStoreFactory.Priority.CLOUD)
+            cloudUserStatisticsStatisticsStore
         else
-            diskUserStatisticsDataStore
+            diskUserStatisticsJsonStatisticsStore
 }
 
-interface UserStatisticsDataStoreFactory {
+interface UserStatisticsJsonDataStoreFactory {
 
     enum class Priority {
         CLOUD,
         CACHE
     }
 
-    fun create(priority: Priority): UserStatisticsDataStore
+    fun create(priority: Priority): UserStatisticsJsonDataStore
 }

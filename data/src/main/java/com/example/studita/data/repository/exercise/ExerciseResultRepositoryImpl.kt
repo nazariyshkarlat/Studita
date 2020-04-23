@@ -14,7 +14,7 @@ class ExerciseResultRepositoryImpl(private val exerciseResultDataStoreFactory: E
         exerciseNumber: Int,
         exerciseRequestData: ExerciseRequestData
     ): Pair<Int, ExerciseResponseData> =
-        with(exerciseResultDataStoreFactory.create(ExerciseResultDataStoreFactory.Priority.CLOUD).getExerciseResult(exerciseNumber, exerciseRequestDataMapper.map(exerciseRequestData))){
+        with(exerciseResultDataStoreFactory.create().getExerciseResult(exerciseNumber, exerciseRequestDataMapper.map(exerciseRequestData))){
             this.first to exerciseResponseDataMapper.map(this.second)
         }
 

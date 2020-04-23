@@ -67,7 +67,7 @@ sealed class UserStatisticsStatus{
     object ServiceUnavailable : UserStatisticsStatus()
     object NoConnection : UserStatisticsStatus()
     object Failure: UserStatisticsStatus()
-    data class Success(val result: UserStatisticsData): UserStatisticsStatus()
+    data class Success(val results: List<UserStatisticsData>): UserStatisticsStatus()
 }
 
 sealed class InterestingStatus{
@@ -77,11 +77,11 @@ sealed class InterestingStatus{
     data class Success(val result: InterestingData): InterestingStatus()
 }
 
-sealed class SubscribeEmailStatus{
-    object ServiceUnavailable : SubscribeEmailStatus()
-    object NoConnection : SubscribeEmailStatus()
-    object Failure: SubscribeEmailStatus()
-    data class Success(val result: String): SubscribeEmailStatus()
+sealed class SubscribeEmailResultStatus{
+    object ServiceUnavailable : SubscribeEmailResultStatus()
+    object NoConnection : SubscribeEmailResultStatus()
+    object Failure: SubscribeEmailResultStatus()
+    data class Success(val result: SubscribeEmailResultData): SubscribeEmailResultStatus()
 }
 
 sealed class SaveObtainedExerciseDataStatus{

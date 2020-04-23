@@ -3,7 +3,6 @@
     <dimen name="tabIndicatorLRPadding">4dp</dimen>
     <dimen name="tabIndicatorTBPadding">8dp</dimen>
     <dimen name="tabIndicatorCircleSize">8dp</dimen>
-    <dimen name="buttonBottomMargin">24dp</dimen>
     <dimen name="buttonRLMargin">16dp</dimen>
     <dimen name="tabIndicatorBottomMargin">16dp</dimen>
     <dimen name="defaultRLMargin">16dp</dimen>
@@ -23,8 +22,6 @@
     <dimen name="homeLayoutToolbarHeight">74dp</dimen>
     <dimen name="connectionSnackbarHeight">26dp</dimen>
     <dimen name="negativeConnectionSnackbarHeight">-26dp</dimen>
-    <dimen name="errorSnackbarHeight">36dp</dimen>
-    <dimen name="negativeErrorSnackbarHeight">-37dp</dimen>
     <dimen name="connectionSnackbarTextSize">12sp</dimen>
     <dimen name="errorSnackbarTextSize">14sp</dimen>
     <dimen name="centerDrawableButtonPadding">4dp</dimen>

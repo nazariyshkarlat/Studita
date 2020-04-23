@@ -55,7 +55,8 @@ class MainActivity : DefaultActivity(){
         super.onResume()
         if (needsRecreate) {
             needsRecreate = false
-            recreate()
+            startActivity<MainActivity>()
+            this.finish()
         }
     }
 

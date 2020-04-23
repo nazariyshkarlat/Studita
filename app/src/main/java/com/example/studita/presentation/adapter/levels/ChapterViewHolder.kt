@@ -22,11 +22,9 @@ class ChapterViewHolder(view: View,val count: Int) : LevelsViewHolder<HomeRecycl
             if(model.chapterNumber == count){
                 formClosedChapter()
             }else{
-                    UserUtils.userData?.completedParts?.get(model.chapterNumber-1)?.let {
-                        chapterItemProgressText.text =  LevelUtils.getProgressText(
-                            it, model.chapterPartsCount, context)
-                        chapterItemProgressBar.percentProgress = LevelUtils.getChapterProgressPercent(it, model.chapterPartsCount)
-                    }
+                chapterItemProgressText.text =  LevelUtils.getProgressText(
+                    UserUtils.userData.completedParts[model.chapterNumber-1], model.chapterPartsCount, context)
+                chapterItemProgressBar.percentProgress = LevelUtils.getChapterProgressPercent(UserUtils.userData.completedParts[model.chapterNumber-1], model.chapterPartsCount)
                 setOnClickListener {
                     initBottomSheetFragment(model.chapterNumber, context)
                 }

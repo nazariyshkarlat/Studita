@@ -17,24 +17,22 @@ class HomeUserDataViewHolder(view: View) : LevelsViewHolder<HomeRecyclerUiModel.
         model as HomeRecyclerUiModel.HomeUserDataUiModel
 
         with(itemView) {
-            UserUtils.userData?.let {
-                homeLayoutUserDataXPLayoutMoreButton.setOnClickListener {
-                    getAppCompatActivity()?.startActivity<UserStatActivity>()
-                }
-                homeLayoutUserDataLevelLayoutCurrentLevel.text = it.currentLevel.toString()
-                homeLayoutUserDataLevelLayoutNextLevel.text =
-                    getNextLevel(it.currentLevel).toString()
-                homeLayoutUserDataLevelLayoutXP.text = itemView.context.resources.getString(
-                    R.string.current_level_XP,
-                    it.currentLevelXP,
-                    getLevelXP(it.currentLevel)
-                )
-                homeLayoutUserDataLevelLayoutProgressBar.percentProgress =
-                    it.currentLevelXP / getLevelXP(it.currentLevel).toFloat()
-                homeLayoutUserDataXPLayoutStreakDays.text =
-                        LanguageUtils.getResourcesRussianLocale(itemView.context)?.getQuantityString(R.plurals.streak_plurals, it.streakDays, it.streakDays)
-                homeLayoutUserDataXPLayoutFireIcon.isActivated = streakActivated(it.streakDate)
+            homeLayoutUserDataXPLayoutMoreButton.setOnClickListener {
+                getAppCompatActivity()?.startActivity<UserStatActivity>()
             }
+            homeLayoutUserDataLevelLayoutCurrentLevel.text = UserUtils.userData.currentLevel.toString()
+            homeLayoutUserDataLevelLayoutNextLevel.text =
+                getNextLevel(UserUtils.userData.currentLevel).toString()
+            homeLayoutUserDataLevelLayoutXP.text = itemView.context.resources.getString(
+                R.string.current_level_XP,
+                UserUtils.userData.currentLevelXP,
+                getLevelXP(UserUtils.userData.currentLevel)
+            )
+            homeLayoutUserDataLevelLayoutProgressBar.percentProgress =
+                UserUtils.userData.currentLevelXP / getLevelXP(UserUtils.userData.currentLevel).toFloat()
+            homeLayoutUserDataXPLayoutStreakDays.text =
+                    LanguageUtils.getResourcesRussianLocale(itemView.context)?.getQuantityString(R.plurals.streak_plurals, UserUtils.userData.streakDays, UserUtils.userData.streakDays)
+            homeLayoutUserDataXPLayoutFireIcon.isActivated = streakActivated(UserUtils.userData.streakDatetime)
         }
     }
 

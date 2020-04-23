@@ -105,17 +105,19 @@ class MainFragment : BaseFragment(R.layout.main_layout){
             })
         }
 
-            mainLayoutFAB.onViewCreated {
-                transValue =
-                    mainLayoutFAB.height.toFloat() + mainLayoutFAB.marginBottom + bottomNavigationView.height
-            }
-
-            if(savedInstanceState != null){
-                showHideFabOnNavigation((activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.mainLayoutFrameLayout))
-            }
-
-            bottomNavigationView.setOnNavigationItemSelectedListener(navigationViewModel)
+        mainLayoutFAB.onViewCreated {
+            transValue =
+                mainLayoutFAB.height.toFloat() + mainLayoutFAB.marginBottom + bottomNavigationView.height
         }
+
+        if(savedInstanceState != null){
+            showHideFabOnNavigation((activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.mainLayoutFrameLayout))
+        }
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(navigationViewModel)
+
+        handleNetworkChanges(view)
+    }
 
     private fun showHideFabOnNavigation(fragment: Fragment?){
         if (fragment is HomeFragment) {
@@ -123,6 +125,36 @@ class MainFragment : BaseFragment(R.layout.main_layout){
         } else {
             mainLayoutFAB.hide()
         }
+    }
+
+
+    private fun handleNetworkChanges(view: View) {
+        NetworkUtils.getNetworkLiveData(view.context).observe(this, Observer { isConnected ->
+                val snackbar = connectionSnackbarLayout as TextView
+                if (!isConnected) {
+                    snackbar.text = resources.getString(R.string.network_absent)
+                    snackbar.setBackgroundColor(ContextCompat.getColor(view.context, R.color.gray88))
+                    mainLayoutBottomSection.animate().translationY(0F)
+                        .setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong())
+                        .start()
+                } else {
+                    snackbar.text = resources.getString(R.string.back_online)
+                    snackbar.setBackgroundColor(
+                        ContextCompat.getColor(
+                            view.context,
+                            R.color.green
+                        )
+                    )
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        delay(resources.getInteger(R.integer.back_online_snackbar_duration).toLong())
+                        mainLayoutBottomSection.animate()
+                            .translationY(resources.getDimension(R.dimen.connectionSnackbarHeight))
+                            .setDuration(
+                                resources.getInteger(R.integer.snackbar_anim_duration).toLong()
+                            ).start()
+                    }
+                }
+            })
     }
 
 }

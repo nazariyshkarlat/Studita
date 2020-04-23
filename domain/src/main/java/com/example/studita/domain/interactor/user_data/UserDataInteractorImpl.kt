@@ -1,17 +1,15 @@
 package com.example.studita.domain.interactor.user_data
 
 import com.example.studita.domain.entity.UserDataData
-import com.example.studita.domain.entity.UserTokenIdData
+import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.exception.NetworkConnectionException
-import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.interactor.UserDataStatus
-import com.example.studita.domain.repository.LevelsRepository
 import com.example.studita.domain.repository.UserDataRepository
 
 class UserDataInteractorImpl(private val repository: UserDataRepository) : UserDataInteractor{
-    override suspend fun getUserData(userTokenIdData: UserTokenIdData): UserDataStatus =
+    override suspend fun getUserData(userIdTokenData: UserIdTokenData?): UserDataStatus =
         try {
-            val result = repository.getUserData(userTokenIdData)
+            val result = repository.getUserData(userIdTokenData)
             when (result.first) {
                 200 -> UserDataStatus.Success(result.second)
                 else -> UserDataStatus.Failure

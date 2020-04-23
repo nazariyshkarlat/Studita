@@ -1,11 +1,13 @@
-package com.example.studita.presentation.fragments.user_statistics.pages
+package com.example.studita.presentation.fragments.user_statistics
 
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.UserStatisticsData
+import com.example.studita.domain.interactor.UserStatisticsStatus
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.utils.TimeUtils
 import com.example.studita.presentation.view_model.UserStatisticsViewModel
@@ -20,9 +22,15 @@ open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout){
         viewModel = activity?.run{
             ViewModelProviders.of(this).get(UserStatisticsViewModel::class.java)
         }
+
+        val pageNumber = arguments?.getInt("PAGE_NUMBER") ?: 0
+        viewModel?.userStatisticsState?.observe(viewLifecycleOwner, Observer {
+            if(it is UserStatisticsStatus.Success)
+                formView(it.results[pageNumber])
+        })
     }
 
-    fun formView(userStatisticsData: UserStatisticsData){
+    private fun formView(userStatisticsData: UserStatisticsData){
         userStatPageLayoutXPSubtitle.text = userStatisticsData.obtainedXP.toString()
         userStatPageLayoutTimeSubtitle.text = context?.let {context->
             TimeUtils.styleTimeText(

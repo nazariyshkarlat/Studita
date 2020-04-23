@@ -3,7 +3,7 @@ package com.example.studita.di.data.exercise
 import com.example.studita.data.entity.mapper.exercise.ExercisesDataMapper
 import com.example.studita.data.net.ExercisesService
 import com.example.studita.data.repository.exercise.ExercisesRepositoryImpl
-import com.example.studita.data.repository.datasource.exercises.CloudExercisesDataStore
+import com.example.studita.data.repository.datasource.exercises.ExercisesDataStoreImpl
 import com.example.studita.data.repository.datasource.exercises.ExercisesDataStoreFactoryImpl
 import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule
@@ -48,7 +48,7 @@ object ExercisesModule {
         )
 
     private fun getExercisesDataStore() =
-        CloudExercisesDataStore(
+        ExercisesDataStoreImpl(
             NetworkModule.connectionManager,
             NetworkModule.getService(ExercisesService::class.java)
         )

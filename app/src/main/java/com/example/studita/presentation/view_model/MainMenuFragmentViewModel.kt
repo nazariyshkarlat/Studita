@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.authenticator.AccountAuthenticator
 import com.example.studita.di.data.AuthorizationModule
+import com.example.studita.domain.entity.authorization.SignInWithGoogleRequestData
+import com.example.studita.presentation.utils.UserUtils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -43,7 +45,7 @@ class MainMenuFragmentViewModel : ViewModel(){
             viewModelScope.launch {
                 account?.let {
                     val result = AuthorizationModule.getAuthorizationInteractorImpl()
-                        .signInWithGoogle(account.idToken.toString())
+                        .signInWithGoogle(SignInWithGoogleRequestData(account.idToken.toString(),if(!UserUtils.isLoggedIn()) UserUtils.userData else null))
                     AccountAuthenticator.addAccount(context, it.email.toString())
                     googleSignInState.postValue(true)
                 }

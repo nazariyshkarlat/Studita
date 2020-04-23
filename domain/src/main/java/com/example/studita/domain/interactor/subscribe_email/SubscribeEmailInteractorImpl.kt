@@ -1,41 +1,50 @@
 package com.example.studita.domain.interactor.subscribe_email
 
-import com.example.studita.domain.entity.UserTokenIdData
+import com.example.studita.domain.entity.SubscribeEmailResultData
+import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.exception.NetworkConnectionException
-import com.example.studita.domain.interactor.SubscribeEmailStatus
-import com.example.studita.domain.interactor.UserDataStatus
-import com.example.studita.domain.interactor.user_data.UserDataInteractor
+import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.domain.repository.SubscribeEmailRepository
-import com.example.studita.domain.repository.UserDataRepository
+import com.example.studita.domain.service.SyncSubscribeEmail
 
-class SubscribeEmailInteractorImpl(private val repository: SubscribeEmailRepository) : SubscribeEmailInteractor {
-    override suspend fun subscribe(userTokenIdData: UserTokenIdData): SubscribeEmailStatus =
+class SubscribeEmailInteractorImpl(private val repository: SubscribeEmailRepository, private val syncSubscribeEmail: SyncSubscribeEmail) : SubscribeEmailInteractor {
+    override suspend fun subscribe(userIdTokenData: UserIdTokenData): SubscribeEmailResultStatus =
         try {
-            val result = repository.subscribe(userTokenIdData)
+            val result = repository.subscribe(userIdTokenData)
             when (result.first) {
-                200 -> SubscribeEmailStatus.Success(result.second)
-                else -> SubscribeEmailStatus.Failure
+                200 -> SubscribeEmailResultStatus.Success(result.second)
+                else -> SubscribeEmailResultStatus.Failure
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if (e is NetworkConnectionException)
-                SubscribeEmailStatus.NoConnection
-            else
-                SubscribeEmailStatus.ServiceUnavailable
+            if (e is NetworkConnectionException) {
+                syncSubscribeEmail.scheduleSubscribeEmail(true)
+                SubscribeEmailResultStatus.NoConnection
+            }else
+                SubscribeEmailResultStatus.ServiceUnavailable
         }
 
-    override suspend fun unsubscribe(userTokenIdData: UserTokenIdData): SubscribeEmailStatus =
+    override suspend fun unsubscribe(userIdTokenData: UserIdTokenData): SubscribeEmailResultStatus =
         try {
-            val result = repository.unsubscribe(userTokenIdData)
+            val result = repository.unsubscribe(userIdTokenData)
             when (result.first) {
-                200 -> SubscribeEmailStatus.Success(result.second)
-                else -> SubscribeEmailStatus.Failure
+                200 -> SubscribeEmailResultStatus.Success(result.second)
+                else -> SubscribeEmailResultStatus.Failure
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if (e is NetworkConnectionException)
-                SubscribeEmailStatus.NoConnection
-            else
-                SubscribeEmailStatus.ServiceUnavailable
+            if (e is NetworkConnectionException) {
+                syncSubscribeEmail.scheduleSubscribeEmail(false)
+                SubscribeEmailResultStatus.NoConnection
+            }else
+                SubscribeEmailResultStatus.ServiceUnavailable
         }
+
+    override suspend fun saveSyncedResult(status: SubscribeEmailResultStatus) {
+        if(status is SubscribeEmailResultStatus.Success) {
+            repository.saveSyncedResult(status.result)
+        }
+    }
+
+    override fun getSyncedResult(): SubscribeEmailResultData? = repository.getSyncedResult()
 }

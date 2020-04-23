@@ -1,6 +1,5 @@
 package com.example.studita.data.entity.obtained_exercise_data
 
-import com.example.studita.data.entity.UserTokenId
 import com.google.gson.annotations.SerializedName
 
 data class ObtainedExerciseDataEntity(@SerializedName("new_levels_count")val newLevelsCount: Int,

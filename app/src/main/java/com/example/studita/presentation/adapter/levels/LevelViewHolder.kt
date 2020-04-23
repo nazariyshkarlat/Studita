@@ -12,12 +12,10 @@ class LevelViewHolder(view: View) : LevelsViewHolder<HomeRecyclerUiModel.HomeRec
         val modelData = (model as HomeRecyclerUiModel.HomeRecyclerLevelViewModel)
         itemView.levelItemLevel.text = itemView.context.resources.getString(R.string.level_number, modelData.levelNumber)
         if(model.chapterPartsCount !=0) {
-            UserUtils.userData?.completedParts?.let {
-                itemView.levelItemLevel.isEnabled = model.chapterPartsCount == it.subList(
-                    model.chaptersBounds.first,
-                    model.chaptersBounds.second
-                ).sum()
-            }
+            itemView.levelItemLevel.isEnabled = model.chapterPartsCount == UserUtils.userData.completedParts.subList(
+                model.chaptersBounds.first,
+                model.chaptersBounds.second
+            ).sum()
         }else{
             itemView.levelItemLevel.isEnabled = false
         }
