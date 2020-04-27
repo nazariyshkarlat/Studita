@@ -21,32 +21,31 @@ import kotlinx.android.synthetic.main.main_menu_layout.*
 class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserver.OnScrollChangedListener {
 
     private val RC_SIGN_IN: Int = 0
-    private var fragmentViewModel: MainMenuFragmentViewModel? = null
-    private var activityViewModel: ToolbarFragmentViewModel? = null
-    lateinit var onThemeChangeListener: MainMenuThemeDialogAlertFragment.OnThemeChangeListener
+    private var mainMenuFragmentViewModel: MainMenuFragmentViewModel? = null
+    private var toolbarFragmentViewModel: ToolbarFragmentViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fragmentViewModel = activity?.run {
+        mainMenuFragmentViewModel = activity?.run {
             ViewModelProviders.of(this).get(MainMenuFragmentViewModel::class.java)
         }
 
-        activityViewModel = activity?.run {
+        toolbarFragmentViewModel = activity?.run {
             ViewModelProviders.of(this).get(ToolbarFragmentViewModel::class.java)
         }
 
-        fragmentViewModel?.let { viewModel ->
+        mainMenuFragmentViewModel?.let { viewModel ->
             viewModel.signUpMethodState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { state ->
                     if (state == MainMenuFragmentViewModel.SignUpMethod.WITH_GOOGLE) {
                         context?.let {
-                            startActivityForResult(fragmentViewModel?.signIn(it)?.signInIntent, RC_SIGN_IN)
+                            startActivityForResult(mainMenuFragmentViewModel?.signIn(it)?.signInIntent, RC_SIGN_IN)
                         }
                     } else {
                         (activity as AppCompatActivity).navigateTo(
-                            AuthenticationFragment(),
+                            AuthorizationFragment(),
                             R.id.doubleFrameLayoutFrameLayout
                         )
                     }
@@ -65,9 +64,12 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
 
         mainMenuScrollView.viewTreeObserver.addOnScrollChangedListener(this)
 
+        mainMenuLayoutOfflineSwitchView.setOnClickListener {
+            mainMenuLayoutOfflineSwitch.isChecked = !mainMenuLayoutOfflineSwitch.isChecked
+        }
+
         mainMenuLayoutThemeView.setOnClickListener {
             val dialogFragment = MainMenuThemeDialogAlertFragment()
-            dialogFragment.onThemeChangeListener = onThemeChangeListener
             dialogFragment.show((activity as AppCompatActivity).supportFragmentManager, null)
         }
 
@@ -84,7 +86,7 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
 
         if ((requestCode == RC_SIGN_IN) and (resultCode == RESULT_OK)) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            context?.let { fragmentViewModel?.handleSignInResult(task, it) }
+            context?.let { mainMenuFragmentViewModel?.handleSignInResult(task, it) }
         }
     }
 
@@ -94,7 +96,7 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
             checkScrollable()
             checkScrollY()
         } else {
-            activityViewModel?.showToolbarDivider(false)
+            toolbarFragmentViewModel?.showToolbarDivider(false)
         }
     }
 
@@ -105,9 +107,9 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
                 + mainMenuScrollView.paddingTop + mainMenuScrollView.paddingBottom
             ) {
                 mainMenuTitle.visibility = View.GONE
-                activityViewModel?.setToolbarText(mainMenuTitle.text.toString())
+                toolbarFragmentViewModel?.setToolbarText(mainMenuTitle.text.toString())
             } else {
-                activityViewModel?.setToolbarText(null)
+                toolbarFragmentViewModel?.setToolbarText(null)
             }
         }
     }
@@ -118,7 +120,7 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
 
     private fun checkScrollY() {
         val scrollY: Int = mainMenuScrollView.scrollY
-        activityViewModel?.showToolbarDivider(scrollY != 0)
+        toolbarFragmentViewModel?.showToolbarDivider(scrollY != 0)
     }
 
 }

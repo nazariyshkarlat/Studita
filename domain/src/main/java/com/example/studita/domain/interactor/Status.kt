@@ -12,6 +12,14 @@ sealed class LevelsStatus {
     data class Success(val result: List<LevelData>) : LevelsStatus()
 }
 
+
+sealed class LevelsCacheStatus {
+    object ServiceUnavailable : LevelsCacheStatus()
+    object NoConnection : LevelsCacheStatus()
+    object IsCached : LevelsCacheStatus()
+    object Success : LevelsCacheStatus()
+}
+
 sealed class SignUpStatus{
     object ServiceUnavailable : SignUpStatus()
     object NoConnection : SignUpStatus()
@@ -40,6 +48,13 @@ sealed class ChapterStatus{
     object NoConnection : ChapterStatus()
     object NoChapterFound: ChapterStatus()
     data class Success(val result: ChapterData): ChapterStatus()
+}
+
+sealed class ChaptersCacheStatus{
+    object ServiceUnavailable : ChaptersCacheStatus()
+    object NoConnection : ChaptersCacheStatus()
+    object IsCached : ChaptersCacheStatus()
+    object Success: ChaptersCacheStatus()
 }
 
 sealed class ExercisesStatus{
@@ -89,4 +104,11 @@ sealed class SaveObtainedExerciseDataStatus{
     object NoConnection : SaveObtainedExerciseDataStatus()
     object Failure: SaveObtainedExerciseDataStatus()
     object Success: SaveObtainedExerciseDataStatus()
+}
+
+sealed class ExercisesCacheStatus{
+    object ServiceUnavailable : ExercisesCacheStatus()
+    object NoConnection : ExercisesCacheStatus()
+    object IsCached : ExercisesCacheStatus()
+    object Success: ExercisesCacheStatus()
 }

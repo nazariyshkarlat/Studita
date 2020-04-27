@@ -13,5 +13,7 @@
         <item name="android:windowLightNavigationBar">true</item>
         <item name="splash_screen_text_color">@color/black30</item>
         <item name="colorControlNormal">?secondary_color</item>
+        <item name="switch_inactive_thumb_color">@color/grayE6</item>
+        <item name="switch_inactive_track_color">@color/black</item>
     </style>
 </resources>

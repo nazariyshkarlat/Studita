@@ -1,10 +1,15 @@
 package com.example.studita.di.data.exercise
 
+import com.example.studita.data.cache.exercises.ExercisesCacheImpl
 import com.example.studita.data.entity.mapper.exercise.ExercisesDataMapper
 import com.example.studita.data.net.ExercisesService
+import com.example.studita.data.net.OfflineExercisesService
+import com.example.studita.data.repository.datasource.exercises.CloudExercisesJsonDataStore
+import com.example.studita.data.repository.datasource.exercises.DiskExercisesJsonDataStore
+import com.example.studita.data.repository.datasource.exercises.ExercisesDataStore
 import com.example.studita.data.repository.exercise.ExercisesRepositoryImpl
-import com.example.studita.data.repository.datasource.exercises.ExercisesDataStoreImpl
 import com.example.studita.data.repository.datasource.exercises.ExercisesDataStoreFactoryImpl
+import com.example.studita.di.CacheModule
 import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.exercises.ExercisesInteractor
@@ -37,7 +42,8 @@ object ExercisesModule {
             repository =
                 ExercisesRepositoryImpl(
                     getExercisesDataStoreFactory(),
-                    ExercisesDataMapper()
+                    ExercisesDataMapper(),
+                    getExercisesCacheImpl()
                 )
         return repository!!
     }
@@ -47,14 +53,23 @@ object ExercisesModule {
             repository
         )
 
-    private fun getExercisesDataStore() =
-        ExercisesDataStoreImpl(
-            NetworkModule.connectionManager,
-            NetworkModule.getService(ExercisesService::class.java)
-        )
-
     private fun getExercisesDataStoreFactory() =
         ExercisesDataStoreFactoryImpl(
-            getExercisesDataStore()
+            getCloudExercisesJsonDataStore(),
+            getDiskExercisesJsonDataStore()
         )
+
+    private fun getCloudExercisesJsonDataStore() =
+        CloudExercisesJsonDataStore(
+            NetworkModule.connectionManager,
+            NetworkModule.getService(ExercisesService::class.java),
+            NetworkModule.getService(OfflineExercisesService::class.java)
+        )
+
+    private fun getDiskExercisesJsonDataStore() =
+        DiskExercisesJsonDataStore(
+            getExercisesCacheImpl()
+        )
+
+    private fun getExercisesCacheImpl() = ExercisesCacheImpl(CacheModule.sharedPreferences)
 }

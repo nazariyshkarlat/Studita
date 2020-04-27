@@ -21,9 +21,10 @@ class CloudObtainedExerciseDataDataStore(private val connectionManager: Connecti
             val responseCode: Int
             try {
                 val saveDataAsync = obtainedExerciseDataService.saveObtainedExerciseDataAsync(
+                    DateTimeFormat().format(Date()),
                     ObtainedExerciseDataRequestEntity(
-                    userIdToken,
-                    obtainedExerciseDataEntity
+                        userIdToken,
+                        obtainedExerciseDataEntity
                     )
                 )
                 val result = saveDataAsync.await()

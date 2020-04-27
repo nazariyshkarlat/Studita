@@ -1,9 +1,6 @@
 package com.example.studita.data.repository.datasource.exercises
 
-import com.example.studita.data.entity.exercise.ExerciseArrayEntity
-import com.example.studita.data.entity.exercise.ExerciseArrayEntityDeserializer
-import com.example.studita.data.entity.exercise.ExercisesJsonArrayMapper
-import com.example.studita.data.entity.exercise.ExercisesResponse
+import com.example.studita.data.entity.exercise.*
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.data.net.ExercisesService
 import com.example.studita.domain.exception.NetworkConnectionException
@@ -13,10 +10,7 @@ import com.google.gson.JsonArray
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-class ExercisesDataStoreImpl(
-    private val connectionManager: ConnectionManager,
-    private val  exercisesService: ExercisesService
-) : ExercisesDataStore {
+class ExercisesDataStoreImpl(private val exercisesJsonDataStore: ExercisesJsonDataStore) : ExercisesDataStore {
 
     private val gsonBuilder = GsonBuilder()
     private val deserializer: ExerciseArrayEntityDeserializer  = ExerciseArrayEntityDeserializer()
@@ -29,15 +23,19 @@ class ExercisesDataStoreImpl(
         type = object : TypeToken<List<ExerciseArrayEntity>>() {}.type
     }
 
-    override suspend fun getExercises(chapterPartNumber: Int): Pair<Int, ExercisesResponse> =
-        if (connectionManager.isNetworkAbsent()) {
-            throw NetworkConnectionException()
-        } else {
-            val exercises: List<ExerciseArrayEntity>
-            val exercisesAsync = exercisesService.getExercisesAsync(chapterPartNumber)
-            val result = exercisesAsync.await()
-            val body = result.body()!!
-            exercises = exercisesGson.fromJson(ExercisesJsonArrayMapper.map(body.exercisesRaw), type)
-            result.code() to ExercisesResponse(body.exercisesStartScreen, body.exercisesDescription, exercises)
-        }
+    override suspend fun getExercises(chapterPartNumber: Int): Pair<Int, ExercisesResponse> {
+        val pair = exercisesJsonDataStore.getExercisesJson(chapterPartNumber)
+        val exercisesRawResponse: ExercisesRawResponse =
+            Gson().fromJson(pair.second, TypeToken.get(ExercisesRawResponse::class.java).type)
+        println(exercisesRawResponse.exercisesRaw)
+        val exercises: List<ExerciseArrayEntity> = exercisesGson.fromJson(
+            ExercisesJsonArrayMapper.map(exercisesRawResponse.exercisesRaw),
+            type
+        )
+        return pair.first to ExercisesResponse(
+            exercisesRawResponse.exercisesStartScreen,
+            exercisesRawResponse.exercisesDescription,
+            exercises
+        )
+    }
 }

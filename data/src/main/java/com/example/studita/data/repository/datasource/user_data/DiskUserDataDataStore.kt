@@ -4,6 +4,7 @@ import com.example.studita.data.database.user_data.UserDataDao
 import com.example.studita.data.date.DateUtils
 import com.example.studita.data.entity.UserDataEntity
 import com.example.studita.data.entity.UserIdToken
+import kotlinx.coroutines.delay
 
 class DiskUserDataDataStore(private val userDataDao: UserDataDao)
     : UserDataDataStore{
@@ -23,8 +24,9 @@ class DiskUserDataDataStore(private val userDataDao: UserDataDao)
     }
 
     override suspend fun getUserDataEntity(userIdToken: UserIdToken?): Pair<Int, UserDataEntity> {
-        if(userDataDao.getUserDataAsync() == null)
+        if(userDataDao.getUserDataAsync() == null) {
             saveUserDataEntity(defaultUserData)
+        }
         return 200 to userDataDao.getUserDataAsync()!!
     }
 

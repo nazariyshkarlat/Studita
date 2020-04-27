@@ -157,8 +157,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             if (exercisesViewModel?.secondsCounterIsStopped() == true)
                 exercisesViewModel?.startSecondsCounter()
         }else {
-                exercisesViewModel?.stopSecondsCounter()
-            }
+            exercisesViewModel?.stopSecondsCounter()
+        }
     }
 
     fun onBackClick(){
@@ -219,7 +219,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         if (responseData.exerciseResult) {
             formTrueSnackbarAnswerView()
         } else {
-                formFalseAnswerSnackbarView(responseData)
+            formFalseAnswerSnackbarView(responseData)
         }
     }
 

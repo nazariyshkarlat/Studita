@@ -50,8 +50,8 @@ class ExerciseResponseUiModelMapper(private val context: Context) : Mapper<Exerc
 
     private fun mapDescriptionContentString(descriptionContentData: ExerciseResponseDescriptionContentData.DescriptionContentString): ExerciseResponseDescriptionContentUiModel.DescriptionContentString =
         ExerciseResponseDescriptionContentUiModel.DescriptionContentString(when (descriptionContentData.descriptionContent) {
-            "true" -> context.getString(R.string.true_answer)
-            "false" -> context.getString(R.string.false_answer)
+            "true" -> context.getString(R.string.true_variant)
+            "false" -> context.getString(R.string.false_variant)
             else -> descriptionContentData.descriptionContent
         }
         )

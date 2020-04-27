@@ -3,9 +3,9 @@ package com.example.studita.presentation.fragments
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.fragments.base.NavigatableFragment.Companion.onNavigateFragment
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
@@ -19,12 +19,15 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        onNavigateFragment = this
         toolbarFragmentViewModel = activity?.run {
             ViewModelProviders.of(this).get(ToolbarFragmentViewModel::class.java)
         }
 
         toolbarFragmentViewModel?.let {
+
+            it.toolbarFragmentOnNavigateState.value = this
+            println("onCreateToolbar")
+
             it.toolbarTextState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { text ->
@@ -43,12 +46,12 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
 
     override fun onDestroy() {
         super.onDestroy()
-        onNavigateFragment = null
+        toolbarFragmentViewModel?.toolbarFragmentOnNavigateState?.value = null
     }
 
     override fun onNavigate(fragment: NavigatableFragment?) {
         toolbarFragmentViewModel?.let {
-            if (fragment is AuthenticationFragment)
+            if (fragment is AuthorizationFragment)
                 it.setToolbarText(resources.getString(R.string.authorization))
             else
                 it.setToolbarText(null)

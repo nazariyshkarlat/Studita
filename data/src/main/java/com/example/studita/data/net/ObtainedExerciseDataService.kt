@@ -11,6 +11,6 @@ import retrofit2.http.POST
 interface ObtainedExerciseDataService {
 
     @POST("save_obtained_exercise_data")
-    fun saveObtainedExerciseDataAsync(@Body obtainedExerciseDataRequestEntity: ObtainedExerciseDataRequestEntity) : Deferred<Response<ResponseBody>>
+    fun saveObtainedExerciseDataAsync(@Header("Date")dateTime: String,@Body obtainedExerciseDataRequestEntity: ObtainedExerciseDataRequestEntity) : Deferred<Response<ResponseBody>>
 
 }

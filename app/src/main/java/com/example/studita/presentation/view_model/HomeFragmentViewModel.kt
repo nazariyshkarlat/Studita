@@ -18,12 +18,13 @@ import com.example.studita.presentation.model.mapper.LevelUiModelMapper
 import com.example.studita.presentation.utils.launchExt
 import com.example.studita.presentation.utils.UserUtils
 import kotlinx.coroutines.Job
+import java.lang.Exception
 
 class HomeFragmentViewModel : ViewModel(){
 
     val progressState = MutableLiveData<Boolean>()
     val errorState = SingleLiveEvent<Int>()
-    val userDataState = SingleLiveEvent<UserDataData>()
+    val userDataState = MutableLiveData<UserDataData>()
     val subscribeEmailState =  SingleLiveEvent<SubscribeEmailResultStatus>()
 
     lateinit var results: List<HomeRecyclerUiModel>

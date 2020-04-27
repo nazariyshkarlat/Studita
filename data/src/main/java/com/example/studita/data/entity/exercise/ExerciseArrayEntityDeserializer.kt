@@ -13,6 +13,8 @@ class ExerciseArrayEntityDeserializer : JsonDeserializer<ExerciseArrayEntity> {
 
         val jsonObject = json.asJsonObject
 
+        println(jsonObject)
+
         return when (jsonObject.get("type").asString) {
             "exercise" -> {
                 ExerciseArrayEntity.ExerciseEntity(jsonObject.get("exercise_number").asInt,
@@ -28,7 +30,7 @@ class ExerciseArrayEntityDeserializer : JsonDeserializer<ExerciseArrayEntity> {
                         10 -> context.deserialize<ExerciseInfo.ExerciseType10Info>(jsonObject.get("exercise_info"), ExerciseInfo.ExerciseType10Info::class.java)
                         11 -> context.deserialize<ExerciseInfo.ExerciseType11Info>(jsonObject.get("exercise_info"), ExerciseInfo.ExerciseType11Info::class.java)
                         else -> throw IOException("Unexpected exercise type")
-                    }
+                    }, if(!jsonObject.has("answer")) null else jsonObject.get("answer").asString
                 )
             }
             "screen" -> {

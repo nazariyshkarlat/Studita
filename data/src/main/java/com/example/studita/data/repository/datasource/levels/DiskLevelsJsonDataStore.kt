@@ -7,6 +7,6 @@ class DiskLevelsJsonDataStore(
     private val levelsCache: LevelsCache
 ) : LevelsJsonDataStore {
 
-    override suspend fun getLevelsJson(isLoggedIn: Boolean) = levelsCache.getLevelsJson() ?: throw NetworkConnectionException()
+    override suspend fun getLevelsJson(isLoggedIn: Boolean) = levelsCache.getLevelsJson(isLoggedIn) ?: throw NetworkConnectionException()
 
 }

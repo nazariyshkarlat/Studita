@@ -8,7 +8,8 @@ sealed class ExerciseArrayEntity(open val exerciseNumber: Int?) {
         override val exerciseNumber: Int?,
         @SerializedName(
             "exercise_info"
-        ) val exerciseInfo: ExerciseInfo
+        ) val exerciseInfo: ExerciseInfo,
+        @SerializedName("answer") val exerciseAnswer: String?
     ): ExerciseArrayEntity(exerciseNumber)
 
     data class ScreenEntity(override val exerciseNumber: Int?, @SerializedName("screen_info") val screenInfo: ScreenInfo) : ExerciseArrayEntity(exerciseNumber)

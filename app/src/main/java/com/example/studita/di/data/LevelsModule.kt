@@ -37,8 +37,10 @@ object LevelsModule {
     private fun getLevelsRepository(): LevelsRepository {
         if (repository == null)
             repository = LevelsRepositoryImpl(
-                getLevelsJsonDataStoreFactory(), LevelDataMapper(),
-                NetworkModule.connectionManager
+                getLevelsJsonDataStoreFactory(),
+                LevelDataMapper(),
+                NetworkModule.connectionManager,
+                getLevelsCacheImpl()
             )
         return repository!!
     }
@@ -51,8 +53,7 @@ object LevelsModule {
     private fun getCloudLevelsDataStore() =
         CloudLevelsJsonDataStore(
             NetworkModule.connectionManager,
-            NetworkModule.getService(LevelsService::class.java),
-            getLevelsCacheImpl()
+            NetworkModule.getService(LevelsService::class.java)
         )
 
     private fun getDiskLevelsDataStore() =

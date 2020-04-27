@@ -13,8 +13,7 @@ import java.lang.reflect.Type
 
 class CloudLevelsJsonDataStore(
     private val connectionManager: ConnectionManager,
-    private val  levelsService: LevelsService,
-    private val levelsCache: LevelsCache
+    private val  levelsService: LevelsService
 ) : LevelsJsonDataStore {
 
     private val gsonBuilder = GsonBuilder()
@@ -36,7 +35,6 @@ class CloudLevelsJsonDataStore(
             val launchesAsync = levelsService.getLevelsAsync(isLoggedIn)
             val result = launchesAsync.await()
             val body = result.body()!!
-            levelsCache.saveLevelsJson(body.toString())
             body.toString()
         }
 }

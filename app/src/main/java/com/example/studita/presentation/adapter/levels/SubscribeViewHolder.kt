@@ -20,6 +20,8 @@ class SubscribeViewHolder(view: View, private val homeFragmentViewModel: HomeFra
                 itemView.getAppCompatActivity()?.startActivity<MainMenuActivity>()
             }
         }else{
+            itemView.levelSubscribeItemButton.text =
+                model.button[if (UserUtils.userData.isSubscribed) 1 else 0]
             itemView.levelSubscribeItemButton.setOnClickListener {
                 UserUtils.getUserTokenIdData()?.let { userTokenIdData ->
                     homeFragmentViewModel.subscribeEmail(
@@ -27,8 +29,6 @@ class SubscribeViewHolder(view: View, private val homeFragmentViewModel: HomeFra
                         !UserUtils.userData.isSubscribed
                     )
                 }
-            itemView.levelSubscribeItemButton.text =
-                model.button[if (UserUtils.userData.isSubscribed) 1 else 0]
             }
         }
     }

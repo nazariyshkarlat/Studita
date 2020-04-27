@@ -1,6 +1,10 @@
 package com.example.studita.data.cache.chapter
 
 import android.content.SharedPreferences
+import com.example.studita.data.cache.exercises.ExercisesCacheImpl
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 
 class ChapterCacheImpl(private val sharedPreferences: SharedPreferences) :
     ChapterCache {
@@ -9,8 +13,11 @@ class ChapterCacheImpl(private val sharedPreferences: SharedPreferences) :
         const val CHAPTER_PREFS = "chapter_cache"
     }
 
-    override fun saveChapterJson(chapterNumber: Int, json: String) {
-        sharedPreferences.edit().putString("${CHAPTER_PREFS}_$chapterNumber", json).apply()
+    override fun saveChaptersJson(json: String) {
+        val chapters = Gson().fromJson<List<JsonObject>>(json, object : TypeToken<List<JsonObject>>() {}.type)
+        chapters.forEachIndexed {chapterNumber, chapter->
+            sharedPreferences.edit().putString("${CHAPTER_PREFS}_${chapterNumber+1}", chapter.toString()).apply()
+        }
     }
 
     override fun getLevelsJson(chapterNumber: Int): String? = sharedPreferences.getString("${CHAPTER_PREFS}_$chapterNumber", null) ?: null

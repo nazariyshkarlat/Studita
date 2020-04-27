@@ -8,7 +8,6 @@ import com.example.studita.R
 import com.example.studita.di.data.InterestingModule
 import com.example.studita.domain.interactor.InterestingStatus
 import com.example.studita.presentation.fragments.interesting.*
-import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.model.InterestingUiModelScreen
 import com.example.studita.presentation.model.mapper.InterestingUiModelMapper
 import com.example.studita.presentation.utils.launchExt

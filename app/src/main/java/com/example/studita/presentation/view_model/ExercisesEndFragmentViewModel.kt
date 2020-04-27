@@ -25,7 +25,7 @@ class ExercisesEndFragmentViewModel : ViewModel(){
                     "FALSE_ANSWERS" to  it.getInt("FALSE_ANSWERS"),
                     "OBTAINED_XP" to it.getInt("OBTAINED_XP"),
                     "PROCESS_SECONDS" to it.getLong("PROCESS_SECONDS"))
-                arguments = bundle
+                fragment.arguments = bundle
             }
             fragment
         }

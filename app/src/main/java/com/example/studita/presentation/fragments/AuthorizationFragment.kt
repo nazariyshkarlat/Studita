@@ -4,14 +4,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
-import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.OneShotPreDrawListener
-import androidx.core.view.marginBottom
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -31,7 +28,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class AuthenticationFragment : NavigatableFragment(R.layout.authentication_layout), TextWatcher, OnViewSizeChangeListener{
+class AuthorizationFragment : NavigatableFragment(R.layout.authentication_layout), TextWatcher, OnViewSizeChangeListener{
 
     private var toolbarFragmentViewModel: ToolbarFragmentViewModel? = null
     private var authorizationFragmentViewModel: AuthorizationFragmentViewModel? = null
@@ -43,8 +40,6 @@ class AuthenticationFragment : NavigatableFragment(R.layout.authentication_layou
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         onViewSizeChangeListener = view.setOnViewSizeChangeListener(this)
         contentView = view as ViewGroup
@@ -130,12 +125,6 @@ class AuthenticationFragment : NavigatableFragment(R.layout.authentication_layou
         OneShotPreDrawListener.add(authorizationBottomSection) {
             initErrorSnackbar()
         }
-    }
-
-
-    override fun onBackClick(){
-        super.onBackClick()
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
     }
 
     override fun afterTextChanged(s: Editable?) {

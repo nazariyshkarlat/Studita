@@ -8,6 +8,7 @@
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
         <item name="splash_screen_color">@color/gray11</item>
+        <item name="splash_screen_text_color">@color/white34</item>
         <item name="colorControlNormal">?secondary_color</item>
     </style>
 
@@ -26,6 +27,8 @@
         <item name="bottom_sheet_color">@color/white</item>
         <item name="press_view_press_alpha">0.64</item>
         <item name="press_view_press_alpha_lighter">0.3</item>
+        <item name="switch_inactive_thumb_color">@color/grayE6</item>
+        <item name="switch_inactive_track_color">@color/black</item>
     </style>
 
     <style name="DarkTheme" parent="AppTheme">
@@ -44,6 +47,8 @@
         <item name="bottom_sheet_color">@color/gray20</item>
         <item name="press_view_press_alpha">0.68</item>
         <item name="press_view_press_alpha_lighter">0.34</item>
+        <item name="switch_inactive_thumb_color">@color/gray8</item>
+        <item name="switch_inactive_track_color">@color/white</item>
     </style>
 
     <!-- Fonts -->
@@ -446,5 +451,9 @@
         <item name="android:numStars">5</item>
     </style>
 
+    <style name="SwitchStyle" parent="">
+        <item name="colorSwitchThumbNormal">?switch_inactive_thumb_color</item>
+        <item name="android:colorForeground">?switch_inactive_track_color</item>
+    </style>
 
 </resources>

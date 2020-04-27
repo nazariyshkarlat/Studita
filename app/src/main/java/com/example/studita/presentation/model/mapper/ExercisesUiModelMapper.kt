@@ -2,35 +2,36 @@ package com.example.studita.presentation.model.mapper
 
 import androidx.annotation.IdRes
 import com.example.studita.R
-import com.example.studita.data.entity.exercise.*
 import com.example.studita.data.entity.mapper.Mapper
-import com.example.studita.data.entity.mapper.exercise.ExerciseShapeMapper
-import com.example.studita.data.entity.mapper.exercise.ExerciseShapesMapper
 import com.example.studita.domain.entity.exercise.*
 import com.example.studita.presentation.model.ExerciseShape
 import com.example.studita.presentation.model.ExerciseUiModel
 import java.io.IOException
 
-class ExercisesUiModelMapper : Mapper<List<ExerciseData>, List<ExerciseUiModel>> {
+class ExercisesUiModelMapper : Mapper<List<com.example.studita.domain.entity.exercise.ExerciseData>, List<ExerciseUiModel>> {
 
-    override fun map(source: List<ExerciseData>):  List<ExerciseUiModel> {
+    override fun map(source: List<com.example.studita.domain.entity.exercise.ExerciseData>):  List<ExerciseUiModel> {
         return source.map {
-            when (it) {
-                is ExerciseData.ExerciseDataExercise.ExerciseType1Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel(it.exerciseNumber, it.title, it.subtitle, ExerciseUiShapesMapper().map(it.variants))
-                is ExerciseData.ExerciseDataExercise.ExerciseType2Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel(it.exerciseNumber, ExerciseUiShapeMapper().map(it.title), it.subtitle, it.variants)
-                is ExerciseData.ExerciseDataExercise.ExerciseType3Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel(it.exerciseNumber, it.title, it.subtitle, it.variants)
-                is ExerciseData.ExerciseDataExercise.ExerciseType4Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel(it.exerciseNumber, it.title, it.subtitle, it.variants)
-                is ExerciseData.ExerciseDataExercise.ExerciseType5and6Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5and6UiModel(it.exerciseNumber, it.title, it.subtitle, it.variants)
-                is ExerciseData.ExerciseDataExercise.ExerciseType7Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel(it.exerciseNumber,it.title)
-                is ExerciseData.ExerciseDataExercise.ExerciseType8Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8UiModel(it.exerciseNumber, it.title, it.subtitle, it.variants)
-                is ExerciseData.ExerciseDataExercise.ExerciseType9Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel(it.exerciseNumber,it.title)
-                is ExerciseData.ExerciseDataExercise.ExerciseType10Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType10UiModel(it.exerciseNumber,it.titleParts, it.subtitle)
-                is ExerciseData.ExerciseDataExercise.ExerciseType11Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType11UiModel(it.exerciseNumber,it.titleParts, it.filter, it.compareNumber)
+            mapExerciseData(it)
+        }
+    }
 
-                is ExerciseData.ExerciseDataScreen.ScreenType1Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel(it.exerciseNumber, it.title, it.subtitle, it.partsToInject, getShapeByName(it.image))
-                is ExerciseData.ExerciseDataScreen.ScreenType2Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel(it.exerciseNumber, it.title)
-                is ExerciseData.ExerciseDataScreen.ScreenType3Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel(it.exerciseNumber, it.title, it.subtitle, it.partsToInject)
-            }
+    fun mapExerciseData(exerciseData: com.example.studita.domain.entity.exercise.ExerciseData): ExerciseUiModel {
+        return when (exerciseData) {
+            is ExerciseData.ExerciseDataExercise.ExerciseType1Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel(exerciseData.exerciseNumber, exerciseData.title, exerciseData.subtitle, ExerciseUiShapesMapper().map(exerciseData.variants))
+            is ExerciseData.ExerciseDataExercise.ExerciseType2Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel(exerciseData.exerciseNumber, ExerciseUiShapeMapper().map(exerciseData.title), exerciseData.subtitle, exerciseData.variants)
+            is ExerciseData.ExerciseDataExercise.ExerciseType3Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel(exerciseData.exerciseNumber, exerciseData.title, exerciseData.subtitle, exerciseData.variants)
+            is ExerciseData.ExerciseDataExercise.ExerciseType4Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel(exerciseData.exerciseNumber, exerciseData.title, exerciseData.subtitle, exerciseData.variants)
+            is ExerciseData.ExerciseDataExercise.ExerciseType5and6Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6UiModel(exerciseData.exerciseNumber, exerciseData.title, exerciseData.subtitle, exerciseData.variants)
+            is ExerciseData.ExerciseDataExercise.ExerciseType7Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel(exerciseData.exerciseNumber,exerciseData.title)
+            is ExerciseData.ExerciseDataExercise.ExerciseType8Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8UiModel(exerciseData.exerciseNumber, exerciseData.title, exerciseData.subtitle, exerciseData.variants)
+            is ExerciseData.ExerciseDataExercise.ExerciseType9Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel(exerciseData.exerciseNumber,exerciseData.title)
+            is ExerciseData.ExerciseDataExercise.ExerciseType10Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType10UiModel(exerciseData.exerciseNumber,exerciseData.titleParts, exerciseData.subtitle)
+            is ExerciseData.ExerciseDataExercise.ExerciseType11Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType11UiModel(exerciseData.exerciseNumber,exerciseData.titleParts, exerciseData.filter, exerciseData.compareNumber)
+
+            is ExerciseData.ExerciseDataScreen.ScreenType1Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel(exerciseData.exerciseNumber, exerciseData.title, exerciseData.subtitle, exerciseData.partsToInject, getShapeByName(exerciseData.image))
+            is ExerciseData.ExerciseDataScreen.ScreenType2Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel(exerciseData.exerciseNumber, exerciseData.title)
+            is ExerciseData.ExerciseDataScreen.ScreenType3Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel(exerciseData.exerciseNumber, exerciseData.title, exerciseData.subtitle, exerciseData.partsToInject)
         }
     }
 }

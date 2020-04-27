@@ -10,5 +10,7 @@
         <item name="splash_screen_color">@color/gray11</item>
         <item name="splash_screen_text_color">@color/white34</item>
         <item name="colorControlNormal">?secondary_color</item>
+        <item name="switch_inactive_thumb_color">@color/gray8</item>
+        <item name="switch_inactive_track_color">@color/white</item>
     </style>
 </resources>

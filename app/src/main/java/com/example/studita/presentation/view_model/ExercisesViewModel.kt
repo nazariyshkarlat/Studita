@@ -12,6 +12,7 @@ import com.example.studita.di.data.exercise.ExerciseResultModule
 import com.example.studita.di.data.exercise.ExercisesModule
 import com.example.studita.domain.entity.ObtainedExerciseDataData
 import com.example.studita.domain.entity.UserDataData
+import com.example.studita.domain.entity.exercise.ExerciseData
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.domain.entity.exercise.ExercisesResponseData
@@ -56,19 +57,20 @@ class ExercisesViewModel : ViewModel(){
     var saveObtainedExerciseDataState = SingleLiveEvent<Boolean>()
 
     lateinit var exerciseRequestData: ExerciseRequestData
-    private val exercisesToRetry = ArrayList<ExerciseUiModel>()
+    private val exercisesToRetry = ArrayList<ExerciseData>()
 
     var isTraining = false
     var chapterPartsCount = 0
     var chapterPartNumber = 0
     var chapterNumber = 0
-    var arrayIndex = 0
+    private var arrayIndex = 0
     private var exerciseIndex = 0
     private var obtainedXP = 0
 
+    lateinit var exerciseData: ExerciseData
     lateinit var exerciseUiModel: ExerciseUiModel
     lateinit var exercisesResponseData: ExercisesResponseData
-    private lateinit var exercises: List<ExerciseUiModel>
+    private lateinit var exercises: List<ExerciseData>
 
     private val userDataInteractor = UserDataModule.getUserDataInteractorImpl()
     private val exercisesInteractor = ExercisesModule.getExercisesInteractorImpl()
@@ -91,7 +93,7 @@ class ExercisesViewModel : ViewModel(){
                 is ExercisesStatus.Success -> {
                     exercisesState.postValue(true)
                     exercisesResponseData = status.result
-                    exercises = ExercisesUiModelMapper().map(exercisesResponseData.exercises)
+                    exercises = exercisesResponseData.exercises
                 }
             }
         }
@@ -174,6 +176,8 @@ class ExercisesViewModel : ViewModel(){
                         }
                     }
                 }
+            }else{
+                saveObtainedExerciseDataState.value = true
             }
         }
     }
@@ -214,11 +218,12 @@ class ExercisesViewModel : ViewModel(){
             if(progressBarState.value?.second == false)
                 progressBarState.value = 1F to true
         } else {
-            exerciseUiModel = if (arrayIndex < exercises.size) {
+            exerciseData = if (arrayIndex < exercises.size) {
                 exercises[arrayIndex]
             } else {
                 exercisesToRetry[0]
             }
+            exerciseUiModel = ExercisesUiModelMapper().mapExerciseData(exerciseData)
             setButtonEnabled(exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen)
             val exerciseFragment = getFragmentToAdd(exerciseUiModel)
             navigationState.value = when (arrayIndex) {
@@ -237,10 +242,8 @@ class ExercisesViewModel : ViewModel(){
         answered.value = true
         job = viewModelScope.launchExt(job){
             if(exerciseUiModel is ExerciseUiModel.ExerciseUiModelExercise){
-                when(val status = (exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise).exerciseNumber?.let {
-                    exerciseResultInteractor.getExerciseResult(
-                        it, exerciseRequestData)
-                }) {
+                when(val status =
+                    exerciseResultInteractor.getExerciseResult(exerciseData as ExerciseData.ExerciseDataExercise, exerciseRequestData)) {
                     is ExerciseResultStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                     is ExerciseResultStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                     is ExerciseResultStatus.Success -> {
@@ -248,7 +251,7 @@ class ExercisesViewModel : ViewModel(){
                         if (status.result.exerciseResult) {
                             exerciseIndex++
 
-                            if (exerciseIndex == exercises.count { it is ExerciseUiModel.ExerciseUiModelExercise }) {
+                            if (exerciseIndex == exercises.count { it is ExerciseData.ExerciseDataExercise }) {
                                 stopSecondsCounter()
                                 saveObtainedExercisesResult()
                             }
@@ -263,7 +266,7 @@ class ExercisesViewModel : ViewModel(){
                         }
 
                         if (arrayIndex == exercises.size - 1) {
-                            falseAnswers = exercisesToRetry.count { it is ExerciseUiModel.ExerciseUiModelExercise }
+                            falseAnswers = exercisesToRetry.count { it is ExerciseData.ExerciseDataExercise }
                         }
                         arrayIndex++
                     }
@@ -282,9 +285,9 @@ class ExercisesViewModel : ViewModel(){
         when(exerciseUiModel){
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel -> ExerciseVariantsType1Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel  -> ExerciseVariantsType2Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel  -> ExerciseVariantsType3Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel -> ExerciseVariantsType3Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel  -> ExerciseVariantsType4Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5and6UiModel  -> ExerciseVariantsType5and6Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6UiModel  -> ExerciseVariantsType5and6Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel  -> ExerciseVariantsType7Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8UiModel  -> ExerciseVariantsType8Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel  -> ExerciseInputEquationFragment()
@@ -304,7 +307,7 @@ class ExercisesViewModel : ViewModel(){
 
     private fun getFalseAnswers(): Int = falseAnswers
 
-    private fun getExercisesCount() = exercises.count { it is ExerciseUiModel.ExerciseUiModelExercise }
+    private fun getExercisesCount() = exercises.count { it is ExerciseData.ExerciseDataExercise }
 
     fun getExercisesEndFragment(): Fragment{
         val fragment =

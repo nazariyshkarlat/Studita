@@ -8,4 +8,6 @@ interface ExercisesRepository {
 
     suspend fun getExercises(chapterPartNumber: Int): Pair<Int, ExercisesResponseData>
 
+    suspend fun downloadOfflineExercises(): Int
+
 }

@@ -41,11 +41,13 @@ open class DefaultActivity : AppCompatActivity(),
     }
 
     override fun onThemeChanged(theme: Theme) {
-        themeState = theme
-        CacheModule.sharedPreferences.edit()?.putInt("theme", themeState.ordinal)?.apply()
-        startActivity<MainMenuActivity>()
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        finish()
+        if(themeState != theme) {
+            themeState = theme
+            CacheModule.sharedPreferences.edit()?.putInt("theme", themeState.ordinal)?.apply()
+            startActivity<MainMenuActivity>()
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
+        }
     }
 
     enum class Theme{

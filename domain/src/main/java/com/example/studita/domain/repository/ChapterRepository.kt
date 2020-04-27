@@ -8,4 +8,6 @@ interface ChapterRepository {
 
     suspend fun getChapter(chapterNumber: Int): Pair<Int, ChapterData>
 
+    suspend fun downloadChapters() : Int
+
 }

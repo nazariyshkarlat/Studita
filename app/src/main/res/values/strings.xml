@@ -28,6 +28,7 @@
     <string name="navigation_bar_third">Ачивки</string>
     <string name="settings">Настройки</string>
     <string name="app_theme">Тема приложения</string>
+    <string name="offline_mode">Оффлайн режим</string>
     <string name="language">Язык</string>
     <string name="help">Помощь</string>
     <string name="learning">Обучение</string>
@@ -43,7 +44,7 @@
     <string name="try_again">Попробовать снова</string>
     <string name="in_settings">Перейти в настройки</string>
     <string name="incorrect_time_layout_title">Упс! Кажется, время на вашем телефоне установлено неправильно (%1$s)</string>
-    <string name="incorrect_time_layout_subtitle">Пожалуйста, сделайте ваше время автоматическим и нажмите "Попробовать снова"</string>
+    <string name="incorrect_time_layout_subtitle">Пожалуйста, сделайте ваше время автоматическим и нажмите \"Попробовать снова\"</string>
     <string name="true_variant">Правда</string>
     <string name="false_variant">Неправда</string>
     <string name="check">Проверить</string>
@@ -120,7 +121,7 @@
     <string name="offline_subscribe_email">Мы получили ваш запрос на подписку. Как только вы подключитесь к интернету, вы получите дополнительное сообщение об успешности.</string>
     <string name="offline_unsubscribe_email">Мы получили ваш запрос на отмену рассылки. Как только вы подключитесь к интернету, вы получите дополнительное сообщение об успешности.</string>
     <string name="unsubscribe_email">Вы отписались от рассылки на почту</string>
-    <string name="un_logged_statistics_text">Войдите, чтобы получить доступ к деталям и другим функциям</string>
+    <string name="un_logged_statistics_text">Войдите, чтобы получить доступ к статистике и другим функциям</string>
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>

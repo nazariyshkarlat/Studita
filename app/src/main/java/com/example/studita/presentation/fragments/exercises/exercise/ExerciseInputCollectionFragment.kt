@@ -51,44 +51,6 @@ class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_in
             exerciseInputCollectionLayoutEditText.hint = formTextViewHint(exerciseUiModel.filter, exerciseUiModel.compareNumber)
             }
         }
-
-        /*
-        when(val exerciseUiModel = arguments?.getParcelable<ExerciseUiModel>("EXERCISE")){
-            is ExerciseUiModel.ExerciseUi8 ->{
-                for(shape in exerciseUiModel.shapes) {
-                    val shapeView = exerciseInputCollectionFragmentLinearLayout.makeView(R.layout.exercise_input_collection_image_view)
-                    (shapeView as ImageView).setImageResource(
-                        when(shape){
-                            "circle" -> R.drawable.exercise_circle
-                            "rectangle" -> R.drawable.exercise_rectangle
-                            else -> throw IOException("unknown exercise type 8 collection shape")
-                        }
-                    )
-                    exerciseInputCollectionFragmentLinearLayout.addView(shapeView)
-                }
-                exerciseInputCollectionFragmentEditText.hint =makeMediumWord(
-                    when(exerciseUiModel.desiredShape){
-                        "circle" -> "кружков"
-                        "rectangle" -> "квадратов"
-                        else -> throw IOException("unknown exercise type 8 desired shape")
-                    }
-                )
-            }
-            is ExerciseUiModel.ExerciseUi9 ->{
-                for(number in exerciseUiModel.numbers) {
-                    val numberView = exerciseInputCollectionFragmentLinearLayout.makeView(R.layout.exercise_input_collection_text_view)
-                    numberView.exerciseInputCollectionTextView.text = number
-                    exerciseInputCollectionFragmentLinearLayout.addView(numberView)
-                }
-                exerciseInputCollectionFragmentEditText.hint = makeMediumWord(when(exerciseUiModel.desiredType){
-                    "natural" -> "натуральных"
-                    "unnatural" -> "ненатуральных"
-                    else -> throw IOException("unknown exercise type 9 desired type")
-                })
-
-            }
-        }
-         */
         exerciseInputCollectionLayoutEditText.addTextChangedListener(this)
     }
 

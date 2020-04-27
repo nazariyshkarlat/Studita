@@ -14,10 +14,12 @@ class UserStatActivity : DefaultActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.frame_layout)
 
-        if(UserUtils.isLoggedIn())
-            addFragment(UserStatFragment(), R.id.frameLayout)
-        else
-            addFragment(UserStatUnLoggedInFragment(), R.id.frameLayout)
+        if(savedInstanceState == null) {
+            if (UserUtils.isLoggedIn())
+                addFragment(UserStatFragment(), R.id.frameLayout)
+            else
+                addFragment(UserStatUnLoggedInFragment(), R.id.frameLayout)
+        }
 
     }
 

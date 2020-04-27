@@ -39,7 +39,7 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
             val variants: List<String>
         ) : ExerciseUiModelExercise(exerciseNumber)
 
-        data class ExerciseType5and6UiModel(
+        data class ExerciseType5And6UiModel(
             override val exerciseNumber: Int?,
             val title: String,
             val subtitle: String,
@@ -47,7 +47,7 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
         ) : ExerciseUiModelExercise(exerciseNumber)
 
         data class ExerciseType7UiModel(override val exerciseNumber: Int?,
-                                      val title: String) : ExerciseUiModelExercise(exerciseNumber)
+                                     val title: String) : ExerciseUiModelExercise(exerciseNumber)
 
         data class ExerciseType8UiModel(override val exerciseNumber: Int?,
                                      val title: String, val subtitle: String, val variants: List<String>

@@ -4,6 +4,7 @@ import com.example.studita.di.CacheModule
 import com.example.studita.data.cache.chapter.ChapterCacheImpl
 import com.example.studita.data.entity.mapper.ChapterDataMapper
 import com.example.studita.data.net.ChapterService
+import com.example.studita.data.net.ChaptersService
 import com.example.studita.data.repository.ChapterRepositoryImpl
 import com.example.studita.data.repository.datasource.chapter.ChapterJsonDataStoreFactoryImpl
 import com.example.studita.data.repository.datasource.chapter.CloudChapterJsonDataStore
@@ -38,8 +39,10 @@ object ChapterModule {
     private fun getChapterRepository(): ChapterRepository {
         if (repository == null)
             repository = ChapterRepositoryImpl(
-                getChapterJsonDataStoreFactory(), ChapterDataMapper(),
-                NetworkModule.connectionManager
+                getChapterJsonDataStoreFactory(),
+                ChapterDataMapper(),
+                NetworkModule.connectionManager,
+                getChapterCacheImpl()
             )
         return repository!!
     }
@@ -53,6 +56,7 @@ object ChapterModule {
         CloudChapterJsonDataStore(
             NetworkModule.connectionManager,
             NetworkModule.getService(ChapterService::class.java),
+            NetworkModule.getService(ChaptersService::class.java),
             getChapterCacheImpl()
         )
 

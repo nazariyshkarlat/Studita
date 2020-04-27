@@ -16,9 +16,9 @@ class ExerciseVariantsType5and6Fragment : ExerciseVariantsFragment(R.layout.exer
         exercisesViewModel?.let {
             observeAnswered(it, exerciseVariantsTitleFragmentLinearLayout)
             when (it.exerciseUiModel) {
-                is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5and6UiModel -> {
+                is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6UiModel -> {
                     val exerciseUiModel =
-                        it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5and6UiModel
+                        it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6UiModel
                     exerciseVariantsTitleFragmentTitle.text = exerciseUiModel.title
                     exerciseVariantsTitleFragmentSubtitle.text = exerciseUiModel.subtitle
                     fillVariants(exerciseUiModel.variants)

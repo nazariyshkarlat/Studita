@@ -29,11 +29,13 @@ open class RadioButtonListDialogAlertFragment : BaseDialogFragment(R.layout.dial
         (dialogListLayoutListLayout as ViewGroup).children.forEachIndexed { index, child ->
             child.dialogListLayoutRadioButtonItemRadioButton.isChecked = index == selectedPos
             child.setOnClickListener {
-                selectedPos = index
-                dialogListLayoutListLayout.children.forEach { child ->
-                    child.dialogListLayoutRadioButtonItemRadioButton.isChecked = false
+                if(selectedPos != index) {
+                    selectedPos = index
+                    dialogListLayoutListLayout.children.forEach { child ->
+                        child.dialogListLayoutRadioButtonItemRadioButton.isChecked = false
+                    }
+                    child.dialogListLayoutRadioButtonItemRadioButton.isChecked = true
                 }
-                child.dialogListLayoutRadioButtonItemRadioButton.isChecked = true
             }
         }
 
