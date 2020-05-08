@@ -5,7 +5,7 @@ import com.example.studita.domain.interactor.ChaptersCacheStatus
 
 interface ChapterInteractor {
 
-    suspend fun getChapter(chapterNumber: Int) : ChapterStatus
+    suspend fun getChapter(chapterNumber: Int, offlineMode: Boolean) : ChapterStatus
 
     suspend fun downloadChapters(): ChaptersCacheStatus
 

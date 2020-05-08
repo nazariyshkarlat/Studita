@@ -1,25 +1,41 @@
 package com.example.studita.data.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.studita.data.entity.UserDataEntity.Companion.TABLE_NAME
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = TABLE_NAME)
-data class UserDataEntity(@SerializedName("user_name")val userName: String?,
-                          @SerializedName("user_public_id")val userPublicId: String?,
-                          @SerializedName("avatar_link")val avatarLink: String?,
-                          @SerializedName("current_level")val currentLevel: Int,
-                          @SerializedName("current_level_XP")val currentLevelXP: Int,
-                          @SerializedName("streak_days")val streakDays: Int,
-                          @SerializedName("subscribed")val isSubscribed: Boolean,
-                          @SerializedName("completed_parts")val completedParts: List<Int>,
-                          @SerializedName("streak_datetime")val streakDatetime: String){
+data class UserDataEntity(@ColumnInfo(name = "user_name")
+                          @SerializedName("user_name")val userName: String? = null,
+                          @ColumnInfo(name = "user_public_id")
+                          @SerializedName("user_public_id")val userPublicId: String? = null,
+                          @ColumnInfo(name = "avatar_link")
+                          @SerializedName("avatar_link")val avatarLink: String? = null,
+                          @ColumnInfo(name = "current_level")
+                          @SerializedName("current_level")val currentLevel: Int = 0,
+                          @ColumnInfo(name = "current_level_XP")
+                          @SerializedName("current_level_XP")val currentLevelXP: Int = 0,
+                          @ColumnInfo(name = "streak_days")
+                          @SerializedName("streak_days")val streakDays: Int = 0,
+                          @ColumnInfo(name = "subscribed")
+                          @SerializedName("subscribed")val isSubscribed: Boolean = false,
+                          @ColumnInfo(name = "completed_parts")
+                          @SerializedName("completed_parts")val completedParts: List<Int> = listOf(),
+                          @ColumnInfo(name = "streak_datetime")
+                          @SerializedName("streak_datetime")val streakDatetime: String = "1900-01-01 00:00:00",
+                          @ColumnInfo(name = "today_completed_exercises")
+                          @SerializedName("today_completed_exercises")val todayCompletedExercises: Int = 0){
     companion object {
         const val TABLE_NAME = "user_data"
     }
-    @PrimaryKey
-    @SerializedName("user_local_id")
-    var userLocalId: Int = 1
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "user_local_id")
+    @Transient
+    var userLocalId: Long = 1
 }
+
+data class SaveUserDataRequest(@SerializedName("auth_data")val userIdToken: UserIdToken, @SerializedName("user_data")val userDataEntity: UserDataEntity)

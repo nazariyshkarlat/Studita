@@ -39,8 +39,7 @@ object LevelsModule {
             repository = LevelsRepositoryImpl(
                 getLevelsJsonDataStoreFactory(),
                 LevelDataMapper(),
-                NetworkModule.connectionManager,
-                getLevelsCacheImpl()
+                NetworkModule.connectionManager
             )
         return repository!!
     }

@@ -8,8 +8,8 @@
     android:orientation="vertical"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
+    android:layout_marginStart="@dimen/defaultRLMargin"
+    android:layout_marginEnd="@dimen/defaultRLMargin"
     android:gravity="center"
     android:background="@drawable/main_blocks_rectangle"
     xmlns:android="http://schemas.android.com/apk/res/android">

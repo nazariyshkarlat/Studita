@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studita.presentation.fragments.ChapterBottomSheetFragment
 import com.example.studita.presentation.model.HomeRecyclerUiModel
-import com.example.studita.presentation.utils.LevelUtils
-import com.example.studita.presentation.utils.UserUtils
+import com.example.studita.utils.LevelUtils
+import com.example.studita.utils.UserUtils
 import com.example.studita.presentation.views.AlphaGradientView
 import kotlinx.android.synthetic.main.chapter_item.view.*
 

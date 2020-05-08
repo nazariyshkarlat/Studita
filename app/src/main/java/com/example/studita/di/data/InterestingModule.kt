@@ -2,6 +2,7 @@ package com.example.studita.di.data
 
 import com.example.studita.data.cache.interesting.InterestingCacheImpl
 import com.example.studita.data.entity.mapper.InterestingDataMapper
+import com.example.studita.data.net.InterestingListService
 import com.example.studita.data.net.InterestingService
 import com.example.studita.data.repository.InterestingRepositoryImpl
 import com.example.studita.data.repository.datasource.interesting.CloudInterestingJsonDataStore
@@ -53,7 +54,7 @@ object InterestingModule {
         CloudInterestingJsonDataStore(
             NetworkModule.connectionManager,
             NetworkModule.getService(InterestingService::class.java),
-            getInterestingCacheImpl()
+            NetworkModule.getService(InterestingListService::class.java)
         )
 
     private fun getDiskInterestingDataStore() =

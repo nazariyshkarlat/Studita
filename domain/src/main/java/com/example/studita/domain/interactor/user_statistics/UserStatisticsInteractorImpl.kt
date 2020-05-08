@@ -1,15 +1,15 @@
 package com.example.studita.domain.interactor.user_statistics
 
 import com.example.studita.domain.entity.UserIdTokenData
-import com.example.studita.domain.enum.UserStatisticsTime
+import com.example.studita.domain.entity.UserStatisticsRowData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.interactor.UserStatisticsStatus
 import com.example.studita.domain.repository.UserStatisticsRepository
 
-class UserStatisticsInteractorImpl(private val repository: UserStatisticsRepository) : UserStatisticsInteractor{
-    override suspend fun getUserStatisticsInteractor(
+class UserStatisticsInteractorImpl(private val repository: UserStatisticsRepository) : UserStatisticsInteractor {
+    override suspend fun getUserStatistics(
         userIdTokenData: UserIdTokenData
-    )=
+    ) =
         try {
             val result = repository.getUserStatistics(userIdTokenData)
             when (result.first) {
@@ -23,5 +23,16 @@ class UserStatisticsInteractorImpl(private val repository: UserStatisticsReposit
             else
                 UserStatisticsStatus.ServiceUnavailable
         }
+
+    override suspend fun saveUserStatistics(idTokenData: UserIdTokenData?, userStatisticsRowData: UserStatisticsRowData) {
+        if(idTokenData == null)
+            repository.saveUserStatistics(userStatisticsRowData)
+    }
+
+    override suspend fun getUserStatisticsRecords(): List<UserStatisticsRowData>? {
+        val stat = repository.getUserStatisticsRecords()
+        return stat
+    }
+
 
 }

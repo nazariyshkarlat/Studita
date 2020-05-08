@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/blue"/>
+            <solid android:color="?colorAccent"/>
         </shape>
     </item>
     <item android:drawable="@drawable/ic_volume_up_white" android:gravity="center" android:bottom="12dp" android:top="12dp" android:left="12dp" android:right="12dp"/>

@@ -14,7 +14,7 @@ import com.example.studita.R
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.model.ExerciseResultAnimation
-import com.example.studita.presentation.utils.*
+import com.example.studita.utils.*
 import com.example.studita.presentation.view_model.ExercisesEndFragmentViewModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercises_result_layout.*
@@ -111,6 +111,12 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
                                 exercisesResultLayoutProgressBarText.text = resources.getString(
                                     R.string.exercises_XP_bonus,
                                     LevelUtils.NEXT_LEVEL_BONUS * newLevels
+                                )
+                            }
+                            is ExerciseResultAnimation.SequenceBonus ->{
+                                exercisesResultLayoutProgressBarText.text = resources.getString(
+                                    R.string.exercises_XP_bonus,
+                                    LevelUtils.SEQUENCE_BONUS
                                 )
                             }
                         }

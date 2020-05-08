@@ -7,7 +7,7 @@ import android.content.SharedPreferences
 object CacheModule {
 
     lateinit var sharedPreferences: SharedPreferences
-    const val PREFS_NAME = "studita_cache"
+    private const val PREFS_NAME = "studita_cache"
 
     fun initialize(app: Application) {
         sharedPreferences = app.getSharedPreferences(

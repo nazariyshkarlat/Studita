@@ -19,9 +19,9 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.example.studita.R
 import com.example.studita.domain.date.DateTimeFormat
 import com.example.studita.presentation.fragments.base.BaseFragment
-import com.example.studita.presentation.utils.TimeUtils
-import com.example.studita.presentation.utils.navigateTo
-import com.example.studita.presentation.utils.replace
+import com.example.studita.utils.TimeUtils
+import com.example.studita.utils.navigateTo
+import com.example.studita.utils.replace
 import kotlinx.android.synthetic.main.incorrect_time_layout.*
 import java.util.*
 

@@ -10,9 +10,9 @@ class LevelsInteractorImpl(
     private val repository: LevelsRepository
 ): LevelsInteractor {
 
-     override suspend fun getLevels(isLoggedIn: Boolean): LevelsStatus =
+     override suspend fun getLevels(isLoggedIn: Boolean, offlineMode: Boolean): LevelsStatus =
          try {
-             val results = repository.getLevels(isLoggedIn)
+             val results = repository.getLevels(isLoggedIn, offlineMode)
              LevelsStatus.Success(results)
          } catch (e: Exception) {
              e.printStackTrace()

@@ -7,6 +7,6 @@ import com.example.studita.domain.interactor.ExercisesStatus
 
 interface ExerciseResultInteractor {
 
-    suspend fun getExerciseResult(exerciseData: ExerciseData.ExerciseDataExercise, exerciseRequestData: ExerciseRequestData, offlineMode: Boolean = true) : ExerciseResultStatus
+    suspend fun getExerciseResult(exerciseData: ExerciseData.ExerciseDataExercise, exerciseRequestData: ExerciseRequestData, offlineMode: Boolean) : ExerciseResultStatus
 
 }

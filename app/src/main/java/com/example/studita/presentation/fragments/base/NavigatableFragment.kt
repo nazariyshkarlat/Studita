@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.utils.navigateBack
+import com.example.studita.utils.navigateBack
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 
 open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){

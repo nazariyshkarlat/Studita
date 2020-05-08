@@ -15,10 +15,13 @@ import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.domain.interactor.UserDataStatus
 import com.example.studita.presentation.model.HomeRecyclerUiModel
 import com.example.studita.presentation.model.mapper.LevelUiModelMapper
-import com.example.studita.presentation.utils.launchExt
-import com.example.studita.presentation.utils.UserUtils
+import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.TimeUtils
+import com.example.studita.utils.launchExt
+import com.example.studita.utils.UserUtils
 import kotlinx.coroutines.Job
-import java.lang.Exception
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeFragmentViewModel : ViewModel(){
 
@@ -36,24 +39,26 @@ class HomeFragmentViewModel : ViewModel(){
     private var levelsJob: Job? = null
     private var subscribeJob: Job? = null
 
-    var userIdTokenData: UserIdTokenData? = null
+    private var userIdTokenData: UserIdTokenData? = null
 
     init{
         initSubscribeEmailState()
         userIdTokenData = UserUtils.getUserTokenIdData()
-        getLevels(userIdTokenData)
+        getHomeScreenData(userIdTokenData)
     }
 
-    private fun getLevels(userIdTokenData: UserIdTokenData?){
+    private fun getHomeScreenData(userIdTokenData: UserIdTokenData?){
         levelsJob = viewModelScope.launchExt(levelsJob){
-            getUserData(userIdTokenData)
-            when(val status = levelsInteractor.getLevels(UserUtils.isLoggedIn())){
-                is LevelsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
-                is LevelsStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
-                is LevelsStatus.Success -> {
-                    progressState.postValue(true)
-                    results = LevelUiModelMapper()
-                        .map(status.result)
+            val status = getUserData(userIdTokenData)
+            when(status){
+                is UserDataStatus.NoConnection -> errorState.postValue(R.string.no_connection)
+                is UserDataStatus.ServiceUnavailable ->errorState.postValue(R.string.server_unavailable)
+                is UserDataStatus.Failure -> errorState.postValue(R.string.server_failure)
+                else ->{
+                    status as UserDataStatus.Success
+                    initUserData(status.result)
+                    userDataState.postValue(status.result)
+                    getUserLevels()
                 }
             }
         }
@@ -61,7 +66,10 @@ class HomeFragmentViewModel : ViewModel(){
 
     fun subscribeEmail(userIdTokenData: UserIdTokenData, subscribe: Boolean){
         subscribeJob = viewModelScope.launchExt(subscribeJob){
-            when(val status = if(subscribe) subscribeEmailInteractor.subscribe(userIdTokenData) else  subscribeEmailInteractor.unsubscribe(userIdTokenData)){
+            when(val status = if(subscribe)
+                subscribeEmailInteractor.subscribe(userIdTokenData)
+            else
+                subscribeEmailInteractor.unsubscribe(userIdTokenData)){
                 is SubscribeEmailResultStatus.NoConnection ->{
                     subscribeEmailState.postValue(status)
                 }
@@ -74,10 +82,17 @@ class HomeFragmentViewModel : ViewModel(){
     }
 
 
-    private suspend fun getUserData(userIdTokenData: UserIdTokenData?){
-        val userData = userDataInteractor.getUserData(userIdTokenData)
-        if (userData is UserDataStatus.Success) {
-            userDataState.postValue(userData.result)
+    private suspend fun getUserData(userIdTokenData: UserIdTokenData?) = userDataInteractor.getUserData(userIdTokenData, PrefsUtils.isOfflineMode())
+
+    private suspend fun getUserLevels(){
+        when(val status = levelsInteractor.getLevels(UserUtils.isLoggedIn(), PrefsUtils.isOfflineMode())){
+            is LevelsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
+            is LevelsStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
+            is LevelsStatus.Success -> {
+                progressState.postValue(true)
+                results = LevelUiModelMapper()
+                    .map(status.result)
+            }
         }
     }
 
@@ -94,6 +109,15 @@ class HomeFragmentViewModel : ViewModel(){
             SubscribeEmailResultStatus.Success(
                 it
             )
+        }
+    }
+
+    private fun initUserData(userDataData: UserDataData){
+        UserUtils.userData = userDataData
+
+        if(TimeUtils.getCalendarDayCount(Date(), userDataData.streakDatetime) > 1F){
+            userDataData.streakDays = 0
+            userDataData.todayCompletedExercises = 0
         }
     }
 }

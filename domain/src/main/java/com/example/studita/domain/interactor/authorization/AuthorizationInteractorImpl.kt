@@ -1,6 +1,5 @@
 package com.example.studita.domain.interactor.authorization
 
-import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
 import com.example.studita.domain.entity.authorization.SignInWithGoogleRequestData
 import com.example.studita.domain.exception.NetworkConnectionException
@@ -8,12 +7,13 @@ import com.example.studita.domain.interactor.LogInStatus
 import com.example.studita.domain.interactor.SignInWithGoogleStatus
 import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.repository.AuthorizationRepository
+import com.example.studita.domain.repository.UserDataRepository
 
-class AuthorizationInteractorImpl(private val repository: AuthorizationRepository) :
+class AuthorizationInteractorImpl(private val authorizationRepository: AuthorizationRepository) :
     AuthorizationInteractor {
     override suspend fun signUp(authorizationRequestData: AuthorizationRequestData): SignUpStatus =
         try {
-             when (repository.signUp(authorizationRequestData)) {
+             when (authorizationRepository.signUp(authorizationRequestData)) {
                 200 -> SignUpStatus.Success
                 409 -> SignUpStatus.UserAlreadyExists
                 else -> SignUpStatus.Failure
@@ -28,7 +28,7 @@ class AuthorizationInteractorImpl(private val repository: AuthorizationRepositor
 
     override suspend fun logIn(authorizationRequestData: AuthorizationRequestData): LogInStatus =
         try {
-            val logInResult = repository.logIn(authorizationRequestData)
+            val logInResult = authorizationRepository.logIn(authorizationRequestData)
             when (logInResult.first) {
                 400 -> LogInStatus.Failure
                 404 -> LogInStatus.NoUserFound
@@ -48,10 +48,10 @@ class AuthorizationInteractorImpl(private val repository: AuthorizationRepositor
 
     override suspend fun signInWithGoogle(signInWithGoogleRequestData: SignInWithGoogleRequestData): SignInWithGoogleStatus =
         try {
-            val result = repository.signInWithGoogle(signInWithGoogleRequestData)
-            when (result.first) {
+            val signInWithGoogleResult = authorizationRepository.signInWithGoogle(signInWithGoogleRequestData)
+            when (signInWithGoogleResult.first) {
                 400 -> SignInWithGoogleStatus.Failure
-                else -> result.second?.let {
+                else -> signInWithGoogleResult.second?.let {
                     SignInWithGoogleStatus.Success(
                         it
                     )

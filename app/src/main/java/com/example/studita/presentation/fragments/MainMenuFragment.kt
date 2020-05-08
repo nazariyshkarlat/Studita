@@ -10,8 +10,11 @@ import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.activities.MainActivity
-import com.example.studita.presentation.utils.navigateTo
+import com.example.studita.utils.navigateTo
 import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.fragments.dialog_alerts.MainMenuLanguageDialogAlertFragment
+import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
+import com.example.studita.utils.PrefsUtils
 import com.example.studita.presentation.view_model.MainMenuFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -64,17 +67,22 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
 
         mainMenuScrollView.viewTreeObserver.addOnScrollChangedListener(this)
 
+        mainMenuLayoutOfflineSwitch.isChecked = PrefsUtils.isOfflineMode()
+
         mainMenuLayoutOfflineSwitchView.setOnClickListener {
+            PrefsUtils.setOfflineMode(!mainMenuLayoutOfflineSwitch.isChecked)
             mainMenuLayoutOfflineSwitch.isChecked = !mainMenuLayoutOfflineSwitch.isChecked
         }
 
         mainMenuLayoutThemeView.setOnClickListener {
-            val dialogFragment = MainMenuThemeDialogAlertFragment()
+            val dialogFragment =
+                MainMenuThemeDialogAlertFragment()
             dialogFragment.show((activity as AppCompatActivity).supportFragmentManager, null)
         }
 
         mainMenuLayoutLanguageView.setOnClickListener {
-            MainMenuLanguageDialogAlertFragment().show((activity as AppCompatActivity).supportFragmentManager, "")
+            MainMenuLanguageDialogAlertFragment()
+                .show((activity as AppCompatActivity).supportFragmentManager, null)
         }
 
         if (!isHidden)

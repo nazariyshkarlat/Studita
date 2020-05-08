@@ -10,9 +10,9 @@ class ExercisesInteractorImpl(
     private val repository: ExercisesRepository
 ): ExercisesInteractor {
 
-    override suspend fun getExercises(chapterPartNumber: Int): ExercisesStatus =
+    override suspend fun getExercises(chapterPartNumber: Int, offlineMode: Boolean): ExercisesStatus =
         try {
-            val results = repository.getExercises(chapterPartNumber)
+            val results = repository.getExercises(chapterPartNumber, offlineMode)
 
             if(results.first == 200)
                 ExercisesStatus.Success(results.second)

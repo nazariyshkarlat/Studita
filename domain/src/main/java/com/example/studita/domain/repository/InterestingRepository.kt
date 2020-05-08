@@ -5,6 +5,8 @@ import com.example.studita.domain.entity.InterestingData
 
 interface InterestingRepository {
 
-    suspend fun getInteresting(interestingNumber: Int): Pair<Int, InterestingData>
+    suspend fun getInteresting(interestingNumber: Int, offlineMode: Boolean): Pair<Int, InterestingData>
+
+    suspend fun downloadInterestingList(): Int
 
 }

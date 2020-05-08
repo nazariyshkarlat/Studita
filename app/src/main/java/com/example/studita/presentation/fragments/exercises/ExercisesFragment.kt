@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
-import com.example.studita.presentation.utils.*
+import com.example.studita.utils.*
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.exercises.description.ExercisesDescription1Fragment
 import com.example.studita.presentation.fragments.exercises.description.ExercisesDescription2Fragment
@@ -47,6 +47,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         }
 
         exercisesViewModel?.let{viewModel ->
+
             viewModel.navigationState.observe(viewLifecycleOwner, Observer{ pair->
                 when(pair.first){
                     ExercisesViewModel.ExercisesNavigationState.FIRST -> {
@@ -60,9 +61,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                 setButtonText()
             })
 
-            viewModel.snackbarState.observe(viewLifecycleOwner, Observer { response ->
-                showSnackbar(response)
-            })
+            viewModel.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver(viewModel))
 
             viewModel.buttonEnabledState.observe(viewLifecycleOwner, Observer { enabled ->
                 exerciseLayoutButton.isEnabled = enabled
@@ -88,21 +87,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                 exerciseToolbarViewTransparent.visibility = if (show) View.VISIBLE else View.GONE
             })
 
-            viewModel.progressBarState.observe(viewLifecycleOwner, Observer { pair ->
-                val progress = pair.first
-                val last = pair.second
-                if(last)
-                    exerciseLayoutButton.setOnClickListener {  }
-                exerciseToolbarProgressBar.animateProgress(toPercent = progress, delay = (if((exerciseToolbarProgressBar.animation == null) || this.exerciseToolbarProgressBar.animation.hasEnded()) 100L else 0L), onAnimEnd = {
-                    if(last){
-                        viewModel.saveObtainedExerciseDataState.observe(viewLifecycleOwner, Observer {saved->
-                            if(saved){
-                                (activity as AppCompatActivity).navigateTo(viewModel.getExercisesEndFragment(), R.id.frameLayout)
-                            }
-                        })
-                    }
-                })
-            })
+            viewModel.progressState.observe(viewLifecycleOwner, getProgressStateObserver(viewModel))
 
             viewModel.exercisesProgress.observe(viewLifecycleOwner, Observer { state ->
                 when (state) {
@@ -125,6 +110,28 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                             delay(resources.getInteger(R.integer.navigatable_fragment_anim_duration).toLong())
                             viewModel.showBars(false)
+                        }
+                    }
+                }
+            })
+
+            viewModel.showBadConnectionDialogAlertFragmentState.observe(viewLifecycleOwner, Observer {show->
+                if(show) {
+                    fragmentManager?.let {
+                        viewModel.snackbarState.removeObservers(viewLifecycleOwner)
+                        viewModel.progressState.removeObservers(viewLifecycleOwner)
+                        val dialogFragment = ExercisesBadConnectionDialogAlertFragment()
+
+                        dialogFragment.show(
+                            it,
+                            null
+                        )
+
+                        it.executePendingTransactions()
+
+                        dialogFragment.dialog?.setOnDismissListener {
+                            viewModel.progressState.observe(viewLifecycleOwner, getProgressStateObserver(viewModel))
+                            viewModel.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver(viewModel))
                         }
                     }
                 }
@@ -294,7 +301,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         val drawable = exerciseLayoutButton.background as TransitionDrawable
         if (onSnackbarShow) {
             exerciseLayoutButton.setTextColor(
-                ContextCompat.getColor(context, R.color.blue)
+                ColorUtils.getAccentColor(context)
             )
             drawable.startTransition(if(animate) resources.getInteger(R.integer.button_transition_duration) else 0)
             exerciseLayoutButton.text = resources.getString(R.string.next)
@@ -307,7 +314,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             exerciseLayoutButton.setTextColor(
                 ContextCompat.getColorStateList(
                     exerciseLayoutButton.context,
-                    R.color.blue_button_8_text_color
+                    R.color.button_accent_8_text_color
                 )
             )
             drawable.reverseTransition(resources.getInteger(R.integer.button_transition_duration))
@@ -355,5 +362,25 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             )
         }
     }
+
+    private fun getProgressStateObserver(exercisesViewModel: ExercisesViewModel) =
+        Observer<Pair<Float, Boolean>> { pair ->
+            val progress = pair.first
+            val last = pair.second
+            exerciseToolbarProgressBar.animateProgress(toPercent = progress, delay = (if((exerciseToolbarProgressBar.animation == null) || this.exerciseToolbarProgressBar.animation.hasEnded()) 100L else 0L), onAnimEnd = {
+                if(last){
+                    exercisesViewModel.saveUserDataState.observe(viewLifecycleOwner, Observer { saved->
+                        if(saved){
+                            (activity as AppCompatActivity).navigateTo(exercisesViewModel.getExercisesEndFragment(), R.id.frameLayout)
+                        }
+                    })
+                }
+            })
+        }
+
+    private fun getSnackbarStateObserver(exercisesViewModel: ExercisesViewModel) =
+        Observer<Pair<ExerciseUiModel, ExerciseResponseData>?> { response ->
+            showSnackbar(response)
+        }
 
 }

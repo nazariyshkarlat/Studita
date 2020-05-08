@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
+    android:layout_marginStart="@dimen/defaultRLMargin"
+    android:layout_marginEnd="@dimen/defaultRLMargin"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -18,7 +18,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:srcCompat="@drawable/ic_watch_later_blue"/>
+            app:srcCompat="@drawable/ic_watch_later_accent"/>
 
         <TextView
             style="@style/Regular16"
@@ -53,6 +53,6 @@
         android:layout_height="@dimen/buttonHeight"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
-        android:text="@string/in_settings" />
+        android:text="@string/to_settings" />
 
 </RelativeLayout>

@@ -92,6 +92,13 @@ sealed class InterestingStatus{
     data class Success(val result: InterestingData): InterestingStatus()
 }
 
+sealed class InterestingCacheStatus{
+    object ServiceUnavailable : InterestingCacheStatus()
+    object NoConnection : InterestingCacheStatus()
+    object IsCached : InterestingCacheStatus()
+    object Success: InterestingCacheStatus()
+}
+
 sealed class SubscribeEmailResultStatus{
     object ServiceUnavailable : SubscribeEmailResultStatus()
     object NoConnection : SubscribeEmailResultStatus()
@@ -99,11 +106,11 @@ sealed class SubscribeEmailResultStatus{
     data class Success(val result: SubscribeEmailResultData): SubscribeEmailResultStatus()
 }
 
-sealed class SaveObtainedExerciseDataStatus{
-    object ServiceUnavailable : SaveObtainedExerciseDataStatus()
-    object NoConnection : SaveObtainedExerciseDataStatus()
-    object Failure: SaveObtainedExerciseDataStatus()
-    object Success: SaveObtainedExerciseDataStatus()
+sealed class SaveObtainedExercisesDataStatus{
+    object ServiceUnavailable : SaveObtainedExercisesDataStatus()
+    object NoConnection : SaveObtainedExercisesDataStatus()
+    object Failure: SaveObtainedExercisesDataStatus()
+    object Success: SaveObtainedExercisesDataStatus()
 }
 
 sealed class ExercisesCacheStatus{
@@ -111,4 +118,11 @@ sealed class ExercisesCacheStatus{
     object NoConnection : ExercisesCacheStatus()
     object IsCached : ExercisesCacheStatus()
     object Success: ExercisesCacheStatus()
+}
+
+sealed class CompleteExercisesStatus{
+    object ServiceUnavailable : CompleteExercisesStatus()
+    object NoConnection : CompleteExercisesStatus()
+    object Failure : CompleteExercisesStatus()
+    object Success: CompleteExercisesStatus()
 }

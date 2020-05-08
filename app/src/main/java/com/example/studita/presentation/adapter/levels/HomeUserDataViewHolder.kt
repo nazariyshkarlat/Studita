@@ -4,9 +4,9 @@ import android.view.View
 import com.example.studita.R
 import com.example.studita.presentation.activities.UserStatActivity
 import com.example.studita.presentation.model.HomeRecyclerUiModel
-import com.example.studita.presentation.utils.*
-import com.example.studita.presentation.utils.LevelUtils.getLevelXP
-import com.example.studita.presentation.utils.LevelUtils.getNextLevel
+import com.example.studita.utils.*
+import com.example.studita.utils.LevelUtils.getLevelXP
+import com.example.studita.utils.LevelUtils.getNextLevel
 import kotlinx.android.synthetic.main.home_layout_user_data.view.*
 import java.util.*
 

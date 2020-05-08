@@ -43,7 +43,7 @@ class DatabaseTest {
 
         database.getUserDataDao().insertUserData(userData)
 
-        val dbUserData = database.getUserDataDao().getUserDataAsync()
+        val dbUserData = database.getUserDataDao().getUserData()
 
         MatcherAssert.assertThat(dbUserData, CoreMatchers.equalTo(userData))
 

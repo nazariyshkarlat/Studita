@@ -2,6 +2,7 @@ package com.example.studita.di.data
 
 import com.example.studita.data.entity.mapper.UserDataDataMapper
 import com.example.studita.data.entity.mapper.UserDataEntityMapper
+import com.example.studita.data.entity.mapper.UserIdTokenMapper
 import com.example.studita.data.net.UserDataService
 import com.example.studita.data.repository.UserDataRepositoryImpl
 import com.example.studita.data.repository.datasource.user_data.*
@@ -32,7 +33,7 @@ object UserDataModule {
         return userDataInteractor!!
     }
 
-    private fun getUserDataRepository(): UserDataRepository {
+    internal fun getUserDataRepository(): UserDataRepository {
         if (repository == null)
             repository = UserDataRepositoryImpl(
                 getUserDataJsonDataStoreFactory(),
@@ -66,6 +67,5 @@ object UserDataModule {
         DiskUserDataDataStore(getUserDataDao())
 
     private fun getUserDataDao() = DatabaseModule.studitaDatabase!!.getUserDataDao()
-
 
 }

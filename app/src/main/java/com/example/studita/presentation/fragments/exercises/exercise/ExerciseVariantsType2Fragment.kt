@@ -6,8 +6,8 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.presentation.utils.dpToPx
-import com.example.studita.presentation.utils.makeView
+import com.example.studita.utils.dpToPx
+import com.example.studita.utils.makeView
 import com.example.studita.presentation.model.ExerciseUiModel
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
 import kotlinx.android.synthetic.main.exercise_variants_linear_fragment.*

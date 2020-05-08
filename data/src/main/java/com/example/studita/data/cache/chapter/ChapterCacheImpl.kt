@@ -15,8 +15,8 @@ class ChapterCacheImpl(private val sharedPreferences: SharedPreferences) :
 
     override fun saveChaptersJson(json: String) {
         val chapters = Gson().fromJson<List<JsonObject>>(json, object : TypeToken<List<JsonObject>>() {}.type)
-        chapters.forEachIndexed {chapterNumber, chapter->
-            sharedPreferences.edit().putString("${CHAPTER_PREFS}_${chapterNumber+1}", chapter.toString()).apply()
+        chapters.forEachIndexed {index, chapter->
+            sharedPreferences.edit().putString("${CHAPTER_PREFS}_${index+1}", chapter.toString()).apply()
         }
     }
 

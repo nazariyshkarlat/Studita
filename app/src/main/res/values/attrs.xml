@@ -17,6 +17,9 @@
     <attr name="press_view_press_alpha" format="float"/>
     <attr name="switch_inactive_thumb_color" format="reference"/>
     <attr name="switch_inactive_track_color" format="reference"/>
+    <attr name="colorAccent10" format="reference"/>
+    <attr name="colorAccent14" format="reference"/>
+    <attr name="colorAccent26" format="reference"/>
 
     <declare-styleable name="CircleProgress">
         <attr name="circle_progress" format="integer"/>

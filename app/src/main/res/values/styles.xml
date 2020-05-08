@@ -1,6 +1,9 @@
 <resources xmlns:http="http://schemas.android.com/apk/res-auto">
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent10">@color/blue10</item>
+        <item name="colorAccent14">@color/blue14</item>
+        <item name="colorAccent26">@color/blue26</item>
+        <item name="colorAccent">@color/blue</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:navigationBarColor">@color/gray11</item>
         <item name="android:statusBarColor">@color/gray11</item>
@@ -17,10 +20,10 @@
         <item name="next_level_color">@color/black10</item>
         <item name="progress_bar_color">@color/black10</item>
         <item name="primary_color">@color/black87</item>
-        <item name="blue_transparent_button_color">@color/blue10</item>
+        <item name="secondary_color">@color/black50</item>
+        <item name="blue_transparent_button_color">?colorAccent10</item>
         <item name="colorControlHighlight">@color/black6</item>
         <item name="divider_color">@color/black10</item>
-        <item name="secondary_color">@color/black50</item>
         <item name="page_background_color">@color/white</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="task_variant_button">@color/black20</item>
@@ -38,7 +41,7 @@
         <item name="next_level_color">@color/white12</item>
         <item name="android:statusBarColor">@color/gray11</item>
         <item name="page_background_color">@color/gray11</item>
-        <item name="blue_transparent_button_color">@color/blue14</item>
+        <item name="blue_transparent_button_color">?colorAccent14</item>
         <item name="main_blocks_color">@color/white8</item>
         <item name="divider_color">@color/white12</item>
         <item name="colorControlHighlight">@color/white8</item>
@@ -108,7 +111,7 @@
 
     <style name="Regular12_50_Selector" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">@color/secondary_blue_color</item>
+        <item name="android:textColor">@color/secondary_accent_color</item>
         <item name="android:textSize">12sp</item>
     </style>
 
@@ -211,19 +214,19 @@
 
     <style name="Medium14Blue" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">@color/blue</item>
+        <item name="android:textColor">?colorAccent</item>
         <item name="android:textSize">14sp</item>
     </style>
 
     <style name="Medium16Blue" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">@color/blue</item>
+        <item name="android:textColor">?colorAccent</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Medium20Blue" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">@color/blue</item>
+        <item name="android:textColor">?colorAccent</item>
         <item name="android:textSize">20sp</item>
     </style>
 
@@ -249,17 +252,17 @@
     <style name="Button" parent="android:Widget.TextView">
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:background">@drawable/button_blue_8</item>
+        <item name="android:background">@drawable/button_accent_8</item>
         <item name="android:textAppearance">@style/Medium16White</item>
-        <item name="android:textColor">@color/blue_button_8_text_color</item>
+        <item name="android:textColor">@color/button_accent_8_text_color</item>
     </style>
 
     <style name="TransitionButton" parent="android:Widget.TextView">
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:background">@drawable/button_blue_8_transition</item>
+        <item name="android:background">@drawable/button_accent_8_transition</item>
         <item name="android:textAppearance">@style/Medium16White</item>
-        <item name="android:textColor">@color/blue_button_8_text_color</item>
+        <item name="android:textColor">@color/button_accent_8_text_color</item>
     </style>
 
     <style name="GreenButton" parent="android:Widget.TextView">
@@ -267,7 +270,7 @@
         <item name="android:textAlignment">center</item>
         <item name="android:background">@drawable/button_green_8</item>
         <item name="android:textAppearance">@style/Medium16White</item>
-        <item name="android:textColor">@color/blue_button_8_text_color</item>
+        <item name="android:textColor">@color/button_accent_8_text_color</item>
     </style>
 
     <style name="WithGoogleButton" parent="android:Widget.TextView">
@@ -276,9 +279,9 @@
         <item name="android:paddingStart">12dp</item>
         <item name="android:drawablePadding">-36dp</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:background">@drawable/button_blue_8</item>
+        <item name="android:background">@drawable/button_accent_8</item>
         <item name="android:textAppearance">@style/Medium16White</item>
-        <item name="android:textColor">@color/blue_button_8_text_color</item>
+        <item name="android:textColor">@color/button_accent_8_text_color</item>
     </style>
 
     <style name="TryAgainButton" parent="Button12">
@@ -298,13 +301,13 @@
     <style name="Button12" parent="android:Widget.TextView">
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:background">@drawable/button_blue_press_transparent</item>
+        <item name="android:background">@drawable/button_accent_press_transparent</item>
         <item name="android:textAppearance">@style/Medium16Blue</item>
     </style>
 
     <style name="ShareButton" parent="Button12">
         <item name="android:gravity">center</item>
-        <item name="android:drawableStart">@drawable/ic_share_blue</item>
+        <item name="android:drawableStart">@drawable/ic_share_accent</item>
         <item name="android:drawablePadding">-40dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:text">@string/share</item>
@@ -316,7 +319,7 @@
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">10dp</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/blue</item>
+        <item name="android:textColor">?colorAccent</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
@@ -394,7 +397,7 @@
 
     <style name="FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="rippleColor">@android:color/transparent</item>
-        <item name="backgroundTint">@color/blue</item>
+        <item name="backgroundTint">?colorAccent</item>
         <item name="tint">@color/white</item>
         <item name="elevation">0dp</item>
         <item name="pressedTranslationZ">0dp</item>
@@ -421,7 +424,7 @@
         parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
         <item name="android:colorEdgeEffect">@color/gray80</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/blue</item>
     </style>
 
     <style name="ShapeAppearance.BottomSheet" parent="ShapeAppearance.MaterialComponents">
@@ -441,9 +444,9 @@
         <item name="android:foreground">?selectableItemBackground</item>
         <item name="itemRippleColor">?colorControlHighlight</item>
         <item name="menu">@menu/bottom_navigation_bar_menu</item>
-        <item name="itemIconTint">@color/secondary_blue_color</item>
+        <item name="itemIconTint">@color/secondary_accent_color</item>
         <item name="elevation">0dp</item>
-        <item name="itemTextColor">@color/secondary_blue_color</item>
+        <item name="itemTextColor">@color/secondary_accent_color</item>
     </style>
 
     <style name="RatingBar" parent="@android:style/Widget.RatingBar">

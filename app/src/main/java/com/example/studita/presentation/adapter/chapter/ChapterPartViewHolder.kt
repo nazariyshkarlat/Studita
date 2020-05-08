@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import com.example.studita.presentation.activities.ExercisesActivity
 import com.example.studita.presentation.model.ChapterPartUiModel
 import com.example.studita.presentation.model.ChapterUiModel
-import com.example.studita.presentation.utils.UserUtils
-import com.example.studita.presentation.utils.getAppCompatActivity
-import com.example.studita.presentation.utils.startActivity
+import com.example.studita.utils.UserUtils
+import com.example.studita.utils.getAppCompatActivity
+import com.example.studita.utils.startActivity
 import kotlinx.android.synthetic.main.chapter_part_item.view.*
 
 

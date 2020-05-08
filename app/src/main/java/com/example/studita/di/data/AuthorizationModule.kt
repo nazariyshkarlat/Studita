@@ -2,12 +2,10 @@ package com.example.studita.di.data
 
 import com.example.studita.di.CacheModule
 import com.example.studita.data.cache.authentication.LogInCacheImpl
-import com.example.studita.data.entity.mapper.AuthorizationRequestMapper
-import com.example.studita.data.entity.mapper.LogInResponseDataMapper
-import com.example.studita.data.entity.mapper.SignInWithGoogleRequestMapper
-import com.example.studita.data.entity.mapper.UserDataEntityMapper
+import com.example.studita.data.entity.mapper.*
 import com.example.studita.data.net.AuthorizationService
 import com.example.studita.data.repository.AuthorizationRepositoryImpl
+import com.example.studita.data.repository.UserDataRepositoryImpl
 import com.example.studita.data.repository.datasource.authorization.AuthorizationDataStoreFactoryImpl
 import com.example.studita.data.repository.datasource.authorization.AuthorizationDataStoreImpl
 import com.example.studita.di.DI
@@ -15,6 +13,7 @@ import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.authorization.AuthorizationInteractor
 import com.example.studita.domain.interactor.authorization.AuthorizationInteractorImpl
 import com.example.studita.domain.repository.AuthorizationRepository
+import com.example.studita.domain.repository.UserDataRepository
 
 object AuthorizationModule {
     private lateinit var config: DI.Config
@@ -31,7 +30,8 @@ object AuthorizationModule {
         if (config == DI.Config.RELEASE && authorizationInteractor == null)
             authorizationInteractor =
                 makeAuthorizationInteractor(
-                    getAuthorizationRepository()
+                    getAuthorizationRepository(),
+                    UserDataModule.getUserDataRepository()
                 )
         return authorizationInteractor!!
     }
@@ -40,16 +40,16 @@ object AuthorizationModule {
         if (repository == null)
             repository = AuthorizationRepositoryImpl(
                 getAuthorizationDataStoreFactory(),
-                LogInResponseDataMapper(),
-               getAuthorizationRequestMapper(),
+                LogInResponseDataMapper(UserDataDataMapper()),
+                getAuthorizationRequestMapper(),
                 getSignInWithGoogleRequestMapper()
             )
         return repository!!
     }
 
-    private fun makeAuthorizationInteractor(repository: AuthorizationRepository) =
+    private fun makeAuthorizationInteractor(authorizationRepository: AuthorizationRepository, userDataRepository: UserDataRepository) =
         AuthorizationInteractorImpl(
-            repository
+            authorizationRepository
         )
 
     private fun getCloudAuthorizationDataStore() =
@@ -64,13 +64,13 @@ object AuthorizationModule {
             getCloudAuthorizationDataStore()
         )
 
-    private fun getUserDataEntityMapper() = UserDataEntityMapper()
-
-    private fun getSignInWithGoogleRequestMapper() = SignInWithGoogleRequestMapper(
-        getUserDataEntityMapper())
-
     private fun getLogInCacheImpl() =
         LogInCacheImpl(CacheModule.sharedPreferences)
 
-    private fun getAuthorizationRequestMapper() =  AuthorizationRequestMapper(UserDataEntityMapper())
+    private fun getSignInWithGoogleRequestMapper() = SignInWithGoogleRequestMapper(
+        UserDataEntityMapper(),
+        UserStatisticsRowEntityMapper()
+    )
+
+    private fun getAuthorizationRequestMapper() =  AuthorizationRequestMapper(UserDataEntityMapper(), UserStatisticsRowEntityMapper())
 }

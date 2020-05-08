@@ -5,14 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.di.data.AuthorizationModule
+import com.example.studita.di.data.UserDataModule
+import com.example.studita.di.data.UserStatisticsModule
+import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
 import com.example.studita.domain.entity.authorization.LogInResponseData
 import com.example.studita.domain.interactor.LogInStatus
 import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.validator.AuthorizationValidator
-import com.example.studita.presentation.utils.UserUtils
-import com.example.studita.presentation.utils.launchExt
+import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.UserUtils
+import com.example.studita.utils.launchExt
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.lang.UnsupportedOperationException
 
 class AuthorizationFragmentViewModel : ViewModel(){
@@ -23,7 +28,9 @@ class AuthorizationFragmentViewModel : ViewModel(){
     val errorState = SingleLiveEvent<Int>()
 
     private var job: Job? = null
-    private val interactor = AuthorizationModule.getAuthorizationInteractorImpl()
+
+    private val userStatisticsInteractor = UserStatisticsModule.getUserStatisticsInteractorImpl()
+    private val authorizationInteractor = AuthorizationModule.getAuthorizationInteractorImpl()
 
     fun setPasswordEmpty(password: String){
         passwordFieldIsEmptyState.value = password.isEmpty()
@@ -56,11 +63,12 @@ class AuthorizationFragmentViewModel : ViewModel(){
     fun logIn(dates : Pair<String, String>){
         if(validate(dates) == AuthorizationResult.Valid){
             job = viewModelScope.launchExt(job){
-            when(val result = interactor.logIn(
+            when(val result = authorizationInteractor.logIn(
                 AuthorizationRequestData(
                     dates.first,
                     dates.second,
-                    UserUtils.userData
+                    null,
+                    null
                 )
             )){
                 is LogInStatus.NoConnection -> errorState.postValue(R.string.no_connection)
@@ -75,18 +83,20 @@ class AuthorizationFragmentViewModel : ViewModel(){
     fun signUp(dates : Pair<String, String>){
         if(validate(dates) == AuthorizationResult.Valid){
             job = viewModelScope.launchExt(job){
-                when(interactor.signUp(
+                when(authorizationInteractor.signUp(
                     AuthorizationRequestData(
                         dates.first,
                         dates.second,
-                        if(!UserUtils.isLoggedIn()) UserUtils.userData else null
-                    )
-                )){
+                        UserUtils.userData,
+                        userStatisticsInteractor.getUserStatisticsRecords()
+                    ))){
                     is SignUpStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                     is SignUpStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                     is SignUpStatus.Failure -> authorizationState.value = AuthorizationResult.SignUpFailure
                     is SignUpStatus.UserAlreadyExists -> authorizationState.value = AuthorizationResult.UserAlreadyExists
-                    is SignUpStatus.Success -> authorizationState.value = AuthorizationResult.SignUpSuccess(dates.first, dates.second)
+                    is SignUpStatus.Success ->{
+                        authorizationState.postValue(AuthorizationResult.SignUpSuccess(dates.first, dates.second))
+                    }
                 }}
         }
     }

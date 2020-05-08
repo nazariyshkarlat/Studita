@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.LoadFragment
-import com.example.studita.presentation.utils.replace
+import com.example.studita.utils.replace
 import com.example.studita.presentation.view_model.InterestingViewModel
 
 class InterestingLoadFragment : LoadFragment(){

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.presentation.model.HomeRecyclerUiModel
-import com.example.studita.presentation.utils.makeView
+import com.example.studita.utils.makeView
 import com.example.studita.presentation.view_model.HomeFragmentViewModel
 import java.lang.UnsupportedOperationException
 

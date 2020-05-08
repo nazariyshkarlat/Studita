@@ -11,5 +11,9 @@ class DiskChapterJsonDataStore(
         return 200 to (json ?: throw NetworkConnectionException())
     }
 
+    fun chaptersAreCached() = chapterCache.isCached(1)
+
+    fun saveChaptersJson(json: String) = chapterCache.saveChaptersJson(json)
+
 
 }

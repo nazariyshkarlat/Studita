@@ -15,7 +15,7 @@
                 android:thickness="6dp">
 
             <solid
-                android:color="@color/blue" />
+                android:color="?colorAccent" />
             </shape>
         </rotate>
     </item>

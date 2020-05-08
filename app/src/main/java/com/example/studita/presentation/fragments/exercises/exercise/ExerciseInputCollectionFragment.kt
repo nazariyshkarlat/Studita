@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.domain.entity.exercise.ExerciseType11Filter
-import com.example.studita.presentation.utils.createSpannableString
-import com.example.studita.presentation.utils.hideKeyboard
-import com.example.studita.presentation.utils.makeView
+import com.example.studita.utils.createSpannableString
+import com.example.studita.utils.hideKeyboard
+import com.example.studita.utils.makeView
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel

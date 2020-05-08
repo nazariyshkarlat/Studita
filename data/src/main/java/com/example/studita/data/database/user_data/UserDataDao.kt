@@ -17,6 +17,6 @@ interface UserDataDao {
     suspend fun deleteUserData()
 
     @Query("SELECT * FROM ${UserDataEntity.TABLE_NAME} LIMIT 1")
-    suspend fun getUserDataAsync(): UserDataEntity?
+    suspend fun getUserData(): UserDataEntity?
 
 }

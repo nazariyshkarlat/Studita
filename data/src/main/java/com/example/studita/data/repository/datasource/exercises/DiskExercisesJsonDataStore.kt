@@ -7,4 +7,8 @@ class DiskExercisesJsonDataStore(private val exercisesCache: ExercisesCache) : E
 
     override suspend fun getExercisesJson(chapterPartNumber: Int): Pair<Int, String> = 200 to (exercisesCache.getExercises(chapterPartNumber) ?: throw NetworkConnectionException())
 
+    fun exercisesAreCached() = exercisesCache.isCached()
+
+    fun saveExercisesJson(json: String) = exercisesCache.saveExercisesJson(json)
+
 }

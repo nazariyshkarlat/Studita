@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.presentation.model.ChapterPartUiModel
 import com.example.studita.presentation.model.ChapterUiModel
-import com.example.studita.presentation.utils.makeView
+import com.example.studita.utils.makeView
 
 class ChapterPartsAdapter(private val chapterUiModel: ChapterUiModel) :
     RecyclerView.Adapter<ChapterPartsViewHolder>() {

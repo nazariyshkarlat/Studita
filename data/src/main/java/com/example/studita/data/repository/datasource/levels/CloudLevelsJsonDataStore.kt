@@ -6,9 +6,11 @@ import com.example.studita.data.entity.level.LevelEntity
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.data.net.LevelsService
 import com.example.studita.domain.exception.NetworkConnectionException
+import com.example.studita.domain.exception.ServerUnavailableException
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import java.lang.Exception
 import java.lang.reflect.Type
 
 class CloudLevelsJsonDataStore(
@@ -16,25 +18,17 @@ class CloudLevelsJsonDataStore(
     private val  levelsService: LevelsService
 ) : LevelsJsonDataStore {
 
-    private val gsonBuilder = GsonBuilder()
-    private val deserializer: LevelsDeserializer = LevelsDeserializer()
-    private val gson: Gson
-    private val type: Type
-
-    init {
-        gsonBuilder.registerTypeAdapter(LevelEntity::class.java, deserializer)
-        gson = gsonBuilder.create()
-        type = object : TypeToken<List<LevelEntity>>() {}.type
-    }
-
-
     override suspend fun getLevelsJson(isLoggedIn: Boolean): String =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
-        }else{
-            val launchesAsync = levelsService.getLevelsAsync(isLoggedIn)
-            val result = launchesAsync.await()
-            val body = result.body()!!
-            body.toString()
+        }else {
+            try {
+                val launchesAsync = levelsService.getLevelsAsync(isLoggedIn)
+                val result = launchesAsync.await()
+                val body = result.body()!!
+                body.toString()
+            } catch (e: Exception) {
+                throw ServerUnavailableException()
+            }
         }
 }

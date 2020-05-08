@@ -3,7 +3,7 @@ package com.example.studita.presentation.adapter.levels
 import android.view.View
 import com.example.studita.R
 import com.example.studita.presentation.model.HomeRecyclerUiModel
-import com.example.studita.presentation.utils.UserUtils
+import com.example.studita.utils.UserUtils
 import kotlinx.android.synthetic.main.level_item.view.*
 
 class LevelViewHolder(view: View) : LevelsViewHolder<HomeRecyclerUiModel.HomeRecyclerLevelViewModel>(view){

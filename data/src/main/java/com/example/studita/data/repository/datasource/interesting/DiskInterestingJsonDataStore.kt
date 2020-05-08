@@ -10,4 +10,8 @@ class DiskInterestingJsonDataStore(
         val json = interestingCache.getInterestingJson(interestingNumber)
         return 200 to (json ?: throw NetworkConnectionException())
     }
+
+    fun interestingIsCached() = interestingCache.isCached(1)
+
+    fun saveInterestingListJson(json: String) = interestingCache.saveInterestingListJson(json)
 }

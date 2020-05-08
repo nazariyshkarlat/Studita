@@ -19,7 +19,7 @@ import com.example.studita.authenticator.AccountAuthenticator
 import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
-import com.example.studita.presentation.utils.setOnViewSizeChangeListener
+import com.example.studita.utils.setOnViewSizeChangeListener
 import com.example.studita.presentation.view_model.AuthorizationFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import kotlinx.android.synthetic.main.authentication_layout.*

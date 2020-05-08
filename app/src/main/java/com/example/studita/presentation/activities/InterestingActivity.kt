@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.interesting.InterestingLoadFragment
-import com.example.studita.presentation.utils.navigateTo
+import com.example.studita.utils.navigateTo
 import com.example.studita.presentation.view_model.InterestingViewModel
 
 class InterestingActivity : DefaultActivity() {

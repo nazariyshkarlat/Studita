@@ -6,6 +6,9 @@ import android.net.ConnectivityManager
 import com.example.data.BuildConfig
 import com.example.studita.data.net.connection.ConnectionManagerImpl
 import com.example.studita.data.net.connection.ConnectionManager
+import com.google.gson.ExclusionStrategy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,7 +18,7 @@ import java.util.concurrent.TimeUnit
 
 object NetworkModule {
 
-    private const val BASE_URL = "http://10.0.2.2:5000"
+    private const val BASE_URL = "http://10.0.2.2:5002"
 
     lateinit var connectionManager: ConnectionManager
     private lateinit var retrofit: Retrofit
@@ -44,9 +47,9 @@ object NetworkModule {
     private fun getRetrofit(client: OkHttpClient) =
         Retrofit.Builder()
             .client(client)
-            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .baseUrl(BASE_URL)
             .build()
 
     private fun getOkHttpClient(interceptor: okhttp3.Interceptor) =
@@ -64,5 +67,4 @@ object NetworkModule {
             else
                 HttpLoggingInterceptor.Level.NONE
         }
-
 }

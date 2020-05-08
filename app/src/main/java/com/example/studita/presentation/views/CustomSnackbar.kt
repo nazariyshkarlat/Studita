@@ -7,6 +7,7 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.text.StaticLayout
@@ -16,6 +17,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -23,9 +25,9 @@ import androidx.core.view.contains
 import com.example.studita.R
 import com.example.studita.presentation.draw.draw
 import com.example.studita.presentation.draw.getMultilineTextLayout
-import com.example.studita.presentation.utils.dpToPx
-import com.example.studita.presentation.utils.getAlphaAnimator
-import com.example.studita.presentation.utils.getScaleAnimator
+import com.example.studita.utils.dpToPx
+import com.example.studita.utils.getAlphaAnimator
+import com.example.studita.utils.getScaleAnimator
 import com.google.android.material.animation.AnimationUtils
 import kotlinx.coroutines.*
 
@@ -80,7 +82,7 @@ class CustomSnackbar @JvmOverloads constructor(
         setMeasuredDimension(width, desiredHeight)
     }
 
-    fun show (text: String,@ColorRes colorId: Int, duration: Long = 3000L, delay: Long = 0L, bottomMarginExtra: Int = 0, contentView: ViewGroup? = null){
+    fun show(text: String, @ColorInt color: Int, duration: Long = 3000L, delay: Long = 0L, bottomMarginExtra: Int = 0, contentView: ViewGroup? = null){
         this.bottomMarginExtra = bottomMarginExtra
         val rootView = contentView
             ?: (context as Activity).window.decorView.rootView.findViewById(android.R.id.content) as ViewGroup
@@ -89,7 +91,7 @@ class CustomSnackbar @JvmOverloads constructor(
             rootView.removeView(it)
         }
         if(!rootView.contains(this)) {
-            initView(text, colorId)
+            initView(text, color)
             this.id = R.id.customSnackbar
             rootView.addView(this)
             startAnimation(duration, delay = delay){
@@ -98,8 +100,8 @@ class CustomSnackbar @JvmOverloads constructor(
         }
     }
 
-    private fun initView(text: String,@ColorRes colorId: Int){
-        backgroundPaint.color = ContextCompat.getColor(context, colorId)
+    private fun initView(text: String, @ColorInt color: Int){
+        backgroundPaint.color = color
         this.text = text
         setViewParams()
         this.layoutParams = params

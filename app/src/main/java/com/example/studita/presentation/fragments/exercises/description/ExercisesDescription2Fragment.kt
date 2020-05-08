@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExercisesDescriptionData
-import com.example.studita.presentation.utils.createSpannableString
+import com.example.studita.utils.createSpannableString
 import kotlinx.android.synthetic.main.exercises_description_2_layout.*
 import java.util.regex.Pattern
 

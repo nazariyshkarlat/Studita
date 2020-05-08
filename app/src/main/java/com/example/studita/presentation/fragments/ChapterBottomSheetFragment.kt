@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.adapter.chapter.ChapterPartsAdapter
 import com.example.studita.presentation.fragments.base.BaseBottomSheetDialogFragment
 import com.example.studita.presentation.model.ChapterUiModel
-import com.example.studita.presentation.utils.LevelUtils
-import com.example.studita.presentation.utils.UserUtils
-import com.example.studita.presentation.utils.getAppCompatActivity
+import com.example.studita.utils.LevelUtils
+import com.example.studita.utils.UserUtils
+import com.example.studita.utils.getAppCompatActivity
 import com.example.studita.presentation.view_model.ChapterViewModel
 import com.example.studita.presentation.views.CustomSnackbar
 import kotlinx.android.synthetic.main.chapter_layout.*
@@ -44,8 +45,10 @@ class ChapterBottomSheetFragment : BaseBottomSheetDialogFragment(R.layout.chapte
         chapterViewModel = ViewModelProviders.of(this).get(ChapterViewModel::class.java)
 
         chapterViewModel?.let {
-            arguments?.getInt("CHAPTER_NUMBER")
-                ?.let { chapterNumber -> it.getChapter(chapterNumber) }
+            if(savedInstanceState == null) {
+                arguments?.getInt("CHAPTER_NUMBER")
+                    ?.let { chapterNumber -> it.getChapter(chapterNumber) }
+            }
             it.progressState.observe(viewLifecycleOwner, Observer { progress ->
                 if (progress) {
                     chapterUiModel =  it.results
@@ -78,7 +81,7 @@ class ChapterBottomSheetFragment : BaseBottomSheetDialogFragment(R.layout.chapte
                         else -> throw IOException("unknown show snackbar reason")
                     }
 
-                    snackbar.show(text, R.color.green, contentView = chapterLayoutFrameLayout.parent.parent.parent as ViewGroup, duration = 5000L, delay = 1000L)
+                    snackbar.show(text, ContextCompat.getColor(snackbar.context, R.color.green), contentView = chapterLayoutFrameLayout.parent.parent.parent as ViewGroup, duration = 5000L, delay = 1000L)
                     snackbarShowReason = SnackbarShowReason.NONE
                 }
             }

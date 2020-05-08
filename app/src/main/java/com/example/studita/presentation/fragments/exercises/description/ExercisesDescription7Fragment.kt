@@ -5,8 +5,8 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.studita.R
-import com.example.studita.presentation.utils.ColorUtils
-import com.example.studita.presentation.utils.dpToPx
+import com.example.studita.utils.ColorUtils
+import com.example.studita.utils.dpToPx
 import kotlinx.android.synthetic.main.exercises_description_pure_layout.*
 
 class ExercisesDescription7Fragment : ExercisesDescriptionFragment(R.layout.exercises_description_pure_layout) {

@@ -41,8 +41,7 @@ object ChapterModule {
             repository = ChapterRepositoryImpl(
                 getChapterJsonDataStoreFactory(),
                 ChapterDataMapper(),
-                NetworkModule.connectionManager,
-                getChapterCacheImpl()
+                NetworkModule.connectionManager
             )
         return repository!!
     }
@@ -56,8 +55,7 @@ object ChapterModule {
         CloudChapterJsonDataStore(
             NetworkModule.connectionManager,
             NetworkModule.getService(ChapterService::class.java),
-            NetworkModule.getService(ChaptersService::class.java),
-            getChapterCacheImpl()
+            NetworkModule.getService(ChaptersService::class.java)
         )
 
     private fun getDiskChapterDataStore() =

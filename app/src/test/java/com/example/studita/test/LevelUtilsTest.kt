@@ -2,7 +2,7 @@ package com.example.studita.test
 
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.presentation.model.ExerciseResultAnimation
-import com.example.studita.presentation.utils.LevelUtils
+import com.example.studita.utils.LevelUtils
 import org.junit.Test
 
 import org.junit.Assert.*

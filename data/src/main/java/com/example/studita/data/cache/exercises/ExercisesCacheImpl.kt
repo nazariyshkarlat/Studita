@@ -14,8 +14,8 @@ class ExercisesCacheImpl(private val sharedPreferences: SharedPreferences) : Exe
 
     override fun saveExercisesJson(json: String) {
         val chapterParts = Gson().fromJson<List<JsonObject>>(json, object : TypeToken<List<JsonObject>>() {}.type)
-        chapterParts.forEachIndexed {chapterPartNumber, chapterPart->
-            sharedPreferences.edit().putString("${EXERCISES_PREFS}_${chapterPartNumber+1}", chapterPart.toString()).apply()
+        chapterParts.forEachIndexed {index, chapterPart->
+            sharedPreferences.edit().putString("${EXERCISES_PREFS}_${index+1}", chapterPart.toString()).apply()
         }
     }
 

@@ -3,7 +3,7 @@ package com.example.studita.presentation.activities
 import android.net.Uri
 import android.os.Bundle
 import com.example.studita.R
-import com.example.studita.presentation.utils.navigateTo
+import com.example.studita.utils.navigateTo
 
 class ShareActivity : DefaultActivity(){
 

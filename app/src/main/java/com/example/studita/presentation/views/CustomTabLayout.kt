@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.studita.R
-import com.example.studita.presentation.utils.*
+import com.example.studita.utils.*
 import com.example.studita.presentation.views.press_view.PressTextView
 
 
@@ -29,7 +29,7 @@ class CustomTabLayout @JvmOverloads constructor(
     private var fragments: List<Fragment>? = null
 
     private var viewPager: ViewPager? = null
-    private var tabColor: Pair<Int, Int> = ColorUtils.getSecondaryColor(context) to ContextCompat.getColor(context, R.color.blue)
+    private var tabColor: Pair<Int, Int> = ColorUtils.getSecondaryColor(context) to ColorUtils.getAccentColor(context)
     private var selectedPos = 0
     private var click: Boolean = false
 

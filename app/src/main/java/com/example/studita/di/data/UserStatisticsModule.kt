@@ -1,8 +1,8 @@
 package com.example.studita.di.data
 
 import com.example.studita.data.cache.user_statistics.UserStatisticsCacheImpl
-import com.example.studita.data.entity.mapper.UserIdTokenMapper
-import com.example.studita.data.entity.mapper.UserStatisticsDataMapper
+import com.example.studita.data.entity.UserStatisticsRowEntity
+import com.example.studita.data.entity.mapper.*
 import com.example.studita.data.net.UserStatisticsService
 import com.example.studita.data.repository.UserStatisticsRepositoryImpl
 import com.example.studita.data.repository.datasource.user_statistics.CloudUserStatisticsJsonDataStore
@@ -10,6 +10,7 @@ import com.example.studita.data.repository.datasource.user_statistics.DiskUserSt
 import com.example.studita.data.repository.datasource.user_statistics.UserStatisticsJsonDataStoreFactoryImpl
 import com.example.studita.di.DI
 import com.example.studita.di.CacheModule
+import com.example.studita.di.DatabaseModule
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.user_statistics.UserStatisticsInteractor
 import com.example.studita.domain.interactor.user_statistics.UserStatisticsInteractorImpl
@@ -40,7 +41,9 @@ object UserStatisticsModule {
             repository = UserStatisticsRepositoryImpl(
                 getUserStatisticsJsonDataStoreFactory(), UserStatisticsDataMapper(),
                 NetworkModule.connectionManager,
-                UserIdTokenMapper()
+                UserIdTokenMapper(),
+                UserStatisticsRowEntityMapper(),
+                UserStatisticsRowDataMapper()
             )
         return repository!!
     }
@@ -65,11 +68,12 @@ object UserStatisticsModule {
         )
 
     private fun getDiskUserStatisticsDataStore() =
-        DiskUserStatisticsJsonDataStore(getUserStatisticsCacheImpl())
+        DiskUserStatisticsJsonDataStore(getUserStatisticsCacheImpl(), getUserStatisticsDao())
 
 
     private fun getUserStatisticsCacheImpl() =
         UserStatisticsCacheImpl(CacheModule.sharedPreferences)
 
+    private fun getUserStatisticsDao() = DatabaseModule.studitaDatabase!!.getUserStatisticsDao()
 
 }

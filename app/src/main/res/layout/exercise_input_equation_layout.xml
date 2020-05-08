@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:paddingStart="@dimen/defaultRLMargin"
-        android:paddingEnd="@dimen/defaultRLMargin">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <EditText
             android:id="@+id/exerciseInputEquationLayoutEditText"

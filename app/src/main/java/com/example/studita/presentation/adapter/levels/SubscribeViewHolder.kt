@@ -3,9 +3,9 @@ package com.example.studita.presentation.adapter.levels
 import android.view.View
 import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.presentation.model.HomeRecyclerUiModel
-import com.example.studita.presentation.utils.UserUtils
-import com.example.studita.presentation.utils.getAppCompatActivity
-import com.example.studita.presentation.utils.startActivity
+import com.example.studita.utils.UserUtils
+import com.example.studita.utils.getAppCompatActivity
+import com.example.studita.utils.startActivity
 import com.example.studita.presentation.view_model.HomeFragmentViewModel
 import kotlinx.android.synthetic.main.level_subscribe_item.view.*
 

@@ -3,12 +3,11 @@ package com.example.studita
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.work.*
-import com.example.studita.di.CacheModule
 import com.example.studita.di.NetworkModule
 import com.example.studita.di.data.SubscribeEmailModule
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.domain.service.SyncSubscribeEmail
-import com.example.studita.presentation.utils.UserUtils
+import com.example.studita.utils.UserUtils
 
 class SyncSubscribeEmailImpl : SyncSubscribeEmail{
 
@@ -40,15 +39,16 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail{
 
             userIdToken?.let {
                 val result = if (subscribe)
-                    SubscribeEmailModule.getSubscribeEmailInteractorImpl().subscribe(userIdToken)
+                    SubscribeEmailModule.getSubscribeEmailInteractorImpl().subscribe(it)
                 else
-                    SubscribeEmailModule.getSubscribeEmailInteractorImpl().unsubscribe(userIdToken)
+                    SubscribeEmailModule.getSubscribeEmailInteractorImpl().unsubscribe(it)
 
                 if(syncSubscribeEmailLiveData == null)
                     SubscribeEmailModule.getSubscribeEmailInteractorImpl().saveSyncedResult(result)
                 else
                     syncSubscribeEmailLiveData?.postValue(result)
             }
+
             return Result.success()
         }
 

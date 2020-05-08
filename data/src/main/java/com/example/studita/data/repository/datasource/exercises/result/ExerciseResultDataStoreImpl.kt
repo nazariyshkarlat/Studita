@@ -4,6 +4,7 @@ import com.example.studita.data.entity.exercise.*
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.data.net.ExerciseResultService
 import com.example.studita.domain.exception.NetworkConnectionException
+import com.example.studita.domain.exception.ServerUnavailableException
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -32,12 +33,22 @@ class ExerciseResultDataStoreImpl(
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         } else {
-            val exercisesAsync =
-                exerciseResultService.getExerciseResultAsync(exerciseNumber, exerciseRequestEntity)
-            val rawResult = exercisesAsync.await()
-            val result = ExerciseResponseEntity(rawResult.body()!!.exerciseResult, descriptionGson.fromJson(
-                rawResult.body()!!.description, type))
-            return rawResult.code() to result
+            try {
+                val exercisesAsync =
+                    exerciseResultService.getExerciseResultAsync(
+                        exerciseNumber,
+                        exerciseRequestEntity
+                    )
+                val rawResult = exercisesAsync.await()
+                val result = ExerciseResponseEntity(
+                    rawResult.body()!!.exerciseResult, descriptionGson.fromJson(
+                        rawResult.body()!!.description, type
+                    )
+                )
+                return rawResult.code() to result
+            }catch (e: Exception) {
+            throw ServerUnavailableException()
+        }
         }
     }
 }

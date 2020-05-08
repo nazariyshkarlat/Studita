@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.exercises.ExercisesLoadFragment
-import com.example.studita.presentation.utils.navigateTo
+import com.example.studita.utils.navigateTo
 import com.example.studita.presentation.fragments.exercises.ExercisesFragment
 import com.example.studita.presentation.fragments.exercises.ExercisesResultFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment

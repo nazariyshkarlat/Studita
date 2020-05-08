@@ -6,8 +6,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.forEach
 import com.example.studita.R
-import com.example.studita.presentation.utils.ColorUtils
-import com.example.studita.presentation.utils.dpToPx
+import com.example.studita.utils.ColorUtils
+import com.example.studita.utils.dpToPx
 import kotlinx.android.synthetic.main.exercises_description_pure_layout.*
 import kotlinx.android.synthetic.main.interesting_explanation_layout.*
 

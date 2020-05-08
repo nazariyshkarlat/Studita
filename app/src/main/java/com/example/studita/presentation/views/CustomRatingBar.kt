@@ -8,7 +8,7 @@ import android.view.View
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.example.studita.R
 import com.example.studita.presentation.listeners.ViewOnTouch
-import com.example.studita.presentation.utils.dpToPx
+import com.example.studita.utils.dpToPx
 import kotlin.math.ceil
 
 

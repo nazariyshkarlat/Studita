@@ -18,7 +18,7 @@ import com.example.studita.presentation.activities.DefaultActivity
 import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
-import com.example.studita.presentation.utils.*
+import com.example.studita.utils.*
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.example.studita.presentation.view_model.MainFragmentViewModel
 import kotlinx.android.synthetic.main.bottom_navigation.*

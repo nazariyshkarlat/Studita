@@ -1,6 +1,9 @@
 <resources xmlns:http="http://schemas.android.com/apk/res-auto">
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent10">@color/blue10</item>
+        <item name="colorAccent14">@color/blue14</item>
+        <item name="colorAccent26">@color/blue26</item>
+        <item name="colorAccent">@color/blue</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:navigationBarColor">@color/gray11</item>
         <item name="android:statusBarColor">@color/gray11</item>

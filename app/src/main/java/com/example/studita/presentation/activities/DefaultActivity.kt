@@ -5,17 +5,15 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studita.R
-import com.example.studita.di.CacheModule
-import com.example.studita.presentation.utils.startActivity
-import com.example.studita.presentation.fragments.MainMenuThemeDialogAlertFragment
+import com.example.studita.utils.startActivity
+import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
+import com.example.studita.utils.PrefsUtils
 
 @SuppressLint("Registered")
 open class DefaultActivity : AppCompatActivity(),
     MainMenuThemeDialogAlertFragment.OnThemeChangeListener {
 
-    companion object {
-        var themeState = Theme.DARK
-    }
+    var themeState = Theme.DARK
 
     private val themes = mutableListOf(R.style.DarkTheme, R.style.LightTheme)
 
@@ -25,10 +23,11 @@ open class DefaultActivity : AppCompatActivity(),
     }
 
     private fun setTheme(){
-        themeState = Theme.values()[CacheModule.sharedPreferences.getInt("theme", Theme.DEFAULT.ordinal)]
+        themeState = Theme.values()[PrefsUtils.getTheme().ordinal]
         if(themeState == Theme.DEFAULT)
             themeState = getDefaultTheme()
         setTheme(themes[themeState.ordinal])
+        PrefsUtils.setTheme(themeState)
         window.setBackgroundDrawable(resources.getDrawable(R.drawable.page_background, theme))
     }
 
@@ -43,7 +42,7 @@ open class DefaultActivity : AppCompatActivity(),
     override fun onThemeChanged(theme: Theme) {
         if(themeState != theme) {
             themeState = theme
-            CacheModule.sharedPreferences.edit()?.putInt("theme", themeState.ordinal)?.apply()
+            PrefsUtils.setTheme(themeState)
             startActivity<MainMenuActivity>()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()

@@ -5,8 +5,8 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.studita.R
-import com.example.studita.presentation.utils.dpToPx
-import com.example.studita.presentation.utils.spToPx
+import com.example.studita.utils.dpToPx
+import com.example.studita.utils.spToPx
 import com.example.studita.presentation.views.CustomTypefaceSpan
 import kotlin.random.Random
 

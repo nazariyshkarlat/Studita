@@ -9,4 +9,7 @@ class DiskLevelsJsonDataStore(
 
     override suspend fun getLevelsJson(isLoggedIn: Boolean) = levelsCache.getLevelsJson(isLoggedIn) ?: throw NetworkConnectionException()
 
+    fun levelsAreCached(isLoggedIn: Boolean) = levelsCache.isCached(isLoggedIn)
+
+    fun saveLevelsJson(isLoggedIn: Boolean, json: String) = levelsCache.saveLevelsJson(isLoggedIn, json)
 }

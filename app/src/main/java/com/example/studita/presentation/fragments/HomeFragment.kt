@@ -1,6 +1,7 @@
 package com.example.studita.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,14 +16,11 @@ import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.presentation.adapter.levels.LevelsAdapter
 import com.example.studita.presentation.draw.AvaDrawer
-import com.example.studita.presentation.utils.startActivity
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.listeners.FabRecyclerImpl
 import com.example.studita.presentation.listeners.FabScrollListener
 import com.example.studita.presentation.model.HomeRecyclerUiModel
-import com.example.studita.presentation.utils.TextUtils
-import com.example.studita.presentation.utils.TimeUtils
-import com.example.studita.presentation.utils.UserUtils
+import com.example.studita.utils.*
 import com.example.studita.presentation.view_model.ChapterViewModel
 import com.example.studita.presentation.view_model.HomeFragmentViewModel
 import com.example.studita.presentation.view_model.MainFragmentViewModel
@@ -84,12 +82,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             })
 
             it.userDataState.observe(viewLifecycleOwner, androidx.lifecycle.Observer<UserDataData>{data->
-                UserUtils.userData = data
-
-                if(TimeUtils.getCalendarDayCount(Date(), data.streakDatetime) > 1F){
-                    data.streakDays = 0
-                }
-
                 if(UserUtils.isLoggedIn()) {
                     if (data.avatarLink == null) {
                         AvaDrawer.drawAwa(homeLayoutBarAccountImageView, data.userName!!)
@@ -123,7 +115,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                                             R.string.subscribe_email,
                                             TextUtils.encryptEmail(status.result.email!!)
                                         ),
-                                        R.color.blue,
+                                        ColorUtils.getAccentColor(snackbar.context),
                                         resources.getInteger(R.integer.subscribe_email_snackbar_duration)
                                             .toLong(),
                                         bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
@@ -132,7 +124,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                                 } else {
                                     snackbar.show(
                                         resources.getString(R.string.unsubscribe_email),
-                                        R.color.blue,
+                                        ColorUtils.getAccentColor(snackbar.context),
                                         resources.getInteger(R.integer.unsubscribe_email_snackbar_duration)
                                             .toLong(),
                                         bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
@@ -144,7 +136,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                                 if (!UserUtils.userData.isSubscribed) {
                                     snackbar.show(
                                         resources.getString(R.string.offline_subscribe_email),
-                                        R.color.blue,
+                                        ColorUtils.getAccentColor(snackbar.context),
                                         resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
                                             .toLong(),
                                         bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
@@ -153,7 +145,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                                 } else {
                                     snackbar.show(
                                         resources.getString(R.string.offline_unsubscribe_email),
-                                        R.color.blue,
+                                        ColorUtils.getAccentColor(snackbar.context),
                                         resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
                                             .toLong(),
                                         bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
@@ -180,6 +172,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         super.onResume()
         if(needsRefresh) {
             homeLayoutRecyclerView.adapter?.notifyDataSetChanged()
+            println(UserUtils.userData)
             needsRefresh = false
         }
     }

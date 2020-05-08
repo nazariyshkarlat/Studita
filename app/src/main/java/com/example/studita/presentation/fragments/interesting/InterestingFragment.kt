@@ -7,10 +7,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseFragment
-import com.example.studita.presentation.utils.addFragment
-import com.example.studita.presentation.utils.animateProgress
-import com.example.studita.presentation.utils.navigateTo
-import com.example.studita.presentation.utils.replace
+import com.example.studita.utils.addFragment
+import com.example.studita.utils.animateProgress
+import com.example.studita.utils.navigateTo
+import com.example.studita.utils.replace
 import com.example.studita.presentation.view_model.InterestingViewModel
 import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.android.synthetic.main.exercise_toolbar.*

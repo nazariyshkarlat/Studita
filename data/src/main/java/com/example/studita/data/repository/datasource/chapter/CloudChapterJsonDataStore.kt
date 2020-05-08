@@ -11,36 +11,34 @@ import java.lang.Exception
 class CloudChapterJsonDataStore(
     private val connectionManager: ConnectionManager,
     private val chapterService: ChapterService,
-    private val chaptersService: ChaptersService,
-    private val chapterCache: ChapterCache
+    private val chaptersService: ChaptersService
 ) : ChapterJsonDataStore {
 
     override suspend fun getChapterJson(chapterNumber: Int): Pair<Int, String> {
-        try {
-            if (connectionManager.isNetworkAbsent()) {
-                throw NetworkConnectionException()
-            } else {
+        if (connectionManager.isNetworkAbsent()) {
+            throw NetworkConnectionException()
+        } else {
+            try {
                 val chapterAsync = chapterService.getChapterAsync(chapterNumber)
                 val result = chapterAsync.await()
                 return result.code() to result.body()!!.toString()
+            } catch (e: Exception){
+                throw ServerUnavailableException()
             }
-        }catch (e: Exception){
-            throw ServerUnavailableException()
         }
     }
 
     suspend fun getAllChaptersJson() : String{
-        try {
-            if (connectionManager.isNetworkAbsent()) {
-                throw NetworkConnectionException()
-            } else {
+        if (connectionManager.isNetworkAbsent()) {
+            throw NetworkConnectionException()
+        } else {
+            try {
                 val chapterAsync = chaptersService.getChaptersAsync()
                 val result = chapterAsync.await()
-                chapterCache.saveChaptersJson(result.body()!!.toString())
                 return result.body()!!.toString()
+            }catch (e: Exception){
+                throw ServerUnavailableException()
             }
-        }catch (e: Exception){
-            throw ServerUnavailableException()
         }
     }
 

@@ -11,9 +11,9 @@ import com.example.studita.domain.repository.UserDataRepository
 
 class UserDataRepositoryImpl(private val userDataDataStoreFactory: UserDataJsonDataStoreFactoryImpl, private val userDataDataMapper: UserDataDataMapper, private val connectionManager: ConnectionManager, private val userDataEntityMapper: UserDataEntityMapper) : UserDataRepository{
 
-    override suspend fun getUserData(userIdTokenData: UserIdTokenData?) : Pair<Int, UserDataData> {
+    override suspend fun getUserData(userIdTokenData: UserIdTokenData?, offlineMode: Boolean) : Pair<Int, UserDataData> {
         val pair =  userDataDataStoreFactory.create(
-            if(connectionManager.isNetworkAbsent() or (userIdTokenData == null))
+            if(offlineMode || (userIdTokenData == null) || connectionManager.isNetworkAbsent())
                 UserDataDataStoreFactory.Priority.CACHE else UserDataDataStoreFactory.Priority.CLOUD)
             .getUserDataEntity(userIdTokenData?.let{UserIdTokenMapper().map(it)})
         return pair.first to userDataDataMapper.map(pair.second)

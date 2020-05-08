@@ -3,13 +3,12 @@ package com.example.studita.presentation.activities
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.utils.addFragment
-import com.example.studita.presentation.utils.navigateTo
+import com.example.studita.utils.addFragment
+import com.example.studita.utils.navigateTo
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.MainMenuFragment
 import com.example.studita.presentation.fragments.ToolbarFragment
 import com.example.studita.presentation.view_model.MainMenuActivityViewModel
-import com.example.studita.presentation.view_model.MainMenuFragmentViewModel
 
 class MainMenuActivity : DefaultActivity(){
 
@@ -21,7 +20,8 @@ class MainMenuActivity : DefaultActivity(){
 
         if(savedInstanceState == null) {
             addFragment(ToolbarFragment(), R.id.doubleTopFrameLayoutFrameLayout)
-            val mainMenuFragment = MainMenuFragment()
+            val mainMenuFragment =
+                MainMenuFragment()
             viewModel.onThemeChangeListener = this
             navigateTo(mainMenuFragment, R.id.doubleFrameLayoutFrameLayout)
         }

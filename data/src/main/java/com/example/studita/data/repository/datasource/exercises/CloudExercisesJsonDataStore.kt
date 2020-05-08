@@ -5,6 +5,7 @@ import com.example.studita.data.net.ExercisesService
 import com.example.studita.data.net.OfflineExercisesService
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.domain.exception.NetworkConnectionException
+import com.example.studita.domain.exception.ServerUnavailableException
 
 class CloudExercisesJsonDataStore(
     private val connectionManager: ConnectionManager,
@@ -16,9 +17,13 @@ class CloudExercisesJsonDataStore(
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         } else {
-            val exercisesAsync = exercisesService.getExercisesAsync(chapterPartNumber)
-            val result = exercisesAsync.await()
-            return result.code() to result.body()!!.toString()
+            try {
+                val exercisesAsync = exercisesService.getExercisesAsync(chapterPartNumber)
+                val result = exercisesAsync.await()
+                return result.code() to result.body()!!.toString()
+            }catch (e: Exception){
+                throw ServerUnavailableException()
+            }
         }
     }
 

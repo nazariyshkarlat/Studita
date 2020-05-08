@@ -10,9 +10,9 @@ class ChapterInteractorImpl(
     private val repository: ChapterRepository
 ): ChapterInteractor {
 
-    override suspend fun getChapter(chapterNumber: Int): ChapterStatus =
+    override suspend fun getChapter(chapterNumber: Int, offlineMode: Boolean): ChapterStatus =
         try {
-            val results = repository.getChapter(chapterNumber)
+            val results = repository.getChapter(chapterNumber, offlineMode)
 
             if(results.first == 200)
                 ChapterStatus.Success(results.second)

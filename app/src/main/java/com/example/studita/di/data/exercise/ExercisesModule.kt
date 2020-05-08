@@ -42,8 +42,7 @@ object ExercisesModule {
             repository =
                 ExercisesRepositoryImpl(
                     getExercisesDataStoreFactory(),
-                    ExercisesDataMapper(),
-                    getExercisesCacheImpl()
+                    ExercisesDataMapper()
                 )
         return repository!!
     }

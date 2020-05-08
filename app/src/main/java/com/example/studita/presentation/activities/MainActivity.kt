@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.IncorrectTimeFragment
 import com.example.studita.presentation.fragments.MainFragment
-import com.example.studita.presentation.utils.*
+import com.example.studita.utils.*
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
 import kotlinx.android.synthetic.main.frame_layout.*

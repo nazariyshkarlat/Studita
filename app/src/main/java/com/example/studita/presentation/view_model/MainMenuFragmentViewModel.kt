@@ -6,9 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.authenticator.AccountAuthenticator
 import com.example.studita.di.data.AuthorizationModule
+import com.example.studita.di.data.UserStatisticsModule
 import com.example.studita.domain.entity.authorization.SignInWithGoogleRequestData
-import com.example.studita.presentation.fragments.MainMenuThemeDialogAlertFragment
-import com.example.studita.presentation.utils.UserUtils
+import com.example.studita.domain.interactor.SignInWithGoogleStatus
+import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.UserUtils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -22,6 +24,10 @@ class MainMenuFragmentViewModel : ViewModel(){
 
     val signUpMethodState = SingleLiveEvent<SignUpMethod>()
     val googleSignInState= SingleLiveEvent<Boolean>()
+
+    private val userStatisticsInteractor = UserStatisticsModule.getUserStatisticsInteractorImpl()
+    private val authorizationInteractor = AuthorizationModule.getAuthorizationInteractorImpl()
+
 
     fun onSignUpLogInClick(viewId: Int){
         when(viewId) {
@@ -45,10 +51,10 @@ class MainMenuFragmentViewModel : ViewModel(){
             val account = task.getResult(ApiException::class.java)
             viewModelScope.launch {
                 account?.let {
-                    val result = AuthorizationModule.getAuthorizationInteractorImpl()
-                        .signInWithGoogle(SignInWithGoogleRequestData(account.idToken.toString(),if(!UserUtils.isLoggedIn()) UserUtils.userData else null))
-                    AccountAuthenticator.addAccount(context, it.email.toString())
-                    googleSignInState.postValue(true)
+                    if(authorizationInteractor.signInWithGoogle(SignInWithGoogleRequestData(account.idToken.toString(), UserUtils.userData, userStatisticsInteractor.getUserStatisticsRecords())) is SignInWithGoogleStatus.Success){
+                        AccountAuthenticator.addAccount(context, it.email.toString())
+                        googleSignInState.postValue(true)
+                    }
                 }
             }
         }catch (e: ApiException){

@@ -9,7 +9,7 @@ import com.example.studita.R
 import com.example.studita.domain.entity.UserStatisticsData
 import com.example.studita.domain.interactor.UserStatisticsStatus
 import com.example.studita.presentation.fragments.base.BaseFragment
-import com.example.studita.presentation.utils.TimeUtils
+import com.example.studita.utils.TimeUtils
 import com.example.studita.presentation.view_model.UserStatisticsViewModel
 import kotlinx.android.synthetic.main.user_stat_page_layout.*
 

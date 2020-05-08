@@ -42,7 +42,8 @@
     <string name="false_answer">Правильный ответ:</string>
     <string name="exercise_type_9_false_snackbar_title">Ваш результат:</string>
     <string name="try_again">Попробовать снова</string>
-    <string name="in_settings">Перейти в настройки</string>
+    <string name="to_settings">Перейти в настройки</string>
+    <string name="to_offline_mode">Перейти в оффлайн режим</string>
     <string name="incorrect_time_layout_title">Упс! Кажется, время на вашем телефоне установлено неправильно (%1$s)</string>
     <string name="incorrect_time_layout_subtitle">Пожалуйста, сделайте ваше время автоматическим и нажмите \"Попробовать снова\"</string>
     <string name="true_variant">Правда</string>
@@ -50,9 +51,13 @@
     <string name="check">Проверить</string>
     <string name="begin">Начать</string>
     <string name="authorization">Авторизация</string>
+    <string name="issues_with_connecting">Мы испытываем трудности с вашим интернет соединением. </string>
+    <string name="exercises_bad_connection_dialog_alert_title">Плохое интернет соединение</string>
+    <string name="exercises_bad_connection_dialog_alert_subtitle">Мы испытываем трудности с вашим интернет соединением. Вы можете подождать, пока соединение восстановится, или перейти в оффлайн режим. При переходе в оффлайн режим ваш прогресс будет сохранён.</string>
     <string name="exercises_close_dialog_alert_title">Покинуть урок?</string>
     <string name="exercises_close_dialog_alert_subtitle">Весь прогресс будет утерян</string>
     <string name="cancel">Отменить</string>
+    <string name="wait">Подождать</string>
     <string name="leave">Покинуть</string>
     <string name="apply">Применить</string>
     <string name="russian">Русский</string>
@@ -116,6 +121,7 @@
     <string name="yesterday">Вчера</string>
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
+    <string name="load_screen_un_logged_text">Вы не вошли в аккаунт. Ваш прогресс может быть утерян</string>
     <string name="difficulty_level">Уровень сложности</string>
     <string name="subscribe_email">Вы успешно подписались на рассылку! Когда новые задания будут доступны, вы получите письмо на почту %1$s</string>
     <string name="offline_subscribe_email">Мы получили ваш запрос на подписку. Как только вы подключитесь к интернету, вы получите дополнительное сообщение об успешности.</string>

@@ -13,4 +13,5 @@
     <integer name="subscribe_email_snackbar_duration">5000</integer>
     <integer name="unsubscribe_email_snackbar_duration">3000</integer>
     <integer name="offline_subscribe_email_snackbar_duration">5000</integer>
+    <integer name="exercises_load_layout_bottom_section_alpha_anim_duration">500</integer>
 </resources>

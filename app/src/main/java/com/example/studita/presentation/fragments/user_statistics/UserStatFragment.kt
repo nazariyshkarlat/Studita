@@ -20,7 +20,6 @@ class UserStatFragment : BaseFragment(R.layout.user_stat_layout), ViewTreeObserv
         userStatLayoutTabs.setFragments(pageFragments)
         userStatLayoutTabs.setItems(listOf(resources.getString(R.string.today), resources.getString(R.string.yesterday), resources.getString(R.string.week), resources.getString(R.string.month)))
 
-        userStatLayoutViewPager.offscreenPageLimit = 3
         fragmentManager?.let { userStatLayoutTabs.syncWithViewPager(userStatLayoutViewPager, it) }
 
         userStatLayoutScrollView.viewTreeObserver
