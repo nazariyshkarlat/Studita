@@ -10,4 +10,6 @@ interface UserDataInteractor {
 
     suspend fun saveUserData(userDataData: UserDataData)
 
+    suspend fun deleteUserData()
+
 }

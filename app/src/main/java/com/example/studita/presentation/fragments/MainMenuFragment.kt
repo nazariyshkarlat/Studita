@@ -19,6 +19,7 @@ import com.example.studita.presentation.view_model.MainMenuFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import kotlinx.android.synthetic.main.main_menu_layout.*
+import kotlinx.android.synthetic.main.settings_offline_mode_item.*
 
 
 class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserver.OnScrollChangedListener {
@@ -75,9 +76,7 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
         }
 
         mainMenuLayoutThemeView.setOnClickListener {
-            val dialogFragment =
-                MainMenuThemeDialogAlertFragment()
-            dialogFragment.show((activity as AppCompatActivity).supportFragmentManager, null)
+            MainMenuThemeDialogAlertFragment().show((activity as AppCompatActivity).supportFragmentManager, null)
         }
 
         mainMenuLayoutLanguageView.setOnClickListener {

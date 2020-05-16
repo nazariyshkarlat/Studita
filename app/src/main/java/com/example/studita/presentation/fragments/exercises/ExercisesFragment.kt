@@ -301,7 +301,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         val drawable = exerciseLayoutButton.background as TransitionDrawable
         if (onSnackbarShow) {
             exerciseLayoutButton.setTextColor(
-                ColorUtils.getAccentColor(context)
+                ThemeUtils.getAccentColor(context)
             )
             drawable.startTransition(if(animate) resources.getInteger(R.integer.button_transition_duration) else 0)
             exerciseLayoutButton.text = resources.getString(R.string.next)
@@ -369,6 +369,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             val last = pair.second
             exerciseToolbarProgressBar.animateProgress(toPercent = progress, delay = (if((exerciseToolbarProgressBar.animation == null) || this.exerciseToolbarProgressBar.animation.hasEnded()) 100L else 0L), onAnimEnd = {
                 if(last){
+                    exerciseLayoutButton.setOnClickListener {  }
                     exercisesViewModel.saveUserDataState.observe(viewLifecycleOwner, Observer { saved->
                         if(saved){
                             (activity as AppCompatActivity).navigateTo(exercisesViewModel.getExercisesEndFragment(), R.id.frameLayout)

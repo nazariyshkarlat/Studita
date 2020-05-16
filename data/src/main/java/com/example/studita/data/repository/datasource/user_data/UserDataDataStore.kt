@@ -12,6 +12,7 @@ interface UserDataDataStore {
             null,
             null,
             null,
+            null,
             1,
             0,
             0,

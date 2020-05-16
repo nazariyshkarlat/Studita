@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ProgressBar
+        android:id="@+id/editProfileLayoutProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+    <ScrollView
+        android:id="@+id/editProfileLayoutScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/toolbarHeight"
+        android:fillViewport="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_marginEnd="@dimen/defaultRLMargin"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/editProfileLayoutAvatar"
+                android:layout_width="@dimen/editProfileLayoutAvatarSize"
+                android:layout_height="@dimen/editProfileLayoutAvatarSize"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/avatar_oval" />
+
+            <com.example.studita.presentation.views.press_view.PressTextView
+                style="@style/BlueTextButton16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/new_photo" />
+
+            <com.example.studita.presentation.views.press_view.PressTextView
+                style="@style/RedTextButton16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_photo" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/main_blocks_rectangle"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/editProfileLayoutUserName"
+                    style="@style/Medium16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_name" />
+
+                <com.example.studita.presentation.views.ErrorEditText
+                    android:id="@+id/editProfileLayoutUserNameEditText"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/user_name_hint"
+                    android:imeOptions="actionNext"
+                    android:maxLength="@integer/userNameMaxLength"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/main_blocks_rectangle"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/editProfileLayoutFullName"
+                    style="@style/Medium16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/full_name" />
+
+                <TextView
+                    style="@style/Regular14_50"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/editProfileLayoutFullName"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="2dp"
+                    android:maxLength="@integer/fullNameMaxLength"
+                    android:text="@string/optional" />
+
+                <com.example.studita.presentation.views.ErrorEditText
+                    android:id="@+id/editProfileLayoutFullNameEditText"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editProfileLayoutFullName"
+                    android:hint="@string/full_name_hint"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+            </RelativeLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <com.example.studita.presentation.views.press_view.PressLinearLayout
+                android:id="@+id/editProfileLayoutOpenProfileButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    style="@style/Medium16Blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/to_my_profile" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_chevron_right_accent" />
+
+            </com.example.studita.presentation.views.press_view.PressLinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

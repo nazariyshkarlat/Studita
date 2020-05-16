@@ -1,12 +1,9 @@
 package com.example.studita.presentation.fragments.exercises
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope

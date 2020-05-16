@@ -1,7 +1,6 @@
 package com.example.studita.di.data
 
-import com.example.studita.SyncSubscribeEmailImpl
-import com.example.studita.data.cache.subscribe_email.SubscribeEmailCache
+import com.example.studita.service.SyncSubscribeEmailImpl
 import com.example.studita.data.cache.subscribe_email.SubscribeEmailCacheImpl
 import com.example.studita.data.entity.mapper.SubscribeEmailDataMapper
 import com.example.studita.data.net.SubscribeEmailService

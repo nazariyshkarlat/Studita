@@ -36,7 +36,7 @@ object LevelUtils {
                 text.substring(
                     text.indexOf(" ")
                 ).createSpannableString(
-                    color = ColorUtils.getAccentColor(context)
+                    color = ThemeUtils.getAccentColor(context)
                 )
             )
         }

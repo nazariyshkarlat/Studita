@@ -12,9 +12,9 @@ import retrofit2.http.POST
 
 interface UserDataService {
     @POST("user_data")
-    fun getUserDataAsync(@Header("Date")date: String, @Body userIdToken: UserIdToken): Deferred<Response<UserDataEntity>>
+    suspend fun getUserData(@Header("Date")date: String, @Body userIdToken: UserIdToken): Response<UserDataEntity>
 
     @POST("save_user_data")
-    fun saveUserDataAsync(@Body saveUserDataRequest: SaveUserDataRequest): Deferred<Response<ResponseBody>>
+    suspend fun saveUserData(@Body saveUserDataRequest: SaveUserDataRequest): Response<ResponseBody>
 
 }

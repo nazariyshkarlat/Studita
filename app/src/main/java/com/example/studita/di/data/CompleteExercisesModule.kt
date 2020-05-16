@@ -1,6 +1,6 @@
 package com.example.studita.di.data
 
-import com.example.studita.SyncCompletedExercisesImpl
+import com.example.studita.service.SyncCompletedExercisesImpl
 import com.example.studita.data.entity.mapper.CompleteExercisesRequestMapper
 import com.example.studita.data.entity.mapper.CompletedExercisesMapper
 import com.example.studita.data.entity.mapper.UserIdTokenMapper
@@ -52,10 +52,10 @@ object CompleteExercisesModule {
 
     private fun getCompleteExercisesDataStoreFactory() =
         CompleteExercisesDataStoreFactoryImpl(
-            getCloudCompleteExercisesDataStore()
+            getCompleteExercisesDataStore()
         )
 
-    private fun getCloudCompleteExercisesDataStore() =
+    private fun getCompleteExercisesDataStore() =
         CompleteExercisesDataStoreImpl(
             NetworkModule.connectionManager,
             NetworkModule.getService(CompleteExercisesService::class.java)

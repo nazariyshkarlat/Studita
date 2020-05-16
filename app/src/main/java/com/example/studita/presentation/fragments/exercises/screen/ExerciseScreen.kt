@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.utils.createSpannableString
-import kotlinx.android.synthetic.main.exercise_screen_type_1.*
 import java.util.regex.Pattern
 
 open class ExerciseScreen(viewId: Int) : NavigatableFragment(viewId){

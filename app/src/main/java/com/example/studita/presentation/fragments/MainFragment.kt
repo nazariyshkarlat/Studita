@@ -14,15 +14,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.example.studita.R
-import com.example.studita.presentation.activities.DefaultActivity
-import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.fragments.base.BaseFragment
-import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.utils.*
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.example.studita.presentation.view_model.MainFragmentViewModel
 import kotlinx.android.synthetic.main.bottom_navigation.*
-import kotlinx.android.synthetic.main.frame_layout.view.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

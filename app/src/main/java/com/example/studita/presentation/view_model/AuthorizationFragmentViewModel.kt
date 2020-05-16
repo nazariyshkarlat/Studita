@@ -5,19 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.di.data.AuthorizationModule
-import com.example.studita.di.data.UserDataModule
 import com.example.studita.di.data.UserStatisticsModule
-import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
 import com.example.studita.domain.entity.authorization.LogInResponseData
 import com.example.studita.domain.interactor.LogInStatus
 import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.validator.AuthorizationValidator
-import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import java.lang.UnsupportedOperationException
 
 class AuthorizationFragmentViewModel : ViewModel(){
@@ -87,8 +83,8 @@ class AuthorizationFragmentViewModel : ViewModel(){
                     AuthorizationRequestData(
                         dates.first,
                         dates.second,
-                        UserUtils.userData,
-                        userStatisticsInteractor.getUserStatisticsRecords()
+                        if(!UserUtils.isLoggedIn()) UserUtils.userData else null,
+                        if(!UserUtils.isLoggedIn()) userStatisticsInteractor.getUserStatisticsRecords() else null
                     ))){
                     is SignUpStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                     is SignUpStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)

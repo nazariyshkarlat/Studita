@@ -35,7 +35,7 @@ object TimeUtils {
     fun getSeconds(timeInSeconds: Long) = (((timeInSeconds % 604800) % 86400) % 3600) % 60
 
     fun styleTimeText(context: Context, text: String): SpannableStringBuilder {
-        val secondaryColor = ColorUtils.getSecondaryColor(context)
+        val secondaryColor = ThemeUtils.getSecondaryColor(context)
         val builder = SpannableStringBuilder()
         val words = text.split(" ")
         val primaryWords = words.filterIndexed { index, _ -> index % 2 == 0 }.toTypedArray()

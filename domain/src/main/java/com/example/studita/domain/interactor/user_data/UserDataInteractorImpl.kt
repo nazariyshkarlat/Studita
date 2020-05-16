@@ -26,4 +26,8 @@ class UserDataInteractorImpl(private val repository: UserDataRepository) : UserD
         repository.saveUserData(userDataData)
     }
 
+    override suspend fun deleteUserData() {
+        repository.deleteUserData()
+    }
+
 }

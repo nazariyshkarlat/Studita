@@ -21,7 +21,7 @@ class UserStatisticsViewModel : ViewModel(){
     private val interactor = UserStatisticsModule.getUserStatisticsInteractorImpl()
 
     init {
-        UserUtils.getUserTokenIdData()?.let { getUserStatistics(it) }
+        UserUtils.getUserIDTokenData()?.let { getUserStatistics(it) }
     }
 
     private fun getUserStatistics(userIdTokenData: UserIdTokenData){

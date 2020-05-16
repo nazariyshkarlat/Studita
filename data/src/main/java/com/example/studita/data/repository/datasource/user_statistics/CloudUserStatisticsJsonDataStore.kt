@@ -6,8 +6,6 @@ import com.example.studita.data.entity.UserIdToken
 import com.example.studita.domain.date.DateTimeFormat
 import com.example.studita.data.net.UserStatisticsService
 import com.example.studita.data.net.connection.ConnectionManager
-import com.example.studita.domain.enum.UserStatisticsTime
-import com.example.studita.domain.enum.timeToString
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import java.lang.Exception
@@ -21,28 +19,17 @@ class CloudUserStatisticsJsonDataStore(private val connectionManager: Connection
         } else {
             try {
                 val userStatisticsJson: String
-                val userStatisticsAsync = userStatisticsService.getUserStatisticsAsync(
+                val userStatistics = userStatisticsService.getUserStatistics(
                     DateTimeFormat().format(Date()),
                     userIdToken
                 )
-                val result = userStatisticsAsync.await()
-                userStatisticsJson = result.body().toString()
+                userStatisticsJson = userStatistics.body()!!.toString()
                 if (userStatisticsJson.isNotEmpty())
                     userStatisticsCache.saveUserStatisticsJson(userStatisticsJson)
-                val statusCode = result.code()
+                val statusCode = userStatistics.code()
                 statusCode to userStatisticsJson
             } catch (e: Exception) {
                 throw ServerUnavailableException()
             }
         }
-
-    suspend fun saveUserStatistics(saveUserStatisticsRequest: SaveUserStatisticsRequest) : Int{
-        if (connectionManager.isNetworkAbsent()) {
-            throw NetworkConnectionException()
-        }else {
-            val saveUserStatisticsAsync = userStatisticsService.saveUserStatisticsAsync(saveUserStatisticsRequest)
-            val result = saveUserStatisticsAsync.await()
-            return result.code()
-        }
-    }
 }

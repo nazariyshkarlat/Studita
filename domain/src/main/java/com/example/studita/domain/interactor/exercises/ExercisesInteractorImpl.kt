@@ -4,28 +4,37 @@ import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.interactor.ExercisesStatus
 import com.example.studita.domain.interactor.ExercisesCacheStatus
 import com.example.studita.domain.repository.ExercisesRepository
+import kotlinx.coroutines.delay
 import java.lang.Exception
 
 class ExercisesInteractorImpl(
     private val repository: ExercisesRepository
 ): ExercisesInteractor {
 
-    override suspend fun getExercises(chapterPartNumber: Int, offlineMode: Boolean): ExercisesStatus =
+    private val retryDelay = 1000L
+
+    override suspend fun getExercises(chapterPartNumber: Int, offlineMode: Boolean, retryCount: Int): ExercisesStatus {
         try {
             val results = repository.getExercises(chapterPartNumber, offlineMode)
 
-            if(results.first == 200)
+            return if (results.first == 200)
                 ExercisesStatus.Success(results.second)
             else
                 ExercisesStatus.NoChapterPartFound
 
         } catch (e: Exception) {
             e.printStackTrace()
-            if (e is NetworkConnectionException)
-                ExercisesStatus.NoConnection
-            else
-                ExercisesStatus.ServiceUnavailable
+            return if (retryCount == 0) {
+                if (e is NetworkConnectionException)
+                    ExercisesStatus.NoConnection
+                else
+                    ExercisesStatus.ServiceUnavailable
+            } else {
+                delay(retryDelay)
+                getExercises(chapterPartNumber, offlineMode, retryCount - 1)
+            }
         }
+    }
 
     override suspend fun downloadOfflineExercises(): ExercisesCacheStatus =
         try {

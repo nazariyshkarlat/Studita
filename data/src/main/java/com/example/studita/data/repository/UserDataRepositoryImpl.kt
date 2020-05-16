@@ -23,4 +23,9 @@ class UserDataRepositoryImpl(private val userDataDataStoreFactory: UserDataJsonD
         (userDataDataStoreFactory.create(UserDataDataStoreFactory.Priority.CACHE) as DiskUserDataDataStore).saveUserDataEntity(userDataEntityMapper.map(userDataData))
     }
 
+    override suspend fun deleteUserData() {
+        System.out.println("DELETE")
+        (userDataDataStoreFactory.create(UserDataDataStoreFactory.Priority.CACHE) as DiskUserDataDataStore).deleteUserData()
+    }
+
 }

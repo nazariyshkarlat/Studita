@@ -1,10 +1,11 @@
 package com.example.studita.presentation.view_model
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
-import com.example.studita.SyncSubscribeEmailImpl
+import com.example.studita.service.SyncSubscribeEmailImpl
 import com.example.studita.di.data.LevelsModule
 import com.example.studita.di.data.SubscribeEmailModule
 import com.example.studita.di.data.UserDataModule
@@ -20,6 +21,7 @@ import com.example.studita.utils.TimeUtils
 import com.example.studita.utils.launchExt
 import com.example.studita.utils.UserUtils
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,7 +29,6 @@ class HomeFragmentViewModel : ViewModel(){
 
     val progressState = MutableLiveData<Boolean>()
     val errorState = SingleLiveEvent<Int>()
-    val userDataState = MutableLiveData<UserDataData>()
     val subscribeEmailState =  SingleLiveEvent<SubscribeEmailResultStatus>()
 
     lateinit var results: List<HomeRecyclerUiModel>
@@ -43,7 +44,7 @@ class HomeFragmentViewModel : ViewModel(){
 
     init{
         initSubscribeEmailState()
-        userIdTokenData = UserUtils.getUserTokenIdData()
+        userIdTokenData = UserUtils.getUserIDTokenData()
         getHomeScreenData(userIdTokenData)
     }
 
@@ -57,7 +58,8 @@ class HomeFragmentViewModel : ViewModel(){
                 else ->{
                     status as UserDataStatus.Success
                     initUserData(status.result)
-                    userDataState.postValue(status.result)
+                    Log.d("USER_DATA", status.toString())
+                    UserUtils.userDataLiveData.postValue(status.result)
                     getUserLevels()
                 }
             }
@@ -105,8 +107,8 @@ class HomeFragmentViewModel : ViewModel(){
 
     private fun initSubscribeEmailState(){
         SyncSubscribeEmailImpl.syncSubscribeEmailLiveData = subscribeEmailState
-        subscribeEmailState.value = subscribeEmailInteractor.getSyncedResult()?.let {
-            SubscribeEmailResultStatus.Success(
+        subscribeEmailInteractor.getSyncedResult()?.let {
+            subscribeEmailState.value = SubscribeEmailResultStatus.Success(
                 it
             )
         }
@@ -115,9 +117,12 @@ class HomeFragmentViewModel : ViewModel(){
     private fun initUserData(userDataData: UserDataData){
         UserUtils.userData = userDataData
 
-        if(TimeUtils.getCalendarDayCount(Date(), userDataData.streakDatetime) > 1F){
+        if(TimeUtils.getCalendarDayCount(userDataData.streakDatetime, Date()) > 1F){
             userDataData.streakDays = 0
             userDataData.todayCompletedExercises = 0
+            viewModelScope.launch {
+                userDataInteractor.saveUserData(userDataData)
+            }
         }
     }
 }

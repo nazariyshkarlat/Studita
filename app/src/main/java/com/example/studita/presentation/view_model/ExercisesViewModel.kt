@@ -110,7 +110,7 @@ class ExercisesViewModel : ViewModel(){
     private suspend fun completeExercises(completedExercisesData: CompletedExercisesData){
         if (completeExercisesInteractor.completeExercises(
                 CompleteExercisesRequestData(
-                    UserUtils.getUserTokenIdData(),
+                    UserUtils.getUserIDTokenData(),
                     completedExercisesData
                 )
             ) is CompleteExercisesStatus.Success
@@ -121,7 +121,7 @@ class ExercisesViewModel : ViewModel(){
 
     private fun saveObtainedExercisesResult(){
         viewModelScope.launch {
-            val userDataStatus = userDataInteractor.getUserData(UserUtils.getUserTokenIdData(), PrefsUtils.isOfflineMode())
+            val userDataStatus = userDataInteractor.getUserData(UserUtils.getUserIDTokenData(), PrefsUtils.isOfflineMode())
             if(userDataStatus is UserDataStatus.Success)
                 UserUtils.userData = userDataStatus.result
             UserUtils.userData.let {
@@ -194,7 +194,7 @@ class ExercisesViewModel : ViewModel(){
     }
     private fun saveUserStatistics(userStatisticsRowData: UserStatisticsRowData){
         viewModelScope.launch {
-            userStatisticsInteractor.saveUserStatistics(UserUtils.getUserTokenIdData(), userStatisticsRowData)
+            userStatisticsInteractor.saveUserStatistics(UserUtils.getUserIDTokenData(), userStatisticsRowData)
         }
     }
 

@@ -9,6 +9,6 @@ import retrofit2.http.Path
 interface InterestingService{
 
     @GET("interesting/{number}")
-    fun getInterestingAsync(@Path("number") interestingNumber: Int) : Deferred<Response<JsonObject>>
+    suspend fun getInteresting(@Path("number") interestingNumber: Int) : Response<JsonObject>
 
 }

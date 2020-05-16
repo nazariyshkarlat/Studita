@@ -38,7 +38,7 @@ object ImageUtils {
 
         val c2 = Canvas(screenBitmap)
 
-        c2.drawColor(ColorUtils.getPageBackgroundColor(view.context))
+        c2.drawColor(ThemeUtils.getPageBackgroundColor(view.context))
 
         c2.drawBitmap(viewBitmap, 0F, 0F, null)
         return screenBitmap

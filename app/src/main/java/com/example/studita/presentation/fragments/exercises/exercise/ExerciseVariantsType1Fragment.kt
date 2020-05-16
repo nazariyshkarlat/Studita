@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.domain.entity.exercise.ExerciseResponseDescriptionContentData
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.makeView
 import com.example.studita.presentation.model.ExerciseShape

@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.OneShotPreDrawListener
@@ -22,15 +23,14 @@ import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.utils.setOnViewSizeChangeListener
 import com.example.studita.presentation.view_model.AuthorizationFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
-import kotlinx.android.synthetic.main.authentication_layout.*
+import kotlinx.android.synthetic.main.authorization_layout.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class AuthorizationFragment : NavigatableFragment(R.layout.authentication_layout), TextWatcher, OnViewSizeChangeListener{
+class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout), TextWatcher, OnViewSizeChangeListener{
 
-    private var toolbarFragmentViewModel: ToolbarFragmentViewModel? = null
     private var authorizationFragmentViewModel: AuthorizationFragmentViewModel? = null
     private lateinit var signUpOnClick: () -> Unit
     private lateinit var onViewSizeChangeListener: View.OnLayoutChangeListener
@@ -44,9 +44,6 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authentication_layout
         onViewSizeChangeListener = view.setOnViewSizeChangeListener(this)
         contentView = view as ViewGroup
 
-        toolbarFragmentViewModel = activity?.run {
-            ViewModelProviders.of(this).get(ToolbarFragmentViewModel::class.java)
-        }
         authorizationFragmentViewModel = activity?.run {
             ViewModelProviders.of(this).get(AuthorizationFragmentViewModel::class.java)
         }

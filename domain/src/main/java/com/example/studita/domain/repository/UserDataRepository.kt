@@ -9,4 +9,6 @@ interface UserDataRepository{
     suspend fun getUserData(userIdTokenData: UserIdTokenData?, offlineMode: Boolean): Pair<Int, UserDataData>
 
     suspend fun saveUserData(userDataData: UserDataData)
+
+    suspend fun deleteUserData()
 }

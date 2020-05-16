@@ -1,6 +1,7 @@
 package com.example.studita.presentation.activities
 
 import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.IncorrectTimeFragment
@@ -9,6 +10,7 @@ import com.example.studita.utils.*
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
 import kotlinx.android.synthetic.main.frame_layout.*
+import java.sql.Time
 
 class MainActivity : DefaultActivity(){
 
@@ -41,6 +43,7 @@ class MainActivity : DefaultActivity(){
             needsRefresh = false
             this.recreate()
         }else if(needsRecreate){
+            UserUtils.userDataLiveData.value = null
             needsRecreate = false
             startActivity<MainActivity>()
             this.finish()

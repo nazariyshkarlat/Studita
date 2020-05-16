@@ -14,7 +14,7 @@ class SubscribeEmailDataStoreImpl(private val connectionManager: ConnectionManag
             throw NetworkConnectionException()
         }else{
             try {
-                val result = subscribeEmailService.subscribeEmailAsync(userIdToken).await()
+                val result = subscribeEmailService.subscribeEmail(userIdToken)
                 val body = result.body()!!
                 result.code() to SubscribeEmailResultEntity(true, body["user_email"])
             } catch (e: Exception) {
@@ -27,7 +27,7 @@ class SubscribeEmailDataStoreImpl(private val connectionManager: ConnectionManag
             throw NetworkConnectionException()
         }else{
             try {
-                val result = subscribeEmailService.unsubscribeEmailAsync(userIdToken).await()
+                val result = subscribeEmailService.unsubscribeEmail(userIdToken)
                 val body = result.body()!!
                 result.code() to SubscribeEmailResultEntity(false, body["user_email"])
             } catch (e: Exception) {

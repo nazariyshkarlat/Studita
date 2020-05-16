@@ -6,7 +6,6 @@ import android.text.SpannableStringBuilder
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExercisesDescriptionData
 import com.example.studita.utils.createSpannableString

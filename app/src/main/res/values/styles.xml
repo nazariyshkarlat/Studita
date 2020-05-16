@@ -319,16 +319,22 @@
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">10dp</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textColor">?colorAccent</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
-    <style name="TextButton16" parent="TextButton">
+    <style name="BlueTextButton16" parent="TextButton">
         <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?colorAccent</item>
     </style>
 
-    <style name="TextButton14" parent="TextButton">
+    <style name="RedTextButton16" parent="TextButton">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="BlueTextButton14" parent="TextButton">
         <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?colorAccent</item>
     </style>
 
     <style name="Level" parent="android:Widget.TextView">

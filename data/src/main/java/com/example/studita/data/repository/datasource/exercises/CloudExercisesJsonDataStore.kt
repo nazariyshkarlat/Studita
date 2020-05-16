@@ -1,6 +1,5 @@
 package com.example.studita.data.repository.datasource.exercises
 
-import com.example.studita.data.entity.exercise.ExerciseArrayEntity
 import com.example.studita.data.net.ExercisesService
 import com.example.studita.data.net.OfflineExercisesService
 import com.example.studita.data.net.connection.ConnectionManager
@@ -18,9 +17,8 @@ class CloudExercisesJsonDataStore(
             throw NetworkConnectionException()
         } else {
             try {
-                val exercisesAsync = exercisesService.getExercisesAsync(chapterPartNumber)
-                val result = exercisesAsync.await()
-                return result.code() to result.body()!!.toString()
+                val exercises = exercisesService.getExercises(chapterPartNumber)
+                return exercises.code() to exercises.body()!!.toString()
             }catch (e: Exception){
                 throw ServerUnavailableException()
             }
@@ -28,7 +26,7 @@ class CloudExercisesJsonDataStore(
     }
 
     suspend fun getOfflineExercisesJson(): Pair<Int, String>{
-        val response =  offlineExercisesService.getOfflineExercisesAsync().await()
-        return response.code() to response.body().toString()
+        val response =  offlineExercisesService.getOfflineExercises()
+        return response.code() to response.body()!!.toString()
     }
 }

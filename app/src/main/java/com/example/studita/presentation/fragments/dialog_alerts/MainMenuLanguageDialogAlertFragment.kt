@@ -19,9 +19,9 @@ class MainMenuLanguageDialogAlertFragment : RadioButtonListDialogAlertFragment()
 
         dialogListLayoutTitle.text = resources.getString(R.string.language)
 
-        dialogListLayoutLeftButton.setOnClickListener { dialog?.dismiss() }
+        dialogListLayoutLeftButton.setOnClickListener { dismiss() }
         dialogListLayouRightButton.setOnClickListener {
-            dialog?.dismiss()
+            dismiss()
         }
     }
 }

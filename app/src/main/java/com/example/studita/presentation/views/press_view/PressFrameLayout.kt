@@ -10,7 +10,7 @@ import com.example.studita.R
 class PressFrameLayout @JvmOverloads constructor(context: Context,
                                                   attrs: AttributeSet? = null,
                                                   defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr), IPressView {
 
     private val pressViewImpl =
         PressView(this)
@@ -19,7 +19,7 @@ class PressFrameLayout @JvmOverloads constructor(context: Context,
         pressViewImpl.setPressAlpha(R.attr.press_view_press_alpha)
     }
 
-    fun setOnClickListener(work: (View) ->Unit) {
+    override fun setOnClickListener(work: (View) ->Unit) {
         pressViewImpl.onClick = work
     }
 }

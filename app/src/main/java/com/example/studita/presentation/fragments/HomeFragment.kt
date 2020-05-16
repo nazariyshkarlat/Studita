@@ -1,17 +1,20 @@
 package com.example.studita.presentation.fragments
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.studita.R
-import com.example.studita.domain.entity.UserDataData
+import com.example.studita.di.data.EditProfileModule
+import com.example.studita.domain.entity.EditProfileData
+import com.example.studita.domain.entity.EditProfileRequestData
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.presentation.adapter.levels.LevelsAdapter
@@ -30,7 +33,6 @@ import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.home_layout_bar.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
 
 class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetChangedListener, FabScrollListener{
 
@@ -81,8 +83,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             })
 
-            it.userDataState.observe(viewLifecycleOwner, androidx.lifecycle.Observer<UserDataData>{data->
-                if(UserUtils.isLoggedIn()) {
+            UserUtils.userDataLiveData.observe(activity as FragmentActivity, androidx.lifecycle.Observer{data->
+                if(UserUtils.isLoggedIn() && data != null) {
                     if (data.avatarLink == null) {
                         AvaDrawer.drawAwa(homeLayoutBarAccountImageView, data.userName!!)
                     } else {
@@ -101,59 +103,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 it.subscribeEmailState.observe(
                     viewLifecycleOwner,
                     androidx.lifecycle.Observer { status ->
-                        val snackbar = CustomSnackbar(view.context)
-                        when (status) {
-                            is SubscribeEmailResultStatus.Success -> {
-                                val subscribe = status.result.subscribe
-                                UserUtils.userData.isSubscribed = subscribe
-                                homeLayoutRecyclerView.adapter?.notifyItemChanged(
-                                    homeLayoutRecyclerView.adapter!!.itemCount - 2
-                                )
-                                if (subscribe) {
-                                    snackbar.show(
-                                        resources.getString(
-                                            R.string.subscribe_email,
-                                            TextUtils.encryptEmail(status.result.email!!)
-                                        ),
-                                        ColorUtils.getAccentColor(snackbar.context),
-                                        resources.getInteger(R.integer.subscribe_email_snackbar_duration)
-                                            .toLong(),
-                                        bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
-                                            .toInt()
-                                    )
-                                } else {
-                                    snackbar.show(
-                                        resources.getString(R.string.unsubscribe_email),
-                                        ColorUtils.getAccentColor(snackbar.context),
-                                        resources.getInteger(R.integer.unsubscribe_email_snackbar_duration)
-                                            .toLong(),
-                                        bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
-                                            .toInt()
-                                    )
-                                }
-                            }
-                            is SubscribeEmailResultStatus.NoConnection -> {
-                                if (!UserUtils.userData.isSubscribed) {
-                                    snackbar.show(
-                                        resources.getString(R.string.offline_subscribe_email),
-                                        ColorUtils.getAccentColor(snackbar.context),
-                                        resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
-                                            .toLong(),
-                                        bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
-                                            .toInt()
-                                    )
-                                } else {
-                                    snackbar.show(
-                                        resources.getString(R.string.offline_unsubscribe_email),
-                                        ColorUtils.getAccentColor(snackbar.context),
-                                        resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
-                                            .toLong(),
-                                        bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
-                                            .toInt()
-                                    )
-                                }
-                            }
-                        }
+                        showSnackbar(status, view.context)
                     })
             }
 
@@ -194,5 +144,61 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
         homeLayoutAppBar.alpha =
             (homeLayoutAppBar.height + verticalOffset * 2) / homeLayoutAppBar.height.toFloat()
+    }
+
+    private fun showSnackbar(status: SubscribeEmailResultStatus, context: Context){
+        val snackbar = CustomSnackbar(context)
+        when (status) {
+            is SubscribeEmailResultStatus.Success -> {
+                val subscribe = status.result.subscribe
+                UserUtils.userData.isSubscribed = subscribe
+                homeLayoutRecyclerView.adapter?.notifyItemChanged(
+                        homeLayoutRecyclerView.adapter!!.itemCount - 2
+                )
+                if (subscribe) {
+                    snackbar.show(
+                            resources.getString(
+                                    R.string.subscribe_email,
+                                    TextUtils.encryptEmail(status.result.email!!)
+                            ),
+                            ThemeUtils.getAccentColor(snackbar.context),
+                            resources.getInteger(R.integer.subscribe_email_snackbar_duration)
+                                    .toLong(),
+                            bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
+                                    .toInt()
+                    )
+                } else {
+                    snackbar.show(
+                            resources.getString(R.string.unsubscribe_email),
+                            ThemeUtils.getAccentColor(snackbar.context),
+                            resources.getInteger(R.integer.unsubscribe_email_snackbar_duration)
+                                    .toLong(),
+                            bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
+                                    .toInt()
+                    )
+                }
+            }
+            is SubscribeEmailResultStatus.NoConnection -> {
+                if (!UserUtils.userData.isSubscribed) {
+                    snackbar.show(
+                            resources.getString(R.string.offline_subscribe_email),
+                            ThemeUtils.getAccentColor(snackbar.context),
+                            resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
+                                    .toLong(),
+                            bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
+                                    .toInt()
+                    )
+                } else {
+                    snackbar.show(
+                            resources.getString(R.string.offline_unsubscribe_email),
+                            ThemeUtils.getAccentColor(snackbar.context),
+                            resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
+                                    .toLong(),
+                            bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
+                                    .toInt()
+                    )
+                }
+            }
+        }
     }
 }

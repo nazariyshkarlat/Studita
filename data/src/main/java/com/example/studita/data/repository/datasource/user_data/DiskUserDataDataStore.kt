@@ -19,4 +19,8 @@ class DiskUserDataDataStore(private val userDataDao: UserDataDao)
     suspend fun saveUserDataEntity(userDataEntity: UserDataEntity) {
         userDataDao.insertUserData(userDataEntity)
     }
+
+    suspend fun deleteUserData(){
+        userDataDao.deleteUserData()
+    }
 }

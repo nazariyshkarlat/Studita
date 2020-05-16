@@ -9,7 +9,6 @@ import com.example.studita.di.data.AuthorizationModule
 import com.example.studita.di.data.UserStatisticsModule
 import com.example.studita.domain.entity.authorization.SignInWithGoogleRequestData
 import com.example.studita.domain.interactor.SignInWithGoogleStatus
-import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -51,7 +50,7 @@ class MainMenuFragmentViewModel : ViewModel(){
             val account = task.getResult(ApiException::class.java)
             viewModelScope.launch {
                 account?.let {
-                    if(authorizationInteractor.signInWithGoogle(SignInWithGoogleRequestData(account.idToken.toString(), UserUtils.userData, userStatisticsInteractor.getUserStatisticsRecords())) is SignInWithGoogleStatus.Success){
+                    if(authorizationInteractor.signInWithGoogle(SignInWithGoogleRequestData(account.idToken.toString(), if(!UserUtils.isLoggedIn()) UserUtils.userData else null, if(!UserUtils.isLoggedIn()) userStatisticsInteractor.getUserStatisticsRecords() else null))is SignInWithGoogleStatus.Success){
                         AccountAuthenticator.addAccount(context, it.email.toString())
                         googleSignInState.postValue(true)
                     }

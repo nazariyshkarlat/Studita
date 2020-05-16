@@ -10,6 +10,6 @@ import retrofit2.http.Path
 interface InterestingListService {
 
     @GET("interesting")
-    fun getInterestingListAsync(): Deferred<Response<JsonArray>>
+    suspend fun getInterestingList(): Response<JsonArray>
 
 }

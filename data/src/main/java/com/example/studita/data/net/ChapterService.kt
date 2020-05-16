@@ -11,6 +11,6 @@ import retrofit2.http.Path
 interface ChapterService{
 
     @GET("chapters/{number}")
-    fun getChapterAsync(@Path("number") chapterNumber: Int) : Deferred<Response<JsonObject>>
+    suspend fun getChapter(@Path("number") chapterNumber: Int) : Response<JsonObject>
 
 }

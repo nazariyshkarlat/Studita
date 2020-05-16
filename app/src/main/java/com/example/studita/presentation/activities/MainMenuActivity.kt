@@ -7,8 +7,10 @@ import com.example.studita.utils.addFragment
 import com.example.studita.utils.navigateTo
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.MainMenuFragment
+import com.example.studita.presentation.fragments.ProfileMenuFragment
 import com.example.studita.presentation.fragments.ToolbarFragment
 import com.example.studita.presentation.view_model.MainMenuActivityViewModel
+import com.example.studita.utils.UserUtils
 
 class MainMenuActivity : DefaultActivity(){
 
@@ -18,12 +20,10 @@ class MainMenuActivity : DefaultActivity(){
 
         val viewModel = ViewModelProviders.of(this).get(MainMenuActivityViewModel::class.java)
 
+        viewModel.onThemeChangeListener = this
         if(savedInstanceState == null) {
             addFragment(ToolbarFragment(), R.id.doubleTopFrameLayoutFrameLayout)
-            val mainMenuFragment =
-                MainMenuFragment()
-            viewModel.onThemeChangeListener = this
-            navigateTo(mainMenuFragment, R.id.doubleFrameLayoutFrameLayout)
+            navigateTo(if(UserUtils.isLoggedIn()) ProfileMenuFragment() else MainMenuFragment(), R.id.doubleFrameLayoutFrameLayout)
         }
     }
 

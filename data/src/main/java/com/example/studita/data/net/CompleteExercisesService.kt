@@ -10,6 +10,6 @@ import retrofit2.http.POST
 interface CompleteExercisesService {
 
     @POST("complete_exercises")
-    fun completeExercisesAsync(@Body completeExercisesRequest: CompleteExercisesRequest) : Deferred<Response<ResponseBody>>
+    suspend fun completeExercises(@Body completeExercisesRequest: CompleteExercisesRequest) : Response<ResponseBody>
 
 }

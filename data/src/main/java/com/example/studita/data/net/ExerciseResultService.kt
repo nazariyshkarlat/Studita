@@ -11,6 +11,6 @@ import retrofit2.http.Path
 interface ExerciseResultService {
 
     @POST("exercises/{number}")
-    fun getExerciseResultAsync(@Path("number") exerciseNumber: Int, @Body exerciseRequestEntity: ExerciseRequestEntity): Deferred<Response<ExerciseResponseRawEntity>>
+    suspend fun getExerciseResult(@Path("number") exerciseNumber: Int, @Body exerciseRequestEntity: ExerciseRequestEntity): Response<ExerciseResponseRawEntity>
 
 }

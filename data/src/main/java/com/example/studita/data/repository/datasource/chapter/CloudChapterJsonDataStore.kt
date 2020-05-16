@@ -1,6 +1,5 @@
 package com.example.studita.data.repository.datasource.chapter
 
-import com.example.studita.data.cache.chapter.ChapterCache
 import com.example.studita.data.net.ChapterService
 import com.example.studita.data.net.ChaptersService
 import com.example.studita.data.net.connection.ConnectionManager
@@ -19,9 +18,8 @@ class CloudChapterJsonDataStore(
             throw NetworkConnectionException()
         } else {
             try {
-                val chapterAsync = chapterService.getChapterAsync(chapterNumber)
-                val result = chapterAsync.await()
-                return result.code() to result.body()!!.toString()
+                val chapter = chapterService.getChapter(chapterNumber)
+                return chapter.code() to chapter.body()!!.toString()
             } catch (e: Exception){
                 throw ServerUnavailableException()
             }
@@ -33,9 +31,8 @@ class CloudChapterJsonDataStore(
             throw NetworkConnectionException()
         } else {
             try {
-                val chapterAsync = chaptersService.getChaptersAsync()
-                val result = chapterAsync.await()
-                return result.body()!!.toString()
+                val chapter = chaptersService.getChapters()
+                return chapter.body()!!.toString()
             }catch (e: Exception){
                 throw ServerUnavailableException()
             }

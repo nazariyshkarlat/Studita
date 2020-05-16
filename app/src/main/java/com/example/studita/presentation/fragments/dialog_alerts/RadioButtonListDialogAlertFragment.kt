@@ -39,6 +39,6 @@ open class RadioButtonListDialogAlertFragment : BaseDialogFragment(R.layout.dial
             }
         }
 
-        dialogListLayoutLeftButton.setOnClickListener { dialog?.dismiss() }
+        dialogListLayoutLeftButton.setOnClickListener { dismiss() }
     }
 }

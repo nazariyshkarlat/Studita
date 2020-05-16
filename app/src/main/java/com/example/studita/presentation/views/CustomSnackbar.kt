@@ -7,7 +7,6 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.text.StaticLayout
@@ -18,7 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.contains
@@ -28,7 +26,6 @@ import com.example.studita.presentation.draw.getMultilineTextLayout
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.getAlphaAnimator
 import com.example.studita.utils.getScaleAnimator
-import com.google.android.material.animation.AnimationUtils
 import kotlinx.coroutines.*
 
 

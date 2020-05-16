@@ -11,6 +11,8 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = TABLE_NAME)
 data class UserDataEntity(@ColumnInfo(name = "user_name")
                           @SerializedName("user_name")val userName: String? = null,
+                          @ColumnInfo(name = "user_full_name")
+                          @SerializedName("user_full_name")val userFullName: String? = null,
                           @ColumnInfo(name = "user_public_id")
                           @SerializedName("user_public_id")val userPublicId: String? = null,
                           @ColumnInfo(name = "avatar_link")

@@ -34,18 +34,17 @@ class ExerciseResultDataStoreImpl(
             throw NetworkConnectionException()
         } else {
             try {
-                val exercisesAsync =
-                    exerciseResultService.getExerciseResultAsync(
+                val exerciseResult =
+                    exerciseResultService.getExerciseResult(
                         exerciseNumber,
                         exerciseRequestEntity
                     )
-                val rawResult = exercisesAsync.await()
                 val result = ExerciseResponseEntity(
-                    rawResult.body()!!.exerciseResult, descriptionGson.fromJson(
-                        rawResult.body()!!.description, type
+                    exerciseResult.body()!!.exerciseResult, descriptionGson.fromJson(
+                        exerciseResult.body()!!.description, type
                     )
                 )
-                return rawResult.code() to result
+                return exerciseResult.code() to result
             }catch (e: Exception) {
             throw ServerUnavailableException()
         }

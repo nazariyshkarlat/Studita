@@ -56,14 +56,14 @@ object NetworkModule {
         OkHttpClient().newBuilder()
             .addInterceptor(interceptor)
             .readTimeout(1, TimeUnit.MINUTES)
-            .connectTimeout(1, TimeUnit.MINUTES)
+            .connectTimeout(1, TimeUnit.SECONDS)
             .build()
 
 
     private fun getInterceptor(): okhttp3.Interceptor =
         HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG)
-                HttpLoggingInterceptor.Level.BODY
+                HttpLoggingInterceptor.Level.BASIC
             else
                 HttpLoggingInterceptor.Level.NONE
         }

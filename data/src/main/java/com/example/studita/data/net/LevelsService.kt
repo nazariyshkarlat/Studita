@@ -10,5 +10,5 @@ import retrofit2.http.Query
 interface LevelsService {
 
     @GET("levels")
-    fun getLevelsAsync(@Query("logged_in")isLoggedIn: Boolean) : Deferred<Response<JsonArray>>
+    suspend fun getLevels(@Query("logged_in")isLoggedIn: Boolean) : Response<JsonArray>
 }

@@ -10,7 +10,7 @@ import com.example.studita.presentation.views.press_view.PressView
 class PressImageView@JvmOverloads constructor(context: Context,
                                               attrs: AttributeSet? = null,
                                               defStyleAttr: Int = 0
-) : AppCompatImageView(context, attrs, defStyleAttr) {
+) : AppCompatImageView(context, attrs, defStyleAttr), IPressView{
     private val  pressViewImpl =
         PressView(this)
 
@@ -18,7 +18,7 @@ class PressImageView@JvmOverloads constructor(context: Context,
         pressViewImpl.setPressAlpha(R.attr.press_view_press_alpha)
     }
 
-    fun setOnClickListener(work: (View) ->Unit) {
+    override fun setOnClickListener(work: (View) ->Unit) {
         pressViewImpl.onClick = work
     }
 }

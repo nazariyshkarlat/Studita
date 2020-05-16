@@ -1,177 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView android:id="@+id/mainMenuScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_alignParentTop="true"
+    android:layout_marginTop="@dimen/toolbarHeight"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
-        android:id="@+id/mainMenuScrollView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/toolbarHeight"
-        android:layout_above="@+id/mainMenuLayoutBottomText"
-        android:fillViewport="true">
+        android:orientation="vertical"
+        android:gravity="center">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:layout_gravity="center">
 
             <LinearLayout
-                android:id="@+id/mainMenuLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/defaultRLMargin"
-                android:layout_marginEnd="@dimen/defaultRLMargin"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/mainMenuTitle"
-                    style="@style/Medium24"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/main_menu_authorization_method"
-                    android:textAlignment="center" />
-
-                <com.example.studita.presentation.views.press_view.PressTextView
-                    android:id="@+id/mainMenuWithGoogleButton"
-                    style="@style/WithGoogleButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/buttonHeight"
-                    android:layout_marginTop="36dp"
-                    android:text="@string/with_google" />
-
-                <TextView
-                    android:id="@+id/mainMenuUseEmailButton"
-                    style="@style/Button12"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/buttonHeight"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/use_email" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:paddingTop="12dp"
-                android:orientation="vertical"
-                android:background="@drawable/divider_top_drawable">
-
-                <FrameLayout
+                <LinearLayout
+                    android:id="@+id/mainMenuLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:layout_gravity="start">
+                    android:layout_marginStart="@dimen/defaultRLMargin"
+                    android:layout_marginEnd="@dimen/defaultRLMargin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/mainMenuTitle"
+                        style="@style/Medium24"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/main_menu_authorization_method"
+                        android:textAlignment="center" />
+
+                    <com.example.studita.presentation.views.press_view.PressTextView
+                        android:id="@+id/mainMenuWithGoogleButton"
+                        style="@style/WithGoogleButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/buttonHeight"
+                        android:layout_marginTop="36dp"
+                        android:text="@string/with_google" />
+
+                    <TextView
+                        android:id="@+id/mainMenuUseEmailButton"
+                        style="@style/Button12"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/buttonHeight"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/use_email" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:paddingTop="12dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/divider_top_drawable">
+
+                    <include
+                        layout="@layout/settings_offline_mode_item"/>
 
                     <com.example.studita.presentation.views.press_view.PressLinearLayout
-                        android:id="@+id/mainMenuLayoutOfflineSwitchView"
+                        android:id="@+id/mainMenuLayoutThemeView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical">
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
 
                         <ImageView
-                            android:id="@+id/mainMenuLayoutOfflineIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="14dp"
                             android:layout_marginBottom="14dp"
-                            app:srcCompat="@drawable/ic_cloud_secondary" />
+                            app:srcCompat="@drawable/ic_palette_secondary" />
 
                         <TextView
                             style="@style/Medium16_50"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:text="@string/offline_mode" />
+                            android:text="@string/app_theme" />
+                    </com.example.studita.presentation.views.press_view.PressLinearLayout>
+
+                    <com.example.studita.presentation.views.press_view.PressLinearLayout
+                        android:id="@+id/mainMenuLayoutLanguageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginBottom="14dp"
+                            app:srcCompat="@drawable/ic_language_secondary" />
+
+                        <TextView
+                            style="@style/Medium16_50"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="@string/language" />
 
                     </com.example.studita.presentation.views.press_view.PressLinearLayout>
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/mainMenuLayoutOfflineSwitch"
-                        android:theme="@style/SwitchStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end|center_vertical" />
-
-                </FrameLayout>
-
-                <com.example.studita.presentation.views.press_view.PressLinearLayout
-                    android:id="@+id/mainMenuLayoutThemeView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:layout_marginBottom="14dp"
-                        app:srcCompat="@drawable/ic_palette_secondary" />
-
-                    <TextView
-                        style="@style/Medium16_50"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="@string/app_theme" />
-                </com.example.studita.presentation.views.press_view.PressLinearLayout>
-
-                <com.example.studita.presentation.views.press_view.PressLinearLayout
-                    android:id="@+id/mainMenuLayoutLanguageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:layout_marginBottom="14dp"
-                        app:srcCompat="@drawable/ic_language_secondary" />
-
-                    <TextView
-                        style="@style/Medium16_50"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="@string/language" />
-
-                </com.example.studita.presentation.views.press_view.PressLinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
-    </ScrollView>
+        </FrameLayout>
 
-    <TextView
-        android:id="@+id/mainMenuLayoutBottomText"
-        style="@style/Regular12_50"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="@string/main_menu_bottom_text"
-        android:padding="10dp"
-        android:layout_alignParentBottom="true"/>
-</RelativeLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/mainMenuLayoutBottomText"
+            style="@style/Regular12_50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/main_menu_bottom_text"
+            android:padding="10dp"/>
+
+    </LinearLayout>
+</ScrollView>

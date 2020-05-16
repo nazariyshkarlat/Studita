@@ -6,7 +6,6 @@ import com.example.studita.presentation.fragments.user_statistics.UserStatFragme
 import com.example.studita.presentation.fragments.user_statistics.UserStatUnLoggedInFragment
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.addFragment
-import kotlinx.android.synthetic.main.toolbar_layout.*
 
 class UserStatActivity : DefaultActivity(){
 

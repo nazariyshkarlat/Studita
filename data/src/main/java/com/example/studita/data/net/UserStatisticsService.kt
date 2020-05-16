@@ -12,8 +12,8 @@ import retrofit2.http.*
 interface UserStatisticsService {
 
     @POST("user_statistics")
-    fun getUserStatisticsAsync(@Header("Date") dateTime: String, @Body userIdToken: UserIdToken) : Deferred<Response<JsonArray>>
+    suspend fun getUserStatistics(@Header("Date") dateTime: String, @Body userIdToken: UserIdToken) : Response<JsonArray>
 
     @POST("save_user_statistics")
-    fun saveUserStatisticsAsync(@Body saveUserStatisticsRequest: SaveUserStatisticsRequest) : Deferred<Response<ResponseBody>>
+    suspend fun saveUserStatistics(@Body saveUserStatisticsRequest: SaveUserStatisticsRequest) : Response<ResponseBody>
 }

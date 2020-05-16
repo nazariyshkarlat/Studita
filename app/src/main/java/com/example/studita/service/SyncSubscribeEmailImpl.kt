@@ -1,25 +1,31 @@
-package com.example.studita
+package com.example.studita.service
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.work.*
 import com.example.studita.di.NetworkModule
 import com.example.studita.di.data.SubscribeEmailModule
+import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.domain.service.SyncSubscribeEmail
+import com.example.studita.presentation.view_model.SingleLiveEvent
 import com.example.studita.utils.UserUtils
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class SyncSubscribeEmailImpl : SyncSubscribeEmail{
 
 
     companion object {
-        private const val syncSubscribeEmailId = "syncSubscribeEmailId"
-        var syncSubscribeEmailLiveData: MutableLiveData<SubscribeEmailResultStatus>? = null
+        private const val SYNC_SUBSCRIBE_EMAIL_ID = "syncSubscribeEmailId"
+        var syncSubscribeEmailLiveData = SingleLiveEvent<SubscribeEmailResultStatus>()
     }
 
     override fun scheduleSubscribeEmail(subscribe: Boolean){
         val data = Data.Builder()
         data.putBoolean("SUBSCRIBE", subscribe)
+        data.putString("USER_ID_TOKEN_DATA",
+            UserUtils.getUserIDTokenData()?.let { serializeUserIdTokenData(it) })
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -29,14 +35,15 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail{
             .setInputData(data.build())
             .build()
         val workManager = WorkManager.getInstance(NetworkModule.context)
-        workManager.enqueueUniqueWork(syncSubscribeEmailId, ExistingWorkPolicy.REPLACE, work)
+        workManager.enqueueUniqueWork(SYNC_SUBSCRIBE_EMAIL_ID, ExistingWorkPolicy.REPLACE, work)
     }
 
     class SubscribeEmailWorker(val context: Context, val params: WorkerParameters) : CoroutineWorker(context, params){
         override suspend fun doWork(): Result {
-            val userIdToken = UserUtils.getUserTokenIdData()
+            val json = inputData.getString("USER_ID_TOKEN_DATA")
             val subscribe = inputData.getBoolean("SUBSCRIBE", false)
 
+            val userIdToken = json?.let { deserializeUserIdTokenData(it) }
             userIdToken?.let {
                 val result = if (subscribe)
                     SubscribeEmailModule.getSubscribeEmailInteractorImpl().subscribe(it)
@@ -52,6 +59,15 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail{
             return Result.success()
         }
 
+        private fun deserializeUserIdTokenData(json: String): UserIdTokenData {
+            return Gson().fromJson(json, TypeToken.get(UserIdTokenData::class.java).type)
+        }
+
     }
+
+    private fun serializeUserIdTokenData(userIdTokenData: UserIdTokenData): String{
+        return Gson().toJson(userIdTokenData)
+    }
+
 
 }

@@ -7,10 +7,9 @@ import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseDialogFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.utils.PrefsUtils
-import kotlinx.android.synthetic.main.exercises_bad_connection_dialog.*
-import kotlinx.android.synthetic.main.exercises_close_dialog_alert.*
+import kotlinx.android.synthetic.main.exercises_bad_connection_dialog_alert.*
 
-class ExercisesBadConnectionDialogAlertFragment : BaseDialogFragment(R.layout.exercises_bad_connection_dialog){
+class ExercisesBadConnectionDialogAlertFragment : BaseDialogFragment(R.layout.exercises_bad_connection_dialog_alert){
 
     var exercisesViewModel: ExercisesViewModel? = null
 

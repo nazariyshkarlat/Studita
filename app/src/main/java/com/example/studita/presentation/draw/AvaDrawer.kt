@@ -2,12 +2,11 @@ package com.example.studita.presentation.draw
 
 import android.graphics.*
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.studita.R
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.spToPx
-import com.example.studita.presentation.views.CustomTypefaceSpan
+import java.lang.Math.abs
 import kotlin.random.Random
 
 
@@ -40,8 +39,6 @@ object AvaDrawer{
         "#A1887F"
     )
 
-    var random = Random
-
     init {
         textPaint.setARGB(255, 255, 255, 255)
     }
@@ -56,8 +53,7 @@ object AvaDrawer{
         val cWidth = r.width()
 
         circlePaint.color = Color.parseColor(
-            colors[random.nextInt(
-                colors.size - 1)])
+            colors[kotlin.math.abs(name.hashCode() % colors.size)])
 
         textPaint.textAlign = Paint.Align.LEFT
         textPaint.textSize = textSize.toFloat()

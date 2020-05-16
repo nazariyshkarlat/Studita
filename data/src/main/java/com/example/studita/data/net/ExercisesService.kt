@@ -11,6 +11,6 @@ import retrofit2.http.Path
 interface ExercisesService {
 
     @GET("chapter_parts/{number}")
-    fun getExercisesAsync(@Path("number") chapterPartNumber: Int): Deferred<Response<JsonObject>>
+    suspend fun getExercises(@Path("number") chapterPartNumber: Int): Response<JsonObject>
 
 }

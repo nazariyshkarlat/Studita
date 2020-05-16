@@ -20,27 +20,16 @@ class CloudUserDataDataStore(private val connectionManager: ConnectionManager, p
         } else {
             try {
                 val userDataAsync =
-                    userDataService.getUserDataAsync(
+                    userDataService.getUserData(
                         DateTimeFormat().format(Date()),
                         userIdToken!!
                     )
-                val result = userDataAsync.await()
-                val entity = result.body()!!
+                val entity = userDataAsync.body()!!
                 userDataDao.insertUserData(entity)
-                return result.code() to entity
+                return userDataAsync.code() to entity
             } catch (e: Exception) {
                 throw ServerUnavailableException()
             }
-        }
-    }
-
-    suspend fun saveUserDataEntity(saveUserDataRequest: SaveUserDataRequest): Int {
-        if (connectionManager.isNetworkAbsent()) {
-            throw NetworkConnectionException()
-        }else {
-            val saveUserDataAsync = userDataService.saveUserDataAsync(saveUserDataRequest)
-            val result = saveUserDataAsync.await()
-            return result.code()
         }
     }
 

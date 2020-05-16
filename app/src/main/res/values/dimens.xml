@@ -25,6 +25,8 @@
     <dimen name="connectionSnackbarTextSize">12sp</dimen>
     <dimen name="errorSnackbarTextSize">14sp</dimen>
     <dimen name="centerDrawableButtonPadding">4dp</dimen>
+    <dimen name="profileMenuAvatarSize">44dp</dimen>
     <dimen name="exercisesResultProgressBarSize">162dp</dimen>
+    <dimen name="editProfileLayoutAvatarSize">56dp</dimen>
     <item name="bars_alpha" type="dimen" format="float">0.96</item>
 </resources>

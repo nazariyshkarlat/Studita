@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,15 +16,13 @@ import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
     lateinit var listener: Animator.AnimatorListener
 
-    private var toolbarFragmentViewModel: ToolbarFragmentViewModel? = null
+    var toolbarFragmentViewModel: ToolbarFragmentViewModel? = null
 
     var onNavigateFragment: OnNavigateFragment? = null
 
     open fun onBackClick() {
         (activity as AppCompatActivity).navigateBack(this)
-        (view?.parent as ViewGroup).alpha = 0F
-        (view?.parent as ViewGroup).animate().alpha(1F).setDuration(resources.getInteger(
-            R.integer.navigatable_fragment_anim_duration).toLong()).start()
+        animateAlpha(view?.parent as ViewGroup)
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -44,17 +43,22 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId){
                 onNavigateFragment?.onNavigate(this)
             })
         }
-        view.alpha = 0F
-        view.animate().alpha(1F).setDuration(resources.getInteger(
-            R.integer.navigatable_fragment_anim_duration).toLong()).start()
+        animateAlpha(view)
     }
 
     interface OnNavigateFragment {
         fun onNavigate(fragment: NavigatableFragment?)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        onNavigateFragment?.onNavigate(null)
+
+    private fun animateAlpha(view: View){
+       if((view.parent as ViewGroup).childCount > 0){
+            view.alpha = 0F
+            view.animate().alpha(1F).setDuration(
+                resources.getInteger(
+                    R.integer.navigatable_fragment_anim_duration
+                ).toLong()
+            ).start()
+        }
     }
 }

@@ -8,8 +8,8 @@ import retrofit2.http.POST
 
 interface SubscribeEmailService {
     @POST("subscribe_email")
-    fun subscribeEmailAsync(@Body userIdToken: UserIdToken): Deferred<Response<HashMap<String, String>>>
+    suspend fun subscribeEmail(@Body userIdToken: UserIdToken): Response<HashMap<String, String>>
 
     @POST("unsubscribe_email")
-    fun unsubscribeEmailAsync(@Body userIdToken: UserIdToken): Deferred<Response<HashMap<String, String>>>
+    suspend fun unsubscribeEmail(@Body userIdToken: UserIdToken): Response<HashMap<String, String>>
 }

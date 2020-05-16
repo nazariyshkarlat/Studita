@@ -18,7 +18,7 @@
 
         <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/exercisesEndLayoutTextButton"
-            style="@style/TextButton16"
+            style="@style/BlueTextButton16"
             android:text="@string/detailed_stat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

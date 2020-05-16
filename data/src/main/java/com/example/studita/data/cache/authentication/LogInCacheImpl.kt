@@ -14,4 +14,8 @@ class LogInCacheImpl(private val sharedPreferences: SharedPreferences) :
         sharedPreferences.edit().putString(USER_ID_PREFS, userId).putString(TOKEN_PREFS, token).apply()
     }
 
+    override fun clearUserAuthenticationInfo() {
+        sharedPreferences.edit().remove(USER_ID_PREFS).remove(TOKEN_PREFS).apply()
+    }
+
 }

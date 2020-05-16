@@ -14,6 +14,7 @@ import com.example.studita.domain.interactor.authorization.AuthorizationInteract
 import com.example.studita.domain.interactor.authorization.AuthorizationInteractorImpl
 import com.example.studita.domain.repository.AuthorizationRepository
 import com.example.studita.domain.repository.UserDataRepository
+import com.example.studita.service.SyncSignOutImpl
 
 object AuthorizationModule {
     private lateinit var config: DI.Config
@@ -42,14 +43,17 @@ object AuthorizationModule {
                 getAuthorizationDataStoreFactory(),
                 LogInResponseDataMapper(UserDataDataMapper()),
                 getAuthorizationRequestMapper(),
-                getSignInWithGoogleRequestMapper()
+                getSignInWithGoogleRequestMapper(),
+                UserIdTokenMapper()
             )
         return repository!!
     }
 
     private fun makeAuthorizationInteractor(authorizationRepository: AuthorizationRepository, userDataRepository: UserDataRepository) =
         AuthorizationInteractorImpl(
-            authorizationRepository
+            authorizationRepository,
+            userDataRepository,
+            SyncSignOutImpl()
         )
 
     private fun getCloudAuthorizationDataStore() =

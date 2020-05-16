@@ -10,7 +10,7 @@ import com.example.studita.R
 class PressRelativeLayout @JvmOverloads constructor(context: Context,
                                                   attrs: AttributeSet? = null,
                                                   defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr) {
+) : RelativeLayout(context, attrs, defStyleAttr), IPressView {
 
     private val pressViewImpl =
         PressView(this)
@@ -19,7 +19,7 @@ class PressRelativeLayout @JvmOverloads constructor(context: Context,
         pressViewImpl.setPressAlpha(R.attr.press_view_press_alpha_lighter)
     }
 
-    fun setOnClickListener(work: (View) ->Unit) {
+    override fun setOnClickListener(work: (View) ->Unit) {
         pressViewImpl.onClick = work
     }
 }

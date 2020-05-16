@@ -5,7 +5,7 @@ import com.example.studita.domain.interactor.ExercisesCacheStatus
 
 interface ExercisesInteractor {
 
-    suspend fun getExercises(chapterPartNumber: Int, offlineMode: Boolean) : ExercisesStatus
+    suspend fun getExercises(chapterPartNumber: Int, offlineMode: Boolean, retryCount: Int = 60) : ExercisesStatus
 
     suspend fun downloadOfflineExercises(): ExercisesCacheStatus
 

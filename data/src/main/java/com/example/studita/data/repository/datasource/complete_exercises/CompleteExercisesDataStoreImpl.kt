@@ -14,8 +14,8 @@ class CompleteExercisesDataStoreImpl(private val connectionManager: ConnectionMa
         }else {
             try {
                 val response =
-                    completeExercisesService.completeExercisesAsync(completeExercisesRequest)
-                return response.await().code()
+                    completeExercisesService.completeExercises(completeExercisesRequest)
+                return response.code()
             } catch (e: Exception) {
                 throw ServerUnavailableException()
             }

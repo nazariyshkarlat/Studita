@@ -10,6 +10,6 @@ import retrofit2.http.Path
 interface OfflineExercisesService {
 
     @GET("offline_exercises")
-    fun getOfflineExercisesAsync(): Deferred<Response<JsonArray>>
+    suspend fun getOfflineExercises(): Response<JsonArray>
 
 }

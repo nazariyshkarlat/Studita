@@ -10,16 +10,16 @@ import com.example.studita.R
 class PressLinearLayout @JvmOverloads constructor(context: Context,
                                                    attrs: AttributeSet? = null,
                                                    defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs, defStyleAttr), IPressView {
 
-    private val pressViewImpl =
+    val pressViewImpl =
         PressView(this)
 
     init {
         pressViewImpl.setPressAlpha(R.attr.press_view_press_alpha_lighter)
     }
 
-    fun setOnClickListener(work: (View) ->Unit) {
+    override fun setOnClickListener(work: (View) ->Unit) {
         pressViewImpl.onClick = work
     }
 }

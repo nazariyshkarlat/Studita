@@ -5,8 +5,8 @@ import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.presentation.model.HomeRecyclerUiModel
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.getAppCompatActivity
-import com.example.studita.utils.startActivity
 import com.example.studita.presentation.view_model.HomeFragmentViewModel
+import com.example.studita.utils.startActivity
 import kotlinx.android.synthetic.main.level_subscribe_item.view.*
 
 class SubscribeViewHolder(view: View, private val homeFragmentViewModel: HomeFragmentViewModel) : LevelsViewHolder<HomeRecyclerUiModel.LevelSubscribeUiModel>(view){
@@ -23,7 +23,7 @@ class SubscribeViewHolder(view: View, private val homeFragmentViewModel: HomeFra
             itemView.levelSubscribeItemButton.text =
                 model.button[if (UserUtils.userData.isSubscribed) 1 else 0]
             itemView.levelSubscribeItemButton.setOnClickListener {
-                UserUtils.getUserTokenIdData()?.let { userTokenIdData ->
+                UserUtils.getUserIDTokenData()?.let { userTokenIdData ->
                     homeFragmentViewModel.subscribeEmail(
                         userTokenIdData,
                         !UserUtils.userData.isSubscribed

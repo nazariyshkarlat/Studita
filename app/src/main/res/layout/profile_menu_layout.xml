@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:id="@+id/profileMenuLayoutScrollView"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:layout_marginTop="@dimen/toolbarHeight"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/main_blocks_rectangle"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
+
+            <ImageView
+                android:id="@+id/profileMenuLayoutAvatar"
+                android:layout_width="@dimen/profileMenuAvatarSize"
+                android:layout_height="@dimen/profileMenuAvatarSize"
+                android:background="@drawable/avatar_oval"
+                android:layout_margin="12dp" />
+
+            <TextView
+                android:id="@+id/profileMenuLayoutUserName"
+                style="@style/Medium16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/profileMenuLayoutAvatar"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/profileMenuLayoutEditProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center|end"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/circle_background_12dp"
+                android:padding="12dp"
+                app:srcCompat="@drawable/ic_create_accent" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/profileMenuLayoutSettingsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/mainMenuLayoutBottomText"
+            style="@style/Regular12_50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/main_menu_bottom_text"
+            android:padding="10dp"/>
+
+    </LinearLayout>
+</ScrollView>

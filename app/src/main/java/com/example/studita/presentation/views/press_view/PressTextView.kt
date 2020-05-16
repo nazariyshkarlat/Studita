@@ -9,7 +9,7 @@ import com.example.studita.R
 class PressTextView@JvmOverloads constructor(context: Context,
                                              attrs: AttributeSet? = null,
                                              defStyleAttr: Int = 0
-) : AppCompatTextView(context, attrs, defStyleAttr){
+) : AppCompatTextView(context, attrs, defStyleAttr), IPressView{
     private val pressViewImpl =
         PressView(this)
 
@@ -17,7 +17,7 @@ class PressTextView@JvmOverloads constructor(context: Context,
         pressViewImpl.setPressAlpha(R.attr.press_view_press_alpha)
     }
 
-    fun setOnClickListener(work: (View) -> Unit){
+    override fun setOnClickListener(work: (View) -> Unit){
         pressViewImpl.onClick = work
     }
 }

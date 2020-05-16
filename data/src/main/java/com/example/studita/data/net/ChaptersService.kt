@@ -10,6 +10,6 @@ import retrofit2.http.Path
 interface ChaptersService{
 
     @GET("chapters")
-    fun getChaptersAsync() : Deferred<Response<JsonArray>>
+    suspend fun getChapters() : Response<JsonArray>
 
 }

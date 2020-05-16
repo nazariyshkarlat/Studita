@@ -1,11 +1,13 @@
 package com.example.studita.presentation.view_model
 
 import android.view.MenuItem
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import com.example.studita.R
 import com.example.studita.presentation.fragments.AchievementsFragment
 import com.example.studita.presentation.fragments.CompetitionsFragment
 import com.example.studita.presentation.fragments.HomeFragment
+import com.example.studita.utils.UserUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.lang.UnsupportedOperationException
 

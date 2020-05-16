@@ -13,7 +13,6 @@ import com.example.studita.presentation.fragments.base.BaseBottomSheetDialogFrag
 import com.example.studita.presentation.model.ChapterUiModel
 import com.example.studita.utils.LevelUtils
 import com.example.studita.utils.UserUtils
-import com.example.studita.utils.getAppCompatActivity
 import com.example.studita.presentation.view_model.ChapterViewModel
 import com.example.studita.presentation.views.CustomSnackbar
 import kotlinx.android.synthetic.main.chapter_layout.*

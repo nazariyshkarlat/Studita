@@ -18,9 +18,8 @@ class CloudInterestingJsonDataStore(
             throw NetworkConnectionException()
         }else {
             try {
-                val chapterAsync = interestingService.getInterestingAsync(interestingNumber)
-                val result = chapterAsync.await()
-                return result.code() to result.body()!!.toString()
+                val interesting = interestingService.getInteresting(interestingNumber)
+                return interesting.code() to interesting.body()!!.toString()
             } catch (e: Exception) {
                 throw ServerUnavailableException()
             }
@@ -33,9 +32,8 @@ class CloudInterestingJsonDataStore(
             if (connectionManager.isNetworkAbsent()) {
                 throw NetworkConnectionException()
             } else {
-                val interestingListAsync = interestingListService.getInterestingListAsync()
-                val result = interestingListAsync.await()
-                return result.body()!!.toString()
+                val interestingList = interestingListService.getInterestingList()
+                return interestingList.body()!!.toString()
             }
         }catch (e: Exception){
             throw ServerUnavailableException()

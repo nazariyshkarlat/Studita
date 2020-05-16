@@ -126,3 +126,10 @@ sealed class CompleteExercisesStatus{
     object Failure : CompleteExercisesStatus()
     object Success: CompleteExercisesStatus()
 }
+
+sealed class EditProfileStatus{
+    object ServiceUnavailable : EditProfileStatus()
+    object NoConnection : EditProfileStatus()
+    object Failure: EditProfileStatus()
+    object Success: EditProfileStatus()
+}

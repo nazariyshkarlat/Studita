@@ -1,15 +1,18 @@
 package com.example.studita.domain.interactor.authorization
 
+import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
 import com.example.studita.domain.entity.authorization.SignInWithGoogleRequestData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.interactor.LogInStatus
 import com.example.studita.domain.interactor.SignInWithGoogleStatus
 import com.example.studita.domain.interactor.SignUpStatus
+import com.example.studita.domain.interactor.user_data.UserDataInteractor
 import com.example.studita.domain.repository.AuthorizationRepository
 import com.example.studita.domain.repository.UserDataRepository
+import com.example.studita.domain.service.SyncSignOut
 
-class AuthorizationInteractorImpl(private val authorizationRepository: AuthorizationRepository) :
+class AuthorizationInteractorImpl(private val authorizationRepository: AuthorizationRepository, private val userDataRepository: UserDataRepository, private val syncSignOut: SyncSignOut) :
     AuthorizationInteractor {
     override suspend fun signUp(authorizationRequestData: AuthorizationRequestData): SignUpStatus =
         try {
@@ -33,6 +36,7 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
                 400 -> LogInStatus.Failure
                 404 -> LogInStatus.NoUserFound
                 else -> logInResult.second?.let {
+                    userDataRepository.saveUserData(it.userDataData)
                     LogInStatus.Success(
                         it
                     )
@@ -52,6 +56,7 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
             when (signInWithGoogleResult.first) {
                 400 -> SignInWithGoogleStatus.Failure
                 else -> signInWithGoogleResult.second?.let {
+                    userDataRepository.saveUserData(it.userDataData)
                     SignInWithGoogleStatus.Success(
                         it
                     )
@@ -64,5 +69,18 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
             else
                 SignInWithGoogleStatus.ServiceUnavailable
         }
+
+    override suspend fun signOut(userIdTokenData: UserIdTokenData) {
+        try {
+            userDataRepository.deleteUserData()
+            authorizationRepository.signOut(userIdTokenData)
+        }catch (e: Exception) {
+            e.printStackTrace()
+            if (e is NetworkConnectionException)
+                syncSignOut.scheduleSignOut()
+            else
+                SignInWithGoogleStatus.ServiceUnavailable
+        }
+    }
 
 }

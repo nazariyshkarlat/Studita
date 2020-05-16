@@ -27,6 +27,7 @@ object DI{
         InterestingModule.initialize(configuration)
         SubscribeEmailModule.initialize(configuration)
         CompleteExercisesModule.initialize(configuration)
+        EditProfileModule.initialize(configuration)
     }
 
 }

@@ -26,7 +26,6 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
         toolbarFragmentViewModel?.let {
 
             it.toolbarFragmentOnNavigateState.value = this
-            println("onCreateToolbar")
 
             it.toolbarTextState.observe(
                 viewLifecycleOwner,
@@ -39,6 +38,14 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
                 androidx.lifecycle.Observer { show ->
                     toolbarLayout.background =  if(show) resources.getDrawable(R.drawable.divider_bottom_drawable, toolbarLayoutTitle.context.theme) else null
                 })
+
+            it.toolbarRightButtonState.observe(viewLifecycleOwner, Observer {onClick->
+                if(onClick != null){
+                    toolbarLayoutRightButton.setOnClickListener { onClick.invoke() }
+                    toolbarLayoutRightButton.visibility = View.VISIBLE
+                }else
+                    toolbarLayoutRightButton.visibility = View.GONE
+            })
         }
 
         (view as ViewGroup).toolbarLayoutBackButton.setOnClickListener { activity?.onBackPressed() }
@@ -50,11 +57,15 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
     }
 
     override fun onNavigate(fragment: NavigatableFragment?) {
+        toolbarFragmentViewModel?.toolbarDividerState?.value = false
+        toolbarFragmentViewModel?.hideRightButton()
         toolbarFragmentViewModel?.let {
-            if (fragment is AuthorizationFragment)
-                it.setToolbarText(resources.getString(R.string.authorization))
-            else
-                it.setToolbarText(null)
+            when (fragment) {
+                is AuthorizationFragment -> it.setToolbarText(resources.getString(R.string.authorization))
+                is ProfileMenuFragment -> it.setToolbarText(resources.getString(R.string.account))
+                is EditProfileFragment -> it.setToolbarText(resources.getString(R.string.edit_profile))
+                else -> it.setToolbarText(null)
+            }
         }
     }
 
