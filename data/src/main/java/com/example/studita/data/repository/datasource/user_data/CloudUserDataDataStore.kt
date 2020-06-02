@@ -14,7 +14,7 @@ import java.util.*
 
 class CloudUserDataDataStore(private val connectionManager: ConnectionManager, private val userDataService: UserDataService, private val userDataDao: UserDataDao) : UserDataDataStore{
 
-    override suspend fun getUserDataEntity(userIdToken: UserIdToken?): Pair<Int, UserDataEntity>{
+    override suspend fun getUserDataEntity(userId: Int?): Pair<Int, UserDataEntity>{
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         } else {
@@ -22,7 +22,7 @@ class CloudUserDataDataStore(private val connectionManager: ConnectionManager, p
                 val userDataAsync =
                     userDataService.getUserData(
                         DateTimeFormat().format(Date()),
-                        userIdToken!!
+                        userId!!
                     )
                 val entity = userDataAsync.body()!!
                 userDataDao.insertUserData(entity)

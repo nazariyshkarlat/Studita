@@ -12,8 +12,8 @@ class UserStatisticsDataStoreImpl(private val useStatisticsJsonDataStore: UserSt
 
     private val type: Type = object : TypeToken<List<UserStatisticsEntity>>() {}.type
 
-    override suspend fun getUserStatisticsEntity(userIdToken: UserIdToken): Pair<Int, List<UserStatisticsEntity>>{
-        val pair = useStatisticsJsonDataStore.getUserStatisticsJson(userIdToken)
+    override suspend fun getUserStatisticsEntity(userId: Int): Pair<Int, List<UserStatisticsEntity>>{
+        val pair = useStatisticsJsonDataStore.getUserStatisticsJson(userId)
         return pair.first to Gson().fromJson<List<UserStatisticsEntity>>(pair.second, type)
     }
 

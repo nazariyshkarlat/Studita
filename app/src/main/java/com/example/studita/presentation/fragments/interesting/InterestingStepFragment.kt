@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.InterestingUiModelScreen
 import com.example.studita.presentation.view_model.InterestingViewModel
-import kotlinx.android.synthetic.main.interesting_start_screen_layout.*
+import kotlinx.android.synthetic.main.interesting_step_layout.*
 
-class InterestingStepFragment : NavigatableFragment(R.layout.interesting_start_screen_layout){
+class InterestingStepFragment : NavigatableFragment(R.layout.interesting_step_layout){
 
     var interestingViewModel: InterestingViewModel? = null
 
@@ -20,19 +19,17 @@ class InterestingStepFragment : NavigatableFragment(R.layout.interesting_start_s
             ViewModelProviders.of(this).get(InterestingViewModel::class.java)
         }
         interestingViewModel?.let {
-            val startScreenModel = it.currentScreen as InterestingUiModelScreen.InterestingUiModelStepScreen
+            val stepScreenModel = it.currentScreen as InterestingUiModelScreen.InterestingUiModelStepScreen
 
-            if(startScreenModel.title != null)
-                interestingStartScreenLayoutTitle.text = startScreenModel.title
+            if(stepScreenModel.title != null)
+                interestingStepLayoutTitle.text = stepScreenModel.title
             else
-                interestingStartScreenLayoutTitle.visibility = View.GONE
+                interestingStepLayoutTitle.visibility = View.GONE
 
-            if(startScreenModel.subtitle != null)
-                interestingStartScreenLayoutSubtitle.text = startScreenModel.subtitle
+            if(stepScreenModel.subtitle != null)
+                interestingStepLayoutSubtitle.text = stepScreenModel.subtitle
             else
-                interestingStartScreenLayoutSubtitle.visibility = View.GONE
-
-            interestingStartScreenDifficultyLayout.visibility = View.GONE
+                interestingStepLayoutSubtitle.visibility = View.GONE
         }
     }
 

@@ -29,6 +29,7 @@ open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewI
             }
         }
 
+        checkScrollY()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -61,10 +62,12 @@ open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewI
 
     private fun checkScrollY(){
         view?.let {
-            if(it is ScrollView) {
-                val scrollY: Int = it.scrollY
-                exercisesViewModel?.showToolbarDivider(scrollY != 0)
-                exercisesViewModel?.showButtonDivider(scrollY != maxScrollY)
+            it.post {
+                if (it is ScrollView) {
+                    val scrollY: Int = it.scrollY
+                    exercisesViewModel?.showToolbarDivider(scrollY != 0)
+                    exercisesViewModel?.showButtonDivider(scrollY != maxScrollY)
+                }
             }
         }
     }

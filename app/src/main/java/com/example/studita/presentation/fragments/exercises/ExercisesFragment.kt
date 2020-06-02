@@ -103,6 +103,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                         }
                     }
                     ExercisesViewModel.ExercisesState.DESCRIPTION -> {
+                        if(savedInstanceState == null)
+                            (activity as AppCompatActivity).navigateTo(viewModel.getDescriptionFragment(), R.id.exerciseLayoutFrameLayout)
                         formDescriptionView()
                     }
                     else -> {
@@ -324,14 +326,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
 
     private fun formDescriptionView(){
         exerciseToolbarProgressBar.alpha = 0F
-        val descriptionFragment = when(exercisesViewModel?.chapterPartNumber){
-            1 -> ExercisesDescription1Fragment()
-            2 -> ExercisesDescription2Fragment()
-            4,5 -> ExercisesDescriptionPureFragment()
-            7 -> ExercisesDescription7Fragment()
-            else -> throw IOException("Unknown chapter part number")
-        }
-        (activity as AppCompatActivity).navigateTo(descriptionFragment, R.id.exerciseLayoutFrameLayout)
         exerciseLayoutButton.text = resources.getString(R.string.continue_string)
         exerciseLayoutButton.setOnClickListener{
             exercisesViewModel?.setExercisesProgress(ExercisesViewModel.ExercisesState.EXERCISES)

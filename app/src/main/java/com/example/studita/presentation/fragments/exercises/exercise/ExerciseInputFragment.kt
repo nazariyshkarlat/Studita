@@ -35,13 +35,6 @@ class ExerciseInputFragment : NavigatableFragment(R.layout.exercise_input_layout
                 })
         }
 
-        /*
-        val exerciseUiModel = arguments?.getParcelable<ExerciseUiModel>("EXERCISE")
-        if (exerciseUiModel is ExerciseUiModel.ExerciseUi3) {
-            exerciseInputFragmentTextView.text = resources.getString(R.string.exercise_type_2_3_title, exerciseUiModel.equation)
-            exerciseInputEditText.hint = resources.getString(R.string.exercise_type_3_hint)
-        }
-         */
         exerciseInputLayoutEditText.addTextChangedListener(this)
     }
 

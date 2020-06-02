@@ -1,5 +1,7 @@
 package com.example.studita.di.data
 
+import android.content.Context
+import com.example.studita.data.entity.mapper.BitmapToFileMapper
 import com.example.studita.data.entity.mapper.EditProfileRequestMapper
 import com.example.studita.data.entity.mapper.EditProfileEntityMapper
 import com.example.studita.data.entity.mapper.UserIdTokenMapper
@@ -20,9 +22,11 @@ object EditProfileModule {
 
     private var repository: EditProfileRepository? = null
     private var editProfileInteractor: EditProfileInteractor? = null
+    lateinit var applicationContext: Context
 
-    fun initialize(configuration: DI.Config = DI.Config.RELEASE) {
+    fun initialize(configuration: DI.Config = DI.Config.RELEASE, context: Context) {
         config = configuration
+        applicationContext = context
     }
 
     fun getEditProfileInteractorImpl(): EditProfileInteractor {
@@ -39,7 +43,8 @@ object EditProfileModule {
         if (repository == null)
             repository = EditProfileRepositoryImpl(
                     getEditProfileDataStoreFactory(),
-                    getEditProfileRequestMapper()
+                    getEditProfileRequestMapper(),
+                    BitmapToFileMapper(applicationContext)
             )
         return repository!!
     }

@@ -9,6 +9,7 @@ interface UserDataDataStore {
 
     companion object {
         val defaultUserData = UserDataEntity(
+                null,
             null,
             null,
             null,
@@ -23,6 +24,6 @@ interface UserDataDataStore {
         )
     }
 
-    suspend fun getUserDataEntity(userIdToken: UserIdToken?): Pair<Int, UserDataEntity>
+    suspend fun getUserDataEntity(userId: Int?): Pair<Int, UserDataEntity>
 
 }

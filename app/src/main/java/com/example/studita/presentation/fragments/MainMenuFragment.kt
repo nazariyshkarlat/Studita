@@ -4,14 +4,12 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.utils.navigateTo
-import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuLanguageDialogAlertFragment
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
 import com.example.studita.utils.PrefsUtils
@@ -22,11 +20,10 @@ import kotlinx.android.synthetic.main.main_menu_layout.*
 import kotlinx.android.synthetic.main.settings_offline_mode_item.*
 
 
-class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserver.OnScrollChangedListener {
+class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
 
     private val RC_SIGN_IN: Int = 0
     private var mainMenuFragmentViewModel: MainMenuFragmentViewModel? = null
-    private var toolbarFragmentViewModel: ToolbarFragmentViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,7 +63,6 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
             mainMenuUseEmailButton.setOnClickListener { viewModel.onSignUpLogInClick(it.id) }
         }
 
-        mainMenuScrollView.viewTreeObserver.addOnScrollChangedListener(this)
 
         mainMenuLayoutOfflineSwitch.isChecked = PrefsUtils.isOfflineMode()
 
@@ -84,8 +80,7 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
                 .show((activity as AppCompatActivity).supportFragmentManager, null)
         }
 
-        if (!isHidden)
-            checkScrollable()
+        scrollingView = mainMenuScrollView
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -95,39 +90,6 @@ class MainMenuFragment : BaseFragment(R.layout.main_menu_layout), ViewTreeObserv
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             context?.let { mainMenuFragmentViewModel?.handleSignInResult(task, it) }
         }
-    }
-
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if (!hidden) {
-            checkScrollable()
-            checkScrollY()
-        } else {
-            toolbarFragmentViewModel?.showToolbarDivider(false)
-        }
-    }
-
-    private fun checkScrollable() {
-        mainMenuTitle.visibility = View.VISIBLE
-        OneShotPreDrawListener.add(mainMenuScrollView) {
-            if (mainMenuScrollView.height < mainMenuScrollView.getChildAt(0).height
-                + mainMenuScrollView.paddingTop + mainMenuScrollView.paddingBottom
-            ) {
-                mainMenuTitle.visibility = View.GONE
-                toolbarFragmentViewModel?.setToolbarText(mainMenuTitle.text.toString())
-            } else {
-                toolbarFragmentViewModel?.setToolbarText(null)
-            }
-        }
-    }
-
-    override fun onScrollChanged() {
-        checkScrollY()
-    }
-
-    private fun checkScrollY() {
-        val scrollY: Int = mainMenuScrollView.scrollY
-        toolbarFragmentViewModel?.showToolbarDivider(scrollY != 0)
     }
 
 }

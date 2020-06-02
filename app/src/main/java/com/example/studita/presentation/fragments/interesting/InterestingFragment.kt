@@ -7,11 +7,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseFragment
-import com.example.studita.utils.addFragment
-import com.example.studita.utils.animateProgress
-import com.example.studita.utils.navigateTo
-import com.example.studita.utils.replace
 import com.example.studita.presentation.view_model.InterestingViewModel
+import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.android.synthetic.main.exercise_toolbar.*
 import java.io.IOException
@@ -31,6 +28,7 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout){
             viewModel.navigationState.observe(viewLifecycleOwner, Observer { pair ->
                 when (pair.first) {
                     InterestingViewModel.InterestingNavigationState.NAVIGATE -> {
+                        (activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.exerciseLayoutFrameLayout)?.let { (activity as AppCompatActivity).removeFragment(it) }
                         (activity as AppCompatActivity).navigateTo(
                             pair.second,
                             R.id.exerciseLayoutFrameLayout
@@ -92,7 +90,11 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout){
             })
 
             exerciseLayoutButton.setOnClickListener {
-                viewModel.initFragment()
+                val isLastFragment = viewModel.progressBarState.value?.second == true
+                if(!isLastFragment)
+                    viewModel.initFragment()
+                else
+                    activity?.finish()
             }
 
             exerciseToolbarCloseButton.setOnClickListener {

@@ -1,5 +1,4 @@
 package com.example.studita.di
-
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
@@ -18,7 +17,7 @@ import java.util.concurrent.TimeUnit
 
 object NetworkModule {
 
-    private const val BASE_URL = "http://10.0.2.2:5002"
+    private const val BASE_URL = "http://10.0.2.2:5000"
 
     lateinit var connectionManager: ConnectionManager
     private lateinit var retrofit: Retrofit
@@ -56,7 +55,7 @@ object NetworkModule {
         OkHttpClient().newBuilder()
             .addInterceptor(interceptor)
             .readTimeout(1, TimeUnit.MINUTES)
-            .connectTimeout(1, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
             .build()
 
 

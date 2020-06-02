@@ -11,11 +11,11 @@ import com.example.studita.domain.repository.UserDataRepository
 
 class UserDataRepositoryImpl(private val userDataDataStoreFactory: UserDataJsonDataStoreFactoryImpl, private val userDataDataMapper: UserDataDataMapper, private val connectionManager: ConnectionManager, private val userDataEntityMapper: UserDataEntityMapper) : UserDataRepository{
 
-    override suspend fun getUserData(userIdTokenData: UserIdTokenData?, offlineMode: Boolean) : Pair<Int, UserDataData> {
+    override suspend fun getUserData(userId: Int?, offlineMode: Boolean) : Pair<Int, UserDataData> {
         val pair =  userDataDataStoreFactory.create(
-            if(offlineMode || (userIdTokenData == null) || connectionManager.isNetworkAbsent())
+            if(offlineMode || (userId == null) || connectionManager.isNetworkAbsent())
                 UserDataDataStoreFactory.Priority.CACHE else UserDataDataStoreFactory.Priority.CLOUD)
-            .getUserDataEntity(userIdTokenData?.let{UserIdTokenMapper().map(it)})
+            .getUserDataEntity(userId)
         return pair.first to userDataDataMapper.map(pair.second)
     }
 
@@ -24,7 +24,6 @@ class UserDataRepositoryImpl(private val userDataDataStoreFactory: UserDataJsonD
     }
 
     override suspend fun deleteUserData() {
-        System.out.println("DELETE")
         (userDataDataStoreFactory.create(UserDataDataStoreFactory.Priority.CACHE) as DiskUserDataDataStore).deleteUserData()
     }
 

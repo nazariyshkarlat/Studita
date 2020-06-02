@@ -9,7 +9,7 @@ import com.example.studita.domain.exception.ServerUnavailableException
 import java.lang.Exception
 
 class SubscribeEmailDataStoreImpl(private val connectionManager: ConnectionManager, private val subscribeEmailService: SubscribeEmailService): SubscribeEmailDataStore{
-    override suspend fun trySubscribe(userIdToken: UserIdToken): Pair<Int, SubscribeEmailResultEntity> =
+    override suspend fun trySubscribe(userIdToken: UserIdToken): Pair<Int, SubscribeEmailResultEntity?> =
         if(connectionManager.isNetworkAbsent()){
             throw NetworkConnectionException()
         }else{
@@ -22,14 +22,13 @@ class SubscribeEmailDataStoreImpl(private val connectionManager: ConnectionManag
             }
         }
 
-    override suspend fun tryUnsubscribe(userIdToken: UserIdToken): Pair<Int, SubscribeEmailResultEntity> =
+    override suspend fun tryUnsubscribe(userIdToken: UserIdToken): Pair<Int, SubscribeEmailResultEntity?> =
         if(connectionManager.isNetworkAbsent()){
             throw NetworkConnectionException()
         }else{
             try {
                 val result = subscribeEmailService.unsubscribeEmail(userIdToken)
-                val body = result.body()!!
-                result.code() to SubscribeEmailResultEntity(false, body["user_email"])
+                result.code() to result.body()?.let{SubscribeEmailResultEntity(false, it["user_email"])}
             } catch (e: Exception) {
                 throw ServerUnavailableException()
             }

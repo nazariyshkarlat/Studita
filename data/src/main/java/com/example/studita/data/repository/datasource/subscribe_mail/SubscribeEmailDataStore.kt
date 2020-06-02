@@ -5,8 +5,8 @@ import com.example.studita.data.entity.UserIdToken
 
 interface SubscribeEmailDataStore{
 
-    suspend fun trySubscribe(userIdToken: UserIdToken) : Pair<Int, SubscribeEmailResultEntity>
+    suspend fun trySubscribe(userIdToken: UserIdToken) : Pair<Int, SubscribeEmailResultEntity?>
 
-    suspend fun tryUnsubscribe(userIdToken: UserIdToken): Pair<Int, SubscribeEmailResultEntity>
+    suspend fun tryUnsubscribe(userIdToken: UserIdToken): Pair<Int, SubscribeEmailResultEntity?>
 
 }

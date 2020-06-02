@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusableInTouchMode="true"
+    android:focusable="true">
+
+    <ProgressBar
+        android:id="@+id/profileLayoutProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+    <ScrollView
+        android:id="@+id/profileLayoutScrollView"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:clipToPadding="false"
+        android:visibility="gone"
+        android:paddingTop="@dimen/toolbarHeight"
+        android:paddingBottom="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="@dimen/defaultRLMargin"
+                android:layout_marginEnd="12dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true">
+                    <TextView
+                        android:id="@+id/profileLayoutUserName"
+                        style="@style/Medium20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/profileLayoutUserFullName"
+                        style="@style/Regular16Secondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"/>
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true">
+                    <ImageView
+                        android:id="@+id/profileLayoutAvatar"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/avatar_oval"/>
+                    <com.example.studita.presentation.views.SquareMinSizeTextView
+                        android:id="@+id/profileLayoutLevelOval"
+                        style="@style/UserCurrentLevelSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|end"/>
+                </FrameLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="@dimen/defaultRLMargin"
+                android:layout_marginEnd="@dimen/defaultRLMargin"
+                android:layout_marginTop="20dp">
+                <com.example.studita.presentation.views.press_view.PressTextView
+                    android:id="@+id/profileLayoutButton"
+                    style="@style/Button"
+                    android:text="@string/edit_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/buttonHeight"/>
+                <com.example.studita.presentation.views.press_view.PressTextView
+                    android:id="@+id/profileLayoutTextButton"
+                    style="@style/BlueTextButton16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/remove_from_friends"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
+
+            <com.example.studita.presentation.views.ProfileHorizontalScrollView
+                android:id="@+id/profileHorizontalScrollView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false"
+                android:paddingStart="@dimen/defaultRLMargin"
+                android:paddingEnd="@dimen/defaultRLMargin"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:padding="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/main_blocks_rectangle">
+
+                <ImageView
+                    android:id="@+id/profileLayoutStreakIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_whatshot"/>
+
+                <TextView
+                    android:id="@+id/profileLayoutStreakText"
+                    style="@style/Regular16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_gravity="center_vertical"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/profileLayoutFriendsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:background="@drawable/main_blocks_rectangle"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/profileLayoutFriendsTitle"
+                    style="@style/Medium20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <com.example.studita.presentation.views.press_view.PressTextView
+                    android:id="@+id/profileLayoutFriendsMoreButton"
+                    style="@style/BlueTextButton16"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginBottom="-8dp"
+                    android:text="@string/show_all"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

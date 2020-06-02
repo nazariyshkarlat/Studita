@@ -20,13 +20,9 @@ class UserStatisticsViewModel : ViewModel(){
 
     private val interactor = UserStatisticsModule.getUserStatisticsInteractorImpl()
 
-    init {
-        UserUtils.getUserIDTokenData()?.let { getUserStatistics(it) }
-    }
-
-    private fun getUserStatistics(userIdTokenData: UserIdTokenData){
+    fun getUserStatistics(userId: Int){
         job = viewModelScope.launchExt(job){
-            when(val status = interactor.getUserStatistics(userIdTokenData)){
+            when(val status = interactor.getUserStatistics(userId)){
                 is UserStatisticsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is UserStatisticsStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is UserStatisticsStatus.Failure -> errorState.postValue(R.string.server_failure)

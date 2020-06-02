@@ -4,6 +4,8 @@
         <item name="colorAccent14">@color/blue14</item>
         <item name="colorAccent26">@color/blue26</item>
         <item name="colorAccent">@color/blue</item>
+        <item name="colorPrimary">@color/gray11</item>
+        <item name="popupMenuStyle">@style/PopupMenu</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:navigationBarColor">@color/gray11</item>
         <item name="android:statusBarColor">@color/gray11</item>

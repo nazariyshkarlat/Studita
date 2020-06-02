@@ -13,7 +13,7 @@ import java.util.*
 
 class CloudUserStatisticsJsonDataStore(private val connectionManager: ConnectionManager, private val userStatisticsService: UserStatisticsService, private val userStatisticsCache: UserStatisticsCache)
     : UserStatisticsJsonDataStore {
-    override suspend fun getUserStatisticsJson(userIdToken: UserIdToken) =
+    override suspend fun getUserStatisticsJson(userId: Int) =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         } else {
@@ -21,7 +21,7 @@ class CloudUserStatisticsJsonDataStore(private val connectionManager: Connection
                 val userStatisticsJson: String
                 val userStatistics = userStatisticsService.getUserStatistics(
                     DateTimeFormat().format(Date()),
-                    userIdToken
+                    userId
                 )
                 userStatisticsJson = userStatistics.body()!!.toString()
                 if (userStatisticsJson.isNotEmpty())

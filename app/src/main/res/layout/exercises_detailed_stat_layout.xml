@@ -29,7 +29,7 @@
 
             <TextView
                 android:id="@+id/exercisesDetailedStatLayoutXPTitle"
-                style="@style/Regular16_50"
+                style="@style/Regular16Secondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/detailed_stat_title1"/>
@@ -43,7 +43,7 @@
 
             <TextView
                 android:id="@+id/exercisesDetailedStatLayoutTimeTitle"
-                style="@style/Regular16_50"
+                style="@style/Regular16Secondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/detailed_stat_title2"

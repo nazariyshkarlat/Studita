@@ -1,8 +1,11 @@
 package com.example.studita.utils
 
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.example.studita.R
+import kotlinx.android.synthetic.main.frame_layout.view.*
 
 fun AppCompatActivity.addFragment(fragment: Fragment, container: Int) {
     supportFragmentManager.beginTransaction()
@@ -39,13 +42,12 @@ fun AppCompatActivity.navigateTo(fragment: Fragment, container: Int) {
     fragmentTransaction.commit()
 }
 
-fun AppCompatActivity.navigateBack(fragment: Fragment){
+fun AppCompatActivity.navigateBack(fragment: Fragment): Fragment? {
     val fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
     fragmentTransaction.remove(fragment)
     supportFragmentManager.popBackStack()
-    val lastFragment = fragment.view?.id?.let { supportFragmentManager.findFragmentById(it) }
-    lastFragment?.let { it1 -> fragmentTransaction.show(it1) }
-    fragmentTransaction.commit()
+    fragmentTransaction.commitNow()
+    return supportFragmentManager.findFragmentById(R.id.doubleFrameLayoutFrameLayout)
 }
 
 fun AppCompatActivity.replace(fragment: Fragment, container: Int, startAnim: Int = 0, endAnim: Int = 0) {

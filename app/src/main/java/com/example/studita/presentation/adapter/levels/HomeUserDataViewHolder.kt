@@ -18,7 +18,7 @@ class HomeUserDataViewHolder(view: View) : LevelsViewHolder<HomeRecyclerUiModel.
 
         with(itemView) {
             homeLayoutUserDataXPLayoutMoreButton.setOnClickListener {
-                getAppCompatActivity()?.startActivity<UserStatActivity>()
+                getAppCompatActivity()?.startActivity<UserStatActivity>("USER_ID" to UserUtils.userData.userId)
             }
             homeLayoutUserDataLevelLayoutCurrentLevel.text = UserUtils.userData.currentLevel.toString()
             homeLayoutUserDataLevelLayoutNextLevel.text =

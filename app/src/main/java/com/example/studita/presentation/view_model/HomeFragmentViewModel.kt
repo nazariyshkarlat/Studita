@@ -21,6 +21,7 @@ import com.example.studita.utils.TimeUtils
 import com.example.studita.utils.launchExt
 import com.example.studita.utils.UserUtils
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
@@ -45,22 +46,27 @@ class HomeFragmentViewModel : ViewModel(){
     init{
         initSubscribeEmailState()
         userIdTokenData = UserUtils.getUserIDTokenData()
-        getHomeScreenData(userIdTokenData)
+        getHomeScreenData()
     }
 
-    private fun getHomeScreenData(userIdTokenData: UserIdTokenData?){
+    private fun getHomeScreenData(){
         levelsJob = viewModelScope.launchExt(levelsJob){
-            val status = getUserData(userIdTokenData)
-            when(status){
+            val statusDef = async{getUserData()}
+            val userLevels = async { getUserLevels()}
+            when(val status = statusDef.await()){
                 is UserDataStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is UserDataStatus.ServiceUnavailable ->errorState.postValue(R.string.server_unavailable)
                 is UserDataStatus.Failure -> errorState.postValue(R.string.server_failure)
                 else ->{
                     status as UserDataStatus.Success
                     initUserData(status.result)
-                    Log.d("USER_DATA", status.toString())
                     UserUtils.userDataLiveData.postValue(status.result)
-                    getUserLevels()
+
+                    val userLevelsStatus = userLevels.await()
+                    if(userLevelsStatus is LevelsStatus.Success) {
+                        results = LevelUiModelMapper().map(userLevelsStatus.result)
+                        progressState.postValue(true)
+                    }
                 }
             }
         }
@@ -84,19 +90,9 @@ class HomeFragmentViewModel : ViewModel(){
     }
 
 
-    private suspend fun getUserData(userIdTokenData: UserIdTokenData?) = userDataInteractor.getUserData(userIdTokenData, PrefsUtils.isOfflineMode())
+    private suspend fun getUserData() = userDataInteractor.getUserData(PrefsUtils.getUserId(), PrefsUtils.isOfflineMode())
 
-    private suspend fun getUserLevels(){
-        when(val status = levelsInteractor.getLevels(UserUtils.isLoggedIn(), PrefsUtils.isOfflineMode())){
-            is LevelsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
-            is LevelsStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
-            is LevelsStatus.Success -> {
-                progressState.postValue(true)
-                results = LevelUiModelMapper()
-                    .map(status.result)
-            }
-        }
-    }
+    private suspend fun getUserLevels() = levelsInteractor.getLevels(UserUtils.isLoggedIn(), PrefsUtils.isOfflineMode())
 
     fun getRecyclerItems(userDataUiModel: HomeRecyclerUiModel.HomeUserDataUiModel, levels: List<HomeRecyclerUiModel>): List<HomeRecyclerUiModel>{
         val adapterItems = ArrayList<HomeRecyclerUiModel>()

@@ -10,7 +10,7 @@ import com.example.studita.domain.enum.timeToString
 
 class DiskUserStatisticsJsonDataStore(private val userStatisticsCache: UserStatisticsCache, private val userStatisticsDao: UserStatisticsDao) : UserStatisticsJsonDataStore {
     override suspend fun getUserStatisticsJson(
-        userIdToken: UserIdToken
+        userId: Int
     ): Pair<Int, String?> = 200 to userStatisticsCache.getUserStatisticsJson()
 
     suspend fun saveUserStatisticsRecord(userStatisticsRowEntity: UserStatisticsRowEntity){

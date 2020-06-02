@@ -66,4 +66,8 @@ dependencies {
     //kotlin coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutine_version"
+
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }

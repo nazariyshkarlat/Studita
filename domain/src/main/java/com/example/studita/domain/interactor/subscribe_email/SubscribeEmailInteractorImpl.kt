@@ -12,7 +12,7 @@ class SubscribeEmailInteractorImpl(private val repository: SubscribeEmailReposit
         try {
             val result = repository.subscribe(userIdTokenData)
             when (result.first) {
-                200 -> SubscribeEmailResultStatus.Success(result.second)
+                200 -> SubscribeEmailResultStatus.Success(result.second!!)
                 else -> SubscribeEmailResultStatus.Failure
             }
         } catch (e: Exception) {
@@ -28,7 +28,7 @@ class SubscribeEmailInteractorImpl(private val repository: SubscribeEmailReposit
         try {
             val result = repository.unsubscribe(userIdTokenData)
             when (result.first) {
-                200 -> SubscribeEmailResultStatus.Success(result.second)
+                200 -> SubscribeEmailResultStatus.Success(result.second!!)
                 else -> SubscribeEmailResultStatus.Failure
             }
         } catch (e: Exception) {

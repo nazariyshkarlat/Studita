@@ -69,9 +69,13 @@ class AuthorizationFragmentViewModel : ViewModel(){
             )){
                 is LogInStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is LogInStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
-                is LogInStatus.Failure -> authorizationState.value = AuthorizationResult.LogInFailure
-                is LogInStatus.NoUserFound -> authorizationState.value = AuthorizationResult.NoUserFound
-                is LogInStatus.Success -> authorizationState.value = AuthorizationResult.LogInSuccess(result.result)
+                is LogInStatus.Failure -> authorizationState.postValue(AuthorizationResult.LogInFailure)
+                is LogInStatus.NoUserFound -> authorizationState.postValue(AuthorizationResult.NoUserFound)
+                is LogInStatus.Success ->{
+                    UserUtils.userData = result.result.userDataData
+                    UserUtils.userDataLiveData.postValue(result.result.userDataData)
+                    authorizationState.postValue(AuthorizationResult.LogInSuccess(result.result))
+                }
             }}
         }
     }

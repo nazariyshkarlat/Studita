@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbarLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -40,8 +41,16 @@
         android:layout_alignParentEnd="true"
         android:background="@drawable/circle_background_16dp"
         android:padding="@dimen/defaultRLMargin"
-        android:visibility="gone"
-        app:srcCompat="@drawable/ic_done_accent" />
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/toolbarLayoutRightButtonProgress"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/defaultRLMargin"
+        android:visibility="gone" />
 
 </RelativeLayout>
 

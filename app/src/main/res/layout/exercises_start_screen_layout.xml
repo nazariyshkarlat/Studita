@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:layout_marginStart="@dimen/defaultRLMargin"
-    android:layout_marginEnd="@dimen/defaultRLMargin">
+    android:layout_marginEnd="@dimen/defaultRLMargin"
+    android:layout_marginBottom="@dimen/toolbarHeight">
 
     <TextView
         android:id="@+id/exercisesStartScreenLayoutTitle"

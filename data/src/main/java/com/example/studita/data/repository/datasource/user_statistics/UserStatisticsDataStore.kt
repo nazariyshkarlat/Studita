@@ -5,5 +5,5 @@ import com.example.studita.data.entity.UserStatisticsEntity
 import com.example.studita.domain.enum.UserStatisticsTime
 
 interface UserStatisticsDataStore {
-    suspend fun getUserStatisticsEntity(userIdToken: UserIdToken): Pair<Int, List<UserStatisticsEntity>>
+    suspend fun getUserStatisticsEntity(userId: Int): Pair<Int, List<UserStatisticsEntity>>
 }

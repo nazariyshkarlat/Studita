@@ -13,8 +13,8 @@ class UserStatisticsRepositoryImpl(private val userStatisticsJsonDataStoreFactor
                                    private val userStatisticsRowEntityMapper: UserStatisticsRowEntityMapper,
                                    private val userStatisticsRowDataMapper: UserStatisticsRowDataMapper) : UserStatisticsRepository{
 
-    override suspend fun getUserStatistics(userIdToken: UserIdTokenData): Pair<Int, List<UserStatisticsData>> {
-        val pair =  UserStatisticsDataStoreImpl(userStatisticsJsonDataStoreFactory.create(if(connectionManager.isNetworkAbsent()) UserStatisticsJsonDataStoreFactory.Priority.CACHE else UserStatisticsJsonDataStoreFactory.Priority.CLOUD)).getUserStatisticsEntity(userIdTokenMapper.map(userIdToken))
+    override suspend fun getUserStatistics(userId: Int): Pair<Int, List<UserStatisticsData>> {
+        val pair =  UserStatisticsDataStoreImpl(userStatisticsJsonDataStoreFactory.create(if(connectionManager.isNetworkAbsent()) UserStatisticsJsonDataStoreFactory.Priority.CACHE else UserStatisticsJsonDataStoreFactory.Priority.CLOUD)).getUserStatisticsEntity(userId)
         return pair.first to userStatisticsDataMapper.map(pair.second)
     }
 

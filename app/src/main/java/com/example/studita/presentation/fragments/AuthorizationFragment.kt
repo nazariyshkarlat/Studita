@@ -1,5 +1,6 @@
 package com.example.studita.presentation.fragments
 
+import android.inputmethodservice.Keyboard
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,6 +24,7 @@ import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.utils.setOnViewSizeChangeListener
 import com.example.studita.presentation.view_model.AuthorizationFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
+import com.example.studita.utils.hideKeyboard
 import kotlinx.android.synthetic.main.authorization_layout.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -141,7 +143,6 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
 
         val viewHeight = authorizationCenterLinearLayout.height + authorizationBottomSection.height + resources.getDimension(R.dimen.toolbarHeight)
 
-        println(getScreenHeight())
         if((viewHeight > getScreenHeight())){
             if(!buttonHidden) {
                 authorizationCenterLinearLayout.setPadding(0, resources.getDimension(R.dimen.toolbarHeight).toInt(), 0, 0)

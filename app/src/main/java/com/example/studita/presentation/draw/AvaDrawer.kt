@@ -1,24 +1,21 @@
 package com.example.studita.presentation.draw
 
+import android.R.attr.bitmap
 import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
 import com.example.studita.R
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.spToPx
-import java.lang.Math.abs
-import kotlin.random.Random
 
 
 object AvaDrawer{
-    private val imageSize = 36.dpToPx()
-    private val textSize = 20.spToPx()
+    private val imageSize = 56.dpToPx()
+    private val textSize = 28.spToPx()
     private val textPaint = Paint()
     private val circlePaint = Paint()
-    private val roundBitmap = Bitmap.createBitmap(
-        imageSize,
-        imageSize, Bitmap.Config.ARGB_8888)
-    private val canvas = Canvas(roundBitmap)
     private var colors = arrayListOf("#C2175B",
         "#0098A6",
         "#AA47BC",
@@ -43,7 +40,12 @@ object AvaDrawer{
         textPaint.setARGB(255, 255, 255, 255)
     }
 
-    fun drawAwa(image: ImageView, name: String) {
+    fun drawAvatar(image: ImageView, name: String, userId: Int) {
+
+        val roundBitmap = Bitmap.createBitmap(
+                imageSize,
+                imageSize, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(roundBitmap)
 
         val text = name.first().toString()
 
@@ -53,11 +55,13 @@ object AvaDrawer{
         val cWidth = r.width()
 
         circlePaint.color = Color.parseColor(
-            colors[kotlin.math.abs(name.hashCode() % colors.size)])
+            colors[kotlin.math.abs(userId.toString().hashCode() % colors.size)])
+        circlePaint.isAntiAlias = true
 
         textPaint.textAlign = Paint.Align.LEFT
         textPaint.textSize = textSize.toFloat()
         textPaint.typeface = ResourcesCompat.getFont(image.context, R.font.roboto_regular)
+        textPaint.isAntiAlias = true
 
         canvas.drawCircle(
             imageSize / 2F, imageSize / 2F, imageSize / 2F,
@@ -71,7 +75,11 @@ object AvaDrawer{
 
         canvas.drawText(text, x, y, textPaint)
 
-        image.setImageBitmap(roundBitmap)
+        val d = BitmapDrawable(image.resources, roundBitmap)
+        d.setAntiAlias(true)
+        d.isFilterBitmap = true
+
+        image.setImageDrawable(d)
     }
 
 }

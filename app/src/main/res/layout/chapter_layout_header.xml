@@ -26,7 +26,7 @@
 
     <TextView
         android:id="@+id/chapterHeaderProgressText"
-        style="@style/Regular14_50"
+        style="@style/Regular14Secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"

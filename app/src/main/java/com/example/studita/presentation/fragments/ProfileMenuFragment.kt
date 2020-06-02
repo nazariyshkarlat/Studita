@@ -2,7 +2,6 @@ package com.example.studita.presentation.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -17,19 +16,14 @@ import com.example.studita.presentation.fragments.dialog_alerts.MainMenuLanguage
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
 import com.example.studita.presentation.fragments.dialog_alerts.ProfileMenuSignOutDialogAlertFragment
 import com.example.studita.presentation.view_model.ProfileMenuFragmentViewModel
-import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.example.studita.presentation.views.press_view.IPressView
-import com.example.studita.presentation.views.press_view.PressLinearLayout
 import com.example.studita.utils.*
-import kotlinx.android.synthetic.main.edit_profile_layout.*
-import kotlinx.android.synthetic.main.exercises_detailed_stat_layout.*
 import kotlinx.android.synthetic.main.profile_menu_layout.*
 import kotlinx.android.synthetic.main.settings_item.view.*
 import kotlinx.android.synthetic.main.settings_offline_mode_item.*
 import kotlinx.android.synthetic.main.settings_offline_mode_item.view.*
-import kotlinx.android.synthetic.main.toolbar_layout.*
 
-class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout), ViewTreeObserver.OnScrollChangedListener{
+class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
 
     private var profileMenuFragmentViewModel: ProfileMenuFragmentViewModel? = null
 
@@ -47,10 +41,10 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout), V
         initSettingList()
 
         profileMenuLayoutEditProfile.setOnClickListener {
-            (activity as AppCompatActivity).navigateTo(EditProfileFragment(), R.id.doubleFrameLayoutFrameLayout)
+            (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineMode()) EditProfileOfflineModeFragment() else EditProfileFragment(), R.id.doubleFrameLayoutFrameLayout)
         }
 
-        profileMenuLayoutScrollView.viewTreeObserver.addOnScrollChangedListener(this)
+        scrollingView = profileMenuLayoutScrollView
     }
 
     private fun fillUserData(userDataData: UserDataData){
@@ -61,7 +55,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout), V
 
     private fun fillAvatar(userDataData: UserDataData){
         if (userDataData.avatarLink == null) {
-            AvaDrawer.drawAwa(profileMenuLayoutAvatar, UserUtils.userData.userName!!)
+            AvaDrawer.drawAvatar(profileMenuLayoutAvatar, UserUtils.userData.userName!!, PrefsUtils.getUserId()!!)
         } else {
             Glide
                 .with(this)
@@ -72,7 +66,8 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout), V
         }
     }
 
-    private fun getSettingsItems() = listOf(R.drawable.ic_notifications_secondary to resources.getString(R.string.notifications),
+    private fun getSettingsItems() = listOf(R.drawable.ic_person_secondary to resources.getString(R.string.my_profile),
+        R.drawable.ic_notifications_secondary to resources.getString(R.string.notifications),
             R.drawable.ic_people_secondary to resources.getString(R.string.friends),
             R.drawable.ic_lock_secondary to resources.getString(R.string.privacy),
             R.drawable.ic_cloud_secondary to resources.getString(R.string.offline_mode),
@@ -103,7 +98,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout), V
     }
 
     private fun View.setListDividers(position: Int){
-        if (position == ListItems.NOTIFICATIONS.ordinal || position == ListItems.PRIVACY.ordinal) {
+        if (position == ListItems.MY_PROFILE.ordinal || position == ListItems.PRIVACY.ordinal) {
             setPadding(0, 12.dpToPx(), 0, 0)
             background =
                 androidx.core.content.ContextCompat.getDrawable(context, R.drawable.divider_top_drawable)
@@ -116,6 +111,9 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout), V
     private fun IPressView.setListOnClick(position: Int){
         setOnClickListener {
             when (position) {
+                ListItems.MY_PROFILE.ordinal -> {
+                    (activity as AppCompatActivity).navigateTo(MyProfileFragment(), R.id.doubleFrameLayoutFrameLayout)
+                }
                 ListItems.THEME.ordinal -> {
                     MainMenuThemeDialogAlertFragment().show(
                         (activity as AppCompatActivity).supportFragmentManager,
@@ -133,11 +131,15 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout), V
                     PrefsUtils.setOfflineMode(!mainMenuLayoutOfflineSwitch.isChecked)
                     mainMenuLayoutOfflineSwitch.isChecked = !mainMenuLayoutOfflineSwitch.isChecked
                 }
+                ListItems.PRIVACY.ordinal ->{
+                    (activity as AppCompatActivity).navigateTo(PrivacySettingsFragment(), R.id.doubleFrameLayoutFrameLayout)
+                }
             }
         }
     }
 
     enum class ListItems{
+        MY_PROFILE,
         NOTIFICATIONS,
         FRIENDS,
         PRIVACY,
@@ -145,18 +147,6 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout), V
         THEME,
         LANGUAGE,
         SIGN_OUT
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        profileMenuLayoutScrollView.viewTreeObserver.removeOnScrollChangedListener(this)
-    }
-
-    override fun onScrollChanged() {
-        val scrollY: Int = profileMenuLayoutScrollView.scrollY
-        val showToolbar = scrollY != 0
-        if(showToolbar != toolbarFragmentViewModel?.toolbarDividerState?.value)
-            toolbarFragmentViewModel?.toolbarDividerState?.value = showToolbar
     }
 
 }

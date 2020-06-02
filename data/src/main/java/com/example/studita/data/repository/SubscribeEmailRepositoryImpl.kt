@@ -18,14 +18,14 @@ class SubscribeEmailRepositoryImpl(private val subscribeEmailDataStoreFactory: S
 
     private val type: Type = object : TypeToken<SubscribeEmailResultEntity>() {}.type
 
-    override suspend fun subscribe(userIdTokenData: UserIdTokenData): Pair<Int, SubscribeEmailResultData>{
+    override suspend fun subscribe(userIdTokenData: UserIdTokenData): Pair<Int, SubscribeEmailResultData?>{
         val pair = subscribeEmailDataStoreFactory.create().trySubscribe(UserIdTokenMapper().map(userIdTokenData))
-        return pair.first to subscribeEmailDataMapper.map(pair.second)
+        return pair.first to pair.second?.let { subscribeEmailDataMapper.map(it) }
     }
 
-    override suspend fun unsubscribe(userIdTokenData: UserIdTokenData): Pair<Int, SubscribeEmailResultData> {
+    override suspend fun unsubscribe(userIdTokenData: UserIdTokenData): Pair<Int, SubscribeEmailResultData?> {
         val pair = subscribeEmailDataStoreFactory.create().tryUnsubscribe(UserIdTokenMapper().map(userIdTokenData))
-        return pair.first to subscribeEmailDataMapper.map(pair.second)
+        return pair.first to pair.second?.let { subscribeEmailDataMapper.map(it) }
     }
 
     override suspend fun saveSyncedResult(subscribeEmailResultData: SubscribeEmailResultData) {

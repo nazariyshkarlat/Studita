@@ -17,8 +17,8 @@
 
     <TextView
         android:id="@+id/unsavedChangesDialogAlertSubtitle"
-        style="@style/Regular16_50"
-        android:layout_marginTop="16dp"
+        style="@style/Regular16Secondary"
+        android:layout_marginTop="@dimen/dialogAlertTitleSubtitleMargin"
         android:layout_marginEnd="10dp"
         android:text="@string/unsaved_changes_dialog_alter_subtitle"
         android:layout_width="wrap_content"

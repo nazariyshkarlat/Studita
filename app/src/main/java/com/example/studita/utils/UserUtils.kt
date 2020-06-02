@@ -9,14 +9,14 @@ object UserUtils {
 
     val userDataLiveData = MutableLiveData<UserDataData>()
     private var userToken: String? = null
-    private var userID: String? = null
+    private var userID: Int? = null
     lateinit var userData: UserDataData
     var oldUserData: UserDataData? = null
 
     private fun getUserToken(): String? =
         if(userToken == null) PrefsUtils.getUserToken() else userToken
 
-    private fun getUserID(): String? =
+    private fun getUserID(): Int? =
         if(userID == null) PrefsUtils.getUserId() else userID
 
     fun getUserIDTokenData(): UserIdTokenData? = getUserID()?.let { getUserToken()?.let { it1 ->

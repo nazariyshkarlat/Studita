@@ -19,8 +19,12 @@ open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = activity?.run{
-            ViewModelProviders.of(this).get(UserStatisticsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(UserStatisticsViewModel::class.java)
+
+        if(savedInstanceState == null) {
+            arguments?.getInt("USER_ID")?.let {
+                viewModel?.getUserStatistics(it)
+            }
         }
 
         val pageNumber = arguments?.getInt("PAGE_NUMBER") ?: 0
@@ -43,7 +47,7 @@ open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout){
         userStatPageLayoutLessonsSubtitle.text = userStatisticsData.obtainedExercises.toString()
         userStatPageLayoutTrainingsSubtitle.text = userStatisticsData.obtainedTrainings.toString()
         userStatPageLayoutAchievementsSubtitle.text = userStatisticsData.obtainedAchievements.toString()
-        ((userStatPageLayoutProgressBar).parent as ViewGroup).removeView(userStatPageLayoutProgressBar)
+        (view as ViewGroup?)?.removeView(userStatPageLayoutProgressBar)
         userStatPageContentView.visibility = View.VISIBLE
     }
 

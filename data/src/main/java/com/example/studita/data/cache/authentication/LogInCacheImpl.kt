@@ -10,8 +10,8 @@ class LogInCacheImpl(private val sharedPreferences: SharedPreferences) :
         const val TOKEN_PREFS = "token"
     }
 
-    override fun saveUserAuthenticationInfo(userId: String, token: String) {
-        sharedPreferences.edit().putString(USER_ID_PREFS, userId).putString(TOKEN_PREFS, token).apply()
+    override fun saveUserAuthenticationInfo(userId: Int, token: String) {
+        sharedPreferences.edit().putInt(USER_ID_PREFS, userId).putString(TOKEN_PREFS, token).apply()
     }
 
     override fun clearUserAuthenticationInfo() {

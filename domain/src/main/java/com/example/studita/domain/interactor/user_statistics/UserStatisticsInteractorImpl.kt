@@ -8,10 +8,10 @@ import com.example.studita.domain.repository.UserStatisticsRepository
 
 class UserStatisticsInteractorImpl(private val repository: UserStatisticsRepository) : UserStatisticsInteractor {
     override suspend fun getUserStatistics(
-        userIdTokenData: UserIdTokenData
+        userId: Int
     ) =
         try {
-            val result = repository.getUserStatistics(userIdTokenData)
+            val result = repository.getUserStatistics(userId)
             when (result.first) {
                 200 -> UserStatisticsStatus.Success(result.second)
                 else -> UserStatisticsStatus.Failure

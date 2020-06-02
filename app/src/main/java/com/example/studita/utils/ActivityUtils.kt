@@ -13,19 +13,6 @@ import java.io.Serializable
 inline fun <reified T: Activity> Context.startActivity(vararg params: Pair<String, Any?>) =
     Internals.internalStartActivity(this, T::class.java, params)
 
-fun Activity.hideKeyboard() {
-    try {
-        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-        if (currentFocus != null && currentFocus?.windowToken != null) {
-            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                currentFocus?.windowToken, 0
-            )
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-}
-
 object Internals{
     fun internalStartActivity(
         ctx: Context,

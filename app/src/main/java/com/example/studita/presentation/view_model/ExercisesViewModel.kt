@@ -20,6 +20,7 @@ import com.example.studita.domain.interactor.*
 import com.example.studita.presentation.fragments.ChapterBottomSheetFragment
 import com.example.studita.presentation.fragments.HomeFragment
 import com.example.studita.presentation.fragments.exercises.ExercisesEndFragment
+import com.example.studita.presentation.fragments.exercises.description.*
 import com.example.studita.presentation.fragments.exercises.exercise.*
 import com.example.studita.presentation.fragments.exercises.screen.ExerciseScreenType1
 import com.example.studita.presentation.fragments.exercises.screen.ExerciseScreenType2
@@ -31,6 +32,7 @@ import com.example.studita.utils.UserUtils.oldUserData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -121,7 +123,7 @@ class ExercisesViewModel : ViewModel(){
 
     private fun saveObtainedExercisesResult(){
         viewModelScope.launch {
-            val userDataStatus = userDataInteractor.getUserData(UserUtils.getUserIDTokenData(), PrefsUtils.isOfflineMode())
+            val userDataStatus = userDataInteractor.getUserData(UserUtils.userData.userId, PrefsUtils.isOfflineMode())
             if(userDataStatus is UserDataStatus.Success)
                 UserUtils.userData = userDataStatus.result
             UserUtils.userData.let {
@@ -329,6 +331,16 @@ class ExercisesViewModel : ViewModel(){
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel -> ExerciseScreenType2()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel -> ExerciseScreenType3()
         }
+
+    fun getDescriptionFragment(): ExercisesDescriptionFragment {
+        return when(chapterPartNumber){
+            1 -> ExercisesDescription1Fragment()
+            2 -> ExercisesDescription2Fragment()
+            4,5 -> ExercisesDescriptionPureFragment()
+            7 -> ExercisesDescription7Fragment()
+            else -> throw IOException("Unknown chapter part number")
+        }
+    }
 
 
     private fun getProgressPercent(): Float = exerciseIndex/getExercisesCount().toFloat()

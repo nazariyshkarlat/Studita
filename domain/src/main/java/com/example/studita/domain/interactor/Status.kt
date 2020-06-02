@@ -131,5 +131,49 @@ sealed class EditProfileStatus{
     object ServiceUnavailable : EditProfileStatus()
     object NoConnection : EditProfileStatus()
     object Failure: EditProfileStatus()
-    object Success: EditProfileStatus()
+    class Success(val avatarLink: String?): EditProfileStatus()
 }
+
+sealed class UserNameAvailableStatus{
+    object Failure: UserNameAvailableStatus()
+    object Available: UserNameAvailableStatus()
+    object Unavailable: UserNameAvailableStatus()
+}
+
+sealed class PrivacySettingsStatus{
+    object ServiceUnavailable : PrivacySettingsStatus()
+    object NoConnection : PrivacySettingsStatus()
+    object Failure: PrivacySettingsStatus()
+    class Success(val privacySettingsData: PrivacySettingsData): PrivacySettingsStatus()
+}
+
+sealed class EditPrivacySettingsStatus{
+    object ServiceUnavailable : EditPrivacySettingsStatus()
+    object NoConnection : EditPrivacySettingsStatus()
+    object Failure: EditPrivacySettingsStatus()
+    object Success: EditPrivacySettingsStatus()
+}
+
+sealed class GetFriendsStatus{
+    object ServiceUnavailable : GetFriendsStatus()
+    object NoConnection : GetFriendsStatus()
+    object Failure: GetFriendsStatus()
+    object NoFriendsFound: GetFriendsStatus()
+    class Success(val friendsResponseData: FriendsResponseData): GetFriendsStatus()
+}
+
+sealed class CheckIsMyFriendStatus{
+    object IsMyFriend : CheckIsMyFriendStatus()
+    object IsNotMyFriend : CheckIsMyFriendStatus()
+    object ServiceUnavailable : CheckIsMyFriendStatus()
+    object NoConnection : CheckIsMyFriendStatus()
+    object Failure: CheckIsMyFriendStatus()
+}
+
+sealed class FriendActionStatus{
+    object ServiceUnavailable : FriendActionStatus()
+    object NoConnection : FriendActionStatus()
+    object Failure: FriendActionStatus()
+    object Success: FriendActionStatus()
+}
+

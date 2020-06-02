@@ -27,11 +27,13 @@ open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(vie
         }
         interestingViewModel?.let {
             interestingExplanationModel = it.currentScreen as InterestingUiModelScreen.InterestingUiModelExplanationScreen
-            if(!this.isHidden){
-                view.viewTreeObserver.addOnScrollChangedListener(this)
-            }
         }
 
+        if(!this.isHidden){
+            view.viewTreeObserver.addOnScrollChangedListener(this)
+        }
+
+        checkScrollY()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -64,10 +66,12 @@ open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(vie
 
     private fun checkScrollY(){
         view?.let {
-            if(it is ScrollView) {
-                val scrollY: Int = it.scrollY
-                interestingViewModel?.showToolbarDivider(scrollY != 0)
-                interestingViewModel?.showButtonDivider(scrollY != maxScrollY)
+            it.post {
+                if (it is ScrollView) {
+                    val scrollY: Int = it.scrollY
+                    interestingViewModel?.showToolbarDivider(scrollY != 0)
+                    interestingViewModel?.showButtonDivider(scrollY != maxScrollY)
+                }
             }
         }
     }

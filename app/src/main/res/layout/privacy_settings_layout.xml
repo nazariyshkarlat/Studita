@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ProgressBar
+        android:id="@+id/privacySettingsLayoutProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+    <ScrollView
+        android:id="@+id/privacySettingsLayoutScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/toolbarHeight"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/privacySettingsContentLayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_marginEnd="@dimen/defaultRLMargin"
+            android:paddingTop="12dp"
+            android:paddingBottom="16dp">
+
+            <LinearLayout
+                android:id="@+id/privacySettingsLayoutDuelsBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:background="@drawable/main_blocks_rectangle">
+
+                <TextView
+                    style="@style/Medium16"
+                    android:text="@string/privacy_settings_first_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <FrameLayout
+                    android:id="@+id/privacySettingsLayoutDuelsBlockMyFriends"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:background="?selectableItemBackground">
+
+                    <TextView
+                        style="@style/Regular16"
+                        android:text="@string/privacy_settings_first_from_my_friends"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"/>
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/privacySettingsLayoutDuelsBlockMyFriendsRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:background="@null"
+                        android:layout_gravity="end"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/privacySettingsLayoutDuelsBlockNobody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:background="?selectableItemBackground">
+
+                    <TextView
+                        style="@style/Regular16"
+                        android:text="@string/privacy_settings_first_from_nobody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"/>
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/privacySettingsLayoutDuelsBlockNobodyRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:background="@null"
+                        android:layout_gravity="end"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/privacySettingsLayoutDuelsBlockExcept"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:visibility="gone"
+                    android:background="?selectableItemBackground">
+
+                    <TextView
+                        android:id="@+id/privacySettingsLayoutDuelsBlockExceptText"
+                        style="@style/Regular16"
+                        android:layout_marginEnd="48dp"
+                        android:singleLine="true"
+                        android:ellipsize="middle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"/>
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/privacySettingsLayoutDuelsBlockExceptRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:background="@null"
+                        android:layout_gravity="end"/>
+                </FrameLayout>
+
+                <com.example.studita.presentation.views.press_view.PressTextView
+                    android:id="@+id/privacySettingsLayoutDuelsBlockEditExceptions"
+                    style="@style/BlueTextButton16"
+                    android:text="@string/privacy_settings_first_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginBottom="-8dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/privacySettingsLayoutRatingsBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/main_blocks_rectangle">
+
+                <TextView
+                    style="@style/Medium16"
+                    android:text="@string/privacy_settings_second_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <FrameLayout
+                    android:id="@+id/privacySettingsLayoutRatingsBlockShow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:background="?selectableItemBackground">
+
+                    <TextView
+                        style="@style/Regular16"
+                        android:text="@string/yes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"/>
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/privacySettingsLayoutRatingsBlockShowRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:background="@null"
+                        android:layout_gravity="end"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/privacySettingsLayoutRatingsBlockHide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:background="?selectableItemBackground">
+
+                    <TextView
+                        style="@style/Regular16"
+                        android:text="@string/no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"/>
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/privacySettingsLayoutRatingsBlockHideRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:background="@null"
+                    android:layout_gravity="end"/>
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/privacySettingsLayoutVisibilityBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/main_blocks_rectangle">
+
+                <TextView
+                    style="@style/Medium16"
+                    android:text="@string/privacy_settings_third_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <FrameLayout
+                    android:id="@+id/privacySettingsLayoutVisibilityBlockShow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:background="?selectableItemBackground">
+
+                    <TextView
+                        style="@style/Regular16"
+                        android:text="@string/yes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"/>
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/privacySettingsLayoutVisibilityBlockShowRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:background="@null"
+                        android:layout_gravity="end"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/privacySettingsLayoutVisibilityHide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:background="?selectableItemBackground">
+
+                    <TextView
+                        style="@style/Regular16"
+                        android:text="@string/no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"/>
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/privacySettingsLayoutVisibilityBlockHideRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:background="@null"
+                        android:layout_gravity="end"/>
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

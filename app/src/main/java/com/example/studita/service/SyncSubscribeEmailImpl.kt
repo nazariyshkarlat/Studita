@@ -50,10 +50,8 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail{
                 else
                     SubscribeEmailModule.getSubscribeEmailInteractorImpl().unsubscribe(it)
 
-                if(syncSubscribeEmailLiveData == null)
                     SubscribeEmailModule.getSubscribeEmailInteractorImpl().saveSyncedResult(result)
-                else
-                    syncSubscribeEmailLiveData?.postValue(result)
+                    syncSubscribeEmailLiveData.postValue(result)
             }
 
             return Result.success()

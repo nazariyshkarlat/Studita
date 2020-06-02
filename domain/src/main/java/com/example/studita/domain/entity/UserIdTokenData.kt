@@ -1,3 +1,3 @@
 package com.example.studita.domain.entity
 
-data class UserIdTokenData(val userId: String, val userToken: String)
+data class UserIdTokenData(val userId: Int, val userToken: String)

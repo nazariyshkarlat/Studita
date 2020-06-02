@@ -1,15 +1,15 @@
 package com.example.studita.data.repository.datasource.subscribe_mail
 
 class SubscribeEmailDataStoreFactoryImpl(
-    private val subscribeEmailDataStoreImpl: SubscribeEmailDataStoreImpl
+    private val subscribeEmailDataStore: SubscribeEmailDataStore
 ) : SubscribeEmailDataStoreFactory {
 
     override fun create() =
-        subscribeEmailDataStoreImpl
+        subscribeEmailDataStore
 }
 
 interface SubscribeEmailDataStoreFactory{
 
-    fun create(): SubscribeEmailDataStoreImpl
+    fun create(): SubscribeEmailDataStore
 
 }

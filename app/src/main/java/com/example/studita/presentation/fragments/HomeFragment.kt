@@ -12,9 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.studita.R
-import com.example.studita.di.data.EditProfileModule
-import com.example.studita.domain.entity.EditProfileData
-import com.example.studita.domain.entity.EditProfileRequestData
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.presentation.adapter.levels.LevelsAdapter
@@ -86,7 +83,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             UserUtils.userDataLiveData.observe(activity as FragmentActivity, androidx.lifecycle.Observer{data->
                 if(UserUtils.isLoggedIn() && data != null) {
                     if (data.avatarLink == null) {
-                        AvaDrawer.drawAwa(homeLayoutBarAccountImageView, data.userName!!)
+                        AvaDrawer.drawAvatar(homeLayoutBarAccountImageView, UserUtils.userData.userName!!, PrefsUtils.getUserId()!!)
                     } else {
                         Glide
                             .with(this@HomeFragment)

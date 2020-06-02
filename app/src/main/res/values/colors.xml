@@ -3,16 +3,17 @@
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#000000</color>
 
+    <color name="white">#FFFFFF</color>
     <color name="white87">#DEFFFFFF</color>
     <color name="white80">#CCFFFFFF</color>
     <color name="white68">#ADFFFFFF</color>
     <color name="white50">#80FFFFFF</color>
     <color name="white34">#57FFFFFF</color>
     <color name="white30">#4DFFFFFF</color>
+    <color name="white28">#47FFFFFF</color>
     <color name="white24">#3DFFFFFF</color>
     <color name="white12">#1FFFFFFF</color>
     <color name="white8">#14FFFFFF</color>
-    <color name="white">#FFFFFF</color>
 
     <color name="red">#FF5238</color>
     <color name="red50">#80FF5238</color>
@@ -30,15 +31,18 @@
     <color name="gray11">#111111</color>
     <color name="gray11_80">#CC111111</color>
     <color name="gray20">#202020</color>
+    <color name="gray24_98">#FA242424</color>
     <color name="gray80">#808080</color>
     <color name="gray88">#888888</color>
-    <color name="grayE6">#E6E6E6</color>
     <color name="gray8">#888888</color>
+    <color name="grayE6">#E6E6E6</color>
+    <color name="grayF0_98">#FAF0F0F0</color>
 
     <color name="black6">#0F000000</color>
     <color name="black10">#1A000000</color>
     <color name="black18">#2E000000</color>
     <color name="black20">#33000000</color>
+    <color name="black24">#3D000000</color>
     <color name="black30">#4D000000</color>
     <color name="black40">#66000000</color>
     <color name="black50">#80000000</color>

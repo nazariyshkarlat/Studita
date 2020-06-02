@@ -43,7 +43,6 @@ class MainActivity : DefaultActivity(){
             needsRefresh = false
             this.recreate()
         }else if(needsRecreate){
-            UserUtils.userDataLiveData.value = null
             needsRecreate = false
             startActivity<MainActivity>()
             this.finish()

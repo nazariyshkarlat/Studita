@@ -8,7 +8,7 @@ import com.example.studita.data.entity.UserIdToken
 class DiskUserDataDataStore(private val userDataDao: UserDataDao)
     : UserDataDataStore{
 
-    override suspend fun getUserDataEntity(userIdToken: UserIdToken?): Pair<Int, UserDataEntity> {
+    override suspend fun getUserDataEntity(userId: Int?): Pair<Int, UserDataEntity> {
         if(userDataDao.getUserData() == null) {
             saveUserDataEntity(UserDataDataStore.defaultUserData)
         }

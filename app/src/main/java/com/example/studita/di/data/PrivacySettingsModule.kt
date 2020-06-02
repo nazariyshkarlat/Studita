@@ -1,0 +1,68 @@
+package com.example.studita.di.data
+
+import com.example.studita.data.entity.mapper.PrivacySettingsDataMapper
+import com.example.studita.data.entity.mapper.PrivacySettingsEntityMapper
+import com.example.studita.data.entity.mapper.PrivacySettingsRequestMapper
+import com.example.studita.data.entity.mapper.UserIdTokenMapper
+import com.example.studita.data.net.PrivacySettingsService
+import com.example.studita.data.repository.PrivacySettingsRepositoryImpl
+import com.example.studita.data.repository.datasource.privacy_settings.PrivacySettingsDataStoreFactoryImpl
+import com.example.studita.data.repository.datasource.privacy_settings.PrivacySettingsDataStoreImpl
+import com.example.studita.di.DI
+import com.example.studita.di.NetworkModule
+import com.example.studita.domain.interactor.privacy_settings.PrivacySettingsInteractor
+import com.example.studita.domain.interactor.privacy_settings.PrivacySettingsInteractorImpl
+import com.example.studita.domain.repository.PrivacySettingsRepository
+
+object PrivacySettingsModule {
+
+    private lateinit var config: DI.Config
+
+    private var repository: PrivacySettingsRepository? = null
+    private var privacySettingsInteractor: PrivacySettingsInteractor? = null
+
+    fun initialize(configuration: DI.Config = DI.Config.RELEASE) {
+        config = configuration
+    }
+
+    fun getPrivacySettingsInteractorImpl(): PrivacySettingsInteractor {
+        if (config == DI.Config.RELEASE && privacySettingsInteractor == null)
+            privacySettingsInteractor =
+                    makePrivacySettingsIntercator(
+                            getPrivacySettingsRepository()
+                    )
+        return privacySettingsInteractor!!
+    }
+
+    private fun getPrivacySettingsRepository(): PrivacySettingsRepository {
+        if (repository == null)
+            repository = PrivacySettingsRepositoryImpl(
+                    getPrivacySettingsDataStoreFactory(),
+                    UserIdTokenMapper(),
+                    PrivacySettingsEntityMapper(),
+                    getPrivacySettingsRequestMapper()
+            )
+        return repository!!
+    }
+
+    private fun makePrivacySettingsIntercator(repository: PrivacySettingsRepository) =
+            PrivacySettingsInteractorImpl(
+                    repository
+            )
+
+
+    private fun getPrivacySettingsDataStoreFactory() =
+            PrivacySettingsDataStoreFactoryImpl(
+                    getCloudPrivacySettingsDataStore())
+
+    private fun getCloudPrivacySettingsDataStore() =
+            PrivacySettingsDataStoreImpl(
+                    NetworkModule.connectionManager,
+                    NetworkModule.getService(PrivacySettingsService::class.java))
+
+    private fun getPrivacySettingsRequestMapper() =
+            PrivacySettingsRequestMapper(
+                    UserIdTokenMapper(),
+                    PrivacySettingsDataMapper()
+            )
+}

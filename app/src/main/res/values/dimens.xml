@@ -28,5 +28,7 @@
     <dimen name="profileMenuAvatarSize">44dp</dimen>
     <dimen name="exercisesResultProgressBarSize">162dp</dimen>
     <dimen name="editProfileLayoutAvatarSize">56dp</dimen>
-    <item name="bars_alpha" type="dimen" format="float">0.96</item>
+    <dimen name="dialogAlertTitleSubtitleMargin">14dp</dimen>
+    <dimen name="minTouchTargetSize">0dp</dimen>
+    <item name="bars_alpha" type="dimen" format="float">0.98</item>
 </resources>

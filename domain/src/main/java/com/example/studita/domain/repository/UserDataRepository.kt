@@ -6,7 +6,7 @@ import com.example.studita.domain.entity.UserIdTokenData
 
 interface UserDataRepository{
 
-    suspend fun getUserData(userIdTokenData: UserIdTokenData?, offlineMode: Boolean): Pair<Int, UserDataData>
+    suspend fun getUserData(userId: Int?, offlineMode: Boolean): Pair<Int, UserDataData>
 
     suspend fun saveUserData(userDataData: UserDataData)
 

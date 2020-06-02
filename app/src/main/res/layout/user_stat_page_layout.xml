@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:paddingStart="@dimen/defaultRLMargin"
     android:paddingEnd="@dimen/defaultRLMargin">
@@ -20,7 +21,7 @@
 
                     <TextView
                         android:id="@+id/userStatPageLayoutXPTitle"
-                        style="@style/Regular16_50"
+                        style="@style/Regular16Secondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_stat_title1"/>
@@ -34,7 +35,7 @@
 
                     <TextView
                         android:id="@+id/userStatPageLayoutTimeTitle"
-                        style="@style/Regular16_50"
+                        style="@style/Regular16Secondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_stat_title2"
@@ -49,7 +50,7 @@
 
                     <TextView
                         android:id="@+id/userStatPageLayoutLessonsTitle"
-                        style="@style/Regular16_50"
+                        style="@style/Regular16Secondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_stat_title3"
@@ -64,7 +65,7 @@
 
                     <TextView
                         android:id="@+id/userStatPageLayoutTrainingsTitle"
-                        style="@style/Regular16_50"
+                        style="@style/Regular16Secondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_stat_title4"
@@ -79,7 +80,7 @@
 
                     <TextView
                         android:id="@+id/userStatPageLayoutAchievementsTitle"
-                        style="@style/Regular16_50"
+                        style="@style/Regular16Secondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/user_stat_title5"

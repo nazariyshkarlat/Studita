@@ -62,7 +62,7 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
 
         toolbarLayoutTitle.text = resources.getString(R.string.stat)
 
-        exercisesDetailedStatLayoutScrollView.viewTreeObserver.addOnScrollChangedListener(this)
+        scrollingView = exercisesDetailedStatLayoutScrollView
 
     }
 
@@ -75,17 +75,6 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
                 exercisesEndFragmentViewModel?.setScrollViewDividerAndPadding(R.drawable.divider_top_drawable, 16.dpToPx())
             }
         }
-    }
-
-    override fun onDestroyView() {
-        exercisesDetailedStatLayoutScrollView.viewTreeObserver
-            .removeOnScrollChangedListener(this)
-        super.onDestroyView()
-    }
-
-    override fun onScrollChanged() {
-        val scrollY: Int = exercisesDetailedStatLayoutScrollView.scrollY
-        toolbarLayout.background = if (scrollY != 0) context?.getDrawable(R.drawable.divider_bottom_drawable) else null
     }
 
 }

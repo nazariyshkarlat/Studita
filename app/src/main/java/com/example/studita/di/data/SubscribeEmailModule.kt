@@ -19,19 +19,19 @@ object SubscribeEmailModule {
     private lateinit var config: DI.Config
 
     private var repository: SubscribeEmailRepository? = null
-    private var userDataInteractor: SubscribeEmailInteractor? = null
+    private var subscribeEmailInteractor: SubscribeEmailInteractor? = null
 
     fun initialize(configuration: DI.Config = DI.Config.RELEASE) {
         config = configuration
     }
 
     fun getSubscribeEmailInteractorImpl(): SubscribeEmailInteractor {
-        if (config == DI.Config.RELEASE && userDataInteractor == null)
-            userDataInteractor =
+        if (config == DI.Config.RELEASE && subscribeEmailInteractor == null)
+            subscribeEmailInteractor =
                 makeSubscribeEmailIntercator(
                     getSubscribeEmailRepository()
                 )
-        return userDataInteractor!!
+        return subscribeEmailInteractor!!
     }
 
     private fun getSubscribeEmailRepository(): SubscribeEmailRepository {

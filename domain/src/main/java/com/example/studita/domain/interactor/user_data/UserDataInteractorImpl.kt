@@ -7,9 +7,9 @@ import com.example.studita.domain.interactor.UserDataStatus
 import com.example.studita.domain.repository.UserDataRepository
 
 class UserDataInteractorImpl(private val repository: UserDataRepository) : UserDataInteractor{
-    override suspend fun getUserData(userIdTokenData: UserIdTokenData?, offlineMode: Boolean): UserDataStatus =
+    override suspend fun getUserData(userId: Int?, offlineMode: Boolean): UserDataStatus =
         try {
-            val result = repository.getUserData(userIdTokenData, offlineMode)
+            val result = repository.getUserData(userId, offlineMode)
             when (result.first) {
                 200 -> UserDataStatus.Success(result.second)
                 else -> UserDataStatus.Failure

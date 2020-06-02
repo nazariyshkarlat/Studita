@@ -14,12 +14,14 @@ object PrefsUtils{
 
     fun getUserToken(): String? = CacheModule.sharedPreferences.getString(LogInCacheImpl.TOKEN_PREFS, null)
 
-    fun getUserId(): String? = CacheModule.sharedPreferences.getString(LogInCacheImpl.USER_ID_PREFS, null)
+    fun getUserId(): Int? {
+        val userId = CacheModule.sharedPreferences.getInt(LogInCacheImpl.USER_ID_PREFS, 0)
+        return if(userId == 0) null else userId
+    }
 
     fun containsOfflineMode() = CacheModule.sharedPreferences.contains("OFFLINE_MODE")
 
     fun getTheme() = DefaultActivity.Theme.values()[CacheModule.sharedPreferences.getInt("theme", DefaultActivity.Theme.DEFAULT.ordinal)]
 
     fun setTheme(themeState: DefaultActivity.Theme) = CacheModule.sharedPreferences.edit()?.putInt("theme", themeState.ordinal)?.apply()
-
 }

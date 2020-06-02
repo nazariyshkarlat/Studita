@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="fullNameMaxLength">30</integer>
-    <integer name="userNameMaxLength">25</integer>
-</resources>

@@ -1,16 +1,23 @@
 package com.example.studita.presentation.fragments
 
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
+import com.example.studita.presentation.fragments.user_statistics.UserStatFragment
+import com.example.studita.presentation.fragments.user_statistics.UserStatOfflineModeFragment
+import com.example.studita.presentation.fragments.user_statistics.UserStatUnLoggedInFragment
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
+import com.example.studita.utils.navigateTo
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.view.*
+
 
 class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
     NavigatableFragment.OnNavigateFragment {
@@ -36,15 +43,25 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
             it.toolbarDividerState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { show ->
+                    System.out.println(show)
                     toolbarLayout.background =  if(show) resources.getDrawable(R.drawable.divider_bottom_drawable, toolbarLayoutTitle.context.theme) else null
                 })
 
-            it.toolbarRightButtonState.observe(viewLifecycleOwner, Observer {onClick->
-                if(onClick != null){
-                    toolbarLayoutRightButton.setOnClickListener { onClick.invoke() }
+            it.toolbarRightButtonState.observe(viewLifecycleOwner, Observer {pair->
+                if(pair != null) {
+                    toolbarLayoutRightButton.setImageResource(pair.first)
+                    val onClick = pair.second
+                    toolbarLayoutRightButton.setOnClickListener { onClick.invoke(it) }
                     toolbarLayoutRightButton.visibility = View.VISIBLE
                 }else
                     toolbarLayoutRightButton.visibility = View.GONE
+            })
+
+            it.progressState.observe(viewLifecycleOwner, Observer { show->
+                if(show)
+                    toolbarLayoutRightButtonProgress.visibility = View.VISIBLE
+                else
+                    toolbarLayoutRightButtonProgress.visibility = View.GONE
             })
         }
 
@@ -57,15 +74,22 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
     }
 
     override fun onNavigate(fragment: NavigatableFragment?) {
-        toolbarFragmentViewModel?.toolbarDividerState?.value = false
-        toolbarFragmentViewModel?.hideRightButton()
-        toolbarFragmentViewModel?.let {
-            when (fragment) {
-                is AuthorizationFragment -> it.setToolbarText(resources.getString(R.string.authorization))
-                is ProfileMenuFragment -> it.setToolbarText(resources.getString(R.string.account))
-                is EditProfileFragment -> it.setToolbarText(resources.getString(R.string.edit_profile))
-                else -> it.setToolbarText(null)
-            }
+        toolbarFragmentViewModel?.let { viewModel ->
+            viewModel.hideRightButton()
+            viewModel.hideProgress()
+            viewModel.hideDivider()
+            viewModel.setToolbarText(when (fragment) {
+                is CropAvatarFragment -> resources.getString(R.string.crop_photo)
+                is AuthorizationFragment -> resources.getString(R.string.authorization)
+                is ProfileMenuFragment -> resources.getString(R.string.account)
+                is PrivacySettingsFragment -> resources.getString(R.string.privacy)
+                is EditProfileFragment, is EditProfileOfflineModeFragment -> resources.getString(R.string.edit_profile)
+                is UserStatFragment, is UserStatUnLoggedInFragment, is UserStatOfflineModeFragment -> resources.getString(R.string.stat)
+                is MyProfileFragment -> resources.getString(R.string.my_profile)
+                is ProfileFragment -> resources.getString(R.string.profile)
+                is FriendsFragment -> resources.getString(R.string.friends)
+                else -> null
+            })
         }
     }
 
