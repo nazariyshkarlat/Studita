@@ -1,7 +1,6 @@
 package com.example.studita.di.data.exercise
 
 import com.example.studita.data.cache.exercises.ExercisesCacheImpl
-import com.example.studita.data.entity.mapper.exercise.ExercisesDataMapper
 import com.example.studita.data.net.ExercisesService
 import com.example.studita.data.net.OfflineExercisesService
 import com.example.studita.data.repository.datasource.exercises.CloudExercisesJsonDataStore
@@ -41,8 +40,7 @@ object ExercisesModule {
         if (repository == null)
             repository =
                 ExercisesRepositoryImpl(
-                    getExercisesDataStoreFactory(),
-                    ExercisesDataMapper()
+                    getExercisesDataStoreFactory()
                 )
         return repository!!
     }

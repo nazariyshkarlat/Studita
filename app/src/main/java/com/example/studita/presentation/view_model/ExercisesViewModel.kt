@@ -1,7 +1,10 @@
 package com.example.studita.presentation.view_model
 
+import android.app.Application
+import android.content.Context
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,17 +29,15 @@ import com.example.studita.presentation.fragments.exercises.screen.ExerciseScree
 import com.example.studita.presentation.fragments.exercises.screen.ExerciseScreenType2
 import com.example.studita.presentation.fragments.exercises.screen.ExerciseScreenType3
 import com.example.studita.presentation.model.ExerciseUiModel
-import com.example.studita.presentation.model.mapper.ExercisesUiModelMapper
+import com.example.studita.presentation.model.toUiModel
 import com.example.studita.utils.*
-import com.example.studita.utils.UserUtils.oldUserData
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.google.gson.Gson
+import kotlinx.coroutines.*
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ExercisesViewModel : ViewModel(){
+class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
 
     val exercisesState = SingleLiveEvent<Boolean>()
     val endButtonState = SingleLiveEvent<Boolean>()
@@ -52,7 +53,7 @@ class ExercisesViewModel : ViewModel(){
     var toolbarDividerState = SingleLiveEvent<Boolean>()
     var barsState = SingleLiveEvent<Boolean>()
     var buttonDividerState = SingleLiveEvent<Boolean>()
-    var saveUserDataState = SingleLiveEvent<Boolean>()
+    var saveUserDataState = SingleLiveEvent<Pair<Boolean, UserDataData>>()
 
     lateinit var exerciseRequestData: ExerciseRequestData
     private val exercisesToRetry = ArrayList<ExerciseData>()
@@ -109,7 +110,7 @@ class ExercisesViewModel : ViewModel(){
         }
     }
 
-    private suspend fun completeExercises(completedExercisesData: CompletedExercisesData){
+    private suspend fun completeExercises(completedExercisesData: CompletedExercisesData, oldUserDataData: UserDataData){
         if (completeExercisesInteractor.completeExercises(
                 CompleteExercisesRequestData(
                     UserUtils.getUserIDTokenData(),
@@ -117,85 +118,98 @@ class ExercisesViewModel : ViewModel(){
                 )
             ) is CompleteExercisesStatus.Success
         ) {
-            saveUserDataState.postValue(true)
+            saveUserDataState.postValue(true to oldUserDataData)
         }
     }
 
     private fun saveObtainedExercisesResult(){
-        viewModelScope.launch {
+        GlobalScope.launch {
             val userDataStatus = userDataInteractor.getUserData(UserUtils.userData.userId, PrefsUtils.isOfflineMode())
-            if(userDataStatus is UserDataStatus.Success)
-                UserUtils.userData = userDataStatus.result
-            UserUtils.userData.let {
+            if(userDataStatus is UserDataStatus.Success) {
+                val currentUserData = userDataStatus.result.copy()
+                currentUserData.let {
 
-                if(!isTraining)
-                    it.todayCompletedExercises++
+                    if (!isTraining)
+                        it.todayCompletedExercises++
 
-                oldUserData = it.copy()
-
-                obtainedXP = LevelUtils.getObtainedXP(
-                    it,
-                    getAnswersPercent(),
-                    isTraining
-                )
-
-                val newLevelsCount = LevelUtils.getNewLevelsCount(it, obtainedXP)
-                val newLevelXP = LevelUtils.getNewLevelXP(it, obtainedXP)
-
-                it.currentLevel += newLevelsCount
-                it.currentLevelXP = newLevelXP
-
-                val daysDiff = TimeUtils.getCalendarDayCount(it.streakDatetime, Date())
-                if (daysDiff != 0L) {
-                    if (it.streakDays == 0)
-                        it.streakDays = 1
-                    else if (daysDiff == 1L)
-                        it.streakDays = it.streakDays + 1
-                    it.streakDatetime = Date()
-                }
-
-                if (!isTraining) {
-                    it.completedParts[chapterNumber - 1] = chapterPartNumber
-
-                    if (chapterPartNumber == chapterPartsCount)
-                        ChapterBottomSheetFragment.snackbarShowReason =
-                            ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED
-
-                    if (getAnswersPercent() < 0.6F) {
-                        ChapterBottomSheetFragment.snackbarShowReason =
-                            if (ChapterBottomSheetFragment.snackbarShowReason == ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED)
-                                ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED_AND_BAD_RESULT
-                            else
-                                ChapterBottomSheetFragment.Companion.SnackbarShowReason.BAD_RESULT
-                    }
-                    ChapterBottomSheetFragment.needsRefresh = true
-                }
-
-                HomeFragment.needsRefresh = true
-
-                saveUserData(it)
-                saveUserStatistics(UserStatisticsRowData(Date(), obtainedXP, seconds, if(!isTraining) 1 else null, if(isTraining) 1 else null, null))
-
-                completeExercises(
-                    CompletedExercisesData(
-                        chapterNumber,
-                        chapterPartNumber,
+                    obtainedXP = LevelUtils.getObtainedXP(
+                        it,
                         getAnswersPercent(),
-                        Date(),
-                        seconds
+                        isTraining
                     )
-                )
+
+                    val newLevelsCount = LevelUtils.getNewLevelsCount(it, obtainedXP)
+                    val newLevelXP = LevelUtils.getNewLevelXP(it, obtainedXP)
+
+                    it.currentLevel += newLevelsCount
+                    it.currentLevelXP = newLevelXP
+
+                    val daysDiff = TimeUtils.getCalendarDayCount(it.streakDatetime, Date())
+                    if (daysDiff != 0L) {
+                        if (it.streakDays == 0)
+                            it.streakDays = 1
+                        else if (daysDiff == 1L)
+                            it.streakDays = it.streakDays + 1
+                        it.streakDatetime = Date()
+                    }
+
+                    if (!isTraining) {
+                        it.completedParts[chapterNumber - 1] = chapterPartNumber
+
+                        if (chapterPartNumber == chapterPartsCount)
+                            ChapterBottomSheetFragment.snackbarShowReason =
+                                ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED
+
+                        if (getAnswersPercent() < 0.6F) {
+                            ChapterBottomSheetFragment.snackbarShowReason =
+                                if (ChapterBottomSheetFragment.snackbarShowReason == ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED)
+                                    ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED_AND_BAD_RESULT
+                                else
+                                    ChapterBottomSheetFragment.Companion.SnackbarShowReason.BAD_RESULT
+                        }
+                        ChapterBottomSheetFragment.needsRefresh = true
+                    }
+
+                    HomeFragment.needsRefresh = true
+
+                    withContext(Dispatchers.Main) {
+                        UserUtils.userDataLiveData.value = it
+                    }
+
+                    saveUserData(it)
+                    saveUserStatistics(
+                        UserStatisticsRowData(
+                            Date(),
+                            obtainedXP,
+                            seconds,
+                            if (!isTraining) 1 else null,
+                            if (isTraining) 1 else null,
+                            null
+                        )
+                    )
+
+                    completeExercises(
+                        CompletedExercisesData(
+                            chapterNumber,
+                            chapterPartNumber,
+                            getAnswersPercent(),
+                            Date(),
+                            seconds
+                        ),
+                        userDataStatus.result
+                    )
+                }
             }
         }
     }
 
     private fun saveUserData(userDataData: UserDataData){
-        viewModelScope.launch {
+        GlobalScope.launch {
             userDataInteractor.saveUserData(userDataData)
         }
     }
     private fun saveUserStatistics(userStatisticsRowData: UserStatisticsRowData){
-        viewModelScope.launch {
+        GlobalScope.launch {
             userStatisticsInteractor.saveUserStatistics(UserUtils.getUserIDTokenData(), userStatisticsRowData)
         }
     }
@@ -241,7 +255,7 @@ class ExercisesViewModel : ViewModel(){
             } else {
                 exercisesToRetry[0]
             }
-            exerciseUiModel = ExercisesUiModelMapper().mapExerciseData(exerciseData)
+            exerciseUiModel = exerciseData.toUiModel(getApplication())
             setButtonEnabled(exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen)
             val exerciseFragment = getFragmentToAdd(exerciseUiModel)
             navigationState.value = when (arrayIndex) {
@@ -258,60 +272,70 @@ class ExercisesViewModel : ViewModel(){
     private fun launchWaitingCoroutine(){
         waitingJob = viewModelScope.launchExt(waitingJob) {
             delay(waitingTime)
-            println(waitingJob?.isActive)
             showBadConnectionDialogAlertFragmentState.postValue(true)
         }
     }
 
 
     fun checkExerciseResult(){
-        answered.value = true
-        launchWaitingCoroutine()
-        exerciseResultSuccess = false
-        job = viewModelScope.launchExt(job){
-            if(exerciseUiModel is ExerciseUiModel.ExerciseUiModelExercise){
-                when(val status =
-                    exerciseResultInteractor.getExerciseResult(exerciseData as ExerciseData.ExerciseDataExercise, exerciseRequestData, PrefsUtils.isOfflineMode())) {
-                    is ExerciseResultStatus.NoConnection -> errorState.postValue(R.string.no_connection)
-                    is ExerciseResultStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
-                    is ExerciseResultStatus.Success -> {
 
-                        exerciseResultSuccess = true
+        if(job == null || job?.isCompleted == true) {
+            answered.value = true
+            exerciseResultSuccess = false
+            job = viewModelScope.launchExt(job) {
+                if (exerciseUiModel is ExerciseUiModel.ExerciseUiModelExercise) {
+                    launchWaitingCoroutine()
+                    when (val status =
+                        exerciseResultInteractor.getExerciseResult(
+                            exerciseData as ExerciseData.ExerciseDataExercise,
+                            exerciseRequestData,
+                            PrefsUtils.isOfflineMode()
+                        )) {
+                        is ExerciseResultStatus.NoConnection -> errorState.postValue(R.string.no_connection)
+                        is ExerciseResultStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
+                        is ExerciseResultStatus.Success -> {
 
-                        waitingJob?.cancel()
+                            exerciseResultSuccess = true
 
-                        snackbarState.postValue(exerciseUiModel to status.result)
-                        if (status.result.exerciseResult) {
-                            exerciseIndex++
+                            waitingJob?.cancel()
 
-                            if (exerciseIndex == exercises.count { it is ExerciseData.ExerciseDataExercise }) {
-                                stopSecondsCounter()
-                                saveObtainedExercisesResult()
+                            snackbarState.postValue(exerciseUiModel to status.result)
+                            if (status.result.exerciseResult) {
+                                exerciseIndex++
+
+                                if (exerciseIndex == exercises.count { it is ExerciseData.ExerciseDataExercise }) {
+                                    stopSecondsCounter()
+                                    saveObtainedExercisesResult()
+                                }
+
+                                progressState.value = getProgressPercent() to false
+                            } else {
+                                exercisesToRetry.addAll(exercises.filter { it.exerciseNumber == exerciseUiModel.exerciseNumber })
                             }
 
-                            progressState.value = getProgressPercent() to false
-                        } else {
-                            exercisesToRetry.addAll(exercises.filter{it.exerciseNumber == exerciseUiModel.exerciseNumber })
-                        }
+                            if (arrayIndex >= exercises.size) {
+                                exercisesToRetry.removeAt(0)
+                            }
 
-                        if (arrayIndex >= exercises.size) {
-                            exercisesToRetry.removeAt(0)
+                            if (arrayIndex == exercises.size - 1) {
+                                falseAnswers =
+                                    exercisesToRetry.count { it is ExerciseData.ExerciseDataExercise }
+                            }
+                            arrayIndex++
                         }
-
-                        if (arrayIndex == exercises.size - 1) {
-                            falseAnswers = exercisesToRetry.count { it is ExerciseData.ExerciseDataExercise }
-                        }
-                        arrayIndex++
                     }
+                } else {
+                    waitingJob?.cancel()
+                    if (arrayIndex >= exercises.size) {
+                        exercisesToRetry.removeAt(0)
+                    }
+                    arrayIndex++
+                    initFragment()
                 }
-            }else{
-                waitingJob?.cancel()
-                if (arrayIndex >= exercises.size) {
-                    exercisesToRetry.removeAt(0)
-                }
-                arrayIndex++
-                initFragment()
             }
+        }else{
+            if(waitingJob?.isCompleted == true)
+                showBadConnectionDialogAlertFragmentState.postValue(true)
         }
     }
 
@@ -353,14 +377,16 @@ class ExercisesViewModel : ViewModel(){
 
     private fun getExercisesCount() = exercises.count { it is ExerciseData.ExerciseDataExercise }
 
-    fun getExercisesEndFragment(): Fragment{
+    fun getExercisesEndFragment(oldUserDataData: UserDataData): Fragment{
         val fragment =
             ExercisesEndFragment()
         val bundle = bundleOf("TRUE_ANSWERS" to getTrueAnswers(),
             "FALSE_ANSWERS" to getFalseAnswers(),
             "ANSWERS_PERCENT" to getAnswersPercent(),
             "OBTAINED_XP" to obtainedXP,
-            "PROCESS_SECONDS" to seconds)
+            "PROCESS_SECONDS" to seconds,
+            "OLD_USER_DATA" to Gson().toJson(oldUserDataData)
+        )
         fragment.arguments = bundle
         return fragment
     }

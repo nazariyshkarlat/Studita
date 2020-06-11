@@ -1,9 +1,6 @@
 package com.example.studita.di.data
 
 import com.example.studita.service.SyncCompletedExercisesImpl
-import com.example.studita.data.entity.mapper.CompleteExercisesRequestMapper
-import com.example.studita.data.entity.mapper.CompletedExercisesMapper
-import com.example.studita.data.entity.mapper.UserIdTokenMapper
 import com.example.studita.data.net.CompleteExercisesService
 import com.example.studita.data.repository.CompleteExercisesRepositoryImpl
 import com.example.studita.data.repository.datasource.complete_exercises.CompleteExercisesDataStoreFactoryImpl
@@ -37,8 +34,7 @@ object CompleteExercisesModule {
     private fun getCompleteExercisesRepository(): CompleteExercisesRepository {
         if (repository == null)
             repository = CompleteExercisesRepositoryImpl(
-                getCompleteExercisesDataStoreFactory(),
-                getCompleteExercisesRequestMapper()
+                getCompleteExercisesDataStoreFactory()
             )
         return repository!!
     }
@@ -60,8 +56,5 @@ object CompleteExercisesModule {
             NetworkModule.connectionManager,
             NetworkModule.getService(CompleteExercisesService::class.java)
         )
-
-    private fun getCompleteExercisesRequestMapper() =
-        CompleteExercisesRequestMapper(UserIdTokenMapper(), CompletedExercisesMapper())
 
 }

@@ -10,5 +10,5 @@ interface AuthorizationDataStore{
 
     suspend fun trySignOut(userIdToken: UserIdToken): Int
 
-    suspend fun trySignInWithGoogle(signInWithGoogleRequestEntity: SignInWithGoogleRequestEntity): Pair<Int, LogInResponseEntity?>
+    suspend fun trySignInWithGoogle(signInWithGoogleRequest: SignInWithGoogleRequest): Pair<Int, LogInResponseEntity?>
 }

@@ -13,6 +13,7 @@ import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.validator.AuthorizationValidator
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import java.lang.UnsupportedOperationException
 
@@ -58,7 +59,7 @@ class AuthorizationFragmentViewModel : ViewModel(){
 
     fun logIn(dates : Pair<String, String>){
         if(validate(dates) == AuthorizationResult.Valid){
-            job = viewModelScope.launchExt(job){
+            job = GlobalScope.launchExt(job){
             when(val result = authorizationInteractor.logIn(
                 AuthorizationRequestData(
                     dates.first,
@@ -72,7 +73,6 @@ class AuthorizationFragmentViewModel : ViewModel(){
                 is LogInStatus.Failure -> authorizationState.postValue(AuthorizationResult.LogInFailure)
                 is LogInStatus.NoUserFound -> authorizationState.postValue(AuthorizationResult.NoUserFound)
                 is LogInStatus.Success ->{
-                    UserUtils.userData = result.result.userDataData
                     UserUtils.userDataLiveData.postValue(result.result.userDataData)
                     authorizationState.postValue(AuthorizationResult.LogInSuccess(result.result))
                 }
@@ -82,7 +82,7 @@ class AuthorizationFragmentViewModel : ViewModel(){
 
     fun signUp(dates : Pair<String, String>){
         if(validate(dates) == AuthorizationResult.Valid){
-            job = viewModelScope.launchExt(job){
+            job = GlobalScope.launchExt(job){
                 when(authorizationInteractor.signUp(
                     AuthorizationRequestData(
                         dates.first,

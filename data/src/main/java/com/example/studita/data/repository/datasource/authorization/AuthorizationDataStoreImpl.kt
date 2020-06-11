@@ -3,7 +3,7 @@ package com.example.studita.data.repository.datasource.authorization
 import com.example.studita.data.cache.authentication.LogInCache
 import com.example.studita.data.entity.AuthorizationRequestEntity
 import com.example.studita.data.entity.LogInResponseEntity
-import com.example.studita.data.entity.SignInWithGoogleRequestEntity
+import com.example.studita.data.entity.SignInWithGoogleRequest
 import com.example.studita.data.entity.UserIdToken
 import com.example.studita.data.net.AuthorizationService
 import com.example.studita.data.net.connection.ConnectionManager
@@ -46,14 +46,14 @@ class AuthorizationDataStoreImpl(private val connectionManager: ConnectionManage
         return authorizationService.signOut(userIdToken).code()
     }
 
-    override suspend fun trySignInWithGoogle(signInWithGoogleRequestEntity: SignInWithGoogleRequestEntity): Pair<Int, LogInResponseEntity?> =
+    override suspend fun trySignInWithGoogle(signInWithGoogleRequest: SignInWithGoogleRequest): Pair<Int, LogInResponseEntity?> =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         }else {
             val signInResult: LogInResponseEntity?
             try {
                 val signIn =
-                    authorizationService.signInWithGoogle(signInWithGoogleRequestEntity)
+                    authorizationService.signInWithGoogle(signInWithGoogleRequest)
                 signInResult = signIn.body()
                 if(signInResult != null)
                     logInCache.saveUserAuthenticationInfo(signInResult.userId, signInResult.userToken)

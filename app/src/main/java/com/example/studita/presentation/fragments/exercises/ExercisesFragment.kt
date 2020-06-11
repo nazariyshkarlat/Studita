@@ -1,5 +1,6 @@
 package com.example.studita.presentation.fragments.exercises
 
+import android.content.Context
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.View
@@ -16,15 +17,7 @@ import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.utils.*
 import com.example.studita.presentation.fragments.base.BaseFragment
-import com.example.studita.presentation.fragments.exercises.description.ExercisesDescription1Fragment
-import com.example.studita.presentation.fragments.exercises.description.ExercisesDescription2Fragment
-import com.example.studita.presentation.fragments.exercises.description.ExercisesDescription7Fragment
-import com.example.studita.presentation.fragments.exercises.description.ExercisesDescriptionPureFragment
-import com.example.studita.presentation.model.ExerciseResponseDescriptionContentUiModel
-import com.example.studita.presentation.model.ExerciseResponseUiModel
-import com.example.studita.presentation.model.ExerciseShapeUiModel
-import com.example.studita.presentation.model.ExerciseUiModel
-import com.example.studita.presentation.model.mapper.ExerciseResponseUiModelMapper
+import com.example.studita.presentation.model.*
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.google.android.flexbox.FlexboxLayout
 import kotlinx.android.synthetic.main.exercise_bottom_snackbar.*
@@ -33,7 +26,6 @@ import kotlinx.android.synthetic.main.exercise_toolbar.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 
 class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
@@ -185,7 +177,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         data?.let {
             val exercisesResponseData = it.second
             formSnackBarView(
-                ExerciseResponseUiModelMapper(exerciseBottomSnackbarLinearLayout.context).map(exercisesResponseData)
+                exercisesResponseData.toUiModel(exerciseBottomSnackbarLinearLayout.context)
             )
 
             setSnackbarTranslationY()
@@ -364,9 +356,10 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             exerciseToolbarProgressBar.animateProgress(toPercent = progress, delay = (if((exerciseToolbarProgressBar.animation == null) || this.exerciseToolbarProgressBar.animation.hasEnded()) 100L else 0L), onAnimEnd = {
                 if(last){
                     exerciseLayoutButton.setOnClickListener {  }
-                    exercisesViewModel.saveUserDataState.observe(viewLifecycleOwner, Observer { saved->
+                    exercisesViewModel.saveUserDataState.observe(viewLifecycleOwner, Observer { pair->
+                        val saved = pair.first
                         if(saved){
-                            (activity as AppCompatActivity).navigateTo(exercisesViewModel.getExercisesEndFragment(), R.id.frameLayout)
+                            (activity as AppCompatActivity).navigateTo(exercisesViewModel.getExercisesEndFragment(pair.second), R.id.frameLayout)
                         }
                     })
                 }

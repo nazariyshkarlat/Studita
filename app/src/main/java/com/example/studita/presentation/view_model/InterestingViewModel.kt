@@ -9,7 +9,7 @@ import com.example.studita.di.data.InterestingModule
 import com.example.studita.domain.interactor.InterestingStatus
 import com.example.studita.presentation.fragments.interesting.*
 import com.example.studita.presentation.model.InterestingUiModelScreen
-import com.example.studita.presentation.model.mapper.InterestingUiModelMapper
+import com.example.studita.presentation.model.toUiModel
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.launchExt
 import kotlinx.coroutines.Job
@@ -41,7 +41,7 @@ class InterestingViewModel : ViewModel(){
                 is InterestingStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is InterestingStatus.Success -> {
                     interestingState.postValue(true)
-                    interestingScreens = InterestingUiModelMapper().map(status.result).screens
+                    interestingScreens = status.result.toUiModel().screens
                     this@InterestingViewModel.interestingNumber = status.result.interestingNumber
                 }
             }

@@ -12,6 +12,7 @@ import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.interactor.PrivacySettingsStatus
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 
 class PrivacySettingsViewModel : ViewModel(){
@@ -41,7 +42,7 @@ class PrivacySettingsViewModel : ViewModel(){
     }
 
     fun editPrivacySettings(privacySettingsRequestData: PrivacySettingsRequestData){
-        job = viewModelScope.launchExt(job){
+        job = GlobalScope.launchExt(job){
             privacySettingsInteractor.editPrivacySettings(privacySettingsRequestData)
         }
     }

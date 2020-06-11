@@ -35,7 +35,7 @@ class ExercisesEndFragmentViewModel : ViewModel(){
             val fragment =
                 ExercisesResultFragment()
             arguments?.let {
-                val bundle =  bundleOf("ANSWERS_PERCENT" to it.getFloat("ANSWERS_PERCENT"))
+                val bundle =  bundleOf("ANSWERS_PERCENT" to it.getFloat("ANSWERS_PERCENT"), "OLD_USER_DATA" to it.getString("OLD_USER_DATA"))
                 fragment.arguments = bundle
             }
             fragment

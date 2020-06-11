@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
+import com.example.studita.utils.hideKeyboard
 import com.example.studita.utils.navigateBack
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -42,6 +43,7 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId),  ViewTreeObs
 
     open fun onBackClick() {
         animateAlpha(view?.parent as ViewGroup)
+        (activity as AppCompatActivity).hideKeyboard()
         val f = (activity as AppCompatActivity).navigateBack(this)
         if(f is NavigatableFragment)
             onNavigateFragment?.onNavigate(f)
@@ -101,7 +103,7 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId),  ViewTreeObs
         })
     }
 
-    private fun checkScroll(){
+    open fun checkScroll(){
         val scrollY = if(scrollingView is RecyclerView) (scrollingView as RecyclerView).computeVerticalScrollOffset() else scrollingView?.scrollY ?: 0
         toolbarFragmentViewModel?.toolbarDividerState?.value = scrollY != 0
     }

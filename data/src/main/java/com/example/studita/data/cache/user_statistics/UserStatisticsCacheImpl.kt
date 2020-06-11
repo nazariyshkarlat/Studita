@@ -15,7 +15,7 @@ class UserStatisticsCacheImpl(private val sharedPreferences: SharedPreferences) 
         sharedPreferences.edit().putString(USER_STATISTICS_PREFS, json).apply()
     }
 
-    override fun getUserStatisticsJson(): String? = sharedPreferences.getString(USER_STATISTICS_PREFS, null) ?: null
+    override fun getUserStatisticsJson(): String? = sharedPreferences.getString(USER_STATISTICS_PREFS, null)
 
     override fun isCached(): Boolean {
         val value = sharedPreferences.getString(USER_STATISTICS_PREFS, null)

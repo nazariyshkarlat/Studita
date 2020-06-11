@@ -1,5 +1,8 @@
 package com.example.studita.presentation.model
 
+import com.example.studita.domain.entity.InterestingData
+import com.example.studita.domain.entity.InterestingDataScreen
+
 
 data class InterestingUiModel(val interestingNumber: Int, val screens: List<InterestingUiModelScreen>)
 
@@ -14,3 +17,13 @@ sealed class InterestingUiModelScreen{
     data class InterestingUiModelExplanationScreen(val textParts: List<String>) : InterestingUiModelScreen()
 
 }
+
+fun InterestingData.toUiModel() = InterestingUiModel(interestingNumber, screens.map { it.toUiModel() })
+
+fun InterestingDataScreen.toUiModel() =
+    when(this){
+        is InterestingDataScreen.InterestingDataStartScreen -> InterestingUiModelScreen.InterestingUiModelStartScreen(title, subtitle, difficultyLevel)
+        is InterestingDataScreen.InterestingDataStepScreen -> InterestingUiModelScreen.InterestingUiModelStepScreen(title, subtitle)
+        is InterestingDataScreen.InterestingDataSpecificDrumRollScreen -> InterestingUiModelScreen.InterestingUiModelSpecificDrumRollScreen
+        is InterestingDataScreen.InterestingDataExplanationScreen -> InterestingUiModelScreen.InterestingUiModelExplanationScreen(textParts)
+    }

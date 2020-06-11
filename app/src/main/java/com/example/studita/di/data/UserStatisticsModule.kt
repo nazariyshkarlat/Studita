@@ -39,11 +39,8 @@ object UserStatisticsModule {
     private fun getUserStatisticsRepository(): UserStatisticsRepository {
         if (repository == null)
             repository = UserStatisticsRepositoryImpl(
-                getUserStatisticsJsonDataStoreFactory(), UserStatisticsDataMapper(),
-                NetworkModule.connectionManager,
-                UserIdTokenMapper(),
-                UserStatisticsRowEntityMapper(),
-                UserStatisticsRowDataMapper()
+                getUserStatisticsJsonDataStoreFactory(),
+                NetworkModule.connectionManager
             )
         return repository!!
     }

@@ -1,5 +1,7 @@
 package com.example.studita.data.entity.level
 
+import com.example.studita.domain.entity.LevelChildData
+import com.example.studita.domain.entity.LevelData
 import com.google.gson.annotations.SerializedName
 
 
@@ -25,4 +27,14 @@ sealed class LevelChildEntity {
         @SerializedName("title") val title: String,
         @SerializedName("button") val button: List<String>
     ): LevelChildEntity()
+}
+
+fun LevelEntity.toBusinessEntity() = LevelData(
+    levelNumber,
+    levelChildren.map { it.toBusinessEntity() }
+)
+fun LevelChildEntity.toBusinessEntity() = when(this) {
+    is LevelChildEntity.LevelChapterEntity -> LevelChildData.LevelChapterData(chapterNumber, chapterTitle, chapterSubtitle, chapterPartsCount)
+    is LevelChildEntity.LevelInterestingEntity -> LevelChildData.LevelInterestingData(interestingNumber, title, subtitle, tags)
+    is LevelChildEntity.LevelSubscribeEntity -> LevelChildData.LevelSubscribeData(title, button)
 }

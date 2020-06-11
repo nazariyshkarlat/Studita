@@ -17,6 +17,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+
+        <LinearLayout
+            android:id="@+id/userStatLayoutProfileInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/userStatLayoutProfileInfoAvatar"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/avatar_oval"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/userStatLayoutProfileInfoUserName"
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_gravity="center_vertical"/>
+
+        </LinearLayout>
+
         <com.example.studita.presentation.views.EnhancedWrapContentViewPager
             android:id="@+id/userStatLayoutViewPager"
             android:layout_width="match_parent"

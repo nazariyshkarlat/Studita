@@ -13,7 +13,10 @@ import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.user_statistics.UserStatFragment
 import com.example.studita.presentation.fragments.user_statistics.UserStatOfflineModeFragment
 import com.example.studita.presentation.fragments.user_statistics.UserStatUnLoggedInFragment
+import com.example.studita.presentation.view_model.FriendsFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
+import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.UserUtils
 import com.example.studita.utils.navigateTo
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.view.*
@@ -82,12 +85,28 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
                 is CropAvatarFragment -> resources.getString(R.string.crop_photo)
                 is AuthorizationFragment -> resources.getString(R.string.authorization)
                 is ProfileMenuFragment -> resources.getString(R.string.account)
-                is PrivacySettingsFragment -> resources.getString(R.string.privacy)
+                is PrivacySettingsFragment, is PrivacySettingsOfflineModeFragment -> resources.getString(R.string.privacy)
                 is EditProfileFragment, is EditProfileOfflineModeFragment -> resources.getString(R.string.edit_profile)
                 is UserStatFragment, is UserStatUnLoggedInFragment, is UserStatOfflineModeFragment -> resources.getString(R.string.stat)
-                is MyProfileFragment -> resources.getString(R.string.my_profile)
+                is MyProfileFragment, is MyProfileOfflineModeFragment -> resources.getString(R.string.my_profile)
                 is ProfileFragment -> resources.getString(R.string.profile)
-                is FriendsFragment -> resources.getString(R.string.friends)
+                is MyFriendsFragment, is MyFriendsOfflineModeFragment ->{
+
+                    if(fragment is MyFriendsFragment) {
+                        if (fragment.friendsFragmentViewModel.searchState != FriendsFragmentViewModel.SearchState.NoSearch)
+                            resources.getString(R.string.search)
+                        else
+                            resources.getString(R.string.my_friends)
+                    }else
+                        resources.getString(R.string.my_friends)
+
+                }
+                is FriendsFragment -> {
+                        if (fragment.friendsFragmentViewModel.searchState != FriendsFragmentViewModel.SearchState.NoSearch)
+                            resources.getString(R.string.search)
+                        else
+                            resources.getString(R.string.friends)
+                }
                 else -> null
             })
         }

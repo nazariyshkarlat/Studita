@@ -1,17 +1,16 @@
 package com.example.studita.data.repository.exercise
 
-import com.example.studita.data.cache.exercises.ExercisesCache
-import com.example.studita.data.entity.mapper.exercise.ExercisesDataMapper
+import com.example.studita.data.entity.exercise.toBusinessEntity
 import com.example.studita.data.repository.datasource.exercises.*
 import com.example.studita.domain.entity.exercise.ExercisesResponseData
 import com.example.studita.domain.repository.ExercisesRepository
 
-class ExercisesRepositoryImpl(private val exercisesDataStoreFactory: ExercisesDataStoreFactory, private val exerciseDataMapper: ExercisesDataMapper):
+class ExercisesRepositoryImpl(private val exercisesDataStoreFactory: ExercisesDataStoreFactory):
     ExercisesRepository {
 
     override suspend fun getExercises(chapterPartNumber: Int, offlineMode: Boolean): Pair<Int, ExercisesResponseData> =
         with(ExercisesDataStoreImpl(exercisesDataStoreFactory.create(if(offlineMode) ExercisesDataStoreFactory.Priority.CACHE else ExercisesDataStoreFactory.Priority.CLOUD)).getExercises(chapterPartNumber)){
-            this.first to exerciseDataMapper.map(this.second)
+            this.first to this.second.toBusinessEntity()
         }
 
     override suspend fun downloadOfflineExercises(): Int {

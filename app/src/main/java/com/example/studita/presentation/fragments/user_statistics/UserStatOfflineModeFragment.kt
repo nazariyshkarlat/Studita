@@ -10,13 +10,4 @@ import com.example.studita.utils.startActivity
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.android.synthetic.main.user_stat_un_logged_layout.*
 
-class UserStatOfflineModeFragment : NavigatableFragment(R.layout.user_stat_un_logged_layout){
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        userStatUnLoggedLayoutButton.setOnClickListener {
-            activity?.startActivity<MainMenuActivity>()
-        }
-    }
-
-}
+class UserStatOfflineModeFragment : NavigatableFragment(R.layout.offline_mode_layout)

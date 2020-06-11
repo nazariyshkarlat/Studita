@@ -14,6 +14,8 @@ import com.example.studita.presentation.model.ExerciseResultAnimation
 import com.example.studita.utils.*
 import com.example.studita.presentation.view_model.ExercisesEndFragmentViewModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.exercises_result_layout.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -40,9 +42,13 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
         }
 
         val percent : Float? = arguments?.getFloat("ANSWERS_PERCENT")
+        val userDataToAnimation = if (arguments?.containsKey("OLD_USER_DATA") == true)
+            Gson().fromJson<UserDataData>(arguments?.getString("OLD_USER_DATA"), object : TypeToken<UserDataData>(){}.type)
+        else
+            null
 
         exercisesViewModel?.let {viewModel->
-            UserUtils.oldUserData?.let { oldUserData ->
+            userDataToAnimation?.let { oldUserData ->
                 percent?.let {
                     initAnimation(oldUserData, viewModel, it)
                 }

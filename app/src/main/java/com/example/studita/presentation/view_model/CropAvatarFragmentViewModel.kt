@@ -17,7 +17,7 @@ class CropAvatarFragmentViewModel : ViewModel(){
 
     fun getBitmap(uri: Uri, context: Context): Bitmap? {
         return if (resultBitmap == null) {
-            var bitmap = if (uri.scheme.contains("file"))
+            var bitmap = if (uri.scheme?.contains("file") == true)
                 MediaStore.Images.Media.getBitmap(context.contentResolver, uri).rotateIfRequired(context, uri)
             else
                 BitmapFactory.decodeFile(IOUtils.getRealPathFromURI(uri, context)).rotateIfRequired(context, uri)

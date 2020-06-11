@@ -1,10 +1,6 @@
 package com.example.studita.di.data
 
 import android.content.Context
-import com.example.studita.data.entity.mapper.BitmapToFileMapper
-import com.example.studita.data.entity.mapper.EditProfileRequestMapper
-import com.example.studita.data.entity.mapper.EditProfileEntityMapper
-import com.example.studita.data.entity.mapper.UserIdTokenMapper
 import com.example.studita.data.net.EditProfileService
 import com.example.studita.data.repository.EditProfileRepositoryImpl
 import com.example.studita.data.repository.datasource.edit_profile.EditProfileDataStoreFactoryImpl
@@ -42,9 +38,8 @@ object EditProfileModule {
     private fun getEditProfileRepository(): EditProfileRepository {
         if (repository == null)
             repository = EditProfileRepositoryImpl(
-                    getEditProfileDataStoreFactory(),
-                    getEditProfileRequestMapper(),
-                    BitmapToFileMapper(applicationContext)
+                getEditProfileDataStoreFactory(),
+                applicationContext
             )
         return repository!!
     }
@@ -66,8 +61,5 @@ object EditProfileModule {
                     NetworkModule.connectionManager,
                     NetworkModule.getService(EditProfileService::class.java)
             )
-
-    private fun getEditProfileRequestMapper() =
-            EditProfileRequestMapper(UserIdTokenMapper(), EditProfileEntityMapper())
 
 }

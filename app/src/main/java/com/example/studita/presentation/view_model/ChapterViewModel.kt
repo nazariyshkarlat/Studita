@@ -7,8 +7,8 @@ import com.example.studita.R
 import com.example.studita.di.data.ChapterModule
 import com.example.studita.domain.interactor.ChapterStatus
 import com.example.studita.presentation.model.ChapterUiModel
+import com.example.studita.presentation.model.toUiModel
 import com.example.studita.utils.launchExt
-import com.example.studita.presentation.model.mapper.ChapterUiModelMapper
 import com.example.studita.utils.PrefsUtils
 import kotlinx.coroutines.Job
 
@@ -16,7 +16,6 @@ class ChapterViewModel : ViewModel(){
 
     val progressState = MutableLiveData<Boolean>()
     val errorState = SingleLiveEvent<Int>()
-    private val chapterPartUiModelMapper = ChapterUiModelMapper()
 
     lateinit var results: ChapterUiModel
     private val interactor = ChapterModule.getChapterInteractorImpl()
@@ -31,7 +30,7 @@ class ChapterViewModel : ViewModel(){
                 is ChapterStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is ChapterStatus.Success -> {
                     progressState.postValue(true)
-                    results = chapterPartUiModelMapper.map(status.result)
+                    results = status.result.toUiModel()
                 }
             }
         }

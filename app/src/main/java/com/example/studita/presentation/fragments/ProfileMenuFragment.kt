@@ -1,8 +1,10 @@
 package com.example.studita.presentation.fragments
 
 import android.os.Bundle
+import android.preference.PreferenceGroup
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -68,7 +70,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
 
     private fun getSettingsItems() = listOf(R.drawable.ic_person_secondary to resources.getString(R.string.my_profile),
         R.drawable.ic_notifications_secondary to resources.getString(R.string.notifications),
-            R.drawable.ic_people_secondary to resources.getString(R.string.friends),
+            R.drawable.ic_people_secondary to resources.getString(R.string.my_friends),
             R.drawable.ic_lock_secondary to resources.getString(R.string.privacy),
             R.drawable.ic_cloud_secondary to resources.getString(R.string.offline_mode),
             R.drawable.ic_palette_secondary to resources.getString(R.string.app_theme),
@@ -112,7 +114,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
         setOnClickListener {
             when (position) {
                 ListItems.MY_PROFILE.ordinal -> {
-                    (activity as AppCompatActivity).navigateTo(MyProfileFragment(), R.id.doubleFrameLayoutFrameLayout)
+                    (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineMode())  MyProfileOfflineModeFragment() else MyProfileFragment(), R.id.doubleFrameLayoutFrameLayout)
                 }
                 ListItems.THEME.ordinal -> {
                     MainMenuThemeDialogAlertFragment().show(
@@ -132,7 +134,10 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
                     mainMenuLayoutOfflineSwitch.isChecked = !mainMenuLayoutOfflineSwitch.isChecked
                 }
                 ListItems.PRIVACY.ordinal ->{
-                    (activity as AppCompatActivity).navigateTo(PrivacySettingsFragment(), R.id.doubleFrameLayoutFrameLayout)
+                    (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineMode()) PrivacySettingsOfflineModeFragment() else PrivacySettingsFragment(), R.id.doubleFrameLayoutFrameLayout)
+                }
+                ListItems.FRIENDS.ordinal ->{
+                    (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineMode()) MyProfileOfflineModeFragment() else MyFriendsFragment(), R.id.doubleFrameLayoutFrameLayout)
                 }
             }
         }

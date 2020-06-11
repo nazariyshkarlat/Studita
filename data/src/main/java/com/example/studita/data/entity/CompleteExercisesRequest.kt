@@ -1,5 +1,8 @@
 package com.example.studita.data.entity
 
+import com.example.studita.domain.date.DateTimeFormat
+import com.example.studita.domain.entity.CompleteExercisesRequestData
+import com.example.studita.domain.entity.CompletedExercisesData
 import com.google.gson.annotations.SerializedName
 
 data class CompletedExercisesEntity(@SerializedName("chapter_number")val chapterNumber: Int,
@@ -9,3 +12,6 @@ data class CompletedExercisesEntity(@SerializedName("chapter_number")val chapter
                                     @SerializedName("obtained_time")val obtainedTime: Long)
 
 data class CompleteExercisesRequest(@SerializedName("auth_data")val userIdToken: UserIdToken, @SerializedName("completed_exercises_data")val completedExercisesEntity: CompletedExercisesEntity)
+
+fun CompletedExercisesData.toRawEntity() = CompletedExercisesEntity(chapterNumber, chapterPartNumber, percent, DateTimeFormat().format(datetime), obtainedTime)
+fun CompleteExercisesRequestData.toRawEntity() = CompleteExercisesRequest(userIdToken!!.toRawEntity(), completedExercisesEntity.toRawEntity())

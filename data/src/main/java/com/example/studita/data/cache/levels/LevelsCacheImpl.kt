@@ -13,7 +13,7 @@ class LevelsCacheImpl(private val sharedPreferences: SharedPreferences) :
         sharedPreferences.edit().putString("${if(isLoggedIn) "LOGGED" else "UN_LOGGED"}_$LEVELS_PREFS", json).apply()
     }
 
-    override fun getLevelsJson(isLoggedIn: Boolean): String? = sharedPreferences.getString("${if(isLoggedIn) "LOGGED" else "UN_LOGGED"}_$LEVELS_PREFS", null) ?: null
+    override fun getLevelsJson(isLoggedIn: Boolean): String? = sharedPreferences.getString("${if(isLoggedIn) "LOGGED" else "UN_LOGGED"}_$LEVELS_PREFS", null)
 
     override fun isCached(isLoggedIn: Boolean): Boolean {
         val value = sharedPreferences.getString("${if(isLoggedIn) "LOGGED" else "UN_LOGGED"}_$LEVELS_PREFS", null)

@@ -119,7 +119,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         super.onResume()
         if(needsRefresh) {
             homeLayoutRecyclerView.adapter?.notifyDataSetChanged()
-            println(UserUtils.userData)
             needsRefresh = false
         }
     }
@@ -147,12 +146,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         val snackbar = CustomSnackbar(context)
         when (status) {
             is SubscribeEmailResultStatus.Success -> {
-                val subscribe = status.result.subscribe
-                UserUtils.userData.isSubscribed = subscribe
-                homeLayoutRecyclerView.adapter?.notifyItemChanged(
-                        homeLayoutRecyclerView.adapter!!.itemCount - 2
-                )
-                if (subscribe) {
+                if (status.result.subscribe) {
                     snackbar.show(
                             resources.getString(
                                     R.string.subscribe_email,

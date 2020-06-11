@@ -45,12 +45,15 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
                 when(privacySettings.duelsInvitesFrom){
                     DuelsInvitesFrom.FRIENDS -> {
                         privacySettingsLayoutDuelsBlockMyFriendsRadio.isChecked = true
+                        privacySettingsLayoutDuelsBlockMyFriendsRadio.jumpDrawablesToCurrentState()
                     }
                     DuelsInvitesFrom.NOBODY -> {
                         privacySettingsLayoutDuelsBlockNobodyRadio.isChecked = true
+                        privacySettingsLayoutDuelsBlockNobodyRadio.jumpDrawablesToCurrentState()
                     }
                     DuelsInvitesFrom.EXCEPT -> {
                         privacySettingsLayoutDuelsBlockExceptRadio.isChecked = true
+                        privacySettingsLayoutDuelsBlockExceptRadio.jumpDrawablesToCurrentState()
                     }
                 }
 
@@ -76,15 +79,21 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
                     }
                 }
 
-                if(privacySettings.showInRatings == true)
+                if(privacySettings.showInRatings == true) {
                     privacySettingsLayoutRatingsBlockShowRadio.isChecked = true
-                else
+                    privacySettingsLayoutRatingsBlockShowRadio.jumpDrawablesToCurrentState()
+                }else {
                     privacySettingsLayoutRatingsBlockHideRadio.isChecked = true
+                    privacySettingsLayoutRatingsBlockHideRadio.jumpDrawablesToCurrentState()
+                }
 
-                if(privacySettings.profileIsVisible == true)
+                if(privacySettings.profileIsVisible == true) {
                     privacySettingsLayoutVisibilityBlockShowRadio.isChecked = true
-                else
+                    privacySettingsLayoutVisibilityBlockShowRadio.jumpDrawablesToCurrentState()
+                }else {
                     privacySettingsLayoutVisibilityBlockHideRadio.isChecked = true
+                    privacySettingsLayoutVisibilityBlockHideRadio.jumpDrawablesToCurrentState()
+                }
 
                 view.setRadioButtonsListeners(viewModel)
             })

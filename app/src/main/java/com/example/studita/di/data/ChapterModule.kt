@@ -2,7 +2,6 @@ package com.example.studita.di.data
 
 import com.example.studita.di.CacheModule
 import com.example.studita.data.cache.chapter.ChapterCacheImpl
-import com.example.studita.data.entity.mapper.ChapterDataMapper
 import com.example.studita.data.net.ChapterService
 import com.example.studita.data.net.ChaptersService
 import com.example.studita.data.repository.ChapterRepositoryImpl
@@ -40,7 +39,6 @@ object ChapterModule {
         if (repository == null)
             repository = ChapterRepositoryImpl(
                 getChapterJsonDataStoreFactory(),
-                ChapterDataMapper(),
                 NetworkModule.connectionManager
             )
         return repository!!

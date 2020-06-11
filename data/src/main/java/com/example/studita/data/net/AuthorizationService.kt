@@ -1,8 +1,6 @@
 package com.example.studita.data.net
 
 import com.example.studita.data.entity.*
-import com.google.gson.annotations.SerializedName
-import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -18,5 +16,5 @@ interface AuthorizationService {
     suspend fun signUp(@Body authorizationData: AuthorizationRequestEntity): Response<ResponseBody?>
 
     @POST("sign_in_with_google")
-    suspend fun signInWithGoogle(@Body signInWithGoogleRequestEntity: SignInWithGoogleRequestEntity): Response<LogInResponseEntity>
+    suspend fun signInWithGoogle(@Body signInWithGoogleRequest: SignInWithGoogleRequest): Response<LogInResponseEntity>
 }

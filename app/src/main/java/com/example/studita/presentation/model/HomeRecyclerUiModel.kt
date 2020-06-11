@@ -2,6 +2,8 @@ package com.example.studita.presentation.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.example.studita.domain.entity.LevelChildData
+import com.example.studita.domain.entity.LevelData
 
 sealed class HomeRecyclerUiModel{
     object HomeUserDataUiModel : HomeRecyclerUiModel()
@@ -26,4 +28,15 @@ sealed class HomeRecyclerUiModel{
         val title: String,
         val button: List<String>
     ): HomeRecyclerUiModel()
+}
+
+fun LevelData.toHomeRecyclerItems() = listOf(
+    HomeRecyclerUiModel.HomeRecyclerLevelViewModel(levelNumber,
+    levelChildren.filterIsInstance<LevelChildData.LevelChapterData>().first().chapterNumber-1 to levelChildren.filterIsInstance<LevelChildData.LevelChapterData>().last().chapterNumber-1,
+    levelChildren.filterIsInstance<LevelChildData.LevelChapterData>().map { it.chapterPartsCount }.sum()), *levelChildren.map { it.toHomeRecyclerUiModel() }.toTypedArray())
+
+fun LevelChildData.toHomeRecyclerUiModel() = when(this) {
+    is LevelChildData.LevelChapterData -> HomeRecyclerUiModel.LevelChapterUiModel(chapterNumber, chapterTitle, chapterSubtitle, chapterPartsCount)
+    is LevelChildData.LevelInterestingData -> HomeRecyclerUiModel.LevelInterestingUiModel(interestingNumber, title, subtitle, tags)
+    is LevelChildData.LevelSubscribeData -> HomeRecyclerUiModel.LevelSubscribeUiModel(title, button)
 }

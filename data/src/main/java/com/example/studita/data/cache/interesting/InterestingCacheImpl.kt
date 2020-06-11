@@ -19,7 +19,7 @@ class InterestingCacheImpl(private val sharedPreferences: SharedPreferences) : I
         }
     }
 
-    override fun getInterestingJson(interestingNumber: Int): String? = sharedPreferences.getString("${INTERESTING_PREFS}_$interestingNumber", null) ?: null
+    override fun getInterestingJson(interestingNumber: Int): String? = sharedPreferences.getString("${INTERESTING_PREFS}_$interestingNumber", null)
 
     override fun isCached(interestingNumber: Int): Boolean {
         val value = sharedPreferences.getString("${INTERESTING_PREFS}_$interestingNumber", null)

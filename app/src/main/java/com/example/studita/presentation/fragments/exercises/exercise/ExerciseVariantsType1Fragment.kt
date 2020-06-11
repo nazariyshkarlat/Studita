@@ -8,7 +8,7 @@ import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.makeView
-import com.example.studita.presentation.model.ExerciseShape
+import com.example.studita.presentation.model.ExerciseShapeUiModel
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.views.SquareView
 import com.google.android.flexbox.FlexboxLayout
@@ -37,7 +37,7 @@ class ExerciseVariantsType1Fragment : ExerciseVariantsFragment(R.layout.exercise
         }
     }
 
-    private fun fillVariants(variants: List<ExerciseShape>){
+    private fun fillVariants(variants: List<ExerciseShapeUiModel>){
         for(variant in variants) {
             val variantView: View
             if(variant.count == 0){
@@ -54,10 +54,7 @@ class ExerciseVariantsType1Fragment : ExerciseVariantsFragment(R.layout.exercise
                     params.height = 20.dpToPx()
                     params.width = 20.dpToPx()
                     shapeView.layoutParams = params
-                    shapeView.background = ContextCompat.getDrawable(
-                        exerciseVariantsTitleFragmentLinearLayout.context,
-                        variant.shapeId
-                    )
+                    shapeView.background = variant.shape
                     variantView.addView(shapeView)
                 }
             }

@@ -13,7 +13,7 @@ class SubscribeEmailCacheImpl(private val sharedPreferences: SharedPreferences) 
         sharedPreferences.edit().putString(SUBSCRIBE_EMAIL_PREFS, json).apply()
     }
 
-    override fun getSubscribeEmailJson(): String? = sharedPreferences.getString(SUBSCRIBE_EMAIL_PREFS, null) ?: null
+    override fun getSubscribeEmailJson(): String? = sharedPreferences.getString(SUBSCRIBE_EMAIL_PREFS, null)
 
     override fun deleteSubscribeEmailJson() {
         sharedPreferences.edit().remove(SUBSCRIBE_EMAIL_PREFS).apply()

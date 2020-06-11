@@ -1,17 +1,21 @@
 package com.example.studita.utils
 
 import androidx.lifecycle.MutableLiveData
+import com.example.studita.domain.entity.UserData
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.UserIdTokenData
-import com.example.studita.presentation.view_model.SingleLiveEvent
+import com.example.studita.presentation.view_model.LiveEvent
 
 object UserUtils {
 
     val userDataLiveData = MutableLiveData<UserDataData>()
+    val userData: UserDataData
+    get(){
+        return userDataLiveData.value as UserDataData
+    }
+    val isMyFriendLiveData = LiveEvent<UserData>()
     private var userToken: String? = null
     private var userID: Int? = null
-    lateinit var userData: UserDataData
-    var oldUserData: UserDataData? = null
 
     private fun getUserToken(): String? =
         if(userToken == null) PrefsUtils.getUserToken() else userToken

@@ -20,8 +20,7 @@ class ExercisesCacheImpl(private val sharedPreferences: SharedPreferences) : Exe
     }
 
     override fun getExercises(chapterPartNumber: Int): String? {
-        println(chapterPartNumber)
-        return sharedPreferences.getString("${EXERCISES_PREFS}_$chapterPartNumber", null) ?: null
+        return sharedPreferences.getString("${EXERCISES_PREFS}_$chapterPartNumber", null)
     }
 
     override fun isCached(): Boolean {

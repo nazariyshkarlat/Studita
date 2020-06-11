@@ -15,6 +15,7 @@
         <item name="splash_screen_color">@color/gray11</item>
         <item name="splash_screen_text_color">@color/white34</item>
         <item name="colorControlNormal">?secondary_color</item>
+        <item name="android:scrollbarSize">4dp</item>
     </style>
 
     <style name="LightTheme" parent="AppTheme">
@@ -504,5 +505,20 @@
         <item name="fontFamily">@font/roboto_medium</item>
     </style>
 
+    <style name="SearchEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:hint">@string/search</item>
+        <item name="drawableStartCompat">@drawable/ic_search</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColorHint">?secondary_color</item>
+        <item name="android:background">@drawable/main_blocks_rectangle</item>
+    </style>
 
 </resources>

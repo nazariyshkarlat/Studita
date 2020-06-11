@@ -29,7 +29,7 @@ object DI{
         CompleteExercisesModule.initialize(configuration)
         EditProfileModule.initialize(configuration, app)
         PrivacySettingsModule.initialize(configuration)
-        FriendsModule.initialize(configuration)
+        UsersModule.initialize(configuration)
     }
 
 }

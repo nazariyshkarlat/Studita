@@ -12,6 +12,7 @@
     <integer name="authorization_error_duration">4000</integer>
     <integer name="subscribe_email_snackbar_duration">5000</integer>
     <integer name="unsubscribe_email_snackbar_duration">3000</integer>
+    <integer name="add_remove_friend_snackbar_duration">2000</integer>
     <integer name="offline_subscribe_email_snackbar_duration">5000</integer>
     <integer name="exercises_load_layout_bottom_section_alpha_anim_duration">500</integer>
     <integer name="user_name_min_length">4</integer>

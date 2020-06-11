@@ -1,8 +1,5 @@
 package com.example.studita.di.data
 
-import com.example.studita.data.entity.mapper.UserDataDataMapper
-import com.example.studita.data.entity.mapper.UserDataEntityMapper
-import com.example.studita.data.entity.mapper.UserIdTokenMapper
 import com.example.studita.data.net.UserDataService
 import com.example.studita.data.repository.UserDataRepositoryImpl
 import com.example.studita.data.repository.datasource.user_data.*
@@ -37,9 +34,7 @@ object UserDataModule {
         if (repository == null)
             repository = UserDataRepositoryImpl(
                 getUserDataJsonDataStoreFactory(),
-                UserDataDataMapper(),
-                NetworkModule.connectionManager,
-                UserDataEntityMapper()
+                NetworkModule.connectionManager
             )
         return repository!!
     }

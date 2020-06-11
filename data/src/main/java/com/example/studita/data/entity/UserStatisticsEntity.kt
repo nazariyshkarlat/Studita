@@ -3,6 +3,9 @@ package com.example.studita.data.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.studita.domain.date.DateTimeFormat
+import com.example.studita.domain.entity.UserStatisticsData
+import com.example.studita.domain.entity.UserStatisticsRowData
 import com.google.gson.annotations.SerializedName
 
 data class UserStatisticsEntity(@SerializedName("time_type")val timeType: String,
@@ -29,3 +32,7 @@ data class UserStatisticsRowEntity(@SerializedName("datetime")val datetime: Stri
 }
 
 data class SaveUserStatisticsRequest(@SerializedName("auth_data")val userIdToken: UserIdToken, @SerializedName("user_statistics")val userStatisticsRowEntity: UserStatisticsRowEntity)
+
+fun UserStatisticsEntity.toBusinessEntity() = UserStatisticsData(obtainedXP, obtainedTime, obtainedExercises, obtainedTrainings, obtainedAchievements)
+fun UserStatisticsRowEntity.toBusinessEntity() = UserStatisticsRowData(DateTimeFormat().parse(datetime)!!, obtainedXP, obtainedTime, obtainedExercises, obtainedTrainings, obtainedAchievements)
+fun UserStatisticsRowData.toRawEntity() = UserStatisticsRowEntity(DateTimeFormat().format(datetime), obtainedXP, obtainedTime, obtainedExercises, obtainedTrainings, obtainedAchievements)

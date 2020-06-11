@@ -14,3 +14,9 @@ enum class DuelsInvitesFrom{
 
 data class PrivacySettingsRequestData(val userIdToken: UserIdTokenData,
                                   val privacySettingsEntity: PrivacySettingsData)
+
+fun DuelsInvitesFrom.asChar() = when(this){
+    DuelsInvitesFrom.FRIENDS -> 'f'
+    DuelsInvitesFrom.NOBODY -> 'n'
+    DuelsInvitesFrom.EXCEPT -> 'e'
+}

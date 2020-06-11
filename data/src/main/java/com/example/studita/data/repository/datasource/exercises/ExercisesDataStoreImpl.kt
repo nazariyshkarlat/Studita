@@ -1,12 +1,8 @@
 package com.example.studita.data.repository.datasource.exercises
 
 import com.example.studita.data.entity.exercise.*
-import com.example.studita.data.net.connection.ConnectionManager
-import com.example.studita.data.net.ExercisesService
-import com.example.studita.domain.exception.NetworkConnectionException
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
@@ -33,8 +29,8 @@ class ExercisesDataStoreImpl(private val exercisesJsonDataStore: ExercisesJsonDa
             type
         )
         return pair.first to ExercisesResponse(
-            exercisesRawResponse.exercisesStartScreen,
-            exercisesRawResponse.exercisesDescription,
+            exercisesRawResponse.exercisesStartScreenEntity,
+            exercisesRawResponse.exercisesDescriptionEntity,
             exercises
         )
     }

@@ -1,6 +1,5 @@
 package com.example.studita.presentation.view_model
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,11 +14,12 @@ import com.example.studita.domain.interactor.LevelsStatus
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.domain.interactor.UserDataStatus
 import com.example.studita.presentation.model.HomeRecyclerUiModel
-import com.example.studita.presentation.model.mapper.LevelUiModelMapper
+import com.example.studita.presentation.model.toHomeRecyclerItems
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.TimeUtils
 import com.example.studita.utils.launchExt
 import com.example.studita.utils.UserUtils
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -64,7 +64,7 @@ class HomeFragmentViewModel : ViewModel(){
 
                     val userLevelsStatus = userLevels.await()
                     if(userLevelsStatus is LevelsStatus.Success) {
-                        results = LevelUiModelMapper().map(userLevelsStatus.result)
+                        results = userLevelsStatus.result.map { it.toHomeRecyclerItems() }.flatten()
                         progressState.postValue(true)
                     }
                 }
@@ -73,7 +73,7 @@ class HomeFragmentViewModel : ViewModel(){
     }
 
     fun subscribeEmail(userIdTokenData: UserIdTokenData, subscribe: Boolean){
-        subscribeJob = viewModelScope.launchExt(subscribeJob){
+        subscribeJob = GlobalScope.launchExt(subscribeJob){
             when(val status = if(subscribe)
                 subscribeEmailInteractor.subscribe(userIdTokenData)
             else
@@ -111,7 +111,7 @@ class HomeFragmentViewModel : ViewModel(){
     }
 
     private fun initUserData(userDataData: UserDataData){
-        UserUtils.userData = userDataData
+        UserUtils.userDataLiveData.value = userDataData
 
         if(TimeUtils.getCalendarDayCount(userDataData.streakDatetime, Date()) > 1F){
             userDataData.streakDays = 0

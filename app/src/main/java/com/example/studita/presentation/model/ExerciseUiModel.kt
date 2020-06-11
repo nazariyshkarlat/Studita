@@ -1,8 +1,10 @@
 package com.example.studita.presentation.model
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import com.example.studita.domain.entity.exercise.ExerciseData
 import com.example.studita.domain.entity.exercise.ExerciseNumberData
@@ -15,12 +17,12 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
         data class ExerciseType1UiModel(
             override val exerciseNumber: Int?, val title: String,
             val subtitle: String,
-            val variants: List<ExerciseShape>
+            val variants: List<ExerciseShapeUiModel>
         ) : ExerciseUiModelExercise(exerciseNumber)
 
         data class ExerciseType2UiModel(
             override val exerciseNumber: Int?,
-            val title: ExerciseShape,
+            val title: ExerciseShapeUiModel,
             val subtitle: String,
             val variants: List<String>
         ) : ExerciseUiModelExercise(exerciseNumber)
@@ -66,7 +68,7 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
             val title: String,
             val subtitle: String,
             val partsToInject: List<String>,
-            @IdRes val image: Int
+            val image: Drawable
         ) : ExerciseUiModelScreen(exerciseNumber)
 
         data class ScreenType2UiModel(override val exerciseNumber: Int?, val title: String) : ExerciseUiModelScreen(exerciseNumber)
@@ -78,4 +80,19 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
     }
 }
 
-data class ExerciseShape(val shapeId: Int, val count: Int)
+fun ExerciseData.toUiModel(context: Context) = when (this) {
+    is ExerciseData.ExerciseDataExercise.ExerciseType1Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel(exerciseNumber, title, subtitle, variants.map { it.toUiModel(context) })
+    is ExerciseData.ExerciseDataExercise.ExerciseType2Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel(exerciseNumber, title.toUiModel(context), subtitle, variants)
+    is ExerciseData.ExerciseDataExercise.ExerciseType3Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel(exerciseNumber, title, subtitle, variants)
+    is ExerciseData.ExerciseDataExercise.ExerciseType4Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel(exerciseNumber, title, subtitle, variants)
+    is ExerciseData.ExerciseDataExercise.ExerciseType5and6Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6UiModel(exerciseNumber, title, subtitle, variants)
+    is ExerciseData.ExerciseDataExercise.ExerciseType7Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel(exerciseNumber,title)
+    is ExerciseData.ExerciseDataExercise.ExerciseType8Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8UiModel(exerciseNumber, title, subtitle, variants)
+    is ExerciseData.ExerciseDataExercise.ExerciseType9Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel(exerciseNumber,title)
+    is ExerciseData.ExerciseDataExercise.ExerciseType10Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType10UiModel(exerciseNumber,titleParts, subtitle)
+    is ExerciseData.ExerciseDataExercise.ExerciseType11Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType11UiModel(exerciseNumber,titleParts, filter, compareNumber)
+
+    is ExerciseData.ExerciseDataScreen.ScreenType1Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel(exerciseNumber, title, subtitle, partsToInject, image.getShapeByName(context))
+    is ExerciseData.ExerciseDataScreen.ScreenType2Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel(exerciseNumber, title)
+    is ExerciseData.ExerciseDataScreen.ScreenType3Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel(exerciseNumber, title, subtitle, partsToInject)
+}

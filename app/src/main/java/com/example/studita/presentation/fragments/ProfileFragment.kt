@@ -12,17 +12,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.domain.entity.FriendsResponseData
+import com.example.studita.domain.entity.UserData
+import com.example.studita.domain.entity.UsersResponseData
 import com.example.studita.domain.entity.UserDataData
-import com.example.studita.domain.interactor.CheckIsMyFriendStatus
-import com.example.studita.domain.interactor.GetFriendsStatus
+import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.interactor.UserDataStatus
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.user_statistics.UserStatFragment
 import com.example.studita.presentation.view_model.ProfileFragmentViewModel
 import com.example.studita.utils.*
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.profile_friend_item.view.*
 import kotlinx.android.synthetic.main.profile_layout.*
 import java.util.*
@@ -39,49 +37,92 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
         profileFragmentViewModel = ViewModelProviders.of(this).get(ProfileFragmentViewModel::class.java)
 
         profileFragmentViewModel.friendsState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if(it is GetFriendsStatus.Success)
-                fillFriends(it.friendsResponseData)
-            else if(it is GetFriendsStatus.NoFriendsFound)
-                profileLayoutFriendsLayout.visibility = View.GONE
-        })
 
-        profileFragmentViewModel.friendDataState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if(it is UserDataStatus.Success) {
+            if(it is GetUsersStatus.Success) {
+                fillFriends(it.friendsResponseData)
+
                 (view as ViewGroup).removeView(profileLayoutProgressBar)
                 profileLayoutScrollView.visibility = View.VISIBLE
-                userData = it.result
 
-                profileLayoutAvatar.fillAvatar(userData.avatarLink, userData.userName!!, userData.userId!!)
-                fillStreakBlock(userData, view.context)
-                fillText(userData)
-                fillCompetitionsBlock(userData)
-            }
-        })
+            }else if(it is GetUsersStatus.NoUsersFound) {
+                val isMyProfile = userData.userId == UserUtils.userData.userId
 
-        profileFragmentViewModel.isMyFriendState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {isMyFriendState->
-            formButton(isMyFriendState, userData, view.context)
-        })
-
-            arguments?.getInt("USER_ID")?.let {
-                if (savedInstanceState == null) {
-                    profileFragmentViewModel.getProfileData(it, UserUtils.userData.userId!!)
-                }
-                val isMyProfile = it == UserUtils.userData.userId
-                if (isMyProfile) {
-                    profileLayoutButton.setOnClickListener {
-                        (activity as AppCompatActivity).navigateTo(
-                            EditProfileFragment(),
-                            R.id.doubleFrameLayoutFrameLayout
-                        )
+                profileLayoutFriendsTitle.text = resources.getString(R.string.friends)
+                profileLayoutEmptyFriends.visibility = View.VISIBLE
+                if(isMyProfile) {
+                    profileLayoutEmptyFriendsText.text = resources.getString(R.string.my_friends_empty)
+                    profileLayoutEmptyFriendsButton.visibility = View.VISIBLE
+                    profileLayoutEmptyFriendsButton.setOnClickListener {
+                        showGlobalSearch()
                     }
+                }else{
+                    profileLayoutEmptyFriendsText.text = resources.getString(R.string.friends_empty)
                 }
-            }
 
-        profileLayoutFriendsMoreButton.setOnClickListener {
-            (activity as AppCompatActivity).navigateTo(FriendsFragment(), R.id.doubleFrameLayoutFrameLayout)
+                (view as ViewGroup).removeView(profileLayoutProgressBar)
+                profileLayoutScrollView.visibility = View.VISIBLE
+
+            }
+        })
+
+        val isMyProfile = arguments?.getInt("USER_ID") == PrefsUtils.getUserId()
+        if(!isMyProfile){
+            profileFragmentViewModel.friendDataState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                if(it is UserDataStatus.Success) {
+                    userData = it.result
+
+                    profileLayoutAvatar.fillAvatar(userData.avatarLink, userData.userName!!, userData.userId!!)
+                    fillText(userData)
+                    fillStreakBlock(userData, view.context)
+                    fillCompetitionsBlock(userData)
+                }
+        })}else {
+            UserUtils.userDataLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                userData = it
+
+                profileLayoutAvatar.fillAvatar(
+                    userData.avatarLink,
+                    userData.userName!!,
+                    userData.userId!!
+                )
+
+                fillText(userData)
+                fillStreakBlock(userData, view.context)
+                fillCompetitionsBlock(userData)
+            })
         }
 
-        view.post { initMenu()}
+        UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {friendData->
+                if (friendData.userId == arguments?.getInt("USER_ID")) {
+                    formButton(friendData, view.context)
+                }
+                arguments?.getInt("USER_ID")?.let { it1 -> profileFragmentViewModel.getFriends(it1) }
+        })
+
+        profileFragmentViewModel.isMyFriendState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            formButton(UserData(userData.userId!!, userData.userName!!, userData.avatarLink, it), view.context)
+        })
+
+        arguments?.getInt("USER_ID")?.let {userId->
+            if (savedInstanceState == null) {
+                profileFragmentViewModel.getProfileData(PrefsUtils.getUserId()!!, userId)
+            }
+            if (isMyProfile) {
+                profileLayoutButton.setOnClickListener {
+                    (activity as AppCompatActivity).navigateTo(
+                        EditProfileFragment(),
+                        R.id.doubleFrameLayoutFrameLayout
+                    )
+                }
+            }
+            profileLayoutFriendsMoreButton.setOnClickListener {
+                navigateToFriends(isMyProfile, userId)
+            }
+        }
+
+
+        if(!isHidden)
+            view.post { initMenu()}
 
         scrollingView = profileLayoutScrollView
     }
@@ -89,28 +130,24 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
 
-        if(!isHidden) {
+        if(!isHidden)
             initMenu()
-            arguments?.getInt("USER_ID")?.let {
-                profileFragmentViewModel.getProfileData(it, UserUtils.userData.userId!!)
-            }
-        }
     }
 
-    private fun formButton(isMyFriendState: CheckIsMyFriendStatus, userDataData: UserDataData, context: Context){
-        if(isMyFriendState is CheckIsMyFriendStatus.IsMyFriend){
+    private fun formButton(userData: UserData, context: Context){
+        if(userData.isMyFriend){
             profileLayoutButton.text = resources.getString(R.string.call_to_duel)
             profileLayoutTextButton.visibility = View.VISIBLE
             profileLayoutButton.background = ContextCompat.getDrawable(context, R.drawable.button_green_8)
             profileLayoutTextButton.setOnClickListener {
-                profileFragmentViewModel.removeFromFriends(UserUtils.getUserIDTokenData()!!, userDataData.userId!!)
+                profileFragmentViewModel.removeFromFriends(UserUtils.getUserIDTokenData()!!, userData)
             }
-        }else if(isMyFriendState is CheckIsMyFriendStatus.IsNotMyFriend){
+        }else{
             profileLayoutButton.text = resources.getString(R.string.add_to_friends)
             profileLayoutButton.background = ContextCompat.getDrawable(context, R.drawable.button_accent_8)
             profileLayoutTextButton.visibility = View.GONE
             profileLayoutButton.setOnClickListener {
-                profileFragmentViewModel.addToFriends(UserUtils.getUserIDTokenData()!!, userDataData.userId!!)
+                profileFragmentViewModel.addToFriends(UserUtils.getUserIDTokenData()!!, userData)
             }
         }
     }
@@ -143,15 +180,18 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
         }
     }
 
-    private fun fillFriends(friendsResponseData: FriendsResponseData){
-        val friends = friendsResponseData.friends
+    private fun fillFriends(friendsResponseData: UsersResponseData){
+        val friends = friendsResponseData.users
 
-        profileLayoutFriendsTitle.text = resources.getString(R.string.friends_count_template, friendsResponseData.friendsCount)
+        profileLayoutFriendsTitle.text = resources.getString(R.string.friends_count_template, friendsResponseData.usersCount)
 
-        if(friends.isNotEmpty())
-            profileLayoutFriendsLayout.visibility = View.VISIBLE
+        val isMyProfile = arguments?.getInt("USER_ID") == UserUtils.userData.userId
 
-        if(friendsResponseData.friendsCount > 3)
+        profileLayoutFriendsTitle.setOnClickListener {
+            navigateToFriends(isMyProfile, arguments?.getInt("USER_ID")!!)
+        }
+
+        if(friendsResponseData.usersCount > 3)
             profileLayoutFriendsMoreButton.visibility = View.VISIBLE
         else
             profileLayoutFriendsMoreButton.visibility = View.GONE
@@ -162,29 +202,15 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
 
             with(friendChild){
 
-                profileFriendItemAvatar.fillAvatar(friendData.avatarLink, friendData.friendName, friendData.friendId)
-                profileFriendItemUserName.text = resources.getString(R.string.user_name_template, friendData.friendName)
+                profileFriendItemAvatar.fillAvatar(friendData.avatarLink, friendData.userName, friendData.userId)
+                profileFriendItemUserName.text = resources.getString(R.string.user_name_template, friendData.userName)
 
                 setOnClickListener {
-                    val isYourProfile = friendData.friendId == UserUtils.userData.userId
-                    navigateToProfile(friendData.friendId, isYourProfile)
+                    val isI = friendData.userId == UserUtils.userData.userId
+                    navigateToProfile(friendData.userId, isI)
                 }
             }
             profileLayoutFriendsLayout.addView(friendChild, profileLayoutFriendsLayout.childCount-1)
-        }
-    }
-
-    private fun initButton(userDataData: UserDataData, context: Context){
-        val isMyProfile = userDataData.userId == UserUtils.userData.userId
-        if(isMyProfile) {
-            profileLayoutButton.setOnClickListener {
-                if (arguments?.get("NAVIGATE_FROM_EDIT_PROFILE") == true)
-                    activity?.onBackPressed()
-                else
-                    (activity as AppCompatActivity).navigateTo(EditProfileFragment(), R.id.doubleFrameLayoutFrameLayout)
-            }
-        }else{
-            profileLayoutButton.background = ContextCompat.getDrawable(context, R.drawable.button_green_8)
         }
     }
 
@@ -209,6 +235,18 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
                 true
             }
         }
+    }
+
+    private fun navigateToFriends(isMyProfile: Boolean, userId: Int){
+        (activity as AppCompatActivity).navigateTo((if(isMyProfile) MyFriendsFragment() else FriendsFragment()).apply {
+            arguments = bundleOf("USER_ID" to userId)
+        }, R.id.doubleFrameLayoutFrameLayout)
+    }
+
+    private fun showGlobalSearch(){
+        (activity as AppCompatActivity).navigateTo(MyFriendsFragment().apply {
+            arguments = bundleOf("USER_ID" to UserUtils.userData.userId, "GLOBAL_SEARCH_ONLY" to true)
+        }, R.id.doubleFrameLayoutFrameLayout)
     }
 
     private fun streakActivated(streakDate: Date) = TimeUtils.getCalendarDayCount(Date(), streakDate) == 0L

@@ -2,7 +2,6 @@ package com.example.studita.di.data
 
 import com.example.studita.di.CacheModule
 import com.example.studita.data.cache.levels.LevelsCacheImpl
-import com.example.studita.data.entity.mapper.LevelDataMapper
 import com.example.studita.data.net.LevelsService
 import com.example.studita.data.repository.LevelsRepositoryImpl
 import com.example.studita.data.repository.datasource.levels.CloudLevelsJsonDataStore
@@ -38,7 +37,6 @@ object LevelsModule {
         if (repository == null)
             repository = LevelsRepositoryImpl(
                 getLevelsJsonDataStoreFactory(),
-                LevelDataMapper(),
                 NetworkModule.connectionManager
             )
         return repository!!

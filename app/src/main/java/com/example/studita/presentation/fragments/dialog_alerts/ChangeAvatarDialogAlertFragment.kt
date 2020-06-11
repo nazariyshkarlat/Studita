@@ -97,26 +97,28 @@ class ChangeAvatarDialogAlertFragment : BaseDialogFragment(R.layout.change_avata
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != RESULT_CANCELED) {
-            var selectedImagePath: Uri? = null
-            when (requestCode) {
-                0 -> if (resultCode == RESULT_OK && data != null) {
+        var selectedImagePath: Uri? = null
+        when (requestCode) {
+            0 -> {
+                if (resultCode == RESULT_OK) {
                     val file = File(photoPath)
                     selectedImagePath = Uri.fromFile(file)
                 }
-                1 -> if (resultCode == RESULT_OK && data != null) {
+            }
+            1 -> {
+                if (resultCode == RESULT_OK && data != null) {
                     val selectedImageUri = data.data
-                    if(selectedImageUri != null)
+                    if (selectedImageUri != null)
                         selectedImagePath = selectedImageUri
                 }
             }
-            selectedImagePath?.let{
-                dismiss()
-                (activity as AppCompatActivity).navigateTo(CropAvatarFragment().apply {
-                    this@ChangeAvatarDialogAlertFragment.targetFragment?.let{this.setTargetFragment(it, 0)}
-                    arguments = bundleOf("SELECTED_IMAGE_URI" to it)
-                }, R.id.doubleFrameLayoutFrameLayout)
-            }
+        }
+        selectedImagePath?.let{
+            dismiss()
+            (activity as AppCompatActivity).navigateTo(CropAvatarFragment().apply {
+                this@ChangeAvatarDialogAlertFragment.targetFragment?.let{this.setTargetFragment(it, 0)}
+                arguments = bundleOf("SELECTED_IMAGE_URI" to it)
+            }, R.id.doubleFrameLayoutFrameLayout)
         }
     }
 
@@ -128,6 +130,10 @@ class ChangeAvatarDialogAlertFragment : BaseDialogFragment(R.layout.change_avata
         }else if(requestCode == 3) {
             showGalleryIntent(context!!)
         }
+    }
+
+    override fun shouldShowRequestPermissionRationale(permission: String): Boolean {
+        return false
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

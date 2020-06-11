@@ -1,9 +1,5 @@
 package com.example.studita.di.data
 
-import com.example.studita.data.entity.mapper.PrivacySettingsDataMapper
-import com.example.studita.data.entity.mapper.PrivacySettingsEntityMapper
-import com.example.studita.data.entity.mapper.PrivacySettingsRequestMapper
-import com.example.studita.data.entity.mapper.UserIdTokenMapper
 import com.example.studita.data.net.PrivacySettingsService
 import com.example.studita.data.repository.PrivacySettingsRepositoryImpl
 import com.example.studita.data.repository.datasource.privacy_settings.PrivacySettingsDataStoreFactoryImpl
@@ -37,10 +33,7 @@ object PrivacySettingsModule {
     private fun getPrivacySettingsRepository(): PrivacySettingsRepository {
         if (repository == null)
             repository = PrivacySettingsRepositoryImpl(
-                    getPrivacySettingsDataStoreFactory(),
-                    UserIdTokenMapper(),
-                    PrivacySettingsEntityMapper(),
-                    getPrivacySettingsRequestMapper()
+                    getPrivacySettingsDataStoreFactory()
             )
         return repository!!
     }
@@ -59,10 +52,4 @@ object PrivacySettingsModule {
             PrivacySettingsDataStoreImpl(
                     NetworkModule.connectionManager,
                     NetworkModule.getService(PrivacySettingsService::class.java))
-
-    private fun getPrivacySettingsRequestMapper() =
-            PrivacySettingsRequestMapper(
-                    UserIdTokenMapper(),
-                    PrivacySettingsDataMapper()
-            )
 }

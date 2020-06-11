@@ -27,6 +27,7 @@ import com.example.studita.presentation.listeners.FabScrollListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListenerImpl
 import com.example.studita.presentation.views.CustomProgressBar
+import kotlinx.android.synthetic.main.edit_profile_layout.*
 import kotlinx.android.synthetic.main.profile_layout.*
 import kotlin.reflect.KClass
 
@@ -46,9 +47,28 @@ fun Activity.hideKeyboard() {
     hideKeyboard(currentFocus ?: View(this))
 }
 
+fun Activity.showKeyboard(){
+    (this as Context).showKeyboard()
+}
+
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun Context.showKeyboard(){
+    (this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+}
+
+fun Context.getAppCompatActivity(): AppCompatActivity?{
+    var context = this
+    while (this is ContextWrapper) {
+        if (context is AppCompatActivity) {
+            return context
+        }
+        context = this.baseContext
+    }
+    return null
 }
 
 fun View.setOnViewSizeChangeListener(viewSizeChangeListener: OnViewSizeChangeListener): View.OnLayoutChangeListener {
@@ -113,6 +133,9 @@ inline fun <reified T : View> ViewGroup.allViewsOfTypeT(noinline f: (T) -> Unit)
 
 fun ImageView.fillAvatar(avatarLink: String?, userName: String, userId: Int){
     if (avatarLink == null) {
+        Glide
+            .with(this.context)
+            .clear(this)
         AvaDrawer.drawAvatar(this, userName, userId)
     } else {
         Glide

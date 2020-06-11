@@ -12,7 +12,7 @@ class LevelsDataCacheImpl(private val sharedPreferences: SharedPreferences) : Le
         sharedPreferences.edit().putString(LEVELS_DATA_PREFS, json).apply()
     }
 
-    override fun getLevelsDataJson(): String? = sharedPreferences.getString(LEVELS_DATA_PREFS, null) ?: null
+    override fun getLevelsDataJson(): String? = sharedPreferences.getString(LEVELS_DATA_PREFS, null)
 
     override fun isCached(): Boolean {
         val value = sharedPreferences.getString(LEVELS_DATA_PREFS, null)

@@ -20,7 +20,7 @@ class ChapterCacheImpl(private val sharedPreferences: SharedPreferences) :
         }
     }
 
-    override fun getLevelsJson(chapterNumber: Int): String? = sharedPreferences.getString("${CHAPTER_PREFS}_$chapterNumber", null) ?: null
+    override fun getLevelsJson(chapterNumber: Int): String? = sharedPreferences.getString("${CHAPTER_PREFS}_$chapterNumber", null)
 
     override fun isCached(chapterNumber: Int): Boolean {
         val value = sharedPreferences.getString("${CHAPTER_PREFS}_$chapterNumber", null)

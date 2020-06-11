@@ -9,26 +9,25 @@ import com.example.studita.R
 import com.example.studita.domain.entity.UserStatisticsData
 import com.example.studita.domain.interactor.UserStatisticsStatus
 import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.view_model.UserStatisticsPageViewModel
 import com.example.studita.utils.TimeUtils
 import com.example.studita.presentation.view_model.UserStatisticsViewModel
 import kotlinx.android.synthetic.main.user_stat_page_layout.*
 
 open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout){
 
-    protected var viewModel: UserStatisticsViewModel? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(UserStatisticsViewModel::class.java)
+        val viewModel: UserStatisticsPageViewModel = ViewModelProviders.of(this).get(UserStatisticsPageViewModel::class.java)
 
         if(savedInstanceState == null) {
             arguments?.getInt("USER_ID")?.let {
-                viewModel?.getUserStatistics(it)
+                viewModel.getUserStatistics(it)
             }
         }
 
         val pageNumber = arguments?.getInt("PAGE_NUMBER") ?: 0
-        viewModel?.userStatisticsState?.observe(viewLifecycleOwner, Observer {
+        viewModel.userStatisticsState.observe(viewLifecycleOwner, Observer {
             if(it is UserStatisticsStatus.Success)
                 formView(it.results[pageNumber])
         })

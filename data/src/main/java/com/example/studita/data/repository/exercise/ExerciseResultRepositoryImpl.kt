@@ -1,20 +1,19 @@
 package com.example.studita.data.repository.exercise
 
-import com.example.studita.data.entity.mapper.exercise.ExerciseRequestDataMapper
-import com.example.studita.data.entity.mapper.exercise.ExerciseResponseDataMapper
+import com.example.studita.data.entity.exercise.toBusinessEntity
 import com.example.studita.data.repository.datasource.exercises.result.ExerciseResultDataStoreFactory
 import com.example.studita.domain.entity.exercise.*
 import com.example.studita.domain.repository.ExerciseResultRepository
 
-class ExerciseResultRepositoryImpl(private val exerciseResultDataStoreFactory: ExerciseResultDataStoreFactory, private val exerciseRequestDataMapper: ExerciseRequestDataMapper, private val exerciseResponseDataMapper: ExerciseResponseDataMapper):
+class ExerciseResultRepositoryImpl(private val exerciseResultDataStoreFactory: ExerciseResultDataStoreFactory):
     ExerciseResultRepository {
 
     override suspend fun getExerciseResult(
         exerciseNumber: Int,
         exerciseRequestData: ExerciseRequestData
     ): Pair<Int, ExerciseResponseData> =
-        with(exerciseResultDataStoreFactory.create().getExerciseResult(exerciseNumber, exerciseRequestDataMapper.map(exerciseRequestData))){
-            this.first to exerciseResponseDataMapper.map(this.second)
+        with(exerciseResultDataStoreFactory.create().getExerciseResult(exerciseNumber, exerciseRequestData.toBusinessEntity())){
+            this.first to this.second.toBusinessEntity()
         }
 
     override suspend fun formExerciseResponse(

@@ -40,11 +40,7 @@ object AuthorizationModule {
     private fun getAuthorizationRepository(): AuthorizationRepository {
         if (repository == null)
             repository = AuthorizationRepositoryImpl(
-                getAuthorizationDataStoreFactory(),
-                LogInResponseDataMapper(UserDataDataMapper()),
-                getAuthorizationRequestMapper(),
-                getSignInWithGoogleRequestMapper(),
-                UserIdTokenMapper()
+                getAuthorizationDataStoreFactory()
             )
         return repository!!
     }
@@ -70,11 +66,4 @@ object AuthorizationModule {
 
     private fun getLogInCacheImpl() =
         LogInCacheImpl(CacheModule.sharedPreferences)
-
-    private fun getSignInWithGoogleRequestMapper() = SignInWithGoogleRequestMapper(
-        UserDataEntityMapper(),
-        UserStatisticsRowEntityMapper()
-    )
-
-    private fun getAuthorizationRequestMapper() =  AuthorizationRequestMapper(UserDataEntityMapper(), UserStatisticsRowEntityMapper())
 }

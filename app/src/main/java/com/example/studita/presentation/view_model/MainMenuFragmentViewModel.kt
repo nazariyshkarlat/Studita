@@ -52,7 +52,6 @@ class MainMenuFragmentViewModel : ViewModel(){
                 account?.let {
                     val result = authorizationInteractor.signInWithGoogle(SignInWithGoogleRequestData(account.idToken.toString(), if(!UserUtils.isLoggedIn()) UserUtils.userData else null, if(!UserUtils.isLoggedIn()) userStatisticsInteractor.getUserStatisticsRecords() else null))
                     if(result is SignInWithGoogleStatus.Success){
-                        UserUtils.userData = result.result.userDataData
                         UserUtils.userDataLiveData.postValue(result.result.userDataData)
                         AccountAuthenticator.addAccount(context, it.email.toString())
                         googleSignInState.postValue(true)

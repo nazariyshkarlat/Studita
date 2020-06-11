@@ -5,6 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.studita.data.entity.UserDataEntity.Companion.TABLE_NAME
+import com.example.studita.domain.date.DateTimeFormat
+import com.example.studita.domain.entity.UserDataData
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -43,3 +45,6 @@ data class UserDataEntity(@ColumnInfo(name = "user_id")
 }
 
 data class SaveUserDataRequest(@SerializedName("auth_data")val userIdToken: UserIdToken, @SerializedName("user_data")val userDataEntity: UserDataEntity)
+
+fun UserDataData.toRawEntity() = UserDataEntity(userId, userName, userFullName, userPublicId, avatarLink, currentLevel, currentLevelXP, streakDays, isSubscribed, ArrayList(completedParts), DateTimeFormat().format(streakDatetime), todayCompletedExercises)
+fun UserDataEntity.toBusinessEntity() = UserDataData(userId, userName, userFullName, userPublicId, avatarLink, currentLevel, currentLevelXP, streakDays, isSubscribed, ArrayList(completedParts), DateTimeFormat().parse(streakDatetime)!!, todayCompletedExercises)

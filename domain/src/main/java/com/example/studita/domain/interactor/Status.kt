@@ -154,17 +154,17 @@ sealed class EditPrivacySettingsStatus{
     object Success: EditPrivacySettingsStatus()
 }
 
-sealed class GetFriendsStatus{
-    object ServiceUnavailable : GetFriendsStatus()
-    object NoConnection : GetFriendsStatus()
-    object Failure: GetFriendsStatus()
-    object NoFriendsFound: GetFriendsStatus()
-    class Success(val friendsResponseData: FriendsResponseData): GetFriendsStatus()
+sealed class GetUsersStatus{
+    object ServiceUnavailable : GetUsersStatus()
+    object NoConnection : GetUsersStatus()
+    object Failure: GetUsersStatus()
+    object NoUsersFound: GetUsersStatus()
+    class Success(val friendsResponseData: UsersResponseData): GetUsersStatus()
 }
 
 sealed class CheckIsMyFriendStatus{
-    object IsMyFriend : CheckIsMyFriendStatus()
-    object IsNotMyFriend : CheckIsMyFriendStatus()
+    class IsMyFriend(val userId: Int) : CheckIsMyFriendStatus()
+    class IsNotMyFriend(val userId: Int) : CheckIsMyFriendStatus()
     object ServiceUnavailable : CheckIsMyFriendStatus()
     object NoConnection : CheckIsMyFriendStatus()
     object Failure: CheckIsMyFriendStatus()
