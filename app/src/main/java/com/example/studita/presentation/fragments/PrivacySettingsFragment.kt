@@ -1,40 +1,47 @@
 package com.example.studita.presentation.fragments
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.DuelsInvitesFrom
+import com.example.studita.domain.entity.EditDuelsExceptionsData
 import com.example.studita.domain.entity.PrivacySettingsData
 import com.example.studita.domain.entity.PrivacySettingsRequestData
 import com.example.studita.presentation.fragments.base.NavigatableFragment
+import com.example.studita.presentation.fragments.dialog_alerts.PrivacySettingsEditExceptionsDialogAlertFragment
 import com.example.studita.presentation.view_model.PrivacySettingsViewModel
+import com.example.studita.presentation.views.CustomSnackbar
+import com.example.studita.utils.ThemeUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.allViewsOfTypeT
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.privacy_settings_layout.*
 
 
 class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_layout){
 
-    private var privacySettingsViewModel: PrivacySettingsViewModel? = null
+    lateinit var privacySettingsViewModel: PrivacySettingsViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         privacySettingsViewModel = ViewModelProviders.of(this).get(PrivacySettingsViewModel::class.java)
 
-        privacySettingsViewModel?.let{viewModel->
+        privacySettingsViewModel.let{ viewModel->
 
             viewModel.errorState.observe(viewLifecycleOwner, Observer { message ->
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             })
-
 
             viewModel.privacySettingsStatus.observe(viewLifecycleOwner, Observer {privacySettings->
 
@@ -42,42 +49,10 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
 
                 privacySettingsLayoutScrollView.visibility = View.VISIBLE
 
-                when(privacySettings.duelsInvitesFrom){
-                    DuelsInvitesFrom.FRIENDS -> {
-                        privacySettingsLayoutDuelsBlockMyFriendsRadio.isChecked = true
-                        privacySettingsLayoutDuelsBlockMyFriendsRadio.jumpDrawablesToCurrentState()
-                    }
-                    DuelsInvitesFrom.NOBODY -> {
-                        privacySettingsLayoutDuelsBlockNobodyRadio.isChecked = true
-                        privacySettingsLayoutDuelsBlockNobodyRadio.jumpDrawablesToCurrentState()
-                    }
-                    DuelsInvitesFrom.EXCEPT -> {
-                        privacySettingsLayoutDuelsBlockExceptRadio.isChecked = true
-                        privacySettingsLayoutDuelsBlockExceptRadio.jumpDrawablesToCurrentState()
-                    }
-                }
+                privacySettings.duelsInvitesFrom?.let { setDuelsInvitesFormCheckboxes(it) }
 
                 val duelsExceptions = privacySettings.duelsExceptions
-                if(duelsExceptions != null && duelsExceptions.isNotEmpty()) {
-                    privacySettingsLayoutDuelsBlockExcept.visibility = View.VISIBLE
-                    privacySettingsLayoutDuelsBlockExceptText.text = when {
-                        duelsExceptions.size == 1 -> {
-                            resources.getString(R.string.privacy_settings_first_from_nobody_except,
-                                    "@${duelsExceptions[0]}")
-                        }
-                        duelsExceptions.size == 2 -> {
-                            resources.getString(R.string.privacy_settings_first_from_nobody_except_two,
-                                    "@${duelsExceptions[0]}",
-                                    "@${duelsExceptions[1]}")
-                        }
-                        duelsExceptions.size > 2 -> {
-                            resources.getString(R.string.privacy_settings_first_from_nobody_except_many,
-                                    "@${duelsExceptions[0]}",
-                                    duelsExceptions.size - 1)
-                        }
-                        else -> null
-                    }
-                }
+                formExceptionsView(duelsExceptions)
 
                 if(privacySettings.showInRatings == true) {
                     privacySettingsLayoutRatingsBlockShowRadio.isChecked = true
@@ -114,6 +89,13 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
                 }
             }
         }
+
+        privacySettingsLayoutDuelsBlockEditExceptions.setOnClickListener {
+            PrivacySettingsEditExceptionsDialogAlertFragment().apply {
+                 setTargetFragment(this@PrivacySettingsFragment, 0)
+            }.show((activity as AppCompatActivity).supportFragmentManager, null)
+        }
+
         scrollingView = privacySettingsLayoutScrollView
     }
 
@@ -136,4 +118,106 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
         }
     }
 
+    private fun formExceptionsView(duelsExceptions: ArrayList<String>?){
+        if(duelsExceptions != null && duelsExceptions.isNotEmpty()) {
+            privacySettingsLayoutDuelsBlockEditExceptions.text = resources.getString(R.string.privacy_settings_edit_duels_exceptions)
+            privacySettingsLayoutDuelsBlockExcept.visibility = View.VISIBLE
+            privacySettingsLayoutDuelsBlockExceptText.text = when {
+                duelsExceptions.size == 1 -> {
+                    resources.getString(
+                        R.string.privacy_settings_first_from_nobody_except,
+                        "@${duelsExceptions[0]}"
+                    )
+                }
+                duelsExceptions.size == 2 -> {
+                    resources.getString(
+                        R.string.privacy_settings_first_from_nobody_except_two,
+                        "@${duelsExceptions[0]}",
+                        "@${duelsExceptions[1]}"
+                    )
+                }
+                duelsExceptions.size > 2 -> {
+                    resources.getString(
+                        R.string.privacy_settings_first_from_nobody_except_many,
+                        "@${duelsExceptions[0]}",
+                        duelsExceptions.size - 1
+                    )
+                }
+                else -> null
+            }
+        }else{
+            privacySettingsLayoutDuelsBlockExcept.visibility = View.GONE
+            privacySettingsLayoutDuelsBlockEditExceptions.text = resources.getString(R.string.privacy_settings_add_duels_exceptions)
+        }
+    }
+
+    private fun setDuelsInvitesFormCheckboxes(duelsInvitesFrom: DuelsInvitesFrom){
+
+        privacySettingsLayoutDuelsBlockMyFriendsRadio.isChecked = false
+        privacySettingsLayoutDuelsBlockNobodyRadio.isChecked = false
+        privacySettingsLayoutDuelsBlockExceptRadio.isChecked = false
+
+        when(duelsInvitesFrom){
+            DuelsInvitesFrom.FRIENDS -> {
+                privacySettingsLayoutDuelsBlockMyFriendsRadio.isChecked = true
+            }
+            DuelsInvitesFrom.NOBODY -> {
+                privacySettingsLayoutDuelsBlockNobodyRadio.isChecked = true
+            }
+            DuelsInvitesFrom.EXCEPT -> {
+                privacySettingsLayoutDuelsBlockExceptRadio.isChecked = true
+            }
+        }
+
+        privacySettingsLayoutDuelsBlockMyFriendsRadio.jumpDrawablesToCurrentState()
+        privacySettingsLayoutDuelsBlockNobodyRadio.jumpDrawablesToCurrentState()
+        privacySettingsLayoutDuelsBlockExceptRadio.jumpDrawablesToCurrentState()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == RESULT_OK && requestCode == 345){
+            if(data?.extras?.containsKey("CHANGED_EXCEPTIONS") == true) {
+                val json = data.getStringExtra("CHANGED_EXCEPTIONS") as String
+                val changedExceptions = Gson().fromJson<ArrayList<EditDuelsExceptionsData>>(json, object: TypeToken<ArrayList<EditDuelsExceptionsData>>(){}.type)
+
+                val privacySettingsData = privacySettingsViewModel.privacySettingsStatus.value
+                
+                if(privacySettingsData != null) {
+
+                    changedExceptions.forEach { exceptionData ->
+                        if (exceptionData.deleteFromExceptions)
+                            privacySettingsData.duelsExceptions?.removeAll { it == exceptionData.userName }
+                        else
+                            privacySettingsData.duelsExceptions?.add(
+                                exceptionData.userName
+                            )
+                    }
+
+                    context?.let {
+                        CustomSnackbar(it).show(
+                            resources.getString(R.string.changes_are_saved),
+                            ThemeUtils.getAccentColor(it)
+                        )
+                    }
+
+                    if (privacySettingsData.duelsExceptions?.isEmpty() == true && privacySettingsData.duelsInvitesFrom == DuelsInvitesFrom.EXCEPT)
+                        privacySettingsData.duelsInvitesFrom = DuelsInvitesFrom.NOBODY
+                    else
+                        privacySettingsData.duelsInvitesFrom = DuelsInvitesFrom.EXCEPT
+
+                    privacySettingsData.duelsInvitesFrom?.let {
+                        setDuelsInvitesFormCheckboxes(
+                            it
+                        )
+                    }
+                    privacySettingsData.duelsExceptions?.let {
+                        formExceptionsView(
+                            it
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

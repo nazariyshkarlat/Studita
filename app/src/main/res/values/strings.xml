@@ -74,6 +74,7 @@
     <string name="wait">Подождать</string>
     <string name="leave">Покинуть</string>
     <string name="apply">Применить</string>
+    <string name="save">Сохранить</string>
     <string name="russian">Русский</string>
     <string name="english">English</string>
     <string name="light_theme">Светлая</string>
@@ -170,7 +171,8 @@
     <string name="privacy_settings_first_from_nobody_except">Никого, кроме %1$s</string>
     <string name="privacy_settings_first_from_nobody_except_two">Никого, кроме %1$s и %2$s </string>
     <string name="privacy_settings_first_from_nobody_except_many">Никого, кроме %1$s и %2$d других</string>
-    <string name="privacy_settings_first_button">Добавить исключения</string>
+    <string name="privacy_settings_add_duels_exceptions">Добавить исключения</string>
+    <string name="privacy_settings_edit_duels_exceptions">Редактировать исключения</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="search">Поиск</string>
@@ -203,6 +205,7 @@
     <string name="friends_not_found">Результатов среди ваших друзей не найдено. Поробуйте другое имя</string>
     <string name="friend_removed_snackbar">\@%1$s был удалён из ваших друзей</string>
     <string name="friend_added_snackbar">\@%1$s был добавлен в ваши друзья</string>
+    <string name="privacy_exceptions_dialog_alert_title">Добавить исключения</string>
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>

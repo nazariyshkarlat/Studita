@@ -1,6 +1,5 @@
 package com.example.studita.di.data
 
-import com.example.studita.data.cache.user_statistics.UserStatisticsCacheImpl
 import com.example.studita.data.entity.UserStatisticsRowEntity
 import com.example.studita.data.entity.mapper.*
 import com.example.studita.data.net.UserStatisticsService
@@ -40,6 +39,7 @@ object UserStatisticsModule {
         if (repository == null)
             repository = UserStatisticsRepositoryImpl(
                 getUserStatisticsJsonDataStoreFactory(),
+                getDiskUserStatisticsDataStore(),
                 NetworkModule.connectionManager
             )
         return repository!!
@@ -53,23 +53,17 @@ object UserStatisticsModule {
 
     private fun getUserStatisticsJsonDataStoreFactory() =
         UserStatisticsJsonDataStoreFactoryImpl(
-            getCloudUserStatisticsDataStore(),
-            getDiskUserStatisticsDataStore()
+            getCloudUserStatisticsDataStore()
         )
 
     private fun getCloudUserStatisticsDataStore() =
         CloudUserStatisticsJsonDataStore(
             NetworkModule.connectionManager,
-            NetworkModule.getService(UserStatisticsService::class.java),
-            getUserStatisticsCacheImpl()
+            NetworkModule.getService(UserStatisticsService::class.java)
         )
 
     private fun getDiskUserStatisticsDataStore() =
-        DiskUserStatisticsJsonDataStore(getUserStatisticsCacheImpl(), getUserStatisticsDao())
-
-
-    private fun getUserStatisticsCacheImpl() =
-        UserStatisticsCacheImpl(CacheModule.sharedPreferences)
+        DiskUserStatisticsJsonDataStore(getUserStatisticsDao())
 
     private fun getUserStatisticsDao() = DatabaseModule.studitaDatabase!!.getUserStatisticsDao()
 

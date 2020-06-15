@@ -109,11 +109,9 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
 
         editProfileViewModel.backClickState.observe(viewLifecycleOwner, Observer {
         if (it == EditProfileViewModel.BackClickState.SHOW_DIALOG) {
-            fragmentManager?.let { manager ->
-                UnsavedChangesDialogAlertFragment().apply {
-                    setTargetFragment(this@EditProfileFragment as NavigatableFragment, 0)
-                }.show(manager, null)
-            }
+            UnsavedChangesDialogAlertFragment().apply {
+                setTargetFragment(this@EditProfileFragment as NavigatableFragment, 0)
+            }.show((activity as AppCompatActivity).supportFragmentManager, null)
         } else {
             super.onBackClick()
         }

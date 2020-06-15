@@ -13,7 +13,7 @@ import com.example.studita.presentation.model.UsersRecyclerUiModel
 import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.friend_item.view.*
 
-class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsCallback) : FriendsViewHolder<UsersRecyclerUiModel.UserItemUiModel>(view), View.OnTouchListener{
+class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsCallback) : UsersViewHolder<UsersRecyclerUiModel.UserItemUiModel>(view), View.OnTouchListener{
 
     lateinit var model: UsersRecyclerUiModel.UserItemUiModel
 

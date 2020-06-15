@@ -26,4 +26,12 @@ class UsersRepositoryImpl(private val usersDataStoreFactory: UsersDataStoreFacto
         return usersDataStoreFactory.create().tryRemoveFriend(friendActionRequestData.toRawEntity())
     }
 
+    override suspend fun acceptFriendship(friendActionRequestData: FriendActionRequestData): Int {
+        return usersDataStoreFactory.create().tryAcceptFriendship(friendActionRequestData.toRawEntity())
+    }
+
+    override suspend fun rejectFriendship(friendActionRequestData: FriendActionRequestData): Int {
+        return usersDataStoreFactory.create().tryRejectFriendship(friendActionRequestData.toRawEntity())
+    }
+
 }

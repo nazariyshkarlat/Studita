@@ -72,4 +72,32 @@ class UsersInteractorImpl(private val repository: UsersRepository,
                     FriendActionStatus.ServiceUnavailable
             }
 
+    override suspend fun acceptFriendship(friendActionRequestData: FriendActionRequestData): FriendActionStatus  =
+        try {
+            when (repository.acceptFriendship(friendActionRequestData)) {
+                200 -> FriendActionStatus.Success
+                else -> FriendActionStatus.Failure
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (e is NetworkConnectionException) {
+                FriendActionStatus.NoConnection
+            }else
+                FriendActionStatus.ServiceUnavailable
+        }
+
+    override suspend fun rejectFriendship(friendActionRequestData: FriendActionRequestData): FriendActionStatus  =
+        try {
+            when (repository.rejectFriendship(friendActionRequestData)) {
+                200 -> FriendActionStatus.Success
+                else -> FriendActionStatus.Failure
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (e is NetworkConnectionException) {
+                FriendActionStatus.NoConnection
+            }else
+                FriendActionStatus.ServiceUnavailable
+        }
+
 }

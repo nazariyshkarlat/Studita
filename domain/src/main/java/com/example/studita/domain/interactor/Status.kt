@@ -177,3 +177,19 @@ sealed class FriendActionStatus{
     object Success: FriendActionStatus()
 }
 
+sealed class PrivacySettingsDuelsExceptionsStatus{
+    object ServiceUnavailable : PrivacySettingsDuelsExceptionsStatus()
+    object NoConnection : PrivacySettingsDuelsExceptionsStatus()
+    object NoUsersFound: PrivacySettingsDuelsExceptionsStatus()
+    object Failure: PrivacySettingsDuelsExceptionsStatus()
+    class Success(val privacySettingsDuelsExceptionsItems: List<PrivacyDuelsExceptionData>): PrivacySettingsDuelsExceptionsStatus()
+}
+
+sealed class EditDuelsExceptionsStatus{
+    object ServiceUnavailable : EditDuelsExceptionsStatus()
+    object NoConnection : EditDuelsExceptionsStatus()
+    object Failure: EditDuelsExceptionsStatus()
+    object Success: EditDuelsExceptionsStatus()
+}
+
+

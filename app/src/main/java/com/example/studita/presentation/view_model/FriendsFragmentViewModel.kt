@@ -41,7 +41,7 @@ class FriendsFragmentViewModel : ViewModel(){
 
     var searchUsersJob : Job? = null
 
-    var pageNumber = 1
+    var currentPageNumber = 1
 
     val perPage: Int = 20
 
@@ -50,9 +50,9 @@ class FriendsFragmentViewModel : ViewModel(){
         val isMyProfile = PrefsUtils.getUserId() == friendOfUserId
 
         if(newPage)
-            pageNumber++
+            currentPageNumber++
         else
-            pageNumber=1
+            currentPageNumber=1
 
         if(!newPage)
             progressState.value = true
@@ -65,13 +65,13 @@ class FriendsFragmentViewModel : ViewModel(){
                 val getUsersStatus = friendsInteractor.getUsers(
                     if (isGlobalSearch) null else friendOfUserId,
                     perPage,
-                    pageNumber,
+                    currentPageNumber,
                     PrefsUtils.getUserId()!!,
                     sortBy,
                     startsWith
                 )
                 if (getUsersStatus is GetUsersStatus.Success) {
-                    searchResultState = if (pageNumber == 1) {
+                    searchResultState = if (currentPageNumber == 1) {
                         userData = ArrayList(getUsersStatus.friendsResponseData.users)
                         SearchResultState.ResultsFound(getUsersStatus.friendsResponseData.users)
                     }else {
@@ -81,12 +81,12 @@ class FriendsFragmentViewModel : ViewModel(){
                 } else if (getUsersStatus is GetUsersStatus.NoUsersFound) {
                     if (!isGlobalSearch) {
                         if (startsWith != null) {
-                            searchResultState = if (pageNumber == 1)
+                            searchResultState = if (currentPageNumber == 1)
                                 SearchResultState.SearchFriendsNotFound
                             else
                                 SearchResultState.NoMoreResults
                         } else {
-                            if (pageNumber == 1) {
+                            if (currentPageNumber == 1) {
                                 if (isMyProfile)
                                     searchResultState = SearchResultState.MyProfileEmptyFriends
                             } else {
@@ -94,7 +94,7 @@ class FriendsFragmentViewModel : ViewModel(){
                             }
                         }
                     } else {
-                        searchResultState = if (pageNumber == 1)
+                        searchResultState = if (currentPageNumber == 1)
                             SearchResultState.GlobalSearchNotFound
                         else
                             SearchResultState.NoMoreResults
@@ -133,17 +133,11 @@ class FriendsFragmentViewModel : ViewModel(){
         }
     }
 
-    fun getRecyclerItems(searchUiModel: UsersRecyclerUiModel.SearchUiModel, friendsItems: List<UserData>, progressUiModel: UsersRecyclerUiModel.ProgressUiModel): List<UsersRecyclerUiModel>{
+    fun getRecyclerItems(searchUiModel: UsersRecyclerUiModel.SearchUiModel, usersItems: List<UserData>, progressUiModel: UsersRecyclerUiModel.ProgressUiModel): List<UsersRecyclerUiModel>{
         val adapterItems = ArrayList<UsersRecyclerUiModel>()
         adapterItems.add(searchUiModel)
-        adapterItems.addAll(friendsItems.map { it.toUserItemUiModel() })
+        adapterItems.addAll(usersItems.map { it.toUserItemUiModel() })
         adapterItems.add(progressUiModel)
-        return adapterItems
-    }
-
-    fun mapItems(friendsItems: List<UserData>): List<UsersRecyclerUiModel>{
-        val adapterItems = ArrayList<UsersRecyclerUiModel>()
-        adapterItems.addAll(friendsItems.map { it.toUserItemUiModel() })
         return adapterItems
     }
 

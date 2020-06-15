@@ -17,4 +17,8 @@ interface UsersInteractor {
     suspend fun addFriend(friendActionRequestData: FriendActionRequestData): FriendActionStatus
 
     suspend fun removeFriend(friendActionRequestData: FriendActionRequestData): FriendActionStatus
+
+    suspend fun acceptFriendship(friendActionRequestData: FriendActionRequestData): FriendActionStatus
+
+    suspend fun rejectFriendship(friendActionRequestData: FriendActionRequestData): FriendActionStatus
 }

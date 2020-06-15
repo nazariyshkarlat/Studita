@@ -8,20 +8,21 @@ import com.example.studita.domain.entity.*
 import com.example.studita.domain.repository.UserStatisticsRepository
 
 class UserStatisticsRepositoryImpl(private val userStatisticsJsonDataStoreFactory: UserStatisticsJsonDataStoreFactory,
+                                   private val diskUserStatisticsJsonDataStore: DiskUserStatisticsJsonDataStore,
                                    private val connectionManager: ConnectionManager) : UserStatisticsRepository{
 
     override suspend fun getUserStatistics(userId: Int): Pair<Int, List<UserStatisticsData>> {
-        val pair =  UserStatisticsDataStoreImpl(userStatisticsJsonDataStoreFactory.create(if(connectionManager.isNetworkAbsent()) UserStatisticsJsonDataStoreFactory.Priority.CACHE else UserStatisticsJsonDataStoreFactory.Priority.CLOUD)).getUserStatisticsEntity(userId)
+        val pair =  UserStatisticsDataStoreImpl(userStatisticsJsonDataStoreFactory.create()).getUserStatisticsEntity(userId)
         return pair.first to pair.second.map { it.toBusinessEntity() }
     }
 
     override suspend fun saveUserStatistics(userStatisticsRowData: UserStatisticsRowData) {
-        (userStatisticsJsonDataStoreFactory.create(UserStatisticsJsonDataStoreFactory.Priority.CACHE) as DiskUserStatisticsJsonDataStore).saveUserStatisticsRecord(
+        diskUserStatisticsJsonDataStore.saveUserStatisticsRecord(
                 userStatisticsRowData.toRawEntity())
     }
 
     override suspend fun getUserStatisticsRecords(): List<UserStatisticsRowData>? {
-        val userStatisticsRowEntities = (userStatisticsJsonDataStoreFactory.create(UserStatisticsJsonDataStoreFactory.Priority.CACHE) as DiskUserStatisticsJsonDataStore).getUserStatisticsRecords()
+        val userStatisticsRowEntities = diskUserStatisticsJsonDataStore.getUserStatisticsRecords()
         return userStatisticsRowEntities?.map { it.toBusinessEntity() }
     }
 

@@ -1,11 +1,10 @@
 package com.example.studita.domain.interactor.privacy_settings
 
+import com.example.studita.domain.entity.EditDuelsExceptionsRequestData
 import com.example.studita.domain.entity.PrivacySettingsRequestData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.exception.NetworkConnectionException
-import com.example.studita.domain.interactor.EditPrivacySettingsStatus
-import com.example.studita.domain.interactor.PrivacySettingsStatus
-import com.example.studita.domain.interactor.SubscribeEmailResultStatus
+import com.example.studita.domain.interactor.*
 import com.example.studita.domain.repository.PrivacySettingsRepository
 
 class PrivacySettingsInteractorImpl(private val repository: PrivacySettingsRepository) : PrivacySettingsInteractor{
@@ -37,4 +36,37 @@ class PrivacySettingsInteractorImpl(private val repository: PrivacySettingsRepos
                 }else
                     EditPrivacySettingsStatus.ServiceUnavailable
             }
+
+    override suspend fun getPrivacyDuelsExceptionsList(
+        userIdTokenData: UserIdTokenData,
+        perPage: Int,
+        pageNumber: Int
+    ): PrivacySettingsDuelsExceptionsStatus =
+        try {
+            val result = repository.getPrivacyDuelsExceptionsList(userIdTokenData, perPage, pageNumber)
+            when (result.first) {
+                200 -> if(result.second!!.isNotEmpty()) PrivacySettingsDuelsExceptionsStatus.Success(result.second!!) else PrivacySettingsDuelsExceptionsStatus.NoUsersFound
+                else -> PrivacySettingsDuelsExceptionsStatus.Failure
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (e is NetworkConnectionException) {
+                PrivacySettingsDuelsExceptionsStatus.NoConnection
+            }else
+                PrivacySettingsDuelsExceptionsStatus.ServiceUnavailable
+        }
+
+    override suspend fun editDuelsExceptions(editDuelsExceptionsRequestData: EditDuelsExceptionsRequestData)=
+        try {
+            when (repository.editDuelsExceptions(editDuelsExceptionsRequestData)) {
+                200 -> EditDuelsExceptionsStatus.Success
+                else -> EditDuelsExceptionsStatus.Failure
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (e is NetworkConnectionException) {
+                EditDuelsExceptionsStatus.NoConnection
+            }else
+                EditDuelsExceptionsStatus.ServiceUnavailable
+        }
 }

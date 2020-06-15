@@ -9,9 +9,10 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import com.example.studita.R
+import com.example.studita.utils.ScreenUtils
 
 
-open class BaseDialogFragment(@LayoutRes private val layoutResId: Int) : DialogFragment() {
+open class BaseDialogFragment(@LayoutRes private val layoutResId: Int) : DialogFragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(layoutResId, container, false)
@@ -28,4 +29,6 @@ open class BaseDialogFragment(@LayoutRes private val layoutResId: Int) : DialogF
             it.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
     }
+
+
 }

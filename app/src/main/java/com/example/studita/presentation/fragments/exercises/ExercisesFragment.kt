@@ -53,7 +53,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                 setButtonText()
             })
 
-            viewModel.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver(viewModel))
+            viewModel.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver())
 
             viewModel.buttonEnabledState.observe(viewLifecycleOwner, Observer { enabled ->
                 exerciseLayoutButton.isEnabled = enabled
@@ -125,7 +125,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
 
                         dialogFragment.dialog?.setOnDismissListener {
                             viewModel.progressState.observe(viewLifecycleOwner, getProgressStateObserver(viewModel))
-                            viewModel.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver(viewModel))
+                            viewModel.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver())
                         }
                     }
                 }
@@ -366,7 +366,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             })
         }
 
-    private fun getSnackbarStateObserver(exercisesViewModel: ExercisesViewModel) =
+    private fun getSnackbarStateObserver() =
         Observer<Pair<ExerciseUiModel, ExerciseResponseData>?> { response ->
             showSnackbar(response)
         }

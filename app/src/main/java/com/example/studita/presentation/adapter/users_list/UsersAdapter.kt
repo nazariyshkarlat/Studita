@@ -13,20 +13,20 @@ import com.example.studita.utils.*
 import java.lang.UnsupportedOperationException
 import kotlin.collections.ArrayList
 
-class FriendsAdapter(var items: ArrayList<UsersRecyclerUiModel>,
-                     private val context: Context,
-                     private val friendsFragmentViewModel: FriendsFragmentViewModel,
-                     private val toolbarFragmentViewModel: ToolbarFragmentViewModel,
-                     private val userId: Int,
-                     var isEmptyView: Boolean = false) :
-    RecyclerView.Adapter<FriendsViewHolder<*>>(),
+class UsersAdapter(var items: ArrayList<UsersRecyclerUiModel>,
+                   private val context: Context,
+                   private val friendsFragmentViewModel: FriendsFragmentViewModel,
+                   private val toolbarFragmentViewModel: ToolbarFragmentViewModel,
+                   private val userId: Int,
+                   var isEmptyView: Boolean = false) :
+    RecyclerView.Adapter<UsersViewHolder<*>>(),
     SearchViewHolder.UpdateCallback,
     LoadViewHolder.RequestMoreItems,
     SearchViewHolder.SearchCallback,
     SearchViewHolder.ShowSearchCallback,
     UserItemViewHolder.AddToFriendsCallback{
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendsViewHolder<out UsersRecyclerUiModel>{
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder<out UsersRecyclerUiModel>{
         return when (viewType) {
             ViewType.SEARCH.ordinal -> SearchViewHolder(
                 parent.makeView(R.layout.users_search_item),
@@ -50,7 +50,7 @@ class FriendsAdapter(var items: ArrayList<UsersRecyclerUiModel>,
         }
     }
 
-    override fun onBindViewHolder(holder: FriendsViewHolder<out UsersRecyclerUiModel>, position: Int) {
+    override fun onBindViewHolder(holder: UsersViewHolder<out UsersRecyclerUiModel>, position: Int) {
         holder.bind(if(!isEmptyView) items[position] else (if(position == 0)UsersRecyclerUiModel.SearchUiModel else UsersRecyclerUiModel.TextItemUiModel(context.resources.getString(friendsFragmentViewModel.getEmptyText()))))
     }
 
@@ -147,7 +147,7 @@ class FriendsAdapter(var items: ArrayList<UsersRecyclerUiModel>,
 }
 
 
-abstract class FriendsViewHolder<T : UsersRecyclerUiModel>(view: View) : RecyclerView.ViewHolder(view) {
+abstract class UsersViewHolder<T : UsersRecyclerUiModel>(view: View) : RecyclerView.ViewHolder(view) {
 
     abstract fun bind(model: UsersRecyclerUiModel)
 }

@@ -1,10 +1,10 @@
 package com.example.studita.domain.entity
 
 
-data class PrivacySettingsData(val duelsInvitesFrom: DuelsInvitesFrom? = null,
+data class PrivacySettingsData(var duelsInvitesFrom: DuelsInvitesFrom? = null,
                                  val showInRatings: Boolean? = null,
                                  val profileIsVisible: Boolean? = null,
-                                 val duelsExceptions: List<String>? = null)
+                                 val duelsExceptions: ArrayList<String>? = null)
 
 enum class DuelsInvitesFrom{
     FRIENDS,

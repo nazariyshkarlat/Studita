@@ -13,6 +13,10 @@ interface UsersRepository {
 
     suspend fun removeFriend(friendActionRequestData: FriendActionRequestData): Int
 
+    suspend fun acceptFriendship(friendActionRequestData: FriendActionRequestData): Int
+
+    suspend fun rejectFriendship(friendActionRequestData: FriendActionRequestData): Int
+
     enum class SortBy{
         A_TO_Z,
         Z_TO_A,

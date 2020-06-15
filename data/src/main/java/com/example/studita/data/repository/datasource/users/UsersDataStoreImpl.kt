@@ -49,4 +49,22 @@ class UsersDataStoreImpl(private val connectionManager: ConnectionManager, priva
         }
     }
 
+    override suspend fun tryAcceptFriendship(friendActionRequest: FriendActionRequest): Int {
+        if (connectionManager.isNetworkAbsent()) {
+            throw NetworkConnectionException()
+        } else {
+            val result = usersService.acceptFriendship(friendActionRequest)
+            return result.code()
+        }
+    }
+
+    override suspend fun tryRejectFriendship(friendActionRequest: FriendActionRequest): Int {
+        if (connectionManager.isNetworkAbsent()) {
+            throw NetworkConnectionException()
+        } else {
+            val result = usersService.rejectFriendship(friendActionRequest)
+            return result.code()
+        }
+    }
+
 }

@@ -27,7 +27,7 @@ fun ExerciseShapeData.toResponseUiModel(context: Context) = ExerciseShapeUiModel
     shape.getShapeByName(context), count)
 
 fun String.getShapeByName(context: Context) : Drawable = when(this){
-    "rect" -> context.getDrawable(R.drawable.exercise_rectangle)
+    "rect" -> context.getDrawable(R.drawable.exercise_rectangle)!!
     else -> throw IOException("Unexpected shape name")
 }
 

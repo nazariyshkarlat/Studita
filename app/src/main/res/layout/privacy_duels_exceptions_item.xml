@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:background="?selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/privacyDuelsExceptionsItemAvatar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/defaultRLMargin"
+        android:background="@drawable/avatar_oval" />
+
+    <TextView
+        android:id="@+id/privacyDuelsExceptionsItemUserName"
+        style="@style/Regular16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@+id/privacyDuelsExceptionsItemAvatar" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/privacyDuelsExceptionsItemCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:layout_centerVertical="true"
+        android:clickable="false"
+        android:background="@null"
+        android:minHeight="0dp"
+        android:minWidth="0dp" />
+
+</RelativeLayout>

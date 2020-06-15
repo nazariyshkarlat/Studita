@@ -10,6 +10,7 @@ import com.example.studita.di.data.exercise.ExercisesModule
 import com.example.studita.domain.entity.FriendActionRequestData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
+import com.example.studita.domain.interactor.PrivacySettingsDuelsExceptionsStatus
 import com.example.studita.domain.interactor.PrivacySettingsStatus
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils

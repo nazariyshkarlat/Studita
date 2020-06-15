@@ -16,7 +16,7 @@ data class PrivacySettingsEntity(@SerializedName("duels_invites_from")val duelsI
                                  @SerializedName("duels_exceptions")val duelsExceptions: List<String>?)
 
 fun PrivacySettingsData.toRawEntity() = PrivacySettingsEntity(duelsInvitesFrom?.asChar(), showInRatings, profileIsVisible, duelsExceptions)
-fun PrivacySettingsEntity.toBusinessEntity() = PrivacySettingsData(duelsInvitesFrom?.toDuelsInvitesFrom(), showInRatings, profileIsVisible, duelsExceptions)
+fun PrivacySettingsEntity.toBusinessEntity() = PrivacySettingsData(duelsInvitesFrom?.toDuelsInvitesFrom(), showInRatings, profileIsVisible, duelsExceptions?.let { ArrayList(it) })
 fun PrivacySettingsRequestData.toRawEntity() = PrivacySettingsRequest(userIdToken.toRawEntity(), privacySettingsEntity.toRawEntity())
 fun Char.toDuelsInvitesFrom() = when(this){
     'f' -> DuelsInvitesFrom.FRIENDS

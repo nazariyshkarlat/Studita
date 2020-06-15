@@ -129,9 +129,6 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
                 val currentUserData = userDataStatus.result.copy()
                 currentUserData.let {
 
-                    if (!isTraining)
-                        it.todayCompletedExercises++
-
                     obtainedXP = LevelUtils.getObtainedXP(
                         it,
                         getAnswersPercent(),
@@ -155,6 +152,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
 
                     if (!isTraining) {
                         it.completedParts[chapterNumber - 1] = chapterPartNumber
+                        it.todayCompletedExercises++
 
                         if (chapterPartNumber == chapterPartsCount)
                             ChapterBottomSheetFragment.snackbarShowReason =

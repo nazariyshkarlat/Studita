@@ -28,4 +28,10 @@ interface UsersService {
 
     @POST("remove_friend")
     suspend fun removeFriend(@Body friendActionRequest: FriendActionRequest): Response<ResponseBody>
+
+    @POST("accept_friendship")
+    suspend fun acceptFriendship(@Body friendActionRequest: FriendActionRequest): Response<ResponseBody>
+
+    @POST("reject_friendship")
+    suspend fun rejectFriendship(@Body friendActionRequest: FriendActionRequest): Response<ResponseBody>
 }

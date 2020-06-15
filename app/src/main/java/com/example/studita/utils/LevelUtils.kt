@@ -99,7 +99,7 @@ object LevelUtils {
         return newXP
     }
 
-    private fun giveSequenceBonus(userData: UserDataData, isTraining: Boolean) = (userData.todayCompletedExercises % SEQUENCE_TO_BONUS  == 0) and (!isTraining)
+    private fun giveSequenceBonus(userData: UserDataData, isTraining: Boolean) = ((userData.todayCompletedExercises+1) % SEQUENCE_TO_BONUS  == 0) and (!isTraining)
 
     fun getExerciseResultAnimation(userData: UserDataData, percent: Float, isTraining: Boolean): List<ExerciseResultAnimation> {
 

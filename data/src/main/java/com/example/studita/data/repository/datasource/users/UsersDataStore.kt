@@ -12,4 +12,8 @@ interface UsersDataStore{
     suspend fun tryAddFriend(friendActionRequest: FriendActionRequest): Int
 
     suspend fun tryRemoveFriend(friendActionRequest: FriendActionRequest): Int
+
+    suspend fun tryAcceptFriendship(friendActionRequest: FriendActionRequest): Int
+
+    suspend fun tryRejectFriendship(friendActionRequest: FriendActionRequest): Int
 }

@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
-import com.example.studita.presentation.adapter.users_list.FriendsAdapter
+import com.example.studita.presentation.adapter.users_list.UsersAdapter
 import com.example.studita.presentation.adapter.users_list.SearchViewHolder
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.UsersRecyclerUiModel
@@ -40,8 +40,8 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
             if(recyclerViewLayoutProgressBar.marginTop == 0)
                 setProgressMargin()
 
-            if(recyclerViewLayoutRecyclerView.adapter is FriendsAdapter)
-                (recyclerViewLayoutRecyclerView.adapter as FriendsAdapter).isEmptyView = false
+            if(recyclerViewLayoutRecyclerView.adapter is UsersAdapter)
+                (recyclerViewLayoutRecyclerView.adapter as UsersAdapter).isEmptyView = false
 
             when(searchResultState){
                 is FriendsFragmentViewModel.SearchResultState.ResultsFound -> {
@@ -55,7 +55,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                                 )
                             )
                         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
-                            FriendsAdapter(
+                            UsersAdapter(
                                 items,
                                 view.context,
                                 friendsFragmentViewModel,
@@ -65,8 +65,8 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                         recyclerViewLayoutRecyclerView.adapter = adapter
                         friendsFragmentViewModel.recyclerItems = adapter?.items
                     }else{
-                        val adapter = recyclerViewLayoutRecyclerView.adapter as FriendsAdapter
-                        val newData = friendsFragmentViewModel.mapItems(searchResultState.results)
+                        val adapter = recyclerViewLayoutRecyclerView.adapter as UsersAdapter
+                        val newData = searchResultState.results.map { it.toUserItemUiModel() }
                         adapter.items.addAll(newData)
                         adapter.items.add(UsersRecyclerUiModel.ProgressUiModel)
                         adapter.notifyItemRangeInserted(1, newData.size+1)
@@ -80,7 +80,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                         myFriendsEmptyButton.setOnClickListener {
 
                             recyclerViewLayoutRecyclerView.visibility = View.VISIBLE
-                            (view as ViewGroup).removeView(myFriendsEmptyLayout)
+                            view.removeView(myFriendsEmptyLayout)
 
                             showGlobalSearchOnly(view.context)
                         }
@@ -91,7 +91,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
 
                     if (recyclerViewLayoutRecyclerView.adapter != null) {
                         val items = searchResultState.results.map { it.toUserItemUiModel() }
-                        val adapter = recyclerViewLayoutRecyclerView.adapter as FriendsAdapter
+                        val adapter = recyclerViewLayoutRecyclerView.adapter as UsersAdapter
 
                         val insertIndex = adapter.itemCount-1
                         adapter.items.addAll(insertIndex, items)
@@ -104,7 +104,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                         }
                     }else{
                         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
-                            FriendsAdapter(
+                            UsersAdapter(
                                 friendsFragmentViewModel.recyclerItems!!,
                                 view.context,
                                 friendsFragmentViewModel,
@@ -126,7 +126,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                         }
                     }else{
                         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
-                            FriendsAdapter(
+                            UsersAdapter(
                                 friendsFragmentViewModel.recyclerItems!!,
                                 view.context,
                                 friendsFragmentViewModel,
@@ -141,7 +141,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
 
                     if(recyclerViewLayoutRecyclerView.adapter == null){
                         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
-                            FriendsAdapter(
+                            UsersAdapter(
                                 friendsFragmentViewModel.recyclerItems!!,
                                 view.context,
                                 friendsFragmentViewModel,
@@ -156,7 +156,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
 
                         val removeCount = adapter.itemCount-2
 
-                        (recyclerViewLayoutRecyclerView.adapter as FriendsAdapter).isEmptyView = true
+                        (recyclerViewLayoutRecyclerView.adapter as UsersAdapter).isEmptyView = true
 
                         adapter.notifyItemRangeRemoved(2, removeCount)
 
@@ -167,7 +167,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
 
                     if(recyclerViewLayoutRecyclerView.adapter == null){
                         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
-                            FriendsAdapter(
+                            UsersAdapter(
                                 friendsFragmentViewModel.recyclerItems!!,
                                 view.context,
                                 friendsFragmentViewModel,
@@ -182,7 +182,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
 
                         val removeCount = adapter.itemCount-2
 
-                        (recyclerViewLayoutRecyclerView.adapter as FriendsAdapter).isEmptyView = true
+                        (recyclerViewLayoutRecyclerView.adapter as UsersAdapter).isEmptyView = true
 
                         adapter.notifyItemRangeRemoved(2, removeCount)
 
@@ -193,7 +193,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
 
                     if(recyclerViewLayoutRecyclerView.adapter == null){
                         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
-                            FriendsAdapter(
+                            UsersAdapter(
                                 friendsFragmentViewModel.recyclerItems!!,
                                 view.context,
                                 friendsFragmentViewModel,
@@ -208,7 +208,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
 
                         val removeCount = adapter.itemCount-2
 
-                        (recyclerViewLayoutRecyclerView.adapter as FriendsAdapter).isEmptyView = true
+                        (recyclerViewLayoutRecyclerView.adapter as UsersAdapter).isEmptyView = true
 
                         adapter.notifyItemRangeRemoved(2, removeCount)
 
@@ -223,7 +223,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                 recyclerViewLayoutRecyclerView?.adapter?.let {
                     val removeCount = it.itemCount - 1
                     friendsFragmentViewModel.recyclerItems!!.removeAll { it !is UsersRecyclerUiModel.SearchUiModel}
-                    (it as FriendsAdapter).isEmptyView = false
+                    (it as UsersAdapter).isEmptyView = false
                     it.notifyItemRangeRemoved(1, removeCount)
                 }
                 recyclerViewLayoutProgressBar.visibility = View.VISIBLE
@@ -312,7 +312,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
         if(friendsFragmentViewModel.searchState != FriendsFragmentViewModel.SearchState.NoSearch && !friendsFragmentViewModel.globalSearchOnly){
             recyclerViewLayoutRecyclerView.scrollToPosition(0)
             friendsFragmentViewModel.searchState = FriendsFragmentViewModel.SearchState.NoSearch
-            (recyclerViewLayoutRecyclerView.adapter as FriendsAdapter).onSearchVisibilityChanged(false)
+            (recyclerViewLayoutRecyclerView.adapter as UsersAdapter).onSearchVisibilityChanged(false)
             recyclerViewLayoutRecyclerView.post {
                 if(recyclerViewLayoutRecyclerView.findViewHolderForAdapterPosition(0) is SearchViewHolder) {
                     (recyclerViewLayoutRecyclerView.findViewHolderForAdapterPosition(0) as SearchViewHolder).searchState =
@@ -347,7 +347,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
     private fun showGlobalSearchOnly(context: Context){
         friendsFragmentViewModel.globalSearchOnly = true
         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
-            FriendsAdapter(
+            UsersAdapter(
                 arrayListOf(UsersRecyclerUiModel.SearchUiModel),
                 context,
                 friendsFragmentViewModel,

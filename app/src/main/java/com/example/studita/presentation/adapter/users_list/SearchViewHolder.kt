@@ -9,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.view.forEachIndexed
-import androidx.core.view.marginBottom
-import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.domain.repository.UsersRepository
 import com.example.studita.presentation.model.UsersRecyclerUiModel
@@ -20,7 +18,6 @@ import com.example.studita.utils.getAppCompatActivity
 import com.example.studita.utils.makeView
 import com.example.studita.utils.showKeyboard
 import kotlinx.android.synthetic.main.friends_filter_popup_layout.view.*
-import kotlinx.android.synthetic.main.recyclerview_layout.*
 import kotlinx.android.synthetic.main.users_search_item.view.*
 
 
@@ -30,7 +27,7 @@ class SearchViewHolder(view: View,
                        private var sortBy: UsersRepository.SortBy,
                        public var searchState: FriendsFragmentViewModel.SearchState,
                        private var showSearchCallback: ShowSearchCallback,
-                       private val globalSearchOnly: Boolean) : FriendsViewHolder<UsersRecyclerUiModel.SearchUiModel>(view) {
+                       private val globalSearchOnly: Boolean) : UsersViewHolder<UsersRecyclerUiModel.SearchUiModel>(view) {
 
     var selectedPos = sortBy.ordinal + 1
 
@@ -92,7 +89,7 @@ class SearchViewHolder(view: View,
             itemView.usersSearchItemSearchRadioGroup.visibility = View.GONE
             itemView.usersSearchItemEditText.text?.clear()
 
-            itemView.usersSearchItemEditText.setOnFocusChangeListener { v, hasFocus ->
+            itemView.usersSearchItemEditText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     itemView.usersSearchItemFilter.visibility = View.GONE
                     itemView.usersSearchItemSearchRadioGroup.visibility = View.VISIBLE
@@ -128,7 +125,7 @@ class SearchViewHolder(view: View,
 
         selectRadioButton()
 
-        itemView.usersSearchItemSearchRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+        itemView.usersSearchItemSearchRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             searchState = if(checkedId == R.id.usersSearchItemGlobalSearchRadioButton) {
                 FriendsFragmentViewModel.SearchState.GlobalSearch(itemView.usersSearchItemEditText.text.toString())
             }else {

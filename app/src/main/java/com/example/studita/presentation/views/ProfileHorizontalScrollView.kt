@@ -30,7 +30,7 @@ class ProfileHorizontalScrollView @JvmOverloads constructor(
     private var mActiveFeature = 0
     private val itemsSize = 2
     private var featureWidth = 0
-    private val gestureDetector = GestureDetector(MyGestureDetector())
+    private val gestureDetector = GestureDetector(context, MyGestureDetector())
 
     init {
         this.addView(getContentView())
