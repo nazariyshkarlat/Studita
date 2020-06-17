@@ -1,8 +1,9 @@
 package com.example.studita.domain.interactor.users
 
 import com.example.studita.domain.entity.FriendActionRequestData
+import com.example.studita.domain.entity.toStatus
 import com.example.studita.domain.exception.NetworkConnectionException
-import com.example.studita.domain.interactor.CheckIsMyFriendStatus
+import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.FriendActionStatus
 import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.repository.UsersRepository
@@ -27,21 +28,21 @@ class UsersInteractorImpl(private val repository: UsersRepository,
                     GetUsersStatus.ServiceUnavailable
             }
 
-    override suspend fun checkIsMyFriend(myId: Int, userId: Int): CheckIsMyFriendStatus  =
+    override suspend fun checkIsMyFriend(myId: Int, userId: Int): IsMyFriendStatus  =
             try {
                 val pair = repository.checkIsMyFriend(myId, userId)
                 val code = pair.first
-                val isMyFriend = pair.second
+                val isMyFriendData = pair.second
                 when (code) {
-                    200 -> if(isMyFriend == true) CheckIsMyFriendStatus.IsMyFriend(userId) else CheckIsMyFriendStatus.IsNotMyFriend(userId)
-                    else -> CheckIsMyFriendStatus.Failure
+                    200 -> isMyFriendData!!.toStatus(userId)
+                    else -> IsMyFriendStatus.Failure
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 if (e is NetworkConnectionException) {
-                    CheckIsMyFriendStatus.NoConnection
+                    IsMyFriendStatus.NoConnection
                 }else
-                    CheckIsMyFriendStatus.ServiceUnavailable
+                    IsMyFriendStatus.ServiceUnavailable
             }
 
     override suspend fun addFriend(friendActionRequestData: FriendActionRequestData): FriendActionStatus  =

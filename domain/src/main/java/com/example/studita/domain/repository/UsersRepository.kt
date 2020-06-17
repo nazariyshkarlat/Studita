@@ -1,13 +1,14 @@
 package com.example.studita.domain.repository
 
 import com.example.studita.domain.entity.FriendActionRequestData
+import com.example.studita.domain.entity.IsMyFriendData
 import com.example.studita.domain.entity.UsersResponseData
 
 interface UsersRepository {
 
     suspend fun getUsers(userId: Int, friendOfUserId: Int?, perPage: Int, pageNumber: Int, sortBy: SortBy?, startsWith: String?): Pair<Int, UsersResponseData?>
 
-    suspend fun checkIsMyFriend(myId: Int, userId: Int) : Pair<Int, Boolean?>
+    suspend fun checkIsMyFriend(myId: Int, userId: Int) : Pair<Int, IsMyFriendData?>
 
     suspend fun addFriend(friendActionRequestData: FriendActionRequestData): Int
 

@@ -305,7 +305,7 @@
         <item name="android:textColor">@color/button_accent_8_text_color</item>
     </style>
 
-    <style name="TryAgainButton" parent="Button12">
+    <style name="TryAgainButton" parent="ButtonBlueTransparent">
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/Medium16Blue</item>
         <item name="android:drawableLeft">@drawable/refresh_animation</item>
@@ -319,14 +319,14 @@
         <item name="android:textAppearance">@style/Medium16</item>
     </style>
 
-    <style name="Button12" parent="android:Widget.TextView">
+    <style name="ButtonBlueTransparent" parent="android:Widget.TextView">
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
         <item name="android:background">@drawable/button_accent_press_transparent</item>
         <item name="android:textAppearance">@style/Medium16Blue</item>
     </style>
 
-    <style name="ShareButton" parent="Button12">
+    <style name="ShareButton" parent="ButtonBlueTransparent">
         <item name="android:gravity">center</item>
         <item name="android:drawableStart">@drawable/ic_share_accent</item>
         <item name="android:drawablePadding">-40dp</item>

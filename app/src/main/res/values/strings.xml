@@ -121,7 +121,7 @@
     <string name="exercises_XP_result">+%1$d XP</string>
     <string name="exercises_XP_bonus">+%1$d XP бонус</string>
     <string name="new_level">Уровень повышен</string>
-    <string name="server_client_id">563230539724-1j3osvmuqtuovqr0am2qj2evm7l7cln8.apps.googleusercontent.com</string>
+    <string name="server_client_id">563230539724-lv9sasj6ejpt5mjlnpsipah5fjr959oi.apps.googleusercontent.com</string>
     <string name="custom_bottom_sheet_behavior" translatable="false">com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior</string>
     <string name="studita_account">&app_name;</string>
     <string name="exercise_snackbar_chapter_completed_reason">Поздравляем! Вы полностью завершили всю тему!</string>
@@ -138,6 +138,7 @@
     <string name="month">Месяц</string>
     <string name="account">Профиль</string>
     <string name="edit_profile">Редактировать профиль</string>
+    <string name="cancel_friendship_request">Отменить запрос</string>
     <string name="profile">Профиль</string>
     <string name="my_profile">Мой профиль</string>
     <string name="user_name_template">\@%1$s</string>
@@ -194,6 +195,7 @@
     <string name="call_to_duel">Вызвать на дуэль</string>
     <string name="go_to_profile">Перейти в профиль</string>
     <string name="add_to_friends">Добавить в друзья</string>
+    <string name="accept_friendship_request">Принять запрос</string>
     <string name="share_profile">Поделиться профлем</string>
     <string name="my_friends">Мои друзья</string>
     <string name="find_friends">Найти друзей</string>

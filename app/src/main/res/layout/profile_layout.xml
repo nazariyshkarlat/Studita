@@ -91,6 +91,14 @@
                     android:layout_height="@dimen/buttonHeight"
                     android:text="@string/edit_profile" />
 
+                <TextView
+                    android:id="@+id/profileLayoutTransparentButton"
+                    style="@style/ButtonBlueTransparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/buttonHeight"
+                    android:visibility="gone"
+                    android:text="@string/cancel_friendship_request" />
+
                 <com.example.studita.presentation.views.press_view.PressTextView
                     android:id="@+id/profileLayoutTextButton"
                     style="@style/BlueTextButton16"

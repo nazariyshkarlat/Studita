@@ -2,6 +2,7 @@ package com.example.studita.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.ContextThemeWrapper
 import android.view.Gravity
 import android.view.View
@@ -11,10 +12,12 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.example.studita.R
 import com.example.studita.domain.entity.UserData
 import com.example.studita.domain.entity.UsersResponseData
 import com.example.studita.domain.entity.UserDataData
+import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.interactor.UserDataStatus
 import com.example.studita.presentation.fragments.base.NavigatableFragment
@@ -23,11 +26,13 @@ import com.example.studita.presentation.view_model.ProfileFragmentViewModel
 import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.profile_friend_item.view.*
 import kotlinx.android.synthetic.main.profile_layout.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
 
-    lateinit var profileFragmentViewModel: ProfileFragmentViewModel
+    private lateinit var profileFragmentViewModel: ProfileFragmentViewModel
 
     lateinit var userData: UserDataData
 
@@ -135,19 +140,43 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
     }
 
     private fun formButton(userData: UserData, context: Context){
-        if(userData.isMyFriend){
-            profileLayoutButton.text = resources.getString(R.string.call_to_duel)
-            profileLayoutTextButton.visibility = View.VISIBLE
-            profileLayoutButton.background = ContextCompat.getDrawable(context, R.drawable.button_green_8)
-            profileLayoutTextButton.setOnClickListener {
-                profileFragmentViewModel.removeFromFriends(UserUtils.getUserIDTokenData()!!, userData)
+        when (userData.isMyFriendStatus) {
+            is IsMyFriendStatus.Success.IsMyFriend -> {
+                profileLayoutButton.visibility = View.VISIBLE
+                profileLayoutTransparentButton.visibility = View.GONE
+                profileLayoutButton.text = resources.getString(R.string.call_to_duel)
+                profileLayoutTextButton.visibility = View.VISIBLE
+                profileLayoutButton.background = ContextCompat.getDrawable(context, R.drawable.button_green_8)
+                profileLayoutTextButton.setOnClickListener {
+                    profileFragmentViewModel.removeFromFriends(UserUtils.getUserIDTokenData()!!, userData)
+                }
             }
-        }else{
-            profileLayoutButton.text = resources.getString(R.string.add_to_friends)
-            profileLayoutButton.background = ContextCompat.getDrawable(context, R.drawable.button_accent_8)
-            profileLayoutTextButton.visibility = View.GONE
-            profileLayoutButton.setOnClickListener {
-                profileFragmentViewModel.addToFriends(UserUtils.getUserIDTokenData()!!, userData)
+            is IsMyFriendStatus.Success.IsNotMyFriend -> {
+                profileLayoutButton.visibility = View.VISIBLE
+                profileLayoutTransparentButton.visibility = View.GONE
+                profileLayoutButton.text = resources.getString(R.string.add_to_friends)
+                profileLayoutButton.background = ContextCompat.getDrawable(context, R.drawable.button_accent_8)
+                profileLayoutTextButton.visibility = View.GONE
+                profileLayoutButton.setOnClickListener {
+                    profileFragmentViewModel.addToFriends(UserUtils.getUserIDTokenData()!!, userData)
+                }
+            }
+            is IsMyFriendStatus.Success.GotMyFriendshipRequest -> {
+                profileLayoutButton.visibility = View.GONE
+                profileLayoutTransparentButton.visibility = View.VISIBLE
+                profileLayoutTransparentButton.setOnClickListener {
+                    profileFragmentViewModel.removeFromFriends(UserUtils.getUserIDTokenData()!!, userData)
+                }
+            }
+            is IsMyFriendStatus.Success.WaitingForFriendshipAccept ->{
+                profileLayoutButton.visibility = View.VISIBLE
+                profileLayoutTransparentButton.visibility = View.GONE
+                profileLayoutButton.text = resources.getString(R.string.accept_friendship_request)
+                profileLayoutButton.background = ContextCompat.getDrawable(context, R.drawable.button_accent_8)
+                profileLayoutTextButton.visibility = View.GONE
+                profileLayoutButton.setOnClickListener {
+                    profileFragmentViewModel.acceptFriendshipRequest(UserUtils.getUserIDTokenData()!!, userData)
+                }
             }
         }
     }

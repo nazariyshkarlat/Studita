@@ -1,6 +1,7 @@
 package com.example.studita.data.net
 
 import com.example.studita.data.entity.FriendActionRequest
+import com.example.studita.data.entity.IsMyFriendEntity
 import com.example.studita.data.entity.UsersResponse
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -21,7 +22,7 @@ interface UsersService {
         @Query("starts_with") startsWith: String?): Response<UsersResponse>
 
     @GET("is_my_friend")
-    suspend fun checkIsMyFriend(@Query("my_id") myId: Int, @Query("user_id") userId: Int): Response<Boolean>
+    suspend fun checkIsMyFriend(@Query("my_id") myId: Int, @Query("user_id") userId: Int): Response<IsMyFriendEntity>
 
     @POST("add_friend")
     suspend fun addFriend(@Body friendActionRequest: FriendActionRequest): Response<ResponseBody>

@@ -253,8 +253,8 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                 friendsFragmentViewModel.recyclerItems?.indexOfFirst { (it is UsersRecyclerUiModel.UserItemUiModel) && it.userId == friendData.userId }
 
             if (itemIndex != null && itemIndex != -1) {
-                friendsFragmentViewModel.userData?.find { it.userId == friendData.userId }?.isMyFriend = friendData.isMyFriend
-                (friendsFragmentViewModel.recyclerItems?.get(itemIndex) as UsersRecyclerUiModel.UserItemUiModel).isMyFriend = friendData.isMyFriend
+                friendsFragmentViewModel.userData?.find { it.userId == friendData.userId }?.isMyFriendStatus = friendData.isMyFriendStatus
+                (friendsFragmentViewModel.recyclerItems?.get(itemIndex) as UsersRecyclerUiModel.UserItemUiModel).isMyFriendStatus = friendData.isMyFriendStatus
                 recyclerViewLayoutRecyclerView.adapter?.notifyItemChanged(itemIndex, Unit)
             }
         })

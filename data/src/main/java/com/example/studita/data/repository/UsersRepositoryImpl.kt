@@ -1,9 +1,11 @@
 package com.example.studita.data.repository
 
+import com.example.studita.data.entity.IsMyFriendEntity
 import com.example.studita.data.entity.toBusinessEntity
 import com.example.studita.data.entity.toRawEntity
 import com.example.studita.data.repository.datasource.users.UsersDataStoreFactory
 import com.example.studita.domain.entity.FriendActionRequestData
+import com.example.studita.domain.entity.IsMyFriendData
 import com.example.studita.domain.entity.UsersResponseData
 import com.example.studita.domain.repository.UsersRepository
 
@@ -14,8 +16,9 @@ class UsersRepositoryImpl(private val usersDataStoreFactory: UsersDataStoreFacto
         return pair.first to friendsRequest?.let{UsersResponseData(friendsRequest.usersCount, ArrayList(friendsRequest.users.map{it.toBusinessEntity()}))}
     }
 
-    override suspend fun checkIsMyFriend(myId: Int, userId: Int): Pair<Int, Boolean?> {
-        return usersDataStoreFactory.create().tryCheckIsMyFriend(myId, userId)
+    override suspend fun checkIsMyFriend(myId: Int, userId: Int): Pair<Int, IsMyFriendData?> {
+        val pair = usersDataStoreFactory.create().tryCheckIsMyFriend(myId, userId)
+        return pair.first to pair.second?.toBusinessEntity()
     }
 
     override suspend fun addFriend(friendActionRequestData: FriendActionRequestData): Int {

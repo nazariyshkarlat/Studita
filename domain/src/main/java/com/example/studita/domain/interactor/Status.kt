@@ -162,12 +162,18 @@ sealed class GetUsersStatus{
     class Success(val friendsResponseData: UsersResponseData): GetUsersStatus()
 }
 
-sealed class CheckIsMyFriendStatus{
-    class IsMyFriend(val userId: Int) : CheckIsMyFriendStatus()
-    class IsNotMyFriend(val userId: Int) : CheckIsMyFriendStatus()
-    object ServiceUnavailable : CheckIsMyFriendStatus()
-    object NoConnection : CheckIsMyFriendStatus()
-    object Failure: CheckIsMyFriendStatus()
+sealed class IsMyFriendStatus{
+
+    sealed class Success : IsMyFriendStatus(){
+        class IsMyFriend(val userId: Int) : Success()
+        class IsNotMyFriend(val userId: Int) : Success()
+        class GotMyFriendshipRequest(val userId: Int) : Success()
+        class WaitingForFriendshipAccept(val userId: Int) : Success()
+    }
+
+    object ServiceUnavailable : IsMyFriendStatus()
+    object NoConnection : IsMyFriendStatus()
+    object Failure: IsMyFriendStatus()
 }
 
 sealed class FriendActionStatus{

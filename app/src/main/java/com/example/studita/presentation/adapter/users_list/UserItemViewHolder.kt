@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import com.example.studita.R
+import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.presentation.fragments.MyProfileFragment
 import com.example.studita.presentation.fragments.ProfileFragment
 import com.example.studita.presentation.model.UsersRecyclerUiModel
@@ -32,15 +33,17 @@ class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsC
 
             friendItemAddFriend.visibility =  if(isMyProfile) View.GONE else View.VISIBLE
 
-            friendItemAddFriend.isSelected = model.isMyFriend
+            val isMyFriend = model.isMyFriendStatus is IsMyFriendStatus.Success.IsMyFriend || model.isMyFriendStatus is IsMyFriendStatus.Success.GotMyFriendshipRequest
+
+            friendItemAddFriend.isSelected = isMyFriend
 
             friendItemAddFriend.setOnClickListener {
-                if(model.isMyFriend){
-                    model.isMyFriend = false
+                if(isMyFriend){
+                    model.isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(model.userId)
                     it.isSelected = false
                     changeIsMyFriend.removeFriend(model.userId)
                 }else{
-                    model.isMyFriend = true
+                    model.isMyFriendStatus = IsMyFriendStatus.Success.GotMyFriendshipRequest(model.userId)
                     it.isSelected = true
                     changeIsMyFriend.addFriend(model.userId)
                 }

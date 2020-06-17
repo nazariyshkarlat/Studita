@@ -9,6 +9,7 @@ import com.example.studita.di.data.UsersModule
 import com.example.studita.domain.entity.FriendActionRequestData
 import com.example.studita.domain.entity.UserData
 import com.example.studita.domain.entity.UserIdTokenData
+import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.FriendActionStatus
 import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.repository.UsersRepository
@@ -110,25 +111,25 @@ class FriendsFragmentViewModel : ViewModel(){
     }
 
     fun removeFromFriends(userIdToken: UserIdTokenData, userData: UserData){
+        UserUtils.isMyFriendLiveData.value = userData.apply {
+            isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
+        }
         GlobalScope.launch{
             val result = friendsInteractor.removeFriend(FriendActionRequestData(userIdToken, userData.userId))
             if(result == FriendActionStatus.Success) {
                 removeFriendStatus.postValue(userData.userId to userData.userName)
-                UserUtils.isMyFriendLiveData.postValue(userData.apply {
-                    isMyFriend = false
-                })
             }
         }
     }
 
     fun addToFriends(userIdToken: UserIdTokenData, userData: UserData){
+        UserUtils.isMyFriendLiveData.value = userData.apply {
+            isMyFriendStatus = IsMyFriendStatus.Success.GotMyFriendshipRequest(userId)
+        }
         GlobalScope.launch{
             val result = friendsInteractor.addFriend(FriendActionRequestData(userIdToken, userData.userId))
             if(result == FriendActionStatus.Success) {
                 addFriendStatus.postValue(userData.userId to userData.userName)
-                UserUtils.isMyFriendLiveData.postValue(userData.apply {
-                    isMyFriend = true
-                })
             }
         }
     }

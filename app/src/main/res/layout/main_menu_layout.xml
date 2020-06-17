@@ -59,7 +59,7 @@
 
                     <TextView
                         android:id="@+id/mainMenuUseEmailButton"
-                        style="@style/Button12"
+                        style="@style/ButtonBlueTransparent"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/buttonHeight"
                         android:layout_marginTop="16dp"

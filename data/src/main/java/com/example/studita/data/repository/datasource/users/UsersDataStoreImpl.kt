@@ -18,7 +18,7 @@ class UsersDataStoreImpl(private val connectionManager: ConnectionManager, priva
         }
     }
 
-    override suspend fun tryCheckIsMyFriend(myId: Int, userId: Int) : Pair<Int, Boolean?>{
+    override suspend fun tryCheckIsMyFriend(myId: Int, userId: Int) : Pair<Int, IsMyFriendEntity?>{
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         } else {

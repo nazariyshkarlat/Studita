@@ -2,7 +2,6 @@ package com.example.studita.presentation.view_model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.di.data.AuthorizationModule
 import com.example.studita.di.data.UserStatisticsModule
@@ -45,7 +44,7 @@ class AuthorizationFragmentViewModel : ViewModel(){
                     AuthorizationResult.IncorrectEmail
                 }
                 validator.isValid(dates) == true to false -> {
-                    AuthorizationResult.PasswordLess6
+                    AuthorizationResult.PasswordLessMixLength
                 }
                 validator.isValid(dates) == true to true -> {
                     AuthorizationResult.Valid
@@ -92,18 +91,16 @@ class AuthorizationFragmentViewModel : ViewModel(){
                     ))){
                     is SignUpStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                     is SignUpStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
-                    is SignUpStatus.Failure -> authorizationState.value = AuthorizationResult.SignUpFailure
-                    is SignUpStatus.UserAlreadyExists -> authorizationState.value = AuthorizationResult.UserAlreadyExists
-                    is SignUpStatus.Success ->{
-                        authorizationState.postValue(AuthorizationResult.SignUpSuccess(dates.first, dates.second))
-                    }
+                    is SignUpStatus.Failure -> authorizationState.postValue(AuthorizationResult.SignUpFailure)
+                    is SignUpStatus.UserAlreadyExists -> authorizationState.postValue(AuthorizationResult.UserAlreadyExists)
+                    is SignUpStatus.Success -> authorizationState.postValue(AuthorizationResult.SignUpSuccess(dates.first, dates.second))
                 }}
         }
     }
 
     sealed class AuthorizationResult{
         object IncorrectEmail : AuthorizationResult()
-        object PasswordLess6 : AuthorizationResult()
+        object PasswordLessMixLength : AuthorizationResult()
         object Valid : AuthorizationResult()
         object LogInFailure : AuthorizationResult()
         object SignUpFailure : AuthorizationResult()

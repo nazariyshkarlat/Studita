@@ -1,13 +1,11 @@
 package com.example.studita.presentation.fragments
 
-import android.inputmethodservice.Keyboard
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.OneShotPreDrawListener
@@ -23,8 +21,6 @@ import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.utils.setOnViewSizeChangeListener
 import com.example.studita.presentation.view_model.AuthorizationFragmentViewModel
-import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
-import com.example.studita.utils.hideKeyboard
 import kotlinx.android.synthetic.main.authorization_layout.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -86,7 +82,7 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                 androidx.lifecycle.Observer<AuthorizationFragmentViewModel.AuthorizationResult> {result ->
                     when(result){
                         is AuthorizationFragmentViewModel.AuthorizationResult.IncorrectEmail -> showError(R.string.incorrect_mail, true)
-                        is AuthorizationFragmentViewModel.AuthorizationResult.PasswordLess6 -> showError(R.string.to_short_password, false)
+                        is AuthorizationFragmentViewModel.AuthorizationResult.PasswordLessMixLength -> showError(R.string.to_short_password, false)
                         is AuthorizationFragmentViewModel.AuthorizationResult.NoUserFound -> showError(R.string.no_user_with_mail, true)
                         is AuthorizationFragmentViewModel.AuthorizationResult.UserAlreadyExists -> showError(R.string.user_already_exists, true)
                         is AuthorizationFragmentViewModel.AuthorizationResult.LogInFailure -> showError(R.string.incorrect_password, false)
