@@ -1,0 +1,46 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "a53c77dc19bd596d157d4729d543a08c",
+    "entities": [
+      {
+        "tableName": "studita_levels",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`levelNumber` INTEGER NOT NULL, `levelChildren` TEXT NOT NULL, `id` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "levelNumber",
+            "columnName": "levelNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "levelChildren",
+            "columnName": "levelChildren",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a53c77dc19bd596d157d4729d543a08c')"
+    ]
+  }
+}
