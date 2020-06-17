@@ -1,5 +1,4 @@
 package com.example.studita.di
-
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
