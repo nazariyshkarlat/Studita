@@ -5,6 +5,6 @@ import com.example.studita.domain.entity.CompletedExercisesData
 
 interface SyncCompletedExercises {
 
-    fun scheduleCompleteExercises(completedExercisesData: CompletedExercisesData)
+    fun scheduleCompleteExercises(completedExercisesRequestData: CompleteExercisesRequestData)
 
 }

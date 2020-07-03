@@ -5,15 +5,16 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studita.R
-import com.example.studita.utils.startActivity
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
 import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.startActivity
+import java.util.*
 
 @SuppressLint("Registered")
 open class DefaultActivity : AppCompatActivity(),
     MainMenuThemeDialogAlertFragment.OnThemeChangeListener {
 
-    var themeState = Theme.DARK
+    private var themeState = Theme.DARK
 
     private val themes = mutableListOf(R.style.DarkTheme, R.style.LightTheme)
 
@@ -54,4 +55,5 @@ open class DefaultActivity : AppCompatActivity(),
         LIGHT,
         DEFAULT
     }
+
 }

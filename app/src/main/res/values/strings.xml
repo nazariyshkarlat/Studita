@@ -121,7 +121,7 @@
     <string name="exercises_XP_result">+%1$d XP</string>
     <string name="exercises_XP_bonus">+%1$d XP бонус</string>
     <string name="new_level">Уровень повышен</string>
-    <string name="server_client_id">563230539724-lv9sasj6ejpt5mjlnpsipah5fjr959oi.apps.googleusercontent.com</string>
+    <string name="server_client_id">100888478237-lldqud6eng1l50k3isp1ovkvl18ev34i.apps.googleusercontent.com</string>
     <string name="custom_bottom_sheet_behavior" translatable="false">com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior</string>
     <string name="studita_account">&app_name;</string>
     <string name="exercise_snackbar_chapter_completed_reason">Поздравляем! Вы полностью завершили всю тему!</string>
@@ -178,6 +178,7 @@
     <string name="no">Нет</string>
     <string name="search">Поиск</string>
     <string name="sort">Сортировать</string>
+    <string name="reject">Отменить</string>
     <string name="sort_by_A_Z">По имени (От A до Z)</string>
     <string name="sort_by_Z_A">По имени (От Z до A)</string>
     <string name="sort_by_new_old">От новых к старым</string>
@@ -195,7 +196,9 @@
     <string name="call_to_duel">Вызвать на дуэль</string>
     <string name="go_to_profile">Перейти в профиль</string>
     <string name="add_to_friends">Добавить в друзья</string>
+    <string name="add">Добавить</string>
     <string name="accept_friendship_request">Принять запрос</string>
+    <string name="accept">Принять</string>
     <string name="share_profile">Поделиться профлем</string>
     <string name="my_friends">Мои друзья</string>
     <string name="find_friends">Найти друзей</string>
@@ -205,9 +208,22 @@
     <string name="enter_name_to_search">Введите имя для поиска</string>
     <string name="global_search_no_results">Результатов не найдено. Попробуйте другое имя</string>
     <string name="friends_not_found">Результатов среди ваших друзей не найдено. Поробуйте другое имя</string>
+    <string name="notifications_are_empty">Список ваших уведомлений пуст</string>
     <string name="friend_removed_snackbar">\@%1$s был удалён из ваших друзей</string>
     <string name="friend_added_snackbar">\@%1$s был добавлен в ваши друзья</string>
+    <string name="friendship_request_is_sent_snackbar">Запрос в друзья \@%1$s был отправлен</string>
+    <string name="friendship_request_is_canceled_snackbar">Запрос в друзья \@%1$s был отменён</string>
     <string name="privacy_exceptions_dialog_alert_title">Добавить исключения</string>
+    <string name="notification_type_duel_invite_text">вызвал вас на дуэль</string>
+    <string name="notification_duel_missed_call_subtitle">вызывал вас на дуэль</string>
+    <string name="notification_type_request_friendship">хочет добавить вас в друзья</string>
+    <string name="notification_type_accepted_friendship">принял запрос в друзья</string>
+    <string name="accept_friendship_dialog_alert_title">Добавить в друзья?</string>
+    <string name="accept_friendship_dialog_alert_subtitle">\@%1$s хочет добавить вас в друзья</string>
+    <string name="notifications_channel_name">&app_name; notifications</string>
+    <string name="notification_friend_reqest_title">Новый запрос</string>
+    <string name="notification_duel_missed_call_title">Пропущенный вызов</string>
+    <string name="notification_friendship_request_accepted_title">Запрос принят</string>
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>
@@ -223,5 +239,61 @@
         <item quantity="few">Прогресс: %1$d задания из %2$d</item>
         <item quantity="many">Прогресс: %1$d заданий из %2$d</item>
         <item quantity="other">%Прогресс: %1$d заданий из %2$d</item>
+    </plurals>
+    <plurals name="seconds_ago_plurals">
+        <item quantity="zero">секунд назад</item>
+        <item quantity="one">секунду назад</item>
+        <item quantity="two">секунды назад</item>
+        <item quantity="few">секунды назад</item>
+        <item quantity="many">секунд назад</item>
+        <item quantity="other">секунд назад</item>
+    </plurals>
+    <plurals name="minutes_ago_plurals">
+        <item quantity="zero">минут назад</item>
+        <item quantity="one">минуту назад</item>
+        <item quantity="two">минуты назад</item>
+        <item quantity="few">минуты назад</item>
+        <item quantity="many">минут назад</item>
+        <item quantity="other">минут назад</item>
+    </plurals>
+    <plurals name="hours_ago_plurals">
+        <item quantity="zero">часов назад</item>
+        <item quantity="one">час назад</item>
+        <item quantity="two">часа назад</item>
+        <item quantity="few">часа назад</item>
+        <item quantity="many">часов назад</item>
+        <item quantity="other">часов назад</item>
+    </plurals>
+    <plurals name="days_ago_plurals">
+        <item quantity="zero">дней назад</item>
+        <item quantity="one">день назад</item>
+        <item quantity="two">дня назад</item>
+        <item quantity="few">дня назад</item>
+        <item quantity="many">дней назад</item>
+        <item quantity="other">дней назад</item>
+    </plurals>
+    <plurals name="weeks_ago_plurals">
+        <item quantity="zero">недель назад</item>
+        <item quantity="one">неделю назад</item>
+        <item quantity="two">недели назад</item>
+        <item quantity="few">недели назад</item>
+        <item quantity="many">недель назад</item>
+        <item quantity="other">недель назад</item>
+    </plurals>
+    <plurals name="months_ago_plurals">
+        <item quantity="zero">месяцев назад</item>
+        <item quantity="one">месяц назад</item>
+        <item quantity="two">месяца назад</item>
+        <item quantity="few">месяца назад</item>
+        <item quantity="many">месяцев назад</item>
+        <item quantity="other">месяцев назад</item>
+    </plurals>
+    <plurals name="years_ago_plurals">
+        <item quantity="zero">лет назад</item>
+        <item quantity="one">год назад</item>
+        <item quantity="two">года назад</item>
+        <item quantity="few">года назад</item>
+        <item quantity="many">лет назад</item>
+        <item quantity="other">лет назад</item>
     </plurals>
 </resources>

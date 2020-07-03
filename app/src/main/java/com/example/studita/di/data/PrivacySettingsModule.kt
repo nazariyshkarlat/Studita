@@ -9,6 +9,8 @@ import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.privacy_settings.PrivacySettingsInteractor
 import com.example.studita.domain.interactor.privacy_settings.PrivacySettingsInteractorImpl
 import com.example.studita.domain.repository.PrivacySettingsRepository
+import com.example.studita.domain.service.SyncPrivacySettings
+import com.example.studita.service.SyncPrivacySettingsImpl
 
 object PrivacySettingsModule {
 
@@ -40,7 +42,8 @@ object PrivacySettingsModule {
 
     private fun makePrivacySettingsIntercator(repository: PrivacySettingsRepository) =
             PrivacySettingsInteractorImpl(
-                    repository
+                repository,
+                SyncPrivacySettingsImpl()
             )
 
 

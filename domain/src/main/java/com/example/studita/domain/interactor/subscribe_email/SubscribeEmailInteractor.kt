@@ -7,8 +7,8 @@ import com.example.studita.domain.interactor.*
 
 interface SubscribeEmailInteractor{
 
-    suspend fun subscribe(userIdTokenData: UserIdTokenData): SubscribeEmailResultStatus
-    suspend fun unsubscribe(userIdTokenData: UserIdTokenData): SubscribeEmailResultStatus
+    suspend fun subscribe(userIdTokenData: UserIdTokenData, retryCount: Int = 30): SubscribeEmailResultStatus
+    suspend fun unsubscribe(userIdTokenData: UserIdTokenData, retryCount: Int = 30): SubscribeEmailResultStatus
     suspend fun saveSyncedResult(status: SubscribeEmailResultStatus)
     fun getSyncedResult(): SubscribeEmailResultData?
 }

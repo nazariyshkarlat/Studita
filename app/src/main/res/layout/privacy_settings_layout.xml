@@ -115,8 +115,6 @@
                         android:id="@+id/privacySettingsLayoutDuelsBlockExceptText"
                         style="@style/Regular16"
                         android:layout_marginEnd="48dp"
-                        android:singleLine="true"
-                        android:ellipsize="middle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center_vertical"/>
@@ -137,6 +135,7 @@
                     style="@style/BlueTextButton16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:layout_marginStart="6dp"
                     android:layout_marginBottom="-8dp"/>
 

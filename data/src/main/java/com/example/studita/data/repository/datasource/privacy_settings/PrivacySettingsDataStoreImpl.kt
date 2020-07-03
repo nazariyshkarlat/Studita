@@ -6,6 +6,7 @@ import com.example.studita.data.net.SubscribeEmailService
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
+import kotlinx.coroutines.CancellationException
 import okhttp3.ResponseBody
 import retrofit2.Response
 import java.lang.Exception
@@ -19,7 +20,10 @@ class PrivacySettingsDataStoreImpl(private val connectionManager: ConnectionMana
                 val result = privacySettingsService.getPrivacySettings(userIdToken)
                 return result.code() to result.body()
             } catch (e: Exception) {
-                throw ServerUnavailableException()
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
     }
@@ -31,7 +35,10 @@ class PrivacySettingsDataStoreImpl(private val connectionManager: ConnectionMana
             try {
                 return privacySettingsService.editPrivacySettings(privacySettingsRequest).code()
             } catch (e: Exception) {
-                throw ServerUnavailableException()
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
     }
@@ -48,7 +55,10 @@ class PrivacySettingsDataStoreImpl(private val connectionManager: ConnectionMana
                 val result = privacySettingsService.getPrivacyDuelsExceptionsList(userIdToken, perPage, pageNumber)
                 return result.code() to result.body()
             } catch (e: Exception) {
-                throw ServerUnavailableException()
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
     }

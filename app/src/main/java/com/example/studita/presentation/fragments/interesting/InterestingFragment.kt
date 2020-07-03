@@ -28,11 +28,11 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout){
             viewModel.navigationState.observe(viewLifecycleOwner, Observer { pair ->
                 when (pair.first) {
                     InterestingViewModel.InterestingNavigationState.NAVIGATE -> {
-                        (activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.exerciseLayoutFrameLayout)?.let { (activity as AppCompatActivity).removeFragment(it) }
                         (activity as AppCompatActivity).navigateTo(
                             pair.second,
                             R.id.exerciseLayoutFrameLayout
                         )
+                        (activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.exerciseLayoutFrameLayout)?.let { (activity as AppCompatActivity).removeFragment(it) }
                     }
                     InterestingViewModel.InterestingNavigationState.ADD -> (activity as AppCompatActivity).addFragment(
                         pair.second,

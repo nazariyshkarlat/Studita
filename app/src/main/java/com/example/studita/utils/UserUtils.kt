@@ -32,6 +32,7 @@ object UserUtils {
     fun clearUserIdToken(){
         userID = null
         userToken = null
+        PrefsUtils.clearUserIdToken()
     }
 
     fun isLoggedIn() = getUserIDTokenData() != null

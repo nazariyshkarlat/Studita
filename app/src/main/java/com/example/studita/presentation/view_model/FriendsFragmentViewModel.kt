@@ -12,6 +12,7 @@ import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.FriendActionStatus
 import com.example.studita.domain.interactor.GetUsersStatus
+import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.domain.repository.UsersRepository
 import com.example.studita.presentation.model.UsersRecyclerUiModel
 import com.example.studita.presentation.model.toUserItemUiModel
@@ -25,8 +26,9 @@ import kotlinx.coroutines.launch
 class FriendsFragmentViewModel : ViewModel(){
 
     private val friendsInteractor = UsersModule.getUsersInteractorImpl()
-    val removeFriendStatus = SingleLiveEvent<Pair<Int, String>>()
-    val addFriendStatus = SingleLiveEvent<Pair<Int, String>>()
+    val addFriendStatus = SingleLiveEvent<UsersInteractor.FriendActionState>()
+
+    private var addToFriendsJob : Job? = null
 
     var globalSearchOnly = false
     var searchState: SearchState = SearchState.NoSearch
@@ -38,7 +40,7 @@ class FriendsFragmentViewModel : ViewModel(){
 
     val progressState = MutableLiveData(true)
 
-    val searchResultState = MutableLiveData<SearchResultState>()
+    val searchResultState = MutableLiveData<Pair<Boolean, SearchResultState>>()
 
     var searchUsersJob : Job? = null
 
@@ -105,45 +107,63 @@ class FriendsFragmentViewModel : ViewModel(){
 
                 if (searchResultState != null) {
                     progressState.value = false
-                    this@FriendsFragmentViewModel.searchResultState.postValue(searchResultState)
+                    this@FriendsFragmentViewModel.searchResultState.postValue(
+                        (canBeMoreItems(searchResultState) to searchResultState))
                 }
             }
     }
 
+    private fun canBeMoreItems(searchResultState: SearchResultState) = (((searchResultState is SearchResultState.ResultsFound) && searchResultState.results.size == perPage) ||
+            ((searchResultState is SearchResultState.MoreResultsFound) && searchResultState.results.size == perPage))
+
     fun removeFromFriends(userIdToken: UserIdTokenData, userData: UserData){
-        UserUtils.isMyFriendLiveData.value = userData.apply {
-            isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
-        }
-        GlobalScope.launch{
+        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob){
             val result = friendsInteractor.removeFriend(FriendActionRequestData(userIdToken, userData.userId))
             if(result == FriendActionStatus.Success) {
-                removeFriendStatus.postValue(userData.userId to userData.userName)
+                if(userData.isMyFriendStatus is IsMyFriendStatus.Success.IsMyFriend)
+                    addFriendStatus.postValue(UsersInteractor.FriendActionState.RemovedFromFriends(userData))
+                else
+                    addFriendStatus.postValue(UsersInteractor.FriendActionState.MyFriendshipRequestIsCanceled(userData))
             }
+            UserUtils.isMyFriendLiveData.postValue(userData.apply {
+                isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
+            })
         }
     }
 
     fun addToFriends(userIdToken: UserIdTokenData, userData: UserData){
-        UserUtils.isMyFriendLiveData.value = userData.apply {
-            isMyFriendStatus = IsMyFriendStatus.Success.GotMyFriendshipRequest(userId)
-        }
-        GlobalScope.launch{
-            val result = friendsInteractor.addFriend(FriendActionRequestData(userIdToken, userData.userId))
+        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob){
+            val result = if(userData.isMyFriendStatus is IsMyFriendStatus.Success.WaitingForFriendshipAccept)
+                friendsInteractor.acceptFriendship(FriendActionRequestData(userIdToken, userData.userId))
+            else
+                friendsInteractor.addFriend(FriendActionRequestData(userIdToken, userData.userId))
             if(result == FriendActionStatus.Success) {
-                addFriendStatus.postValue(userData.userId to userData.userName)
+                if(userData.isMyFriendStatus is IsMyFriendStatus.Success.WaitingForFriendshipAccept)
+                    addFriendStatus.postValue(UsersInteractor.FriendActionState.AddedToFriends(userData))
+                else
+                    addFriendStatus.postValue(UsersInteractor.FriendActionState.FriendshipRequestIsSent(userData))
             }
+            UserUtils.isMyFriendLiveData.postValue(userData.apply {
+                isMyFriendStatus = if(isMyFriendStatus is IsMyFriendStatus.Success.WaitingForFriendshipAccept)
+                    IsMyFriendStatus.Success.IsMyFriend(userId)
+                else
+                    IsMyFriendStatus.Success.GotMyFriendshipRequest(userId)
+            }
+            )
         }
     }
 
-    fun getRecyclerItems(searchUiModel: UsersRecyclerUiModel.SearchUiModel, usersItems: List<UserData>, progressUiModel: UsersRecyclerUiModel.ProgressUiModel): List<UsersRecyclerUiModel>{
+    fun getRecyclerItems(searchUiModel: UsersRecyclerUiModel.SearchUiModel, usersItems: List<UserData>, progressUiModel: UsersRecyclerUiModel.ProgressUiModel? = null): List<UsersRecyclerUiModel>{
         val adapterItems = ArrayList<UsersRecyclerUiModel>()
         adapterItems.add(searchUiModel)
         adapterItems.addAll(usersItems.map { it.toUserItemUiModel() })
-        adapterItems.add(progressUiModel)
+        if(progressUiModel != null)
+            adapterItems.add(progressUiModel)
         return adapterItems
     }
 
     @StringRes
-    fun getEmptyText() = when(searchResultState.value){
+    fun getEmptyText() = when(searchResultState.value?.second){
         is SearchResultState.GlobalSearchEnterText -> R.string.enter_name_to_search
         is SearchResultState.GlobalSearchNotFound -> R.string.global_search_no_results
         is SearchResultState.SearchFriendsNotFound -> R.string.friends_not_found

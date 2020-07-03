@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "100888478237",
+    "firebase_url": "https://studita-180f7.firebaseio.com",
+    "project_id": "studita-180f7",
+    "storage_bucket": "studita-180f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100888478237:android:eadfac85feaa5536d47cf4",
+        "android_client_info": {
+          "package_name": "com.example.studita"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "100888478237-60s5er0i1ogofdod17ir1pcooahudp1j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.studita",
+            "certificate_hash": "5f9bc0308845df7251ddfd61a7c74aec4ef1ef8c"
+          }
+        },
+        {
+          "client_id": "100888478237-lldqud6eng1l50k3isp1ovkvl18ev34i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlv2QKEwNIHE695lv4McLMZOkiQB5WzsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "100888478237-lldqud6eng1l50k3isp1ovkvl18ev34i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

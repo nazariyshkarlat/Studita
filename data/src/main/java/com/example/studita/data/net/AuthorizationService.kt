@@ -7,7 +7,7 @@ import retrofit2.http.*
 
 interface AuthorizationService {
     @POST("sign_out")
-    suspend fun signOut(@Body userIdToken: UserIdToken): Response<ResponseBody?>
+    suspend fun signOut(@Body signOutRequestEntity: SignOutRequestEntity): Response<ResponseBody?>
 
     @POST("log_in")
     suspend fun logIn(@Body authorizationData: AuthorizationRequestEntity): Response<LogInResponseEntity>

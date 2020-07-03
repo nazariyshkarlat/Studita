@@ -52,7 +52,7 @@ object NetworkModule {
         OkHttpClient().newBuilder()
             .addInterceptor(interceptor)
             .readTimeout(1, TimeUnit.MINUTES)
-            .connectTimeout(10, TimeUnit.SECONDS)
+            .connectTimeout(2, TimeUnit.SECONDS)
             .build()
 
 

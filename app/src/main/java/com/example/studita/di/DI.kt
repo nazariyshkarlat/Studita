@@ -30,6 +30,7 @@ object DI{
         EditProfileModule.initialize(configuration, app)
         PrivacySettingsModule.initialize(configuration)
         UsersModule.initialize(configuration)
+        NotificationsModule.initialize(configuration)
     }
 
 }

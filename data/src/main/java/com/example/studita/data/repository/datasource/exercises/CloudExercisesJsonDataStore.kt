@@ -5,6 +5,7 @@ import com.example.studita.data.net.OfflineExercisesService
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
+import kotlinx.coroutines.CancellationException
 
 class CloudExercisesJsonDataStore(
     private val connectionManager: ConnectionManager,
@@ -20,7 +21,10 @@ class CloudExercisesJsonDataStore(
                 val exercises = exercisesService.getExercises(chapterPartNumber)
                 return exercises.code() to exercises.body()!!.toString()
             }catch (e: Exception){
-                throw ServerUnavailableException()
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
     }

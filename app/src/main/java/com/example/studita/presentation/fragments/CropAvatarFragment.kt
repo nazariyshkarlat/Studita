@@ -19,7 +19,6 @@ import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.CropAvatarFragmentViewModel
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
-import com.example.studita.utils.IOUtils.getRealPathFromURI
 import com.example.studita.utils.ImageUtils
 import com.example.studita.utils.ImageUtils.rotateIfRequired
 import com.example.studita.utils.ScreenUtils

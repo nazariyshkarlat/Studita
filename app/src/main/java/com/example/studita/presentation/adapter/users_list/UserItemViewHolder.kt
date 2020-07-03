@@ -25,32 +25,37 @@ class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsC
 
         val isMyProfile = model.userId == UserUtils.userData.userId
 
-        with(itemView){
-            friendItemUserName.text = resources.getString(R.string.user_name_template, model.userName)
+        with(itemView) {
+            friendItemUserName.text =
+                resources.getString(R.string.user_name_template, model.userName)
 
             clearAvatar()
             friendItemAvatar.fillAvatar(model.avatarLink, model.userName, model.userId)
 
-            friendItemAddFriend.visibility =  if(isMyProfile) View.GONE else View.VISIBLE
+            friendItemAddFriend.visibility = if (isMyProfile) View.GONE else View.VISIBLE
 
-            val isMyFriend = model.isMyFriendStatus is IsMyFriendStatus.Success.IsMyFriend || model.isMyFriendStatus is IsMyFriendStatus.Success.GotMyFriendshipRequest
+            val isMyFriend =
+                model.isMyFriendStatus is IsMyFriendStatus.Success.IsMyFriend || model.isMyFriendStatus is IsMyFriendStatus.Success.GotMyFriendshipRequest
 
             friendItemAddFriend.isSelected = isMyFriend
 
             friendItemAddFriend.setOnClickListener {
-                if(isMyFriend){
+                if (isMyFriend) {
                     model.isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(model.userId)
                     it.isSelected = false
                     changeIsMyFriend.removeFriend(model.userId)
-                }else{
-                    model.isMyFriendStatus = IsMyFriendStatus.Success.GotMyFriendshipRequest(model.userId)
+                } else {
+                    model.isMyFriendStatus =
+                        IsMyFriendStatus.Success.GotMyFriendshipRequest(model.userId)
                     it.isSelected = true
                     changeIsMyFriend.addFriend(model.userId)
                 }
             }
+            this.setOnClickListener {
+                this.getAppCompatActivity()?.let { it1 -> navigateToProfile(it1, model) }
+            }
+            this.setOnTouchListener(this@UserItemViewHolder)
         }
-        itemView.setOnClickListener {itemView.getAppCompatActivity()?.let { it1 -> navigateToProfile(it1, model)  }}
-        itemView.setOnTouchListener(this)
     }
 
     private fun clearAvatar(){

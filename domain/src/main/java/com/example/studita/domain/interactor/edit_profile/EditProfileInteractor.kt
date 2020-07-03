@@ -9,10 +9,9 @@ import com.example.studita.domain.interactor.UserNameAvailableStatus
 
 interface EditProfileInteractor {
 
-    suspend fun editProfile(editProfileRequestData: EditProfileRequestData, userDataData: UserDataData, newAvatar: Bitmap?): EditProfileStatus
+    suspend fun editProfile(editProfileRequestData: EditProfileRequestData, userDataData: UserDataData, newAvatar: Bitmap?, retryCount: Int = 30): EditProfileStatus
 
-    suspend fun isUserNameAvailable(userName: String): UserNameAvailableStatus
-
+    suspend fun isUserNameAvailable(userName: String, retryCount: Int = 30): UserNameAvailableStatus
 
     fun isProfileDataChanged(oldProfileData: EditProfileData, newProfileData: EditProfileData, avaChanged: Boolean): Boolean
 

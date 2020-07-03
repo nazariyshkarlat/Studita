@@ -1,5 +1,6 @@
 package com.example.studita.domain.repository
 
+import com.example.studita.domain.entity.SignOutRequestData
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
@@ -14,5 +15,5 @@ interface AuthorizationRepository {
 
     suspend fun signInWithGoogle(signInWithGoogleRequestData: SignInWithGoogleRequestData) : Pair<Int, LogInResponseData?>
 
-    suspend fun signOut(userIdTokenData: UserIdTokenData): Int
+    suspend fun signOut(signOutRequestData: SignOutRequestData): Int
 }

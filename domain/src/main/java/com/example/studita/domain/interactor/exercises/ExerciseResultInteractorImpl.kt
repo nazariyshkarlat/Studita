@@ -5,6 +5,7 @@ import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.domain.entity.exercise.ExerciseResponseDescriptionData
 import com.example.studita.domain.exception.NetworkConnectionException
+import com.example.studita.domain.exception.ServerUnavailableException
 import com.example.studita.domain.interactor.ExerciseResultStatus
 import com.example.studita.domain.repository.ExerciseResultRepository
 import java.lang.Exception
@@ -21,31 +22,39 @@ class ExerciseResultInteractorImpl(
         exerciseRequestData: ExerciseRequestData,
         offlineMode: Boolean,
         retryCount: Int
-    ): ExerciseResultStatus {
+    ): ExerciseResultStatus =
         if (offlineMode) {
-            return ExerciseResultStatus.Success(
+            ExerciseResultStatus.Success(
                 repository.formExerciseResponse(exerciseData, exerciseRequestData)
             )
         } else {
             try {
                 val result =
                     repository.getExerciseResult(exerciseData.exerciseNumber, exerciseRequestData)
-                return if (result.first == 200)
+                if (result.first == 200)
                     ExerciseResultStatus.Success(result.second)
                 else
                     ExerciseResultStatus.NoExerciseFound
             } catch (e: Exception) {
                 e.printStackTrace()
-                return if (retryCount == 0) {
-                    if (e is NetworkConnectionException)
-                        ExerciseResultStatus.NoConnection
-                    else
-                        ExerciseResultStatus.ServiceUnavailable
-                } else {
-                    delay(retryDelay)
-                    getExerciseResult(exerciseData, exerciseRequestData, offlineMode, retryCount-1)
-                }
-            }
+                if(e is NetworkConnectionException || e is ServerUnavailableException) {
+                    if (retryCount == 0) {
+                        if (e is NetworkConnectionException)
+                            ExerciseResultStatus.NoConnection
+                        else
+                            ExerciseResultStatus.ServiceUnavailable
+                    } else {
+                        if (e is NetworkConnectionException)
+                            delay(retryDelay)
+                        getExerciseResult(
+                            exerciseData,
+                            exerciseRequestData,
+                            offlineMode,
+                            retryCount - 1
+                        )
+                    }
+                }else
+                    ExerciseResultStatus.Failure
         }
     }
 

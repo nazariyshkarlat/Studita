@@ -89,7 +89,7 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
 
         if ((requestCode == RC_SIGN_IN) and (resultCode == RESULT_OK)) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            context?.let { mainMenuFragmentViewModel?.handleSignInResult(task, it) }
+            activity?.application?.let { mainMenuFragmentViewModel?.handleSignInResult(task, it) }
         }
     }
 

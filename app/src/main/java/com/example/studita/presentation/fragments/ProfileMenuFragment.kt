@@ -139,6 +139,9 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
                 ListItems.FRIENDS.ordinal ->{
                     (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineMode()) MyProfileOfflineModeFragment() else MyFriendsFragment(), R.id.doubleFrameLayoutFrameLayout)
                 }
+                ListItems.NOTIFICATIONS.ordinal->{
+                    (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineMode()) NotificationsOfflineModeFragment() else NotificationsFragment(), R.id.doubleFrameLayoutFrameLayout)
+                }
             }
         }
     }

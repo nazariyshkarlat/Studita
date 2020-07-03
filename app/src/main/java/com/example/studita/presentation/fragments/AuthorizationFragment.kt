@@ -89,7 +89,7 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                         is AuthorizationFragmentViewModel.AuthorizationResult.SignUpSuccess -> {
                             Toast.makeText(context, resources.getString(R.string.sign_up_success), Toast.LENGTH_LONG).show()
                             AccountAuthenticator.addAccount(view.context, result.email)
-                            viewModel.logIn(result.email to result.password)
+                            activity?.application?.let {viewModel.logIn(result.email to result.password,  it)}
                         }
                         is AuthorizationFragmentViewModel.AuthorizationResult.LogInSuccess -> {
                             Toast.makeText(
@@ -106,7 +106,11 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                 })
 
             signUpOnClick = {viewModel.signUp(authorizationEmailEditText.text.toString() to authorizationPasswordEditText.text.toString())}
-            authorizationLogInButton.setOnClickListener {viewModel.logIn(authorizationEmailEditText.text.toString() to authorizationPasswordEditText.text.toString())}
+            authorizationLogInButton.setOnClickListener {
+                activity?.application?.let {
+                    viewModel.logIn(authorizationEmailEditText.text.toString() to authorizationPasswordEditText.text.toString(), it)
+                }
+            }
             authorizationSignUpButton.setOnClickListener{signUpOnClick.invoke()}
             authorizationVisible.setOnClickListener {viewModel.changePasswordVisible(authorizationPasswordEditText.transformationMethod == null)}
         }

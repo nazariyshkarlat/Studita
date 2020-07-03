@@ -1,6 +1,7 @@
 package com.example.studita.presentation.draw
 
 import android.R.attr.bitmap
+import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -42,9 +43,19 @@ object AvaDrawer{
 
     fun drawAvatar(image: ImageView, name: String, userId: Int) {
 
+        val d = BitmapDrawable(image.resources, getBitmap(name, userId, image.context))
+        d.setAntiAlias(true)
+        d.isFilterBitmap = true
+
+        image.setImageDrawable(d)
+    }
+
+    fun getBitmap(name: String, userId: Int, context: Context): Bitmap {
+
         val roundBitmap = Bitmap.createBitmap(
-                imageSize,
-                imageSize, Bitmap.Config.ARGB_8888)
+            imageSize,
+            imageSize, Bitmap.Config.ARGB_8888
+        )
         val canvas = Canvas(roundBitmap)
 
         val text = name.first().toString()
@@ -55,12 +66,13 @@ object AvaDrawer{
         val cWidth = r.width()
 
         circlePaint.color = Color.parseColor(
-            colors[kotlin.math.abs(userId.toString().hashCode() % colors.size)])
+            colors[kotlin.math.abs(userId.toString().hashCode() % colors.size)]
+        )
         circlePaint.isAntiAlias = true
 
         textPaint.textAlign = Paint.Align.LEFT
         textPaint.textSize = textSize.toFloat()
-        textPaint.typeface = ResourcesCompat.getFont(image.context, R.font.roboto_regular)
+        textPaint.typeface = ResourcesCompat.getFont(context, R.font.roboto_regular)
         textPaint.isAntiAlias = true
 
         canvas.drawCircle(
@@ -75,11 +87,7 @@ object AvaDrawer{
 
         canvas.drawText(text, x, y, textPaint)
 
-        val d = BitmapDrawable(image.resources, roundBitmap)
-        d.setAntiAlias(true)
-        d.isFilterBitmap = true
-
-        image.setImageDrawable(d)
+        return roundBitmap
     }
 
 }

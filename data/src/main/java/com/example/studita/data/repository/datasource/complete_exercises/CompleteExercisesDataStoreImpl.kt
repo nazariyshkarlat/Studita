@@ -5,6 +5,7 @@ import com.example.studita.data.net.CompleteExercisesService
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
+import kotlinx.coroutines.CancellationException
 import java.lang.Exception
 
 class CompleteExercisesDataStoreImpl(private val connectionManager: ConnectionManager, private val completeExercisesService: CompleteExercisesService) : CompleteExercisesPartDataStore{
@@ -17,7 +18,10 @@ class CompleteExercisesDataStoreImpl(private val connectionManager: ConnectionMa
                     completeExercisesService.completeExercises(completeExercisesRequest)
                 return response.code()
             } catch (e: Exception) {
-                throw ServerUnavailableException()
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
     }

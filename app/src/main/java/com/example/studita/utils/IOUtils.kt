@@ -2,21 +2,36 @@ package com.example.studita.utils
 
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.loader.content.CursorLoader
+import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.io.InputStream
+
 
 object IOUtils {
-    fun getRealPathFromURI(contentUri: Uri, context: Context): String? {
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val loader = CursorLoader(context, contentUri, proj, null, null, null)
-        val cursor: Cursor? = loader.loadInBackground()
-        cursor?.let {
-            val columnIndex: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            cursor.moveToFirst()
-            val result: String = cursor.getString(columnIndex)
-            cursor.close()
-            return result
+    fun getBitmapFromUri(
+        context: Context,
+        uri: Uri
+    ): Bitmap? {
+        var `is`: InputStream? = null
+        if (uri.authority != null) {
+            try {
+                `is` = context.contentResolver.openInputStream(uri)
+                return BitmapFactory.decodeStream(`is`)
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            } finally {
+                try {
+                    `is`?.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
         }
         return null
     }

@@ -9,6 +9,7 @@ import com.example.studita.domain.entity.EditDuelsExceptionsData
 import com.example.studita.domain.entity.EditDuelsExceptionsRequestData
 import com.example.studita.domain.entity.PrivacyDuelsExceptionData
 import com.example.studita.domain.entity.UserIdTokenData
+import com.example.studita.domain.interactor.EditDuelsExceptionsStatus
 import com.example.studita.domain.interactor.PrivacySettingsDuelsExceptionsStatus
 import com.example.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
 import com.example.studita.presentation.model.toUiModel
@@ -20,7 +21,8 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel(){
 
     private val privacySettingsInteractor = PrivacySettingsModule.getPrivacySettingsInteractorImpl()
 
-    val privacySettingsDuelsExceptionsState = MutableLiveData<PrivacySettingsViewModel.DuelsExceptionsResultState>()
+    val privacySettingsDuelsExceptionsState = MutableLiveData<Pair<Boolean, DuelsExceptionsResultState>>()
+    val privacySettingsEditDuelsExceptionsState = SingleLiveEvent<Boolean>()
     val errorState = SingleLiveEvent<Int>()
 
     var recyclerItems: ArrayList<PrivacySettingsDuelsExceptionsRecyclerUiModel>? = null
@@ -28,7 +30,7 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel(){
 
     val progressState = MutableLiveData<Boolean>()
 
-    val perPage = 20
+    private val perPage = 20
     var currentPageNumber = 1
 
     init {
@@ -49,43 +51,54 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel(){
                 is PrivacySettingsDuelsExceptionsStatus.ServiceUnavailable -> errorState.postValue(R.string.no_connection)
                 is PrivacySettingsDuelsExceptionsStatus.NoUsersFound -> {
                     privacySettingsDuelsExceptionsState.postValue(
-                        PrivacySettingsViewModel.DuelsExceptionsResultState.NoMoreResultsFound
+                        false to DuelsExceptionsResultState.NoMoreResultsFound
                     )
                 }
                 is PrivacySettingsDuelsExceptionsStatus.Success -> {
 
+                    val duelsExceptionsResultState = if(currentPageNumber == 1)
+                        DuelsExceptionsResultState.FirstResults(
+                        result.privacySettingsDuelsExceptionsItems
+                    ) else DuelsExceptionsResultState.MoreResults(
+                        result.privacySettingsDuelsExceptionsItems
+                    )
+
                     progressState.postValue(false)
 
-                    if(currentPageNumber == 1)
-                        privacySettingsDuelsExceptionsState.postValue(
-                            PrivacySettingsViewModel.DuelsExceptionsResultState.FirstResults(
-                                result.privacySettingsDuelsExceptionsItems
-                            ))
-                    else
-                        privacySettingsDuelsExceptionsState.postValue(
-                            PrivacySettingsViewModel.DuelsExceptionsResultState.MoreResults(
-                                result.privacySettingsDuelsExceptionsItems
-                            ))
+                    privacySettingsDuelsExceptionsState.postValue(canBeMoreItems(duelsExceptionsResultState) to duelsExceptionsResultState)
                 }
             }
         }
     }
 
+    private fun canBeMoreItems(duelsExceptionsResultState: DuelsExceptionsResultState) = (((duelsExceptionsResultState is DuelsExceptionsResultState.FirstResults) && duelsExceptionsResultState.results.size == perPage) ||
+            ((duelsExceptionsResultState is DuelsExceptionsResultState.MoreResults) && duelsExceptionsResultState.results.size == perPage))
+
     fun editDuelsExceptions(){
         GlobalScope.launch{
             if(editedDuelsExceptionsData.isNotEmpty()) {
-                privacySettingsInteractor.editDuelsExceptions(EditDuelsExceptionsRequestData(UserUtils.getUserIDTokenData()!!, editedDuelsExceptionsData))
+                val result = privacySettingsInteractor.editDuelsExceptions(EditDuelsExceptionsRequestData(UserUtils.getUserIDTokenData()!!, editedDuelsExceptionsData))
+                privacySettingsEditDuelsExceptionsState.postValue(result is EditDuelsExceptionsStatus.Success)
             }
         }
     }
 
 
-    fun getRecyclerItems(usersItems: List<PrivacyDuelsExceptionData>, progressUiModel: PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel): List<PrivacySettingsDuelsExceptionsRecyclerUiModel>{
+    fun getRecyclerItems(usersItems: List<PrivacyDuelsExceptionData>, progressUiModel: PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel? = null): List<PrivacySettingsDuelsExceptionsRecyclerUiModel>{
         val adapterItems = ArrayList<PrivacySettingsDuelsExceptionsRecyclerUiModel>()
         adapterItems.addAll(usersItems.map { it.toUiModel() })
-        adapterItems.add(progressUiModel)
+        if(progressUiModel != null)
+            adapterItems.add(progressUiModel)
         return adapterItems
     }
+
+
+    sealed class DuelsExceptionsResultState{
+        data class FirstResults(val results: List<PrivacyDuelsExceptionData>): DuelsExceptionsResultState()
+        data class MoreResults(val results: List<PrivacyDuelsExceptionData>) : DuelsExceptionsResultState()
+        object NoMoreResultsFound: DuelsExceptionsResultState()
+    }
+
 
 
 }

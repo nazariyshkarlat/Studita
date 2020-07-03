@@ -7,6 +7,7 @@ import com.example.studita.data.net.UserStatisticsService
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
+import kotlinx.coroutines.CancellationException
 import java.lang.Exception
 import java.util.*
 
@@ -26,7 +27,10 @@ class CloudUserStatisticsJsonDataStore(private val connectionManager: Connection
                 val statusCode = userStatistics.code()
                 statusCode to userStatisticsJson
             } catch (e: Exception) {
-                throw ServerUnavailableException()
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
 }

@@ -17,4 +17,6 @@ interface UsersDataStore{
     suspend fun tryAcceptFriendship(friendActionRequest: FriendActionRequest): Int
 
     suspend fun tryRejectFriendship(friendActionRequest: FriendActionRequest): Int
+
+    suspend fun tryCheckHasFriends(userId: Int): Pair<Int, Boolean?>
 }

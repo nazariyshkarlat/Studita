@@ -20,9 +20,11 @@ import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.interactor.UserDataStatus
+import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.user_statistics.UserStatFragment
 import com.example.studita.presentation.view_model.ProfileFragmentViewModel
+import com.example.studita.presentation.views.CustomSnackbar
 import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.profile_friend_item.view.*
 import kotlinx.android.synthetic.main.profile_layout.*
@@ -41,6 +43,47 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
 
         profileFragmentViewModel = ViewModelProviders.of(this).get(ProfileFragmentViewModel::class.java)
 
+
+        val isMyProfile = arguments?.getInt("USER_ID") == PrefsUtils.getUserId()
+        if(!isMyProfile){
+            profileFragmentViewModel.friendDataState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                if(it is UserDataStatus.Success) {
+                    userData = it.result
+
+                    profileLayoutAvatar.fillAvatar(userData.avatarLink, userData.userName!!, userData.userId!!)
+                    fillText(userData)
+                    fillStreakBlock(userData, view.context)
+                    fillCompetitionsBlock(userData)
+                }
+            })}else {
+            UserUtils.userDataLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                userData = it
+
+                profileLayoutAvatar.fillAvatar(
+                    userData.avatarLink,
+                    userData.userName!!,
+                    userData.userId!!
+                )
+
+                fillText(userData)
+                fillStreakBlock(userData, view.context)
+                fillCompetitionsBlock(userData)
+            })
+        }
+
+        UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {friendData->
+
+            if (friendData.userId == arguments?.getInt("USER_ID")) {
+                profileFragmentViewModel.isMyFriendState.value = friendData.isMyFriendStatus
+                formButton(friendData, view.context)
+            }
+            arguments?.getInt("USER_ID")?.let { it1 -> profileFragmentViewModel.getFriends(it1) }
+        })
+
+        profileFragmentViewModel.isMyFriendState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            formButton(UserData(userData.userId!!, userData.userName!!, userData.avatarLink, it), view.context)
+        })
+
         profileFragmentViewModel.friendsState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
             if(it is GetUsersStatus.Success) {
@@ -50,7 +93,6 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
                 profileLayoutScrollView.visibility = View.VISIBLE
 
             }else if(it is GetUsersStatus.NoUsersFound) {
-                val isMyProfile = userData.userId == UserUtils.userData.userId
 
                 profileLayoutFriendsTitle.text = resources.getString(R.string.friends)
                 profileLayoutEmptyFriends.visibility = View.VISIBLE
@@ -70,42 +112,18 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
             }
         })
 
-        val isMyProfile = arguments?.getInt("USER_ID") == PrefsUtils.getUserId()
-        if(!isMyProfile){
-            profileFragmentViewModel.friendDataState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                if(it is UserDataStatus.Success) {
-                    userData = it.result
+        profileFragmentViewModel.addFriendStatus.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-                    profileLayoutAvatar.fillAvatar(userData.avatarLink, userData.userName!!, userData.userId!!)
-                    fillText(userData)
-                    fillStreakBlock(userData, view.context)
-                    fillCompetitionsBlock(userData)
-                }
-        })}else {
-            UserUtils.userDataLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                userData = it
-
-                profileLayoutAvatar.fillAvatar(
-                    userData.avatarLink,
-                    userData.userName!!,
-                    userData.userId!!
-                )
-
-                fillText(userData)
-                fillStreakBlock(userData, view.context)
-                fillCompetitionsBlock(userData)
-            })
-        }
-
-        UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {friendData->
-                if (friendData.userId == arguments?.getInt("USER_ID")) {
-                    formButton(friendData, view.context)
-                }
-                arguments?.getInt("USER_ID")?.let { it1 -> profileFragmentViewModel.getFriends(it1) }
-        })
-
-        profileFragmentViewModel.isMyFriendState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            formButton(UserData(userData.userId!!, userData.userName!!, userData.avatarLink, it), view.context)
+            val snackbar = CustomSnackbar(view.context)
+            snackbar.show(
+                resources.getString(
+                    when(it) {
+                        is UsersInteractor.FriendActionState.AddedToFriends -> R.string.friend_added_snackbar
+                        is UsersInteractor.FriendActionState.RemovedFromFriends -> R.string.friend_removed_snackbar
+                        is UsersInteractor.FriendActionState.MyFriendshipRequestIsCanceled -> R.string.friendship_request_is_canceled_snackbar
+                        is UsersInteractor.FriendActionState.FriendshipRequestIsSent -> R.string.friendship_request_is_sent_snackbar
+                    },
+                    it.userData.userName), ThemeUtils.getAccentColor(snackbar.context), duration = resources.getInteger(R.integer.add_remove_friend_snackbar_duration).toLong())
         })
 
         arguments?.getInt("USER_ID")?.let {userId->
@@ -165,7 +183,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
                 profileLayoutButton.visibility = View.GONE
                 profileLayoutTransparentButton.visibility = View.VISIBLE
                 profileLayoutTransparentButton.setOnClickListener {
-                    profileFragmentViewModel.removeFromFriends(UserUtils.getUserIDTokenData()!!, userData)
+                    profileFragmentViewModel.cancelFriendshipRequest(UserUtils.getUserIDTokenData()!!, userData)
                 }
             }
             is IsMyFriendStatus.Success.WaitingForFriendshipAccept ->{

@@ -9,6 +9,7 @@ import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.domain.interactor.users.UsersInteractorImpl
 import com.example.studita.domain.repository.UsersRepository
+import com.example.studita.service.SyncFriendshipImpl
 
 object UsersModule {
 
@@ -40,15 +41,16 @@ object UsersModule {
 
     private fun makeUsersIntercator(repository: UsersRepository) =
             UsersInteractorImpl(
-                    repository
+                repository,
+                syncFriendship = SyncFriendshipImpl()
             )
 
 
     private fun getUsersDataStoreFactory() =
             UsersDataStoreFactoryImpl(
-                    getCloudUsersDataStore())
+                    getUsersDataStore())
 
-    private fun getCloudUsersDataStore() =
+    private fun getUsersDataStore() =
             UsersDataStoreImpl(
                     NetworkModule.connectionManager,
                     NetworkModule.getService(UsersService::class.java))

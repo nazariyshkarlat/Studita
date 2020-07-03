@@ -7,8 +7,8 @@ import com.example.studita.domain.interactor.InterestingStatus
 
 interface InterestingInteractor {
 
-    suspend fun getInteresting(interestingNumber: Int, offlineMode: Boolean) : InterestingStatus
+    suspend fun getInteresting(interestingNumber: Int, offlineMode: Boolean, retryCount: Int = 30) : InterestingStatus
 
-    suspend fun downloadInterestingList(): InterestingCacheStatus
+    suspend fun downloadInterestingList(retryCount: Int = 30): InterestingCacheStatus
 
 }

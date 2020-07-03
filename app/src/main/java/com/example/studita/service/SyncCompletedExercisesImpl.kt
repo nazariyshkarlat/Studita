@@ -16,10 +16,10 @@ class SyncCompletedExercisesImpl : SyncCompletedExercises {
         private const val SYNC_COMPLETED_EXERCISES_ID = "syncCompleteChapterPart"
     }
 
-    override fun scheduleCompleteExercises(completedExercisesData: CompletedExercisesData) {
-        val json = serializeCompletedChapterPartRequest(CompleteExercisesRequestData(UserUtils.getUserIDTokenData(), completedExercisesData))
+    override fun scheduleCompleteExercises(completedExercisesRequestData: CompleteExercisesRequestData) {
+        val json = serializeCompletedChapterPartRequest(completedExercisesRequestData)
         val data = Data.Builder()
-        data.putString("COMPLETED_CHAPTER_PART", json)
+        data.putString("COMPLETED_EXERCISES_REQUEST_DATA", json)
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -34,10 +34,9 @@ class SyncCompletedExercisesImpl : SyncCompletedExercises {
 
     class CompleteChapterPartWorker(val context: Context, val params: WorkerParameters) : CoroutineWorker(context, params){
         override suspend fun doWork(): Result {
-            val userIdToken = UserUtils.getUserIDTokenData()
-            val json = inputData.getString("COMPLETED_CHAPTER_PART")
+            val json = inputData.getString("COMPLETED_EXERCISES_REQUEST_DATA")
 
-            if((userIdToken != null) && (json != null))
+            if(json != null)
                 CompleteExercisesModule.getCompleteExercisesInteractorImpl().completeExercises(
                     deserializeCompletedChapterPartRequest(json)
                 )

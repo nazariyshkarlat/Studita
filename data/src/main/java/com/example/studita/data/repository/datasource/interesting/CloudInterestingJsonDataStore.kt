@@ -5,6 +5,7 @@ import com.example.studita.data.net.InterestingService
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
+import kotlinx.coroutines.CancellationException
 import java.lang.Exception
 
 class CloudInterestingJsonDataStore(
@@ -21,7 +22,10 @@ class CloudInterestingJsonDataStore(
                 val interesting = interestingService.getInteresting(interestingNumber)
                 return interesting.code() to interesting.body()!!.toString()
             } catch (e: Exception) {
-                throw ServerUnavailableException()
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
     }
@@ -36,7 +40,10 @@ class CloudInterestingJsonDataStore(
                 return interestingList.body()!!.toString()
             }
         }catch (e: Exception){
-            throw ServerUnavailableException()
+            if(e is CancellationException)
+                throw e
+            else
+                throw ServerUnavailableException()
         }
     }
 

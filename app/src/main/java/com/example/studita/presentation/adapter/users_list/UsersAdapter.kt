@@ -103,7 +103,7 @@ class UsersAdapter(var items: ArrayList<UsersRecyclerUiModel>,
             else {
                 if (searchState is FriendsFragmentViewModel.SearchState.GlobalSearch)
                     friendsFragmentViewModel.searchResultState.value =
-                        FriendsFragmentViewModel.SearchResultState.GlobalSearchEnterText
+                        (friendsFragmentViewModel.searchResultState.value?.first  == true) to FriendsFragmentViewModel.SearchResultState.GlobalSearchEnterText
                 else if (searchState is FriendsFragmentViewModel.SearchState.FriendsSearch)
                     friendsFragmentViewModel.getUsers(
                         userId,

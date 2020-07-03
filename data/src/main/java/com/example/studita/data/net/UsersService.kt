@@ -35,4 +35,7 @@ interface UsersService {
 
     @POST("reject_friendship")
     suspend fun rejectFriendship(@Body friendActionRequest: FriendActionRequest): Response<ResponseBody>
+
+    @GET("has_friends")
+    suspend fun hasFriends(@Query("user_id") userId: Int): Response<Boolean?>
 }

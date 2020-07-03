@@ -38,6 +38,8 @@
         android:layout_height="wrap_content"
         android:clickable="false"
         android:focusable="false"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
         android:layout_gravity="end|center_vertical" />
 
 </FrameLayout>

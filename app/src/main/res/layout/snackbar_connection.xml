@@ -5,4 +5,5 @@
     android:gravity="center"
     android:textAlignment="center"
     android:layout_width="match_parent"
+    android:background="?page_background_color"
     android:layout_height="@dimen/connectionSnackbarHeight"/>

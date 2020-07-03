@@ -1,17 +1,24 @@
 package com.example.studita.presentation.view_model
 
+import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.studita.App
 import com.example.studita.R
 import com.example.studita.di.data.AuthorizationModule
 import com.example.studita.di.data.UserStatisticsModule
+import com.example.studita.domain.entity.PushTokenData
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
 import com.example.studita.domain.entity.authorization.LogInResponseData
 import com.example.studita.domain.interactor.LogInStatus
 import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.validator.AuthorizationValidator
+import com.example.studita.utils.DeviceUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import java.lang.UnsupportedOperationException
@@ -56,26 +63,37 @@ class AuthorizationFragmentViewModel : ViewModel(){
         return result
     }
 
-    fun logIn(dates : Pair<String, String>){
+    fun logIn(dates : Pair<String, String>, applicationRef: Application){
         if(validate(dates) == AuthorizationResult.Valid){
-            job = GlobalScope.launchExt(job){
-            when(val result = authorizationInteractor.logIn(
-                AuthorizationRequestData(
-                    dates.first,
-                    dates.second,
-                    null,
-                    null
-                )
-            )){
-                is LogInStatus.NoConnection -> errorState.postValue(R.string.no_connection)
-                is LogInStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
-                is LogInStatus.Failure -> authorizationState.postValue(AuthorizationResult.LogInFailure)
-                is LogInStatus.NoUserFound -> authorizationState.postValue(AuthorizationResult.NoUserFound)
-                is LogInStatus.Success ->{
-                    UserUtils.userDataLiveData.postValue(result.result.userDataData)
-                    authorizationState.postValue(AuthorizationResult.LogInSuccess(result.result))
-                }
-            }}
+            FirebaseInstanceId.getInstance().instanceId
+                .addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.w("FIREBASE", "getInstanceId failed", task.exception)
+                        return@OnCompleteListener
+                    }
+
+                    val token = task.result?.token
+
+                    job = GlobalScope.launchExt(job){
+                        when(val result = authorizationInteractor.logIn(
+                            AuthorizationRequestData(
+                                dates.first,
+                                dates.second,
+                                null,
+                                null,
+                                token?.let { PushTokenData(it, DeviceUtils.getDeviceId(applicationRef)) }
+                            )
+                        )){
+                            is LogInStatus.NoConnection -> errorState.postValue(R.string.no_connection)
+                            is LogInStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
+                            is LogInStatus.Failure -> authorizationState.postValue(AuthorizationResult.LogInFailure)
+                            is LogInStatus.NoUserFound -> authorizationState.postValue(AuthorizationResult.NoUserFound)
+                            is LogInStatus.Success ->{
+                                App.initUserData(result.result.userDataData)
+                                authorizationState.postValue(AuthorizationResult.LogInSuccess(result.result))
+                            }
+                        }}
+                })
         }
     }
 
@@ -87,7 +105,8 @@ class AuthorizationFragmentViewModel : ViewModel(){
                         dates.first,
                         dates.second,
                         if(!UserUtils.isLoggedIn()) UserUtils.userData else null,
-                        if(!UserUtils.isLoggedIn()) userStatisticsInteractor.getUserStatisticsRecords() else null
+                        if(!UserUtils.isLoggedIn()) userStatisticsInteractor.getUserStatisticsRecords() else null,
+                        null
                     ))){
                     is SignUpStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                     is SignUpStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)

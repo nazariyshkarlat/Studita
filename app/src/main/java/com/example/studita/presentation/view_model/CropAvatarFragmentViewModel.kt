@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import com.example.studita.utils.IOUtils
 import com.example.studita.utils.ImageUtils.rotateIfRequired
 import com.example.studita.utils.ScreenUtils
-import java.io.IOException
 
 class CropAvatarFragmentViewModel : ViewModel(){
 
@@ -20,7 +19,7 @@ class CropAvatarFragmentViewModel : ViewModel(){
             var bitmap = if (uri.scheme?.contains("file") == true)
                 MediaStore.Images.Media.getBitmap(context.contentResolver, uri).rotateIfRequired(context, uri)
             else
-                BitmapFactory.decodeFile(IOUtils.getRealPathFromURI(uri, context)).rotateIfRequired(context, uri)
+                IOUtils.getBitmapFromUri(context, uri)?.rotateIfRequired(context, uri)
 
             if (bitmap != null) {
                 val scaleFactor = (bitmap.width / ScreenUtils.getScreenWidth().toFloat()).coerceAtMost(bitmap.height / ScreenUtils.getScreenHeight().toFloat())

@@ -6,12 +6,21 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import androidx.core.content.res.ResourcesCompat
 import com.example.studita.R
+import com.example.studita.utils.LanguageUtils.getResourcesRussianLocale
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToLong
 
 object TimeUtils {
+
+    private const val minuteInSeconds = 60L
+    private const val hourInSeconds = 3600L
+    private const val dayInSeconds = 86400L
+    private const val weekInSeconds = 604800L
+    private const val monthInSeconds = 2592000L
+    private const val yearInSeconds = 31556952L
+
 
     class IncorrectTimeDateTimeFormat : SimpleDateFormat("hh:mm, dd MMMM, yyyy", Locale("ru"))
 
@@ -28,11 +37,22 @@ object TimeUtils {
         return ((dateEnd.time - dateStart.time) / 86400000.toDouble()).roundToLong()
     }
 
-    fun getHours(timeInSeconds: Long) = timeInSeconds/3600
+    fun Long.secondsToAgoString(context: Context) =
+        when{
+            this < minuteInSeconds -> "$this ${getResourcesRussianLocale(context)?.getQuantityString(R.plurals.seconds_ago_plurals, this.toInt())}"
+            this < hourInSeconds -> "${(this/minuteInSeconds).toInt()} ${getResourcesRussianLocale(context)?.getQuantityString(R.plurals.minutes_ago_plurals, (this/minuteInSeconds).toInt())}"
+            this < dayInSeconds -> "${(this/hourInSeconds).toInt()} ${getResourcesRussianLocale(context)?.getQuantityString(R.plurals.hours_ago_plurals, (this/hourInSeconds).toInt())}"
+            this < weekInSeconds -> "${(this/dayInSeconds).toInt()} ${getResourcesRussianLocale(context)?.getQuantityString(R.plurals.days_ago_plurals, (this/dayInSeconds).toInt())}"
+            this < monthInSeconds -> "${(this/weekInSeconds).toInt()} ${getResourcesRussianLocale(context)?.getQuantityString(R.plurals.weeks_ago_plurals, (this/weekInSeconds).toInt())}"
+            this < yearInSeconds -> "${(this/monthInSeconds).toInt()} ${getResourcesRussianLocale(context)?.getQuantityString(R.plurals.months_ago_plurals, (this/monthInSeconds).toInt())}"
+            else -> "${(this/ yearInSeconds).toInt()} ${getResourcesRussianLocale(context)?.getQuantityString(R.plurals.years_ago_plurals, (this/yearInSeconds).toInt())}"
+        }
 
-    fun getMinutes(timeInSeconds: Long) = (((timeInSeconds % 604800) % 86400) % 3600) / 60
+    fun getHours(timeInSeconds: Long) = timeInSeconds/hourInSeconds
 
-    fun getSeconds(timeInSeconds: Long) = (((timeInSeconds % 604800) % 86400) % 3600) % 60
+    fun getMinutes(timeInSeconds: Long) = (((timeInSeconds % weekInSeconds) % dayInSeconds) % hourInSeconds) / minuteInSeconds
+
+    fun getSeconds(timeInSeconds: Long) = (((timeInSeconds % weekInSeconds) % dayInSeconds) % hourInSeconds) % minuteInSeconds
 
     fun styleTimeText(context: Context, text: String): SpannableStringBuilder {
         val secondaryColor = ThemeUtils.getSecondaryColor(context)

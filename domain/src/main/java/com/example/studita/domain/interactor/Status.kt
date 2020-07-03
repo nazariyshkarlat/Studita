@@ -4,11 +4,14 @@ import com.example.studita.domain.entity.*
 import com.example.studita.domain.entity.authorization.LogInResponseData
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.domain.entity.exercise.ExercisesResponseData
+import com.google.gson.annotations.SerializedName
+import java.util.ArrayList
 
 
 sealed class LevelsStatus {
     object ServiceUnavailable : LevelsStatus()
     object NoConnection : LevelsStatus()
+    object Failure: LevelsStatus()
     data class Success(val result: List<LevelData>) : LevelsStatus()
 }
 
@@ -18,6 +21,7 @@ sealed class LevelsCacheStatus {
     object NoConnection : LevelsCacheStatus()
     object IsCached : LevelsCacheStatus()
     object Success : LevelsCacheStatus()
+    object Failure : LevelsCacheStatus()
 }
 
 sealed class SignUpStatus{
@@ -47,6 +51,7 @@ sealed class ChapterStatus{
     object ServiceUnavailable : ChapterStatus()
     object NoConnection : ChapterStatus()
     object NoChapterFound: ChapterStatus()
+    object Failure: ChapterStatus()
     data class Success(val result: ChapterData): ChapterStatus()
 }
 
@@ -54,11 +59,13 @@ sealed class ChaptersCacheStatus{
     object ServiceUnavailable : ChaptersCacheStatus()
     object NoConnection : ChaptersCacheStatus()
     object IsCached : ChaptersCacheStatus()
+    object Failure: ChaptersCacheStatus()
     object Success: ChaptersCacheStatus()
 }
 
 sealed class ExercisesStatus{
     object ServiceUnavailable : ExercisesStatus()
+    object Failure : ExercisesStatus()
     object NoConnection : ExercisesStatus()
     object NoChapterPartFound: ExercisesStatus()
     data class Success(val result: ExercisesResponseData): ExercisesStatus()
@@ -68,6 +75,7 @@ sealed class ExerciseResultStatus{
     object ServiceUnavailable : ExerciseResultStatus()
     object NoConnection : ExerciseResultStatus()
     object NoExerciseFound: ExerciseResultStatus()
+    object Failure: ExerciseResultStatus()
     data class Success(val result: ExerciseResponseData): ExerciseResultStatus()
 }
 
@@ -89,6 +97,8 @@ sealed class InterestingStatus{
     object ServiceUnavailable : InterestingStatus()
     object NoConnection : InterestingStatus()
     object NoInterestingFound: InterestingStatus()
+    object Failure : InterestingStatus()
+
     data class Success(val result: InterestingData): InterestingStatus()
 }
 
@@ -97,6 +107,7 @@ sealed class InterestingCacheStatus{
     object NoConnection : InterestingCacheStatus()
     object IsCached : InterestingCacheStatus()
     object Success: InterestingCacheStatus()
+    object Failure : InterestingCacheStatus()
 }
 
 sealed class SubscribeEmailResultStatus{
@@ -118,6 +129,7 @@ sealed class ExercisesCacheStatus{
     object NoConnection : ExercisesCacheStatus()
     object IsCached : ExercisesCacheStatus()
     object Success: ExercisesCacheStatus()
+    object Failure : ExercisesCacheStatus()
 }
 
 sealed class CompleteExercisesStatus{
@@ -164,11 +176,11 @@ sealed class GetUsersStatus{
 
 sealed class IsMyFriendStatus{
 
-    sealed class Success : IsMyFriendStatus(){
-        class IsMyFriend(val userId: Int) : Success()
-        class IsNotMyFriend(val userId: Int) : Success()
-        class GotMyFriendshipRequest(val userId: Int) : Success()
-        class WaitingForFriendshipAccept(val userId: Int) : Success()
+    sealed class Success(@SerializedName("user_id")open val userId: Int) : IsMyFriendStatus(){
+        class IsMyFriend(override val userId: Int) : Success(userId)
+        class IsNotMyFriend(override val userId: Int) : Success(userId)
+        class GotMyFriendshipRequest(override val userId: Int) : Success(userId)
+        class WaitingForFriendshipAccept(override val userId: Int) : Success(userId)
     }
 
     object ServiceUnavailable : IsMyFriendStatus()
@@ -196,6 +208,23 @@ sealed class EditDuelsExceptionsStatus{
     object NoConnection : EditDuelsExceptionsStatus()
     object Failure: EditDuelsExceptionsStatus()
     object Success: EditDuelsExceptionsStatus()
+}
+
+sealed class HasFriendsStatus{
+    object ServiceUnavailable : HasFriendsStatus()
+    object NoConnection : HasFriendsStatus()
+    object Failure: HasFriendsStatus()
+    object HasFriends: HasFriendsStatus()
+    object HasNoFriends: HasFriendsStatus()
+}
+
+
+sealed class GetNotificationsStatus{
+    object ServiceUnavailable : GetNotificationsStatus()
+    object NoConnection : GetNotificationsStatus()
+    object Failure: GetNotificationsStatus()
+    object NoNotificationsFound: GetNotificationsStatus()
+    class Success(val notificationsData: ArrayList<NotificationData>): GetNotificationsStatus()
 }
 
 

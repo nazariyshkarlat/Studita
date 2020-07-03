@@ -1,6 +1,7 @@
 package com.example.studita.presentation.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
@@ -9,6 +10,9 @@ import com.example.studita.presentation.fragments.MainFragment
 import com.example.studita.utils.*
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.FirebaseApp
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.frame_layout.*
 import java.sql.Time
 
@@ -34,6 +38,21 @@ class MainActivity : DefaultActivity(){
             else
                 addFragment(IncorrectTimeFragment(), R.id.frameLayout)
         }
+
+        FirebaseApp.initializeApp(application)
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("FSDF", "getInstanceId failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new Instance ID token
+                val token = task.result?.token
+
+                // Log and toast
+                Log.d("TAG ASD", token!!)
+            })
 
     }
 

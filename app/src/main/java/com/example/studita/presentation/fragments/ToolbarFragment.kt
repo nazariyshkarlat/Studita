@@ -107,6 +107,7 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
                         else
                             resources.getString(R.string.friends)
                 }
+                is NotificationsFragment, is NotificationsOfflineModeFragment -> resources.getString(R.string.notifications)
                 else -> null
             })
         }

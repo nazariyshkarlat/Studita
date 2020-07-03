@@ -18,6 +18,8 @@ interface UsersRepository {
 
     suspend fun rejectFriendship(friendActionRequestData: FriendActionRequestData): Int
 
+    suspend fun hasFriends(userId: Int): Pair<Int, Boolean?>
+
     enum class SortBy{
         A_TO_Z,
         Z_TO_A,

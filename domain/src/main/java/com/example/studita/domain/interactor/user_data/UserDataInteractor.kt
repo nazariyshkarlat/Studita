@@ -6,7 +6,7 @@ import com.example.studita.domain.interactor.UserDataStatus
 
 interface UserDataInteractor {
 
-    suspend fun getUserData(userId: Int?, offlineMode: Boolean) : UserDataStatus
+    suspend fun getUserData(userId: Int?, offlineMode: Boolean, retryCount: Int = 30) : UserDataStatus
 
     suspend fun saveUserData(userDataData: UserDataData)
 

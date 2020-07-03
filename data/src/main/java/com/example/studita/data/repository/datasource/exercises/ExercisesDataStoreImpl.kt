@@ -23,7 +23,6 @@ class ExercisesDataStoreImpl(private val exercisesJsonDataStore: ExercisesJsonDa
         val pair = exercisesJsonDataStore.getExercisesJson(chapterPartNumber)
         val exercisesRawResponse: ExercisesRawResponse =
             Gson().fromJson(pair.second, TypeToken.get(ExercisesRawResponse::class.java).type)
-        println(exercisesRawResponse.exercisesRaw)
         val exercises: List<ExerciseArrayEntity> = exercisesGson.fromJson(
             ExercisesJsonArrayMapper.map(exercisesRawResponse.exercisesRaw),
             type

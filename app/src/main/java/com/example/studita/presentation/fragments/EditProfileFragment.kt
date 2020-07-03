@@ -30,7 +30,6 @@ import com.example.studita.presentation.listeners.setGenericTextWatcher
 import com.example.studita.presentation.view_model.EditProfileViewModel
 import com.example.studita.presentation.views.CustomSnackbar
 import com.example.studita.utils.*
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.edit_profile_layout.*
 
 

@@ -8,6 +8,7 @@ import com.example.studita.domain.exception.ServerUnavailableException
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CancellationException
 import java.lang.reflect.Type
 
 class ExerciseResultDataStoreImpl(
@@ -46,8 +47,11 @@ class ExerciseResultDataStoreImpl(
                 )
                 return exerciseResult.code() to result
             }catch (e: Exception) {
-            throw ServerUnavailableException()
-        }
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
+            }
         }
     }
 }

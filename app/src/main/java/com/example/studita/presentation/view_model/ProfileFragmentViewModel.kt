@@ -3,6 +3,7 @@ package com.example.studita.presentation.view_model
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.studita.data.entity.FriendActionRequest
 import com.example.studita.di.data.UsersModule
 import com.example.studita.di.data.UserDataModule
 import com.example.studita.domain.entity.*
@@ -10,6 +11,7 @@ import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.FriendActionStatus
 import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.interactor.UserDataStatus
+import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
@@ -19,6 +21,8 @@ class ProfileFragmentViewModel : ViewModel(){
 
     private val friendsInteractor = UsersModule.getUsersInteractorImpl()
     private val userDataInteractor = UserDataModule.getUserDataInteractorImpl()
+
+    val addFriendStatus = SingleLiveEvent<UsersInteractor.FriendActionState>()
 
     var addToFriendsJob: Job? = null
     var getFriendsJob: Job? = null
@@ -72,7 +76,9 @@ class ProfileFragmentViewModel : ViewModel(){
             isMyFriendStatus = IsMyFriendStatus.Success.GotMyFriendshipRequest(userId)
         }
         addToFriendsJob = GlobalScope.launchExt(addToFriendsJob){
-            friendsInteractor.addFriend(FriendActionRequestData(userIdToken, userData.userId))
+            val result = friendsInteractor.addFriend(FriendActionRequestData(userIdToken, userData.userId))
+            if(result is FriendActionStatus.Success)
+                addFriendStatus.postValue(UsersInteractor.FriendActionState.FriendshipRequestIsSent(userData))
         }
     }
 
@@ -81,7 +87,9 @@ class ProfileFragmentViewModel : ViewModel(){
             isMyFriendStatus = IsMyFriendStatus.Success.IsMyFriend(userId)
         }
         addToFriendsJob = GlobalScope.launchExt(addToFriendsJob){
-            friendsInteractor.acceptFriendship(FriendActionRequestData(userIdToken, userData.userId))
+            val result = friendsInteractor.acceptFriendship(FriendActionRequestData(userIdToken, userData.userId))
+            if(result is FriendActionStatus.Success)
+                addFriendStatus.postValue(UsersInteractor.FriendActionState.AddedToFriends(userData))
         }
     }
 
@@ -91,7 +99,20 @@ class ProfileFragmentViewModel : ViewModel(){
             isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
         }
         addToFriendsJob = GlobalScope.launchExt(addToFriendsJob){
-            friendsInteractor.removeFriend(FriendActionRequestData(userIdToken, userData.userId))
+            val result = friendsInteractor.removeFriend(FriendActionRequestData(userIdToken, userData.userId))
+            if(result is FriendActionStatus.Success)
+                addFriendStatus.postValue(UsersInteractor.FriendActionState.RemovedFromFriends(userData))
+        }
+    }
+
+    fun cancelFriendshipRequest(userIdToken: UserIdTokenData, userData: UserData){
+        UserUtils.isMyFriendLiveData.value = userData.apply {
+            isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
+        }
+        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob){
+            val result = friendsInteractor.removeFriend(FriendActionRequestData(userIdToken, userData.userId))
+            if(result is FriendActionStatus.Success)
+                addFriendStatus.postValue(UsersInteractor.FriendActionState.MyFriendshipRequestIsCanceled(userData))
         }
     }
 

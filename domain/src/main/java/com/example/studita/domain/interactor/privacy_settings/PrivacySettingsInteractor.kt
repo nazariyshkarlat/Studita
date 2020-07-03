@@ -11,11 +11,11 @@ import com.example.studita.domain.interactor.PrivacySettingsStatus
 
 interface PrivacySettingsInteractor {
 
-    suspend fun getPrivacySettings(userIdTokenData: UserIdTokenData): PrivacySettingsStatus
+    suspend fun getPrivacySettings(userIdTokenData: UserIdTokenData, retryCount: Int = 30): PrivacySettingsStatus
 
-    suspend fun editPrivacySettings(privacySettingsRequestData: PrivacySettingsRequestData): EditPrivacySettingsStatus
+    suspend fun editPrivacySettings(privacySettingsRequestData: PrivacySettingsRequestData, retryCount: Int = 30): EditPrivacySettingsStatus
 
-    suspend fun getPrivacyDuelsExceptionsList(userIdTokenData: UserIdTokenData, perPage: Int, pageNumber: Int) : PrivacySettingsDuelsExceptionsStatus
+    suspend fun getPrivacyDuelsExceptionsList(userIdTokenData: UserIdTokenData, perPage: Int, pageNumber: Int, retryCount: Int = 30) : PrivacySettingsDuelsExceptionsStatus
 
-    suspend fun editDuelsExceptions(editDuelsExceptionsRequestData: EditDuelsExceptionsRequestData): EditDuelsExceptionsStatus
+    suspend fun editDuelsExceptions(editDuelsExceptionsRequestData: EditDuelsExceptionsRequestData, retryCount: Int = 30): EditDuelsExceptionsStatus
 }

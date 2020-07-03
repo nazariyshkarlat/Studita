@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.work.*
 import com.example.studita.di.NetworkModule
 import com.example.studita.di.data.AuthorizationModule
+import com.example.studita.domain.entity.SignOutRequestData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.service.SyncSignOut
-import com.example.studita.utils.UserUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -17,10 +17,9 @@ class SyncSignOutImpl: SyncSignOut{
         private const val SYNC_SIGN_OUT_ID = "syncSubscribeEmailId"
     }
 
-    override fun scheduleSignOut() {
+    override fun scheduleSignOut(signOutRequestData: SignOutRequestData) {
         val data = Data.Builder()
-        data.putString("USER_ID_TOKEN_DATA",
-            UserUtils.getUserIDTokenData()?.let { serializeUserIdTokenData(it) })
+        data.putString("USER_ID_TOKEN_DATA", serializeSignOutData(signOutRequestData))
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -38,22 +37,22 @@ class SyncSignOutImpl: SyncSignOut{
 
             val json = inputData.getString("USER_ID_TOKEN_DATA")
             if(json != null) {
-                val userIdToken =
-                    deserializeUserIdTokenData(json)
-                AuthorizationModule.getAuthorizationInteractorImpl().signOut(userIdToken)
+                val signOutRequestData =
+                    deserializeSignOutData(json)
+                AuthorizationModule.getAuthorizationInteractorImpl().signOut(signOutRequestData)
             }
 
             return Result.success()
         }
 
-        private fun deserializeUserIdTokenData(json: String): UserIdTokenData {
-            return Gson().fromJson(json, TypeToken.get(UserIdTokenData::class.java).type)
+        private fun deserializeSignOutData(json: String): SignOutRequestData {
+            return Gson().fromJson(json, TypeToken.get(SignOutRequestData::class.java).type)
         }
 
     }
 
-    private fun serializeUserIdTokenData(userIdTokenData: UserIdTokenData): String{
-        return Gson().toJson(userIdTokenData)
+    private fun serializeSignOutData(signOutRequestData: SignOutRequestData): String{
+        return Gson().toJson(signOutRequestData)
     }
 
 }

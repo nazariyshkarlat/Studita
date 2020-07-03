@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.privacy_settings_layout.*
 
 class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_layout){
 
-    lateinit var privacySettingsViewModel: PrivacySettingsViewModel
+    private lateinit var privacySettingsViewModel: PrivacySettingsViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -119,35 +119,40 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
     }
 
     private fun formExceptionsView(duelsExceptions: ArrayList<String>?){
-        if(duelsExceptions != null && duelsExceptions.isNotEmpty()) {
-            privacySettingsLayoutDuelsBlockEditExceptions.text = resources.getString(R.string.privacy_settings_edit_duels_exceptions)
-            privacySettingsLayoutDuelsBlockExcept.visibility = View.VISIBLE
-            privacySettingsLayoutDuelsBlockExceptText.text = when {
-                duelsExceptions.size == 1 -> {
-                    resources.getString(
-                        R.string.privacy_settings_first_from_nobody_except,
-                        "@${duelsExceptions[0]}"
-                    )
+        if(privacySettingsViewModel.hasFriends) {
+            privacySettingsLayoutDuelsBlockEditExceptions.visibility = View.VISIBLE
+            if (duelsExceptions != null && duelsExceptions.isNotEmpty()) {
+                privacySettingsLayoutDuelsBlockEditExceptions.text =
+                    resources.getString(R.string.privacy_settings_edit_duels_exceptions)
+                privacySettingsLayoutDuelsBlockExcept.visibility = View.VISIBLE
+                privacySettingsLayoutDuelsBlockExceptText.text = when {
+                    duelsExceptions.size == 1 -> {
+                        resources.getString(
+                            R.string.privacy_settings_first_from_nobody_except,
+                            "@${duelsExceptions[0]}"
+                        )
+                    }
+                    duelsExceptions.size == 2 -> {
+                        resources.getString(
+                            R.string.privacy_settings_first_from_nobody_except_two,
+                            "@${duelsExceptions[0]}",
+                            "@${duelsExceptions[1]}"
+                        )
+                    }
+                    duelsExceptions.size > 2 -> {
+                        resources.getString(
+                            R.string.privacy_settings_first_from_nobody_except_many,
+                            "@${duelsExceptions[0]}",
+                            duelsExceptions.size - 1
+                        )
+                    }
+                    else -> null
                 }
-                duelsExceptions.size == 2 -> {
-                    resources.getString(
-                        R.string.privacy_settings_first_from_nobody_except_two,
-                        "@${duelsExceptions[0]}",
-                        "@${duelsExceptions[1]}"
-                    )
-                }
-                duelsExceptions.size > 2 -> {
-                    resources.getString(
-                        R.string.privacy_settings_first_from_nobody_except_many,
-                        "@${duelsExceptions[0]}",
-                        duelsExceptions.size - 1
-                    )
-                }
-                else -> null
+            } else {
+                privacySettingsLayoutDuelsBlockExcept.visibility = View.GONE
+                privacySettingsLayoutDuelsBlockEditExceptions.text =
+                    resources.getString(R.string.privacy_settings_add_duels_exceptions)
             }
-        }else{
-            privacySettingsLayoutDuelsBlockExcept.visibility = View.GONE
-            privacySettingsLayoutDuelsBlockEditExceptions.text = resources.getString(R.string.privacy_settings_add_duels_exceptions)
         }
     }
 
@@ -192,13 +197,6 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
                             privacySettingsData.duelsExceptions?.add(
                                 exceptionData.userName
                             )
-                    }
-
-                    context?.let {
-                        CustomSnackbar(it).show(
-                            resources.getString(R.string.changes_are_saved),
-                            ThemeUtils.getAccentColor(it)
-                        )
                     }
 
                     if (privacySettingsData.duelsExceptions?.isEmpty() == true && privacySettingsData.duelsInvitesFrom == DuelsInvitesFrom.EXCEPT)

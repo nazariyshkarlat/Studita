@@ -6,6 +6,7 @@ import com.example.studita.data.net.SubscribeEmailService
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
+import kotlinx.coroutines.CancellationException
 import java.lang.Exception
 
 class SubscribeEmailDataStoreImpl(private val connectionManager: ConnectionManager, private val subscribeEmailService: SubscribeEmailService): SubscribeEmailDataStore{
@@ -18,7 +19,10 @@ class SubscribeEmailDataStoreImpl(private val connectionManager: ConnectionManag
                 val body = result.body()!!
                 result.code() to SubscribeEmailResultEntity(true, body["user_email"])
             } catch (e: Exception) {
-                throw ServerUnavailableException()
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
 
@@ -30,7 +34,10 @@ class SubscribeEmailDataStoreImpl(private val connectionManager: ConnectionManag
                 val result = subscribeEmailService.unsubscribeEmail(userIdToken)
                 result.code() to result.body()?.let{SubscribeEmailResultEntity(false, it["user_email"])}
             } catch (e: Exception) {
-                throw ServerUnavailableException()
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
 

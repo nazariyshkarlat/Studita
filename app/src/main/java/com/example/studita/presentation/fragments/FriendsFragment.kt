@@ -3,6 +3,7 @@ package com.example.studita.presentation.fragments
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
+import com.example.studita.domain.interactor.IsMyFriendStatus
+import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.presentation.adapter.users_list.UsersAdapter
 import com.example.studita.presentation.adapter.users_list.SearchViewHolder
 import com.example.studita.presentation.fragments.base.NavigatableFragment
@@ -35,7 +38,10 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
 
         recyclerViewLayoutRecyclerView.setPadding(0, resources.getDimension(R.dimen.toolbarHeight).toInt() + 10.dpToPx(), 0, 10.dpToPx())
 
-        friendsFragmentViewModel.searchResultState.observe(viewLifecycleOwner, Observer {searchResultState->
+        friendsFragmentViewModel.searchResultState.observe(viewLifecycleOwner, Observer {pair->
+
+            val canBeMoreItems = pair.first
+            val searchResultState = pair.second
 
             if(recyclerViewLayoutProgressBar.marginTop == 0)
                 setProgressMargin()
@@ -51,7 +57,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                             if (friendsFragmentViewModel.recyclerItems != null) friendsFragmentViewModel.recyclerItems!! else ArrayList(
                                 friendsFragmentViewModel.getRecyclerItems(
                                     UsersRecyclerUiModel.SearchUiModel,
-                                    searchResultState.results, UsersRecyclerUiModel.ProgressUiModel
+                                    searchResultState.results, if(canBeMoreItems)UsersRecyclerUiModel.ProgressUiModel else null
                                 )
                             )
                         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
@@ -68,7 +74,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                         val adapter = recyclerViewLayoutRecyclerView.adapter as UsersAdapter
                         val newData = searchResultState.results.map { it.toUserItemUiModel() }
                         adapter.items.addAll(newData)
-                        adapter.items.add(UsersRecyclerUiModel.ProgressUiModel)
+                        if(canBeMoreItems) adapter.items.add(UsersRecyclerUiModel.ProgressUiModel)
                         adapter.notifyItemRangeInserted(1, newData.size+1)
                     }
                 }
@@ -99,8 +105,9 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                             insertIndex,
                             items.size
                         )
-                        if(items.size < friendsFragmentViewModel.perPage){
-                            adapter.notifyItemChanged(adapter.itemCount-1, Unit)
+                        if(!canBeMoreItems){
+                            adapter.items.removeAll{it is UsersRecyclerUiModel.ProgressUiModel}
+                            adapter.notifyItemRemoved(adapter.itemCount-1)
                         }
                     }else{
                         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
@@ -232,19 +239,18 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
             }
         })
 
-        friendsFragmentViewModel.removeFriendStatus.observe(viewLifecycleOwner, Observer {pair->
-
-            val friendName = pair.second
+        friendsFragmentViewModel.addFriendStatus.observe(viewLifecycleOwner, Observer {
 
             val snackbar = CustomSnackbar(view.context)
             snackbar.show(
                 resources.getString(
-                    R.string.friend_removed_snackbar,
-                    friendName
-                ),
-                ThemeUtils.getAccentColor(snackbar.context),
-                duration = resources.getInteger(R.integer.add_remove_friend_snackbar_duration).toLong()
-                )
+                    when(it) {
+                        is UsersInteractor.FriendActionState.AddedToFriends -> R.string.friend_added_snackbar
+                        is UsersInteractor.FriendActionState.RemovedFromFriends -> R.string.friend_removed_snackbar
+                        is UsersInteractor.FriendActionState.MyFriendshipRequestIsCanceled -> R.string.friendship_request_is_canceled_snackbar
+                        is UsersInteractor.FriendActionState.FriendshipRequestIsSent -> R.string.friendship_request_is_sent_snackbar
+                    },
+                    it.userData.userName), ThemeUtils.getAccentColor(snackbar.context), duration = resources.getInteger(R.integer.add_remove_friend_snackbar_duration).toLong())
         })
 
         UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, Observer { friendData ->
@@ -257,21 +263,6 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                 (friendsFragmentViewModel.recyclerItems?.get(itemIndex) as UsersRecyclerUiModel.UserItemUiModel).isMyFriendStatus = friendData.isMyFriendStatus
                 recyclerViewLayoutRecyclerView.adapter?.notifyItemChanged(itemIndex, Unit)
             }
-        })
-
-        friendsFragmentViewModel.addFriendStatus.observe(viewLifecycleOwner, Observer {pair->
-
-            val friendName = pair.second
-
-            val snackbar = CustomSnackbar(view.context)
-            snackbar.show(
-                resources.getString(
-                    R.string.friend_added_snackbar,
-                    friendName
-                ),
-                ThemeUtils.getAccentColor(snackbar.context),
-                duration = resources.getInteger(R.integer.add_remove_friend_snackbar_duration).toLong()
-            )
         })
 
 
@@ -357,7 +348,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
         recyclerViewLayoutRecyclerView.adapter = adapter
         friendsFragmentViewModel.recyclerItems = adapter?.items
         friendsFragmentViewModel.searchState = FriendsFragmentViewModel.SearchState.GlobalSearch("")
-        friendsFragmentViewModel.searchResultState.value = FriendsFragmentViewModel.SearchResultState.GlobalSearchEnterText
+        friendsFragmentViewModel.searchResultState.value = (friendsFragmentViewModel.searchResultState.value?.first == true) to FriendsFragmentViewModel.SearchResultState.GlobalSearchEnterText
     }
 
 }

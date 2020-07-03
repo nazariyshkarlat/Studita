@@ -1,20 +1,24 @@
 package com.example.studita.domain.interactor.authorization
 
+import com.example.studita.domain.entity.SignOutRequestData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
 import com.example.studita.domain.entity.authorization.SignInWithGoogleRequestData
 import com.example.studita.domain.exception.NetworkConnectionException
-import com.example.studita.domain.interactor.LogInStatus
-import com.example.studita.domain.interactor.SignInWithGoogleStatus
-import com.example.studita.domain.interactor.SignUpStatus
+import com.example.studita.domain.exception.ServerUnavailableException
+import com.example.studita.domain.interactor.*
 import com.example.studita.domain.interactor.user_data.UserDataInteractor
 import com.example.studita.domain.repository.AuthorizationRepository
 import com.example.studita.domain.repository.UserDataRepository
 import com.example.studita.domain.service.SyncSignOut
+import kotlinx.coroutines.delay
 
 class AuthorizationInteractorImpl(private val authorizationRepository: AuthorizationRepository, private val userDataRepository: UserDataRepository, private val syncSignOut: SyncSignOut) :
     AuthorizationInteractor {
-    override suspend fun signUp(authorizationRequestData: AuthorizationRequestData): SignUpStatus =
+
+    val retryDelay = 1000L
+
+    override suspend fun signUp(authorizationRequestData: AuthorizationRequestData, retryCount: Int): SignUpStatus =
         try {
              when (authorizationRepository.signUp(authorizationRequestData)) {
                 200 -> SignUpStatus.Success
@@ -23,13 +27,22 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if (e is NetworkConnectionException)
-                SignUpStatus.NoConnection
-            else
-                SignUpStatus.ServiceUnavailable
+            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+                if (retryCount == 0) {
+                    if (e is NetworkConnectionException)
+                        SignUpStatus.NoConnection
+                    else
+                        SignUpStatus.ServiceUnavailable
+                } else {
+                    if (e is NetworkConnectionException)
+                        delay(retryDelay)
+                    signUp(authorizationRequestData, retryCount - 1)
+                }
+            }else
+                SignUpStatus.Failure
         }
 
-    override suspend fun logIn(authorizationRequestData: AuthorizationRequestData): LogInStatus =
+    override suspend fun logIn(authorizationRequestData: AuthorizationRequestData, retryCount: Int): LogInStatus =
         try {
             val logInResult = authorizationRepository.logIn(authorizationRequestData)
             when (logInResult.first) {
@@ -44,13 +57,22 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
             }
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
-            if (e is NetworkConnectionException)
-                LogInStatus.NoConnection
-            else
-                LogInStatus.ServiceUnavailable
+            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+                if (retryCount == 0) {
+                    if (e is NetworkConnectionException)
+                        LogInStatus.NoConnection
+                    else
+                        LogInStatus.ServiceUnavailable
+                } else {
+                    if (e is NetworkConnectionException)
+                        delay(retryDelay)
+                    logIn(authorizationRequestData, retryCount - 1)
+                }
+            }else
+                LogInStatus.Failure
         }
 
-    override suspend fun signInWithGoogle(signInWithGoogleRequestData: SignInWithGoogleRequestData): SignInWithGoogleStatus =
+    override suspend fun signInWithGoogle(signInWithGoogleRequestData: SignInWithGoogleRequestData, retryCount: Int): SignInWithGoogleStatus =
         try {
             val signInWithGoogleResult = authorizationRepository.signInWithGoogle(signInWithGoogleRequestData)
             when (signInWithGoogleResult.first) {
@@ -64,23 +86,42 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if (e is NetworkConnectionException)
-                SignInWithGoogleStatus.NoConnection
-            else
-                SignInWithGoogleStatus.ServiceUnavailable
+            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+                if (retryCount == 0) {
+                    if (e is NetworkConnectionException)
+                        SignInWithGoogleStatus.NoConnection
+                    else
+                        SignInWithGoogleStatus.ServiceUnavailable
+                } else {
+                    if (e is NetworkConnectionException)
+                        delay(retryDelay)
+                    signInWithGoogle(signInWithGoogleRequestData, retryCount - 1)
+                }
+            }else
+                SignInWithGoogleStatus.Failure
         }
 
-    override suspend fun signOut(userIdTokenData: UserIdTokenData) {
+    override suspend fun signOut(signOutRequestData: SignOutRequestData, retryCount: Int) {
         try {
-            userDataRepository.deleteUserData()
-            authorizationRepository.signOut(userIdTokenData)
-        }catch (e: Exception) {
+            authorizationRepository.signOut(signOutRequestData)
+        } catch (e: Exception) {
             e.printStackTrace()
-            if (e is NetworkConnectionException)
-                syncSignOut.scheduleSignOut()
-            else
-                SignInWithGoogleStatus.ServiceUnavailable
+            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+                when {
+                    e is NetworkConnectionException -> {
+                        syncSignOut.scheduleSignOut(signOutRequestData)
+                    }
+                    retryCount == 0 -> return
+                    else -> {
+                        signOut(signOutRequestData, retryCount - 1)
+                    }
+                }
+            }
         }
+    }
+
+    override suspend fun deleteUserData() {
+        userDataRepository.deleteUserData()
     }
 
 }

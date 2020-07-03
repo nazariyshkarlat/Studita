@@ -5,6 +5,6 @@ import com.example.studita.domain.interactor.CompleteExercisesStatus
 
 interface CompleteExercisesInteractor {
 
-    suspend fun completeExercises(completeExercisesRequestData: CompleteExercisesRequestData) : CompleteExercisesStatus
+    suspend fun completeExercises(completeExercisesRequestData: CompleteExercisesRequestData, retryCount: Int=30) : CompleteExercisesStatus
 
 }

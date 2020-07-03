@@ -5,7 +5,7 @@ import com.example.studita.domain.interactor.LevelsCacheStatus
 
 interface LevelsInteractor{
 
-    suspend fun getLevels(isLoggedIn: Boolean, offlineMode: Boolean): LevelsStatus
+    suspend fun getLevels(isLoggedIn: Boolean, offlineMode: Boolean, retryCount: Int = 30): LevelsStatus
 
-    suspend fun downloadLevels(): LevelsCacheStatus
+    suspend fun downloadLevels(retryCount: Int = 30): LevelsCacheStatus
     }

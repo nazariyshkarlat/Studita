@@ -4,6 +4,7 @@ import com.example.studita.data.entity.mapper.*
 import com.example.studita.data.entity.toBusinessEntity
 import com.example.studita.data.entity.toRawEntity
 import com.example.studita.data.repository.datasource.authorization.AuthorizationDataStoreFactoryImpl
+import com.example.studita.domain.entity.SignOutRequestData
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
@@ -28,8 +29,8 @@ class AuthorizationRepositoryImpl(private val authorizationDataStoreFactory: Aut
         }
     }
 
-    override suspend fun signOut(userIdTokenData: UserIdTokenData): Int {
-        return authorizationDataStoreFactory.create().trySignOut(userIdTokenData.toRawEntity())
+    override suspend fun signOut(signOutRequestData: SignOutRequestData): Int {
+        return authorizationDataStoreFactory.create().trySignOut(signOutRequestData.toRawEntity())
     }
 
 }

@@ -101,8 +101,10 @@ class ChangeAvatarDialogAlertFragment : BaseDialogFragment(R.layout.change_avata
         when (requestCode) {
             0 -> {
                 if (resultCode == RESULT_OK) {
-                    val file = File(photoPath)
-                    selectedImagePath = Uri.fromFile(file)
+                    photoPath?.let{
+                        val file = File(it)
+                        selectedImagePath = Uri.fromFile(file)
+                    }
                 }
             }
             1 -> {

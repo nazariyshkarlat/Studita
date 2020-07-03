@@ -7,6 +7,8 @@ import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineExceptionHandler
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -23,7 +25,10 @@ class EditProfileDataStoreImpl(private val connectionManager: ConnectionManager,
                 val avatarLink = Gson().fromJson<HashMap<String, String?>>(result.body().toString(), object : TypeToken<HashMap<String, String?>>(){}.type)["avatar_link"]
                 avatarLink to result.code()
             }catch (e: Exception){
-                throw ServerUnavailableException()
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
     }
 
@@ -35,7 +40,10 @@ class EditProfileDataStoreImpl(private val connectionManager: ConnectionManager,
                 val response = editProfileService.isUserNameAvailable(userName)
                 response.code() to response.body()
             } catch (e: Exception) {
-                throw ServerUnavailableException()
+                if(e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
 
