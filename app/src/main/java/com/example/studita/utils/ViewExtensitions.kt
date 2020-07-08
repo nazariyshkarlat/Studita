@@ -1,5 +1,7 @@
 package com.example.studita.utils
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
@@ -19,7 +21,6 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.studita.domain.entity.UserDataData
 import com.example.studita.presentation.animations.ProgressBarAnimation
 import com.example.studita.presentation.draw.AvaDrawer
 import com.example.studita.presentation.listeners.FabScrollImpl
@@ -27,12 +28,27 @@ import com.example.studita.presentation.listeners.FabScrollListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListenerImpl
 import com.example.studita.presentation.views.CustomProgressBar
-import kotlinx.android.synthetic.main.edit_profile_layout.*
-import kotlinx.android.synthetic.main.profile_layout.*
 import kotlin.reflect.KClass
 
 fun NestedScrollView.setOnScrollChangeFabListener(fabScrollListener: FabScrollListener) {
     this.setOnScrollChangeListener(FabScrollImpl(fabScrollListener))
+}
+
+fun View.asNotificationIndicator(notificationsAreChecked: Boolean){
+    if(notificationsAreChecked || !UserUtils.isLoggedIn()){
+        this.animate().scaleX(0F).scaleY(0F).setListener(object : AnimatorListenerAdapter(){
+            override fun onAnimationEnd(animation: Animator?) {
+                this@asNotificationIndicator.visibility = View.GONE
+            }
+        }).start()
+    }else{
+        with(this) {
+            visibility = android.view.View.VISIBLE
+            scaleX = 0F
+            scaleY = 0F
+            this.animate().scaleX(1F).scaleY(1F).setListener(null).start()
+        }
+    }
 }
 
 fun EditText.limitLength(maxLength: Int) {

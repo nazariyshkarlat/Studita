@@ -6,7 +6,7 @@ import com.example.studita.presentation.activities.DefaultActivity
 
 object PrefsUtils{
 
-    fun isOfflineMode() = CacheModule.sharedPreferences.getBoolean("OFFLINE_MODE", false)
+    fun isOfflineModeEnabled() = CacheModule.sharedPreferences.getBoolean("OFFLINE_MODE", false)
 
     fun notificationsAreEnabled() = CacheModule.sharedPreferences.getBoolean("NOTIFICATIONS_MODE", true)
 

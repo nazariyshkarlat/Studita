@@ -143,6 +143,6 @@ class LevelUtilsTest {
         assertEquals(LevelUtils.getExerciseResultAnimation(getUserDataWithXP(400), 1F, false), arrayListOf(ExerciseResultAnimation.ObtainedXP(1F), ExerciseResultAnimation.AllCorrectBonus(50/600F), ExerciseResultAnimation.LevelUPBonus(100/600F)))
     }
 
-    private fun getUserDataWithXP(currentLevelXP: Int) = UserDataData("", "", null, 1, currentLevelXP, 0, false, arrayListOf(0,0,0,0),  Date())
+    private fun getUserDataWithXP(currentLevelXP: Int) = UserDataData(0, "", "", "", null, 1, currentLevelXP, 0, false, arrayListOf(0,0,0,0),  Date(), 1, true)
 
 }

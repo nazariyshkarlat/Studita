@@ -27,6 +27,7 @@ class App : Application(){
 
     companion object{
         lateinit var userDataDeferred: Deferred<UserDataStatus>
+        val applicationScope = CoroutineScope(Dispatchers.Main)
 
         fun initUserData(userDataData: UserDataData){
             UserUtils.userDataLiveData.value = userDataData
@@ -41,9 +42,9 @@ class App : Application(){
         }
 
         fun getUserData(){
-            userDataDeferred = GlobalScope.async {
+            userDataDeferred = applicationScope.async {
                 val userDataStatus = UserDataModule.getUserDataInteractorImpl()
-                    .getUserData(PrefsUtils.getUserId(), PrefsUtils.isOfflineMode())
+                    .getUserData(PrefsUtils.getUserId(), PrefsUtils.isOfflineModeEnabled())
 
                 withContext(Dispatchers.Main) {
                     if (userDataStatus is UserDataStatus.Success) {
@@ -60,8 +61,9 @@ class App : Application(){
         DI.initialize(this)
         downloadCache()
         initDefPrefs()
-        GlobalScope.launch {
-            getUserData()
+
+        getUserData()
+        applicationScope.launch {
             userDataDeferred.await()
         }
     }

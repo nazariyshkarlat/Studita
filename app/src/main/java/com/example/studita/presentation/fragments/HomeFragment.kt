@@ -1,5 +1,7 @@
 package com.example.studita.presentation.fragments
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.os.Bundle
 import android.view.View
@@ -82,8 +84,13 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
             UserUtils.userDataLiveData.observe(activity as FragmentActivity, androidx.lifecycle.Observer{data->
                 if(UserUtils.isLoggedIn() && data != null) {
+                    homeLayoutBarAccountNotificationsIndicator.asNotificationIndicator(data.notificationsAreChecked)
                     if (data.avatarLink == null) {
-                        AvaDrawer.drawAvatar(homeLayoutBarAccountImageView, UserUtils.userData.userName!!, PrefsUtils.getUserId()!!)
+                        AvaDrawer.drawAvatar(
+                            homeLayoutBarAccountImageView,
+                            UserUtils.userData.userName!!,
+                            PrefsUtils.getUserId()!!
+                        )
                     } else {
                         Glide
                             .with(this@HomeFragment)
@@ -106,7 +113,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
             if(UserUtils.isLoggedIn()){
                 homeLayoutBarLogInButton.visibility = View.GONE
-                homeLayoutBarAccountImageView.visibility = View.VISIBLE
+                homeLayoutBarAccountImageLayout.visibility = View.VISIBLE
             }
         }
         homeLayoutBarLogInButton.setOnClickListener { (activity as AppCompatActivity).startActivity<MainMenuActivity>() }

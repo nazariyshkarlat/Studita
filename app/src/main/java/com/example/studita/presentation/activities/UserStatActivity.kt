@@ -20,7 +20,7 @@ class UserStatActivity : DefaultActivity(){
         if(savedInstanceState == null) {
             addFragment(ToolbarFragment(), R.id.doubleTopFrameLayoutFrameLayout)
             if (UserUtils.isLoggedIn()) {
-                if(PrefsUtils.isOfflineMode())
+                if(PrefsUtils.isOfflineModeEnabled())
                     addFragment(UserStatOfflineModeFragment(), R.id.doubleFrameLayoutFrameLayout)
                 else
                     addFragment(UserStatFragment().apply {

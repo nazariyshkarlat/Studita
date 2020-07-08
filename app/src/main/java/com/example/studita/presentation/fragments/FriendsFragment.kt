@@ -338,6 +338,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
     private fun showGlobalSearchOnly(context: Context){
         friendsFragmentViewModel.globalSearchOnly = true
         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
+            toolbarFragmentVM.setToolbarText(context.resources.getString(R.string.search))
             UsersAdapter(
                 arrayListOf(UsersRecyclerUiModel.SearchUiModel),
                 context,

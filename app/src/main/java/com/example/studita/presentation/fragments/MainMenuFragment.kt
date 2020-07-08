@@ -3,7 +3,6 @@ package com.example.studita.presentation.fragments
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -65,7 +64,7 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
         }
 
 
-        mainMenuLayoutOfflineSwitch.isChecked = PrefsUtils.isOfflineMode()
+        mainMenuLayoutOfflineSwitch.isChecked = PrefsUtils.isOfflineModeEnabled()
 
         mainMenuLayoutOfflineSwitchView.setOnClickListener {
             PrefsUtils.setOfflineMode(!mainMenuLayoutOfflineSwitch.isChecked)

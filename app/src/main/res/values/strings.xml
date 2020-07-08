@@ -178,7 +178,7 @@
     <string name="no">Нет</string>
     <string name="search">Поиск</string>
     <string name="sort">Сортировать</string>
-    <string name="reject">Отменить</string>
+    <string name="reject">Отклонить</string>
     <string name="sort_by_A_Z">По имени (От A до Z)</string>
     <string name="sort_by_Z_A">По имени (От Z до A)</string>
     <string name="sort_by_new_old">От новых к старым</string>
@@ -224,6 +224,7 @@
     <string name="notification_friend_reqest_title">Новый запрос</string>
     <string name="notification_duel_missed_call_title">Пропущенный вызов</string>
     <string name="notification_friendship_request_accepted_title">Запрос принят</string>
+    <string name="just_now">только что</string>
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>

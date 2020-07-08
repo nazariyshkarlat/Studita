@@ -60,7 +60,7 @@ class ProfileFragmentViewModel : ViewModel(){
     }
 
     private suspend fun getFriendsAsync(userId: Int): GetUsersStatus{
-            return friendsInteractor.getUsers(userId, 3, 1, sortBy = friendsInteractor.defSortBy, userId = PrefsUtils.getUserId()!!)
+        return friendsInteractor.getUsers(userId, 3, 1, sortBy = friendsInteractor.defSortBy, userId = PrefsUtils.getUserId()!!)
     }
 
     fun getFriends(userId: Int){
@@ -93,6 +93,32 @@ class ProfileFragmentViewModel : ViewModel(){
         }
     }
 
+    fun refreshFriends(changedUser: UserData){
+        val friendsStateValue = friendsState.value
+        if(changedUser.isMyFriendStatus is IsMyFriendStatus.Success.IsMyFriend){
+            if(friendsStateValue is GetUsersStatus.NoUsersFound){
+                friendsState.value = GetUsersStatus.Success(
+                    UsersResponseData(1, arrayListOf(changedUser))
+                )
+            }else if(friendsStateValue is GetUsersStatus.Success){
+                friendsState.value = friendsStateValue.apply {
+                    friendsResponseData.usersCount++
+                    friendsResponseData.users.add(changedUser)
+                }
+            }
+        }else{
+            if(friendsStateValue is GetUsersStatus.Success){
+                if(friendsStateValue.friendsResponseData.usersCount == 1){
+                    friendsState.value = GetUsersStatus.NoUsersFound
+                }else {
+                    friendsState.value = friendsStateValue.apply {
+                        friendsResponseData.usersCount--
+                        friendsResponseData.users.removeAll { it.userId == changedUser.userId}
+                    }
+                }
+            }
+        }
+    }
 
     fun removeFromFriends(userIdToken: UserIdTokenData, userData: UserData){
         UserUtils.isMyFriendLiveData.value = userData.apply {

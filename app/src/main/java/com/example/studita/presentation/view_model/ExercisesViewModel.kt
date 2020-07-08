@@ -1,12 +1,10 @@
 package com.example.studita.presentation.view_model
 
 import android.app.Application
-import android.content.Context
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.di.data.CompleteExercisesModule
@@ -92,7 +90,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
 
     fun getExercises(chapterPartNumber: Int){
         job = viewModelScope.launchExt(job){
-            when(val status = exercisesInteractor.getExercises(chapterPartNumber, PrefsUtils.isOfflineMode())){
+            when(val status = exercisesInteractor.getExercises(chapterPartNumber, PrefsUtils.isOfflineModeEnabled())){
                 is ExercisesStatus.NoConnection -> exercisesState.postValue(false)
                 is ExercisesStatus.ServiceUnavailable -> exercisesState.postValue(false)
                 is ExercisesStatus.Success -> {
@@ -124,7 +122,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
 
     private fun saveObtainedExercisesResult(){
         GlobalScope.launch {
-            val userDataStatus = userDataInteractor.getUserData(UserUtils.userData.userId, PrefsUtils.isOfflineMode())
+            val userDataStatus = userDataInteractor.getUserData(UserUtils.userData.userId, PrefsUtils.isOfflineModeEnabled())
             if(userDataStatus is UserDataStatus.Success) {
                 val currentUserData = userDataStatus.result.copy()
                 currentUserData.let {
@@ -287,7 +285,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
                         exerciseResultInteractor.getExerciseResult(
                             exerciseData as ExerciseData.ExerciseDataExercise,
                             exerciseRequestData,
-                            PrefsUtils.isOfflineMode()
+                            PrefsUtils.isOfflineModeEnabled()
                         )) {
                         is ExerciseResultStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                         is ExerciseResultStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)

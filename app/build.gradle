@@ -6,6 +6,15 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
+
+    signingConfigs {
+        release {
+            storeFile file('D:\\Android Studio Projects\\CERTIFICATES\\stud\\stud.jks')
+            storePassword 'jxNw&gKZE=*V8S*}'
+            keyAlias = 'upload'
+            keyPassword 'jxNw&gKZE=*V8S*}'
+        }
+    }
     defaultConfig {
         applicationId "com.example.studita"
         minSdkVersion 21
@@ -16,6 +25,7 @@ android {
     }
     buildTypes {
         release {
+            signingConfig = signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

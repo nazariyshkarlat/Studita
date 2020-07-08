@@ -16,6 +16,7 @@ import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.validator.AuthorizationValidator
 import com.example.studita.utils.DeviceUtils
 import com.example.studita.utils.UserUtils
+import com.example.studita.utils.launchBlock
 import com.example.studita.utils.launchExt
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
@@ -74,7 +75,7 @@ class AuthorizationFragmentViewModel : ViewModel(){
 
                     val token = task.result?.token
 
-                    job = GlobalScope.launchExt(job){
+                    job = GlobalScope.launchBlock(job){
                         when(val result = authorizationInteractor.logIn(
                             AuthorizationRequestData(
                                 dates.first,
@@ -90,7 +91,8 @@ class AuthorizationFragmentViewModel : ViewModel(){
                             is LogInStatus.NoUserFound -> authorizationState.postValue(AuthorizationResult.NoUserFound)
                             is LogInStatus.Success ->{
                                 App.initUserData(result.result.userDataData)
-                                authorizationState.postValue(AuthorizationResult.LogInSuccess(result.result))
+
+                                authorizationState.value = AuthorizationResult.LogInSuccess(result.result)
                             }
                         }}
                 })
@@ -99,7 +101,7 @@ class AuthorizationFragmentViewModel : ViewModel(){
 
     fun signUp(dates : Pair<String, String>){
         if(validate(dates) == AuthorizationResult.Valid){
-            job = GlobalScope.launchExt(job){
+            job = GlobalScope.launchBlock(job){
                 when(authorizationInteractor.signUp(
                     AuthorizationRequestData(
                         dates.first,

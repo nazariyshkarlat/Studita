@@ -36,7 +36,7 @@ class InterestingViewModel : ViewModel(){
 
     fun getInteresting(interestingNumber: Int){
         job = viewModelScope.launchExt(job){
-            when(val status = interestingInteractor.getInteresting(interestingNumber, PrefsUtils.isOfflineMode())){
+            when(val status = interestingInteractor.getInteresting(interestingNumber, PrefsUtils.isOfflineModeEnabled())){
                 is InterestingStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is InterestingStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is InterestingStatus.Success -> {

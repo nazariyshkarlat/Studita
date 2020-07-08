@@ -76,9 +76,10 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
     })
 
         editProfileViewModel.saveChangesButtonVisibleState.observe(viewLifecycleOwner, Observer {
-        if (it)
+        if (it) {
             showSaveChangesButton()
-        else
+            toolbarFragmentViewModel?.hideProgress()
+        }else
             toolbarFragmentViewModel?.hideRightButton()
     })
 

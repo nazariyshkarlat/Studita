@@ -56,6 +56,9 @@ class NotificationsFragmentViewModel : ViewModel(){
 
                     val notificationsResultState = if(currentPageNumber == 1) NotificationsResultState.FirstResults(result.notificationsData) else NotificationsResultState.MoreResults(result.notificationsData)
 
+                    UserUtils.userDataLiveData.postValue(UserUtils.userData.apply {
+                        notificationsAreChecked = true
+                    })
                     progressState.postValue(false)
                     notificationsState.postValue(canBeMoreItems(notificationsResultState) to notificationsResultState)
                 }

@@ -1,5 +1,6 @@
 package com.example.studita.presentation.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
@@ -69,6 +70,7 @@ class MainActivity : DefaultActivity(){
     }
 
     override fun onBackPressed() {
+        Log.d("ON_BACK_PRESSED", "fsdfsdf")
         when (val currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)) {
             is NavigatableFragment -> currentFragment.onBackClick()
             is MainFragment -> navigationViewModel.onBackPressed()

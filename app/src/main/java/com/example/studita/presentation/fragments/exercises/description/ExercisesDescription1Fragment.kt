@@ -27,7 +27,6 @@ class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exer
                 checkButtonDivider(view)
             }
         }
-        System.out.println(this)
     }
 
     private fun formView(exercisesDescriptionModel: ExercisesDescriptionData){

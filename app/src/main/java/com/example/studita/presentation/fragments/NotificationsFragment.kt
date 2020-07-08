@@ -1,5 +1,11 @@
 package com.example.studita.presentation.fragments
 
+import android.app.Activity
+import android.app.NotificationManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -10,26 +16,48 @@ import androidx.core.widget.TextViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
+import com.example.studita.domain.entity.NotificationData
+import com.example.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
+import com.example.studita.domain.interactor.IsMyFriendStatus
+import com.example.studita.notifications.service.PushReceiverIntentService
 import com.example.studita.presentation.adapter.notifications.NotificationsAdapter
-import com.example.studita.presentation.adapter.privacy_settings_duels_exceptions.PrivacySettingsDuelsExceptionsAdapter
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.NotificationsUiModel
-import com.example.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
-import com.example.studita.presentation.model.UsersRecyclerUiModel
 import com.example.studita.presentation.model.toUiModel
 import com.example.studita.presentation.view_model.NotificationsFragmentViewModel
-import com.example.studita.presentation.view_model.PrivacySettingsViewModel
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.dpToPx
-import kotlinx.android.synthetic.main.privacy_duels_exceptions_dialog_alert.*
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.recyclerview_layout.*
+import java.lang.Exception
 
 class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
+
+    lateinit var viewModel: NotificationsFragmentViewModel
+
+    private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver(){
+        override fun onReceive(context: Context, intent: Intent) {
+            val notificationData = GsonBuilder().apply {
+                registerTypeAdapter(IsMyFriendStatus::class.java, IsMyFriendStatusDeserializer())
+            }.create().fromJson<NotificationData>(
+                intent.getStringExtra("NOTIFICATION_DATA"),
+                object : TypeToken<NotificationData>() {}.type
+            )
+
+            viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
+            recyclerViewLayoutRecyclerView.adapter?.notifyItemInserted(1)
+
+            if(isVisible)
+                resultCode = Activity.RESULT_CANCELED
+        }
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        val viewModel = ViewModelProviders.of(this).get(NotificationsFragmentViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(NotificationsFragmentViewModel::class.java)
 
         recyclerViewLayoutRecyclerView.setPadding(0, resources.getDimension(R.dimen.toolbarHeight).toInt() + 12.dpToPx(), 0, 12.dpToPx())
 
@@ -124,7 +152,11 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
         viewModel.progressState.observe(
             viewLifecycleOwner,
             Observer { showProgress ->
-                recyclerViewLayoutProgressBar.visibility = if(showProgress) View.VISIBLE else View.GONE
+                recyclerViewLayoutProgressBar.visibility = if(showProgress) View.VISIBLE else {
+                    registerReceiver()
+                    (view.context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancelAll()
+                    View.GONE
+                }
             })
 
         UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, Observer { friendData ->
@@ -140,6 +172,15 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
         scrollingView = recyclerViewLayoutRecyclerView
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            activity?.unregisterReceiver(notificationReceiver)
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
     private fun showEmptyView(){
         recyclerViewLayoutRecyclerView.adapter = NotificationsAdapter(arrayListOf(NotificationsUiModel.NotificationsSwitch), null)
         (view as ViewGroup).addView(TextView(context).apply {
@@ -152,6 +193,18 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                 }
             }
         })
+    }
+
+    private fun registerReceiver(){
+        try {
+            val filter = IntentFilter().apply {
+                addAction(PushReceiverIntentService.BROADCAST_NOTIFICATION)
+                priority = 1
+            }
+            activity?.registerReceiver(notificationReceiver, filter)
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 
 }

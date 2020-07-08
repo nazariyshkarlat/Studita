@@ -63,7 +63,8 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator"/>
         </service>
-        <service android:name=".notifications.service.FirebaseMessagingService">
+        <service android:name=".notifications.service.FirebaseMessagingService"
+            android:exported="false">
         <intent-filter>
             <action android:name="com.google.firebase.MESSAGING_EVENT"/>
         </intent-filter>
@@ -77,6 +78,27 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <service android:name=".notifications.service.PushIntentService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE">
+        </service>
+        <service android:name=".notifications.service.PushReceiverIntentService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE">
+        </service>
+        <receiver android:name=".notifications.NotificationsActionsHandleBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ACCEPT_FRIENDSHIP"/>
+                <action android:name="REJECT_FRIENDSHIP"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".notifications.PushReceiver"
+            android:exported="false" >
+            <intent-filter android:priority="0" >
+                <action android:name="BROADCAST_NOTIFICATION"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 

@@ -34,7 +34,9 @@ data class UserDataEntity(@ColumnInfo(name = "user_id")
                           @ColumnInfo(name = "streak_datetime")
                           @SerializedName("streak_datetime")val streakDatetime: String = "1900-01-01 00:00:00",
                           @ColumnInfo(name = "today_completed_exercises")
-                          @SerializedName("today_completed_exercises")val todayCompletedExercises: Int = 0){
+                          @SerializedName("today_completed_exercises")val todayCompletedExercises: Int = 0,
+                          @ColumnInfo(name = "notifications_are_checked")
+                          @SerializedName("notifications_are_checked")val notificationsAreChecked: Boolean = true){
     companion object {
         const val TABLE_NAME = "user_data"
     }
@@ -47,4 +49,4 @@ data class UserDataEntity(@ColumnInfo(name = "user_id")
 data class SaveUserDataRequest(@SerializedName("auth_data")val userIdToken: UserIdToken, @SerializedName("user_data")val userDataEntity: UserDataEntity)
 
 fun UserDataData.toRawEntity() = UserDataEntity(userId, userName, userFullName, userPublicId, avatarLink, currentLevel, currentLevelXP, streakDays, isSubscribed, ArrayList(completedParts), DateTimeFormat().format(streakDatetime), todayCompletedExercises)
-fun UserDataEntity.toBusinessEntity() = UserDataData(userId, userName, userFullName, userPublicId, avatarLink, currentLevel, currentLevelXP, streakDays, isSubscribed, ArrayList(completedParts), DateTimeFormat().parse(streakDatetime)!!, todayCompletedExercises)
+fun UserDataEntity.toBusinessEntity() = UserDataData(userId, userName, userFullName, userPublicId, avatarLink, currentLevel, currentLevelXP, streakDays, isSubscribed, ArrayList(completedParts), DateTimeFormat().parse(streakDatetime)!!, todayCompletedExercises, notificationsAreChecked)

@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -33,7 +34,8 @@
             style="@style/Medium16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sort_by_A_Z"/>
+            android:text="@string/sort_by_A_Z"
+            tools:ignore="DuplicateIds" />
 
         <Space
             android:layout_width="0dp"
@@ -45,7 +47,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            app:srcCompat="@drawable/done_selector"/>
+            app:srcCompat="@drawable/done_selector"
+            tools:ignore="DuplicateIds" />
 
     </LinearLayout>
 
@@ -65,7 +68,8 @@
             style="@style/Medium16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sort_by_Z_A"/>
+            android:text="@string/sort_by_Z_A"
+            tools:ignore="DuplicateIds" />
 
         <Space
             android:layout_width="0dp"
@@ -77,7 +81,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            app:srcCompat="@drawable/done_selector"/>
+            app:srcCompat="@drawable/done_selector"
+            tools:ignore="DuplicateIds" />
 
     </LinearLayout>
 
@@ -97,7 +102,8 @@
             style="@style/Medium16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sort_by_new_old"/>
+            android:text="@string/sort_by_new_old"
+            tools:ignore="DuplicateIds" />
 
         <Space
             android:layout_width="0dp"
@@ -109,7 +115,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            app:srcCompat="@drawable/done_selector"/>
+            app:srcCompat="@drawable/done_selector"
+            tools:ignore="DuplicateIds" />
 
     </LinearLayout>
 
@@ -129,7 +136,8 @@
             style="@style/Medium16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sort_by_old_new"/>
+            android:text="@string/sort_by_old_new"
+            tools:ignore="DuplicateIds" />
 
         <Space
             android:layout_width="0dp"
@@ -141,7 +149,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            app:srcCompat="@drawable/done_selector"/>
+            app:srcCompat="@drawable/done_selector"
+            tools:ignore="DuplicateIds" />
 
     </LinearLayout>
 </LinearLayout>

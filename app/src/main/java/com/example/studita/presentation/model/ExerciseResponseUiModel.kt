@@ -22,12 +22,10 @@ sealed  class ExerciseResponseDescriptionContentUiModel{
 
 data class ExerciseShapeUiModel(val shape: Drawable, val count: Int)
 
-fun ExerciseShapeData.toUiModel(context: Context) = ExerciseShapeUiModel(shape.getShapeByName(context), count)
-fun ExerciseShapeData.toResponseUiModel(context: Context) = ExerciseShapeUiModel(
-    shape.getShapeByName(context), count)
+fun ExerciseShapeData.toUiModel(context: Context, white: Boolean = false) = ExerciseShapeUiModel(shape.getShapeByName(context, white), count)
 
-fun String.getShapeByName(context: Context) : Drawable = when(this){
-    "rect" -> context.getDrawable(R.drawable.exercise_rectangle)!!
+fun String.getShapeByName(context: Context, white: Boolean = false) : Drawable = when(this){
+    "rect" -> if(white) context.getDrawable(R.drawable.exercise_rectangle_white)!! else context.getDrawable(R.drawable.exercise_rectangle)!!
     else -> throw IOException("Unexpected shape name")
 }
 
@@ -40,7 +38,7 @@ fun ExerciseResponseDescriptionContentData.DescriptionContentString.toUiModel(co
 fun ExerciseResponseDescriptionData.toUiModel(context: Context) =  ExerciseResponseDescriptionUiModel(
     when (val descriptionContentData = descriptionContent) {
         is ExerciseResponseDescriptionContentData.DescriptionContentArray -> ExerciseResponseDescriptionContentUiModel.DescriptionContentArray(
-            descriptionContentData.descriptionContent.toResponseUiModel(context)
+            descriptionContentData.descriptionContent.toUiModel(context, true)
         )
         is ExerciseResponseDescriptionContentData.DescriptionContentString -> {
             descriptionContentData.toUiModel(context)

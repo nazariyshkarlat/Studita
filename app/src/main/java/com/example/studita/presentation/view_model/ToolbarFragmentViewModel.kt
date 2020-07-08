@@ -16,7 +16,6 @@ class ToolbarFragmentViewModel : ViewModel(){
     val toolbarFragmentOnNavigateState = MutableLiveData<NavigatableFragment.OnNavigateFragment>()
 
     fun setToolbarText(text: String?){
-        println(text)
         toolbarTextState.value = text
     }
 

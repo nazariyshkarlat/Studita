@@ -2,7 +2,6 @@ package com.example.studita.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.view.ContextThemeWrapper
 import android.view.Gravity
 import android.view.View
@@ -12,11 +11,11 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import com.example.studita.R
 import com.example.studita.domain.entity.UserData
 import com.example.studita.domain.entity.UsersResponseData
 import com.example.studita.domain.entity.UserDataData
+import com.example.studita.domain.entity.toUserData
 import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.interactor.UserDataStatus
@@ -28,8 +27,6 @@ import com.example.studita.presentation.views.CustomSnackbar
 import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.profile_friend_item.view.*
 import kotlinx.android.synthetic.main.profile_layout.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.*
 
 open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
@@ -71,13 +68,21 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
             })
         }
 
-        UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {friendData->
+        UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {userData->
 
-            if (friendData.userId == arguments?.getInt("USER_ID")) {
-                profileFragmentViewModel.isMyFriendState.value = friendData.isMyFriendStatus
-                formButton(friendData, view.context)
+            if(!isMyProfile) {
+                profileFragmentViewModel.isMyFriendState.value = userData.isMyFriendStatus
+                formButton(userData, view.context)
             }
-            arguments?.getInt("USER_ID")?.let { it1 -> profileFragmentViewModel.getFriends(it1) }
+
+            val changeUserHasMeInFriends = userData.userId == arguments?.getInt("USER_ID")
+
+            if(isMyProfile){
+                profileFragmentViewModel.refreshFriends(userData)
+            }else if(changeUserHasMeInFriends){
+                profileFragmentViewModel.refreshFriends(this.userData.toUserData(userData.isMyFriendStatus))
+            }
+
         })
 
         profileFragmentViewModel.isMyFriendState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
@@ -89,11 +94,16 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
             if(it is GetUsersStatus.Success) {
                 fillFriends(it.friendsResponseData)
 
-                (view as ViewGroup).removeView(profileLayoutProgressBar)
-                profileLayoutScrollView.visibility = View.VISIBLE
+                if(profileLayoutProgressBar != null) {
+                    (view as ViewGroup).removeView(profileLayoutProgressBar)
+                    profileLayoutScrollView.visibility = View.VISIBLE
+                }
 
             }else if(it is GetUsersStatus.NoUsersFound) {
 
+                profileLayoutFriendsContentView.removeAllViews()
+                profileLayoutEmptyFriends.visibility = View.VISIBLE
+                profileLayoutFriendsMoreButton.visibility = View.GONE
                 profileLayoutFriendsTitle.text = resources.getString(R.string.friends)
                 profileLayoutEmptyFriends.visibility = View.VISIBLE
                 if(isMyProfile) {
@@ -144,7 +154,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
         }
 
 
-        if(!isHidden)
+        if(isVisible)
             view.post { initMenu()}
 
         scrollingView = profileLayoutScrollView
@@ -153,9 +163,10 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
 
-        if(!isHidden)
+        if(isVisible)
             initMenu()
     }
+
 
     private fun formButton(userData: UserData, context: Context){
         when (userData.isMyFriendStatus) {
@@ -238,12 +249,13 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
             navigateToFriends(isMyProfile, arguments?.getInt("USER_ID")!!)
         }
 
-        if(friendsResponseData.usersCount > 3)
+        if(friendsResponseData.usersCount > friendsResponseData.users.size)
             profileLayoutFriendsMoreButton.visibility = View.VISIBLE
         else
             profileLayoutFriendsMoreButton.visibility = View.GONE
 
-        profileLayoutFriendsLayout.removeViews(1,profileLayoutFriendsLayout.childCount-2)
+        profileLayoutEmptyFriends.visibility = View.GONE
+        profileLayoutFriendsContentView.removeAllViews()
         friends.forEach {friendData->
             val friendChild = profileLayoutFriendsLayout.makeView(R.layout.profile_friend_item)
 
@@ -257,7 +269,8 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
                     navigateToProfile(friendData.userId, isI)
                 }
             }
-            profileLayoutFriendsLayout.addView(friendChild, profileLayoutFriendsLayout.childCount-1)
+
+            profileLayoutFriendsContentView.addView(friendChild, profileLayoutFriendsContentView.childCount)
         }
     }
 

@@ -24,7 +24,7 @@ open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewI
         }
         exercisesViewModel?.let {
             exercisesDescriptionModel = it.exercisesResponseData.exercisesDescription
-            if(!this.isHidden){
+            if(isVisible){
                 view.viewTreeObserver.addOnScrollChangedListener(this)
             }
         }

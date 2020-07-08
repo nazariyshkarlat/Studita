@@ -8,21 +8,16 @@ import com.example.studita.R
 import com.example.studita.service.SyncSubscribeEmailImpl
 import com.example.studita.di.data.LevelsModule
 import com.example.studita.di.data.SubscribeEmailModule
-import com.example.studita.di.data.UserDataModule
-import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.interactor.LevelsStatus
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.presentation.model.HomeRecyclerUiModel
 import com.example.studita.presentation.model.toHomeRecyclerItems
 import com.example.studita.utils.PrefsUtils
-import com.example.studita.utils.TimeUtils
 import com.example.studita.utils.launchExt
 import com.example.studita.utils.UserUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import java.util.*
 import kotlin.collections.ArrayList
 
 class HomeFragmentViewModel : ViewModel(){
@@ -50,7 +45,7 @@ class HomeFragmentViewModel : ViewModel(){
 
     private fun getLevels(){
         levelsJob = viewModelScope.launchExt(levelsJob){
-            when(val getLevelsStatus = levelsInteractor.getLevels(UserUtils.isLoggedIn(), PrefsUtils.isOfflineMode())){
+            when(val getLevelsStatus = levelsInteractor.getLevels(UserUtils.isLoggedIn(), PrefsUtils.isOfflineModeEnabled())){
                 is LevelsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is LevelsStatus.ServiceUnavailable ->errorState.postValue(R.string.server_unavailable)
                 is LevelsStatus.Failure -> errorState.postValue(R.string.server_failure)

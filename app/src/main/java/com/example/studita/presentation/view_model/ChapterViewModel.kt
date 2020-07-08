@@ -25,7 +25,7 @@ class ChapterViewModel : ViewModel(){
     fun getChapter(chapterNumber: Int){
         job = viewModelScope.launchExt(job){
             progressState.postValue(false)
-            when(val status = interactor.getChapter(chapterNumber, PrefsUtils.isOfflineMode())){
+            when(val status = interactor.getChapter(chapterNumber, PrefsUtils.isOfflineModeEnabled())){
                 is ChapterStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is ChapterStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is ChapterStatus.Success -> {

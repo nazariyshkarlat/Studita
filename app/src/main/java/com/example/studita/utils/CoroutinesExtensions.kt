@@ -2,14 +2,23 @@ package com.example.studita.utils
 
 import com.google.android.gms.tasks.Tasks.await
 import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-fun CoroutineScope.launchExt(job: Job?,
-    block: suspend CoroutineScope.() -> Unit
+fun CoroutineScope.launchExt(job: Job?, coroutineContext: CoroutineContext = Dispatchers.Main, block: suspend CoroutineScope.() -> Unit
 ): Job {
     job?.cancel()
-    return launch {
+    return launch(coroutineContext) {
         block()
     }
+}
+
+fun CoroutineScope.launchBlock(job: Job?, coroutineContext: CoroutineContext = Dispatchers.Main, block: suspend CoroutineScope.() -> Unit): Job {
+    return if(job == null || job.isCompleted) {
+         launch(coroutineContext) {
+            block()
+        }
+    }else
+        job
 }
 
 fun CoroutineScope.asyncExt(job: Job?,

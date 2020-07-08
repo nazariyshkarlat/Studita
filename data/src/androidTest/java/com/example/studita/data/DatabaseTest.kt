@@ -31,7 +31,9 @@ class DatabaseTest {
     @Test
     @Throws(InterruptedException::class)
     fun insertAndSelectUserData() = runBlocking {
-        val userData = UserDataEntity("inasar0327",
+        val userData = UserDataEntity(0,
+            "inasar0327",
+            "NAZARii ssad",
             "23c1c59a-81b7-11ea-b95d-00d8612be2bb",
             "https://lh3.googleusercontent.com/a-/AOh14GjjVfisFrm6D0EV6SooFKf9vZZkxUB3loY6X8Ky=s96-c",
             1,

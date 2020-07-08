@@ -180,17 +180,23 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                 exercisesResponseData.toUiModel(exerciseBottomSnackbarLinearLayout.context)
             )
 
-            setSnackbarTranslationY()
+            exerciseLayoutSnackbar.post {
+                setSnackbarTranslationY()
 
-            if (animate) {
-                exerciseLayoutSnackbar.animate().translationY(0F)
-                    .setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong())
-                    .setInterpolator(FastOutSlowInInterpolator()).start()
-            } else {
-                exerciseLayoutSnackbar.translationY = 0F
+                exerciseLayoutSnackbar.post {
+                    if (animate) {
+                        exerciseLayoutSnackbar.animate().translationY(0F)
+                            .setDuration(
+                                resources.getInteger(R.integer.snackbar_anim_duration).toLong()
+                            )
+                            .setInterpolator(FastOutSlowInInterpolator()).start()
+                    } else {
+                        exerciseLayoutSnackbar.translationY = 0F
+                    }
+
+                    changeButton(true, animate)
+                }
             }
-
-            changeButton(true, animate)
         }
     }
 
@@ -210,9 +216,12 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             exerciseBottomSnackbarLinearLayout.layoutParams as RelativeLayout.LayoutParams
         snackBarParams.bottomMargin = snackbarLinearLayoutBottomMargin
         exerciseBottomSnackbarLinearLayout.layoutParams = snackBarParams
-        exerciseLayoutSnackbar.translationY =
-            exerciseLayoutSnackbar.height + snackbarLinearLayoutBottomMargin.toFloat()
-        exerciseLayoutSnackbar.visibility = View.VISIBLE
+
+        exerciseLayoutSnackbar.post {
+            exerciseLayoutSnackbar.translationY =
+                exerciseLayoutSnackbar.height.toFloat()
+            exerciseLayoutSnackbar.visibility = View.VISIBLE
+        }
     }
 
 

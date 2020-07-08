@@ -4,18 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.utils.addFragment
-import com.example.studita.utils.navigateTo
-import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.MainMenuFragment
 import com.example.studita.presentation.fragments.NotificationsFragment
 import com.example.studita.presentation.fragments.ProfileMenuFragment
 import com.example.studita.presentation.fragments.ToolbarFragment
+import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.MainMenuActivityViewModel
 import com.example.studita.utils.UserUtils
+import com.example.studita.utils.addFragment
+import com.example.studita.utils.navigateTo
+
 
 class MainMenuActivity : DefaultActivity(){
 
+    companion object {
+        const val NOTIFICATIONS_REQUEST_CODE = 7534
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,19 +31,33 @@ class MainMenuActivity : DefaultActivity(){
         if(savedInstanceState == null) {
             addFragment(ToolbarFragment(), R.id.doubleTopFrameLayoutFrameLayout)
 
-            if(intent.getBooleanExtra("OPEN_NOTIFICATIONS", false))
+            navigateTo(if(UserUtils.isLoggedIn()) ProfileMenuFragment() else MainMenuFragment(), R.id.doubleFrameLayoutFrameLayout)
+            if(intent.getIntExtra("REQUEST_CODE", 0) == NOTIFICATIONS_REQUEST_CODE) {
+                supportFragmentManager.executePendingTransactions()
                 navigateTo(NotificationsFragment(), R.id.doubleFrameLayoutFrameLayout)
-            else
-                navigateTo(if(UserUtils.isLoggedIn()) ProfileMenuFragment() else MainMenuFragment(), R.id.doubleFrameLayoutFrameLayout)
+            }
         }
     }
 
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount == 1)
-            this.finish()
-        else{
+        if(supportFragmentManager.backStackEntryCount == 1) {
+            if (isTaskRoot){
+                val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(intent)
+            }else
+                finish()
+        }else{
             val f = supportFragmentManager.findFragmentById(R.id.doubleFrameLayoutFrameLayout) as NavigatableFragment
             f.onBackClick()
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if(intent.getIntExtra("REQUEST_CODE", 0) == NOTIFICATIONS_REQUEST_CODE){
+            if(supportFragmentManager.findFragmentById(R.id.doubleFrameLayoutFrameLayout) !is NotificationsFragment)
+                navigateTo(NotificationsFragment(), R.id.doubleFrameLayoutFrameLayout)
         }
     }
 

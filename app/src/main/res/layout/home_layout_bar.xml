@@ -29,17 +29,33 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/homeLayoutBarTitle"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.example.studita.presentation.views.press_view.PressImageView
-        android:id="@+id/homeLayoutBarAccountImageView"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/avatar_oval"
+    <FrameLayout
+        android:id="@+id/homeLayoutBarAccountImageLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone"
         android:gravity="center"
-        android:textAlignment="center" />
+        android:textAlignment="center" >
+
+        <com.example.studita.presentation.views.press_view.PressImageView
+            android:id="@+id/homeLayoutBarAccountImageView"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/avatar_oval"/>
+
+        <View
+            android:id="@+id/homeLayoutBarAccountNotificationsIndicator"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_gravity="top|end"
+            android:visibility="gone"
+            android:background="@drawable/new_notifications_indicator"/>
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

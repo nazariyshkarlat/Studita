@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.di.data.EditProfileModule
+import com.example.studita.di.data.UserDataModule
 import com.example.studita.domain.entity.EditProfileData
 import com.example.studita.domain.entity.EditProfileRequestData
 import com.example.studita.domain.interactor.EditProfileStatus
@@ -16,15 +17,13 @@ import com.example.studita.utils.UserUtils
 import com.example.studita.utils.asyncExt
 import com.example.studita.utils.launchExt
 import kotlinx.android.synthetic.main.edit_profile_layout.*
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.w3c.dom.Text
 
 class EditProfileViewModel : ViewModel(){
 
     private val editProfileInteractor = EditProfileModule.getEditProfileInteractorImpl()
+    private val userDataInteractor = UserDataModule.getUserDataInteractorImpl()
     private var job: Job? = null
 
     lateinit var oldProfileData: EditProfileData
@@ -116,6 +115,9 @@ class EditProfileViewModel : ViewModel(){
         UserUtils.userData.userFullName = newProfileData.userFullName
         UserUtils.userData.avatarLink = avatarLink
         UserUtils.userDataLiveData.postValue(UserUtils.userData)
+        GlobalScope.launch {
+            userDataInteractor.saveUserData(UserUtils.userData)
+        }
     }
 
     enum class TextField{
