@@ -92,7 +92,7 @@ class UsersAdapter(var items: ArrayList<UsersRecyclerUiModel>,
     override fun search(text: String, searchState: FriendsFragmentViewModel.SearchState) {
         if(friendsFragmentViewModel.searchState != searchState) {
             friendsFragmentViewModel.searchState = searchState
-            if (text.isNotEmpty())
+            if (text.isNotEmpty()) {
                 friendsFragmentViewModel.getUsers(
                     userId,
                     sortBy = null,
@@ -100,11 +100,10 @@ class UsersAdapter(var items: ArrayList<UsersRecyclerUiModel>,
                     isGlobalSearch = friendsFragmentViewModel.searchState is FriendsFragmentViewModel.SearchState.GlobalSearch,
                     newPage = false
                 )
-            else {
-                if (searchState is FriendsFragmentViewModel.SearchState.GlobalSearch)
-                    friendsFragmentViewModel.searchResultState.value =
-                        (friendsFragmentViewModel.searchResultState.value?.first  == true) to FriendsFragmentViewModel.SearchResultState.GlobalSearchEnterText
-                else if (searchState is FriendsFragmentViewModel.SearchState.FriendsSearch)
+            }else {
+                if (searchState is FriendsFragmentViewModel.SearchState.GlobalSearch) {
+                    friendsFragmentViewModel.formGlobalSearchEmptySearch()
+                }else if (searchState is FriendsFragmentViewModel.SearchState.FriendsSearch)
                     friendsFragmentViewModel.getUsers(
                         userId,
                         friendsFragmentViewModel.sortBy,

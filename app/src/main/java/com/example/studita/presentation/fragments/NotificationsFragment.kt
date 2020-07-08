@@ -70,34 +70,21 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                 when (val notificationsResultState = pair.second) {
                     is NotificationsFragmentViewModel.NotificationsResultState.FirstResults -> {
 
-                        if (recyclerViewLayoutRecyclerView.adapter == null) {
-                            val items =
-                                if (viewModel.recyclerItems != null) viewModel.recyclerItems!! else ArrayList(
-                                    viewModel.getRecyclerItems(
-                                        NotificationsUiModel.NotificationsSwitch,
-                                        notificationsResultState.results,
-                                        if(canBeMoreItems) NotificationsUiModel.ProgressUiModel else null,
-                                        view.context
-                                    )
+                        val items =
+                            if (viewModel.recyclerItems != null) viewModel.recyclerItems!! else ArrayList(
+                                viewModel.getRecyclerItems(
+                                    NotificationsUiModel.NotificationsSwitch,
+                                    notificationsResultState.results,
+                                    if(canBeMoreItems) NotificationsUiModel.ProgressUiModel else null,
+                                    view.context
                                 )
-                            val adapter = NotificationsAdapter(
-                                items,
-                                viewModel
                             )
-                            recyclerViewLayoutRecyclerView.adapter = adapter
-                            viewModel.recyclerItems = adapter.items
-                        } else {
-                            val adapter =
-                                recyclerViewLayoutRecyclerView.adapter as NotificationsAdapter
-                            val newData = viewModel.getRecyclerItems(
-                                NotificationsUiModel.NotificationsSwitch,
-                                notificationsResultState.results,
-                                if(canBeMoreItems) NotificationsUiModel.ProgressUiModel else null,
-                                view.context
-                            )
-                            adapter.items.addAll(newData)
-                            adapter.notifyItemRangeInserted(0, newData.size)
-                        }
+                        val adapter = NotificationsAdapter(
+                            items,
+                            viewModel
+                        )
+                        recyclerViewLayoutRecyclerView.adapter = adapter
+                        viewModel.recyclerItems = adapter.items
                     }
                     is NotificationsFragmentViewModel.NotificationsResultState.MoreResults -> {
 

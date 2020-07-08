@@ -113,6 +113,13 @@ class FriendsFragmentViewModel : ViewModel(){
             }
     }
 
+
+    fun formGlobalSearchEmptySearch(){
+        searchUsersJob?.cancel()
+        searchResultState.value = (searchResultState.value?.first == true) to SearchResultState.GlobalSearchEnterText
+        progressState.value = false
+    }
+
     private fun canBeMoreItems(searchResultState: SearchResultState) = (((searchResultState is SearchResultState.ResultsFound) && searchResultState.results.size == perPage) ||
             ((searchResultState is SearchResultState.MoreResultsFound) && searchResultState.results.size == perPage))
 

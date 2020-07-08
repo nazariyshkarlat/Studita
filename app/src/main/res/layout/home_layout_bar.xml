@@ -29,7 +29,7 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/homeLayoutBarTitle"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <FrameLayout
+    <com.example.studita.presentation.views.press_view.PressFrameLayout
         android:id="@+id/homeLayoutBarAccountImageLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         android:gravity="center"
         android:textAlignment="center" >
 
-        <com.example.studita.presentation.views.press_view.PressImageView
+        <ImageView
             android:id="@+id/homeLayoutBarAccountImageView"
             android:layout_width="36dp"
             android:layout_height="36dp"
@@ -56,6 +56,6 @@
             android:visibility="gone"
             android:background="@drawable/new_notifications_indicator"/>
 
-    </FrameLayout>
+    </com.example.studita.presentation.views.press_view.PressFrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

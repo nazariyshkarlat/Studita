@@ -183,6 +183,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             exerciseLayoutSnackbar.post {
                 setSnackbarTranslationY()
 
+                changeButton(true, animate)
+
                 exerciseLayoutSnackbar.post {
                     if (animate) {
                         exerciseLayoutSnackbar.animate().translationY(0F)
@@ -193,8 +195,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                     } else {
                         exerciseLayoutSnackbar.translationY = 0F
                     }
-
-                    changeButton(true, animate)
                 }
             }
         }

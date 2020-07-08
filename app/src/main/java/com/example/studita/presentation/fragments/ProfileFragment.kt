@@ -70,7 +70,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
 
         UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {userData->
 
-            if(!isMyProfile) {
+            if (userData.userId == arguments?.getInt("USER_ID")) {
                 profileFragmentViewModel.isMyFriendState.value = userData.isMyFriendStatus
                 formButton(userData, view.context)
             }

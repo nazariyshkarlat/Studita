@@ -41,30 +41,20 @@ class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.la
                 when (val privacySettingsDuelsExceptionsResultState = pair.second) {
                     is PrivacySettingsDuelsExceptionsViewModel.DuelsExceptionsResultState.FirstResults -> {
 
-                        if (privacyDuelsExceptionsRecyclerView.adapter == null) {
-                            val items =
-                                if (viewModel.recyclerItems != null) viewModel.recyclerItems!! else ArrayList(
-                                    viewModel.getRecyclerItems(
-                                        privacySettingsDuelsExceptionsResultState.results,
-                                        if(canBeMoreItems) PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel else null
-                                    )
+                        val items =
+                            if (viewModel.recyclerItems != null) viewModel.recyclerItems!! else ArrayList(
+                                viewModel.getRecyclerItems(
+                                    privacySettingsDuelsExceptionsResultState.results,
+                                    if(canBeMoreItems) PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel else null
                                 )
-                            val adapter = PrivacySettingsDuelsExceptionsAdapter(
-                                items,
-                                viewModel
                             )
-                            privacyDuelsExceptionsRecyclerView.adapter = adapter
-                            viewModel.recyclerItems = adapter.items
-                        } else {
-                            val adapter =
-                                privacyDuelsExceptionsRecyclerView.adapter as PrivacySettingsDuelsExceptionsAdapter
-                            val newData =viewModel.getRecyclerItems(
-                                privacySettingsDuelsExceptionsResultState.results,
-                                if(canBeMoreItems) PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel else null
-                            )
-                            adapter.items.addAll(newData)
-                            adapter.notifyItemRangeInserted(0, newData.size)
-                        }
+                        val adapter = PrivacySettingsDuelsExceptionsAdapter(
+                            items,
+                            viewModel
+                        )
+                        privacyDuelsExceptionsRecyclerView.adapter = adapter
+                        viewModel.recyclerItems = adapter.items
+
                     }
                     is PrivacySettingsDuelsExceptionsViewModel.DuelsExceptionsResultState.MoreResults -> {
 

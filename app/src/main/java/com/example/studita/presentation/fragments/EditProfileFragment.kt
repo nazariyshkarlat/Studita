@@ -42,8 +42,6 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
 
         editProfileViewModel = ViewModelProviders.of(this@EditProfileFragment).get(EditProfileViewModel::class.java)
 
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-
         UserUtils.userDataLiveData.observe(viewLifecycleOwner, Observer { userData ->
 
         if (savedInstanceState == null) {

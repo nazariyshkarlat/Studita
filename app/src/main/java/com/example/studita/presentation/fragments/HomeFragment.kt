@@ -117,7 +117,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             }
         }
         homeLayoutBarLogInButton.setOnClickListener { (activity as AppCompatActivity).startActivity<MainMenuActivity>() }
-        homeLayoutBarAccountImageView.setOnClickListener { (activity as AppCompatActivity).startActivity<MainMenuActivity>() }
+        homeLayoutBarAccountImageLayout.setOnClickListener { (activity as AppCompatActivity).startActivity<MainMenuActivity>() }
         homeLayoutAppBar.addOnOffsetChangedListener(this)
         homeLayoutRecyclerView.addOnScrollListener(FabRecyclerImpl(this))
     }

@@ -75,7 +75,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                         val newData = searchResultState.results.map { it.toUserItemUiModel() }
                         adapter.items.addAll(newData)
                         if(canBeMoreItems) adapter.items.add(UsersRecyclerUiModel.ProgressUiModel)
-                        adapter.notifyItemRangeInserted(1, newData.size+1)
+                        adapter.notifyItemRangeInserted(1, adapter.itemCount-1)
                     }
                 }
                 is FriendsFragmentViewModel.SearchResultState.MyProfileEmptyFriends -> {
@@ -144,59 +144,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                         recyclerViewLayoutRecyclerView.adapter = adapter
                     }
                 }
-                is FriendsFragmentViewModel.SearchResultState.GlobalSearchEnterText -> {
-
-                    if(recyclerViewLayoutRecyclerView.adapter == null){
-                        val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
-                            UsersAdapter(
-                                friendsFragmentViewModel.recyclerItems!!,
-                                view.context,
-                                friendsFragmentViewModel,
-                                toolbarFragmentVM,
-                                arguments?.getInt("USER_ID")!!
-                            )
-                        }
-                        recyclerViewLayoutRecyclerView.adapter = adapter
-                    }
-
-                    recyclerViewLayoutRecyclerView?.adapter?.let { adapter ->
-
-                        val removeCount = adapter.itemCount-2
-
-                        (recyclerViewLayoutRecyclerView.adapter as UsersAdapter).isEmptyView = true
-
-                        adapter.notifyItemRangeRemoved(2, removeCount)
-
-                        adapter.notifyItemChanged(1, Unit)
-                    }
-                }
-                is FriendsFragmentViewModel.SearchResultState.GlobalSearchNotFound -> {
-
-                    if(recyclerViewLayoutRecyclerView.adapter == null){
-                        val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
-                            UsersAdapter(
-                                friendsFragmentViewModel.recyclerItems!!,
-                                view.context,
-                                friendsFragmentViewModel,
-                                toolbarFragmentVM,
-                                arguments?.getInt("USER_ID")!!
-                            )
-                        }
-                        recyclerViewLayoutRecyclerView.adapter = adapter
-                    }
-
-                    recyclerViewLayoutRecyclerView?.adapter?.let { adapter ->
-
-                        val removeCount = adapter.itemCount-2
-
-                        (recyclerViewLayoutRecyclerView.adapter as UsersAdapter).isEmptyView = true
-
-                        adapter.notifyItemRangeRemoved(2, removeCount)
-
-                        adapter.notifyItemChanged(1, Unit)
-                    }
-                }
-                is FriendsFragmentViewModel.SearchResultState.SearchFriendsNotFound -> {
+                is FriendsFragmentViewModel.SearchResultState.GlobalSearchNotFound, FriendsFragmentViewModel.SearchResultState.SearchFriendsNotFound, FriendsFragmentViewModel.SearchResultState.GlobalSearchEnterText -> {
 
                     if(recyclerViewLayoutRecyclerView.adapter == null){
                         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
@@ -229,7 +177,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
             if(progress){
                 recyclerViewLayoutRecyclerView?.adapter?.let {
                     val removeCount = it.itemCount - 1
-                    friendsFragmentViewModel.recyclerItems!!.removeAll { it !is UsersRecyclerUiModel.SearchUiModel}
+                    friendsFragmentViewModel.recyclerItems!!.removeAll {it1-> it1 !is UsersRecyclerUiModel.SearchUiModel}
                     (it as UsersAdapter).isEmptyView = false
                     it.notifyItemRangeRemoved(1, removeCount)
                 }
