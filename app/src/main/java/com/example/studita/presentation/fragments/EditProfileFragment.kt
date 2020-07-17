@@ -187,7 +187,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
             Glide
                 .with(this)
                 .clear(editProfileLayoutAvatar)
-            AvaDrawer.drawAvatar(editProfileLayoutAvatar, UserUtils.userData.userName!!, PrefsUtils.getUserId()!!)
+            AvaDrawer.drawAvatar(editProfileLayoutAvatar, editProfileViewModel.newProfileData.userName!!, PrefsUtils.getUserId()!!)
         } else {
             Glide
                     .with(this)

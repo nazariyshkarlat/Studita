@@ -1,14 +1,17 @@
 package com.example.studita.presentation.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import com.example.studita.App
 import com.example.studita.R
+import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
 import com.example.studita.utils.PrefsUtils
-import com.example.studita.utils.startActivity
-import java.util.*
+import com.example.studita.utils.UserUtils
 
 @SuppressLint("Registered")
 open class DefaultActivity : AppCompatActivity(),
@@ -21,6 +24,26 @@ open class DefaultActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme()
         super.onCreate(savedInstanceState)
+
+        App.authenticationState.observe(this, Observer { checkTokenIsCorrect ->
+            when (checkTokenIsCorrect) {
+                CheckTokenIsCorrectStatus.Incorrect -> {
+                    UserUtils.deviceSignOut(this)
+                    App.authenticate(UserUtils.getUserIDTokenData())
+                    startLogInActivityStack()
+                }
+            }
+        })
+    }
+
+    private fun startLogInActivityStack(){
+        val intent = Intent(
+            this,
+            MainMenuActivity::class.java
+        )
+        intent.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 
     private fun setTheme(){
@@ -44,8 +67,6 @@ open class DefaultActivity : AppCompatActivity(),
         if(themeState != theme) {
             themeState = theme
             PrefsUtils.setTheme(themeState)
-            startActivity<MainMenuActivity>()
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }
     }

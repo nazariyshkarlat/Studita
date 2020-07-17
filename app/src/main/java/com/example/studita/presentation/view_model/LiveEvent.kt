@@ -4,7 +4,7 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-class LiveEvent<T> : MutableLiveData<T>() {
+class LiveEvent<T> : MediatorLiveData<T>() {
 
     private val liveDataToObserve: LiveData<T>
     private val pendingMap: MutableMap<Int, Boolean>
@@ -34,5 +34,10 @@ class LiveEvent<T> : MutableLiveData<T>() {
     override fun setValue(t: T?) {
         pendingMap.forEach { pendingMap[it.key] = true }
         super.setValue(t)
+    }
+
+    override fun postValue(value: T?) {
+        pendingMap.forEach { pendingMap[it.key] = true }
+        super.postValue(value)
     }
 }

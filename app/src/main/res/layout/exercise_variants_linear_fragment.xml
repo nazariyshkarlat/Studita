@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:layout_gravity="center">
 
-    <LinearLayout
-        android:id="@+id/exerciseVariantsLinearFragmentTopLinearLayout"
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/exerciseVariantsLinearFragmentTopFlexboxLayout"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:orientation="horizontal"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:showDivider="middle"
+        app:alignContent="center"
+        app:alignItems="center"
+        app:justifyContent="center"
+        app:dividerDrawable="@drawable/exercises_flexbox_divider_16"/>
 
     <TextView
         android:id="@+id/exerciseVariantsLinearFragmentSubtitle"

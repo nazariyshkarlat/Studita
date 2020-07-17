@@ -34,16 +34,7 @@ class HomeFragmentViewModel : ViewModel(){
     private var levelsJob: Job? = null
     private var subscribeJob: Job? = null
 
-    private var userIdTokenData: UserIdTokenData? = null
-
-    init{
-        initSubscribeEmailState()
-        userIdTokenData = UserUtils.getUserIDTokenData()
-
-        getLevels()
-    }
-
-    private fun getLevels(){
+    fun getLevels(){
         levelsJob = viewModelScope.launchExt(levelsJob){
             when(val getLevelsStatus = levelsInteractor.getLevels(UserUtils.isLoggedIn(), PrefsUtils.isOfflineModeEnabled())){
                 is LevelsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
@@ -85,7 +76,7 @@ class HomeFragmentViewModel : ViewModel(){
         return adapterItems
     }
 
-    private fun initSubscribeEmailState(){
+    fun initSubscribeEmailState(){
         SyncSubscribeEmailImpl.syncSubscribeEmailLiveData = subscribeEmailState
         subscribeEmailInteractor.getSyncedResult()?.let {
             subscribeEmailState.value = SubscribeEmailResultStatus.Success(

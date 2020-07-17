@@ -20,13 +20,4 @@ class ProfileMenuFragmentViewModel : ViewModel(){
         }
     }
 
-
-    fun deleteUserData(){
-        GlobalScope.launch {
-            authorizationInteractor.deleteUserData()
-        }
-    }
-
-
-
 }

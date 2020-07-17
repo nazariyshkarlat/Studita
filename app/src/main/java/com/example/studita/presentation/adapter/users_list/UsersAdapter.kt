@@ -3,6 +3,7 @@ package com.example.studita.presentation.adapter.users_list
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.domain.repository.UsersRepository
@@ -18,7 +19,8 @@ class UsersAdapter(var items: ArrayList<UsersRecyclerUiModel>,
                    private val friendsFragmentViewModel: FriendsFragmentViewModel,
                    private val toolbarFragmentViewModel: ToolbarFragmentViewModel,
                    private val userId: Int,
-                   var isEmptyView: Boolean = false) :
+                   var isEmptyView: Boolean = false,
+                   private val lifecycleOwner: LifecycleOwner) :
     RecyclerView.Adapter<UsersViewHolder<*>>(),
     SearchViewHolder.UpdateCallback,
     LoadViewHolder.RequestMoreItems,
@@ -39,7 +41,8 @@ class UsersAdapter(var items: ArrayList<UsersRecyclerUiModel>,
             )
             ViewType.ITEM.ordinal -> UserItemViewHolder(
                 parent.makeView(R.layout.friend_item),
-                this
+                this,
+                lifecycleOwner
             )
             ViewType.ITEMS_LOAD.ordinal -> LoadViewHolder(
                 parent.makeView(R.layout.friends_load_item),

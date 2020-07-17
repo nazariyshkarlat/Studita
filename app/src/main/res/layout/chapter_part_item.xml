@@ -20,9 +20,11 @@
         style="@style/Regular18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginStart="14dp"
-        android:layout_toEndOf="@+id/chapterPartItemIcon"
-        android:layout_centerVertical="true"/>
+        android:layout_marginEnd="16dp"
+        android:layout_toStartOf="@+id/chapterPartItemButton"
+        android:layout_toEndOf="@+id/chapterPartItemIcon" />
 
     <com.example.studita.presentation.views.press_view.PressImageView
         android:id="@+id/chapterPartItemButton"

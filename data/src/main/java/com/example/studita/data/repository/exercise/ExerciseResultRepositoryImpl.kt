@@ -28,7 +28,7 @@ class ExerciseResultRepositoryImpl(private val exerciseResultDataStoreFactory: E
                     ExerciseResponseDescriptionContentData.DescriptionContentArray(correctAnswer)
                 }
                 is ExerciseData.ExerciseDataExercise.ExerciseType3Data -> {
-                     ExerciseResponseDescriptionContentData.DescriptionContentString(exerciseData.variants.first{it.number.toString() == exerciseData.exerciseAnswer}.numberName)
+                     ExerciseResponseDescriptionContentData.DescriptionContentString(exerciseData.variants.first{it.character.toString() == exerciseData.exerciseAnswer}.characterName)
                 }
                 else -> ExerciseResponseDescriptionContentData.DescriptionContentString(exerciseData.exerciseAnswer!!)
             }))

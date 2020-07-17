@@ -13,7 +13,8 @@
     <attr name="splash_screen_color" format="reference"/>
     <attr name="splash_screen_text_color" format="reference"/>
     <attr name="task_variant_button" format="reference"/>
-    <attr name="bottom_sheet_color" format="reference"/>
+    <attr name="swipe_refresh_layout_background_color" format="reference"/>
+    <attr name="dialogs_color" format="reference"/>
     <attr name="press_view_press_alpha_lighter" format="float"/>
     <attr name="press_view_press_alpha" format="float"/>
     <attr name="switch_inactive_thumb_color" format="reference"/>

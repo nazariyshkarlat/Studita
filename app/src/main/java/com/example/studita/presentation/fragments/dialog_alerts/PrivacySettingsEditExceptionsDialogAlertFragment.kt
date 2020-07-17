@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -13,17 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.presentation.adapter.privacy_settings_duels_exceptions.PrivacySettingsDuelsExceptionsAdapter
 import com.example.studita.presentation.fragments.base.BaseDialogFragment
-import com.example.studita.presentation.model.NotificationsUiModel
 import com.example.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
-import com.example.studita.presentation.model.toUiModel
+import com.example.studita.presentation.model.toShapeUiModel
 import com.example.studita.presentation.view_model.PrivacySettingsDuelsExceptionsViewModel
-import com.example.studita.presentation.view_model.PrivacySettingsViewModel
 import com.example.studita.presentation.views.CustomSnackbar
 import com.example.studita.utils.ThemeUtils
-import com.example.studita.utils.UserUtils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.privacy_duels_exceptions_dialog_alert.*
-import kotlinx.android.synthetic.main.recyclerview_layout.*
 
 class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.layout.privacy_duels_exceptions_dialog_alert){
 
@@ -59,7 +54,7 @@ class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.la
                     is PrivacySettingsDuelsExceptionsViewModel.DuelsExceptionsResultState.MoreResults -> {
 
                         if (privacyDuelsExceptionsRecyclerView.adapter != null) {
-                            val items = privacySettingsDuelsExceptionsResultState.results.map { it.toUiModel() }
+                            val items = privacySettingsDuelsExceptionsResultState.results.map { it.toShapeUiModel() }
                             val adapter =
                                 privacyDuelsExceptionsRecyclerView.adapter as PrivacySettingsDuelsExceptionsAdapter
 

@@ -3,7 +3,6 @@ package com.example.studita.presentation.view_model
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.studita.data.entity.FriendActionRequest
 import com.example.studita.di.data.UsersModule
 import com.example.studita.di.data.UserDataModule
 import com.example.studita.domain.entity.*
@@ -27,7 +26,7 @@ class ProfileFragmentViewModel : ViewModel(){
     var addToFriendsJob: Job? = null
     var getFriendsJob: Job? = null
 
-    val friendDataState = MutableLiveData<UserDataStatus>()
+    val userDataState = MutableLiveData<UserDataStatus>()
 
     val friendsState = MutableLiveData<GetUsersStatus>()
     val isMyFriendState = MutableLiveData<IsMyFriendStatus>()
@@ -43,7 +42,7 @@ class ProfileFragmentViewModel : ViewModel(){
             if(userDataStatus is UserDataStatus.Success &&
                 (getFriendsStatus is GetUsersStatus.Success || getFriendsStatus is GetUsersStatus.NoUsersFound) &&
                 (checkMyFriendStatus == null || checkMyFriendStatus is IsMyFriendStatus.Success)) {
-                friendDataState.postValue(userDataStatus)
+                userDataState.postValue(userDataStatus)
                 friendsState.postValue(getFriendsStatus)
                 if (friendOfUserId != myId)
                     isMyFriendState.postValue(checkMyFriendStatus)

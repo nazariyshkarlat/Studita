@@ -7,7 +7,7 @@ import com.example.studita.R
 import com.example.studita.di.data.ChapterModule
 import com.example.studita.domain.interactor.ChapterStatus
 import com.example.studita.presentation.model.ChapterUiModel
-import com.example.studita.presentation.model.toUiModel
+import com.example.studita.presentation.model.toShapeUiModel
 import com.example.studita.utils.launchExt
 import com.example.studita.utils.PrefsUtils
 import kotlinx.coroutines.Job
@@ -30,7 +30,7 @@ class ChapterViewModel : ViewModel(){
                 is ChapterStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is ChapterStatus.Success -> {
                     progressState.postValue(true)
-                    results = status.result.toUiModel()
+                    results = status.result.toShapeUiModel()
                 }
             }
         }

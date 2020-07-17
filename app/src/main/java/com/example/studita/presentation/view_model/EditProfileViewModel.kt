@@ -103,7 +103,8 @@ class EditProfileViewModel : ViewModel(){
     private fun userNameAvailable() = userNameAvailableState.value == UserNameAvailable.AVAILABLE
 
     fun formNewUserName(charSequence: CharSequence?){
-        newProfileData.userName = charSequence?.toString()?.substring(1)?.takeIf { it.isNotEmpty() }
+        if(charSequence.toString().length >= 2)
+            newProfileData.userName = charSequence?.toString()?.substring(1)?.takeIf { it.isNotEmpty() }
     }
 
     fun formNewUserFullName(charSequence: CharSequence?){

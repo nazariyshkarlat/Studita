@@ -10,6 +10,21 @@ import kotlinx.coroutines.CancellationException
 
 class AuthorizationDataStoreImpl(private val connectionManager: ConnectionManager, private val authorizationService: AuthorizationService, private val logInCache: LogInCache) :
     AuthorizationDataStore {
+    override suspend fun tryCheckTokenIsCorrect(userIdToken: UserIdToken): Pair<Int, Boolean?> =
+        if (connectionManager.isNetworkAbsent()) {
+            throw NetworkConnectionException()
+        } else {
+            val checkTokenIsCorrectResult: Boolean?
+            try {
+                val tokenIsCorrect = authorizationService.checkTokenIsCorrect(userIdToken)
+                checkTokenIsCorrectResult = tokenIsCorrect.body()
+                val statusCode = tokenIsCorrect.code()
+                statusCode to checkTokenIsCorrectResult
+            } catch (exception: Exception) {
+                throw ServerUnavailableException()
+            }
+        }
+
     override suspend fun tryLogIn(authorizationRequestEntity: AuthorizationRequestEntity): Pair<Int, LogInResponseEntity?> =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()

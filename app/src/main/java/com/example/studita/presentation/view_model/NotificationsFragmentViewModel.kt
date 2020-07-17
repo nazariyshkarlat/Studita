@@ -6,15 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.di.data.NotificationsModule
-import com.example.studita.di.data.PrivacySettingsModule
 import com.example.studita.domain.entity.NotificationData
-import com.example.studita.domain.entity.PrivacyDuelsExceptionData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.interactor.GetNotificationsStatus
-import com.example.studita.domain.interactor.PrivacySettingsDuelsExceptionsStatus
 import com.example.studita.presentation.model.NotificationsUiModel
-import com.example.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
-import com.example.studita.presentation.model.toUiModel
+import com.example.studita.presentation.model.toShapeUiModel
 import com.example.studita.utils.UserUtils
 import kotlinx.coroutines.launch
 
@@ -72,7 +68,7 @@ class NotificationsFragmentViewModel : ViewModel(){
     fun getRecyclerItems(notificationSwitch: NotificationsUiModel.NotificationsSwitch, notificationItems: List<NotificationData>, progressItem: NotificationsUiModel.ProgressUiModel? = null, context: Context): ArrayList<NotificationsUiModel>{
         val adapterItems = ArrayList<NotificationsUiModel>()
         adapterItems.add(notificationSwitch)
-        adapterItems.addAll(notificationItems.map { it.toUiModel(context) })
+        adapterItems.addAll(notificationItems.map { it.toShapeUiModel(context) })
         if(progressItem != null)
             adapterItems.add(progressItem)
         return adapterItems

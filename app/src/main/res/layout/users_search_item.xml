@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
+        android:id="@+id/usersSearchItemSearchLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -18,11 +19,10 @@
         <ImageView
             android:id="@+id/usersSearchItemEditTextClearTextButton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center|end"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
             android:background="@drawable/circle_background_12dp"
-            android:padding="12dp"
-            android:visibility="gone"
+            android:padding="10dp"
             app:srcCompat="@drawable/ic_close_secondary" />
     </FrameLayout>
 

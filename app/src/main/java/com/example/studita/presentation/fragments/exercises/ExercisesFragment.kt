@@ -1,6 +1,5 @@
 package com.example.studita.presentation.fragments.exercises
 
-import android.content.Context
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.View
@@ -17,6 +16,7 @@ import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.utils.*
 import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.fragments.exercises.description.ExercisesDescriptionFragment
 import com.example.studita.presentation.model.*
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.google.android.flexbox.FlexboxLayout
@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
 
     var exercisesViewModel: ExercisesViewModel? = null
+    var snackbarTranslationY = 0F
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -95,7 +96,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                         }
                     }
                     ExercisesViewModel.ExercisesState.DESCRIPTION -> {
-                        if(savedInstanceState == null)
+                        if(activity?.supportFragmentManager?.findFragmentById(R.id.exerciseLayoutFrameLayout) !is ExercisesDescriptionFragment)
                             (activity as AppCompatActivity).navigateTo(viewModel.getDescriptionFragment(), R.id.exerciseLayoutFrameLayout)
                         formDescriptionView()
                     }
@@ -111,7 +112,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
 
             viewModel.showBadConnectionDialogAlertFragmentState.observe(viewLifecycleOwner, Observer {show->
                 if(show) {
-                    fragmentManager?.let {
+                    activity?.supportFragmentManager?.let {
                         viewModel.snackbarState.removeObservers(viewLifecycleOwner)
                         viewModel.progressState.removeObservers(viewLifecycleOwner)
                         val dialogFragment = ExercisesBadConnectionDialogAlertFragment()
@@ -179,11 +180,9 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             formSnackBarView(
                 exercisesResponseData.toUiModel(exerciseBottomSnackbarLinearLayout.context)
             )
-
+            exerciseLayoutButton.setOnClickListener {}
             exerciseLayoutSnackbar.post {
                 setSnackbarTranslationY()
-
-                changeButton(true, animate)
 
                 exerciseLayoutSnackbar.post {
                     if (animate) {
@@ -195,15 +194,17 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                     } else {
                         exerciseLayoutSnackbar.translationY = 0F
                     }
+                    changeButton(true, animate)
                 }
             }
         }
     }
 
     private fun hideSnackBar(){
-        exerciseLayoutSnackbar.animate().translationY(exerciseLayoutSnackbar.height.toFloat())
+        exerciseLayoutSnackbar.animate().translationY(snackbarTranslationY)
             .setInterpolator(
                 FastOutSlowInInterpolator()
+            ).setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong()
             ).start()
     }
 
@@ -218,14 +219,15 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         exerciseBottomSnackbarLinearLayout.layoutParams = snackBarParams
 
         exerciseLayoutSnackbar.post {
-            exerciseLayoutSnackbar.translationY =
-                exerciseLayoutSnackbar.height.toFloat()
+            snackbarTranslationY = exerciseLayoutSnackbar.height.toFloat()
+            exerciseLayoutSnackbar.translationY = snackbarTranslationY
             exerciseLayoutSnackbar.visibility = View.VISIBLE
         }
     }
 
 
     private fun formSnackBarView(responseData: ExerciseResponseUiModel) {
+        exerciseLayoutSnackbar.visibility = View.INVISIBLE
         if (responseData.exerciseResult) {
             formTrueSnackbarAnswerView()
         } else {
@@ -320,6 +322,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
                     R.color.button_accent_8_text_color
                 )
             )
+            exerciseLayoutButton.setOnClickListener {}
             drawable.reverseTransition(resources.getInteger(R.integer.button_transition_duration))
             exerciseLayoutButton.text = resources.getString(R.string.check)
         }
@@ -364,7 +367,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
             val last = pair.second
             exerciseToolbarProgressBar.animateProgress(toPercent = progress, delay = (if((exerciseToolbarProgressBar.animation == null) || this.exerciseToolbarProgressBar.animation.hasEnded()) 100L else 0L), onAnimEnd = {
                 if(last){
-                    exerciseLayoutButton.setOnClickListener {  }
+                    exerciseLayoutButton.setOnClickListener {}
                     exercisesViewModel.saveUserDataState.observe(viewLifecycleOwner, Observer { pair->
                         val saved = pair.first
                         if(saved){

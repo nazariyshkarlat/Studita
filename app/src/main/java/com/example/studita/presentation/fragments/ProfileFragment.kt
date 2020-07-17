@@ -1,6 +1,7 @@
 package com.example.studita.presentation.fragments
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.Gravity
@@ -11,6 +12,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProviders
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.studita.R
 import com.example.studita.domain.entity.UserData
 import com.example.studita.domain.entity.UsersResponseData
@@ -29,57 +31,61 @@ import kotlinx.android.synthetic.main.profile_friend_item.view.*
 import kotlinx.android.synthetic.main.profile_layout.*
 import java.util.*
 
-open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
+open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), SwipeRefreshLayout.OnRefreshListener{
 
     private lateinit var profileFragmentViewModel: ProfileFragmentViewModel
 
     lateinit var userData: UserDataData
+    var userId = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         profileFragmentViewModel = ViewModelProviders.of(this).get(ProfileFragmentViewModel::class.java)
 
+        userId = arguments?.getInt("USER_ID")!!
 
-        val isMyProfile = arguments?.getInt("USER_ID") == PrefsUtils.getUserId()
-        if(!isMyProfile){
-            profileFragmentViewModel.friendDataState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                if(it is UserDataStatus.Success) {
-                    userData = it.result
+        if(savedInstanceState == null)
+            profileFragmentViewModel.getProfileData(PrefsUtils.getUserId()!!, userId)
 
-                    profileLayoutAvatar.fillAvatar(userData.avatarLink, userData.userName!!, userData.userId!!)
-                    fillText(userData)
-                    fillStreakBlock(userData, view.context)
-                    fillCompetitionsBlock(userData)
+        val isMyProfile = userId == PrefsUtils.getUserId()
+
+        profileFragmentViewModel.userDataState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if(it is UserDataStatus.Success) {
+
+                fillData(it.result, view.context)
+
+                if(isMyProfile) {
+                    if(UserUtils.userDataLiveData.value != it.result) {
+                        UserUtils.userDataLiveData.value = it.result.copy()
+                    }
                 }
-            })}else {
-            UserUtils.userDataLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                userData = it
+            }
+        })
 
-                profileLayoutAvatar.fillAvatar(
-                    userData.avatarLink,
-                    userData.userName!!,
-                    userData.userId!!
-                )
-
-                fillText(userData)
-                fillStreakBlock(userData, view.context)
-                fillCompetitionsBlock(userData)
-            })
+        if(isMyProfile) {
+            UserUtils.userDataEventsLiveData.observe(
+                viewLifecycleOwner,
+                androidx.lifecycle.Observer {
+                    if(profileFragmentViewModel.userDataState.value != null) {
+                        if (userData != it) {
+                            profileFragmentViewModel.userDataState.value = UserDataStatus.Success(it)
+                        }}
+                })
         }
 
         UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {userData->
 
-            if (userData.userId == arguments?.getInt("USER_ID")) {
+            val myProfileIsRemovedFromFriends = userData.userId == userId
+
+            if (myProfileIsRemovedFromFriends) {
                 profileFragmentViewModel.isMyFriendState.value = userData.isMyFriendStatus
                 formButton(userData, view.context)
             }
 
-            val changeUserHasMeInFriends = userData.userId == arguments?.getInt("USER_ID")
-
             if(isMyProfile){
                 profileFragmentViewModel.refreshFriends(userData)
-            }else if(changeUserHasMeInFriends){
+            }else if(myProfileIsRemovedFromFriends){
                 profileFragmentViewModel.refreshFriends(this.userData.toUserData(userData.isMyFriendStatus))
             }
 
@@ -136,27 +142,22 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
                     it.userData.userName), ThemeUtils.getAccentColor(snackbar.context), duration = resources.getInteger(R.integer.add_remove_friend_snackbar_duration).toLong())
         })
 
-        arguments?.getInt("USER_ID")?.let {userId->
-            if (savedInstanceState == null) {
-                profileFragmentViewModel.getProfileData(PrefsUtils.getUserId()!!, userId)
-            }
-            if (isMyProfile) {
-                profileLayoutButton.setOnClickListener {
-                    (activity as AppCompatActivity).navigateTo(
-                        EditProfileFragment(),
-                        R.id.doubleFrameLayoutFrameLayout
-                    )
-                }
-            }
-            profileLayoutFriendsMoreButton.setOnClickListener {
-                navigateToFriends(isMyProfile, userId)
+        if (isMyProfile) {
+            profileLayoutButton.setOnClickListener {
+                (activity as AppCompatActivity).navigateTo(
+                    EditProfileFragment(),
+                    R.id.doubleFrameLayoutFrameLayout
+                )
             }
         }
-
+        profileLayoutFriendsMoreButton.setOnClickListener {
+            navigateToFriends(isMyProfile, userId)
+        }
 
         if(isVisible)
             view.post { initMenu()}
 
+        initRefreshLayout(view.context)
         scrollingView = profileLayoutScrollView
     }
 
@@ -167,6 +168,21 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
             initMenu()
     }
 
+
+    override fun onRefresh() {
+        profileFragmentViewModel.getProfileData(PrefsUtils.getUserId()!!, userId)
+    }
+
+    private fun fillData(userData: UserDataData, context: Context){
+        this.userData = userData
+
+        profileLayoutAvatar.fillAvatar(userData.avatarLink, userData.userName!!, userData.userId!!)
+        fillText(userData)
+        fillStreakBlock(userData, context)
+        fillCompetitionsBlock(userData)
+        profileLayoutSwipeRefresh.isEnabled = true
+        profileLayoutSwipeRefresh.isRefreshing = false
+    }
 
     private fun formButton(userData: UserData, context: Context){
         when (userData.isMyFriendStatus) {
@@ -229,11 +245,11 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
     private fun fillCompetitionsBlock(userDataData: UserDataData){
         val isMyProfile = userDataData.userId == UserUtils.userData.userId
 
-        profileHorizontalScrollView.setLevelRatingSubtitle(resources.getString(R.string.profile_competitions_item_rating_subtitle_template, userDataData.currentLevel, if(isMyProfile) resources.getString( R.string.You) else resources.getString(R.string.user_name_template, userDataData.userName)))
+        profileHorizontalScrollView.setLevelRatingSubtitle(resources.getString(R.string.profile_competitions_item_rating_subtitle_template, UserUtils.userData.currentLevel+1, if(isMyProfile) resources.getString( R.string.You) else resources.getString(R.string.user_name_template, userDataData.userName)))
         profileHorizontalScrollView.setXPRatingSubtitle(resources.getString(R.string.profile_competitions_item_rating_subtitle_template, userDataData.currentLevel, if(isMyProfile) resources.getString( R.string.You) else resources.getString(R.string.user_name_template, userDataData.userName)))
 
         if(!isMyProfile){
-            profileHorizontalScrollView.setLevelSecondarySubtitle(resources.getString(R.string.profile_competitions_item_secondary_subtitle_template, userDataData.currentLevel))
+            profileHorizontalScrollView.setLevelSecondarySubtitle(resources.getString(R.string.profile_competitions_item_secondary_subtitle_template, UserUtils.userData.currentLevel+1))
             profileHorizontalScrollView.setXPSecondarySubtitle(resources.getString(R.string.profile_competitions_item_secondary_subtitle_template, userDataData.currentLevel))
         }
     }
@@ -243,10 +259,10 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
 
         profileLayoutFriendsTitle.text = resources.getString(R.string.friends_count_template, friendsResponseData.usersCount)
 
-        val isMyProfile = arguments?.getInt("USER_ID") == UserUtils.userData.userId
+        val isMyProfile = userId == UserUtils.userData.userId
 
         profileLayoutFriendsTitle.setOnClickListener {
-            navigateToFriends(isMyProfile, arguments?.getInt("USER_ID")!!)
+            navigateToFriends(isMyProfile, userId)
         }
 
         if(friendsResponseData.usersCount > friendsResponseData.users.size)
@@ -261,12 +277,24 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
 
             with(friendChild){
 
-                profileFriendItemAvatar.fillAvatar(friendData.avatarLink, friendData.userName, friendData.userId)
-                profileFriendItemUserName.text = resources.getString(R.string.user_name_template, friendData.userName)
+                val isMe = friendData.userId == UserUtils.userData.userId
+
+                if(!isMe) {
+                    profileFriendItemAvatar.fillAvatar(
+                        friendData.avatarLink,
+                        friendData.userName,
+                        friendData.userId
+                    )
+                    profileFriendItemUserName.text = resources.getString(R.string.user_name_template, friendData.userName)
+                }else{
+                    UserUtils.userDataLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                        profileFriendItemAvatar.fillAvatar(it.avatarLink, it.userName!!, it.userId!!)
+                        profileFriendItemUserName.text = resources.getString(R.string.user_name_template, it.userName)
+                    })
+                }
 
                 setOnClickListener {
-                    val isI = friendData.userId == UserUtils.userData.userId
-                    navigateToProfile(friendData.userId, isI)
+                    navigateToProfile(friendData.userId, isMe)
                 }
             }
 
@@ -307,6 +335,14 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout){
         (activity as AppCompatActivity).navigateTo(MyFriendsFragment().apply {
             arguments = bundleOf("USER_ID" to UserUtils.userData.userId, "GLOBAL_SEARCH_ONLY" to true)
         }, R.id.doubleFrameLayoutFrameLayout)
+    }
+
+    private fun initRefreshLayout(context: Context){
+        profileLayoutSwipeRefresh.setProgressViewOffset(false,0,   resources.getDimension(R.dimen.toolbarHeight).toInt())
+        profileLayoutSwipeRefresh.setOnRefreshListener(this)
+        profileLayoutSwipeRefresh.isEnabled = false
+        profileLayoutSwipeRefresh.setColorSchemeColors(ThemeUtils.getAccentColor(context))
+        profileLayoutSwipeRefresh.setProgressBackgroundColorSchemeColor(ThemeUtils.getSwipeRefreshBackgroundColor(context))
     }
 
     private fun streakActivated(streakDate: Date) = TimeUtils.getCalendarDayCount(Date(), streakDate) == 0L

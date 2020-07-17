@@ -23,8 +23,8 @@ class ExerciseVariantsType7Fragment : ExerciseVariantsFragment(R.layout.exercise
                 }
             }
             fillVariants()
-            if (it.selectedPos != -1)
-                selectVariant(exerciseVariantsTrueFalseLinearLayout, it.selectedPos)
+            if (selectedPos != -1)
+                selectVariant(exerciseVariantsTrueFalseLinearLayout, selectedPos)
         }
     }
 
@@ -33,17 +33,13 @@ class ExerciseVariantsType7Fragment : ExerciseVariantsFragment(R.layout.exercise
         (exerciseVariantsTrueFalseFalse as TextView).text = resources.getString(R.string.false_variant)
         for(variantView in exerciseVariantsTrueFalseLinearLayout.children) {
             variantView.setOnClickListener {
-                exercisesViewModel?.let {viewModel->
-                    viewModel.selectedPos =
-                        exerciseVariantsTrueFalseLinearLayout.indexOfChild(it)
-                    selectVariant(
-                        exerciseVariantsTrueFalseLinearLayout,
-                        viewModel.selectedPos
-                    )
-                    viewModel.exerciseRequestData = ExerciseRequestData(
-                        if (exerciseVariantsTrueFalseLinearLayout.indexOfChild(variantView) == 0) "true" else "false"
-                    )
-                }
+                selectVariant(
+                    exerciseVariantsTrueFalseLinearLayout,
+                    exerciseVariantsTrueFalseLinearLayout.indexOfChild(it)
+                )
+                exercisesViewModel?.exerciseRequestData= ExerciseRequestData(
+                    if (exerciseVariantsTrueFalseLinearLayout.indexOfChild(variantView) == 0) "true" else "false"
+                )
             }
         }
     }

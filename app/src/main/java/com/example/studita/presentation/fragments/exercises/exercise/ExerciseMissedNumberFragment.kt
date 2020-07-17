@@ -2,6 +2,7 @@ package com.example.studita.presentation.fragments.exercises.exercise
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
@@ -42,11 +43,15 @@ class ExerciseMissedNumberFragment : NavigatableFragment(R.layout.exercise_input
                 exerciseMissedPartLayoutLeftTextView.text = exerciseUiModel.titleParts[0]
                 exerciseMissedPartLayoutRightTextView.text =  exerciseUiModel.titleParts[1]
                 exerciseMissedPartLayoutBottomTextView.text = exerciseUiModel.subtitle
+
+                if(exerciseUiModel.isNumeral)
+                    exerciseMissedPartLayoutEditText.filters += InputFilter.LengthFilter(1)
             }
         }
 
         exerciseMissedPartLayoutEditText.inputType = InputType.TYPE_CLASS_NUMBER
         exerciseMissedPartLayoutEditText.addTextChangedListener(this)
+
     }
 
     override fun afterTextChanged(s: Editable?) {
@@ -65,12 +70,12 @@ class ExerciseMissedNumberFragment : NavigatableFragment(R.layout.exercise_input
                         exerciseMissedPartLayoutEditText.text.length
                     )
                 )else {
-                exercisesViewModel?.buttonEnabledState?.value = true
+                exercisesViewModel?.setButtonEnabled(true)
                 exercisesViewModel?.exerciseRequestData =
                     ExerciseRequestData(str)
             }
         } else
-            exercisesViewModel?.buttonEnabledState?.value = false
+            exercisesViewModel?.setButtonEnabled(false)
     }
 
 }

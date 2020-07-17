@@ -19,7 +19,7 @@ sealed class NotificationsUiModel{
 
 }
 
-fun NotificationData.toUiModel(context: Context) = NotificationsUiModel.Notification(UserData(userId, userName, avatarLink, isMyFriendData.toStatus(userId)),
+fun NotificationData.toShapeUiModel(context: Context) = NotificationsUiModel.Notification(UserData(userId, userName, avatarLink, isMyFriendData.toStatus(userId)),
     createNotificationText(context),
     secondsAgo.secondsToAgoString(context),
     notificationType

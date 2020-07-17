@@ -33,7 +33,7 @@ class ExerciseScreenType1 :  ExerciseScreen(R.layout.exercise_screen_type_1){
                     params.height = 32.dpToPx()
                     params.width = 32.dpToPx()
                     shapeView.layoutParams = params
-                    shapeView.background =  ContextCompat.getDrawable(exerciseScreenType1FlexboxLayout.context, R.drawable.exercise_rectangle)
+                    shapeView.background =  ContextCompat.getDrawable(exerciseScreenType1FlexboxLayout.context, R.drawable.exercise_rectangle_green)
                     exerciseScreenType1FlexboxLayout.addView(shapeView)
                 }
                 exerciseScreenType1Subtitle.text = injectParts(screenUiModel.subtitle, screenUiModel.partsToInject)

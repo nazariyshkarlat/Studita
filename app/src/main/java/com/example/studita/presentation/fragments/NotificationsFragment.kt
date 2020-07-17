@@ -23,7 +23,7 @@ import com.example.studita.notifications.service.PushReceiverIntentService
 import com.example.studita.presentation.adapter.notifications.NotificationsAdapter
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.NotificationsUiModel
-import com.example.studita.presentation.model.toUiModel
+import com.example.studita.presentation.model.toShapeUiModel
 import com.example.studita.presentation.view_model.NotificationsFragmentViewModel
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.dpToPx
@@ -45,7 +45,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                 object : TypeToken<NotificationData>() {}.type
             )
 
-            viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
+            viewModel.recyclerItems?.add(1, notificationData.toShapeUiModel(context))
             recyclerViewLayoutRecyclerView.adapter?.notifyItemInserted(1)
 
             if(isVisible)
@@ -89,7 +89,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                     is NotificationsFragmentViewModel.NotificationsResultState.MoreResults -> {
 
                         if (recyclerViewLayoutRecyclerView.adapter != null) {
-                            val items = notificationsResultState.results.map { it.toUiModel(view.context) }
+                            val items = notificationsResultState.results.map { it.toShapeUiModel(view.context) }
                             val adapter =
                                 recyclerViewLayoutRecyclerView.adapter as NotificationsAdapter
 

@@ -33,7 +33,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.activities.MainMenuActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".presentation.activities.MainActivity">
         </activity>
         <activity android:name=".presentation.activities.ExercisesActivity"
             android:windowSoftInputMode="adjustResize">

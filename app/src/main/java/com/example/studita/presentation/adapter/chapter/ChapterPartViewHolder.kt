@@ -17,9 +17,10 @@ class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view){
         with(itemView) {
             this as ViewGroup
             chapterPartItemText.text = model.chapterPartName
+            val chapterPartInChapterNumber = chapterUiModel.parts.indexOfFirst { it.chapterPartNumber == model.chapterPartNumber } + 1
             when {
-                (model.chapterPartNumber - 1) <= UserUtils.userData.completedParts[chapterUiModel.chapterNumber-1] -> {
-                    if ((model.chapterPartNumber - 1) == UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1]) {
+                chapterPartInChapterNumber-1 <= UserUtils.userData.completedParts[chapterUiModel.chapterNumber-1] -> {
+                    if (isCurrentChapterPart(chapterPartInChapterNumber, chapterUiModel.chapterNumber)) {
                         setItemSelected()
                     }else{
                         setItemEnabled()
@@ -58,5 +59,7 @@ class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view){
         itemView.chapterPartItemIcon.isSelected = false
         itemView.chapterPartItemButton.isSelected = false
     }
+
+    private fun isCurrentChapterPart(chapterPartInChapterNumber: Int, chapterNumber: Int) = (chapterPartInChapterNumber - 1) == UserUtils.userData.completedParts[chapterNumber - 1]
 
 }

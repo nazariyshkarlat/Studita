@@ -137,6 +137,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/full_name_hint"
                         android:imeOptions="actionDone"
+                        android:inputType="textPersonName|textCapWords"
                         android:paddingEnd="48dp"
                         android:singleLine="true" />
 

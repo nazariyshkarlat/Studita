@@ -2,8 +2,11 @@ package com.example.studita.presentation.fragments
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.app.TaskStackBuilder
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +16,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.studita.App
 import com.example.studita.R
+import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
+import com.example.studita.presentation.activities.DefaultActivity
+import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.presentation.adapter.levels.LevelsAdapter
 import com.example.studita.presentation.draw.AvaDrawer
@@ -27,6 +34,7 @@ import com.example.studita.presentation.view_model.ChapterViewModel
 import com.example.studita.presentation.view_model.HomeFragmentViewModel
 import com.example.studita.presentation.view_model.MainFragmentViewModel
 import com.example.studita.presentation.views.CustomSnackbar
+import com.example.studita.utils.UserUtils.deviceSignOut
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.home_layout_bar.*
@@ -62,7 +70,21 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             })
         }
 
+
         homeFragmentViewModel?.let {
+
+            App.authenticationState.observe(viewLifecycleOwner, Observer { checkTokenIsCorrect ->
+
+                if(savedInstanceState == null && !MainActivity.needsRecreate) {
+                    when (checkTokenIsCorrect) {
+                        CheckTokenIsCorrectStatus.Correct -> {
+                            it.initSubscribeEmailState()
+                            it.getLevels()
+                        }
+                    }
+                }
+            })
+
             it.progressState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { done ->

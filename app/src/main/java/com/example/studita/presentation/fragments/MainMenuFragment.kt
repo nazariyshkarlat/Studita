@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
+import com.example.studita.App
 import com.example.studita.R
+import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.utils.navigateTo
 import com.example.studita.presentation.fragments.base.NavigatableFragment
@@ -55,9 +57,12 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
             viewModel.googleSignInState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { signIn ->
-                    if(signIn)
-                        MainActivity.needsRecreate = true
-                        activity?.finish()
+                    if(signIn) {
+                        if(activity?.isTaskRoot == false)
+                            MainActivity.needsRecreate = true
+                        App.authenticationState.value = CheckTokenIsCorrectStatus.Correct
+                        activity?.onBackPressed()
+                    }
                 })
             mainMenuWithGoogleButton.setOnClickListener { viewModel.onSignUpLogInClick(it.id) }
             mainMenuUseEmailButton.setOnClickListener { viewModel.onSignUpLogInClick(it.id) }

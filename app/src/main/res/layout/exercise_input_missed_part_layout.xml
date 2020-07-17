@@ -31,6 +31,7 @@
             android:textAppearance="@style/Medium32"
             android:minWidth="66dp"
             android:layout_weight="1"
+            android:maxLength="6"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:imeOptions="actionDone"

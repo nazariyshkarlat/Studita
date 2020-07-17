@@ -2,13 +2,8 @@ package com.example.studita.presentation.model
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Parcel
-import android.os.Parcelable
-import androidx.annotation.DrawableRes
-import androidx.annotation.IdRes
 import com.example.studita.domain.entity.exercise.ExerciseData
-import com.example.studita.domain.entity.exercise.ExerciseNumberData
-import com.example.studita.domain.entity.exercise.ExerciseShapeData
+import com.example.studita.domain.entity.exercise.ExerciseCharacterData
 import com.example.studita.domain.entity.exercise.ExerciseType11Filter
 
 sealed class ExerciseUiModel(open val exerciseNumber: Int?){
@@ -20,7 +15,7 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
             val variants: List<ExerciseShapeUiModel>
         ) : ExerciseUiModelExercise(exerciseNumber)
 
-        data class ExerciseType2UiModel(
+        data class ExerciseType2And14UiModel(
             override val exerciseNumber: Int?,
             val title: ExerciseShapeUiModel,
             val subtitle: String,
@@ -29,19 +24,19 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
 
         data class ExerciseType3UiModel(
             override val exerciseNumber: Int?,
-            val title: ExerciseNumberData,
+            val title: ExerciseCharacterData,
             val subtitle: String,
-            val variants: List<ExerciseNumberData>
+            val variants: List<ExerciseCharacterData>
         ) : ExerciseUiModelExercise(exerciseNumber)
 
         data class ExerciseType4UiModel(
             override val exerciseNumber: Int?,
-            val title: ExerciseNumberData,
+            val title: ExerciseCharacterData,
             val subtitle: String,
             val variants: List<String>
         ) : ExerciseUiModelExercise(exerciseNumber)
 
-        data class ExerciseType5And6UiModel(
+        data class ExerciseType5And6And18UiModel(
             override val exerciseNumber: Int?,
             val title: String,
             val subtitle: String,
@@ -51,15 +46,23 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
         data class ExerciseType7UiModel(override val exerciseNumber: Int?,
                                      val title: String) : ExerciseUiModelExercise(exerciseNumber)
 
-        data class ExerciseType8UiModel(override val exerciseNumber: Int?,
-                                     val title: String, val subtitle: String, val variants: List<String>
+        data class ExerciseType8And12UiModel(override val exerciseNumber: Int?,
+                                             val title: String, val subtitle: String, val variants: List<String>
         ) :ExerciseUiModelExercise(exerciseNumber)
 
         data class ExerciseType9UiModel(override val exerciseNumber: Int?, val title: String) : ExerciseUiModelExercise(exerciseNumber)
 
-        data class ExerciseType10UiModel(override val exerciseNumber: Int?, val titleParts: List<String>, val subtitle: String) : ExerciseUiModelExercise(exerciseNumber)
+        data class ExerciseType10UiModel(override val exerciseNumber: Int?, val titleParts: List<String>, val subtitle: String, val isNumeral: Boolean) : ExerciseUiModelExercise(exerciseNumber)
 
         data class ExerciseType11UiModel(override val exerciseNumber: Int, val titleParts: List<String>, val filter: ExerciseType11Filter, val compareNumber: String) :  ExerciseUiModel.ExerciseUiModelExercise(exerciseNumber)
+
+        data class ExerciseType13UiModel(override val exerciseNumber: Int, val exerciseShapeEquationUiModel: List<ExerciseShapeEquationMemberUiModel>, val subtitle: String, val variants: List<String>) : ExerciseUiModel.ExerciseUiModelExercise(exerciseNumber)
+
+        data class ExerciseType15UiModel(override val exerciseNumber: Int, val title: String, val subtitle: String, val variants: List<String>) : ExerciseUiModel.ExerciseUiModelExercise(exerciseNumber)
+
+        data class ExerciseType16UiModel(override val exerciseNumber: Int, val titleParts: List<String>, val subtitle: String) : ExerciseUiModel.ExerciseUiModelExercise(exerciseNumber)
+
+        data class ExerciseType17UiModel(override val exerciseNumber: Int, val exerciseShapeEquationUiModel: List<ExerciseShapeEquationMemberUiModel>, val subtitle: String, val variants: List<ExerciseShapeUiModel>) : ExerciseUiModel.ExerciseUiModelExercise(exerciseNumber)
     }
 
     sealed class ExerciseUiModelScreen(override val exerciseNumber: Int?) : ExerciseUiModel(exerciseNumber) {
@@ -81,16 +84,20 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
 }
 
 fun ExerciseData.toUiModel(context: Context) = when (this) {
-    is ExerciseData.ExerciseDataExercise.ExerciseType1Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel(exerciseNumber, title, subtitle, variants.map { it.toUiModel(context) })
-    is ExerciseData.ExerciseDataExercise.ExerciseType2Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel(exerciseNumber, title.toUiModel(context), subtitle, variants)
+    is ExerciseData.ExerciseDataExercise.ExerciseType1Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel(exerciseNumber, title, subtitle, variants.map { it.toShapeUiModel(context) })
+    is ExerciseData.ExerciseDataExercise.ExerciseType2And14Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2And14UiModel(exerciseNumber, title.toShapeUiModel(context), subtitle, variants)
     is ExerciseData.ExerciseDataExercise.ExerciseType3Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel(exerciseNumber, title, subtitle, variants)
     is ExerciseData.ExerciseDataExercise.ExerciseType4Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel(exerciseNumber, title, subtitle, variants)
-    is ExerciseData.ExerciseDataExercise.ExerciseType5and6Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6UiModel(exerciseNumber, title, subtitle, variants)
+    is ExerciseData.ExerciseDataExercise.ExerciseType5And6And18Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6And18UiModel(exerciseNumber, title, subtitle, variants)
     is ExerciseData.ExerciseDataExercise.ExerciseType7Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel(exerciseNumber,title)
-    is ExerciseData.ExerciseDataExercise.ExerciseType8Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8UiModel(exerciseNumber, title, subtitle, variants)
+    is ExerciseData.ExerciseDataExercise.ExerciseType8And12Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8And12UiModel(exerciseNumber, title, subtitle, variants)
     is ExerciseData.ExerciseDataExercise.ExerciseType9Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel(exerciseNumber,title)
-    is ExerciseData.ExerciseDataExercise.ExerciseType10Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType10UiModel(exerciseNumber,titleParts, subtitle)
+    is ExerciseData.ExerciseDataExercise.ExerciseType10Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType10UiModel(exerciseNumber,titleParts, subtitle, isNumeral)
     is ExerciseData.ExerciseDataExercise.ExerciseType11Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType11UiModel(exerciseNumber,titleParts, filter, compareNumber)
+    is ExerciseData.ExerciseDataExercise.ExerciseType13Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType13UiModel(exerciseNumber, exerciseShapeEquationData.map { it.toUiModel(context) }, subtitle, variants)
+    is ExerciseData.ExerciseDataExercise.ExerciseType15Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType15UiModel(exerciseNumber, title, subtitle, variants)
+    is ExerciseData.ExerciseDataExercise.ExerciseType16Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType16UiModel(exerciseNumber, titleParts, subtitle)
+    is ExerciseData.ExerciseDataExercise.ExerciseType17Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType17UiModel(exerciseNumber, exerciseShapeEquationData.map { it.toUiModel(context) }, subtitle, variants.map { it.toShapeUiModel(context, false) })
 
     is ExerciseData.ExerciseDataScreen.ScreenType1Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel(exerciseNumber, title, subtitle, partsToInject, image.getShapeByName(context))
     is ExerciseData.ExerciseDataScreen.ScreenType2Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel(exerciseNumber, title)

@@ -15,9 +15,9 @@ sealed class InterestingUiModelScreen{
 
 }
 
-fun InterestingData.toUiModel() = InterestingUiModel(interestingNumber, screens.map { it.toUiModel() })
+fun InterestingData.toShapeUiModel() = InterestingUiModel(interestingNumber, screens.map { it.toShapeUiModel() })
 
-fun InterestingDataScreen.toUiModel() =
+fun InterestingDataScreen.toShapeUiModel() =
     when(this){
         is InterestingDataScreen.InterestingDataStartScreen -> InterestingUiModelScreen.InterestingUiModelStartScreen(title, subtitle, difficultyLevel)
         is InterestingDataScreen.InterestingDataStepScreen -> InterestingUiModelScreen.InterestingUiModelStepScreen(title, subtitle)

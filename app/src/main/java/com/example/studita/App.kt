@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.net.wifi.WifiManager
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.studita.data.entity.FriendActionRequest
 import com.example.studita.di.DI
@@ -13,10 +15,13 @@ import com.example.studita.domain.entity.FriendActionRequestData
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.entity.authorization.AuthorizationRequestData
+import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.domain.interactor.PrivacySettingsDuelsExceptionsStatus
 import com.example.studita.domain.interactor.PrivacySettingsStatus
 import com.example.studita.domain.interactor.UserDataStatus
 import com.example.studita.domain.interactor.user_data.UserDataInteractor
+import com.example.studita.presentation.view_model.LiveEvent
+import com.example.studita.presentation.view_model.SingleLiveEvent
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.TimeUtils
 import com.example.studita.utils.UserUtils
@@ -28,6 +33,7 @@ class App : Application(){
     companion object{
         lateinit var userDataDeferred: Deferred<UserDataStatus>
         val applicationScope = CoroutineScope(Dispatchers.Main)
+        val authenticationState = MutableLiveData<CheckTokenIsCorrectStatus>()
 
         fun initUserData(userDataData: UserDataData){
             UserUtils.userDataLiveData.value = userDataData
@@ -54,6 +60,22 @@ class App : Application(){
                 }
             }
         }
+
+        fun authenticate(userIdTokenData: UserIdTokenData?){
+            if(PrefsUtils.isOfflineModeEnabled() || !UserUtils.isLoggedIn()){
+                getUserData()
+                authenticationState.value = CheckTokenIsCorrectStatus.Correct
+            }else {
+                applicationScope.launch {
+                    getUserData()
+                    authenticationState.postValue(
+                        AuthorizationModule.getAuthorizationInteractorImpl()
+                            .checkTokenIsCorrect(userIdTokenData!!)
+                    )
+                    userDataDeferred.await()
+                }
+            }
+        }
     }
 
     override fun onCreate() {
@@ -62,10 +84,7 @@ class App : Application(){
         downloadCache()
         initDefPrefs()
 
-        getUserData()
-        applicationScope.launch {
-            userDataDeferred.await()
-        }
+        authenticate(UserUtils.getUserIDTokenData())
     }
 
     private fun downloadCache(){

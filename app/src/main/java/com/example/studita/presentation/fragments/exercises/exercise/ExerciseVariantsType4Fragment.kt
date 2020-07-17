@@ -19,29 +19,23 @@ class ExerciseVariantsType4Fragment : ExerciseVariantsFragment(R.layout.exercise
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel -> {
                     val exerciseUiModel =
                         it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel
-                    exerciseVariantsTitleFragmentTitle.text = exerciseUiModel.title.numberName
+                    exerciseVariantsTitleFragmentTitle.text = exerciseUiModel.title.characterName
                     exerciseVariantsTitleFragmentSubtitle.text = exerciseUiModel.subtitle
                     fillVariants(exerciseUiModel.variants)
                 }
             }
-            if (it.selectedPos != -1)
-                selectVariant(exerciseVariantsTitleFragmentLinearLayout, it.selectedPos)
+            if (selectedPos != -1)
+                selectVariant(exerciseVariantsTitleFragmentLinearLayout, selectedPos)
         }
     }
 
     private fun fillVariants(variants: List<String>){
-        for(variant in variants) {
+        variants.forEach { variant ->
             val variantView = exerciseVariantsTitleFragmentLinearLayout.makeView(R.layout.exercise_variant_text_item)
             variantView.exerciseVariantTextItem.text = variant
             variantView.setOnClickListener {
-                exercisesViewModel?.let { viewModel ->
-                    viewModel.selectedPos =
-                        exerciseVariantsTitleFragmentLinearLayout.indexOfChild(it)
-                        selectVariant(
-                            exerciseVariantsTitleFragmentLinearLayout,
-                            viewModel.selectedPos)
-                    viewModel.exerciseRequestData = ExerciseRequestData(variant)
-                }
+                selectVariant(exerciseVariantsTitleFragmentLinearLayout, exerciseVariantsTitleFragmentLinearLayout.indexOfChild(it))
+                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant)
             }
             exerciseVariantsTitleFragmentLinearLayout.addView(variantView)
         }

@@ -218,13 +218,20 @@ sealed class HasFriendsStatus{
     object HasNoFriends: HasFriendsStatus()
 }
 
-
 sealed class GetNotificationsStatus{
     object ServiceUnavailable : GetNotificationsStatus()
     object NoConnection : GetNotificationsStatus()
     object Failure: GetNotificationsStatus()
     object NoNotificationsFound: GetNotificationsStatus()
     class Success(val notificationsData: ArrayList<NotificationData>): GetNotificationsStatus()
+}
+
+sealed class CheckTokenIsCorrectStatus{
+    object ServiceUnavailable : CheckTokenIsCorrectStatus()
+    object NoConnection : CheckTokenIsCorrectStatus()
+    object Failure: CheckTokenIsCorrectStatus()
+    object Correct: CheckTokenIsCorrectStatus()
+    object Incorrect: CheckTokenIsCorrectStatus()
 }
 
 

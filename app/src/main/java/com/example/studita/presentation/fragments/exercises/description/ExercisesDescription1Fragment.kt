@@ -32,7 +32,7 @@ class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exer
     private fun formView(exercisesDescriptionModel: ExercisesDescriptionData){
         var childIndex = -1
         var insideBrackets = "0"
-        for(child in exercisesDescription1ParentLinearLayout.children){
+        exercisesDescription1ParentLinearLayout.children.forEach { child ->
             if(child is TextView){
                 if(childIndex >= 0) {
                     val text = exercisesDescriptionModel.textParts[childIndex]
@@ -59,9 +59,8 @@ class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exer
                 }
                 childIndex++
             }else{
-                if(child is LinearLayout){
+                if(child is LinearLayout)
                     fillLinearLayout(child, insideBrackets.toInt())
-                }
             }
         }
     }
@@ -75,7 +74,7 @@ class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exer
             if(i != imgCount-1)
                 params.marginEnd = 16.dpToPx()
             shapeView.layoutParams = params
-            shapeView.background =  ContextCompat.getDrawable(child.context, R.drawable.exercise_rectangle)
+            shapeView.background =  ContextCompat.getDrawable(child.context, R.drawable.exercise_rectangle_green)
             child.addView(shapeView)
         }
     }

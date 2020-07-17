@@ -13,6 +13,10 @@ import com.example.studita.domain.entity.authorization.SignInWithGoogleRequestDa
 import com.example.studita.domain.repository.AuthorizationRepository
 
 class AuthorizationRepositoryImpl(private val authorizationDataStoreFactory: AuthorizationDataStoreFactoryImpl) : AuthorizationRepository {
+    override suspend fun checkTokenIsCorrect(userIdTokenData: UserIdTokenData): Pair<Int, Boolean?> {
+        return authorizationDataStoreFactory.create().tryCheckTokenIsCorrect(userIdTokenData.toRawEntity())
+    }
+
     override suspend fun signUp(authorizationRequestData: AuthorizationRequestData): Int {
         return authorizationDataStoreFactory.create().trySignUp(authorizationRequestData.toRawEntity())
     }

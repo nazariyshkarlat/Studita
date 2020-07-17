@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
             ) val variants: List<List<String>>
         ) : ExerciseInfo()
 
-        data class ExerciseType2Info(
+        data class ExerciseType2And14Info(
             @SerializedName("title") val title: List<String>, @SerializedName(
                 "subtitle"
             ) val subtitle: String, @SerializedName("variants") val variants: List<String>
@@ -26,7 +26,7 @@ import com.google.gson.annotations.SerializedName
          ) val subtitle: String, @SerializedName("variants") val variants: List<String>
      ) : ExerciseInfo()
 
-     data class ExerciseType5and6Info(
+     data class ExerciseType5And6And18Info(
          @SerializedName("title") val title: String, @SerializedName(
              "subtitle"
          ) val subtitle: String, @SerializedName("variants") val variants: List<String>
@@ -34,7 +34,7 @@ import com.google.gson.annotations.SerializedName
 
      data class ExerciseType7Info(@SerializedName("title") val title: String) : ExerciseInfo()
 
-     data class ExerciseType8Info(
+     data class ExerciseType8And12Info(
          @SerializedName("title") val title: String, @SerializedName(
              "subtitle"
          ) val subtitle: String, @SerializedName("variants") val variants: List<String>
@@ -44,9 +44,17 @@ import com.google.gson.annotations.SerializedName
 
      data class ExerciseType10Info(@SerializedName("title_parts") val titleParts: List<String>, @SerializedName(
          "subtitle"
-     ) val subtitle: String ) : ExerciseInfo()
+     ) val subtitle: String, @SerializedName("is_numeral")val isNumeral: Boolean) : ExerciseInfo()
 
      data class ExerciseType11Info(@SerializedName("title_parts") val titleParts: List<String>, @SerializedName("filter") val filter: String, @SerializedName("compare_number") val compareNumber: String) : ExerciseInfo()
+
+     data class ExerciseType13Info(@SerializedName("title") val title: List<String>, @SerializedName("subtitle")val subtitle: String, @SerializedName("variants") val variants: List<String>) : ExerciseInfo()
+
+     data class ExerciseType15Info(@SerializedName("title") val title: String, @SerializedName("subtitle")val subtitle: String, @SerializedName("variants") val variants: List<String>) : ExerciseInfo()
+
+     data class ExerciseType16Info(@SerializedName("title_parts") val titleParts: List<String>, @SerializedName("subtitle") val subtitle: String ) : ExerciseInfo()
+
+     data class ExerciseType17Info(@SerializedName("title") val title: List<String>, @SerializedName("subtitle")val subtitle: String, @SerializedName("variants") val variants: List<List<String>>) : ExerciseInfo()
  }
 
 sealed class ScreenInfo{

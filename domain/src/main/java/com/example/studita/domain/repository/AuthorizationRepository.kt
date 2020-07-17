@@ -9,6 +9,8 @@ import com.example.studita.domain.entity.authorization.SignInWithGoogleRequestDa
 
 interface AuthorizationRepository {
 
+    suspend fun checkTokenIsCorrect(userIdTokenData: UserIdTokenData):  Pair<Int, Boolean?>
+
     suspend fun signUp(authorizationRequestData: AuthorizationRequestData):  Int
 
     suspend fun logIn(authorizationRequestData: AuthorizationRequestData): Pair<Int, LogInResponseData?>

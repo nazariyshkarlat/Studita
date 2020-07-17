@@ -1,5 +1,6 @@
 package com.example.studita.presentation.fragments.base
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -29,6 +30,5 @@ open class BaseDialogFragment(@LayoutRes private val layoutResId: Int) : DialogF
             it.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
     }
-
 
 }

@@ -4,15 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
-import com.example.studita.data.entity.PrivacySettingsRequest
 import com.example.studita.di.data.PrivacySettingsModule
 import com.example.studita.di.data.UsersModule
 import com.example.studita.domain.entity.*
 import com.example.studita.domain.interactor.*
-import com.example.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
-import com.example.studita.presentation.model.UsersRecyclerUiModel
-import com.example.studita.presentation.model.toUiModel
-import com.example.studita.presentation.model.toUserItemUiModel
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt

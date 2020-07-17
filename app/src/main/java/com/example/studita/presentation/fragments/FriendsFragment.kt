@@ -66,7 +66,8 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                                 view.context,
                                 friendsFragmentViewModel,
                                 toolbarFragmentVM,
-                                arguments?.getInt("USER_ID")!!)
+                                arguments?.getInt("USER_ID")!!,
+                                lifecycleOwner = viewLifecycleOwner)
                         }
                         recyclerViewLayoutRecyclerView.adapter = adapter
                         friendsFragmentViewModel.recyclerItems = adapter?.items
@@ -116,8 +117,8 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                                 view.context,
                                 friendsFragmentViewModel,
                                 toolbarFragmentVM,
-                                arguments?.getInt("USER_ID")!!
-                            )
+                                arguments?.getInt("USER_ID")!!,
+                                lifecycleOwner = viewLifecycleOwner)
                         }
                         recyclerViewLayoutRecyclerView.adapter = adapter
                     }
@@ -138,8 +139,8 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                                 view.context,
                                 friendsFragmentViewModel,
                                 toolbarFragmentVM,
-                                arguments?.getInt("USER_ID")!!
-                            )
+                                arguments?.getInt("USER_ID")!!,
+                                lifecycleOwner = viewLifecycleOwner)
                         }
                         recyclerViewLayoutRecyclerView.adapter = adapter
                     }
@@ -153,8 +154,8 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                                 view.context,
                                 friendsFragmentViewModel,
                                 toolbarFragmentVM,
-                                arguments?.getInt("USER_ID")!!
-                            )
+                                arguments?.getInt("USER_ID")!!,
+                                lifecycleOwner = viewLifecycleOwner)
                         }
                         recyclerViewLayoutRecyclerView.adapter = adapter
                     }
@@ -292,7 +293,8 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                 context,
                 friendsFragmentViewModel,
                 toolbarFragmentVM,
-                arguments?.getInt("USER_ID")!!)
+                arguments?.getInt("USER_ID")!!,
+                lifecycleOwner = viewLifecycleOwner)
         }
         recyclerViewLayoutRecyclerView.adapter = adapter
         friendsFragmentViewModel.recyclerItems = adapter?.items

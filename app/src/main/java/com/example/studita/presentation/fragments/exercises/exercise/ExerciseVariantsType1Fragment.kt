@@ -32,13 +32,13 @@ class ExerciseVariantsType1Fragment : ExerciseVariantsFragment(R.layout.exercise
                 }
             }
 
-            if(it.selectedPos != -1)
-                selectVariant(exerciseVariantsTitleFragmentLinearLayout, it.selectedPos)
+            if(selectedPos != -1)
+                selectVariant(exerciseVariantsTitleFragmentLinearLayout, selectedPos)
         }
     }
 
     private fun fillVariants(variants: List<ExerciseShapeUiModel>){
-        for(variant in variants) {
+        variants.forEach { variant ->
             val variantView: View
             if(variant.count == 0){
                 variantView = exerciseVariantsTitleFragmentLinearLayout.makeView(R.layout.exercise_variant_text_item) as TextView
@@ -59,8 +59,7 @@ class ExerciseVariantsType1Fragment : ExerciseVariantsFragment(R.layout.exercise
                 }
             }
             variantView.setOnClickListener {
-                exercisesViewModel?.selectedPos = exerciseVariantsTitleFragmentLinearLayout.indexOfChild(it)
-                exercisesViewModel?.selectedPos?.let { it1 -> selectVariant(exerciseVariantsTitleFragmentLinearLayout, it1) }
+                selectVariant(exerciseVariantsTitleFragmentLinearLayout, exerciseVariantsTitleFragmentLinearLayout.indexOfChild(it))
                 exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant.count.toString())
             }
             exerciseVariantsTitleFragmentLinearLayout.addView(variantView)

@@ -39,6 +39,13 @@ object ThemeUtils {
         return ContextCompat.getColor(context, typedValue.resourceId)
     }
 
+    @ColorInt
+    fun getSwipeRefreshBackgroundColor(context: Context): Int {
+        val typedValue = TypedValue()
+        context.theme.resolveAttribute(R.attr.swipe_refresh_layout_background_color, typedValue, true)
+        return ContextCompat.getColor(context, typedValue.resourceId)
+    }
+
     @ColorRes
     fun getSelectableItemBackground(context: Context): Int {
         val typedValue = TypedValue()

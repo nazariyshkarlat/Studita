@@ -52,6 +52,7 @@
     <string name="incorrect_time_layout_title">Упс! Кажется, время на вашем телефоне установлено неправильно (%1$s)</string>
     <string name="incorrect_time_layout_subtitle">Пожалуйста, сделайте ваше время автоматическим и нажмите \"Попробовать снова\"</string>
     <string name="true_variant">Правда</string>
+    <string name="and">и</string>
     <string name="false_variant">Неправда</string>
     <string name="check">Проверить</string>
     <string name="begin">Начать</string>
@@ -225,6 +226,8 @@
     <string name="notification_duel_missed_call_title">Пропущенный вызов</string>
     <string name="notification_friendship_request_accepted_title">Запрос принят</string>
     <string name="just_now">только что</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>

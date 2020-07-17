@@ -6,6 +6,10 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface AuthorizationService {
+
+    @POST("authentication")
+    suspend fun checkTokenIsCorrect(@Body userIdToken: UserIdToken): Response<Boolean?>
+
     @POST("sign_out")
     suspend fun signOut(@Body signOutRequestEntity: SignOutRequestEntity): Response<ResponseBody?>
 

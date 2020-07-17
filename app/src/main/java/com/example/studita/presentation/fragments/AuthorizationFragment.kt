@@ -14,8 +14,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import com.example.studita.App
 import com.example.studita.R
 import com.example.studita.authenticator.AccountAuthenticator
+import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
@@ -97,8 +99,11 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                                 resources.getString(R.string.log_in_success),
                                 Toast.LENGTH_LONG
                             ).show()
-                            MainActivity.needsRecreate = true
-                            activity?.finish()
+
+                            if(activity?.isTaskRoot == false)
+                                MainActivity.needsRecreate = true
+                            App.authenticationState.value = CheckTokenIsCorrectStatus.Correct
+                            activity?.onBackPressed()
                         }
                         null ->{}
                         else -> Toast.makeText(context, resources.getString(R.string.server_failure), Toast.LENGTH_LONG).show()

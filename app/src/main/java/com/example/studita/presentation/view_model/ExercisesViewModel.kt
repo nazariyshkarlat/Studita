@@ -32,6 +32,7 @@ import com.example.studita.utils.*
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import java.io.IOException
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -84,9 +85,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
     private var secondsCounter: Timer? = null
 
     private var job: Job? = null
-    private var waitingJob: Job? = null
-
-    var selectedPos = -1
+    var waitingJob: Job? = null
 
     fun getExercises(chapterPartNumber: Int){
         job = viewModelScope.launchExt(job){
@@ -94,11 +93,13 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
                 is ExercisesStatus.NoConnection -> exercisesState.postValue(false)
                 is ExercisesStatus.ServiceUnavailable -> exercisesState.postValue(false)
                 is ExercisesStatus.Success -> {
+
+                    job = null
                     exercisesState.postValue(true)
                     exercisesResponseData = status.result
                     exercises = exercisesResponseData.exercises
                     if(answered.value == true){
-                        if(exerciseData == exercises[arrayIndex])
+                        if(exerciseData == getCurrentExerciseData())
                             checkExerciseResult()
                         else
                             initFragment()
@@ -239,19 +240,15 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
     }
 
     fun initFragment(){
-        selectedPos = -1
         answered.value = false
         snackbarState.value = null
         if (exerciseIndex == getExercisesCount()) {
             if(progressState.value?.second == false)
                 progressState.value = 1F to true
         } else {
-            exerciseData = if (arrayIndex < exercises.size) {
-                exercises[arrayIndex]
-            } else {
-                exercisesToRetry[0]
-            }
+            exerciseData = getCurrentExerciseData()
             exerciseUiModel = exerciseData.toUiModel(getApplication())
+            println(exercisesResponseData.exercises.map { it.toUiModel(getApplication()) })
             setButtonEnabled(exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen)
             val exerciseFragment = getFragmentToAdd(exerciseUiModel)
             navigationState.value = when (arrayIndex) {
@@ -265,7 +262,13 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
         }
     }
 
-    private fun launchWaitingCoroutine(){
+    fun getCurrentExerciseData() = if (arrayIndex < exercises.size) {
+        exercises[arrayIndex]
+    } else {
+        exercisesToRetry[0]
+    }
+
+    fun launchWaitingCoroutine(){
         waitingJob = viewModelScope.launchExt(waitingJob) {
             delay(waitingTime)
             showBadConnectionDialogAlertFragmentState.postValue(true)
@@ -275,7 +278,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
 
     fun checkExerciseResult(){
 
-        if(job == null || job?.isCompleted == true) {
+        if((job == null || job?.isCompleted == true) && (waitingJob == null || waitingJob?.isCompleted == true)) {
             answered.value = true
             exerciseResultSuccess = false
             job = viewModelScope.launchExt(job) {
@@ -330,23 +333,27 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
                 }
             }
         }else{
-            if(waitingJob?.isCompleted == true)
-                showBadConnectionDialogAlertFragmentState.postValue(true)
+            waitingJob?.cancel()
+            showBadConnectionDialogAlertFragmentState.postValue(true)
         }
     }
 
     private fun getFragmentToAdd(exerciseUiModel: ExerciseUiModel) =
         when(exerciseUiModel){
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel -> ExerciseVariantsType1Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel  -> ExerciseVariantsType2Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2And14UiModel  -> ExerciseVariantsType2Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel -> ExerciseVariantsType3Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel  -> ExerciseVariantsType4Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6UiModel  -> ExerciseVariantsType5and6Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6And18UiModel  -> ExerciseVariantsType5and6Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel  -> ExerciseVariantsType7Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8UiModel  -> ExerciseVariantsType8Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8And12UiModel  -> ExerciseVariantsType8Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel  -> ExerciseInputEquationFragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType10UiModel  -> ExerciseMissedNumberFragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType11UiModel  -> ExerciseInputCollectionFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType13UiModel  -> ExerciseVariantsType13Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType15UiModel -> ExerciseVariantsType15Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType16UiModel -> ExerciseMissedCharacterFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType17UiModel -> ExerciseVariantsType17Fragment()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel -> ExerciseScreenType1()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel -> ExerciseScreenType2()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel -> ExerciseScreenType3()
@@ -358,6 +365,8 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
             2 -> ExercisesDescription2Fragment()
             4,5 -> ExercisesDescriptionPureFragment()
             7 -> ExercisesDescription7Fragment()
+            9 -> ExercisesDescription9Fragment()
+            10 -> ExercisesDescription10Fragment()
             else -> throw IOException("Unknown chapter part number")
         }
     }

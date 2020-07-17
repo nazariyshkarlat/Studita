@@ -4,18 +4,15 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.ScrollView
-import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
-import com.example.studita.R
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
 
-open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
+open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(viewId) {
+
+    var selectedPositions = ArrayList<Int>()
 
     protected var exercisesViewModel: ExercisesViewModel? = null
-
-    var selectedPos = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -25,18 +22,7 @@ open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
         }
 
         if(savedInstanceState != null)
-            selectedPos = savedInstanceState.getInt("SELECTED_POSITION")
-    }
-
-    private fun View.refreshVariants() {
-        this.isEnabled = true
-        this.isSelected = false
-        if (this is ViewGroup) {
-            for (i in 0 until this.childCount) {
-                val child = this.getChildAt(i)
-                child.refreshVariants()
-            }
-        }
+            selectedPositions = savedInstanceState.getIntegerArrayList("SELECTED_POSITIONS") as ArrayList<Int>
     }
 
     private fun View.disableAllItems(){
@@ -58,17 +44,35 @@ open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
             })
     }
 
-    fun selectVariant(centerLayout: ViewGroup, position: Int){
+    fun selectVariant(centerLayout: ViewGroup, position: Int, maxSelectedCount: Int){
+
+        if(!selectedPositions.contains(position)) {
+            if (maxSelectedCount == selectedPositions.size)
+                unSelectVariant(centerLayout, selectedPositions.last())
+        }
+
         val childView= if(centerLayout.getChildAt(0) !is LinearLayout) centerLayout.getChildAt(position) else (centerLayout.getChildAt(position/2)as ViewGroup).getChildAt(position%2)
-        exercisesViewModel?.setButtonEnabled(true)
-        centerLayout.refreshVariants()
-        childView.isEnabled = false
         childView.isSelected = true
-        selectedPos = position
+
+        if(!selectedPositions.contains(position))
+            selectedPositions.add(position)
+
+        if (maxSelectedCount == selectedPositions.size)
+            exercisesViewModel?.setButtonEnabled(true)
+    }
+
+    fun unSelectVariant(centerLayout: ViewGroup, position: Int) {
+        val childView =
+            if (centerLayout.getChildAt(0) !is LinearLayout) centerLayout.getChildAt(position) else (centerLayout.getChildAt(
+                position / 2
+            ) as ViewGroup).getChildAt(position % 2)
+        exercisesViewModel?.setButtonEnabled(false)
+        childView.isSelected = false
+        selectedPositions.remove(position)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("SELECTED_POSITION", selectedPos)
+        outState.putIntegerArrayList("SELECTED_POSITIONS", selectedPositions)
     }
 }

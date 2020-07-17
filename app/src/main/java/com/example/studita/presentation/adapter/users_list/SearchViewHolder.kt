@@ -24,8 +24,8 @@ import kotlinx.android.synthetic.main.users_search_item.view.*
 class SearchViewHolder(view: View,
                        private val updateCallback: UpdateCallback,
                        private val searchCallback: SearchCallback,
-                       private var sortBy: UsersRepository.SortBy,
-                       public var searchState: FriendsFragmentViewModel.SearchState,
+                       sortBy: UsersRepository.SortBy,
+                       var searchState: FriendsFragmentViewModel.SearchState,
                        private var showSearchCallback: ShowSearchCallback,
                        private val globalSearchOnly: Boolean) : UsersViewHolder<UsersRecyclerUiModel.SearchUiModel>(view) {
 
@@ -35,7 +35,7 @@ class SearchViewHolder(view: View,
         var popUp = formPopUp()
         itemView.usersSearchItemFilter.setOnClickListener {
             popUp = formPopUp()
-            popUp.showAsDropDown(itemView.usersSearchItemFilter, 0, (-14).dpToPx(), Gravity.START)
+            popUp.showAsDropDown(itemView.usersSearchItemFilter, 0, (-4).dpToPx(), Gravity.START)
             (popUp.contentView as ViewGroup).setSelectedItem(selectedPos)
         }
 
@@ -194,9 +194,9 @@ class SearchViewHolder(view: View,
     }
 
     private fun setSearchMargin(){
-        val param = itemView.usersSearchItemEditText.layoutParams as ViewGroup.MarginLayoutParams
+        val param = itemView.usersSearchItemSearchLayout.layoutParams as ViewGroup.MarginLayoutParams
         param.setMargins(0, 0,0, 8.dpToPx())
-        itemView.usersSearchItemEditText.layoutParams = param
+        itemView.usersSearchItemSearchLayout.layoutParams = param
     }
 
 }

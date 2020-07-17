@@ -5,6 +5,7 @@ import android.view.MotionEvent.ACTION_DOWN
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.example.studita.R
 import com.example.studita.domain.interactor.IsMyFriendStatus
@@ -13,8 +14,9 @@ import com.example.studita.presentation.fragments.ProfileFragment
 import com.example.studita.presentation.model.UsersRecyclerUiModel
 import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.friend_item.view.*
+import kotlinx.android.synthetic.main.profile_friend_item.view.*
 
-class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsCallback) : UsersViewHolder<UsersRecyclerUiModel.UserItemUiModel>(view), View.OnTouchListener{
+class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsCallback, private val lifecycleOwner: LifecycleOwner) : UsersViewHolder<UsersRecyclerUiModel.UserItemUiModel>(view), View.OnTouchListener{
 
     lateinit var model: UsersRecyclerUiModel.UserItemUiModel
 
@@ -26,11 +28,20 @@ class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsC
         val isMyProfile = model.userId == UserUtils.userData.userId
 
         with(itemView) {
-            friendItemUserName.text =
-                resources.getString(R.string.user_name_template, model.userName)
 
             clearAvatar()
-            friendItemAvatar.fillAvatar(model.avatarLink, model.userName, model.userId)
+
+            if(!isMyProfile) {
+                friendItemAvatar.fillAvatar(model.avatarLink, model.userName, model.userId)
+                friendItemUserName.text =
+                    resources.getString(R.string.user_name_template, model.userName)
+            }else{
+                UserUtils.userDataLiveData.observe(lifecycleOwner, androidx.lifecycle.Observer {
+                    profileFriendItemAvatar.fillAvatar(it.avatarLink, it.userName!!, it.userId!!)
+                    friendItemUserName.text =
+                        resources.getString(R.string.user_name_template, it.userName)
+                })
+            }
 
             friendItemAddFriend.visibility = if (isMyProfile) View.GONE else View.VISIBLE
 

@@ -12,11 +12,39 @@ import com.example.studita.domain.repository.AuthorizationRepository
 import com.example.studita.domain.repository.UserDataRepository
 import com.example.studita.domain.service.SyncSignOut
 import kotlinx.coroutines.delay
+import kotlin.time.seconds
 
 class AuthorizationInteractorImpl(private val authorizationRepository: AuthorizationRepository, private val userDataRepository: UserDataRepository, private val syncSignOut: SyncSignOut) :
     AuthorizationInteractor {
 
     val retryDelay = 1000L
+
+    override suspend fun checkTokenIsCorrect(
+        userIdTokenData: UserIdTokenData,
+        retryCount: Int
+    ): CheckTokenIsCorrectStatus =
+        try {
+            val result = authorizationRepository.checkTokenIsCorrect(userIdTokenData)
+            when (result.first) {
+                200 -> if(result.second == true) CheckTokenIsCorrectStatus.Correct else CheckTokenIsCorrectStatus.Incorrect
+                else -> CheckTokenIsCorrectStatus.Failure
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
+                if (retryCount == 0) {
+                    if (e is NetworkConnectionException)
+                        CheckTokenIsCorrectStatus.NoConnection
+                    else
+                        CheckTokenIsCorrectStatus.ServiceUnavailable
+                } else {
+                    if (e is NetworkConnectionException)
+                        delay(retryDelay)
+                    checkTokenIsCorrect(userIdTokenData, retryCount - 1)
+                }
+            } else
+                CheckTokenIsCorrectStatus.Failure
+        }
 
     override suspend fun signUp(authorizationRequestData: AuthorizationRequestData, retryCount: Int): SignUpStatus =
         try {

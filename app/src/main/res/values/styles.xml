@@ -31,7 +31,8 @@
         <item name="page_background_color">@color/white</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="task_variant_button">@color/black20</item>
-        <item name="bottom_sheet_color">@color/white</item>
+        <item name="dialogs_color">@color/white</item>
+        <item name="swipe_refresh_layout_background_color">@color/white</item>
         <item name="press_view_press_alpha">0.64</item>
         <item name="press_view_press_alpha_lighter">0.3</item>
         <item name="switch_inactive_thumb_color">@color/grayE6</item>
@@ -54,7 +55,8 @@
         <item name="colorControlHighlight">@color/white8</item>
         <item name="android:navigationBarColor">@color/gray11</item>
         <item name="task_variant_button">@color/white24</item>
-        <item name="bottom_sheet_color">@color/gray20</item>
+        <item name="swipe_refresh_layout_background_color">@color/black</item>
+        <item name="dialogs_color">@color/gray20</item>
         <item name="press_view_press_alpha">0.68</item>
         <item name="press_view_press_alpha_lighter">0.34</item>
         <item name="switch_inactive_thumb_color">@color/gray8</item>
@@ -472,7 +474,7 @@
 
     <style name="AppModalStyle"
         parent="Widget.Design.BottomSheet.Modal">
-        <item name="backgroundTint">?bottom_sheet_color</item>
+        <item name="backgroundTint">?attr/dialogs_color</item>
         <item name="shapeAppearance">@style/ShapeAppearance.BottomSheet</item>
     </style>
 
@@ -508,8 +510,8 @@
     <style name="SearchEditText" parent="Widget.AppCompat.EditText">
         <item name="android:paddingStart">12dp</item>
         <item name="android:paddingEnd">16dp</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
         <item name="android:hint">@string/search</item>
         <item name="drawableStartCompat">@drawable/ic_search</item>
         <item name="android:singleLine">true</item>
