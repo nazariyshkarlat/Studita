@@ -3,7 +3,7 @@ package com.example.studita.presentation.model
 import android.content.Context
 import android.graphics.drawable.Drawable
 import com.example.studita.domain.entity.exercise.ExerciseData
-import com.example.studita.domain.entity.exercise.ExerciseCharacterData
+import com.example.studita.domain.entity.exercise.ExerciseSymbolData
 import com.example.studita.domain.entity.exercise.ExerciseType11Filter
 
 sealed class ExerciseUiModel(open val exerciseNumber: Int?){
@@ -24,19 +24,19 @@ sealed class ExerciseUiModel(open val exerciseNumber: Int?){
 
         data class ExerciseType3UiModel(
             override val exerciseNumber: Int?,
-            val title: ExerciseCharacterData,
+            val title: ExerciseSymbolData,
             val subtitle: String,
-            val variants: List<ExerciseCharacterData>
+            val variants: List<ExerciseSymbolData>
         ) : ExerciseUiModelExercise(exerciseNumber)
 
         data class ExerciseType4UiModel(
             override val exerciseNumber: Int?,
-            val title: ExerciseCharacterData,
+            val title: ExerciseSymbolData,
             val subtitle: String,
             val variants: List<String>
         ) : ExerciseUiModelExercise(exerciseNumber)
 
-        data class ExerciseType5And6And18UiModel(
+        data class ExerciseType5And6UiModel(
             override val exerciseNumber: Int?,
             val title: String,
             val subtitle: String,
@@ -88,7 +88,7 @@ fun ExerciseData.toUiModel(context: Context) = when (this) {
     is ExerciseData.ExerciseDataExercise.ExerciseType2And14Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2And14UiModel(exerciseNumber, title.toShapeUiModel(context), subtitle, variants)
     is ExerciseData.ExerciseDataExercise.ExerciseType3Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel(exerciseNumber, title, subtitle, variants)
     is ExerciseData.ExerciseDataExercise.ExerciseType4Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel(exerciseNumber, title, subtitle, variants)
-    is ExerciseData.ExerciseDataExercise.ExerciseType5And6And18Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6And18UiModel(exerciseNumber, title, subtitle, variants)
+    is ExerciseData.ExerciseDataExercise.ExerciseType5And6Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6UiModel(exerciseNumber, title, subtitle, variants)
     is ExerciseData.ExerciseDataExercise.ExerciseType7Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel(exerciseNumber,title)
     is ExerciseData.ExerciseDataExercise.ExerciseType8And12Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8And12UiModel(exerciseNumber, title, subtitle, variants)
     is ExerciseData.ExerciseDataExercise.ExerciseType9Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel(exerciseNumber,title)

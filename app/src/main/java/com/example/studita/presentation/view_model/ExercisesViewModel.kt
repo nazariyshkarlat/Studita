@@ -1,6 +1,7 @@
 package com.example.studita.presentation.view_model
 
 import android.app.Application
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
@@ -32,7 +33,6 @@ import com.example.studita.utils.*
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import java.io.IOException
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -99,9 +99,10 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
                     exercisesResponseData = status.result
                     exercises = exercisesResponseData.exercises
                     if(answered.value == true){
-                        if(exerciseData == getCurrentExerciseData())
+                        if(exerciseData == (getCurrentExerciseData() as ExerciseData.ExerciseDataExercise).copy()) {
+                            exerciseData = getCurrentExerciseData()
                             checkExerciseResult()
-                        else
+                        }else
                             initFragment()
                     }
                 }
@@ -150,7 +151,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
                     }
 
                     if (!isTraining) {
-                        it.completedParts[chapterNumber - 1] = chapterPartNumber
+                        it.completedParts[chapterNumber - 1]++
                         it.todayCompletedExercises++
 
                         if (chapterPartNumber == chapterPartsCount)
@@ -248,7 +249,6 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
         } else {
             exerciseData = getCurrentExerciseData()
             exerciseUiModel = exerciseData.toUiModel(getApplication())
-            println(exercisesResponseData.exercises.map { it.toUiModel(getApplication()) })
             setButtonEnabled(exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen)
             val exerciseFragment = getFragmentToAdd(exerciseUiModel)
             navigationState.value = when (arrayIndex) {
@@ -262,13 +262,13 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
         }
     }
 
-    fun getCurrentExerciseData() = if (arrayIndex < exercises.size) {
+    private fun getCurrentExerciseData() = if (arrayIndex < exercises.size) {
         exercises[arrayIndex]
     } else {
         exercisesToRetry[0]
     }
 
-    fun launchWaitingCoroutine(){
+    private fun launchWaitingCoroutine(){
         waitingJob = viewModelScope.launchExt(waitingJob) {
             delay(waitingTime)
             showBadConnectionDialogAlertFragmentState.postValue(true)
@@ -284,6 +284,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
             job = viewModelScope.launchExt(job) {
                 if (exerciseUiModel is ExerciseUiModel.ExerciseUiModelExercise) {
                     launchWaitingCoroutine()
+
                     when (val status =
                         exerciseResultInteractor.getExerciseResult(
                             exerciseData as ExerciseData.ExerciseDataExercise,
@@ -296,6 +297,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
 
                             exerciseResultSuccess = true
 
+                            showBadConnectionDialogAlertFragmentState.postValue(false)
                             waitingJob?.cancel()
 
                             snackbarState.postValue(exerciseUiModel to status.result)
@@ -325,14 +327,13 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
                     }
                 } else {
                     waitingJob?.cancel()
-                    if (arrayIndex >= exercises.size) {
+                    if (arrayIndex >= exercises.size)
                         exercisesToRetry.removeAt(0)
-                    }
                     arrayIndex++
                     initFragment()
                 }
             }
-        }else{
+        }else if(showBadConnectionDialogAlertFragmentState.value == true){
             waitingJob?.cancel()
             showBadConnectionDialogAlertFragmentState.postValue(true)
         }
@@ -344,7 +345,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2And14UiModel  -> ExerciseVariantsType2Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel -> ExerciseVariantsType3Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel  -> ExerciseVariantsType4Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6And18UiModel  -> ExerciseVariantsType5and6Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6UiModel  -> ExerciseVariantsType5and6Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel  -> ExerciseVariantsType7Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8And12UiModel  -> ExerciseVariantsType8Fragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel  -> ExerciseInputEquationFragment()
@@ -401,7 +402,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
         secondsCounter?.schedule(object : TimerTask() {
             override fun run() {
                 seconds++
-                println("EXERCISE TIME IS $seconds SECONDS")
+                Log.d("EXERCISES", "TIME IS $seconds SECONDS")
             }
         }, 1000, 1000)
     }
@@ -411,11 +412,15 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
             secondsCounter!!.cancel()
             secondsCounter!!.purge()
             secondsCounter = null
-            println("EXERCISE TIME STOP")
+            Log.d("EXERCISES", "TIME STOP")
         }
     }
 
     fun secondsCounterIsStopped() = secondsCounter == null
+
+    fun cancelExercisesJob(){
+        job?.cancel()
+    }
 
     enum class ExercisesNavigationState{
         FIRST,

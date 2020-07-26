@@ -11,7 +11,6 @@ import com.example.studita.domain.interactor.UserStatisticsStatus
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.view_model.UserStatisticsPageViewModel
 import com.example.studita.utils.TimeUtils
-import com.example.studita.presentation.view_model.UserStatisticsViewModel
 import kotlinx.android.synthetic.main.user_stat_page_layout.*
 
 open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout){

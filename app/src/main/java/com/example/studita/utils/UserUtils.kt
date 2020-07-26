@@ -11,6 +11,7 @@ import com.example.studita.di.data.UserDataModule
 import com.example.studita.domain.entity.UserData
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.UserIdTokenData
+import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.view_model.LiveEvent
 import com.example.studita.presentation.view_model.SingleLiveEvent
@@ -30,7 +31,7 @@ object UserUtils {
     get(){
         return userDataLiveData.value as UserDataData
     }
-    val isMyFriendLiveData = LiveEvent<UserData>()
+    val isMyFriendLiveData = LiveEvent<UsersInteractor.FriendActionState>()
     private var userToken: String? = null
     private var userID: Int? = null
 
@@ -45,6 +46,8 @@ object UserUtils {
             it1
         )
     } }
+
+    fun userDataNotNull() = userDataLiveData.value != null
 
     fun clearUserIdToken(){
         userID = null

@@ -16,7 +16,7 @@
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">@color/white</item>
         <item name="popup_background_color">@color/grayF0_98</item>
-        <item name="task_variant_button">@color/black20</item>
+        <item name="exercise_variant_button_divider_color">@color/black20</item>
         <item name="dialogs_color">@color/white</item>
         <item name="press_view_press_alpha">0.64</item>
         <item name="press_view_press_alpha_lighter">0.3</item>
@@ -43,7 +43,7 @@
         <item name="android:navigationBarColor">@color/gray11</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
-        <item name="task_variant_button">@color/white24</item>
+        <item name="exercise_variant_button_divider_color">@color/white24</item>
         <item name="dialogs_color">@color/gray20</item>
         <item name="press_view_press_alpha">0.68</item>
         <item name="press_view_press_alpha_lighter">0.34</item>

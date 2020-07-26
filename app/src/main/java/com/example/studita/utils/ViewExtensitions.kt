@@ -34,6 +34,8 @@ fun NestedScrollView.setOnScrollChangeFabListener(fabScrollListener: FabScrollLi
     this.setOnScrollChangeListener(FabScrollImpl(fabScrollListener))
 }
 
+fun View.postExt(block: (View) -> Unit){post { block.invoke(this) }}
+
 fun View.asNotificationIndicator(notificationsAreChecked: Boolean){
     if(notificationsAreChecked || !UserUtils.isLoggedIn()){
         this.animate().scaleX(0F).scaleY(0F).setListener(object : AnimatorListenerAdapter(){

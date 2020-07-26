@@ -176,7 +176,7 @@ sealed class GetUsersStatus{
 
 sealed class IsMyFriendStatus{
 
-    sealed class Success(@SerializedName("user_id")open val userId: Int) : IsMyFriendStatus(){
+    sealed class Success(@Transient open val userId: Int) : IsMyFriendStatus(){
         class IsMyFriend(override val userId: Int) : Success(userId)
         class IsNotMyFriend(override val userId: Int) : Success(userId)
         class GotMyFriendshipRequest(override val userId: Int) : Success(userId)
@@ -231,7 +231,15 @@ sealed class CheckTokenIsCorrectStatus{
     object NoConnection : CheckTokenIsCorrectStatus()
     object Failure: CheckTokenIsCorrectStatus()
     object Correct: CheckTokenIsCorrectStatus()
+    object Waiting: CheckTokenIsCorrectStatus()
     object Incorrect: CheckTokenIsCorrectStatus()
+}
+
+sealed class SetNotificationsAreCheckedStatus{
+    object ServiceUnavailable : SetNotificationsAreCheckedStatus()
+    object NoConnection : SetNotificationsAreCheckedStatus()
+    object Failure: SetNotificationsAreCheckedStatus()
+    object Success: SetNotificationsAreCheckedStatus()
 }
 
 

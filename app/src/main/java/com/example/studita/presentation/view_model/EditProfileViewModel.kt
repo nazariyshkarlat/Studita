@@ -51,7 +51,7 @@ class EditProfileViewModel : ViewModel(){
         }
     }
 
-    fun checkUserNameAvailable(){
+    private fun checkUserNameAvailable(){
         job = viewModelScope.launchExt(job) {
             when(editProfileInteractor.isUserNameAvailable(newProfileData.userName!!)){
                 is UserNameAvailableStatus.Available -> userNameAvailableState.postValue(UserNameAvailable.AVAILABLE)
@@ -79,6 +79,7 @@ class EditProfileViewModel : ViewModel(){
                 }else {
                     userNameAvailableState.value = UserNameAvailable.INVALID_LENGTH
                     countersErrorState.value = TextField.USER_NAME to true
+                    job?.cancel()
                 }
         }else{
             countersErrorState.value = TextField.USER_NAME to false

@@ -24,11 +24,14 @@ interface UsersService {
     @GET("is_my_friend")
     suspend fun checkIsMyFriend(@Query("my_id") myId: Int, @Query("user_id") userId: Int): Response<IsMyFriendEntity>
 
-    @POST("add_friend")
-    suspend fun addFriend(@Body friendActionRequest: FriendActionRequest): Response<ResponseBody>
+    @POST("send_friendship")
+    suspend fun sendFriendship(@Body friendActionRequest: FriendActionRequest): Response<ResponseBody>
 
     @POST("remove_friend")
     suspend fun removeFriend(@Body friendActionRequest: FriendActionRequest): Response<ResponseBody>
+
+    @POST("cancel_friendship")
+    suspend fun cancelFriendship(@Body friendActionRequest: FriendActionRequest): Response<ResponseBody>
 
     @POST("accept_friendship")
     suspend fun acceptFriendship(@Body friendActionRequest: FriendActionRequest): Response<ResponseBody>

@@ -2,11 +2,14 @@ package com.example.studita.presentation.fragments.exercises.exercise
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.utils.makeView
+import com.example.studita.utils.postExt
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
+import kotlinx.android.synthetic.main.exercise_variants_linear_fragment.*
 import kotlinx.android.synthetic.main.exercise_variants_title_fragment.*
 
 class ExerciseVariantsType15Fragment : ExerciseMultipleVariantsFragment(R.layout.exercise_variants_title_fragment){
@@ -17,20 +20,29 @@ class ExerciseVariantsType15Fragment : ExerciseMultipleVariantsFragment(R.layout
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        exercisesViewModel?.let {
-            observeAnswered(it, exerciseVariantsTitleFragmentLinearLayout)
-            when (it.exerciseUiModel) {
+        exercisesViewModel?.let {vm->
+            observeAnswered(vm, exerciseVariantsTitleFragmentLinearLayout)
+            when (vm.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType15UiModel -> {
                     val exerciseUiModel =
-                        it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType15UiModel
+                        vm.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType15UiModel
                     exerciseVariantsTitleFragmentTitle.text = exerciseUiModel.title
                     exerciseVariantsTitleFragmentSubtitle.text = exerciseUiModel.subtitle
                     fillVariants(exerciseUiModel.variants)
                 }
             }
-            selectedPositions.forEach {position->
-                selectVariant(exerciseVariantsTitleFragmentLinearLayout, position, MAX_SELECTED_COUNT)
+
+            exerciseVariantsTitleFragmentLinearLayout.postExt {
+                it as ViewGroup
+                selectedPositions.forEach { position ->
+                    selectVariant(
+                        it,
+                        position,
+                        MAX_SELECTED_COUNT
+                    )
+                }
             }
+            observeAnswered(vm, exerciseVariantsLinearFragmentCenterLinearLayout)
         }
     }
 

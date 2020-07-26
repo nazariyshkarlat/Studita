@@ -10,7 +10,7 @@ class ChapterRepositoryImpl(private val chapterJsonDataStoreFactory: ChapterJson
                             private val connectionManager: ConnectionManager): ChapterRepository {
 
     override suspend fun getChapter(chapterNumber: Int, offlineMode: Boolean): Pair<Int, ChapterData> =
-        with(ChapterDataStoreImpl(chapterJsonDataStoreFactory.create(if(offlineMode || connectionManager.isNetworkAbsent()) ChapterJsonDataStoreFactory.Priority.CACHE else ChapterJsonDataStoreFactory.Priority.CLOUD)).getChapterEntity(chapterNumber)){
+        with(ChapterDataStoreImpl(chapterJsonDataStoreFactory.create(if(offlineMode) ChapterJsonDataStoreFactory.Priority.CACHE else ChapterJsonDataStoreFactory.Priority.CLOUD)).getChapterEntity(chapterNumber)){
              this.first to this.second.toRawEntity()
         }
 

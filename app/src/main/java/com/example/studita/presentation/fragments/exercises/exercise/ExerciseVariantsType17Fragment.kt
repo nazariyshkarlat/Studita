@@ -15,6 +15,7 @@ import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.views.SquareView
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.makeView
+import com.example.studita.utils.postExt
 import com.google.android.flexbox.FlexboxLayout
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
 import kotlinx.android.synthetic.main.exercise_variants_linear_fragment.*
@@ -24,19 +25,24 @@ class ExerciseVariantsType17Fragment : ExerciseVariantsFragment(R.layout.exercis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        exercisesViewModel?.let {
-            observeAnswered(it, exerciseVariantsLinearFragmentCenterLinearLayout)
-            when (it.exerciseUiModel) {
+        exercisesViewModel?.let { vm ->
+            observeAnswered(vm, exerciseVariantsLinearFragmentCenterLinearLayout)
+            when (vm.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType17UiModel -> {
-                    val exerciseUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType17UiModel
+                    val exerciseUiModel =
+                        vm.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType17UiModel
                     exerciseVariantsLinearFragmentSubtitle.text = exerciseUiModel.subtitle
                     fillVariants(exerciseUiModel.variants)
                     fillLinearLayout(exerciseUiModel)
                 }
             }
 
-            if(selectedPos != -1)
-                selectVariant(exerciseVariantsLinearFragmentTopFlexboxLayout, selectedPos)
+            if (selectedPos != -1)
+                exerciseVariantsLinearFragmentCenterLinearLayout.postExt {
+                    it as ViewGroup
+                    selectVariant(it, selectedPos)
+                }
+            observeAnswered(vm, exerciseVariantsLinearFragmentCenterLinearLayout)
         }
     }
 

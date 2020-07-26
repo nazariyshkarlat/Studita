@@ -77,6 +77,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
                 if(savedInstanceState == null && !MainActivity.needsRecreate) {
                     when (checkTokenIsCorrect) {
+                        CheckTokenIsCorrectStatus.Waiting -> {
+                            it.progressState.value = false
+                        }
                         CheckTokenIsCorrectStatus.Correct -> {
                             it.initSubscribeEmailState()
                             it.getLevels()
@@ -96,6 +99,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                                 it)
                         homeLayoutRecyclerView.visibility = View.VISIBLE
                     } else {
+                        mainFragmentViewModel?.hideProgress(false)
                         homeLayoutRecyclerView.visibility = View.GONE
                     }
                 })

@@ -1,5 +1,6 @@
 package com.example.studita.presentation.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,10 +20,11 @@ import com.example.studita.R
 import com.example.studita.authenticator.AccountAuthenticator
 import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.presentation.activities.MainActivity
+import com.example.studita.presentation.activities.MainActivity.Companion.startMainActivityNewTask
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
-import com.example.studita.utils.setOnViewSizeChangeListener
 import com.example.studita.presentation.view_model.AuthorizationFragmentViewModel
+import com.example.studita.utils.setOnViewSizeChangeListener
 import kotlinx.android.synthetic.main.authorization_layout.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -103,7 +105,7 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                             if(activity?.isTaskRoot == false)
                                 MainActivity.needsRecreate = true
                             App.authenticationState.value = CheckTokenIsCorrectStatus.Correct
-                            activity?.onBackPressed()
+                            activity?.startMainActivityNewTask()
                         }
                         null ->{}
                         else -> Toast.makeText(context, resources.getString(R.string.server_failure), Toast.LENGTH_LONG).show()

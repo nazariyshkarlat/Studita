@@ -25,6 +25,7 @@ import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.NotificationsUiModel
 import com.example.studita.presentation.model.toShapeUiModel
 import com.example.studita.presentation.view_model.NotificationsFragmentViewModel
+import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.dpToPx
 import com.google.gson.GsonBuilder
@@ -39,7 +40,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
     private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context, intent: Intent) {
             val notificationData = GsonBuilder().apply {
-                registerTypeAdapter(IsMyFriendStatus::class.java, IsMyFriendStatusDeserializer())
+                registerTypeAdapter(IsMyFriendStatus.Success::class.java, IsMyFriendStatusDeserializer())
             }.create().fromJson<NotificationData>(
                 intent.getStringExtra("NOTIFICATION_DATA"),
                 object : TypeToken<NotificationData>() {}.type
@@ -48,8 +49,10 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
             viewModel.recyclerItems?.add(1, notificationData.toShapeUiModel(context))
             recyclerViewLayoutRecyclerView.adapter?.notifyItemInserted(1)
 
-            if(isVisible)
+            if(isVisible) {
                 resultCode = Activity.RESULT_CANCELED
+                viewModel.setNotificationsAreChecked(UserUtils.getUserIDTokenData()!!)
+            }
         }
 
     }
@@ -146,14 +149,13 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                 }
             })
 
-        UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, Observer { friendData ->
-
-                viewModel.recyclerItems?.forEachIndexed { index, notificationsUiModel ->
-                    if((notificationsUiModel is NotificationsUiModel.Notification) && notificationsUiModel.userData.userId == friendData.userId){
-                        (viewModel.recyclerItems?.get(index) as NotificationsUiModel.Notification).userData.isMyFriendStatus = friendData.isMyFriendStatus
-                        recyclerViewLayoutRecyclerView.adapter?.notifyItemChanged(index, Unit)
-                    }
+        UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, Observer {
+            viewModel.recyclerItems?.forEachIndexed { index, notificationsUiModel ->
+                if((notificationsUiModel is NotificationsUiModel.Notification) && notificationsUiModel.userData.userId == it.userData.userId){
+                    (viewModel.recyclerItems?.get(index) as NotificationsUiModel.Notification).userData.isMyFriendStatus = it.userData.isMyFriendStatus
+                    recyclerViewLayoutRecyclerView.adapter?.notifyItemChanged(index, Unit)
                 }
+            }
         })
 
         scrollingView = recyclerViewLayoutRecyclerView

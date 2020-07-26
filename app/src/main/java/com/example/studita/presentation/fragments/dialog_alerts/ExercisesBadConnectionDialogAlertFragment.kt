@@ -1,7 +1,5 @@
-package com.example.studita.presentation.fragments.exercises
+package com.example.studita.presentation.fragments.dialog_alerts
 
-import android.app.Activity
-import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
@@ -23,11 +21,11 @@ class ExercisesBadConnectionDialogAlertFragment : BaseDialogFragment(R.layout.ex
             ViewModelProviders.of(this).get(ExercisesViewModel::class.java)
         }
         exercisesBadConnectionDialogLeftButton.setOnClickListener {
-            dialog?.dismiss()
-            exercisesViewModel?.launchWaitingCoroutine()
+            dismiss()
+            exercisesViewModel?.checkExerciseResult()
         }
         exercisesBadConnectionDialogRightButton.setOnClickListener {
-            dialog?.dismiss()
+            dismiss()
             exercisesViewModel?.waitingJob?.cancel()
             exercisesViewModel?.let{
                 PrefsUtils.setOfflineMode(true)
@@ -36,5 +34,14 @@ class ExercisesBadConnectionDialogAlertFragment : BaseDialogFragment(R.layout.ex
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        if(activity?.isDestroyed == false)
+            (targetFragment as? DialogInterface.OnDismissListener)?.onDismiss(dialog)
+    }
 
 }

@@ -1,7 +1,6 @@
 package com.example.studita.presentation.fragments
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.Gravity
@@ -14,10 +13,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProviders
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.studita.R
-import com.example.studita.domain.entity.UserData
-import com.example.studita.domain.entity.UsersResponseData
-import com.example.studita.domain.entity.UserDataData
-import com.example.studita.domain.entity.toUserData
+import com.example.studita.domain.entity.*
 import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.interactor.UserDataStatus
@@ -53,6 +49,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), Swipe
         profileFragmentViewModel.userDataState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if(it is UserDataStatus.Success) {
 
+                initMenu()
                 fillData(it.result, view.context)
 
                 if(isMyProfile) {
@@ -69,24 +66,24 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), Swipe
                 androidx.lifecycle.Observer {
                     if(profileFragmentViewModel.userDataState.value != null) {
                         if (userData != it) {
-                            profileFragmentViewModel.userDataState.value = UserDataStatus.Success(it)
+                            profileFragmentViewModel.userDataState.value = UserDataStatus.Success(it.copy())
                         }}
                 })
         }
 
-        UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {userData->
+        UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-            val myProfileIsRemovedFromFriends = userData.userId == userId
-
-            if (myProfileIsRemovedFromFriends) {
-                profileFragmentViewModel.isMyFriendState.value = userData.isMyFriendStatus
-                formButton(userData, view.context)
+            if (it.userData.userId == userId) {
+                profileFragmentViewModel.isMyFriendState.value =it.userData.isMyFriendStatus
+                formButton(it.userData, view.context)
             }
 
-            if(isMyProfile){
-                profileFragmentViewModel.refreshFriends(userData)
-            }else if(myProfileIsRemovedFromFriends){
-                profileFragmentViewModel.refreshFriends(this.userData.toUserData(userData.isMyFriendStatus))
+            if(it is UsersInteractor.FriendActionState.FriendshipRequestIsAccepted || it is UsersInteractor.FriendActionState.RemovedFromFriends) {
+                if (isMyProfile) {
+                    profileFragmentViewModel.refreshFriends(it.userData)
+                } else if (it.userData.userId == userId) {
+                    profileFragmentViewModel.refreshFriends(UserUtils.userData.toUserData(it.userData.isMyFriendStatus))
+                }
             }
 
         })
@@ -134,10 +131,11 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), Swipe
             snackbar.show(
                 resources.getString(
                     when(it) {
-                        is UsersInteractor.FriendActionState.AddedToFriends -> R.string.friend_added_snackbar
+                        is UsersInteractor.FriendActionState.FriendshipRequestIsAccepted -> R.string.friend_added_snackbar
                         is UsersInteractor.FriendActionState.RemovedFromFriends -> R.string.friend_removed_snackbar
-                        is UsersInteractor.FriendActionState.MyFriendshipRequestIsCanceled -> R.string.friendship_request_is_canceled_snackbar
+                        is UsersInteractor.FriendActionState.FriendshipRequestIsCanceled -> R.string.friendship_request_is_canceled_snackbar
                         is UsersInteractor.FriendActionState.FriendshipRequestIsSent -> R.string.friendship_request_is_sent_snackbar
+                        is UsersInteractor.FriendActionState.FriendshipRequestIsRejected -> R.string.friendship_request_is_rejected_snackbar
                     },
                     it.userData.userName), ThemeUtils.getAccentColor(snackbar.context), duration = resources.getInteger(R.integer.add_remove_friend_snackbar_duration).toLong())
         })
@@ -153,9 +151,6 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), Swipe
         profileLayoutFriendsMoreButton.setOnClickListener {
             navigateToFriends(isMyProfile, userId)
         }
-
-        if(isVisible)
-            view.post { initMenu()}
 
         initRefreshLayout(view.context)
         scrollingView = profileLayoutScrollView
@@ -193,8 +188,9 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), Swipe
                 profileLayoutTextButton.visibility = View.VISIBLE
                 profileLayoutButton.background = ContextCompat.getDrawable(context, R.drawable.button_green_8)
                 profileLayoutTextButton.setOnClickListener {
-                    profileFragmentViewModel.removeFromFriends(UserUtils.getUserIDTokenData()!!, userData)
+                    profileFragmentViewModel.removeFriend(UserUtils.getUserIDTokenData()!!, userData)
                 }
+                profileLayoutButton.setOnClickListener {}
             }
             is IsMyFriendStatus.Success.IsNotMyFriend -> {
                 profileLayoutButton.visibility = View.VISIBLE
@@ -203,12 +199,13 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), Swipe
                 profileLayoutButton.background = ContextCompat.getDrawable(context, R.drawable.button_accent_8)
                 profileLayoutTextButton.visibility = View.GONE
                 profileLayoutButton.setOnClickListener {
-                    profileFragmentViewModel.addToFriends(UserUtils.getUserIDTokenData()!!, userData)
+                    profileFragmentViewModel.sendFriendshipRequest(UserUtils.getUserIDTokenData()!!, userData)
                 }
             }
             is IsMyFriendStatus.Success.GotMyFriendshipRequest -> {
                 profileLayoutButton.visibility = View.GONE
                 profileLayoutTransparentButton.visibility = View.VISIBLE
+                profileLayoutTextButton.visibility = View.GONE
                 profileLayoutTransparentButton.setOnClickListener {
                     profileFragmentViewModel.cancelFriendshipRequest(UserUtils.getUserIDTokenData()!!, userData)
                 }
@@ -317,7 +314,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), Swipe
                 when(item.itemId){
                     R.id.profilePopupMenuSecond -> (activity as AppCompatActivity).navigateTo(
                         UserStatFragment().apply {
-                            arguments = bundleOf("USER_ID" to userData.userId)
+                            arguments = bundleOf("USER_ID" to userId, "USER_NAME" to userData.userName, "AVATAR_LINK"  to userData.avatarLink)
                         }, R.id.doubleFrameLayoutFrameLayout)
                 }
                 true

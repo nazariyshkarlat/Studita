@@ -3,7 +3,6 @@ package com.example.studita.presentation.fragments
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +12,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
-import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.presentation.adapter.users_list.UsersAdapter
 import com.example.studita.presentation.adapter.users_list.SearchViewHolder
@@ -194,22 +192,23 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
             snackbar.show(
                 resources.getString(
                     when(it) {
-                        is UsersInteractor.FriendActionState.AddedToFriends -> R.string.friend_added_snackbar
+                        is UsersInteractor.FriendActionState.FriendshipRequestIsAccepted -> R.string.friend_added_snackbar
                         is UsersInteractor.FriendActionState.RemovedFromFriends -> R.string.friend_removed_snackbar
-                        is UsersInteractor.FriendActionState.MyFriendshipRequestIsCanceled -> R.string.friendship_request_is_canceled_snackbar
+                        is UsersInteractor.FriendActionState.FriendshipRequestIsCanceled -> R.string.friendship_request_is_canceled_snackbar
                         is UsersInteractor.FriendActionState.FriendshipRequestIsSent -> R.string.friendship_request_is_sent_snackbar
+                        is UsersInteractor.FriendActionState.FriendshipRequestIsRejected-> R.string.friendship_request_is_rejected_snackbar
                     },
                     it.userData.userName), ThemeUtils.getAccentColor(snackbar.context), duration = resources.getInteger(R.integer.add_remove_friend_snackbar_duration).toLong())
         })
 
-        UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, Observer { friendData ->
+        UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, Observer {friendActionState->
 
             val itemIndex =
-                friendsFragmentViewModel.recyclerItems?.indexOfFirst { (it is UsersRecyclerUiModel.UserItemUiModel) && it.userId == friendData.userId }
+                friendsFragmentViewModel.recyclerItems?.indexOfFirst { (it is UsersRecyclerUiModel.UserItemUiModel) && it.userId == friendActionState.userData.userId }
 
             if (itemIndex != null && itemIndex != -1) {
-                friendsFragmentViewModel.userData?.find { it.userId == friendData.userId }?.isMyFriendStatus = friendData.isMyFriendStatus
-                (friendsFragmentViewModel.recyclerItems?.get(itemIndex) as UsersRecyclerUiModel.UserItemUiModel).isMyFriendStatus = friendData.isMyFriendStatus
+                friendsFragmentViewModel.userData?.find { it.userId == friendActionState.userData.userId }?.isMyFriendStatus = friendActionState.userData.isMyFriendStatus
+                (friendsFragmentViewModel.recyclerItems?.get(itemIndex) as UsersRecyclerUiModel.UserItemUiModel).isMyFriendStatus = friendActionState.userData.isMyFriendStatus
                 recyclerViewLayoutRecyclerView.adapter?.notifyItemChanged(itemIndex, Unit)
             }
         })

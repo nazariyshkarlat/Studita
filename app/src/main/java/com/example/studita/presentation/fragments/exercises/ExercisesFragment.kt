@@ -1,5 +1,6 @@
 package com.example.studita.presentation.fragments.exercises
 
+import android.content.DialogInterface
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.utils.*
 import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.fragments.dialog_alerts.ExercisesBadConnectionDialogAlertFragment
 import com.example.studita.presentation.fragments.exercises.description.ExercisesDescriptionFragment
 import com.example.studita.presentation.model.*
 import com.example.studita.presentation.view_model.ExercisesViewModel
@@ -28,7 +30,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
+class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterface.OnDismissListener{
 
     var exercisesViewModel: ExercisesViewModel? = null
     var snackbarTranslationY = 0F
@@ -112,22 +114,19 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
 
             viewModel.showBadConnectionDialogAlertFragmentState.observe(viewLifecycleOwner, Observer {show->
                 if(show) {
+                    viewModel.cancelExercisesJob()
                     activity?.supportFragmentManager?.let {
                         viewModel.snackbarState.removeObservers(viewLifecycleOwner)
                         viewModel.progressState.removeObservers(viewLifecycleOwner)
                         val dialogFragment = ExercisesBadConnectionDialogAlertFragment()
+                            .apply {
+                            setTargetFragment(this@ExercisesFragment, 5325)
+                        }
 
                         dialogFragment.show(
                             it,
                             null
                         )
-
-                        it.executePendingTransactions()
-
-                        dialogFragment.dialog?.setOnDismissListener {
-                            viewModel.progressState.observe(viewLifecycleOwner, getProgressStateObserver(viewModel))
-                            viewModel.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver())
-                        }
                     }
                 }
             })
@@ -152,6 +151,16 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout){
         }
 
         exerciseBottomSnackbarIcon.setOnClickListener {  }
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        exercisesViewModel?.let {
+            it.progressState.observe(
+                viewLifecycleOwner,
+                getProgressStateObserver(it)
+            )
+            it.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver())
+        }
     }
 
     fun onWindowFocusChanged(hasFocus: Boolean){

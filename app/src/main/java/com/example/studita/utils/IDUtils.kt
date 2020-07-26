@@ -7,7 +7,7 @@ object IDUtils {
 
     fun createID(): Int {
         val now = Date()
-        return SimpleDateFormat("ddHHmmssSS", Locale.US).format(now).toInt()
+        return SimpleDateFormat("ddHHmmssSS", Locale.US).format(now).toLong().toInt()
     }
 
 }

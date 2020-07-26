@@ -10,7 +10,7 @@ class DiskUserDataDataStore(private val userDataDao: UserDataDao)
 
     override suspend fun getUserDataEntity(userId: Int?): Pair<Int, UserDataEntity> {
         val userData = userDataDao.getUserData()
-        return 200 to if(userData == null) {
+        return 200 to if(userData == null || userId != userData.userId) {
             saveUserDataEntity(UserDataDataStore.defaultUserData)
             UserDataDataStore.defaultUserData
         }else

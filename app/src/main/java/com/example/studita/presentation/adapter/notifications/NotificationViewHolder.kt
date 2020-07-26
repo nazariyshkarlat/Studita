@@ -27,6 +27,7 @@ class NotificationViewHolder(view: View) : NotificationsViewHolder<Notifications
     override fun bind(model: NotificationsUiModel) {
         model as NotificationsUiModel.Notification
 
+
         with(itemView){
             notificationsLayoutItemAvatar.fillAvatar(model.userData.avatarLink, model.userData.userName, model.userData.userId)
             notificationsLayoutItemTitle.text = model.notificationText
@@ -42,7 +43,7 @@ class NotificationViewHolder(view: View) : NotificationsViewHolder<Notifications
                                     AcceptFriendshipDialogAlertFragment().apply {
                                         arguments =
                                             bundleOf("USER_DATA" to GsonBuilder().apply {
-                                                registerTypeAdapter(IsMyFriendStatus::class.java, IsMyFriendStatusSerializer())
+                                                registerTypeAdapter(IsMyFriendStatus.Success::class.java, IsMyFriendStatusSerializer())
                                             }.create().toJson(model.userData))
                                     }.show(it, null)
                                 }

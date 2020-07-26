@@ -12,3 +12,4 @@ fun IsMyFriendData.toStatus(userId: Int) = when{
     friendshipRequestToMe -> IsMyFriendStatus.Success.WaitingForFriendshipAccept(userId)
     else -> IsMyFriendStatus.Success.IsNotMyFriend(userId)
 }
+

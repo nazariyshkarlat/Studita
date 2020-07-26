@@ -35,6 +35,7 @@ class HomeFragmentViewModel : ViewModel(){
     private var subscribeJob: Job? = null
 
     fun getLevels(){
+        progressState.postValue(false)
         levelsJob = viewModelScope.launchExt(levelsJob){
             when(val getLevelsStatus = levelsInteractor.getLevels(UserUtils.isLoggedIn(), PrefsUtils.isOfflineModeEnabled())){
                 is LevelsStatus.NoConnection -> errorState.postValue(R.string.no_connection)

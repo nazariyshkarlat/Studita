@@ -3,12 +3,9 @@ package com.example.studita.service
 import android.content.Context
 import androidx.work.*
 import com.example.studita.di.NetworkModule
-import com.example.studita.di.data.SubscribeEmailModule
 import com.example.studita.di.data.UsersModule
 import com.example.studita.domain.entity.FriendActionRequestData
-import com.example.studita.domain.interactor.FriendActionStatus
 import com.example.studita.domain.service.SyncFriendship
-import com.example.studita.utils.UserUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -44,10 +41,11 @@ class SyncFriendshipImpl : SyncFriendship{
             val friendActionRequestData = json?.let { deserializeFriendActionRequestData(it) }
             friendActionRequestData?.let {
                 when(friendActionType){
-                    SyncFriendship.FriendActionType.ADD -> UsersModule.getUsersInteractorImpl().addFriend(friendActionRequestData)
+                    SyncFriendship.FriendActionType.ADD -> UsersModule.getUsersInteractorImpl().sendFriendship(friendActionRequestData)
                     SyncFriendship.FriendActionType.REMOVE -> UsersModule.getUsersInteractorImpl().removeFriend(friendActionRequestData)
                     SyncFriendship.FriendActionType.ACCEPT_REQUEST -> UsersModule.getUsersInteractorImpl().acceptFriendship(friendActionRequestData)
                     SyncFriendship.FriendActionType.REJECT_REQUEST -> UsersModule.getUsersInteractorImpl().rejectFriendship(friendActionRequestData)
+                    SyncFriendship.FriendActionType.CANCEL_REQUEST ->  UsersModule.getUsersInteractorImpl().cancelFriendship(friendActionRequestData)
                 }
             }
 

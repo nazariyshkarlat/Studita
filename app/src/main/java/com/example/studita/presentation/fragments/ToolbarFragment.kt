@@ -46,7 +46,6 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
             it.toolbarDividerState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { show ->
-                    System.out.println(show)
                     toolbarLayout.background =  if(show) resources.getDrawable(R.drawable.divider_bottom_drawable, toolbarLayoutTitle.context.theme) else null
                 })
 

@@ -17,7 +17,7 @@
     <string name="user_already_exists_button_text">Войти в аккаунт</string>
     <string name="incorrect_mail">Проверьте правильность ввода эл. почты</string>
     <string name="incorrect_password">Пароль неверный, проверьте правильность ввода</string>
-    <string name="no_user_with_mail">Данный аккаунт не найден, проверьте правильность эл. почты</string>
+    <string name="no_user_with_mail">Данный аккаунт не найден, проверьте правильность ввода эл. почты</string>
     <string name="account_already_exists">Введите электронную почту</string>
     <string name="sign_up_success">Аккаунт успешно зарегистрирован!</string>
     <string name="log_in_success">Добро пожаловать!</string>
@@ -57,7 +57,7 @@
     <string name="check">Проверить</string>
     <string name="begin">Начать</string>
     <string name="authorization">Авторизация</string>
-    <string name="issues_with_connecting">Мы испытываем трудности с вашим интернет соединением.</string>
+    <string name="issues_with_connecting">Мы испытываем трудности с вашим интернет соединением</string>
     <string name="sign_out_dialog_alert_title">Выйти из аккаунта?</string>
     <string name="sign_out_dialog_alert_subtitle">В следующий раз вам придётся ввести пароль повторно</string>
     <string name="exercises_bad_connection_dialog_alert_title">Плохое интернет соединение</string>
@@ -214,6 +214,7 @@
     <string name="friend_added_snackbar">\@%1$s был добавлен в ваши друзья</string>
     <string name="friendship_request_is_sent_snackbar">Запрос в друзья \@%1$s был отправлен</string>
     <string name="friendship_request_is_canceled_snackbar">Запрос в друзья \@%1$s был отменён</string>
+    <string name="friendship_request_is_rejected_snackbar">Запрос в друзья \@%1$s был отклонён</string>
     <string name="privacy_exceptions_dialog_alert_title">Добавить исключения</string>
     <string name="notification_type_duel_invite_text">вызвал вас на дуэль</string>
     <string name="notification_duel_missed_call_subtitle">вызывал вас на дуэль</string>

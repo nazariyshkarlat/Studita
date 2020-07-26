@@ -1,5 +1,6 @@
 package com.example.studita.presentation.activities
 
+import android.app.Activity
 import android.app.TaskStackBuilder
 import android.content.Intent
 import android.os.Bundle
@@ -29,6 +30,12 @@ class MainActivity : DefaultActivity(){
     companion object{
         var needsRefresh = false
         var needsRecreate = false
+
+        fun Activity.startMainActivityNewTask() {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

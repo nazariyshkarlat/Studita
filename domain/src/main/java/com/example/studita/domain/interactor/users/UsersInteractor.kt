@@ -16,9 +16,11 @@ interface UsersInteractor {
 
     suspend fun checkIsMyFriend(myId: Int, userId: Int, retryCount: Int = 30): IsMyFriendStatus
 
-    suspend fun addFriend(friendActionRequestData: FriendActionRequestData, retryCount: Int = 30): FriendActionStatus
+    suspend fun sendFriendship(friendActionRequestData: FriendActionRequestData, retryCount: Int = 30): FriendActionStatus
 
     suspend fun removeFriend(friendActionRequestData: FriendActionRequestData, retryCount: Int = 30): FriendActionStatus
+
+    suspend fun cancelFriendship(friendActionRequestData: FriendActionRequestData, retryCount: Int = 30): FriendActionStatus
 
     suspend fun acceptFriendship(friendActionRequestData: FriendActionRequestData, retryCount: Int = 30): FriendActionStatus
 
@@ -27,9 +29,10 @@ interface UsersInteractor {
     suspend fun hasFriends(userId: Int, retryCount: Int = 30): HasFriendsStatus
 
     sealed class FriendActionState(open val userData: UserData){
-        data class AddedToFriends(override val userData: UserData): FriendActionState(userData)
+        data class FriendshipRequestIsAccepted(override val userData: UserData): FriendActionState(userData)
         data class RemovedFromFriends(override val userData: UserData): FriendActionState(userData)
-        data class MyFriendshipRequestIsCanceled(override val userData: UserData): FriendActionState(userData)
+        data class FriendshipRequestIsCanceled(override val userData: UserData): FriendActionState(userData)
+        data class FriendshipRequestIsRejected(override  val userData: UserData): FriendActionState(userData)
         data class FriendshipRequestIsSent(override val userData: UserData): FriendActionState(userData)
     }
 }

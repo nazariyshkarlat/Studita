@@ -33,7 +33,7 @@
         <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/acceptFriendshipDialogLeftButton"
             style="@style/BlueTextButton16"
-            android:text="@string/cancel"
+            android:text="@string/reject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

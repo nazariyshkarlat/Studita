@@ -62,7 +62,7 @@ class PushReceiverIntentService : JobIntentService() {
         )
 
         sendNotification(bundleOf("NOTIFICATION_DATA" to GsonBuilder().apply {
-            registerTypeAdapter(IsMyFriendStatus::class.java, IsMyFriendStatusSerializer())
+            registerTypeAdapter(IsMyFriendStatus.Success::class.java, IsMyFriendStatusSerializer())
         }.create().toJson(notificationData)))
 
     }

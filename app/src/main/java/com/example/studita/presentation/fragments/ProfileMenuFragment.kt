@@ -1,5 +1,6 @@
 package com.example.studita.presentation.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -12,8 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.studita.App
 import com.example.studita.R
 import com.example.studita.domain.entity.UserDataData
+import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.draw.AvaDrawer
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuLanguageDialogAlertFragment
@@ -157,6 +160,10 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
                 ListItems.OFFLINE_MODE.ordinal ->{
                     PrefsUtils.setOfflineMode(!mainMenuLayoutOfflineSwitch.isChecked)
                     mainMenuLayoutOfflineSwitch.isChecked = !mainMenuLayoutOfflineSwitch.isChecked
+                    if(!PrefsUtils.isOfflineModeEnabled())
+                        App.authenticate(UserUtils.getUserIDTokenData())
+                    else
+                        App.authenticationJob?.cancel()
                 }
                 ListItems.PRIVACY.ordinal ->{
                     (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineModeEnabled()) PrivacySettingsOfflineModeFragment() else PrivacySettingsFragment(), R.id.doubleFrameLayoutFrameLayout)

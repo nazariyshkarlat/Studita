@@ -95,9 +95,12 @@ class MainFragment : BaseFragment(R.layout.main_layout){
                 }
             })
 
-            viewModel.progressState.observe(this, Observer{ hide ->
-                if(hide)
-                    (view as ViewGroup).removeView(mainLayoutProgressBar)
+            viewModel.progressState.observe(this, Observer{ hideProgress ->
+                if(hideProgress) {
+                    mainLayoutProgressBar.visibility = View.GONE
+                }else{
+                    mainLayoutProgressBar.visibility = View.VISIBLE
+                }
             })
         }
 
@@ -144,7 +147,7 @@ class MainFragment : BaseFragment(R.layout.main_layout){
                     viewLifecycleOwner.lifecycleScope.launch {
                         delay(resources.getInteger(R.integer.back_online_snackbar_duration).toLong())
                         mainLayoutBottomSection.animate()
-                            .translationY(resources.getDimension(R.dimen.connectionSnackbarHeight))
+                            .translationY(resources.getDimension(R.dimen.connectionSnackbarLayoutTranslationY))
                             .setDuration(
                                 resources.getInteger(R.integer.snackbar_anim_duration).toLong()
                             ).start()

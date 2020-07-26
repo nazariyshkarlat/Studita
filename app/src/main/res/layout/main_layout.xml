@@ -15,7 +15,7 @@
         android:id="@+id/mainLayoutBottomSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:translationY="@dimen/connectionSnackbarHeight"
+        android:translationY="@dimen/connectionSnackbarLayoutTranslationY"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 

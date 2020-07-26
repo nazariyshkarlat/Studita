@@ -20,7 +20,7 @@ class ExerciseArrayEntityDeserializer : JsonDeserializer<ExerciseArrayEntity> {
                         2, 14 -> context.deserialize<ExerciseInfo.ExerciseType2And14Info>(jsonObject.get("exercise_info"), ExerciseInfo.ExerciseType2And14Info::class.java)
                         3 -> context.deserialize<ExerciseInfo.ExerciseType3Info>(jsonObject.get("exercise_info"), ExerciseInfo.ExerciseType3Info::class.java)
                         4 -> context.deserialize<ExerciseInfo.ExerciseType4Info>(jsonObject.get("exercise_info"), ExerciseInfo.ExerciseType4Info::class.java)
-                        5,6,18 -> context.deserialize<ExerciseInfo.ExerciseType5And6And18Info>(jsonObject.get("exercise_info"), ExerciseInfo.ExerciseType5And6And18Info::class.java)
+                        5,6 -> context.deserialize<ExerciseInfo.ExerciseType5And6Info>(jsonObject.get("exercise_info"), ExerciseInfo.ExerciseType5And6Info::class.java)
                         7 -> context.deserialize<ExerciseInfo.ExerciseType7Info>(jsonObject.get("exercise_info"), ExerciseInfo.ExerciseType7Info::class.java)
                         8, 12 -> context.deserialize<ExerciseInfo.ExerciseType8And12Info>(jsonObject.get("exercise_info"), ExerciseInfo.ExerciseType8And12Info::class.java)
                         9 -> context.deserialize<ExerciseInfo.ExerciseType9Info>(jsonObject.get("exercise_info"), ExerciseInfo.ExerciseType9Info::class.java)

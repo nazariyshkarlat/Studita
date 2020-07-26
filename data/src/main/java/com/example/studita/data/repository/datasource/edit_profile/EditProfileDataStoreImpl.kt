@@ -21,7 +21,6 @@ class EditProfileDataStoreImpl(private val connectionManager: ConnectionManager,
         } else {
             try {
                 val result = editProfileService.editProfile(editProfileRequest.toRequestBody(), newAvatarFile?.toBodyPart())
-                println(result.body())
                 val avatarLink = Gson().fromJson<HashMap<String, String?>>(result.body().toString(), object : TypeToken<HashMap<String, String?>>(){}.type)["avatar_link"]
                 avatarLink to result.code()
             }catch (e: Exception){

@@ -1,6 +1,5 @@
 package com.example.studita.data.repository
 
-import com.example.studita.data.entity.IsMyFriendEntity
 import com.example.studita.data.entity.toBusinessEntity
 import com.example.studita.data.entity.toRawEntity
 import com.example.studita.data.repository.datasource.users.UsersDataStoreFactory
@@ -21,13 +20,18 @@ class UsersRepositoryImpl(private val usersDataStoreFactory: UsersDataStoreFacto
         return pair.first to pair.second?.toBusinessEntity()
     }
 
-    override suspend fun addFriend(friendActionRequestData: FriendActionRequestData): Int {
-        return usersDataStoreFactory.create().tryAddFriend(friendActionRequestData.toRawEntity())
+    override suspend fun sendFriendship(friendActionRequestData: FriendActionRequestData): Int {
+        return usersDataStoreFactory.create().trySendFriendship(friendActionRequestData.toRawEntity())
     }
 
     override suspend fun removeFriend(friendActionRequestData: FriendActionRequestData): Int {
         return usersDataStoreFactory.create().tryRemoveFriend(friendActionRequestData.toRawEntity())
     }
+
+    override suspend fun cancelFriendship(friendActionRequestData: FriendActionRequestData): Int {
+        return usersDataStoreFactory.create().tryCancelFriendship(friendActionRequestData.toRawEntity())
+    }
+
 
     override suspend fun acceptFriendship(friendActionRequestData: FriendActionRequestData): Int {
         return usersDataStoreFactory.create().tryAcceptFriendship(friendActionRequestData.toRawEntity())

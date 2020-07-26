@@ -25,6 +25,7 @@ import com.example.studita.presentation.view_model.SingleLiveEvent
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.TimeUtils
 import com.example.studita.utils.UserUtils
+import com.example.studita.utils.launchExt
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -34,11 +35,12 @@ class App : Application(){
         lateinit var userDataDeferred: Deferred<UserDataStatus>
         val applicationScope = CoroutineScope(Dispatchers.Main)
         val authenticationState = MutableLiveData<CheckTokenIsCorrectStatus>()
+        var authenticationJob: Job? = null
 
         fun initUserData(userDataData: UserDataData){
             UserUtils.userDataLiveData.value = userDataData
 
-            if(TimeUtils.getCalendarDayCount(userDataData.streakDatetime, Date()) > 1F){
+            if((TimeUtils.getCalendarDayCount(userDataData.streakDatetime, Date()) > 1F) && (userDataData.streakDays != 0)){
                 userDataData.streakDays = 0
                 userDataData.todayCompletedExercises = 0
                 GlobalScope.launch {
@@ -62,16 +64,16 @@ class App : Application(){
         }
 
         fun authenticate(userIdTokenData: UserIdTokenData?){
+            authenticationState.value = CheckTokenIsCorrectStatus.Waiting
             if(PrefsUtils.isOfflineModeEnabled() || !UserUtils.isLoggedIn()){
                 getUserData()
                 authenticationState.value = CheckTokenIsCorrectStatus.Correct
             }else {
-                applicationScope.launch {
+                authenticationJob = applicationScope.launchExt(authenticationJob) {
+                    val tokenIsCorrectStatus = AuthorizationModule.getAuthorizationInteractorImpl()
+                        .checkTokenIsCorrect(userIdTokenData!!)
                     getUserData()
-                    authenticationState.postValue(
-                        AuthorizationModule.getAuthorizationInteractorImpl()
-                            .checkTokenIsCorrect(userIdTokenData!!)
-                    )
+                    authenticationState.postValue(tokenIsCorrectStatus)
                     userDataDeferred.await()
                 }
             }

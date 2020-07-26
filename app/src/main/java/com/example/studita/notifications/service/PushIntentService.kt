@@ -17,13 +17,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.studita.R
-import com.example.studita.domain.entity.NotificationData
-import com.example.studita.domain.entity.NotificationType
-import com.example.studita.domain.entity.UserData
+import com.example.studita.domain.entity.*
 import com.example.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.example.studita.domain.entity.serializer.IsMyFriendStatusSerializer
-import com.example.studita.domain.entity.toStatus
 import com.example.studita.domain.interactor.IsMyFriendStatus
+import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.notifications.NotificationsActionsHandleBroadcastReceiver
 import com.example.studita.notifications.toActionString
 import com.example.studita.presentation.activities.MainMenuActivity
@@ -69,7 +67,7 @@ class PushIntentService : JobIntentService(){
         this.intent = intent
 
         notificationData = GsonBuilder().apply {
-            registerTypeAdapter(IsMyFriendStatus::class.java, IsMyFriendStatusDeserializer())
+            registerTypeAdapter(IsMyFriendStatus.Success::class.java, IsMyFriendStatusDeserializer())
         }.create().fromJson<NotificationData>(
             intent.getStringExtra("NOTIFICATION_DATA"),
             object : TypeToken<NotificationData>() {}.type
@@ -106,7 +104,7 @@ class PushIntentService : JobIntentService(){
 
         actionIntent.putExtra("NOTIFICATION_ID", notificationId)
         actionIntent.putExtra("USER_DATA", GsonBuilder().apply {
-            registerTypeAdapter(IsMyFriendStatus::class.java, IsMyFriendStatusSerializer())
+            registerTypeAdapter(IsMyFriendStatus.Success::class.java, IsMyFriendStatusSerializer())
         }.create().toJson(userData))
 
         val openNotificationsPendingIntent = PendingIntent.getActivity(
@@ -144,7 +142,12 @@ class PushIntentService : JobIntentService(){
                     )
                     .addAction(0, this.resources.getString(R.string.accept) as CharSequence, acceptFriendshipPendingIntent)
                     .addAction(0, this.resources.getString(R.string.reject) as CharSequence, rejectFriendshipPendingIntent)
-                UserUtils.isMyFriendLiveData.postValue(UserData(notificationData.userId, notificationData.userName, notificationData.avatarLink, IsMyFriendStatus.Success.WaitingForFriendshipAccept(notificationData.userId)))
+                UserUtils.isMyFriendLiveData.postValue(UsersInteractor.FriendActionState.FriendshipRequestIsSent(
+                    UserData(notificationData.userId,
+                        notificationData.userName,
+                        notificationData.avatarLink,
+                        IsMyFriendStatus.Success.WaitingForFriendshipAccept(notificationData.userId)))
+                )
             }
             NotificationType.DUEL_REQUEST -> {
                 notification
@@ -159,11 +162,16 @@ class PushIntentService : JobIntentService(){
                     .setContentText("${this.resources.getString(R.string.user_name_template, notificationData.userName)} " +
                             this.resources.getString(R.string.notification_type_accepted_friendship)
                     )
-                UserUtils.isMyFriendLiveData.postValue(UserData(notificationData.userId, notificationData.userName, notificationData.avatarLink, IsMyFriendStatus.Success.IsMyFriend(notificationData.userId)))
+                UserUtils.isMyFriendLiveData.postValue( UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(UserData(
+                    notificationData.userId,
+                    notificationData.userName,
+                    notificationData.avatarLink,
+                    IsMyFriendStatus.Success.IsMyFriend(notificationData.userId)))
+                )
             }
         }
 
-        if(UserUtils.userDataLiveData.value != null) {
+        if(UserUtils.userDataNotNull()) {
             UserUtils.userDataLiveData.postValue(UserUtils.userData.apply {
                 notificationsAreChecked = false
             })

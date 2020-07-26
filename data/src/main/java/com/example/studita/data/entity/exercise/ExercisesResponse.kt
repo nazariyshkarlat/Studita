@@ -31,7 +31,7 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
             is ExerciseInfo.ExerciseType3Info -> ExerciseData.ExerciseDataExercise.ExerciseType3Data(
                 exerciseNumber!!, exerciseInfo.title.toExerciseCharacterData(), exerciseInfo.subtitle, exerciseInfo.variants.map { it.toExerciseCharacterData() }, exerciseAnswer)
             is ExerciseInfo.ExerciseType4Info -> ExerciseData.ExerciseDataExercise.ExerciseType4Data(exerciseNumber!!, exerciseInfo.title.toExerciseCharacterData(), exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
-            is ExerciseInfo.ExerciseType5And6And18Info -> ExerciseData.ExerciseDataExercise.ExerciseType5And6And18Data(exerciseNumber!!, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
+            is ExerciseInfo.ExerciseType5And6Info -> ExerciseData.ExerciseDataExercise.ExerciseType5And6Data(exerciseNumber!!, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
             is ExerciseInfo.ExerciseType7Info -> ExerciseData.ExerciseDataExercise.ExerciseType7Data(exerciseNumber!!,exerciseInfo.title, exerciseAnswer)
             is ExerciseInfo.ExerciseType8And12Info -> ExerciseData.ExerciseDataExercise.ExerciseType8And12Data(exerciseNumber!!, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
             is ExerciseInfo.ExerciseType9Info -> ExerciseData.ExerciseDataExercise.ExerciseType9Data(exerciseNumber!!,exerciseInfo.title, exerciseAnswer)

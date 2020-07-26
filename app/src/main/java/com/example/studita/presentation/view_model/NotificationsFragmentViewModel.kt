@@ -12,6 +12,8 @@ import com.example.studita.domain.interactor.GetNotificationsStatus
 import com.example.studita.presentation.model.NotificationsUiModel
 import com.example.studita.presentation.model.toShapeUiModel
 import com.example.studita.utils.UserUtils
+import com.example.studita.utils.launchExt
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class NotificationsFragmentViewModel : ViewModel(){
@@ -23,6 +25,8 @@ class NotificationsFragmentViewModel : ViewModel(){
     val progressState = MutableLiveData<Boolean>()
 
     var recyclerItems: ArrayList<NotificationsUiModel>? = null
+
+    private var notificationsAreCheckedJob: Job? = null
 
     private val perPage = 20
     var currentPageNumber = 1
@@ -52,13 +56,21 @@ class NotificationsFragmentViewModel : ViewModel(){
 
                     val notificationsResultState = if(currentPageNumber == 1) NotificationsResultState.FirstResults(result.notificationsData) else NotificationsResultState.MoreResults(result.notificationsData)
 
-                    UserUtils.userDataLiveData.postValue(UserUtils.userData.apply {
-                        notificationsAreChecked = true
-                    })
+                    if(UserUtils.userDataNotNull()) {
+                        UserUtils.userDataLiveData.postValue(UserUtils.userData.apply {
+                            notificationsAreChecked = true
+                        })
+                    }
                     progressState.postValue(false)
                     notificationsState.postValue(canBeMoreItems(notificationsResultState) to notificationsResultState)
                 }
             }
+        }
+    }
+
+    fun setNotificationsAreChecked(userIdTokenData: UserIdTokenData){
+        notificationsAreCheckedJob = viewModelScope.launchExt(notificationsAreCheckedJob){
+            notificationsInteractor.setNotificationsAreChecked(userIdTokenData)
         }
     }
 

@@ -2,6 +2,7 @@ package com.example.studita.presentation.activities
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import com.example.studita.R
 
 class ShareActivity : DefaultActivity(){
@@ -12,7 +13,7 @@ class ShareActivity : DefaultActivity(){
 
         val data: Uri? = intent?.data
 
-        println(data?.queryParameterNames)
+        Log.d("SHARE_ACTIVITY", "QUERY PARAMS: ${data?.queryParameterNames}")
     }
 
 }

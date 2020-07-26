@@ -93,7 +93,6 @@ object ImageUtils {
         val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                 ExifInterface.ORIENTATION_UNDEFINED)
 
-        System.out.println(orientation)
         return when (orientation) {
             ExifInterface.ORIENTATION_ROTATE_90 -> this.rotate(90F)
             ExifInterface.ORIENTATION_ROTATE_180 -> this.rotate(180F)

@@ -37,7 +37,7 @@ class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsC
                     resources.getString(R.string.user_name_template, model.userName)
             }else{
                 UserUtils.userDataLiveData.observe(lifecycleOwner, androidx.lifecycle.Observer {
-                    profileFriendItemAvatar.fillAvatar(it.avatarLink, it.userName!!, it.userId!!)
+                    friendItemAvatar.fillAvatar(it.avatarLink, it.userName!!, it.userId!!)
                     friendItemUserName.text =
                         resources.getString(R.string.user_name_template, it.userName)
                 })
@@ -57,7 +57,7 @@ class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsC
                     changeIsMyFriend.removeFriend(model.userId)
                 } else {
                     model.isMyFriendStatus =
-                        IsMyFriendStatus.Success.GotMyFriendshipRequest(model.userId)
+                        IsMyFriendStatus.Success.IsMyFriend(model.userId)
                     it.isSelected = true
                     changeIsMyFriend.addFriend(model.userId)
                 }

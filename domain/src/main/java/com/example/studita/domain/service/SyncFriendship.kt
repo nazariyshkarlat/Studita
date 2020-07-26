@@ -10,6 +10,7 @@ interface SyncFriendship {
     enum class FriendActionType{
         ADD,
         REMOVE,
+        CANCEL_REQUEST,
         ACCEPT_REQUEST,
         REJECT_REQUEST
     }

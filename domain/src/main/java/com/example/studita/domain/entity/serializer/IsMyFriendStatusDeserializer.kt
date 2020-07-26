@@ -8,13 +8,13 @@ import com.google.gson.JsonObject
 import java.io.IOException
 import java.lang.reflect.Type
 
-class IsMyFriendStatusDeserializer : JsonDeserializer<IsMyFriendStatus>{
+class IsMyFriendStatusDeserializer : JsonDeserializer<IsMyFriendStatus.Success>{
 
     override fun deserialize(
         json: JsonElement?,
         typeOfT: Type?,
         context: JsonDeserializationContext?
-    ): IsMyFriendStatus{
+    ): IsMyFriendStatus.Success{
         checkNotNull(json)
         checkNotNull(typeOfT)
         checkNotNull(context)

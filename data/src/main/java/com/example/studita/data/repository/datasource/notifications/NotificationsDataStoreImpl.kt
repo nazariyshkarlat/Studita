@@ -16,7 +16,7 @@ import java.lang.Exception
 class NotificationsDataStoreImpl(private val connectionManager: ConnectionManager, private val notificationsService: NotificationsService):
     NotificationsDataStore {
 
-    override suspend fun tryGetNotifications(userIdToken: UserIdToken, perPage: Int, pageNumber: Int): Pair<Int, List<NotificationEntity>?> {
+    override suspend fun tryGetNotifications(userIdToken: UserIdToken, perPage: Int, pageNumber: Int): Pair<Int, List<NotificationEntity>?> =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         } else {
@@ -26,7 +26,7 @@ class NotificationsDataStoreImpl(private val connectionManager: ConnectionManage
                     perPage,
                     pageNumber
                 )
-                return result.code() to result.body()
+                result.code() to result.body()
             } catch (e: Exception) {
                 if (e is CancellationException)
                     throw e
@@ -34,5 +34,19 @@ class NotificationsDataStoreImpl(private val connectionManager: ConnectionManage
                     throw ServerUnavailableException()
             }
         }
-    }
+
+    override suspend fun trySetNotificationsAreChecked(userIdToken: UserIdToken): Int =
+        if (connectionManager.isNetworkAbsent()) {
+            throw NetworkConnectionException()
+        } else {
+            try {
+                val result = notificationsService.setNotificationsAreChecked(userIdToken)
+                result.code()
+            } catch (e: Exception) {
+                if (e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
+            }
+        }
 }

@@ -5,7 +5,4 @@
         android:radius="@dimen/defRadius"/>
     <solid
         android:color="?attr/popup_background_color" />
-    <padding
-        android:top="8dp"
-        android:bottom="8dp"/>
 </shape>

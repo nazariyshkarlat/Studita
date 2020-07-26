@@ -5,17 +5,17 @@ import android.text.Editable
 import android.text.InputFilter
 import android.text.InputType
 import android.text.TextWatcher
-import android.text.method.DigitsKeyListener
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.utils.hideKeyboard
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.example.studita.utils.hideKeyboard
 import kotlinx.android.synthetic.main.exercise_input_missed_part_layout.*
+
 
 class ExerciseMissedCharacterFragment : NavigatableFragment(R.layout.exercise_input_missed_part_layout), TextWatcher {
 
@@ -47,7 +47,17 @@ class ExerciseMissedCharacterFragment : NavigatableFragment(R.layout.exercise_in
         }
 
         with(exerciseMissedPartLayoutEditText) {
-            keyListener = DigitsKeyListener.getInstance("+-*:÷×/")
+            inputType = InputType.TYPE_CLASS_TEXT
+            filters = arrayOf(
+                InputFilter { src, _, _, _, _, _ ->
+                    if (src.isEmpty()) {
+                        return@InputFilter src
+                    }
+                    if (src.toString().first() in setOf('+', '-', '*', '/', ':', '÷', '×')) {
+                        src
+                    } else ""
+                }
+            )
             filters += InputFilter.LengthFilter(1)
             addTextChangedListener(this@ExerciseMissedCharacterFragment)
         }

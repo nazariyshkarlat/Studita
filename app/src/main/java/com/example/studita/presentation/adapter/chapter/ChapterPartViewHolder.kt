@@ -29,7 +29,7 @@ class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view){
                         getAppCompatActivity()?.startActivity<ExercisesActivity>("CHAPTER_NUMBER" to chapterUiModel.chapterNumber,
                             "CHAPTER_PART_NUMBER" to model.chapterPartNumber,
                             "CHAPTER_PARTS_COUNT" to chapterUiModel.parts.size,
-                            "IS_TRAINING" to ((model.chapterPartNumber - 1) != UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1]))
+                            "IS_TRAINING" to (chapterPartInChapterNumber-1 != UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1]))
                     }
                 }
                 else -> {

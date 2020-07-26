@@ -20,15 +20,21 @@ class ExerciseResultRepositoryImpl(private val exerciseResultDataStoreFactory: E
         exerciseData: ExerciseData.ExerciseDataExercise,
         exerciseRequestData: ExerciseRequestData
     ): ExerciseResponseData {
-        return ExerciseResponseData(exerciseData.exerciseAnswer == exerciseRequestData.exerciseAnswer,
+        return ExerciseResponseData(
+            exerciseData.exerciseAnswer!!.split(",").toSet() == exerciseRequestData.exerciseAnswer.split(",").toSet() ,
             ExerciseResponseDescriptionData(when(exerciseData){
                 is ExerciseData.ExerciseDataExercise.ExerciseType1Data -> {
                     val correctAnswer =
                         exerciseData.variants.first { it.count == exerciseData.exerciseAnswer!!.toInt() }
                     ExerciseResponseDescriptionContentData.DescriptionContentArray(correctAnswer)
                 }
+                is ExerciseData.ExerciseDataExercise.ExerciseType17Data -> {
+                    val correctAnswer =
+                        exerciseData.variants.first { it.count == exerciseData.exerciseAnswer!!.toInt() }
+                    ExerciseResponseDescriptionContentData.DescriptionContentArray(correctAnswer)
+                }
                 is ExerciseData.ExerciseDataExercise.ExerciseType3Data -> {
-                     ExerciseResponseDescriptionContentData.DescriptionContentString(exerciseData.variants.first{it.character.toString() == exerciseData.exerciseAnswer}.characterName)
+                     ExerciseResponseDescriptionContentData.DescriptionContentString(exerciseData.variants.first{it.symbol == exerciseData.exerciseAnswer}.characterName)
                 }
                 else -> ExerciseResponseDescriptionContentData.DescriptionContentString(exerciseData.exerciseAnswer!!)
             }))

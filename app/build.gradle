@@ -3,40 +3,18 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
+apply from: "$rootProject.projectDir/android-library.gradle"
 
-android {
-    compileSdkVersion 29
-
-    signingConfigs {
-        release {
-            storeFile file('D:\\Android Studio Projects\\CERTIFICATES\\stud\\stud.jks')
-            storePassword 'jxNw&gKZE=*V8S*}'
-            keyAlias = 'upload'
-            keyPassword 'jxNw&gKZE=*V8S*}'
-        }
-    }
-    defaultConfig {
+android{
+    defaultConfig{
         applicationId "com.example.studita"
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
-        release {
-            signingConfig = signingConfigs.release
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+    buildTypes{
+        release{
+            shrinkResources true
         }
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-}
-
-androidExtensions {
-    experimental = true
 }
 
 dependencies {
@@ -44,15 +22,12 @@ dependencies {
     api project(':data')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
     implementation "androidx.appcompat:appcompat:$app_compat_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.google.android:flexbox:2.0.1'
 
     //Paging

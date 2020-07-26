@@ -10,6 +10,7 @@ import com.example.studita.presentation.model.HomeRecyclerUiModel
 import com.example.studita.utils.LevelUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.presentation.views.AlphaGradientView
+import com.example.studita.utils.PrefsUtils
 import kotlinx.android.synthetic.main.chapter_item.view.*
 
 class ChapterViewHolder(view: View,val count: Int) : LevelsViewHolder<HomeRecyclerUiModel.LevelChapterUiModel>(view){

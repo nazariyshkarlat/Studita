@@ -26,7 +26,7 @@ import com.google.gson.annotations.SerializedName
          ) val subtitle: String, @SerializedName("variants") val variants: List<String>
      ) : ExerciseInfo()
 
-     data class ExerciseType5And6And18Info(
+     data class ExerciseType5And6Info(
          @SerializedName("title") val title: String, @SerializedName(
              "subtitle"
          ) val subtitle: String, @SerializedName("variants") val variants: List<String>

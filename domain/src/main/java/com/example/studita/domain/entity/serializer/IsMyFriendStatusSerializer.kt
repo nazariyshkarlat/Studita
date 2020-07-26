@@ -9,9 +9,9 @@ import com.google.gson.JsonSerializer
 import java.io.IOException
 import java.lang.reflect.Type
 
-class IsMyFriendStatusSerializer() : JsonSerializer<IsMyFriendStatus>{
+class IsMyFriendStatusSerializer : JsonSerializer<IsMyFriendStatus.Success>{
     override fun serialize(
-        src: IsMyFriendStatus?,
+        src: IsMyFriendStatus.Success?,
         typeOfSrc: Type?,
         context: JsonSerializationContext?
     ): JsonElement {
@@ -22,20 +22,28 @@ class IsMyFriendStatusSerializer() : JsonSerializer<IsMyFriendStatus>{
 
         val jsonObject = JsonObject()
 
-        if(src is IsMyFriendStatus.Success) {
-            jsonObject.addProperty("friend_id", src.userId)
+        jsonObject.addProperty("friend_id", src.userId)
 
-            when (src) {
-                is IsMyFriendStatus.Success.IsMyFriend -> jsonObject.addProperty("type", "is_my_friend")
-                is IsMyFriendStatus.Success.IsNotMyFriend -> jsonObject.addProperty("type", "is_not_my_friend")
-                is IsMyFriendStatus.Success.WaitingForFriendshipAccept -> jsonObject.addProperty("type", "waiting_for_friendship_accept")
-                is IsMyFriendStatus.Success.GotMyFriendshipRequest ->jsonObject.addProperty("type", "got_my_friendship_request")
+        when (src) {
+            is IsMyFriendStatus.Success.IsMyFriend -> jsonObject.addProperty(
+                "type",
+                "is_my_friend"
+            )
+            is IsMyFriendStatus.Success.IsNotMyFriend -> jsonObject.addProperty(
+                "type",
+                "is_not_my_friend"
+            )
+            is IsMyFriendStatus.Success.WaitingForFriendshipAccept -> jsonObject.addProperty(
+                "type",
+                "waiting_for_friendship_accept"
+            )
+            is IsMyFriendStatus.Success.GotMyFriendshipRequest -> jsonObject.addProperty(
+                "type",
+                "got_my_friendship_request"
+            )
+        }
 
-            }
-
-            return jsonObject
-        }else
-            throw IOException("invalid is my friend status")
+        return jsonObject
     }
 
 

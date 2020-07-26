@@ -2,6 +2,7 @@ package com.example.studita.presentation.fragments.exercises.exercise
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.example.studita.R
@@ -10,8 +11,10 @@ import com.example.studita.utils.dpToPx
 import com.example.studita.utils.makeView
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.views.SquareView
+import com.example.studita.utils.postExt
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
 import kotlinx.android.synthetic.main.exercise_variants_linear_fragment.*
+import kotlinx.android.synthetic.main.exercise_variants_title_fragment.*
 
 
 class ExerciseVariantsType2Fragment : ExerciseVariantsFragment(R.layout.exercise_variants_linear_fragment) {
@@ -19,19 +22,22 @@ class ExerciseVariantsType2Fragment : ExerciseVariantsFragment(R.layout.exercise
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        exercisesViewModel?.let {
-            observeAnswered(it, exerciseVariantsLinearFragmentCenterLinearLayout)
-            when (it.exerciseUiModel) {
+        exercisesViewModel?.let {vm->
+            when (vm.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2And14UiModel -> {
                     val exerciseUiModel =
-                        it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2And14UiModel
+                        vm.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2And14UiModel
                     fillLinearLayout(exerciseUiModel)
                     exerciseVariantsLinearFragmentSubtitle.text = exerciseUiModel.subtitle
                     fillVariants(exerciseUiModel.variants)
                 }
             }
             if (selectedPos != -1)
-                selectVariant(exerciseVariantsLinearFragmentCenterLinearLayout, selectedPos)
+                exerciseVariantsLinearFragmentCenterLinearLayout.postExt {
+                    it as ViewGroup
+                    selectVariant(it, selectedPos)
+                }
+            observeAnswered(vm, exerciseVariantsLinearFragmentCenterLinearLayout)
         }
 
     }

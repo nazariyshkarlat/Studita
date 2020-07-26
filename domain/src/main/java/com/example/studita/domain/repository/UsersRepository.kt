@@ -10,9 +10,11 @@ interface UsersRepository {
 
     suspend fun checkIsMyFriend(myId: Int, userId: Int) : Pair<Int, IsMyFriendData?>
 
-    suspend fun addFriend(friendActionRequestData: FriendActionRequestData): Int
+    suspend fun sendFriendship(friendActionRequestData: FriendActionRequestData): Int
 
     suspend fun removeFriend(friendActionRequestData: FriendActionRequestData): Int
+
+    suspend fun cancelFriendship(friendActionRequestData: FriendActionRequestData) : Int
 
     suspend fun acceptFriendship(friendActionRequestData: FriendActionRequestData): Int
 

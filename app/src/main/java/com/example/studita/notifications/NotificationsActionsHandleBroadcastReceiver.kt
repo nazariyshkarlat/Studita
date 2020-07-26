@@ -12,6 +12,7 @@ import com.example.studita.domain.entity.FriendActionRequestData
 import com.example.studita.domain.entity.UserData
 import com.example.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.example.studita.domain.interactor.IsMyFriendStatus
+import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.utils.UserUtils
 import com.google.gson.GsonBuilder
@@ -26,7 +27,7 @@ class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver(){
     override fun onReceive(context: Context, intent: Intent) {
         val notificationId = intent.getIntExtra("NOTIFICATION_ID", 0)
         val userData = GsonBuilder().apply {
-            registerTypeAdapter(IsMyFriendStatus::class.java, IsMyFriendStatusDeserializer())
+            registerTypeAdapter(IsMyFriendStatus.Success::class.java, IsMyFriendStatusDeserializer())
         }.create().fromJson<UserData>(intent.getStringExtra("USER_DATA"), object  : TypeToken<UserData>() {}.type)
 
         when(intent.action?.toNotificationAction()){
@@ -40,9 +41,9 @@ class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver(){
                         )
                     )
                 }
-                UserUtils.isMyFriendLiveData.value = userData.apply {
+                UserUtils.isMyFriendLiveData.value = UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(userData.apply {
                     isMyFriendStatus = IsMyFriendStatus.Success.IsMyFriend(userData.userId)
-                }
+                })
             }
             NotificationAction.REJECT_FRIENDSHIP -> {
                 GlobalScope.launch {
@@ -53,13 +54,13 @@ class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver(){
                         )
                     )
                 }
-                UserUtils.isMyFriendLiveData.value = userData.apply {
+                UserUtils.isMyFriendLiveData.value = UsersInteractor.FriendActionState.FriendshipRequestIsRejected(userData.apply {
                     isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userData.userId)
-                }
+                })
             }
         }
 
-        if(UserUtils.userDataLiveData.value != null) {
+        if(UserUtils.userDataNotNull()) {
             UserUtils.userDataLiveData.postValue(UserUtils.userData.apply {
                 notificationsAreChecked = true
             })

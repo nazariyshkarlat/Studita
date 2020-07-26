@@ -12,7 +12,7 @@
     <attr name="popup_background_color" format="reference"/>
     <attr name="splash_screen_color" format="reference"/>
     <attr name="splash_screen_text_color" format="reference"/>
-    <attr name="task_variant_button" format="reference"/>
+    <attr name="exercise_variant_button_divider_color" format="reference"/>
     <attr name="swipe_refresh_layout_background_color" format="reference"/>
     <attr name="dialogs_color" format="reference"/>
     <attr name="press_view_press_alpha_lighter" format="float"/>

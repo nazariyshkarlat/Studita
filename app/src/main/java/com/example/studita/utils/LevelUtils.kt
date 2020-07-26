@@ -208,7 +208,6 @@ object LevelUtils {
             }
         }
 
-        println(exerciseResultAnimation)
         return exerciseResultAnimation
     }
 }

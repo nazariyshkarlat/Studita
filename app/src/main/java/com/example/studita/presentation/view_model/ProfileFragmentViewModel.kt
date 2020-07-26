@@ -16,7 +16,7 @@ import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
 import kotlinx.coroutines.*
 
-class ProfileFragmentViewModel : ViewModel(){
+class ProfileFragmentViewModel : ViewModel() {
 
     private val friendsInteractor = UsersModule.getUsersInteractorImpl()
     private val userDataInteractor = UserDataModule.getUserDataInteractorImpl()
@@ -29,67 +29,103 @@ class ProfileFragmentViewModel : ViewModel(){
     val userDataState = MutableLiveData<UserDataStatus>()
 
     val friendsState = MutableLiveData<GetUsersStatus>()
-    val isMyFriendState = MutableLiveData<IsMyFriendStatus>()
+    val isMyFriendState = MutableLiveData<IsMyFriendStatus.Success>()
 
-    fun getProfileData(myId: Int, friendOfUserId: Int){
-        viewModelScope.launch{
+    fun getProfileData(myId: Int, friendOfUserId: Int) {
+        viewModelScope.launch {
             val friendDataDeferred = async { getFriendData(friendOfUserId) }
-            val friendsDeferred  = async {  getFriendsAsync(friendOfUserId) }
-            val checkMyFriendDeferred = if(friendOfUserId != myId) async { checkIsMyFriend(myId, friendOfUserId) } else null
+            val friendsDeferred = async { getFriendsAsync(friendOfUserId) }
+            val checkMyFriendDeferred = if (friendOfUserId != myId) async {
+                checkIsMyFriend(
+                    myId,
+                    friendOfUserId
+                )
+            } else null
             val userDataStatus = friendDataDeferred.await()
             val getFriendsStatus = friendsDeferred.await()
             val checkMyFriendStatus = checkMyFriendDeferred?.await()
-            if(userDataStatus is UserDataStatus.Success &&
+            if (userDataStatus is UserDataStatus.Success &&
                 (getFriendsStatus is GetUsersStatus.Success || getFriendsStatus is GetUsersStatus.NoUsersFound) &&
-                (checkMyFriendStatus == null || checkMyFriendStatus is IsMyFriendStatus.Success)) {
+                (checkMyFriendStatus == null || checkMyFriendStatus is IsMyFriendStatus.Success)
+            ) {
                 userDataState.postValue(userDataStatus)
                 friendsState.postValue(getFriendsStatus)
                 if (friendOfUserId != myId)
-                    isMyFriendState.postValue(checkMyFriendStatus)
+                    isMyFriendState.postValue(checkMyFriendStatus as IsMyFriendStatus.Success)
             }
         }
     }
 
-    private suspend fun getFriendData(userId: Int): UserDataStatus{
+    private suspend fun getFriendData(userId: Int): UserDataStatus {
         return userDataInteractor.getUserData(userId, false)
     }
 
-    private suspend fun checkIsMyFriend(userId: Int, anotherUserId: Int): IsMyFriendStatus{
+    private suspend fun checkIsMyFriend(userId: Int, anotherUserId: Int): IsMyFriendStatus {
         return friendsInteractor.checkIsMyFriend(userId, anotherUserId)
     }
 
-    private suspend fun getFriendsAsync(userId: Int): GetUsersStatus{
-        return friendsInteractor.getUsers(userId, 3, 1, sortBy = friendsInteractor.defSortBy, userId = PrefsUtils.getUserId()!!)
+    private suspend fun getFriendsAsync(userId: Int): GetUsersStatus {
+        return friendsInteractor.getUsers(
+            userId,
+            3,
+            1,
+            sortBy = friendsInteractor.defSortBy,
+            userId = PrefsUtils.getUserId()!!
+        )
     }
 
-    fun getFriends(userId: Int){
-        getFriendsJob = viewModelScope.launchExt(getFriendsJob){
-            val status = friendsInteractor.getUsers(userId, 3, 1, sortBy = friendsInteractor.defSortBy, userId = PrefsUtils.getUserId()!!)
-            if(status is GetUsersStatus.Success)
-                friendsState.postValue(status)
-        }
-    }
+    fun acceptFriendshipRequest(userIdToken: UserIdTokenData, userData: UserData) {
+        val newValue = UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(
+            userData.apply { isMyFriendStatus = IsMyFriendStatus.Success.IsMyFriend(userId) })
 
-    fun addToFriends(userIdToken: UserIdTokenData, userData: UserData){
-        UserUtils.isMyFriendLiveData.value = userData.apply {
-            isMyFriendStatus = IsMyFriendStatus.Success.GotMyFriendshipRequest(userId)
-        }
-        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob){
-            val result = friendsInteractor.addFriend(FriendActionRequestData(userIdToken, userData.userId))
-            if(result is FriendActionStatus.Success)
-                addFriendStatus.postValue(UsersInteractor.FriendActionState.FriendshipRequestIsSent(userData))
-        }
-    }
-
-    fun acceptFriendshipRequest(userIdToken: UserIdTokenData, userData: UserData){
-        UserUtils.isMyFriendLiveData.value = userData.apply {
-            isMyFriendStatus = IsMyFriendStatus.Success.IsMyFriend(userId)
-        }
-        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob){
+        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob) {
             val result = friendsInteractor.acceptFriendship(FriendActionRequestData(userIdToken, userData.userId))
-            if(result is FriendActionStatus.Success)
-                addFriendStatus.postValue(UsersInteractor.FriendActionState.AddedToFriends(userData))
+            if (result == FriendActionStatus.Success)
+                addFriendStatus.postValue(newValue)
         }
+        UserUtils.isMyFriendLiveData.postValue(newValue)
+    }
+
+    fun removeFriend(userIdToken: UserIdTokenData, userData: UserData){
+        val newValue = UsersInteractor.FriendActionState.RemovedFromFriends(
+            userData.apply {
+                isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
+            })
+
+        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob) {
+            val result = friendsInteractor.removeFriend(FriendActionRequestData(userIdToken, userData.userId))
+            if (result == FriendActionStatus.Success)
+                addFriendStatus.postValue(newValue)
+        }
+        UserUtils.isMyFriendLiveData.postValue(newValue)
+    }
+
+    fun cancelFriendshipRequest(userIdToken: UserIdTokenData, userData: UserData){
+        val newValue = UsersInteractor.FriendActionState.FriendshipRequestIsCanceled(
+            userData.apply {
+                isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
+            })
+
+        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob) {
+            val result = friendsInteractor.cancelFriendship(FriendActionRequestData(userIdToken, userData.userId))
+            if (result == FriendActionStatus.Success)
+                addFriendStatus.postValue(newValue)
+        }
+        UserUtils.isMyFriendLiveData.postValue(newValue)
+    }
+
+    fun sendFriendshipRequest(userIdToken: UserIdTokenData, userData: UserData){
+        val newValue = UsersInteractor.FriendActionState.FriendshipRequestIsSent(
+            userData.apply {
+                isMyFriendStatus = IsMyFriendStatus.Success.GotMyFriendshipRequest(userId)
+            })
+
+        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob) {
+            val result = friendsInteractor.sendFriendship(FriendActionRequestData(userIdToken, userData.userId))
+            if (result == FriendActionStatus.Success)
+                addFriendStatus.postValue(newValue)
+        }
+        UserUtils.isMyFriendLiveData.postValue(newValue)
     }
 
     fun refreshFriends(changedUser: UserData){
@@ -100,9 +136,11 @@ class ProfileFragmentViewModel : ViewModel(){
                     UsersResponseData(1, arrayListOf(changedUser))
                 )
             }else if(friendsStateValue is GetUsersStatus.Success){
-                friendsState.value = friendsStateValue.apply {
-                    friendsResponseData.usersCount++
-                    friendsResponseData.users.add(changedUser)
+                if(friendsStateValue.friendsResponseData.users.none{it.userId == changedUser.userId}) {
+                    friendsState.value = friendsStateValue.apply {
+                        friendsResponseData.usersCount++
+                        friendsResponseData.users.add(0, changedUser)
+                    }
                 }
             }
         }else{
@@ -116,28 +154,6 @@ class ProfileFragmentViewModel : ViewModel(){
                     }
                 }
             }
-        }
-    }
-
-    fun removeFromFriends(userIdToken: UserIdTokenData, userData: UserData){
-        UserUtils.isMyFriendLiveData.value = userData.apply {
-            isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
-        }
-        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob){
-            val result = friendsInteractor.removeFriend(FriendActionRequestData(userIdToken, userData.userId))
-            if(result is FriendActionStatus.Success)
-                addFriendStatus.postValue(UsersInteractor.FriendActionState.RemovedFromFriends(userData))
-        }
-    }
-
-    fun cancelFriendshipRequest(userIdToken: UserIdTokenData, userData: UserData){
-        UserUtils.isMyFriendLiveData.value = userData.apply {
-            isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
-        }
-        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob){
-            val result = friendsInteractor.removeFriend(FriendActionRequestData(userIdToken, userData.userId))
-            if(result is FriendActionStatus.Success)
-                addFriendStatus.postValue(UsersInteractor.FriendActionState.MyFriendshipRequestIsCanceled(userData))
         }
     }
 

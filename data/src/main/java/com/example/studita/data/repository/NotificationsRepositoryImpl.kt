@@ -19,4 +19,6 @@ class NotificationsRepositoryImpl(private val notificationsDataStoreFactory: Not
         }
     }
 
+    override suspend fun setNotificationsAreChecked(userIdTokenData: UserIdTokenData) = notificationsDataStoreFactory.create().trySetNotificationsAreChecked(userIdTokenData.toRawEntity())
+
 }

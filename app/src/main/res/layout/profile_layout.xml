@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        <com.example.studita.presentation.views.SlopeSwipeToRefresh
         android:id="@+id/profileLayoutSwipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -220,5 +220,5 @@
             </LinearLayout>
         </ScrollView>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.example.studita.presentation.views.SlopeSwipeToRefresh>
 </FrameLayout>

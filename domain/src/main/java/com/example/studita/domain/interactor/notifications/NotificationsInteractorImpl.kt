@@ -6,6 +6,7 @@ import com.example.studita.domain.exception.ServerUnavailableException
 import com.example.studita.domain.interactor.GetNotificationsStatus
 import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.interactor.LevelsStatus
+import com.example.studita.domain.interactor.SetNotificationsAreCheckedStatus
 import com.example.studita.domain.repository.NotificationsRepository
 import com.example.studita.domain.repository.UsersRepository
 import kotlinx.coroutines.delay
@@ -48,4 +49,32 @@ class NotificationsInteractorImpl(private val repository: NotificationsRepositor
                 GetNotificationsStatus.Failure
         }
 
+    override suspend fun setNotificationsAreChecked(
+        userIdTokenData: UserIdTokenData,
+        retryCount: Int
+    ): SetNotificationsAreCheckedStatus =
+        try {
+            if (repository.setNotificationsAreChecked(userIdTokenData) == 200)
+                SetNotificationsAreCheckedStatus.Success
+            else
+                SetNotificationsAreCheckedStatus.Failure
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+                if (retryCount == 0) {
+                    if (e is NetworkConnectionException) {
+                        SetNotificationsAreCheckedStatus.NoConnection
+                    } else
+                        SetNotificationsAreCheckedStatus.ServiceUnavailable
+                } else {
+                    if (e is NetworkConnectionException)
+                        delay(retryDelay)
+                    setNotificationsAreChecked(
+                        userIdTokenData,
+                        retryCount-1
+                    )
+                }
+            }else
+                SetNotificationsAreCheckedStatus.Failure
+        }
 }

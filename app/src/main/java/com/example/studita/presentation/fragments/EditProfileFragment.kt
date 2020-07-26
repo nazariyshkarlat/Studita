@@ -1,18 +1,17 @@
 package com.example.studita.presentation.fragments
 
+import android.R.attr.end
+import android.R.attr.start
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.text.Editable
+import android.text.*
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.view.WindowManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
@@ -29,13 +28,17 @@ import com.example.studita.presentation.listeners.GenericTextWatcherImpl
 import com.example.studita.presentation.listeners.setGenericTextWatcher
 import com.example.studita.presentation.view_model.EditProfileViewModel
 import com.example.studita.presentation.views.CustomSnackbar
-import com.example.studita.utils.*
+import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.TextUtils.isFullNameCharAllowed
+import com.example.studita.utils.ThemeUtils
+import com.example.studita.utils.UserUtils
+import com.example.studita.utils.limitLength
 import kotlinx.android.synthetic.main.edit_profile_layout.*
 
 
 class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), GenericTextWatcher{
 
-    lateinit var editProfileViewModel: EditProfileViewModel
+    private lateinit var editProfileViewModel: EditProfileViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -145,6 +148,34 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
         editProfileLayoutUserNameEditText.limitLength(resources.getInteger(R.integer.user_name_max_length) + 1)
         editProfileLayoutUserFullNameEditText.limitLength(resources.getInteger(R.integer.user_full_name_max_length))
 
+        val fullNameFilter =
+            InputFilter { source, start, end, dest, _, dend ->
+                var keepOriginal = true
+                val sb = StringBuilder(end - start)
+                for (i in start until end) {
+                    val c: Char = source[i]
+                    if (c.isFullNameCharAllowed(dest.getOrNull(dend-1)) || dest.isEmpty())
+                        sb.append(c) else keepOriginal = false
+                }
+                if (keepOriginal) null else {
+                    if (source is Spanned) {
+                        val sp = SpannableString(sb)
+                        TextUtils.copySpansFrom(
+                            source,
+                            start,
+                            end,
+                            null,
+                            sp,
+                            0
+                        )
+                        sp
+                    } else {
+                        sb
+                    }
+                }
+            }
+        editProfileLayoutUserFullNameEditText.filters = arrayOf(fullNameFilter, *editProfileLayoutUserFullNameEditText.filters)
+
         editProfileLayoutUserFullNameEditText.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus)
                 (v as EditText).setSelection(v.text.length)
@@ -223,7 +254,11 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                 }
             }
             R.id.editProfileLayoutUserFullNameEditText -> {
-                editProfileViewModel.formNewUserFullName(charSequence)
+
+                if((charSequence?.length == resources.getInteger(R.integer.user_full_name_max_length)) && (charSequence.last() == ' '))
+                    editProfileLayoutUserFullNameEditText.text?.delete(charSequence.length-1, charSequence.length)
+
+                editProfileViewModel.formNewUserFullName(charSequence?.trim())
                 editProfileViewModel.checkIfUserNameAvailableAndCorrectFullName()
             }
         }

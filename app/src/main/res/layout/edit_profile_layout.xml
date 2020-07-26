@@ -78,7 +78,7 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
                         android:hint="@string/user_name_hint"
-                        android:imeOptions="actionNext"
+                        android:imeOptions="actionNext|flagForceAscii"
                         android:paddingEnd="48dp"
                         android:singleLine="true" />
 

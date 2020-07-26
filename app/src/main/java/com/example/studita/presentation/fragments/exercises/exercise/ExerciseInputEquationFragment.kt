@@ -73,7 +73,6 @@ class ExerciseInputEquationFragment : NavigatableFragment(R.layout.exercise_inpu
                 str = removeZeros
                 if (!lastChar.isCharacter()) {
                     if (str.checkStringIsValidEquation()) {
-                        println(str)
                         exercisesViewModel?.buttonEnabledState?.value =
                             true
                         exercisesViewModel?.exerciseRequestData =

@@ -53,8 +53,12 @@ open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
         viewModel.answered.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer { answered ->
-                if (answered)
-                    variantsLayout.disableAllItems()
+                println(answered)
+                if (answered) {
+                    variantsLayout.post {
+                        variantsLayout.disableAllItems()
+                    }
+                }
             })
     }
 

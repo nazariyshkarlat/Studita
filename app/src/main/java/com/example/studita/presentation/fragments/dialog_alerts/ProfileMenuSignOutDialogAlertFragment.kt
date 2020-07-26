@@ -1,5 +1,6 @@
 package com.example.studita.presentation.fragments.dialog_alerts
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
@@ -8,6 +9,7 @@ import com.example.studita.App
 import com.example.studita.R
 import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.presentation.activities.MainActivity
+import com.example.studita.presentation.activities.MainActivity.Companion.startMainActivityNewTask
 import com.example.studita.presentation.fragments.base.BaseDialogFragment
 import com.example.studita.presentation.view_model.ProfileMenuFragmentViewModel
 import com.example.studita.utils.PrefsUtils
@@ -42,7 +44,7 @@ class ProfileMenuSignOutDialogAlertFragment : BaseDialogFragment(R.layout.sign_o
                 MainActivity.needsRecreate = true
                 dialog?.dismiss()
                 App.authenticationState.value = CheckTokenIsCorrectStatus.Correct
-                activity?.finish()
+                activity?.startMainActivityNewTask()
             }
         }
     }

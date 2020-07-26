@@ -8,4 +8,5 @@ interface NotificationsRepository {
 
     suspend fun getNotifications(userIdTokenData: UserIdTokenData, perPage: Int, pageNumber: Int): Pair<Int, List<NotificationData>?>
 
+    suspend fun setNotificationsAreChecked(userIdTokenData: UserIdTokenData): Int
 }

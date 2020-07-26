@@ -17,4 +17,4 @@ data class UserDataData(val userId: Int?,
                         var todayCompletedExercises: Int = 0,
                         var notificationsAreChecked: Boolean)
 
-fun UserDataData.toUserData(isMyFriendStatus: IsMyFriendStatus) = UserData(userId!!, userName!!, avatarLink, isMyFriendStatus)
+fun UserDataData.toUserData(isMyFriendStatus: IsMyFriendStatus.Success) = UserData(userId!!, userName!!, avatarLink, isMyFriendStatus)

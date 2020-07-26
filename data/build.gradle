@@ -2,46 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-
-android {
-    compileSdkVersion 29
-
-    signingConfigs {
-        release {
-            storeFile file('D:\\Android Studio Projects\\CERTIFICATES\\stud\\stud.jks')
-            storePassword 'jxNw&gKZE=*V8S*}'
-            keyAlias = 'upload'
-            keyPassword 'jxNw&gKZE=*V8S*}'
-        }
-    }
-    defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
-    }
-
-    buildTypes {
-        release {
-            signingConfig = signingConfigs.release
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-
-        debug {
-            resValue("string", "DB_PASSWORD_PERSON", "password")
-        }
-    }
-
-}
+apply from: "$rootProject.projectDir/android-library.gradle"
 
 dependencies {
+
+    api project(':domain')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
 
     //retrofit
     api "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -59,10 +25,4 @@ dependencies {
     api "androidx.room:room-ktx:$room_version"
 
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-    implementation project(':domain')
 }
