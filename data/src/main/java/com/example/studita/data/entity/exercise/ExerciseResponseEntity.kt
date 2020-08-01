@@ -26,6 +26,6 @@ fun ExerciseResponseEntity.toBusinessEntity() = ExerciseResponseData(
 fun ExerciseResponseDescriptionEntity.toBusinessEntity() = ExerciseResponseDescriptionData(when(descriptionContent){
     is ExerciseResponseDescriptionContent.DescriptionContentString -> ExerciseResponseDescriptionContentData.DescriptionContentString(descriptionContent.descriptionContent)
     is ExerciseResponseDescriptionContent.DescriptionContentArray -> ExerciseResponseDescriptionContentData.DescriptionContentArray(
-        ExerciseShapeData( descriptionContent.descriptionContent[0], descriptionContent.descriptionContent[1].toInt())
+        ExerciseImagesRowData( descriptionContent.descriptionContent[0].toImageType(), descriptionContent.descriptionContent[1].toInt())
     )
 })

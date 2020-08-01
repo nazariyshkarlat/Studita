@@ -15,7 +15,9 @@ class ExercisesDescription7Fragment : ExercisesDescriptionFragment(R.layout.exer
         super.onViewCreated(view, savedInstanceState)
         exercisesDescriptionModel?.let {
             formView(it.textParts)
-            checkButtonDivider(view)
+
+            if(!isHidden)
+                checkButtonDivider(view)
         }
     }
 

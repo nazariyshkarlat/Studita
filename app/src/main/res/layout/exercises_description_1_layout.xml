@@ -38,10 +38,12 @@
 
         <LinearLayout
             android:id="@+id/exercisesDescription1LayoutLinearLayout1"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp"/>
+            android:background="@drawable/main_blocks_rectangle"
+            android:gravity="center"
+            android:layout_marginTop="24dp"/>
 
         <TextView
             style="@style/Regular18"
@@ -51,10 +53,12 @@
 
         <LinearLayout
             android:id="@+id/exercisesDescription1LayoutLinearLayout2"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp"/>
+            android:background="@drawable/main_blocks_rectangle"
+            android:gravity="center"
+            android:layout_marginTop="24dp" />
 
         <TextView
             style="@style/Regular18"
@@ -63,10 +67,13 @@
             android:layout_marginTop="24dp"/>
 
         <TextView
-            style="@style/Regular18Green"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            style="@style/Medium18Yellow"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textAlignment="center"
+            android:background="@drawable/main_blocks_rectangle"
+            android:gravity="center"
+            android:layout_marginTop="24dp"/>
 
         <TextView
             style="@style/Regular18"

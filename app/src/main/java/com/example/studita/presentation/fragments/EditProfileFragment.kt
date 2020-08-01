@@ -1,7 +1,5 @@
 package com.example.studita.presentation.fragments
 
-import android.R.attr.end
-import android.R.attr.start
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -27,9 +25,9 @@ import com.example.studita.presentation.listeners.GenericTextWatcher
 import com.example.studita.presentation.listeners.GenericTextWatcherImpl
 import com.example.studita.presentation.listeners.setGenericTextWatcher
 import com.example.studita.presentation.view_model.EditProfileViewModel
+import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.example.studita.presentation.views.CustomSnackbar
 import com.example.studita.utils.PrefsUtils
-import com.example.studita.utils.TextUtils.isFullNameCharAllowed
 import com.example.studita.utils.ThemeUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.limitLength
@@ -48,7 +46,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
         UserUtils.userDataLiveData.observe(viewLifecycleOwner, Observer { userData ->
 
         if (savedInstanceState == null) {
-            editProfileViewModel.oldProfileData = EditProfileData(userData.userName, userData.userFullName, userData.avatarLink)
+            editProfileViewModel.oldProfileData = EditProfileData(userData.userName, userData.name, userData.avatarLink)
             editProfileViewModel.newProfileData = editProfileViewModel.oldProfileData.copy()
             fillEditTexts(editProfileViewModel.newProfileData)
         }
@@ -58,7 +56,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
             editProfileViewModel.userNameAvailableState.value = EditProfileViewModel.UserNameAvailable.AVAILABLE
             (view as ViewGroup).removeView(editProfileLayoutProgressBar)
             editProfileLayoutScrollView.visibility = View.VISIBLE
-    })
+        })
 
         editProfileViewModel.userNameAvailableState.observe(viewLifecycleOwner, Observer {
             editProfileViewModel.checkCorrectUserName()
@@ -67,7 +65,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
             editProfileLayoutUserNameStatusTextView.text = resources.getString(R.string.edit_profile_user_name_available)
             editProfileLayoutUserNameStatusTextView.setTextColor(ContextCompat.getColor(view.context, R.color.green))
         } else {
-            if (it == EditProfileViewModel.UserNameAvailable.INVALID_LENGTH)
+            if (it == EditProfileViewModel.UserNameAvailable.UNAVAILABLE)
                 editProfileLayoutUserNameStatusTextView.text = resources.getString(R.string.edit_profile_user_name_unavailable)
             else
                 editProfileLayoutUserNameStatusTextView.text = resources.getString(R.string.edit_profile_user_name_is_taken)
@@ -81,31 +79,19 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
             showSaveChangesButton()
             toolbarFragmentViewModel?.hideProgress()
         }else
-            toolbarFragmentViewModel?.hideRightButton()
+            toolbarFragmentViewModel?.setToolbarRightButtonState(ToolbarFragmentViewModel.ToolbarRightButtonState.Disabled(R.drawable.ic_done_selector))
     })
 
         editProfileViewModel.countersErrorState.observe(viewLifecycleOwner, Observer { showError ->
-        if (showError.first == EditProfileViewModel.TextField.USER_NAME) {
             editProfileLayoutUserNameCounter.setTextColor(
-                    if (showError.second) {
-                        editProfileLayoutUserNameEditText.hasError = true
-                        ContextCompat.getColor(view.context, R.color.red)
-                    } else {
-                        editProfileLayoutUserNameEditText.hasError = false
-                        ThemeUtils.getSecondaryColor(view.context)
-                    }
+                if (showError) {
+                    editProfileLayoutUserNameEditText.hasError = true
+                    ContextCompat.getColor(view.context, R.color.red)
+                } else {
+                    editProfileLayoutUserNameEditText.hasError = false
+                    ThemeUtils.getSecondaryColor(view.context)
+                }
             )
-        } else {
-            editProfileLayoutUserFullNameCounter.setTextColor(
-                    if (showError.second) {
-                        editProfileLayoutUserFullNameEditText.hasError = true
-                        ContextCompat.getColor(view.context, R.color.red)
-                    } else {
-                        editProfileLayoutUserFullNameEditText.hasError = false
-                        ThemeUtils.getSecondaryColor(view.context)
-                    }
-            )
-        }
     })
 
         editProfileViewModel.backClickState.observe(viewLifecycleOwner, Observer {
@@ -135,7 +121,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
             }
             EditProfileViewModel.SaveProfileChangesState.LOADING -> {
                 toolbarFragmentViewModel?.showProgress()
-                toolbarFragmentViewModel?.hideRightButton()
+                toolbarFragmentViewModel?.setToolbarRightButtonState(ToolbarFragmentViewModel.ToolbarRightButtonState.Invisible)
             }
             else -> {
             }
@@ -143,40 +129,12 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
     })
 
         editProfileLayoutUserNameEditText.setGenericTextWatcher(GenericTextWatcherImpl(this, editProfileLayoutUserNameEditText))
-        editProfileLayoutUserFullNameEditText.setGenericTextWatcher(GenericTextWatcherImpl(this, editProfileLayoutUserFullNameEditText))
+        editProfileLayoutNameEditText.setGenericTextWatcher(GenericTextWatcherImpl(this, editProfileLayoutNameEditText))
 
-        editProfileLayoutUserNameEditText.limitLength(resources.getInteger(R.integer.user_name_max_length) + 1)
-        editProfileLayoutUserFullNameEditText.limitLength(resources.getInteger(R.integer.user_full_name_max_length))
+        editProfileLayoutUserNameEditText.limitLength(resources.getInteger(R.integer.user_name_max_length))
+        editProfileLayoutNameEditText.limitLength(resources.getInteger(R.integer.name_max_length))
 
-        val fullNameFilter =
-            InputFilter { source, start, end, dest, _, dend ->
-                var keepOriginal = true
-                val sb = StringBuilder(end - start)
-                for (i in start until end) {
-                    val c: Char = source[i]
-                    if (c.isFullNameCharAllowed(dest.getOrNull(dend-1)) || dest.isEmpty())
-                        sb.append(c) else keepOriginal = false
-                }
-                if (keepOriginal) null else {
-                    if (source is Spanned) {
-                        val sp = SpannableString(sb)
-                        TextUtils.copySpansFrom(
-                            source,
-                            start,
-                            end,
-                            null,
-                            sp,
-                            0
-                        )
-                        sp
-                    } else {
-                        sb
-                    }
-                }
-            }
-        editProfileLayoutUserFullNameEditText.filters = arrayOf(fullNameFilter, *editProfileLayoutUserFullNameEditText.filters)
-
-        editProfileLayoutUserFullNameEditText.setOnFocusChangeListener { v, hasFocus ->
+        editProfileLayoutNameEditText.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus)
                 (v as EditText).setSelection(v.text.length)
         }
@@ -202,13 +160,13 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
     }
 
     private fun fillEditTexts(editProfileData: EditProfileData) {
-        editProfileLayoutUserNameEditText.setText(resources.getString(R.string.user_name_template, editProfileData.userName))
-        editProfileLayoutUserFullNameEditText.setText(editProfileData.userFullName)
+        editProfileLayoutUserNameEditText.setText(editProfileData.userName)
+        editProfileLayoutNameEditText.setText(editProfileData.name)
     }
 
     private fun fillCounters(editProfileData: EditProfileData) {
-        editProfileLayoutUserFullNameCounter.text = resources.getString(R.string.edit_text_counter_template, editProfileData.userFullName?.length
-                ?: 0, resources.getInteger(R.integer.user_full_name_max_length))
+        editProfileLayoutNameCounter.text = resources.getString(R.string.edit_text_counter_template, editProfileData.name?.length
+                ?: 0, resources.getInteger(R.integer.name_max_length))
         editProfileLayoutUserNameCounter.text = resources.getString(R.string.edit_text_counter_template, editProfileData.userName?.length
                 ?: 0, resources.getInteger(R.integer.user_name_max_length))
     }
@@ -236,39 +194,38 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
         editProfileViewModel.saveChangesButtonVisibleState.value = false
         when (view.id) {
             R.id.editProfileLayoutUserNameEditText -> {
-                if (charSequence?.isEmpty() == true) {
-                    (view as EditText).setText("@")
-                    view.setSelection(1)
-                } else {
-
-                    if(charSequence?.length == 2){
-                        if(editProfileViewModel.newProfileData.avatarLink == null)
-                            AvaDrawer.drawAvatar(editProfileLayoutAvatar, charSequence.toString().substring(1), PrefsUtils.getUserId()!!)
-                    }
-
-                    editProfileViewModel.formNewUserName(charSequence)
-
-                    verifyingUserName(view)
-
-                    editProfileViewModel.verifyUserName()
+                if(charSequence?.length == 1){
+                    if(editProfileViewModel.newProfileData.avatarLink == null)
+                        AvaDrawer.drawAvatar(editProfileLayoutAvatar, charSequence.toString(), PrefsUtils.getUserId()!!)
                 }
+
+                editProfileViewModel.formNewUserName(charSequence)
+
+                verifyingUserName(view)
+
+                editProfileViewModel.verifyUserName()
             }
-            R.id.editProfileLayoutUserFullNameEditText -> {
+            R.id.editProfileLayoutNameEditText -> {
 
-                if((charSequence?.length == resources.getInteger(R.integer.user_full_name_max_length)) && (charSequence.last() == ' '))
-                    editProfileLayoutUserFullNameEditText.text?.delete(charSequence.length-1, charSequence.length)
+                if((charSequence?.length == resources.getInteger(R.integer.name_max_length)) && (charSequence.last() == ' ')) {
+                    editProfileLayoutNameEditText.text?.delete(
+                        charSequence.length - 1,
+                        charSequence.length
+                    )
+                    return
+                }
 
-                editProfileViewModel.formNewUserFullName(charSequence?.trim())
-                editProfileViewModel.checkIfUserNameAvailableAndCorrectFullName()
+                editProfileViewModel.formNewName(charSequence?.trim())
+                editProfileViewModel.checkShowSaveButton()
             }
         }
         fillCounters(editProfileViewModel.newProfileData)
     }
 
     private fun showSaveChangesButton() {
-        toolbarFragmentViewModel?.showRightButtonAndSetOnClick(R.drawable.ic_done_accent) {
+        toolbarFragmentViewModel?.setToolbarRightButtonState(ToolbarFragmentViewModel.ToolbarRightButtonState.IsEnabled(R.drawable.ic_done_selector) {
             saveChangesButtonOnClick()
-        }
+        })
     }
 
     override fun onBackClick() {

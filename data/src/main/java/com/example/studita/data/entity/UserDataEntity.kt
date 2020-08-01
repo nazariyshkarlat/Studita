@@ -3,11 +3,9 @@ package com.example.studita.data.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 import com.example.studita.data.entity.UserDataEntity.Companion.TABLE_NAME
 import com.example.studita.domain.date.DateTimeFormat
 import com.example.studita.domain.entity.UserDataData
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = TABLE_NAME)
@@ -15,8 +13,8 @@ data class UserDataEntity(@ColumnInfo(name = "user_id")
                           @SerializedName("user_id")val userId: Int? = null,
                           @ColumnInfo(name = "user_name")
                           @SerializedName("user_name")val userName: String? = null,
-                          @ColumnInfo(name = "user_full_name")
-                          @SerializedName("user_full_name")val userFullName: String? = null,
+                          @ColumnInfo(name = "name")
+                          @SerializedName("name")val name: String? = null,
                           @ColumnInfo(name = "user_public_id")
                           @SerializedName("user_public_id")val userPublicId: String? = null,
                           @ColumnInfo(name = "avatar_link")
@@ -48,5 +46,5 @@ data class UserDataEntity(@ColumnInfo(name = "user_id")
 
 data class SaveUserDataRequest(@SerializedName("auth_data")val userIdToken: UserIdToken, @SerializedName("user_data")val userDataEntity: UserDataEntity)
 
-fun UserDataData.toRawEntity() = UserDataEntity(userId, userName, userFullName, userPublicId, avatarLink, currentLevel, currentLevelXP, streakDays, isSubscribed, ArrayList(completedParts), DateTimeFormat().format(streakDatetime), todayCompletedExercises)
-fun UserDataEntity.toBusinessEntity() = UserDataData(userId, userName, userFullName, userPublicId, avatarLink, currentLevel, currentLevelXP, streakDays, isSubscribed, ArrayList(completedParts), DateTimeFormat().parse(streakDatetime)!!, todayCompletedExercises, notificationsAreChecked)
+fun UserDataData.toRawEntity() = UserDataEntity(userId, userName, name, userPublicId, avatarLink, currentLevel, currentLevelXP, streakDays, isSubscribed, ArrayList(completedParts), DateTimeFormat().format(streakDatetime), todayCompletedExercises)
+fun UserDataEntity.toBusinessEntity() = UserDataData(userId, userName, name, userPublicId, avatarLink, currentLevel, currentLevelXP, streakDays, isSubscribed, ArrayList(completedParts), DateTimeFormat().parse(streakDatetime)!!, todayCompletedExercises, notificationsAreChecked)

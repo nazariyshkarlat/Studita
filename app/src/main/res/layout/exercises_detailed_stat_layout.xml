@@ -9,12 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:paddingTop="@dimen/toolbarHeight"
+        android:paddingBottom="16dp"
         android:clipToPadding="false">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/exercisesDetailedStatLayoutLinearLayout"
@@ -85,18 +81,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"/>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/exercisesDetailedStatLayoutShareButton"
-            style="@style/ShareButton"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/buttonHeight"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="@dimen/defaultRLMargin"
-            android:layout_marginEnd="@dimen/defaultRLMargin"
-            android:text="@string/share" />
 
         </LinearLayout>
 

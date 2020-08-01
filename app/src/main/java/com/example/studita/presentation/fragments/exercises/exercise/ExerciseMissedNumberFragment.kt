@@ -63,13 +63,15 @@ class ExerciseMissedNumberFragment : NavigatableFragment(R.layout.exercise_input
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         val str = s.toString()
         if (str.isNotEmpty()) {
-            if (str[0] == '0')
+            if (str[0] == '0'){
                 exerciseMissedPartLayoutEditText.setText(
                     exerciseMissedPartLayoutEditText.text.substring(
                         1,
                         exerciseMissedPartLayoutEditText.text.length
                     )
-                )else {
+                )
+                return
+            }else {
                 exercisesViewModel?.setButtonEnabled(true)
                 exercisesViewModel?.exerciseRequestData =
                     ExerciseRequestData(str)

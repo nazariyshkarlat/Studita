@@ -49,13 +49,15 @@ class ExerciseInputFragment : NavigatableFragment(R.layout.exercise_input_layout
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         val str = s.toString()
         if(str.isNotEmpty()) {
-            if (str[0] == '0')
+            if (str[0] == '0'){
                 exerciseInputLayoutEditText.setText(
                     exerciseInputLayoutEditText.text.substring(
                         1,
                         exerciseInputLayoutEditText.text.length
                     )
-                )else {
+                )
+                return
+            }else {
                 exercisesViewModel?.exerciseRequestData = ExerciseRequestData(s.toString())
                 exercisesViewModel?.buttonEnabledState?.value = true
             }

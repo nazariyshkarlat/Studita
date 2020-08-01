@@ -25,29 +25,33 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
     is ExerciseArrayEntity.ExerciseEntity ->{
         when(val exerciseInfo = exerciseInfo){
             is ExerciseInfo.ExerciseType1Info -> ExerciseData.ExerciseDataExercise.ExerciseType1Data(
-                exerciseNumber!!, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants.map { it.toExerciseShapeData() }, exerciseAnswer)
-            is ExerciseInfo.ExerciseType2And14Info -> ExerciseData.ExerciseDataExercise.ExerciseType2And14Data(
-                exerciseNumber!!, exerciseInfo.title.toExerciseShapeData(), exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
+                exerciseNumber!!, isBonus, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants.map{it.toExerciseImagesRowData()}, exerciseAnswer)
+            is ExerciseInfo.ExerciseType2Info -> ExerciseData.ExerciseDataExercise.ExerciseType2Data(
+                exerciseNumber!!, isBonus, exerciseInfo.title.toExerciseImagesRowData(), exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
             is ExerciseInfo.ExerciseType3Info -> ExerciseData.ExerciseDataExercise.ExerciseType3Data(
-                exerciseNumber!!, exerciseInfo.title.toExerciseCharacterData(), exerciseInfo.subtitle, exerciseInfo.variants.map { it.toExerciseCharacterData() }, exerciseAnswer)
-            is ExerciseInfo.ExerciseType4Info -> ExerciseData.ExerciseDataExercise.ExerciseType4Data(exerciseNumber!!, exerciseInfo.title.toExerciseCharacterData(), exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
-            is ExerciseInfo.ExerciseType5And6Info -> ExerciseData.ExerciseDataExercise.ExerciseType5And6Data(exerciseNumber!!, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
-            is ExerciseInfo.ExerciseType7Info -> ExerciseData.ExerciseDataExercise.ExerciseType7Data(exerciseNumber!!,exerciseInfo.title, exerciseAnswer)
-            is ExerciseInfo.ExerciseType8And12Info -> ExerciseData.ExerciseDataExercise.ExerciseType8And12Data(exerciseNumber!!, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
-            is ExerciseInfo.ExerciseType9Info -> ExerciseData.ExerciseDataExercise.ExerciseType9Data(exerciseNumber!!,exerciseInfo.title, exerciseAnswer)
-            is ExerciseInfo.ExerciseType10Info -> ExerciseData.ExerciseDataExercise.ExerciseType10Data(exerciseNumber!!,exerciseInfo.titleParts, exerciseInfo.subtitle, exerciseAnswer, exerciseInfo.isNumeral)
-            is ExerciseInfo.ExerciseType11Info -> ExerciseData.ExerciseDataExercise.ExerciseType11Data(exerciseNumber!!,exerciseInfo.titleParts, exerciseInfo.filter.toExerciseType11Filter(), exerciseInfo.compareNumber, exerciseAnswer)
-            is ExerciseInfo.ExerciseType13Info -> ExerciseData.ExerciseDataExercise.ExerciseType13Data(exerciseNumber!!, exerciseInfo.title.toExerciseShapeEquation(), exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
-            is ExerciseInfo.ExerciseType15Info -> ExerciseData.ExerciseDataExercise.ExerciseType15Data(exerciseNumber!!, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
-            is ExerciseInfo.ExerciseType16Info -> ExerciseData.ExerciseDataExercise.ExerciseType16Data(exerciseNumber!!, exerciseInfo.titleParts, exerciseInfo.subtitle, exerciseAnswer)
-            is ExerciseInfo.ExerciseType17Info -> ExerciseData.ExerciseDataExercise.ExerciseType17Data(exerciseNumber!!, exerciseInfo.title.toExerciseShapeEquation(), exerciseInfo.subtitle, exerciseInfo.variants.map { it.toExerciseShapeData() }, exerciseAnswer)
+                exerciseNumber!!, isBonus, exerciseInfo.title.toExerciseSymbolData(), exerciseInfo.subtitle, exerciseInfo.variants.map { it.toExerciseSymbolData() }, exerciseAnswer)
+            is ExerciseInfo.ExerciseType4Info -> ExerciseData.ExerciseDataExercise.ExerciseType4Data(exerciseNumber!!, isBonus, exerciseInfo.title.toExerciseSymbolData(), exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
+            is ExerciseInfo.ExerciseType5And6Info -> ExerciseData.ExerciseDataExercise.ExerciseType5And6Data(exerciseNumber!!, isBonus, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
+            is ExerciseInfo.ExerciseType7Info -> ExerciseData.ExerciseDataExercise.ExerciseType7Data(exerciseNumber!!, isBonus, exerciseInfo.title, exerciseAnswer)
+            is ExerciseInfo.ExerciseType8And12Info -> ExerciseData.ExerciseDataExercise.ExerciseType8And12Data(exerciseNumber!!, isBonus, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
+            is ExerciseInfo.ExerciseType9Info -> ExerciseData.ExerciseDataExercise.ExerciseType9Data(exerciseNumber!!, isBonus, exerciseInfo.title, exerciseAnswer)
+            is ExerciseInfo.ExerciseType10Info -> ExerciseData.ExerciseDataExercise.ExerciseType10Data(exerciseNumber!!, isBonus, exerciseInfo.titleParts, exerciseInfo.subtitle, exerciseAnswer, exerciseInfo.isNumeral)
+            is ExerciseInfo.ExerciseType11Info -> ExerciseData.ExerciseDataExercise.ExerciseType11Data(exerciseNumber!!, isBonus, exerciseInfo.titleParts, exerciseInfo.filter.toExerciseType11Filter(), exerciseInfo.compareNumber, exerciseAnswer)
+            is ExerciseInfo.ExerciseType13Info -> ExerciseData.ExerciseDataExercise.ExerciseType13Data(exerciseNumber!!, isBonus, exerciseInfo.title.toExerciseShapeEquation(), exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
+            is ExerciseInfo.ExerciseType14Info -> ExerciseData.ExerciseDataExercise.ExerciseType14Data(
+                exerciseNumber!!, isBonus, exerciseInfo.title.toExerciseShapeData(), exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
+            is ExerciseInfo.ExerciseType15Info -> ExerciseData.ExerciseDataExercise.ExerciseType15Data(exerciseNumber!!, isBonus, exerciseInfo.title, exerciseInfo.subtitle, exerciseInfo.variants, exerciseAnswer)
+            is ExerciseInfo.ExerciseType16Info -> ExerciseData.ExerciseDataExercise.ExerciseType16Data(exerciseNumber!!, isBonus, exerciseInfo.titleParts, exerciseInfo.subtitle, exerciseAnswer)
+            is ExerciseInfo.ExerciseType17Info -> ExerciseData.ExerciseDataExercise.ExerciseType17Data(exerciseNumber!!, isBonus, exerciseInfo.title.toExerciseShapeEquation(), exerciseInfo.subtitle, exerciseInfo.variants.map { it.toExerciseShapeData() }, exerciseAnswer)
+            is ExerciseInfo.ExerciseType18Info -> ExerciseData.ExerciseDataExercise.ExerciseType18Data(exerciseNumber!!, isBonus, exerciseInfo.title, exerciseInfo.titleImages.toExerciseImagesRowData(), exerciseAnswer)
         }
     }
     is ExerciseArrayEntity.ScreenEntity ->{
         when(val screenInfo = screenInfo){
-            is ScreenInfo.ScreenType1Info -> ExerciseData.ExerciseDataScreen.ScreenType1Data(exerciseNumber, screenInfo.title, screenInfo.subtitle, screenInfo.partsToInject, screenInfo.image)
+            is ScreenInfo.ScreenType1Info -> ExerciseData.ExerciseDataScreen.ScreenType1Data(exerciseNumber, screenInfo.title.toExerciseSymbolData(), screenInfo.subtitle, listOf(screenInfo.image, screenInfo.title[1]).toExerciseImagesRowData())
             is ScreenInfo.ScreenType2Info -> ExerciseData.ExerciseDataScreen.ScreenType2Data(exerciseNumber, screenInfo.title)
             is ScreenInfo.ScreenType3Info -> ExerciseData.ExerciseDataScreen.ScreenType3Data(exerciseNumber, screenInfo.title, screenInfo.subtitle, screenInfo.partsToInject)
+            is ScreenInfo.ScreenType4Info -> ExerciseData.ExerciseDataScreen.ScreenType4Data(exerciseNumber, screenInfo.title, screenInfo.subtitle, screenInfo.image.toImageType(), screenInfo.isBonusStart, screenInfo.bonusSeconds)
         }
     }
 }

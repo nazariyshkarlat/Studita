@@ -12,6 +12,7 @@
     android:layout_marginEnd="@dimen/defaultRLMargin"
     android:gravity="center"
     android:background="@drawable/main_blocks_rectangle"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
@@ -25,6 +26,7 @@
         android:id="@+id/levelSubscribeItemButton"
         style="@style/BlueTextButton16"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:with_min_click_interval="true"/>
 
 </LinearLayout>

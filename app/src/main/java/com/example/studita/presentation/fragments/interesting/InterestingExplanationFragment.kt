@@ -29,11 +29,10 @@ open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(vie
             interestingExplanationModel = it.currentScreen as InterestingUiModelScreen.InterestingUiModelExplanationScreen
         }
 
-        if(isVisible){
-            view.viewTreeObserver.addOnScrollChangedListener(this)
-        }
+        view.viewTreeObserver.addOnScrollChangedListener(this)
 
-        checkScrollY()
+        if(!isHidden)
+            checkScrollY()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {

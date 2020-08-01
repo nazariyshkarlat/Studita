@@ -84,6 +84,11 @@ public class AlphaGradientView extends FrameLayout {
         this.gradientDirtyFlags = DIRTY_FLAG_TOP;
     }
 
+
+    public boolean getFadeTop() {
+        return this.fadeTop;
+    }
+
     @Override
     public void setPadding(int left, int top, int right, int bottom) {
         if (getPaddingTop() != top) {

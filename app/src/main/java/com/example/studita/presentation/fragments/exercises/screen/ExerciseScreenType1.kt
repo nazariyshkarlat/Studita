@@ -25,18 +25,19 @@ class ExerciseScreenType1 :  ExerciseScreen(R.layout.exercise_screen_type_1){
         exercisesViewModel?.let {
             if(it.exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel){
                 val screenUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel
-                exerciseScreenType1Title.text = screenUiModel.title
+                exerciseScreenType1SymbolTitle.text = screenUiModel.title.symbol
+                exerciseScreenType1SymbolNameTitle.text = screenUiModel.title.symbolName
                 exerciseScreenType1Subtitle.text = screenUiModel.subtitle
-                for(i in 0 until screenUiModel.title.toInt()) {
+                for(i in 0 until screenUiModel.imagesRowUiModel.count) {
                     val shapeView = View(exerciseScreenType1FlexboxLayout.context)
                     val params = FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT)
-                    params.height = 32.dpToPx()
-                    params.width = 32.dpToPx()
+                    params.height = 24.dpToPx()
+                    params.width = 24.dpToPx()
                     shapeView.layoutParams = params
-                    shapeView.background =  ContextCompat.getDrawable(exerciseScreenType1FlexboxLayout.context, R.drawable.exercise_rectangle_green)
+                    shapeView.background =  screenUiModel.imagesRowUiModel.image
                     exerciseScreenType1FlexboxLayout.addView(shapeView)
                 }
-                exerciseScreenType1Subtitle.text = injectParts(screenUiModel.subtitle, screenUiModel.partsToInject)
+                exerciseScreenType1Subtitle.text = screenUiModel.subtitle
             }
         }
 

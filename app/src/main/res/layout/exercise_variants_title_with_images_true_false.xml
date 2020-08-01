@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_gravity="center">
+
+    <TextView
+        android:id="@+id/exerciseVariantsTitleWithImagesTrueFalseTitle"
+        style="@style/Medium32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="12dp" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/exerciseVariantsTitleWithImagesTrueFalseFlexboxLayout"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:showDivider="middle"
+        app:alignContent="center"
+        app:alignItems="center"
+        app:justifyContent="center"
+        app:dividerDrawable="@drawable/exercises_flexbox_divider_16"/>
+
+    <LinearLayout
+        android:id="@+id/exerciseVariantsTitleWithImagesTrueFalseLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/exerciseVariantsTitleWithImagesTrueFalseTrue"
+            layout="@layout/exercise_variant_text_item"/>
+
+        <include
+            android:id="@+id/exerciseVariantsTitleWithImagesTrueFalseFalse"
+            layout="@layout/exercise_variant_text_item"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

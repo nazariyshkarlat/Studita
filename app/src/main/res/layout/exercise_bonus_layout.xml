@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/exerciseParentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/exerciseBonusLayoutCounterLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/defaultRLMargin"
+        android:layout_marginStart="@dimen/defaultRLMargin"
+        android:background="@drawable/main_blocks_rectangle">
+
+        <ImageView
+            android:id="@+id/exerciseBonusLayoutCounterIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/ic_access_time_secondary"/>
+
+        <TextView
+            android:id="@+id/exerciseBonusLayoutCounterText"
+            style="@style/Medium24Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="1dp"
+            android:layout_marginStart="6dp"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/exerciseBonusLayoutFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

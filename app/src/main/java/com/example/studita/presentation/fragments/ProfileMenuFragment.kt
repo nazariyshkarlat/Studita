@@ -24,6 +24,8 @@ import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDia
 import com.example.studita.presentation.fragments.dialog_alerts.ProfileMenuSignOutDialogAlertFragment
 import com.example.studita.presentation.view_model.ProfileMenuFragmentViewModel
 import com.example.studita.presentation.views.press_view.IPressView
+import com.example.studita.presentation.views.press_view.PressFrameLayout
+import com.example.studita.presentation.views.press_view.PressLinearLayout
 import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.profile_menu_layout.*
 import kotlinx.android.synthetic.main.profile_menu_item.view.*
@@ -88,7 +90,11 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
         getProfileMenuItems().forEachIndexed { index, pair ->
             val itemView: View
             if(index != ListItems.OFFLINE_MODE.ordinal) {
-                itemView = profileMenuLayoutSettingsList.makeView(R.layout.profile_menu_item)
+                itemView = profileMenuLayoutSettingsList.makeView(R.layout.profile_menu_item).apply {
+                    if(index == ListItems.LANGUAGE.ordinal || index == ListItems.THEME.ordinal)
+                        profileMenuItemLayout.setWithMinClickInterval(true)
+                }
+
                 with(itemView)ItemView@ {
 
                     if(index == ListItems.NOTIFICATIONS.ordinal){

@@ -3,6 +3,7 @@ package com.example.studita.presentation.fragments
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -71,10 +72,11 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                         friendsFragmentViewModel.recyclerItems = adapter?.items
                     }else{
                         val adapter = recyclerViewLayoutRecyclerView.adapter as UsersAdapter
-                        val newData = searchResultState.results.map { it.toUserItemUiModel() }
-                        adapter.items.addAll(newData)
-                        if(canBeMoreItems) adapter.items.add(UsersRecyclerUiModel.ProgressUiModel)
-                        adapter.notifyItemRangeInserted(1, adapter.itemCount-1)
+                        val newData = listOf(*searchResultState.results.map { it.toUserItemUiModel() }.toTypedArray(),
+                            *(if(canBeMoreItems) arrayOf(UsersRecyclerUiModel.ProgressUiModel) else emptyArray()))
+                        friendsFragmentViewModel.recyclerItems?.addAll(newData)
+
+                        adapter.notifyItemRangeInserted(1, newData.size)
                     }
                 }
                 is FriendsFragmentViewModel.SearchResultState.MyProfileEmptyFriends -> {
@@ -95,17 +97,24 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                 is FriendsFragmentViewModel.SearchResultState.MoreResultsFound -> {
 
                     if (recyclerViewLayoutRecyclerView.adapter != null) {
-                        val items = searchResultState.results.map { it.toUserItemUiModel() }
+                        val items = listOf(*searchResultState.results.map { it.toUserItemUiModel() }.toTypedArray(),
+                            *(if(canBeMoreItems) arrayOf(UsersRecyclerUiModel.ProgressUiModel) else emptyArray()))
+
                         val adapter = recyclerViewLayoutRecyclerView.adapter as UsersAdapter
 
-                        val insertIndex = adapter.itemCount-1
-                        adapter.items.addAll(insertIndex, items)
+                        val removePos = adapter.items.lastIndex
+                        adapter.items.removeAt(removePos)
+                        adapter.notifyItemRemoved(removePos)
+
+                        val insertIndex = adapter.items.size
+                        adapter.items.addAll(items)
                         adapter.notifyItemRangeInserted(
                             insertIndex,
                             items.size
                         )
+
                         if(!canBeMoreItems){
-                            adapter.items.removeAll{it is UsersRecyclerUiModel.ProgressUiModel}
+                            adapter.items.removeAt(adapter.items.lastIndex)
                             adapter.notifyItemRemoved(adapter.itemCount-1)
                         }
                     }else{

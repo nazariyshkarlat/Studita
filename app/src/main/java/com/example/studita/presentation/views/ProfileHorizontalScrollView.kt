@@ -33,16 +33,17 @@ class ProfileHorizontalScrollView @JvmOverloads constructor(
     private val gestureDetector = GestureDetector(context, MyGestureDetector())
 
     init {
-        this.addView(getContentView())
+        addView(getContentView())
+        makeItemsSameHeight()
         this.setOnTouchListener(this)
     }
 
     private fun getContentView(): ViewGroup{
         val contentView = LinearLayout(context)
         contentView.orientation = LinearLayout.HORIZONTAL
-        val ratingItem = getLevelRatingItem()
+        val levelItem = getLevelRatingItem()
         val XPItem = getXPRatingItem()
-        contentView.addView(ratingItem)
+        contentView.addView(levelItem)
         contentView.addView(XPItem)
         setParams(contentView)
         return contentView
@@ -69,6 +70,16 @@ class ProfileHorizontalScrollView @JvmOverloads constructor(
         XPRatingItem = makeView(R.layout.profile_competitions_item)
         XPRatingItem!!.profileCompetitionsItemTitle.text = resources.getString(R.string.profile_competitions_item_XP_rating_title)
         return XPRatingItem!!
+    }
+
+    private fun makeItemsSameHeight(){
+        XPRatingItem!!.profileCompetitionsItemTitle.post {
+            if(XPRatingItem!!.profileCompetitionsItemTitle.lineCount > levelRatingItem!!.profileCompetitionsItemTitle.lineCount){
+                levelRatingItem!!.profileCompetitionsItemTitle.text = resources.getString(R.string.profile_competitions_item_levels_rating_two_line_title)
+            }else if(XPRatingItem!!.profileCompetitionsItemTitle.lineCount < levelRatingItem!!.profileCompetitionsItemTitle.lineCount){
+                XPRatingItem!!.profileCompetitionsItemTitle.text = resources.getString(R.string.profile_competitions_item_XP_rating_two_line_title)
+            }
+        }
     }
 
     fun setLevelRatingSubtitle(text: String){

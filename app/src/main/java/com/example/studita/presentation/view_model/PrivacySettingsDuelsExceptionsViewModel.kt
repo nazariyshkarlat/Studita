@@ -13,6 +13,7 @@ import com.example.studita.domain.interactor.EditDuelsExceptionsStatus
 import com.example.studita.domain.interactor.PrivacySettingsDuelsExceptionsStatus
 import com.example.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
 import com.example.studita.presentation.model.toShapeUiModel
+import com.example.studita.presentation.model.toUiModel
 import com.example.studita.utils.UserUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -86,7 +87,7 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel(){
 
     fun getRecyclerItems(usersItems: List<PrivacyDuelsExceptionData>, progressUiModel: PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel? = null): List<PrivacySettingsDuelsExceptionsRecyclerUiModel>{
         val adapterItems = ArrayList<PrivacySettingsDuelsExceptionsRecyclerUiModel>()
-        adapterItems.addAll(usersItems.map { it.toShapeUiModel() })
+        adapterItems.addAll(usersItems.map { it.toUiModel() })
         if(progressUiModel != null)
             adapterItems.add(progressUiModel)
         return adapterItems

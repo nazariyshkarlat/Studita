@@ -2,6 +2,7 @@
 <resources>
     <style name="LightTheme" parent="AppTheme">
         <item name="main_blocks_color">@color/black6</item>
+        <item name="disabled_color">@color/black6</item>
         <item name="progress_bar_color">@color/black10</item>
         <item name="primary_color">@color/black87</item>
         <item name="blue_transparent_button_color">?colorAccent10</item>
@@ -34,6 +35,7 @@
         <item name="page_background_color">@color/gray11</item>
         <item name="blue_transparent_button_color">?colorAccent14</item>
         <item name="main_blocks_color">@color/white8</item>
+        <item name="disabled_color">@color/white8</item>
         <item name="next_level_color">@color/white12</item>
         <item name="divider_color">@color/white12</item>
         <item name="colorControlHighlight">@color/white8</item>

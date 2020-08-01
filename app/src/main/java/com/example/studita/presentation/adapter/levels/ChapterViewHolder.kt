@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studita.presentation.fragments.ChapterBottomSheetFragment
+import com.example.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
 import com.example.studita.presentation.model.HomeRecyclerUiModel
 import com.example.studita.utils.LevelUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.presentation.views.AlphaGradientView
 import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.dpToPx
 import kotlinx.android.synthetic.main.chapter_item.view.*
 
 class ChapterViewHolder(view: View,val count: Int) : LevelsViewHolder<HomeRecyclerUiModel.LevelChapterUiModel>(view){
@@ -23,10 +25,11 @@ class ChapterViewHolder(view: View,val count: Int) : LevelsViewHolder<HomeRecycl
             if(model.chapterNumber == count){
                 formClosedChapter()
             }else{
+                formOpenChapter()
                 chapterItemProgressText.text =  LevelUtils.getProgressText(
                     UserUtils.userData.completedParts[model.chapterNumber-1], model.chapterPartsCount, context)
                 chapterItemProgressBar.percentProgress = LevelUtils.getChapterProgressPercent(UserUtils.userData.completedParts[model.chapterNumber-1], model.chapterPartsCount)
-                setOnClickListener {
+                setOnSingleClickListener {
                     initBottomSheetFragment(model.chapterNumber, context)
                 }
             }
@@ -52,8 +55,21 @@ class ChapterViewHolder(view: View,val count: Int) : LevelsViewHolder<HomeRecycl
         itemView.chapterItemProgressBar.visibility = View.GONE
         itemView.chapterItemCardView.layoutParams = params
         itemView.chapterItemCardView.isClickable = false
-        itemView.setFadeTop(true)
+        itemView.fadeTop = true
         itemView.setGradientSizeTop(0)
+    }
+
+    private fun formOpenChapter(){
+        itemView as AlphaGradientView
+        if(itemView.fadeTop) {
+            val params = itemView.chapterItemCardView.layoutParams as ViewGroup.MarginLayoutParams
+            params.bottomMargin = 8.dpToPx()
+            itemView.chapterItemProgressText.visibility = View.VISIBLE
+            itemView.chapterItemProgressBar.visibility = View.VISIBLE
+            itemView.chapterItemCardView.layoutParams = params
+            itemView.chapterItemCardView.isClickable = true
+            itemView.fadeTop = false
+        }
     }
 
 }

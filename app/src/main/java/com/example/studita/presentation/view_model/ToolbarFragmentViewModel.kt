@@ -12,7 +12,7 @@ class ToolbarFragmentViewModel : ViewModel(){
     val toolbarTextState = MutableLiveData<String?>()
     val toolbarDividerState = SingleLiveEvent<Boolean>()
     val progressState = MutableLiveData<Boolean>()
-    val toolbarRightButtonState = MutableLiveData<Pair<Int, (View) -> Unit>>()
+    val toolbarRightButtonState = MutableLiveData<ToolbarRightButtonState>()
     val toolbarFragmentOnNavigateState = MutableLiveData<NavigatableFragment.OnNavigateFragment>()
 
     fun setToolbarText(text: String?){
@@ -23,12 +23,8 @@ class ToolbarFragmentViewModel : ViewModel(){
         toolbarDividerState.value = show
     }
 
-    fun showRightButtonAndSetOnClick(@DrawableRes iconRes: Int, onClick:(View) -> Unit){
-        toolbarRightButtonState.value = iconRes to onClick
-    }
-
-    fun hideRightButton(){
-        toolbarRightButtonState.value = null
+    fun setToolbarRightButtonState(toolbarRightButtonState: ToolbarRightButtonState){
+        this.toolbarRightButtonState.value = toolbarRightButtonState
     }
 
     fun hideProgress() {
@@ -41,6 +37,12 @@ class ToolbarFragmentViewModel : ViewModel(){
 
     fun hideDivider() {
         toolbarDividerState.value = false
+    }
+
+    sealed class ToolbarRightButtonState{
+        class IsEnabled(@DrawableRes val imageRes: Int, val onClick: (View) -> Unit): ToolbarRightButtonState()
+        class Disabled(@DrawableRes val imageRes: Int): ToolbarRightButtonState()
+        object Invisible: ToolbarRightButtonState()
     }
 
 }

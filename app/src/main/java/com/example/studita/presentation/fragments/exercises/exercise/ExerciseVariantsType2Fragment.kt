@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
+import com.example.studita.presentation.model.ExerciseImagesRowUiModel
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.makeView
 import com.example.studita.presentation.model.ExerciseUiModel
@@ -24,10 +25,10 @@ class ExerciseVariantsType2Fragment : ExerciseVariantsFragment(R.layout.exercise
 
         exercisesViewModel?.let {vm->
             when (vm.exerciseUiModel) {
-                is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2And14UiModel -> {
+                is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel -> {
                     val exerciseUiModel =
-                        vm.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2And14UiModel
-                    fillLinearLayout(exerciseUiModel)
+                        vm.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel
+                    fillLinearLayout(exerciseUiModel.title)
                     exerciseVariantsLinearFragmentSubtitle.text = exerciseUiModel.subtitle
                     fillVariants(exerciseUiModel.variants)
                 }
@@ -57,21 +58,18 @@ class ExerciseVariantsType2Fragment : ExerciseVariantsFragment(R.layout.exercise
         }
     }
 
-    private fun fillLinearLayout(exerciseUiModel: ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2And14UiModel){
-        (0 until exerciseUiModel.title.count).forEach { _ ->
-            val shapeView = SquareView(exerciseVariantsLinearFragmentTopFlexboxLayout.context)
+    private fun fillLinearLayout(exerciseImagesRowUiModel: ExerciseImagesRowUiModel){
+        (0 until exerciseImagesRowUiModel.count).forEach { _ ->
+            val emojiView = SquareView(exerciseVariantsLinearFragmentTopFlexboxLayout.context)
             val params = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             params.height = 32.dpToPx()
             params.width = 32.dpToPx()
-            shapeView.layoutParams = params
-            shapeView.background = ContextCompat.getDrawable(
-                exerciseVariantsLinearFragmentTopFlexboxLayout.context,
-                R.drawable.exercise_rectangle_green
-            )
-            exerciseVariantsLinearFragmentTopFlexboxLayout.addView(shapeView)
+            emojiView.layoutParams = params
+            emojiView.background = exerciseImagesRowUiModel.image
+            exerciseVariantsLinearFragmentTopFlexboxLayout.addView(emojiView)
         }
     }
 }

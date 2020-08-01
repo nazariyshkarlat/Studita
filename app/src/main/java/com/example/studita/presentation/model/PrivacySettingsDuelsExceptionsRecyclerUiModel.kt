@@ -12,4 +12,4 @@ sealed class PrivacySettingsDuelsExceptionsRecyclerUiModel{
     object ProgressUiModel : PrivacySettingsDuelsExceptionsRecyclerUiModel()
 }
 
-fun PrivacyDuelsExceptionData.toShapeUiModel() = PrivacySettingsDuelsExceptionsRecyclerUiModel.UserItemUiModel(userId, userName, avatarLink, isException)
+fun PrivacyDuelsExceptionData.toUiModel() = PrivacySettingsDuelsExceptionsRecyclerUiModel.UserItemUiModel(userId, userName, avatarLink, isException)

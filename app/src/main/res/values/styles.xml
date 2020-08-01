@@ -20,6 +20,7 @@
 
     <style name="LightTheme" parent="AppTheme">
         <item name="main_blocks_color">@color/black6</item>
+        <item name="disabled_color">@color/black6</item>
         <item name="popup_background_color">@color/grayF0_98</item>
         <item name="next_level_color">@color/black10</item>
         <item name="progress_bar_color">@color/black10</item>
@@ -51,6 +52,7 @@
         <item name="blue_transparent_button_color">?colorAccent14</item>
         <item name="popup_background_color">@color/gray24_98</item>
         <item name="main_blocks_color">@color/white8</item>
+        <item name="disabled_color">@color/white8</item>
         <item name="divider_color">@color/white12</item>
         <item name="colorControlHighlight">@color/white8</item>
         <item name="android:navigationBarColor">@color/gray11</item>
@@ -87,6 +89,12 @@
     <style name="Regular20" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Regular20Secondary" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?secondary_color</item>
         <item name="android:textSize">20sp</item>
     </style>
 
@@ -192,6 +200,18 @@
         <item name="android:textSize">24sp</item>
     </style>
 
+    <style name="Medium24Secondary" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">?secondary_color</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Medium28" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">?primary_color</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
     <style name="Regular24" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textColor">?primary_color</item>
@@ -232,6 +252,12 @@
     <style name="Medium18Green" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textColor">@color/green</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Medium18Yellow" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/yellow</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -317,7 +343,7 @@
 
     <style name="ExerciseVariant" parent="android:Widget.TextView">
         <item name="android:textAlignment">center</item>
-        <item name="android:background">@drawable/exercise_variant</item>
+        <item name="android:background">@drawable/exercise_variant_transition</item>
         <item name="android:textAppearance">@style/Medium16</item>
     </style>
 

@@ -26,7 +26,6 @@ class ExerciseVariantsType13Fragment : ExerciseVariantsFragment(R.layout.exercis
         super.onViewCreated(view, savedInstanceState)
 
         exercisesViewModel?.let {vm->
-            observeAnswered(vm, exerciseVariantsLinearFragmentCenterLinearLayout)
             when (vm.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType13UiModel -> {
                     val exerciseUiModel = vm.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType13UiModel

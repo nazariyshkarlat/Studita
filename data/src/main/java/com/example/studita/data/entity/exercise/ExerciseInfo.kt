@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
             ) val variants: List<List<String>>
         ) : ExerciseInfo()
 
-        data class ExerciseType2And14Info(
+        data class ExerciseType2Info(
             @SerializedName("title") val title: List<String>, @SerializedName(
                 "subtitle"
             ) val subtitle: String, @SerializedName("variants") val variants: List<String>
@@ -50,21 +50,26 @@ import com.google.gson.annotations.SerializedName
 
      data class ExerciseType13Info(@SerializedName("title") val title: List<String>, @SerializedName("subtitle")val subtitle: String, @SerializedName("variants") val variants: List<String>) : ExerciseInfo()
 
+     data class ExerciseType14Info(
+         @SerializedName("title") val title: List<String>, @SerializedName(
+             "subtitle"
+         ) val subtitle: String, @SerializedName("variants") val variants: List<String>
+     ) : ExerciseInfo()
+
      data class ExerciseType15Info(@SerializedName("title") val title: String, @SerializedName("subtitle")val subtitle: String, @SerializedName("variants") val variants: List<String>) : ExerciseInfo()
 
      data class ExerciseType16Info(@SerializedName("title_parts") val titleParts: List<String>, @SerializedName("subtitle") val subtitle: String ) : ExerciseInfo()
 
      data class ExerciseType17Info(@SerializedName("title") val title: List<String>, @SerializedName("subtitle")val subtitle: String, @SerializedName("variants") val variants: List<List<String>>) : ExerciseInfo()
+
+     data class ExerciseType18Info(@SerializedName("title") val title: String, @SerializedName("title_images") val titleImages: List<String>) : ExerciseInfo()
  }
 
 sealed class ScreenInfo{
     data class ScreenType1Info(
-        @SerializedName("title") val title: String, @SerializedName("subtitle") val subtitle: String, @SerializedName(
-            "parts_to_inject"
-        ) val partsToInject: List<String>,
-        @SerializedName(
-            "image"
-        ) val image: String
+        @SerializedName("title") val title: List<String>,
+        @SerializedName("subtitle") val subtitle: String,
+        @SerializedName("image") val image: String
     ): ScreenInfo()
 
     data class ScreenType2Info(@SerializedName("title") val title: String) : ScreenInfo()
@@ -73,5 +78,13 @@ sealed class ScreenInfo{
         @SerializedName("title") val title: String, @SerializedName("subtitle") val subtitle: String, @SerializedName(
             "parts_to_inject"
         ) val partsToInject: List<String>
+    ): ScreenInfo()
+
+    data class ScreenType4Info(
+        @SerializedName("title") val title: String,
+        @SerializedName("subtitle") val subtitle: String,
+        @SerializedName("bonus_start") val isBonusStart: Boolean = false,
+        @SerializedName("bonus_seconds") val bonusSeconds: Long = 0L,
+        @SerializedName("image") val image: String
     ): ScreenInfo()
 }

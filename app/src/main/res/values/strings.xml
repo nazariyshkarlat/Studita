@@ -23,9 +23,9 @@
     <string name="log_in_success">Добро пожаловать!</string>
     <string name="authorization_email_hint">Электронная почта</string>
     <string name="user_name">Имя пользователя</string>
-    <string name="full_name">Полное имя</string>
+    <string name="name">Имя</string>
     <string name="user_name_hint">Введите имя пользователя</string>
-    <string name="full_name_hint">Введите полное имя</string>
+    <string name="name_hint">Введите имя</string>
     <string name="authorization_password_hint">Пароль</string>
     <string name="navigation_bar_first">Обучение</string>
     <string name="navigation_bar_second">Состязания</string>
@@ -118,7 +118,7 @@
     <string name="interesting_explanation_title">Объяснение</string>
     <string name="interesting_explanation_rating">Понравился фокус?</string>
     <string name="continue_string">Продолжить</string>
-    <string name="exercise_shape_0_rect">Ни один квадрат</string>
+    <string name="exercise_image_0_count">Ни один эмоджи</string>
     <string name="exercises_XP_result">+%1$d XP</string>
     <string name="exercises_XP_bonus">+%1$d XP бонус</string>
     <string name="new_level">Уровень повышен</string>
@@ -131,7 +131,7 @@
     <string name="main_menu_bottom_text">© 2020 &app_name;. Сделано с любовью</string>
     <string name="drum_roll_subtitle">Воспроизвести барабанную дробь</string>
     <string name="account_type" translatable="false">com.example.studita.authentication.StuditaAccount</string>
-    <string name="network_absent">Нет подключения. Вы оффлайн</string>
+    <string name="network_absent">Нет подключения</string>
     <string name="back_online">Подключение восстановлено</string>
     <string name="today">Сегодня</string>
     <string name="yesterday">Вчера</string>
@@ -186,8 +186,10 @@
     <string name="sort_by_old_new">От старых к новым</string>
     <string name="show_all">Показать всех</string>
     <string name="friends_count_template">Друзья (%1$d)</string>
-    <string name="profile_competitions_item_levels_rating_title">Недельный рейтинг\nуровней</string>
-    <string name="profile_competitions_item_XP_rating_title">Недельный рейтинг\nопыта</string>
+    <string name="profile_competitions_item_levels_rating_title">Недельный рейтинг уровнвывфывей</string>
+    <string name="profile_competitions_item_XP_rating_title">Недельный рейтинг опыта</string>
+    <string name="profile_competitions_item_levels_rating_two_line_title">Недельный рейтинг\nуровнвывфывей</string>
+    <string name="profile_competitions_item_XP_rating_two_line_title">Недельный рейтинг\nопыта</string>
     <string name="profile_competitions_item_rating_subtitle_template">Место: %1$d (%2$s)</string>
     <string name="profile_competitions_item_secondary_subtitle_template">Ваше место: %1$d</string>
     <string name="my_friends_empty">Список ваших друзей пока пуст</string>
@@ -226,6 +228,7 @@
     <string name="notification_friend_reqest_title">Новый запрос</string>
     <string name="notification_duel_missed_call_title">Пропущенный вызов</string>
     <string name="notification_friendship_request_accepted_title">Запрос принят</string>
+    <string name="exercises_bonus_end_layout_title_template">Получено +%1$dXP</string>
     <string name="just_now">только что</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
@@ -300,5 +303,13 @@
         <item quantity="few">года назад</item>
         <item quantity="many">лет назад</item>
         <item quantity="other">лет назад</item>
+    </plurals>
+    <plurals name="exercises_bonus_end_layout_subtitle_plurals_template">
+        <item quantity="zero">%1$d правильных ответов</item>
+        <item quantity="one">%1$d правильный ответ</item>
+        <item quantity="two">%1$d правильных ответа</item>
+        <item quantity="few">%1$d правильных ответа</item>
+        <item quantity="many">%1$d правильных ответов</item>
+        <item quantity="other">%1$d правильных ответов</item>
     </plurals>
 </resources>

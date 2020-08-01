@@ -55,13 +55,15 @@ class ExerciseInputEquationFragment : NavigatableFragment(R.layout.exercise_inpu
         var str = s.toString()
         if(str.isNotEmpty()) {
             val lastChar = str[str.lastIndex]
-            if ((str[0].isCharacter()) or (str[0] == '0'))
+            if ((str[0].isCharacter()) or (str[0] == '0')) {
                 exerciseInputEquationLayoutEditText.setText(
                     exerciseInputEquationLayoutEditText.text.substring(
                         1,
                         exerciseInputEquationLayoutEditText.text.length
                     )
                 )
+                return
+            }
             if (str.length >= 2) {
                 val removeDuplicate = str.removeCharDuplicate()
                 val removeZeros = removeDuplicate.removeZeros()
@@ -84,6 +86,7 @@ class ExerciseInputEquationFragment : NavigatableFragment(R.layout.exercise_inpu
                 } else
                     exercisesViewModel?.buttonEnabledState?.value =
                         false
+                return
             }
         }
     }

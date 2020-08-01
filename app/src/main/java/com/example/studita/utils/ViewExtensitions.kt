@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.text.InputFilter
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
@@ -28,6 +30,7 @@ import com.example.studita.presentation.listeners.FabScrollListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListenerImpl
 import com.example.studita.presentation.views.CustomProgressBar
+import org.w3c.dom.Text
 import kotlin.reflect.KClass
 
 fun NestedScrollView.setOnScrollChangeFabListener(fabScrollListener: FabScrollListener) {
@@ -35,6 +38,16 @@ fun NestedScrollView.setOnScrollChangeFabListener(fabScrollListener: FabScrollLi
 }
 
 fun View.postExt(block: (View) -> Unit){post { block.invoke(this) }}
+
+fun View.isContains(rx: Int, ry: Int): Boolean {
+    val l = IntArray(2)
+    getLocationOnScreen(l)
+    val x = l[0]
+    val y = l[1]
+    val w = width
+    val h = height
+    return !(rx < x || rx > x + w || ry < y || ry > y + h)
+}
 
 fun View.asNotificationIndicator(notificationsAreChecked: Boolean){
     if(notificationsAreChecked || !UserUtils.isLoggedIn()){
@@ -54,7 +67,7 @@ fun View.asNotificationIndicator(notificationsAreChecked: Boolean){
 }
 
 fun EditText.limitLength(maxLength: Int) {
-    filters = arrayOf(InputFilter.LengthFilter(maxLength))
+    filters = arrayOf(*filters, InputFilter.LengthFilter(maxLength))
 }
 
 fun Fragment.hideKeyboard() {
@@ -149,6 +162,18 @@ fun <T : View> ViewGroup.allViewsOfTypeT(type: KClass<T>, f: (T) -> Unit) {
 inline fun <reified T : View> ViewGroup.allViewsOfTypeT(noinline f: (T) -> Unit)
         = allViewsOfTypeT(T::class, f)
 
+fun <T : View> ViewGroup.getAllViewsOfTypeT(type: KClass<T>): List<T> {
+    val allViews = ArrayList<T>()
+    this.forEach {child->
+        if (type.isInstance(child)) allViews.add(child as T)
+        if (child is ViewGroup) allViews.addAll(child.getAllViewsOfTypeT(type))
+    }
+    return allViews
+}
+
+inline fun <reified T : View> ViewGroup.getAllViewsOfTypeT()
+        = getAllViewsOfTypeT<T>(T::class)
+
 fun ImageView.fillAvatar(avatarLink: String?, userName: String, userId: Int){
     if (avatarLink == null) {
         Glide
@@ -163,4 +188,24 @@ fun ImageView.fillAvatar(avatarLink: String?, userName: String, userId: Int){
                 .apply(RequestOptions.circleCropTransform())
                 .into(this)
     }
+}
+
+fun TextView.isEllipsized(): Boolean {
+
+    // Check if ellipsizing the text is enabled
+    if (ellipsize == null || TextUtils.TruncateAt.MARQUEE == ellipsize
+    ) return false
+
+    // Retrieve the layout in which the text is rendered
+    val layout = layout ?: return false
+
+    // Iterate all lines to search for ellipsized text
+    for (line in 0 until layout.lineCount) {
+
+        // Check if characters have been ellipsized away within this line of text
+        if (layout.getEllipsisCount(line) > 0) {
+            return true
+        }
+    }
+    return false
 }

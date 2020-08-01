@@ -26,7 +26,6 @@ class ExerciseVariantsType17Fragment : ExerciseVariantsFragment(R.layout.exercis
         super.onViewCreated(view, savedInstanceState)
 
         exercisesViewModel?.let { vm ->
-            observeAnswered(vm, exerciseVariantsLinearFragmentCenterLinearLayout)
             when (vm.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType17UiModel -> {
                     val exerciseUiModel =
@@ -51,7 +50,7 @@ class ExerciseVariantsType17Fragment : ExerciseVariantsFragment(R.layout.exercis
             val variantView: View
             if(variant.count == 0){
                 variantView = exerciseVariantsLinearFragmentCenterLinearLayout.makeView(R.layout.exercise_variant_text_item) as TextView
-                variantView.exerciseVariantTextItem.text = resources.getString(R.string.exercise_shape_0_rect)
+                variantView.exerciseVariantTextItem.text = resources.getString(R.string.exercise_image_0_count)
             }else {
                 variantView = exerciseVariantsLinearFragmentCenterLinearLayout.makeView(R.layout.exercise_variant_linear_item) as FlexboxLayout
                 for (i in 0 until variant.count) {

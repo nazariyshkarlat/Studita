@@ -35,9 +35,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:showDivider="middle"
-            app:dividerDrawable="@drawable/exercises_flexbox_divider_16"
+            app:dividerDrawable="@drawable/exercises_flexbox_divider_8"
             android:visibility="gone"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="8dp"/>
 
     </LinearLayout>
 

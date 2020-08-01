@@ -1,12 +1,9 @@
 package com.example.studita.presentation.view_model
 
 import android.graphics.Bitmap
-import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.studita.R
 import com.example.studita.di.data.EditProfileModule
 import com.example.studita.di.data.UserDataModule
 import com.example.studita.domain.entity.EditProfileData
@@ -14,11 +11,8 @@ import com.example.studita.domain.entity.EditProfileRequestData
 import com.example.studita.domain.interactor.EditProfileStatus
 import com.example.studita.domain.interactor.UserNameAvailableStatus
 import com.example.studita.utils.UserUtils
-import com.example.studita.utils.asyncExt
 import com.example.studita.utils.launchExt
-import kotlinx.android.synthetic.main.edit_profile_layout.*
 import kotlinx.coroutines.*
-import org.w3c.dom.Text
 
 class EditProfileViewModel : ViewModel(){
 
@@ -34,7 +28,7 @@ class EditProfileViewModel : ViewModel(){
 
     var userNameAvailableState =  MutableLiveData<UserNameAvailable>()
     var saveChangesButtonVisibleState = MutableLiveData<Boolean>(false)
-    var countersErrorState = MutableLiveData<Pair<TextField, Boolean>>()
+    var countersErrorState = MutableLiveData<Boolean>()
     var backClickState = SingleLiveEvent<BackClickState>()
     var saveProfileChangesState = MutableLiveData<SaveProfileChangesState>()
 
@@ -55,14 +49,15 @@ class EditProfileViewModel : ViewModel(){
         job = viewModelScope.launchExt(job) {
             when(editProfileInteractor.isUserNameAvailable(newProfileData.userName!!)){
                 is UserNameAvailableStatus.Available -> userNameAvailableState.postValue(UserNameAvailable.AVAILABLE)
-                is UserNameAvailableStatus.Unavailable -> userNameAvailableState.postValue(UserNameAvailable.IS_TAKEN)
+                is UserNameAvailableStatus.IsTaken -> userNameAvailableState.postValue(UserNameAvailable.IS_TAKEN)
+                is UserNameAvailableStatus.Failure -> userNameAvailableState.postValue(UserNameAvailable.UNAVAILABLE)
             }
         }
     }
 
     fun checkCorrectUserName(){
         if(editProfileInteractor.isProfileDataChanged(oldProfileData, newProfileData, avaChanged)) {
-            if (editProfileInteractor.isValidUserFullNameLength(newProfileData) && (userNameAvailableState.value == UserNameAvailable.AVAILABLE))
+            if (userNameAvailableState.value == UserNameAvailable.AVAILABLE)
                 saveChangesButtonVisibleState.value = true
         }
     }
@@ -74,28 +69,19 @@ class EditProfileViewModel : ViewModel(){
     fun verifyUserName(){
         if(editProfileInteractor.isUserNameChanged(oldProfileData, newProfileData)) {
                 if(editProfileInteractor.isValidUserNameLength(newProfileData)) {
-                    countersErrorState.value = TextField.USER_NAME to false
+                    countersErrorState.value = false
                     checkUserNameAvailable()
                 }else {
-                    userNameAvailableState.value = UserNameAvailable.INVALID_LENGTH
-                    countersErrorState.value = TextField.USER_NAME to true
+                    userNameAvailableState.value = UserNameAvailable.UNAVAILABLE
+                    countersErrorState.value = true
                     job?.cancel()
                 }
         }else{
-            countersErrorState.value = TextField.USER_NAME to false
+            countersErrorState.value = false
             userNameAvailableState.value = UserNameAvailable.AVAILABLE
         }
     }
 
-    fun checkIfUserNameAvailableAndCorrectFullName(){
-        if(editProfileInteractor.isValidUserFullNameLength(newProfileData)) {
-            countersErrorState.value = TextField.USER_FULL_NAME to false
-            if (userNameAvailable() && editProfileInteractor.isProfileDataChanged(oldProfileData, newProfileData, avaChanged)) {
-                saveChangesButtonVisibleState.value = true
-            }
-        }else
-            countersErrorState.value = TextField.USER_FULL_NAME to true
-    }
 
     fun checkShowSaveButton(){
         saveChangesButtonVisibleState.value = editProfileInteractor.isValidData(oldProfileData, newProfileData, avaChanged) && userNameAvailable()
@@ -104,17 +90,16 @@ class EditProfileViewModel : ViewModel(){
     private fun userNameAvailable() = userNameAvailableState.value == UserNameAvailable.AVAILABLE
 
     fun formNewUserName(charSequence: CharSequence?){
-        if(charSequence.toString().length >= 2)
-            newProfileData.userName = charSequence?.toString()?.substring(1)?.takeIf { it.isNotEmpty() }
+        newProfileData.userName = charSequence?.toString()?.takeIf { it.isNotEmpty() }
     }
 
-    fun formNewUserFullName(charSequence: CharSequence?){
-        newProfileData.userFullName = charSequence?.toString()?.takeIf { it.isNotEmpty() }
+    fun formNewName(charSequence: CharSequence?){
+        newProfileData.name = charSequence?.toString()?.takeIf { it.isNotEmpty() }
     }
 
     private fun applyLocalChanges(avatarLink: String?){
         UserUtils.userData.userName = newProfileData.userName
-        UserUtils.userData.userFullName = newProfileData.userFullName
+        UserUtils.userData.name = newProfileData.name
         UserUtils.userData.avatarLink = avatarLink
         UserUtils.userDataLiveData.postValue(UserUtils.userData)
         GlobalScope.launch {
@@ -122,15 +107,10 @@ class EditProfileViewModel : ViewModel(){
         }
     }
 
-    enum class TextField{
-        USER_NAME,
-        USER_FULL_NAME
-    }
-
     enum class UserNameAvailable{
         AVAILABLE,
-        INVALID_LENGTH,
-        IS_TAKEN
+        IS_TAKEN,
+        UNAVAILABLE
     }
 
 

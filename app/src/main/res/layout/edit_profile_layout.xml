@@ -43,14 +43,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@string/new_photo" />
+                android:text="@string/new_photo"
+                app:with_min_click_interval="true"/>
 
             <com.example.studita.presentation.views.press_view.PressTextView
                 android:id="@+id/editProfileLayoutRemoveAvatar"
                 style="@style/RedTextButton16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/delete_photo" />
+                android:text="@string/delete_photo"
+                app:with_min_click_interval="true"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -76,7 +78,7 @@
                         style="@style/EditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_."
                         android:hint="@string/user_name_hint"
                         android:imeOptions="actionNext|flagForceAscii"
                         android:paddingEnd="48dp"
@@ -110,17 +112,17 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/editProfileLayoutFullName"
+                    android:id="@+id/editProfileLayoutName"
                     style="@style/Medium16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/full_name" />
+                    android:text="@string/name" />
 
                 <TextView
                     style="@style/Regular14Secondary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/editProfileLayoutFullName"
+                    android:layout_alignBottom="@+id/editProfileLayoutName"
                     android:layout_alignParentEnd="true"
                     android:layout_marginBottom="2dp"
                     android:text="@string/optional" />
@@ -128,21 +130,21 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/editProfileLayoutFullName">
+                    android:layout_below="@+id/editProfileLayoutName">
 
-                    <com.example.studita.presentation.views.ErrorEditText
-                        android:id="@+id/editProfileLayoutUserFullNameEditText"
+                    <com.example.studita.presentation.views.NoEmojiEditText
+                        android:id="@+id/editProfileLayoutNameEditText"
                         style="@style/EditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/full_name_hint"
+                        android:hint="@string/name_hint"
                         android:imeOptions="actionDone"
                         android:inputType="textPersonName|textCapWords"
                         android:paddingEnd="48dp"
                         android:singleLine="true" />
 
                     <TextView
-                        android:id="@+id/editProfileLayoutUserFullNameCounter"
+                        android:id="@+id/editProfileLayoutNameCounter"
                         style="@style/Regular14Secondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

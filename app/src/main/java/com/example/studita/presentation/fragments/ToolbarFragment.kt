@@ -2,9 +2,12 @@ package com.example.studita.presentation.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
@@ -15,9 +18,7 @@ import com.example.studita.presentation.fragments.user_statistics.UserStatOfflin
 import com.example.studita.presentation.fragments.user_statistics.UserStatUnLoggedInFragment
 import com.example.studita.presentation.view_model.FriendsFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
-import com.example.studita.utils.PrefsUtils
-import com.example.studita.utils.UserUtils
-import com.example.studita.utils.navigateTo
+import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.view.*
 
@@ -49,14 +50,23 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
                     toolbarLayout.background =  if(show) resources.getDrawable(R.drawable.divider_bottom_drawable, toolbarLayoutTitle.context.theme) else null
                 })
 
-            it.toolbarRightButtonState.observe(viewLifecycleOwner, Observer {pair->
-                if(pair != null) {
-                    toolbarLayoutRightButton.setImageResource(pair.first)
-                    val onClick = pair.second
-                    toolbarLayoutRightButton.setOnClickListener { onClick.invoke(it) }
-                    toolbarLayoutRightButton.visibility = View.VISIBLE
-                }else
-                    toolbarLayoutRightButton.visibility = View.GONE
+            it.toolbarRightButtonState.observe(viewLifecycleOwner, Observer {state->
+                when(state){
+                    is ToolbarFragmentViewModel.ToolbarRightButtonState.IsEnabled -> {
+                        toolbarLayoutRightButton.setImageResource(state.imageRes)
+                        toolbarLayoutRightButton.isEnabled = true
+                        toolbarLayoutRightButton.setOnClickListener { state.onClick }
+                        toolbarLayoutRightButton.visibility = View.VISIBLE
+                    }
+                    is ToolbarFragmentViewModel.ToolbarRightButtonState.Disabled -> {
+                        toolbarLayoutRightButton.setImageResource(state.imageRes)
+                        toolbarLayoutRightButton.isEnabled = false
+                        toolbarLayoutRightButton.visibility = View.VISIBLE
+                    }
+                    is ToolbarFragmentViewModel.ToolbarRightButtonState.Invisible -> {
+                        toolbarLayoutRightButton.visibility = View.GONE
+                    }
+                }
             })
 
             it.progressState.observe(viewLifecycleOwner, Observer { show->
@@ -77,7 +87,7 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
 
     override fun onNavigate(fragment: NavigatableFragment?) {
         toolbarFragmentViewModel?.let { viewModel ->
-            viewModel.hideRightButton()
+            viewModel.setToolbarRightButtonState(ToolbarFragmentViewModel.ToolbarRightButtonState.Invisible)
             viewModel.hideProgress()
             viewModel.hideDivider()
             viewModel.setToolbarText(when (fragment) {

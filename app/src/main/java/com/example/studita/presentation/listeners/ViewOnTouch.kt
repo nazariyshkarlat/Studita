@@ -1,6 +1,7 @@
 package com.example.studita.presentation.listeners
 
 import android.graphics.Rect
+import android.os.SystemClock
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.SoundEffectConstants
@@ -11,17 +12,20 @@ abstract class ViewOnTouch : OnTouchListener {
     /**
      * Flag determining whether the down touch has stayed with the bounds of the view.
      */
+
     private var touchStayedWithinViewBounds = false
 
     override fun onTouch(view: View, event: MotionEvent): Boolean {
         view.clearAnimation()
         return when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+
                 touchStayedWithinViewBounds = true
                 onDownTouchAction(event.x, event.y)
                 true
             }
             MotionEvent.ACTION_UP -> {
+
                 if (touchStayedWithinViewBounds) {
                     view.playSoundEffect(SoundEffectConstants.CLICK);
                     onUpTouchAction(event.x, event.y)

@@ -15,6 +15,7 @@ import com.example.studita.utils.navigateTo
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuLanguageDialogAlertFragment
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
+import com.example.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.presentation.view_model.MainMenuFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
@@ -78,11 +79,11 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
             mainMenuLayoutOfflineSwitch.isChecked = !mainMenuLayoutOfflineSwitch.isChecked
         }
 
-        mainMenuLayoutThemeView.setOnClickListener {
+        mainMenuLayoutThemeView.setOnSingleClickListener {
             MainMenuThemeDialogAlertFragment().show((activity as AppCompatActivity).supportFragmentManager, null)
         }
 
-        mainMenuLayoutLanguageView.setOnClickListener {
+        mainMenuLayoutLanguageView.setOnSingleClickListener {
             MainMenuLanguageDialogAlertFragment()
                 .show((activity as AppCompatActivity).supportFragmentManager, null)
         }

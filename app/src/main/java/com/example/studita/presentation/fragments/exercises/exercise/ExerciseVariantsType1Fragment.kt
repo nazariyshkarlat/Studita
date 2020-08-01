@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
+import com.example.studita.presentation.model.ExerciseImagesRowUiModel
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.makeView
-import com.example.studita.presentation.model.ExerciseShapeUiModel
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.views.SquareView
 import com.example.studita.utils.postExt
@@ -42,25 +41,25 @@ class ExerciseVariantsType1Fragment : ExerciseVariantsFragment(R.layout.exercise
         }
     }
 
-    private fun fillVariants(variants: List<ExerciseShapeUiModel>){
+    private fun fillVariants(variants: List<ExerciseImagesRowUiModel>){
         variants.forEach { variant ->
             val variantView: View
             if(variant.count == 0){
                 variantView = exerciseVariantsTitleFragmentLinearLayout.makeView(R.layout.exercise_variant_text_item) as TextView
-                variantView.exerciseVariantTextItem.text = resources.getString(R.string.exercise_shape_0_rect)
+                variantView.exerciseVariantTextItem.text = resources.getString(R.string.exercise_image_0_count)
             }else {
                 variantView = exerciseVariantsTitleFragmentLinearLayout.makeView(R.layout.exercise_variant_linear_item) as FlexboxLayout
                 for (i in 0 until variant.count) {
-                    val shapeView = SquareView(exerciseVariantsTitleFragmentLinearLayout.context)
+                    val emojiView = SquareView(exerciseVariantsTitleFragmentLinearLayout.context)
                     val params = FlexboxLayout.LayoutParams(
                         FlexboxLayout.LayoutParams.WRAP_CONTENT,
                         FlexboxLayout.LayoutParams.WRAP_CONTENT
                     )
-                    params.height = 20.dpToPx()
-                    params.width = 20.dpToPx()
-                    shapeView.layoutParams = params
-                    shapeView.background = variant.shape
-                    variantView.addView(shapeView)
+                    params.height = 24.dpToPx()
+                    params.width = 24.dpToPx()
+                    emojiView.layoutParams = params
+                    emojiView.background = variant.image
+                    variantView.addView(emojiView)
                 }
             }
             variantView.setOnClickListener {

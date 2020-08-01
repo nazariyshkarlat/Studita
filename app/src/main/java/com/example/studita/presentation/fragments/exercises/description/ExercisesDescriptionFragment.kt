@@ -1,6 +1,7 @@
 package com.example.studita.presentation.fragments.exercises.description
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -24,12 +25,11 @@ open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewI
         }
         exercisesViewModel?.let {
             exercisesDescriptionModel = it.exercisesResponseData.exercisesDescription
-            if(isVisible){
-                view.viewTreeObserver.addOnScrollChangedListener(this)
-            }
+            view.viewTreeObserver.addOnScrollChangedListener(this)
         }
 
-        checkScrollY()
+        if(!isHidden)
+            checkScrollY()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {

@@ -6,5 +6,5 @@ data class ExerciseResponseDescriptionData(val descriptionContent: ExerciseRespo
 
 sealed  class ExerciseResponseDescriptionContentData{
     data class DescriptionContentString(val descriptionContent: String) : ExerciseResponseDescriptionContentData()
-    data class DescriptionContentArray(val descriptionContent: ExerciseShapeData) : ExerciseResponseDescriptionContentData()
+    data class DescriptionContentArray(val descriptionContent: ExerciseImagesRowData) : ExerciseResponseDescriptionContentData()
 }

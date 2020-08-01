@@ -9,12 +9,6 @@ android{
     defaultConfig{
         applicationId "com.example.studita"
     }
-
-    buildTypes{
-        release{
-            shrinkResources true
-        }
-    }
 }
 
 dependencies {

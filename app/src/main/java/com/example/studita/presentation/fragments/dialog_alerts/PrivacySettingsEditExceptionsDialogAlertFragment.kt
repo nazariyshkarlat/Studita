@@ -11,14 +11,15 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.presentation.adapter.privacy_settings_duels_exceptions.PrivacySettingsDuelsExceptionsAdapter
+import com.example.studita.presentation.adapter.users_list.UsersAdapter
 import com.example.studita.presentation.fragments.base.BaseDialogFragment
-import com.example.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
-import com.example.studita.presentation.model.toShapeUiModel
+import com.example.studita.presentation.model.*
 import com.example.studita.presentation.view_model.PrivacySettingsDuelsExceptionsViewModel
 import com.example.studita.presentation.views.CustomSnackbar
 import com.example.studita.utils.ThemeUtils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.privacy_duels_exceptions_dialog_alert.*
+import kotlinx.android.synthetic.main.recyclerview_layout.*
 
 class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.layout.privacy_duels_exceptions_dialog_alert){
 
@@ -54,18 +55,25 @@ class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.la
                     is PrivacySettingsDuelsExceptionsViewModel.DuelsExceptionsResultState.MoreResults -> {
 
                         if (privacyDuelsExceptionsRecyclerView.adapter != null) {
-                            val items = privacySettingsDuelsExceptionsResultState.results.map { it.toShapeUiModel() }
-                            val adapter =
-                                privacyDuelsExceptionsRecyclerView.adapter as PrivacySettingsDuelsExceptionsAdapter
 
-                            val insertIndex = adapter.itemCount - 1
-                            adapter.items.addAll(insertIndex, items)
+                            val items = listOf(*privacySettingsDuelsExceptionsResultState.results.map { it.toUiModel() }.toTypedArray(),
+                                *(if(canBeMoreItems) arrayOf(PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel) else emptyArray()))
+
+                            val adapter = privacyDuelsExceptionsRecyclerView.adapter as PrivacySettingsDuelsExceptionsAdapter
+
+                            val removePos = adapter.items.lastIndex
+                            adapter.items.removeAt(removePos)
+                            adapter.notifyItemRemoved(removePos)
+
+                            val insertIndex = adapter.items.size
+                            adapter.items.addAll(items)
                             adapter.notifyItemRangeInserted(
                                 insertIndex,
                                 items.size
                             )
+
                             if(!canBeMoreItems){
-                                adapter.items.removeAll{it is PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel}
+                                adapter.items.removeAt(adapter.items.lastIndex)
                                 adapter.notifyItemRemoved(adapter.itemCount-1)
                             }
                         } else {

@@ -17,7 +17,6 @@ class ExerciseVariantsType7Fragment : ExerciseVariantsFragment(R.layout.exercise
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exercisesViewModel?.let {vm->
-            observeAnswered(vm, exerciseVariantsTrueFalseLinearLayout)
             when (vm.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel -> {
                     val exerciseUiModel =
@@ -32,7 +31,7 @@ class ExerciseVariantsType7Fragment : ExerciseVariantsFragment(R.layout.exercise
                     it as ViewGroup
                     selectVariant(it, selectedPos)
                 }
-            observeAnswered(vm, exerciseVariantsLinearFragmentCenterLinearLayout)
+            observeAnswered(vm, exerciseVariantsTrueFalseLinearLayout)
         }
     }
 

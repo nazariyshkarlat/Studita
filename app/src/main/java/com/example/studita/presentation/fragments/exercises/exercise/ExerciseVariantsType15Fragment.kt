@@ -21,7 +21,6 @@ class ExerciseVariantsType15Fragment : ExerciseMultipleVariantsFragment(R.layout
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exercisesViewModel?.let {vm->
-            observeAnswered(vm, exerciseVariantsTitleFragmentLinearLayout)
             when (vm.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType15UiModel -> {
                     val exerciseUiModel =
@@ -42,7 +41,7 @@ class ExerciseVariantsType15Fragment : ExerciseMultipleVariantsFragment(R.layout
                     )
                 }
             }
-            observeAnswered(vm, exerciseVariantsLinearFragmentCenterLinearLayout)
+            observeAnswered(vm, exerciseVariantsTitleFragmentLinearLayout)
         }
     }
 

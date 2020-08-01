@@ -21,6 +21,12 @@ class ExercisesStartScreenFragment : BaseFragment(R.layout.exercises_start_scree
             val startScreenModel = it.exercisesResponseData.exercisesStartScreen
             exercisesStartScreenLayoutTitle.text = startScreenModel.title
             exercisesStartScreenLayoutSubtitle.text = startScreenModel.subtitle
+
+            when(it.chapterPartNumber){
+                1 -> exercisesStartScreenLayoutImage.setImageResource(R.drawable.ic_chapter_part_one_start_screen_image)
+                2 -> exercisesStartScreenLayoutImage.setImageResource(R.drawable.ic_chapter_part_two_start_screen_image)
+                else -> exercisesStartScreenLayoutImage.visibility = View.GONE
+            }
         }
     }
 

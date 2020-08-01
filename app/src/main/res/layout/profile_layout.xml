@@ -51,7 +51,7 @@
                             android:layout_height="wrap_content" />
 
                         <TextView
-                            android:id="@+id/profileLayoutUserFullName"
+                            android:id="@+id/profileLayoutName"
                             style="@style/Regular16Secondary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
                         style="@style/Button"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/buttonHeight"
-                        android:text="@string/edit_profile" />
+                        android:text="@string/edit_profile"/>
 
                     <TextView
                         android:id="@+id/profileLayoutTransparentButton"
@@ -112,7 +112,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="8dp"
                         android:text="@string/remove_from_friends"
-                        android:visibility="gone" />
+                        android:visibility="gone"/>
                 </LinearLayout>
 
                 <com.example.studita.presentation.views.ProfileHorizontalScrollView

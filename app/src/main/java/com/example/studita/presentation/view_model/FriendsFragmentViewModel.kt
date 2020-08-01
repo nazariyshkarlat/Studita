@@ -106,7 +106,7 @@ class FriendsFragmentViewModel : ViewModel(){
             }
 
             if (searchResultState != null) {
-                progressState.value = false
+                progressState.postValue(false)
                 this@FriendsFragmentViewModel.searchResultState.postValue(
                     (canBeMoreItems(searchResultState) to searchResultState))
             }

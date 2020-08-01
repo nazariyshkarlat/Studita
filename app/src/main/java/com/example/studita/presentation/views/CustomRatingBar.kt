@@ -44,7 +44,7 @@ class CustomRatingBar @JvmOverloads constructor(
             R.styleable.CustomRatingBar,
             0, 0);
 
-        selectedStar = a.getInteger(R.styleable.CustomRatingBar_selectedStar, 0)
+        selectedStar = a.getInteger(R.styleable.CustomRatingBar_selected_star, 0)
 
         if(isClickable)
             setOnTouch()

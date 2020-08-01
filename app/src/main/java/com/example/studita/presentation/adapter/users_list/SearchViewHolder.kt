@@ -18,8 +18,6 @@ import com.example.studita.domain.repository.UsersRepository
 import com.example.studita.presentation.model.UsersRecyclerUiModel
 import com.example.studita.presentation.view_model.FriendsFragmentViewModel
 import com.example.studita.utils.*
-import com.example.studita.utils.TextUtils.isFullNameCharAllowed
-import com.example.studita.utils.TextUtils.isSearchCharAllowed
 import kotlinx.android.synthetic.main.edit_profile_layout.*
 import kotlinx.android.synthetic.main.friends_filter_popup_layout.view.*
 import kotlinx.android.synthetic.main.users_search_item.view.*
@@ -35,41 +33,23 @@ class SearchViewHolder(view: View,
 
     var selectedPos = sortBy.ordinal
 
+    private val sortNames = arrayListOf(R.string.sort_by_A_Z, R.string.sort_by_Z_A, R.string.sort_by_new_old, R.string.sort_by_old_new)
+
     override fun bind(model: UsersRecyclerUiModel) {
-        itemView.post { formPopUp() }
+        itemView.usersSearchItemFilterText.text = itemView.context.resources.getString(sortNames[selectedPos])
         itemView.usersSearchItemFilter.setOnClickListener {
             formPopUp().showAsDropDown(itemView.usersSearchItemFilter, 0, (-4).dpToPx(), Gravity.START)
         }
 
         itemView.usersSearchItemEditText.clearFocus()
 
-        val searchFilter =
-            InputFilter { source, start, end, dest, _, dend ->
-                var keepOriginal = true
-                val sb = StringBuilder(end - start)
-                for (i in start until end) {
-                    val c: Char = source[i]
-                    if (c.isFullNameCharAllowed(dest.getOrNull(dend-1)) || dest.isEmpty())
-                        sb.append(c) else keepOriginal = false
-                }
-                if (keepOriginal) null else {
-                    if (source is Spanned) {
-                        val sp = SpannableString(sb)
-                        TextUtils.copySpansFrom(
-                            source,
-                            start,
-                            end,
-                            null,
-                            sp,
-                            0
-                        )
-                        sp
-                    } else {
-                        sb
-                    }
-                }
-            }
-        itemView.usersSearchItemEditText.filters = arrayOf(searchFilter)
+        with(searchState) {
+            if (this is FriendsFragmentViewModel.SearchState.FriendsSearch)
+                handleEditTextIsEmpty(this.startsWith.toString())
+            else if (this is FriendsFragmentViewModel.SearchState.GlobalSearch)
+                handleEditTextIsEmpty(this.startsWith.toString())
+        }
+
 
         itemView.usersSearchItemEditTextClearTextButton.setOnClickListener {
             itemView.usersSearchItemEditText.text.clear()
@@ -118,10 +98,7 @@ class SearchViewHolder(view: View,
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(s.toString().isNotEmpty())
-                    itemView.usersSearchItemEditTextClearTextButton.visibility = View.VISIBLE
-                else
-                    itemView.usersSearchItemEditTextClearTextButton.visibility = View.GONE
+                handleEditTextIsEmpty(s.toString())
 
                 searchState.let {
                     if (it is FriendsFragmentViewModel.SearchState.GlobalSearch) {
@@ -172,6 +149,13 @@ class SearchViewHolder(view: View,
         itemView.usersSearchItemFriendsRadioButton.jumpDrawablesToCurrentState()
     }
 
+    private fun handleEditTextIsEmpty(text: String){
+        if(text.isNotEmpty())
+            itemView.usersSearchItemEditTextClearTextButton.visibility = View.VISIBLE
+        else
+            itemView.usersSearchItemEditTextClearTextButton.visibility = View.GONE
+    }
+
     private fun getSortBy(view: View) =
         when (view.id) {
             R.id.friendsFilterPopupLayoutItemAtoZ -> UsersRepository.SortBy.A_TO_Z
@@ -183,15 +167,13 @@ class SearchViewHolder(view: View,
 
     private fun formPopUp() = PopupWindow(itemView.context).apply {
         contentView = (itemView as ViewGroup).makeView(R.layout.friends_filter_popup_layout) as ViewGroup
-        contentView.post {
-            (((contentView as ViewGroup).getChildAt(1) as ViewGroup).getChildAt(0) as ViewGroup).children.forEachIndexed { index, child ->
-                child.setOnClickListener {
-                    it.friendsFilterPopupLayoutItemCheckIcon.isSelected = false
-                    selectedPos = index
-                    (contentView as ViewGroup).setSelectedItem(selectedPos)
-                    updateCallback.update(getSortBy(it))
-                    dismiss()
-                }
+        (((contentView as ViewGroup).getChildAt(1) as ViewGroup).getChildAt(0) as ViewGroup).children.forEachIndexed { index, child ->
+            child.setOnClickListener {
+                it.friendsFilterPopupLayoutItemCheckIcon.isSelected = false
+                selectedPos = index
+                (contentView as ViewGroup).setSelectedItem(selectedPos)
+                updateCallback.update(getSortBy(it))
+                dismiss()
             }
         }
         (contentView as ViewGroup).setSelectedItem(selectedPos)
@@ -203,8 +185,7 @@ class SearchViewHolder(view: View,
     private fun ViewGroup.setSelectedItem(selectedPos: Int){
         with(((getChildAt(1) as ViewGroup).getChildAt(0) as ViewGroup).getChildAt(selectedPos)) {
             this.friendsFilterPopupLayoutItemCheckIcon.isSelected = true
-            itemView.usersSearchItemFilterText.text =
-                this.friendsFilterPopupLayoutItemTextView.text
+            itemView.usersSearchItemFilterText.text = context.resources.getString(sortNames[selectedPos])
         }
     }
 

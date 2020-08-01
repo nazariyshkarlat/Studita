@@ -9,7 +9,6 @@ import com.example.studita.utils.makeView
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.utils.postExt
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
-import kotlinx.android.synthetic.main.exercise_variants_linear_fragment.*
 import kotlinx.android.synthetic.main.exercise_variants_title_fragment.*
 
 class ExerciseVariantsType4Fragment : ExerciseVariantsFragment(R.layout.exercise_variants_title_fragment){
@@ -17,12 +16,11 @@ class ExerciseVariantsType4Fragment : ExerciseVariantsFragment(R.layout.exercise
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exercisesViewModel?.let {vm->
-            observeAnswered(vm, exerciseVariantsTitleFragmentLinearLayout)
             when (vm.exerciseUiModel) {
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel -> {
                     val exerciseUiModel =
                         vm.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel
-                    exerciseVariantsTitleFragmentTitle.text = exerciseUiModel.title.characterName
+                    exerciseVariantsTitleFragmentTitle.text = exerciseUiModel.title.symbolName
                     exerciseVariantsTitleFragmentSubtitle.text = exerciseUiModel.subtitle
                     fillVariants(exerciseUiModel.variants)
                 }
@@ -33,7 +31,7 @@ class ExerciseVariantsType4Fragment : ExerciseVariantsFragment(R.layout.exercise
                     it as ViewGroup
                     selectVariant(it, selectedPos)
                 }
-            observeAnswered(vm, exerciseVariantsLinearFragmentCenterLinearLayout)
+            observeAnswered(vm, exerciseVariantsTitleFragmentLinearLayout)
         }
     }
 

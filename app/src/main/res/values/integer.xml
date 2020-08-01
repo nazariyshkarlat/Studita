@@ -15,8 +15,9 @@
     <integer name="add_remove_friend_snackbar_duration">2000</integer>
     <integer name="offline_subscribe_email_snackbar_duration">5000</integer>
     <integer name="exercises_load_layout_bottom_section_alpha_anim_duration">500</integer>
-    <integer name="user_name_min_length">4</integer>
-    <integer name="user_full_name_min_length">2</integer>
+    <integer name="user_name_min_length">3</integer>
+    <integer name="name_min_length">0</integer>
     <integer name="user_name_max_length">25</integer>
-    <integer name="user_full_name_max_length">30</integer>
+    <integer name="name_max_length">30</integer>
+    <integer name="bonus_exercises_delay">500</integer>
 </resources>

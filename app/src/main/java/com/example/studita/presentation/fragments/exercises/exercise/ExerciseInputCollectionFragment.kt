@@ -82,17 +82,19 @@ class ExerciseInputCollectionFragment : NavigatableFragment(R.layout.exercise_in
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         val str = s.toString()
         if(str.isNotEmpty()) {
-            if (str[0] == '0')
+            if (str[0] == '0'){
                 exerciseInputCollectionLayoutEditText.setText(
-                exerciseInputCollectionLayoutEditText.text.substring(
-                    1,
-                    exerciseInputCollectionLayoutEditText.text.length
+                    exerciseInputCollectionLayoutEditText.text.substring(
+                        1,
+                        exerciseInputCollectionLayoutEditText.text.length
+                    )
                 )
-            )else {
-                exercisesViewModel?.buttonEnabledState?.value = true
-                exercisesViewModel?.exerciseRequestData =
-                    ExerciseRequestData(s.toString())
-            }
+                return
+            }else {
+                    exercisesViewModel?.buttonEnabledState?.value = true
+                    exercisesViewModel?.exerciseRequestData =
+                        ExerciseRequestData(s.toString())
+                }
         }else{
             exercisesViewModel?.buttonEnabledState?.value = false
         }

@@ -21,6 +21,7 @@ import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.user_statistics.UserStatFragment
 import com.example.studita.presentation.view_model.ProfileFragmentViewModel
+import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.example.studita.presentation.views.CustomSnackbar
 import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.profile_friend_item.view.*
@@ -159,7 +160,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), Swipe
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
 
-        if(isVisible)
+        if(!isHidden)
             initMenu()
     }
 
@@ -225,11 +226,11 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), Swipe
 
     private fun fillText(userDataData: UserDataData){
         profileLayoutUserName.text = resources.getString(R.string.user_name_template, userDataData.userName)
-        if(userDataData.userFullName != null) {
-            profileLayoutUserFullName.text = userDataData.userFullName
-            profileLayoutUserFullName.visibility = View.VISIBLE
+        if(userDataData.name != null) {
+            profileLayoutName.text = userDataData.name
+            profileLayoutName.visibility = View.VISIBLE
         }else
-            profileLayoutUserFullName.visibility = View.GONE
+            profileLayoutName.visibility = View.GONE
         profileLayoutLevelOval.text = userDataData.currentLevel.toString()
     }
 
@@ -305,7 +306,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), Swipe
     }
 
     private fun initMenu(){
-        toolbarFragmentViewModel?.showRightButtonAndSetOnClick(R.drawable.ic_more_vert){
+        toolbarFragmentViewModel?.setToolbarRightButtonState(ToolbarFragmentViewModel.ToolbarRightButtonState.IsEnabled(R.drawable.ic_more_vert){
             val wrapper = ContextThemeWrapper(it.context, R.style.PopupMenu)
             val popup = PopupMenu(wrapper, it, Gravity.END)
             popup.menuInflater.inflate(R.menu.profile_popup_menu, popup.menu)
@@ -319,7 +320,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout), Swipe
                 }
                 true
             }
-        }
+        })
     }
 
     private fun navigateToFriends(isMyProfile: Boolean, userId: Int){

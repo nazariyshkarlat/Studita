@@ -19,7 +19,5 @@ interface EditProfileInteractor {
 
     fun isValidUserNameLength(newProfileData: EditProfileData): Boolean
 
-    fun isValidUserFullNameLength(newProfileData: EditProfileData): Boolean
-
     fun isValidData(oldProfileData: EditProfileData, newProfileData: EditProfileData, avaChanged: Boolean): Boolean
 }

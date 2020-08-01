@@ -7,7 +7,6 @@ import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.example.studita.domain.interactor.EditProfileStatus
-import com.example.studita.domain.interactor.ExercisesStatus
 import com.example.studita.domain.interactor.UserNameAvailableStatus
 import com.example.studita.domain.repository.EditProfileRepository
 import com.example.studita.domain.repository.UserDataRepository
@@ -48,7 +47,7 @@ class EditProfileInteractorImpl(private val editProfileRepository: EditProfileRe
                 val code = pair.first
                 val isMyFriend = pair.second == true
                 when (code) {
-                    200 -> if(isMyFriend) UserNameAvailableStatus.Available else UserNameAvailableStatus.Unavailable
+                    200 -> if(isMyFriend) UserNameAvailableStatus.Available else UserNameAvailableStatus.IsTaken
                     else -> UserNameAvailableStatus.Failure
                 }
             } catch (e: Exception) {
@@ -71,10 +70,6 @@ class EditProfileInteractorImpl(private val editProfileRepository: EditProfileRe
 
     override fun isValidUserNameLength(newProfileData: EditProfileData): Boolean = newProfileData.userName?.length in 4..25
 
-    override fun isValidUserFullNameLength(newProfileData: EditProfileData): Boolean = newProfileData.userFullName?.length  in 2..30 || newProfileData.userFullName == null
-
     override fun isValidData(oldProfileData: EditProfileData, newProfileData: EditProfileData, avaChanged: Boolean): Boolean = isProfileDataChanged(oldProfileData, newProfileData, avaChanged)
             && isValidUserNameLength(newProfileData)
-            && isValidUserFullNameLength(newProfileData)
-
 }

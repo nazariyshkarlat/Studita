@@ -21,9 +21,9 @@ import com.example.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.notifications.service.PushReceiverIntentService
 import com.example.studita.presentation.adapter.notifications.NotificationsAdapter
+import com.example.studita.presentation.adapter.users_list.UsersAdapter
 import com.example.studita.presentation.fragments.base.NavigatableFragment
-import com.example.studita.presentation.model.NotificationsUiModel
-import com.example.studita.presentation.model.toShapeUiModel
+import com.example.studita.presentation.model.*
 import com.example.studita.presentation.view_model.NotificationsFragmentViewModel
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
@@ -46,12 +46,13 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                 object : TypeToken<NotificationData>() {}.type
             )
 
-            viewModel.recyclerItems?.add(1, notificationData.toShapeUiModel(context))
+            viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
             recyclerViewLayoutRecyclerView.adapter?.notifyItemInserted(1)
 
-            if(isVisible) {
+            if(!isHidden) {
                 resultCode = Activity.RESULT_CANCELED
                 viewModel.setNotificationsAreChecked(UserUtils.getUserIDTokenData()!!)
+                (view?.context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
             }
         }
 
@@ -92,18 +93,24 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                     is NotificationsFragmentViewModel.NotificationsResultState.MoreResults -> {
 
                         if (recyclerViewLayoutRecyclerView.adapter != null) {
-                            val items = notificationsResultState.results.map { it.toShapeUiModel(view.context) }
-                            val adapter =
-                                recyclerViewLayoutRecyclerView.adapter as NotificationsAdapter
 
-                            val insertIndex = adapter.itemCount - 1
-                            adapter.items.addAll(insertIndex, items)
+                            val items = listOf(*notificationsResultState.results.map { it.toUiModel(view.context) }.toTypedArray(),
+                                *(if(canBeMoreItems) arrayOf(NotificationsUiModel.ProgressUiModel) else emptyArray()))
+
+                            val adapter = recyclerViewLayoutRecyclerView.adapter as NotificationsAdapter
+
+                            val removePos = adapter.items.lastIndex
+                            adapter.items.removeAt(removePos)
+                            adapter.notifyItemRemoved(removePos)
+
+                            val insertIndex = adapter.items.size
+                            adapter.items.addAll(items)
                             adapter.notifyItemRangeInserted(
                                 insertIndex,
                                 items.size
                             )
                             if(!canBeMoreItems){
-                                adapter.items.removeAll{it is NotificationsUiModel.ProgressUiModel}
+                                adapter.items.removeAt(adapter.items.lastIndex)
                                 adapter.notifyItemRemoved(adapter.itemCount-1)
                             }
                         } else {

@@ -149,7 +149,7 @@ sealed class EditProfileStatus{
 sealed class UserNameAvailableStatus{
     object Failure: UserNameAvailableStatus()
     object Available: UserNameAvailableStatus()
-    object Unavailable: UserNameAvailableStatus()
+    object IsTaken: UserNameAvailableStatus()
 }
 
 sealed class PrivacySettingsStatus{

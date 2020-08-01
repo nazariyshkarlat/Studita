@@ -16,6 +16,7 @@ object LevelUtils {
     const val ALL_CORRECT_BONUS = 50
     private const val TRAINING_XP = 50
     private const val FIRST_LEVEL_XP = 500
+    private const val SINGLE_BONUS_EXERCISE_XP = 10
 
     fun getProgressText(completedParts: Int, chapterPartsCount: Int, context: Context): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
@@ -98,6 +99,8 @@ object LevelUtils {
         }
         return newXP
     }
+
+    fun getObtainedExercisesBonusXP(correctAnswersCount: Int) = correctAnswersCount*SINGLE_BONUS_EXERCISE_XP
 
     private fun giveSequenceBonus(userData: UserDataData, isTraining: Boolean) = ((userData.todayCompletedExercises+1) % SEQUENCE_TO_BONUS  == 0) and (!isTraining)
 

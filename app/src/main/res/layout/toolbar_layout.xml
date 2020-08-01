@@ -26,8 +26,8 @@
     <TextView
         android:id="@+id/toolbarLayoutTitle"
         style="@style/Medium24"
-        android:layout_marginStart="56dp"
-        android:layout_marginEnd="56dp"
+        android:paddingStart="56dp"
+        android:paddingEnd="56dp"
         android:singleLine="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

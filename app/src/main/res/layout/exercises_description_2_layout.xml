@@ -36,65 +36,75 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"/>
 
-        <TextView
-            style="@style/Regular18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"/>
 
-        <TextView
-            style="@style/Regular18"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/exercisesDescription2BlockLinearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:padding="16dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/main_blocks_rectangle"
+            android:orientation="vertical">
+            <TextView
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <TextView
-            style="@style/Regular18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            <TextView
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
 
-        <TextView
-            style="@style/Regular18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            <TextView
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
 
-        <TextView
-            style="@style/Regular18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            <TextView
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
 
-        <TextView
-            style="@style/Regular18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            <TextView
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
 
-        <TextView
-            style="@style/Regular18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            <TextView
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
 
-        <TextView
-            style="@style/Regular18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            <TextView
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
 
-        <TextView
-            style="@style/Regular18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            <TextView
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
 
-        <TextView
-            style="@style/Regular18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            <TextView
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
+
+        </LinearLayout>
 
         <TextView
             style="@style/Regular18"

@@ -62,6 +62,8 @@ open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
             })
     }
 
+    fun getSelectedChild(centerLayout: ViewGroup): View = if(centerLayout.getChildAt(0) !is LinearLayout) centerLayout.getChildAt(selectedPos) else (centerLayout.getChildAt(selectedPos/2)as ViewGroup).getChildAt(selectedPos%2)
+
     fun selectVariant(centerLayout: ViewGroup, position: Int){
         val childView= if(centerLayout.getChildAt(0) !is LinearLayout) centerLayout.getChildAt(position) else (centerLayout.getChildAt(position/2)as ViewGroup).getChildAt(position%2)
         exercisesViewModel?.setButtonEnabled(true)

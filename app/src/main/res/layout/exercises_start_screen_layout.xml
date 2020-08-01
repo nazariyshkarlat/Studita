@@ -7,6 +7,14 @@
     android:layout_marginEnd="@dimen/defaultRLMargin"
     android:layout_marginBottom="@dimen/toolbarHeight">
 
+    <ImageView
+        android:id="@+id/exercisesStartScreenLayoutImage"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:background="@drawable/main_blocks_oval"
+        android:layout_marginBottom="24dp"
+        android:scaleType="center" />
+
     <TextView
         android:id="@+id/exercisesStartScreenLayoutTitle"
         style="@style/Medium24"

@@ -1,6 +1,7 @@
 package com.example.studita.presentation.activities
 
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.exercises.ExercisesLoadFragment
@@ -58,6 +59,18 @@ class ExercisesActivity : DefaultActivity() {
             else if(childFragment is NavigatableFragment)
                 childFragment.onBackClick()
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val fragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
+        if(fragment is DispatchTouchEvent){
+            fragment.dispatchTouchEvent(ev)
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
+    interface DispatchTouchEvent{
+        fun dispatchTouchEvent(ev: MotionEvent): Boolean
     }
 
 }

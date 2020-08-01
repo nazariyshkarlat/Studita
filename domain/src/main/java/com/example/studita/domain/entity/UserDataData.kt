@@ -5,7 +5,7 @@ import java.util.*
 
 data class UserDataData(val userId: Int?,
                         var userName: String?,
-                        var userFullName: String?,
+                        var name: String?,
                         var userPublicId: String?,
                         var avatarLink: String?,
                         var currentLevel: Int,

@@ -24,7 +24,9 @@ class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exer
         exercisesDescriptionModel?.let {
             OneShotPreDrawListener.add(exercisesDescription1ParentLinearLayout) {
                 formView(it)
-                checkButtonDivider(view)
+
+                if(!isHidden)
+                    checkButtonDivider(view)
             }
         }
     }
@@ -48,7 +50,7 @@ class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exer
                             ).toInt()]
                         val textSpanParts: ArrayList<SpannableString> = ArrayList(text.split(
                             "\\{.*?\\}".toRegex()).map{span -> SpannableString(span) })
-                        textSpanParts.add(spanIndex, insideBrackets.createSpannableString(color = ContextCompat.getColor(child.context, R.color.green)))
+                        textSpanParts.add(spanIndex, insideBrackets.createSpannableString(color = ContextCompat.getColor(child.context, R.color.yellow)))
                         textSpanParts.forEach{part-> builder.append(part)}
                         spanIndex++
                     }
@@ -69,12 +71,12 @@ class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exer
         for(i in 0 until imgCount) {
             val shapeView = View(child.context)
             val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            params.height = child.height
-            params.width = child.height
+            params.height = 24.dpToPx()
+            params.width = 24.dpToPx()
             if(i != imgCount-1)
-                params.marginEnd = 16.dpToPx()
+                params.marginEnd = 12.dpToPx()
             shapeView.layoutParams = params
-            shapeView.background =  ContextCompat.getDrawable(child.context, R.drawable.exercise_rectangle_green)
+            shapeView.background =  ContextCompat.getDrawable(child.context, R.drawable.slightly_smiling_face)
             child.addView(shapeView)
         }
     }

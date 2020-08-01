@@ -11,6 +11,7 @@ import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.presentation.fragments.MyProfileFragment
 import com.example.studita.presentation.fragments.ProfileFragment
 import com.example.studita.presentation.fragments.dialog_alerts.AcceptFriendshipDialogAlertFragment
+import com.example.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
 import com.example.studita.presentation.model.NotificationsUiModel
 import com.example.studita.presentation.model.UsersRecyclerUiModel
 import com.example.studita.utils.UserUtils
@@ -38,7 +39,7 @@ class NotificationViewHolder(view: View) : NotificationsViewHolder<Notifications
                 NotificationType.DUEL_REQUEST -> {}
                 NotificationType.FRIENDSHIP_REQUEST -> {
                         if(model.userData.isMyFriendStatus is IsMyFriendStatus.Success.WaitingForFriendshipAccept) {
-                            this.setOnClickListener {
+                            this.setOnSingleClickListener {
                                 this.getAppCompatActivity()?.supportFragmentManager?.let {
                                     AcceptFriendshipDialogAlertFragment().apply {
                                         arguments =
