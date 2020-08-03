@@ -10,9 +10,10 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/toolbarHeight">
         <View
-            android:id="@+id/exerciseBonusEndLayoutImage"
+            android:id="@+id/exercisesBonusEndLayoutImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
@@ -20,7 +21,7 @@
             android:background="@drawable/grinning_face_with_star_eyes"/>
 
         <TextView
-            android:id="@+id/exerciseBonusEndLayoutTitle"
+            android:id="@+id/exercisesBonusEndLayoutTitle"
             style="@style/Medium28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,7 +30,7 @@
             android:textAlignment="center"/>
 
         <TextView
-            android:id="@+id/exerciseBonusEndLayoutSubtitle"
+            android:id="@+id/exercisesBonusEndLayoutSubtitle"
             style="@style/Regular20Secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +41,7 @@
     </LinearLayout>
 
     <com.example.studita.presentation.views.press_view.PressTextView
-        android:id="@+id/exerciseBonusEndLayoutButton"
+        android:id="@+id/exercisesBonusEndLayoutButton"
         style="@style/Button"
         android:text="@string/continue_string"
         android:layout_width="match_parent"

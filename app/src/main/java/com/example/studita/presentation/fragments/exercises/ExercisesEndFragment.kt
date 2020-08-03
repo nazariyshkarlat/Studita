@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.exercises_end_layout.*
 class ExercisesEndFragment : NavigatableFragment(R.layout.exercises_end_layout){
 
     var exercisesViewModel: ExercisesViewModel? = null
-    var exercisesEndFragmentViewModel: ExercisesEndFragmentViewModel? = null
+    private var exercisesEndFragmentViewModel: ExercisesEndFragmentViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -55,7 +55,7 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
                     is ToolbarFragmentViewModel.ToolbarRightButtonState.IsEnabled -> {
                         toolbarLayoutRightButton.setImageResource(state.imageRes)
                         toolbarLayoutRightButton.isEnabled = true
-                        toolbarLayoutRightButton.setOnClickListener { state.onClick }
+                        toolbarLayoutRightButton.setOnClickListener { state.onClick.invoke(it) }
                         toolbarLayoutRightButton.visibility = View.VISIBLE
                     }
                     is ToolbarFragmentViewModel.ToolbarRightButtonState.Disabled -> {

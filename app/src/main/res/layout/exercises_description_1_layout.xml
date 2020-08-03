@@ -43,7 +43,8 @@
             android:orientation="horizontal"
             android:background="@drawable/main_blocks_rectangle"
             android:gravity="center"
-            android:layout_marginTop="24dp"/>
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="-16dp"/>
 
         <TextView
             style="@style/Regular18"
@@ -58,7 +59,8 @@
             android:orientation="horizontal"
             android:background="@drawable/main_blocks_rectangle"
             android:gravity="center"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="-16dp"/>
 
         <TextView
             style="@style/Regular18"

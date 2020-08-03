@@ -52,6 +52,7 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
             is ScreenInfo.ScreenType2Info -> ExerciseData.ExerciseDataScreen.ScreenType2Data(exerciseNumber, screenInfo.title)
             is ScreenInfo.ScreenType3Info -> ExerciseData.ExerciseDataScreen.ScreenType3Data(exerciseNumber, screenInfo.title, screenInfo.subtitle, screenInfo.partsToInject)
             is ScreenInfo.ScreenType4Info -> ExerciseData.ExerciseDataScreen.ScreenType4Data(exerciseNumber, screenInfo.title, screenInfo.subtitle, screenInfo.image.toImageType(), screenInfo.isBonusStart, screenInfo.bonusSeconds)
+            is ScreenInfo.ScreenType5Info -> ExerciseData.ExerciseDataScreen.ScreenType5Data(exerciseNumber, screenInfo.title.toExerciseSymbolData(), screenInfo.variants)
         }
     }
 }

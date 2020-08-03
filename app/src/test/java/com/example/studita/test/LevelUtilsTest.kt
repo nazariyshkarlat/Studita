@@ -12,98 +12,98 @@ class LevelUtilsTest {
 
     @Test
     fun getObtainedXP_isTraining_noBonus() {
-        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(300), 0.5F, true)
-        assertEquals(50, obtainedXP)
+        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(300), 0.5F, true, 5)
+        assertEquals(50 + 25, obtainedXP)
     }
 
     @Test
     fun getObtainedXP_isTraining_levelBonus() {
-        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(450), 0.5F, true)
-        assertEquals(100, obtainedXP)
+        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(450), 0.5F, true, 5)
+        assertEquals(100 + 25, obtainedXP)
     }
 
     @Test
     fun getObtainedXP_isTraining_allCorrectBonus() {
-        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(400), 1F, true)
-        assertEquals(50, obtainedXP)
+        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(400), 1F, true, 5)
+        assertEquals(50 + 25, obtainedXP)
     }
 
     @Test
     fun getObtainedXP_isTraining_levelBonus_allCorrectBonus() {
-        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(450), 1F, true)
-        assertEquals(100, obtainedXP)
+        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(450), 1F, true, 5)
+        assertEquals(100 + 25, obtainedXP)
     }
 
     @Test
     fun getObtainedXP_isNotTraining_noBonus() {
-        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(300), 0.3F, false)
-        assertEquals(30, obtainedXP)
+        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(300), 0.3F, false, 6)
+        assertEquals(30 + 60, obtainedXP)
     }
 
     @Test
     fun getObtainedXP_isNotTraining_levelBonus() {
-        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(450), 0.5F, false)
-        assertEquals(100, obtainedXP)
+        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(450), 0.5F, false, 6)
+        assertEquals(100 + 60, obtainedXP)
     }
 
     @Test
     fun getObtainedXP_isNotTraining_allCorrectBonus() {
-        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(300), 1F, false)
-        assertEquals(150, obtainedXP)
+        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(300), 1F, false, 6)
+        assertEquals(200 + 60, obtainedXP)
     }
 
     @Test
     fun getObtainedXP_isNotTraining_levelBonus_allCorrectBonus() {
-        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(450), 1F, false)
-        assertEquals(200, obtainedXP)
+        val obtainedXP = LevelUtils.getObtainedXP(getUserDataWithXP(450), 1F, false, 6)
+        assertEquals(200 + 60, obtainedXP)
     }
 
 
     @Test
     fun getObtainedBonus_isTraining_noBonus() {
-        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(300), 0.5F, true)
+        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(300), 0.5F, true, 0)
         assertEquals(0, obtainedBonus)
     }
 
     @Test
     fun getObtainedBonus_isTraining_levelUpBonus() {
-        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(450), 0.5F, true)
-        assertEquals(50, obtainedBonus)
+        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(450), 0.5F, true, 2)
+        assertEquals(50 + 10, obtainedBonus)
     }
 
     @Test
     fun getObtainedBonus_isTraining_allCorrectBonus() {
-        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(300), 1F, true)
-        assertEquals(0, obtainedBonus)
+        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(300), 1F, true, 2)
+        assertEquals(0 + 10, obtainedBonus)
     }
 
     @Test
     fun getObtainedBonus_isTraining_levelUp_allCorrectBonus() {
-        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(450), 1F, true)
-        assertEquals(50, obtainedBonus)
+        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(450), 1F, true, 6)
+        assertEquals(80, obtainedBonus)
     }
 
     @Test
     fun getObtainedBonus_isNotTraining_noBonus() {
-        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(300), 0.5F, false)
+        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(300), 0.5F, false, 0)
         assertEquals(0, obtainedBonus)
     }
 
     @Test
     fun getObtainedBonus_isNotTraining_levelUpBonus() {
-        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(450), 0.5F, false)
+        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(450), 0.5F, false, 0)
         assertEquals(50, obtainedBonus)
     }
 
     @Test
     fun getObtainedBonus_isNotTraining_allCorrectBonus() {
-        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(300), 1F, false)
+        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(300), 1F, false, 0)
         assertEquals(50, obtainedBonus)
     }
 
     @Test
     fun getObtainedBonus_isNotTraining_levelUp_allCorrectBonus() {
-        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(450), 1F, false)
+        val obtainedBonus = LevelUtils.getObtainedBonus(getUserDataWithXP(450), 1F, false, 0)
         assertEquals(100, obtainedBonus)
     }
 
@@ -140,9 +140,9 @@ class LevelUtilsTest {
 
     @Test
     fun getExerciseResultAnimation() {
-        assertEquals(LevelUtils.getExerciseResultAnimation(getUserDataWithXP(400), 1F, false), arrayListOf(ExerciseResultAnimation.ObtainedXP(1F), ExerciseResultAnimation.AllCorrectBonus(50/600F), ExerciseResultAnimation.LevelUPBonus(100/600F)))
+        assertEquals(LevelUtils.getExerciseResultAnimation(getUserDataWithXP(665), 1F, true, 9), arrayListOf(ExerciseResultAnimation.ObtainedXP(1F), ExerciseResultAnimation.ObtainedXP(15/800F), ExerciseResultAnimation.BonusExercisesBonus(60/800F), ExerciseResultAnimation.LevelUPBonus(110/800F)))
     }
 
-    private fun getUserDataWithXP(currentLevelXP: Int) = UserDataData(0, "", "", "", null, 1, currentLevelXP, 0, false, arrayListOf(0,0,0,0),  Date(), 1, true)
+    private fun getUserDataWithXP(currentLevelXP: Int) = UserDataData(0, "", "", "", null, 3, currentLevelXP, 0, false, arrayListOf(2,0,0,0),  Date(), 1, true)
 
 }

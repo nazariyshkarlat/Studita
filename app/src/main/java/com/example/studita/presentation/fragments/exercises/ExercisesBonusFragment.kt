@@ -1,27 +1,19 @@
 package com.example.studita.presentation.fragments.exercises
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.example.studita.R
-import com.example.studita.presentation.activities.ExercisesActivity
-import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
-import com.example.studita.presentation.fragments.exercises.exercise.ExercisesBonusEndScreenFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.utils.addFragment
 import com.example.studita.utils.navigateTo
 import com.example.studita.utils.removeFragment
 import com.example.studita.utils.replace
 import kotlinx.android.synthetic.main.exercise_bonus_layout.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class ExercisesBonusFragment : NavigatableFragment(R.layout.exercise_bonus_layout){
 
@@ -47,6 +39,7 @@ class ExercisesBonusFragment : NavigatableFragment(R.layout.exercise_bonus_layou
             viewModel.exercisesBonusRemainingTimeState.observe(viewLifecycleOwner, Observer {
 
                 if(it == 0L){
+                    viewModel.endBonusExercises()
                     showBonusEndFragment(viewModel.getExercisesBonusEndFragment())
                     return@Observer
                 }
@@ -81,7 +74,7 @@ class ExercisesBonusFragment : NavigatableFragment(R.layout.exercise_bonus_layou
         }
     }
 
-    fun showBonusEndFragment(bonusEndScreenFragment: ExercisesBonusEndScreenFragment){
+    private fun showBonusEndFragment(bonusEndScreenFragment: ExercisesBonusEndScreenFragment){
         (activity as AppCompatActivity).navigateTo(
             bonusEndScreenFragment,
             R.id.frameLayout

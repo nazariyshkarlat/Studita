@@ -222,7 +222,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                     val hiddenPartWidth =
                     (it.measuredWidth - it.chapterPartTwoHelpLayoutButton.measuredWidth).toFloat()
 
-                    if (ev.action == ACTION_DOWN && it.translationX == 0F && !it.isContains(
+                    if (ev.action == ACTION_DOWN && it.translationX != hiddenPartWidth && !it.isContains(
                             ev.x.toInt(),
                             ev.y.toInt()
                         )
@@ -236,25 +236,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             }
         }
         return false
-    }
-
-    fun onWindowFocusChanged(hasFocus: Boolean){
-        if(hasFocus) {
-            if (exercisesViewModel?.secondsCounterIsStopped() == true)
-                exercisesViewModel?.startSecondsCounter()
-        }else {
-            exercisesViewModel?.stopSecondsCounter()
-        }
-    }
-
-    fun onBackClick(){
-        val fragment = ExercisesCloseDialogAlertFragment()
-        activity?.supportFragmentManager?.let {
-            fragment.show(it, null)
-            fragment.dialog?.setOnShowListener {
-                exercisesViewModel?.stopSecondsCounter()
-            }
-        }
     }
 
     private fun showSnackbar(data: Pair<ExerciseUiModel, ExerciseResponseData>?, animate: Boolean = true) {

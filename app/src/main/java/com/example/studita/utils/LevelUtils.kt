@@ -17,6 +17,7 @@ object LevelUtils {
     private const val TRAINING_XP = 50
     private const val FIRST_LEVEL_XP = 500
     private const val SINGLE_BONUS_EXERCISE_XP = 10
+    private const val SINGLE_BONUS_TRAINING_XP = 5
 
     fun getProgressText(completedParts: Int, chapterPartsCount: Int, context: Context): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
@@ -54,12 +55,12 @@ object LevelUtils {
 
     fun percentToXP(percent: Float, isTraining: Boolean) = if(percent > 1F) throw IOException("percent more than 100!") else if(isTraining) TRAINING_XP else (percent*100).toInt()
 
-    fun getObtainedXP(userData: UserDataData, percent: Float, isTraining: Boolean) : Int{
-        return getObtainedBonus(userData, percent, isTraining) + percentToXP(percent, isTraining)
+    fun getObtainedXP(userData: UserDataData, percent: Float, isTraining: Boolean, exercisesBonusCorrectCount: Int) : Int{
+        return getObtainedBonus(userData, percent, isTraining, exercisesBonusCorrectCount) + percentToXP(percent, isTraining)
     }
 
-    fun getObtainedBonus(userData: UserDataData, percent: Float, isTraining: Boolean) : Int{
-        val withoutLevelBonus: Int = (if(!isTraining && (percent == 1F)) ALL_CORRECT_BONUS else 0) + (if(giveSequenceBonus(userData, isTraining)) SEQUENCE_BONUS else 0)
+    fun getObtainedBonus(userData: UserDataData, percent: Float, isTraining: Boolean, exercisesBonusCorrectCount: Int) : Int{
+        val withoutLevelBonus: Int = (if(!isTraining && (percent == 1F)) ALL_CORRECT_BONUS else 0) + (if(giveSequenceBonus(userData, isTraining)) SEQUENCE_BONUS else 0) + getObtainedExercisesBonusXP(exercisesBonusCorrectCount, isTraining)
         val obtainedXP = withoutLevelBonus + percentToXP(percent, isTraining)
         return getNewLevelsBonus(userData, obtainedXP)+ withoutLevelBonus
     }
@@ -100,11 +101,11 @@ object LevelUtils {
         return newXP
     }
 
-    fun getObtainedExercisesBonusXP(correctAnswersCount: Int) = correctAnswersCount*SINGLE_BONUS_EXERCISE_XP
+    fun getObtainedExercisesBonusXP(correctAnswersCount: Int, isTraining: Boolean) = correctAnswersCount*(if(!isTraining)SINGLE_BONUS_EXERCISE_XP else SINGLE_BONUS_TRAINING_XP)
 
     private fun giveSequenceBonus(userData: UserDataData, isTraining: Boolean) = ((userData.todayCompletedExercises+1) % SEQUENCE_TO_BONUS  == 0) and (!isTraining)
 
-    fun getExerciseResultAnimation(userData: UserDataData, percent: Float, isTraining: Boolean): List<ExerciseResultAnimation> {
+    fun getExerciseResultAnimation(userData: UserDataData, percent: Float, isTraining: Boolean, exercisesBonusCorrectCount: Int): List<ExerciseResultAnimation> {
 
         val oldUserData = userData.copy()
 
@@ -186,7 +187,33 @@ object LevelUtils {
             }
         }
 
-        bonus = (newLevelsAfterAllCorrectBonus + newLevelsBeforeBonus + newLevelsAfterSequenceBonus) * NEXT_LEVEL_BONUS
+        bonus =  getObtainedExercisesBonusXP(exercisesBonusCorrectCount, isTraining)
+
+        val newLevelsAfterBonusExercisesBonus = getNewLevelsCount(oldUserData, bonus)
+        oldUserData.currentLevelXP = getNewLevelXP(oldUserData, bonus)
+
+        if (bonus != 0) {
+            repeat(newLevelsAfterBonusExercisesBonus) {
+                exerciseResultAnimation.add(
+                    ExerciseResultAnimation.BonusExercisesBonus(
+                        1F
+                    )
+                )
+                oldUserData.currentLevel++
+            }
+
+            if (oldUserData.currentLevelXP != 0) {
+                exerciseResultAnimation.add(
+                    ExerciseResultAnimation.BonusExercisesBonus(
+                        getLevelProgressPercent(
+                            oldUserData
+                        )
+                    )
+                )
+            }
+        }
+
+        bonus = (newLevelsAfterAllCorrectBonus + newLevelsBeforeBonus + newLevelsAfterSequenceBonus + newLevelsAfterBonusExercisesBonus) * NEXT_LEVEL_BONUS
 
         oldUserData.currentLevelXP +=  bonus
 

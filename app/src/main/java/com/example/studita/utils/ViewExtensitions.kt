@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.graphics.Rect
 import android.text.InputFilter
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -19,6 +20,8 @@ import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
+import androidx.core.view.marginEnd
+import androidx.core.view.marginStart
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -30,8 +33,15 @@ import com.example.studita.presentation.listeners.FabScrollListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListenerImpl
 import com.example.studita.presentation.views.CustomProgressBar
-import org.w3c.dom.Text
 import kotlin.reflect.KClass
+
+
+fun View.getRelativeLeft(parent: ViewGroup): Int{
+    val offsetViewBounds = Rect()
+    getDrawingRect(offsetViewBounds)
+    parent.offsetDescendantRectToMyCoords(this, offsetViewBounds)
+    return offsetViewBounds.left
+}
 
 fun NestedScrollView.setOnScrollChangeFabListener(fabScrollListener: FabScrollListener) {
     this.setOnScrollChangeListener(FabScrollImpl(fabScrollListener))
@@ -47,6 +57,14 @@ fun View.isContains(rx: Int, ry: Int): Boolean {
     val w = width
     val h = height
     return !(rx < x || rx > x + w || ry < y || ry > y + h)
+}
+
+fun View.childContainsParentX(rx: Int): Boolean {
+     val bounds =  Rect()
+    getHitRect(bounds)
+    bounds.left -= marginStart
+    bounds.right += marginEnd
+    return bounds.contains(rx, bounds.centerY())
 }
 
 fun View.asNotificationIndicator(notificationsAreChecked: Boolean){

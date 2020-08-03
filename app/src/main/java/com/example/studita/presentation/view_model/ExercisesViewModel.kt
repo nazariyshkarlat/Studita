@@ -21,14 +21,12 @@ import com.example.studita.domain.entity.exercise.ExercisesResponseData
 import com.example.studita.domain.interactor.*
 import com.example.studita.presentation.fragments.ChapterBottomSheetFragment
 import com.example.studita.presentation.fragments.HomeFragment
+import com.example.studita.presentation.fragments.exercises.ExercisesBonusEndScreenFragment
 import com.example.studita.presentation.fragments.exercises.ExercisesBonusFragment
 import com.example.studita.presentation.fragments.exercises.ExercisesEndFragment
 import com.example.studita.presentation.fragments.exercises.description.*
 import com.example.studita.presentation.fragments.exercises.exercise.*
-import com.example.studita.presentation.fragments.exercises.screen.ExerciseScreenType1
-import com.example.studita.presentation.fragments.exercises.screen.ExerciseScreenType2
-import com.example.studita.presentation.fragments.exercises.screen.ExerciseScreenType3
-import com.example.studita.presentation.fragments.exercises.screen.ExerciseScreenType4
+import com.example.studita.presentation.fragments.exercises.screen.*
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.model.toUiModel
 import com.example.studita.utils.*
@@ -60,15 +58,18 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
     val exerciseBonusResultState = MutableLiveData<Boolean>()
     val exerciseBonusNavigationState = SingleLiveEvent<Boolean>()
     val saveUserDataState = SingleLiveEvent<Pair<Boolean, UserDataData>>()
+    val loadScreenBadConnectionState = MutableLiveData<Boolean>()
 
     lateinit var exerciseRequestData: ExerciseRequestData
     private val exercisesToRetry = ArrayList<ExerciseData>()
 
+    private val connectionTimeout = 3000L
     private val waitingTime = 5000L
 
     var isBonusCompleted = true
     var isTraining = false
     var exerciseResultSuccess = false
+    var timeCounterIsPaused = true
 
     var chapterPartsCount = 0
     var chapterPartNumber = 0
@@ -96,17 +97,23 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
     var bonusEndTime = 0L
     private var secondsCounter: Timer? = null
 
+    var saveObtainedExercisesDataJob: Job? = null
+    private var badConnectionJob: Job? = null
     private var job: Job? = null
     var waitingJob: Job? = null
 
     fun getExercises(chapterPartNumber: Int){
+
         job = viewModelScope.launchExt(job){
+
+            runBadConnectionCoroutine()
+
             when(val status = exercisesInteractor.getExercises(chapterPartNumber, PrefsUtils.isOfflineModeEnabled())){
                 is ExercisesStatus.NoConnection -> exercisesState.postValue(false)
                 is ExercisesStatus.ServiceUnavailable -> exercisesState.postValue(false)
                 is ExercisesStatus.Success -> {
-
                     job = null
+                    badConnectionJob?.cancel()
                     exercisesState.postValue(true)
                     exercisesResponseData = status.result
 
@@ -131,6 +138,15 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
         }
     }
 
+    private fun runBadConnectionCoroutine(){
+
+        badConnectionJob = viewModelScope.launch {
+            delay(connectionTimeout)
+            loadScreenBadConnectionState.postValue(true)
+        }
+
+    }
+
     private suspend fun completeExercises(completedExercisesData: CompletedExercisesData, oldUserDataData: UserDataData){
         if (completeExercisesInteractor.completeExercises(
                 CompleteExercisesRequestData(
@@ -144,7 +160,8 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
     }
 
     private fun saveObtainedExercisesResult(){
-        GlobalScope.launch {
+        timeCounterIsPaused = true
+        saveObtainedExercisesDataJob =GlobalScope.launchExt(saveObtainedExercisesDataJob) {
             val userDataStatus = userDataInteractor.getUserData(UserUtils.userData.userId, PrefsUtils.isOfflineModeEnabled())
             if(userDataStatus is UserDataStatus.Success) {
                 val currentUserData = userDataStatus.result.copy()
@@ -153,7 +170,8 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
                     obtainedXP = LevelUtils.getObtainedXP(
                         it,
                         getAnswersPercent(),
-                        isTraining
+                        isTraining,
+                        correctBonusAnswers
                     )
 
                     val newLevelsCount = LevelUtils.getNewLevelsCount(it, obtainedXP)
@@ -213,7 +231,8 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
                             chapterPartNumber,
                             getAnswersPercent(),
                             Date(),
-                            seconds
+                            seconds,
+                            correctBonusAnswers
                         ),
                         userDataStatus.result
                     )
@@ -273,11 +292,11 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
         answered.value = false
         snackbarState.value = null
         if (exerciseIndex == getExercisesCount() && isBonusCompleted) {
-            if(progressState.value?.second == false)
-                progressState.value = 1F to true
+            endExercises()
         } else {
 
             if(exerciseIndex != 0 && isBonusScreen()) {
+                timeCounterIsPaused = true
                 animateProgressBarVisibility(false)
                 bonusEndTime = seconds+(bonusExercises.first() as ExerciseData.ExerciseDataScreen.ScreenType4Data).bonusSeconds
                 stopSecondsCounter()
@@ -304,7 +323,10 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
 
     fun initBonusFragment(): Fragment{
 
+        timeCounterIsPaused = false
+
         if(wasLastBonusExercise()){
+            endBonusExercises()
             return getExercisesBonusEndFragment()
         }
 
@@ -314,6 +336,11 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
         exerciseUiModel = exerciseData.toUiModel(getApplication())
         bonusIndex++
         return getFragmentToAdd(exerciseUiModel)
+    }
+
+    fun endBonusExercises(){
+        timeCounterIsPaused = true
+        saveObtainedExercisesResult()
     }
 
     private fun wasLastBonusExercise() = bonusIndex >= bonusExercises.size
@@ -332,6 +359,8 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
             showBadConnectionDialogAlertFragmentState.postValue(true)
         }
     }
+
+    fun exercisesResultSentToServer() = saveObtainedExercisesDataJob?.isActive == true || saveObtainedExercisesDataJob?.isCompleted == true
 
     private fun isBonusScreen() = exerciseIndex == getExercisesCount() && bonusExercises.isNotEmpty()
 
@@ -363,14 +392,14 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
                             if (status.result.exerciseResult) {
                                 exerciseIndex++
 
-                                if (exerciseIndex == getExercisesCount()) {
+                                if (exerciseIndex == getExercisesCount() && isBonusCompleted) {
                                     stopSecondsCounter()
                                     saveObtainedExercisesResult()
                                 }
 
                                 progressState.value = getProgressPercent() to false
                             } else {
-                                exercisesToRetry.addAll(exercises.filter { it.exerciseNumber == exerciseUiModel.exerciseNumber })
+                                exercisesToRetry.addAll(exercises.filter { it.exerciseNumber == exerciseData.exerciseNumber })
                             }
 
                             if (arrayIndex >= exercises.size) {
@@ -433,6 +462,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel -> ExerciseScreenType2()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel -> ExerciseScreenType3()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType4UiModel -> ExerciseScreenType4()
+            is ExerciseUiModel.ExerciseUiModelScreen.ScreenType5UiModel -> ExerciseScreenType5()
         }
 
     fun getDescriptionFragment(): ExercisesDescriptionFragment {
@@ -465,15 +495,22 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app){
                 "ANSWERS_PERCENT" to getAnswersPercent(),
                 "OBTAINED_XP" to obtainedXP,
                 "PROCESS_SECONDS" to seconds,
-                "OLD_USER_DATA" to Gson().toJson(oldUserDataData)
+                "OLD_USER_DATA" to Gson().toJson(oldUserDataData),
+                "EXERCISES_BONUS_CORRECT_COUNT" to correctBonusAnswers
             )
         }
 
     fun getExercisesBonusEndFragment() =
-        ExercisesBonusEndScreenFragment().apply {
-            arguments = bundleOf("OBTAINED_XP" to LevelUtils.getObtainedExercisesBonusXP(correctBonusAnswers),
+        ExercisesBonusEndScreenFragment()
+            .apply {
+            arguments = bundleOf("OBTAINED_XP" to LevelUtils.getObtainedExercisesBonusXP(correctBonusAnswers, isTraining),
                 "CORRECT_ANSWERS_COUNT" to  correctBonusAnswers)
         }
+
+    fun endExercises(){
+        if(progressState.value?.second == false)
+            progressState.value = 1F to true
+    }
 
     fun startSecondsCounter(){
         secondsCounter = Timer()

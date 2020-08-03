@@ -167,6 +167,12 @@ sealed class ExerciseData(open val exerciseNumber: Int?){
             val isBonusStart: Boolean,
             val bonusSeconds: Long
         ): ExerciseDataScreen(exerciseNumber)
+
+        data class ScreenType5Data(
+            override val exerciseNumber: Int?,
+            val title: ExerciseSymbolData,
+            val variants: List<String>
+        ): ExerciseDataScreen(exerciseNumber)
     }
 }
 

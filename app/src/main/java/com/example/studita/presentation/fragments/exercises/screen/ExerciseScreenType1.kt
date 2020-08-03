@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
+import com.example.studita.presentation.model.ExerciseImagesRowUiModel
 import com.example.studita.utils.dpToPx
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
@@ -28,19 +29,22 @@ class ExerciseScreenType1 :  ExerciseScreen(R.layout.exercise_screen_type_1){
                 exerciseScreenType1SymbolTitle.text = screenUiModel.title.symbol
                 exerciseScreenType1SymbolNameTitle.text = screenUiModel.title.symbolName
                 exerciseScreenType1Subtitle.text = screenUiModel.subtitle
-                for(i in 0 until screenUiModel.imagesRowUiModel.count) {
-                    val shapeView = View(exerciseScreenType1FlexboxLayout.context)
-                    val params = FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT)
-                    params.height = 24.dpToPx()
-                    params.width = 24.dpToPx()
-                    shapeView.layoutParams = params
-                    shapeView.background =  screenUiModel.imagesRowUiModel.image
-                    exerciseScreenType1FlexboxLayout.addView(shapeView)
-                }
-                exerciseScreenType1Subtitle.text = screenUiModel.subtitle
+                fillFlexBoxLayout(screenUiModel.imagesRowUiModel)
             }
         }
 
+    }
+
+    private fun fillFlexBoxLayout(imagesRowUiModel: ExerciseImagesRowUiModel){
+        for(i in 0 until imagesRowUiModel.count) {
+            val shapeView = View(exerciseScreenType1FlexboxLayout.context)
+            val params = FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT)
+            params.height = 24.dpToPx()
+            params.width = 24.dpToPx()
+            shapeView.layoutParams = params
+            shapeView.background =  imagesRowUiModel.image
+            exerciseScreenType1FlexboxLayout.addView(shapeView)
+        }
     }
 
 }

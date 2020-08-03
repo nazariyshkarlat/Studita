@@ -41,17 +41,17 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
             ViewModelProviders.of(this).get(ExercisesEndFragmentViewModel::class.java)
         }
 
-        val percent : Float? = arguments?.getFloat("ANSWERS_PERCENT")
-        val userDataToAnimation = if (arguments?.containsKey("OLD_USER_DATA") == true)
-            Gson().fromJson<UserDataData>(arguments?.getString("OLD_USER_DATA"), object : TypeToken<UserDataData>(){}.type)
-        else
-            null
+        arguments?.let {
+            val percent = it.getFloat("ANSWERS_PERCENT")
+            val userDataToAnimation = Gson().fromJson<UserDataData>(
+                    it.getString("OLD_USER_DATA"),
+                    object : TypeToken<UserDataData>() {}.type
+                )
 
-        exercisesViewModel?.let {viewModel->
-            userDataToAnimation?.let { oldUserData ->
-                percent?.let {
-                    initAnimation(oldUserData, viewModel, it)
-                }
+            val exercisesBonusCorrectCount = it.getInt("EXERCISES_BONUS_CORRECT_COUNT")
+
+            exercisesViewModel?.let { viewModel ->
+                initAnimation(userDataToAnimation, viewModel, percent, exercisesBonusCorrectCount)
             }
         }
 
@@ -87,12 +87,12 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
         }
     }
 
-    private fun startAnimation(userData: UserDataData, percent: Float, isTraining: Boolean){
-        val anims = LevelUtils.getExerciseResultAnimation(userData, percent, isTraining)
-        animateProgress(anims.iterator(), anims.filter { it.to == 1F }.count(), null)
+    private fun startAnimation(userData: UserDataData, percent: Float, isTraining: Boolean, exercisesBonusCorrectCount: Int){
+        val anims = LevelUtils.getExerciseResultAnimation(userData, percent, isTraining,  exercisesBonusCorrectCount)
+        animateProgress(anims.iterator(), anims.filter { it.to == 1F }.count(), null,  LevelUtils.getObtainedExercisesBonusXP(exercisesBonusCorrectCount, isTraining))
     }
 
-    private fun animateProgress(animations: Iterator<ExerciseResultAnimation>, newLevels: Int, lastAnimation: ExerciseResultAnimation?){
+    private fun animateProgress(animations: Iterator<ExerciseResultAnimation>, newLevels: Int, lastAnimation: ExerciseResultAnimation?, exercisesBonusObtainedXP: Int){
         if(animations.hasNext()) {
 
             val anim = animations.next()
@@ -122,6 +122,12 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
                                     LevelUtils.SEQUENCE_BONUS
                                 )
                             }
+                            is ExerciseResultAnimation.BonusExercisesBonus ->{
+                                exercisesResultLayoutProgressBarText.text = resources.getString(
+                                    R.string.exercises_XP_bonus,
+                                    exercisesBonusObtainedXP
+                                )
+                            }
                         }
                         exercisesResultLayoutProgressBarText.animateFadeIn()
                     }
@@ -132,21 +138,25 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
                         .toLong(), onAnimEnd = {
                         if (anim.to == 1F) {
                             animateLevelUp{
-                                animateProgress(animations, newLevels, anim)
+                                animateProgress(animations, newLevels, anim, exercisesBonusObtainedXP)
                             }
                         }else{
-                            animateProgress(animations, newLevels, anim)
+                            animateProgress(animations, newLevels, anim, exercisesBonusObtainedXP)
                         }
                     })
             }
         }
     }
 
-    private fun initAnimation(oldUserData: UserDataData, viewModel: ExercisesViewModel, percent: Float){
-        exercisesResultLayoutProgressBar.percentProgress = LevelUtils.getLevelProgressPercent(oldUserData)
+    private fun initAnimation(userData: UserDataData, viewModel: ExercisesViewModel, percent: Float, exercisesBonusCorrectCount: Int){
+
+        exercisesResultLayoutProgressBar?.postExt {
+            exercisesResultLayoutProgressBar.percentProgress =
+                LevelUtils.getLevelProgressPercent(userData)
+            startAnimation(userData, percent, viewModel.isTraining, exercisesBonusCorrectCount)
+        }
         exercisesResultLayoutProgressBarText.text = resources.getString(R.string.exercises_XP_result, LevelUtils.percentToXP(percent, viewModel.isTraining))
-        startAnimation(oldUserData, percent, viewModel.isTraining)
-        updateTextLevels(oldUserData.currentLevel)
+        updateTextLevels(userData.currentLevel)
         exercisesResultLayoutAnswersPercent.text = resources.getString(
             R.string.answers_percent,
             (percent*100).toInt()

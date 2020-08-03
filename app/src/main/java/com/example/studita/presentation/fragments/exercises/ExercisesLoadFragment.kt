@@ -24,8 +24,6 @@ class ExercisesLoadFragment : LoadFragment(){
 
     var exercisesViewModel: ExercisesViewModel? = null
 
-    private val connectionTimeout = 3000L
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -35,10 +33,10 @@ class ExercisesLoadFragment : LoadFragment(){
 
         exercisesViewModel?.let {viewModel->
 
-            lifecycleScope.launch {
-                delay(connectionTimeout)
-                formBadConnectionButton(viewModel)
-            }
+            viewModel.loadScreenBadConnectionState.observe(viewLifecycleOwner, Observer { badConnection->
+                if(badConnection)
+                    formBadConnectionButton(viewModel)
+            })
 
             viewModel.exercisesState.observe(
                 viewLifecycleOwner,
@@ -66,6 +64,7 @@ class ExercisesLoadFragment : LoadFragment(){
             animator.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     exercisesViewModel?.startSecondsCounter()
+                    exercisesViewModel?.timeCounterIsPaused = false
                 }
             })
             animator

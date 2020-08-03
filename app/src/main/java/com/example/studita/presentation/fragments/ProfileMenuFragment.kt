@@ -166,10 +166,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
                 ListItems.OFFLINE_MODE.ordinal ->{
                     PrefsUtils.setOfflineMode(!mainMenuLayoutOfflineSwitch.isChecked)
                     mainMenuLayoutOfflineSwitch.isChecked = !mainMenuLayoutOfflineSwitch.isChecked
-                    if(!PrefsUtils.isOfflineModeEnabled())
-                        App.authenticate(UserUtils.getUserIDTokenData())
-                    else
-                        App.authenticationJob?.cancel()
+                    App.authenticate(UserUtils.getUserIDTokenData())
                 }
                 ListItems.PRIVACY.ordinal ->{
                     (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineModeEnabled()) PrivacySettingsOfflineModeFragment() else PrivacySettingsFragment(), R.id.doubleFrameLayoutFrameLayout)

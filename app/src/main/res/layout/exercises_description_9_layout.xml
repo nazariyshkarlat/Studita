@@ -15,7 +15,7 @@
         android:id="@+id/exercisesDescription9ParentLinearLayout"
         android:orientation="vertical"
         android:layout_marginStart="@dimen/defaultRLMargin"
-        android:layout_marginEnd="32dp">
+        android:layout_marginEnd="@dimen/defaultRLMargin">
 
         <TextView
             style="@style/Medium24"

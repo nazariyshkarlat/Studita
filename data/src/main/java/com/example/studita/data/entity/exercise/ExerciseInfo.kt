@@ -87,4 +87,9 @@ sealed class ScreenInfo{
         @SerializedName("bonus_seconds") val bonusSeconds: Long = 0L,
         @SerializedName("image") val image: String
     ): ScreenInfo()
+
+    data class ScreenType5Info(
+        @SerializedName("title") val title: List<String>,
+        @SerializedName("variants") val variants: List<String>
+    ): ScreenInfo()
 }

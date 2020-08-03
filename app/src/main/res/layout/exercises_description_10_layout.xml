@@ -15,38 +15,43 @@
         android:id="@+id/exercisesDescription10ParentLinearLayout"
         android:orientation="vertical"
         android:layout_marginStart="@dimen/defaultRLMargin"
-        android:layout_marginEnd="32dp">
+        android:layout_marginEnd="@dimen/defaultRLMargin">
 
         <TextView
             style="@style/Medium24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/exercises_description_title"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"/>
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"/>
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"/>
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"/>
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"/>
 
         <LinearLayout
             android:id="@+id/exercisesDescription10LayoutLinearLayout1"
@@ -86,7 +91,8 @@
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"/>
 
         <LinearLayout
             android:id="@+id/exercisesDescription10LayoutLinearLayout2"

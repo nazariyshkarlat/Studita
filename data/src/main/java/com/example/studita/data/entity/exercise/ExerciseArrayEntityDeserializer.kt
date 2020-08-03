@@ -51,9 +51,13 @@ class ExerciseArrayEntityDeserializer : JsonDeserializer<ExerciseArrayEntity> {
                             jsonObject.get("screen_info"),
                             ScreenInfo.ScreenType3Info::class.java
                         )
-                        4 -> context.deserialize<ScreenInfo.ScreenType3Info>(
+                        4 -> context.deserialize<ScreenInfo.ScreenType4Info>(
                             jsonObject.get("screen_info"),
                             ScreenInfo.ScreenType4Info::class.java
+                        )
+                        5 -> context.deserialize<ScreenInfo.ScreenType5Info>(
+                            jsonObject.get("screen_info"),
+                            ScreenInfo.ScreenType5Info::class.java
                         )
                         else -> throw IOException("Unexpected screen type")
                     }
