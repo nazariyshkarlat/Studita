@@ -181,7 +181,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                 viewLifecycleOwner,
                 Observer { show ->
                     if (show) {
-                        viewModel.cancelExercisesJob()
                         activity?.supportFragmentManager?.let {
                             viewModel.snackbarState.removeObservers(viewLifecycleOwner)
                             viewModel.progressState.removeObservers(viewLifecycleOwner)

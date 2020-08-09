@@ -366,6 +366,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
     fun endBonusExercises() {
         isBonusCompleted = true
         timeCounterIsPaused = true
+        stopSecondsCounter()
         saveObtainedExercisesResult()
     }
 
