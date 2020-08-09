@@ -21,11 +21,12 @@ open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(v
             ViewModelProviders.of(this).get(ExercisesViewModel::class.java)
         }
 
-        if(savedInstanceState != null)
-            selectedPositions = savedInstanceState.getIntegerArrayList("SELECTED_POSITIONS") as ArrayList<Int>
+        if (savedInstanceState != null)
+            selectedPositions =
+                savedInstanceState.getIntegerArrayList("SELECTED_POSITIONS") as ArrayList<Int>
     }
 
-    private fun View.disableAllItems(){
+    private fun View.disableAllItems() {
         this.isEnabled = false
         if (this is ViewGroup) {
             for (i in 0 until this.childCount) {
@@ -35,7 +36,7 @@ open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(v
         }
     }
 
-    protected fun observeAnswered(viewModel: ExercisesViewModel, variantsLayout: LinearLayout){
+    protected fun observeAnswered(viewModel: ExercisesViewModel, variantsLayout: LinearLayout) {
         viewModel.answered.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer { answered ->
@@ -44,17 +45,20 @@ open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(v
             })
     }
 
-    fun selectVariant(centerLayout: ViewGroup, position: Int, maxSelectedCount: Int){
+    fun selectVariant(centerLayout: ViewGroup, position: Int, maxSelectedCount: Int) {
 
-        if(!selectedPositions.contains(position)) {
+        if (!selectedPositions.contains(position)) {
             if (maxSelectedCount == selectedPositions.size)
                 unSelectVariant(centerLayout, selectedPositions.last())
         }
 
-        val childView= if(centerLayout.getChildAt(0) !is LinearLayout) centerLayout.getChildAt(position) else (centerLayout.getChildAt(position/2)as ViewGroup).getChildAt(position%2)
+        val childView =
+            if (centerLayout.getChildAt(0) !is LinearLayout) centerLayout.getChildAt(position) else (centerLayout.getChildAt(
+                position / 2
+            ) as ViewGroup).getChildAt(position % 2)
         childView.isSelected = true
 
-        if(!selectedPositions.contains(position))
+        if (!selectedPositions.contains(position))
             selectedPositions.add(position)
 
         if (maxSelectedCount == selectedPositions.size)

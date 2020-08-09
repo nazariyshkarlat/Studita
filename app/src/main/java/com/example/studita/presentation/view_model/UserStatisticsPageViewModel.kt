@@ -9,7 +9,7 @@ import com.example.studita.domain.interactor.UserStatisticsStatus
 import com.example.studita.utils.launchExt
 import kotlinx.coroutines.Job
 
-class UserStatisticsPageViewModel : ViewModel(){
+class UserStatisticsPageViewModel : ViewModel() {
 
     private val userStatisticsInteractor = UserStatisticsModule.getUserStatisticsInteractorImpl()
 
@@ -18,9 +18,9 @@ class UserStatisticsPageViewModel : ViewModel(){
 
     private var job: Job? = null
 
-    fun getUserStatistics(userId: Int){
-        job = viewModelScope.launchExt(job){
-            when(val status = userStatisticsInteractor.getUserStatistics(userId)){
+    fun getUserStatistics(userId: Int) {
+        job = viewModelScope.launchExt(job) {
+            when (val status = userStatisticsInteractor.getUserStatistics(userId)) {
                 is UserStatisticsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is UserStatisticsStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is UserStatisticsStatus.Failure -> errorState.postValue(R.string.server_failure)

@@ -2,12 +2,11 @@ package com.example.studita.presentation.view_model
 
 import android.view.View
 import androidx.annotation.DrawableRes
-import androidx.annotation.IdRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 
-class ToolbarFragmentViewModel : ViewModel(){
+class ToolbarFragmentViewModel : ViewModel() {
 
     val toolbarTextState = MutableLiveData<String?>()
     val toolbarDividerState = SingleLiveEvent<Boolean>()
@@ -15,15 +14,15 @@ class ToolbarFragmentViewModel : ViewModel(){
     val toolbarRightButtonState = MutableLiveData<ToolbarRightButtonState>()
     val toolbarFragmentOnNavigateState = MutableLiveData<NavigatableFragment.OnNavigateFragment>()
 
-    fun setToolbarText(text: String?){
+    fun setToolbarText(text: String?) {
         toolbarTextState.value = text
     }
 
-    fun showToolbarDivider(show: Boolean){
+    fun showToolbarDivider(show: Boolean) {
         toolbarDividerState.value = show
     }
 
-    fun setToolbarRightButtonState(toolbarRightButtonState: ToolbarRightButtonState){
+    fun setToolbarRightButtonState(toolbarRightButtonState: ToolbarRightButtonState) {
         this.toolbarRightButtonState.value = toolbarRightButtonState
     }
 
@@ -39,10 +38,12 @@ class ToolbarFragmentViewModel : ViewModel(){
         toolbarDividerState.value = false
     }
 
-    sealed class ToolbarRightButtonState{
-        class IsEnabled(@DrawableRes val imageRes: Int, val onClick: (View) -> Unit): ToolbarRightButtonState()
-        class Disabled(@DrawableRes val imageRes: Int): ToolbarRightButtonState()
-        object Invisible: ToolbarRightButtonState()
+    sealed class ToolbarRightButtonState {
+        class IsEnabled(@DrawableRes val imageRes: Int, val onClick: (View) -> Unit) :
+            ToolbarRightButtonState()
+
+        class Disabled(@DrawableRes val imageRes: Int) : ToolbarRightButtonState()
+        object Invisible : ToolbarRightButtonState()
     }
 
 }

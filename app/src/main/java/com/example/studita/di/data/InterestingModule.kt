@@ -7,8 +7,8 @@ import com.example.studita.data.repository.InterestingRepositoryImpl
 import com.example.studita.data.repository.datasource.interesting.CloudInterestingJsonDataStore
 import com.example.studita.data.repository.datasource.interesting.DiskInterestingJsonDataStore
 import com.example.studita.data.repository.datasource.interesting.InterestingJsonDataStoreFactoryImpl
-import com.example.studita.di.DI
 import com.example.studita.di.CacheModule
+import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.interesting.InterestingInteractor
 import com.example.studita.domain.interactor.interesting.InterestingInteractorImpl

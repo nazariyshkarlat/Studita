@@ -8,7 +8,11 @@ interface PrivacySettingsRepository {
 
     suspend fun editPrivacySettings(privacySettingsRequestData: PrivacySettingsRequestData): Int
 
-    suspend fun getPrivacyDuelsExceptionsList(userIdTokenData: UserIdTokenData, perPage: Int, pageNumber: Int) : Pair<Int, List<PrivacyDuelsExceptionData>?>
+    suspend fun getPrivacyDuelsExceptionsList(
+        userIdTokenData: UserIdTokenData,
+        perPage: Int,
+        pageNumber: Int
+    ): Pair<Int, List<PrivacyDuelsExceptionData>?>
 
     suspend fun editDuelsExceptions(editDuelsExceptionsRequestData: EditDuelsExceptionsRequestData): Int
 }

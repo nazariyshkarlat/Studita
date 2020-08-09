@@ -1,6 +1,6 @@
 package com.example.studita.data.cache.levels
 
-interface LevelsCache{
+interface LevelsCache {
     fun saveLevelsJson(isLoggedIn: Boolean, json: String)
 
     fun getLevelsJson(isLoggedIn: Boolean): String?

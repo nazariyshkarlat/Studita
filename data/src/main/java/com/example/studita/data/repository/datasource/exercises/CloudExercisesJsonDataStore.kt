@@ -9,7 +9,7 @@ import kotlinx.coroutines.CancellationException
 
 class CloudExercisesJsonDataStore(
     private val connectionManager: ConnectionManager,
-    private val  exercisesService: ExercisesService,
+    private val exercisesService: ExercisesService,
     private val offlineExercisesService: OfflineExercisesService
 ) : ExercisesJsonDataStore {
 
@@ -20,8 +20,8 @@ class CloudExercisesJsonDataStore(
             try {
                 val exercises = exercisesService.getExercises(chapterPartNumber)
                 return exercises.code() to exercises.body()!!.toString()
-            }catch (e: Exception){
-                if(e is CancellationException)
+            } catch (e: Exception) {
+                if (e is CancellationException)
                     throw e
                 else
                     throw ServerUnavailableException()
@@ -29,8 +29,8 @@ class CloudExercisesJsonDataStore(
         }
     }
 
-    suspend fun getOfflineExercisesJson(): Pair<Int, String>{
-        val response =  offlineExercisesService.getOfflineExercises()
+    suspend fun getOfflineExercisesJson(): Pair<Int, String> {
+        val response = offlineExercisesService.getOfflineExercises()
         return response.code() to response.body()!!.toString()
     }
 }

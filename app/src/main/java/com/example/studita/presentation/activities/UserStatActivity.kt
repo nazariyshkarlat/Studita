@@ -11,22 +11,23 @@ import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.addFragment
 
-class UserStatActivity : DefaultActivity(){
+class UserStatActivity : DefaultActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.double_center_frame_layout)
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             addFragment(ToolbarFragment(), R.id.doubleTopFrameLayoutFrameLayout)
             if (UserUtils.isLoggedIn()) {
-                if(PrefsUtils.isOfflineModeEnabled())
+                if (PrefsUtils.isOfflineModeEnabled())
                     addFragment(UserStatOfflineModeFragment(), R.id.doubleFrameLayoutFrameLayout)
                 else
                     addFragment(UserStatFragment().apply {
-                        arguments = bundleOf("USER_ID" to this@UserStatActivity.intent.extras?.getInt("USER_ID"))
+                        arguments =
+                            bundleOf("USER_ID" to this@UserStatActivity.intent.extras?.getInt("USER_ID"))
                     }, R.id.doubleFrameLayoutFrameLayout)
-            }else
+            } else
                 addFragment(UserStatUnLoggedInFragment(), R.id.doubleFrameLayoutFrameLayout)
         }
 

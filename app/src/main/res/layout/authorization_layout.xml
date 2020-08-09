@@ -10,9 +10,9 @@
         android:id="@+id/authorizationCenterLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_marginStart="@dimen/defaultRLMargin"
         android:layout_marginEnd="@dimen/defaultRLMargin"
-        android:layout_centerInParent="true"
         android:orientation="vertical">
 
         <com.example.studita.presentation.views.ErrorEditText

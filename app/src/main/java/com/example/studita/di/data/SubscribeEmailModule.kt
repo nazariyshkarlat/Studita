@@ -1,17 +1,17 @@
 package com.example.studita.di.data
 
-import com.example.studita.service.SyncSubscribeEmailImpl
 import com.example.studita.data.cache.subscribe_email.SubscribeEmailCacheImpl
 import com.example.studita.data.net.SubscribeEmailService
 import com.example.studita.data.repository.SubscribeEmailRepositoryImpl
-import com.example.studita.data.repository.datasource.subscribe_mail.SubscribeEmailDataStoreImpl
 import com.example.studita.data.repository.datasource.subscribe_mail.SubscribeEmailDataStoreFactoryImpl
+import com.example.studita.data.repository.datasource.subscribe_mail.SubscribeEmailDataStoreImpl
 import com.example.studita.di.CacheModule
 import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.subscribe_email.SubscribeEmailInteractor
 import com.example.studita.domain.interactor.subscribe_email.SubscribeEmailInteractorImpl
 import com.example.studita.domain.repository.SubscribeEmailRepository
+import com.example.studita.service.SyncSubscribeEmailImpl
 
 object SubscribeEmailModule {
 
@@ -51,13 +51,16 @@ object SubscribeEmailModule {
 
     private fun getSubscribeEmailDataStoreFactory() =
         SubscribeEmailDataStoreFactoryImpl(
-            getCloudSubscribeEmailDataStore())
+            getCloudSubscribeEmailDataStore()
+        )
 
     private fun getCloudSubscribeEmailDataStore() =
         SubscribeEmailDataStoreImpl(
             NetworkModule.connectionManager,
-            NetworkModule.getService(SubscribeEmailService::class.java))
+            NetworkModule.getService(SubscribeEmailService::class.java)
+        )
 
-    private fun getSubscribeEmailCacheImpl() = SubscribeEmailCacheImpl(CacheModule.sharedPreferences)
+    private fun getSubscribeEmailCacheImpl() =
+        SubscribeEmailCacheImpl(CacheModule.sharedPreferences)
 
 }

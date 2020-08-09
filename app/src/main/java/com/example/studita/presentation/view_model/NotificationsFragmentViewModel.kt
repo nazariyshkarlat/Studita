@@ -10,14 +10,13 @@ import com.example.studita.domain.entity.NotificationData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.interactor.GetNotificationsStatus
 import com.example.studita.presentation.model.NotificationsUiModel
-import com.example.studita.presentation.model.toShapeUiModel
 import com.example.studita.presentation.model.toUiModel
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class NotificationsFragmentViewModel : ViewModel(){
+class NotificationsFragmentViewModel : ViewModel() {
 
     private val notificationsInteractor = NotificationsModule.getNotificationsInteractorImpl()
 
@@ -37,27 +36,34 @@ class NotificationsFragmentViewModel : ViewModel(){
         getNotifications(UserUtils.getUserIDTokenData()!!, false)
     }
 
-    fun getNotifications(userIdTokenData: UserIdTokenData, newPage: Boolean){
+    fun getNotifications(userIdTokenData: UserIdTokenData, newPage: Boolean) {
 
-        if(newPage)
+        if (newPage)
             currentPageNumber++
         else
-            currentPageNumber=1
+            currentPageNumber = 1
 
-        viewModelScope.launch{
-            when(val result = notificationsInteractor.getNotifications(userIdTokenData, perPage, currentPageNumber)){
+        viewModelScope.launch {
+            when (val result = notificationsInteractor.getNotifications(
+                userIdTokenData,
+                perPage,
+                currentPageNumber
+            )) {
                 is GetNotificationsStatus.Failure -> errorState.postValue(R.string.no_connection)
                 is GetNotificationsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is GetNotificationsStatus.ServiceUnavailable -> errorState.postValue(R.string.no_connection)
                 is GetNotificationsStatus.NoNotificationsFound -> {
                     progressState.postValue(false)
-                    notificationsState.postValue(false to (if(currentPageNumber == 1) NotificationsResultState.NoResultsFound else NotificationsResultState.NoMoreResultsFound))
+                    notificationsState.postValue(false to (if (currentPageNumber == 1) NotificationsResultState.NoResultsFound else NotificationsResultState.NoMoreResultsFound))
                 }
                 is GetNotificationsStatus.Success -> {
 
-                    val notificationsResultState = if(currentPageNumber == 1) NotificationsResultState.FirstResults(result.notificationsData) else NotificationsResultState.MoreResults(result.notificationsData)
+                    val notificationsResultState =
+                        if (currentPageNumber == 1) NotificationsResultState.FirstResults(result.notificationsData) else NotificationsResultState.MoreResults(
+                            result.notificationsData
+                        )
 
-                    if(UserUtils.userDataNotNull()) {
+                    if (UserUtils.userDataNotNull()) {
                         UserUtils.userDataLiveData.postValue(UserUtils.userData.apply {
                             notificationsAreChecked = true
                         })
@@ -69,29 +75,35 @@ class NotificationsFragmentViewModel : ViewModel(){
         }
     }
 
-    fun setNotificationsAreChecked(userIdTokenData: UserIdTokenData){
-        notificationsAreCheckedJob = viewModelScope.launchExt(notificationsAreCheckedJob){
+    fun setNotificationsAreChecked(userIdTokenData: UserIdTokenData) {
+        notificationsAreCheckedJob = viewModelScope.launchExt(notificationsAreCheckedJob) {
             notificationsInteractor.setNotificationsAreChecked(userIdTokenData)
         }
     }
 
-    private fun canBeMoreItems(notificationsResultState: NotificationsResultState) = (((notificationsResultState is NotificationsResultState.FirstResults) && notificationsResultState.results.size == perPage) ||
-            ((notificationsResultState is NotificationsResultState.MoreResults) && notificationsResultState.results.size == perPage))
+    private fun canBeMoreItems(notificationsResultState: NotificationsResultState) =
+        (((notificationsResultState is NotificationsResultState.FirstResults) && notificationsResultState.results.size == perPage) ||
+                ((notificationsResultState is NotificationsResultState.MoreResults) && notificationsResultState.results.size == perPage))
 
-    fun getRecyclerItems(notificationSwitch: NotificationsUiModel.NotificationsSwitch, notificationItems: List<NotificationData>, progressItem: NotificationsUiModel.ProgressUiModel? = null, context: Context): ArrayList<NotificationsUiModel>{
+    fun getRecyclerItems(
+        notificationSwitch: NotificationsUiModel.NotificationsSwitch,
+        notificationItems: List<NotificationData>,
+        progressItem: NotificationsUiModel.ProgressUiModel? = null,
+        context: Context
+    ): ArrayList<NotificationsUiModel> {
         val adapterItems = ArrayList<NotificationsUiModel>()
         adapterItems.add(notificationSwitch)
         adapterItems.addAll(notificationItems.map { it.toUiModel(context) })
-        if(progressItem != null)
+        if (progressItem != null)
             adapterItems.add(progressItem)
         return adapterItems
     }
 
-    sealed class NotificationsResultState{
-        data class FirstResults(val results: List<NotificationData>): NotificationsResultState()
+    sealed class NotificationsResultState {
+        data class FirstResults(val results: List<NotificationData>) : NotificationsResultState()
         data class MoreResults(val results: List<NotificationData>) : NotificationsResultState()
-        object NoResultsFound: NotificationsResultState()
-        object NoMoreResultsFound: NotificationsResultState()
+        object NoResultsFound : NotificationsResultState()
+        object NoMoreResultsFound : NotificationsResultState()
     }
 
 }

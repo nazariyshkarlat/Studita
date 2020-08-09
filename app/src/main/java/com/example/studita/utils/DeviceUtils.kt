@@ -6,7 +6,7 @@ import android.provider.Settings
 
 object DeviceUtils {
     @SuppressLint("HardwareIds")
-    fun getDeviceId(applicationRef: Application): String{
+    fun getDeviceId(applicationRef: Application): String {
         return Settings.Secure.getString(applicationRef.contentResolver, Settings.Secure.ANDROID_ID)
     }
 }

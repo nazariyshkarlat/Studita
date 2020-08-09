@@ -11,26 +11,19 @@ import androidx.core.view.MotionEventCompat;
 import com.example.studita.utils.NumberExtensionsKt;
 
 public class CropGestureDetector {
-    private ScaleGestureDetector mDetector;
-    private CropGestureListener mListener;
-    float mLastTouchX;
-    float mLastTouchY;
+    private static final int INVALID_POINTER_ID = -1;
     final float mTouchSlop;
     final float mMinimumVelocity;
+    float mLastTouchX;
+    float mLastTouchY;
+    private ScaleGestureDetector mDetector;
+    private CropGestureListener mListener;
     private VelocityTracker mVelocityTracker;
     private boolean mIsDragging;
-
-    private static final int INVALID_POINTER_ID = -1;
     private int mActivePointerId;
     private int mActivePointerIndex;
 
     private boolean started;
-
-    public interface CropGestureListener {
-        void onDrag(float dx, float dy);
-        void onFling(float startX, float startY, float velocityX, float velocityY);
-        void onScale(float scaleFactor, float focusX, float focusY);
-    }
 
     public CropGestureDetector(Context context) {
         final ViewConfiguration configuration = ViewConfiguration
@@ -95,7 +88,6 @@ public class CropGestureDetector {
     public boolean isDragging() {
         return mIsDragging;
     }
-
 
     public boolean onTouchEvent(MotionEvent ev) {
         mDetector.onTouchEvent(ev);
@@ -216,6 +208,15 @@ public class CropGestureDetector {
         }
 
         return true;
+    }
+
+
+    public interface CropGestureListener {
+        void onDrag(float dx, float dy);
+
+        void onFling(float startX, float startY, float velocityX, float velocityY);
+
+        void onScale(float scaleFactor, float focusX, float focusY);
     }
 
 }

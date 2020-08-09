@@ -3,9 +3,7 @@ package com.example.studita.notifications
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
-
 import android.content.Intent
-import android.util.Log
 import com.example.studita.notifications.service.PushIntentService
 import com.example.studita.notifications.service.PushReceiverIntentService.Companion.BROADCAST_NOTIFICATION
 
@@ -13,7 +11,7 @@ import com.example.studita.notifications.service.PushReceiverIntentService.Compa
 class PushReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
-        if(resultCode == Activity.RESULT_OK && intent.action == BROADCAST_NOTIFICATION) {
+        if (resultCode == Activity.RESULT_OK && intent.action == BROADCAST_NOTIFICATION) {
             val push = Intent(context, PushIntentService::class.java)
             push.putExtras(getResultExtras(true))
             PushIntentService.enqueueWork(context, push)

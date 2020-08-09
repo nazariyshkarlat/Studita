@@ -1,19 +1,21 @@
 package com.example.studita.domain.interactor.user_data
 
 import com.example.studita.domain.entity.UserDataData
-import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.example.studita.domain.interactor.UserDataStatus
-import com.example.studita.domain.interactor.UserStatisticsStatus
 import com.example.studita.domain.repository.UserDataRepository
 import kotlinx.coroutines.delay
 
-class UserDataInteractorImpl(private val repository: UserDataRepository) : UserDataInteractor{
+class UserDataInteractorImpl(private val repository: UserDataRepository) : UserDataInteractor {
 
     private val retryDelay = 1000L
 
-    override suspend fun getUserData(userId: Int?, offlineMode: Boolean, retryCount: Int): UserDataStatus =
+    override suspend fun getUserData(
+        userId: Int?,
+        offlineMode: Boolean,
+        retryCount: Int
+    ): UserDataStatus =
         try {
             val result = repository.getUserData(userId, offlineMode)
             when (result.first) {
@@ -22,7 +24,7 @@ class UserDataInteractorImpl(private val repository: UserDataRepository) : UserD
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException) {
                         UserDataStatus.NoConnection
@@ -33,7 +35,7 @@ class UserDataInteractorImpl(private val repository: UserDataRepository) : UserD
                         delay(retryDelay)
                     getUserData(userId, offlineMode, retryCount - 1)
                 }
-            }else
+            } else
                 UserDataStatus.Failure
         }
 

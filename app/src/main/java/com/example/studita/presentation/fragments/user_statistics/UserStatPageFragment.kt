@@ -13,13 +13,14 @@ import com.example.studita.presentation.view_model.UserStatisticsPageViewModel
 import com.example.studita.utils.TimeUtils
 import kotlinx.android.synthetic.main.user_stat_page_layout.*
 
-open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout){
+open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel: UserStatisticsPageViewModel = ViewModelProviders.of(this).get(UserStatisticsPageViewModel::class.java)
+        val viewModel: UserStatisticsPageViewModel =
+            ViewModelProviders.of(this).get(UserStatisticsPageViewModel::class.java)
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             arguments?.getInt("USER_ID")?.let {
                 viewModel.getUserStatistics(it)
             }
@@ -27,24 +28,27 @@ open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout){
 
         val pageNumber = arguments?.getInt("PAGE_NUMBER") ?: 0
         viewModel.userStatisticsState.observe(viewLifecycleOwner, Observer {
-            if(it is UserStatisticsStatus.Success)
+            if (it is UserStatisticsStatus.Success)
                 formView(it.results[pageNumber])
         })
     }
 
-    private fun formView(userStatisticsData: UserStatisticsData){
+    private fun formView(userStatisticsData: UserStatisticsData) {
         userStatPageLayoutXPSubtitle.text = userStatisticsData.obtainedXP.toString()
-        userStatPageLayoutTimeSubtitle.text = context?.let {context->
+        userStatPageLayoutTimeSubtitle.text = context?.let { context ->
             TimeUtils.styleTimeText(
                 context,
-                TimeUtils.getTimeText(TimeUtils.getHours(userStatisticsData.obtainedTime) to resources.getString(R.string.hours),
+                TimeUtils.getTimeText(
+                    TimeUtils.getHours(userStatisticsData.obtainedTime) to resources.getString(R.string.hours),
                     TimeUtils.getMinutes(userStatisticsData.obtainedTime) to resources.getString(R.string.minutes),
-                    TimeUtils.getSeconds(userStatisticsData.obtainedTime) to  resources.getString(R.string.seconds))
+                    TimeUtils.getSeconds(userStatisticsData.obtainedTime) to resources.getString(R.string.seconds)
+                )
             )
         }
         userStatPageLayoutLessonsSubtitle.text = userStatisticsData.obtainedExercises.toString()
         userStatPageLayoutTrainingsSubtitle.text = userStatisticsData.obtainedTrainings.toString()
-        userStatPageLayoutAchievementsSubtitle.text = userStatisticsData.obtainedAchievements.toString()
+        userStatPageLayoutAchievementsSubtitle.text =
+            userStatisticsData.obtainedAchievements.toString()
         (view as ViewGroup?)?.removeView(userStatPageLayoutProgressBar)
         userStatPageContentView.visibility = View.VISIBLE
     }

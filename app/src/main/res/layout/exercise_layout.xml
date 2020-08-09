@@ -20,18 +20,18 @@
         <include
             android:id="@+id/exerciseLayoutToolbar"
             layout="@layout/exercise_toolbar"
-            android:layout_height="@dimen/toolbarHeight"
-            android:layout_width="match_parent" />
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbarHeight" />
 
     </RelativeLayout>
 
     <include
         android:id="@+id/exerciseLayoutSnackbar"
         layout="@layout/exercise_bottom_snackbar"
-        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible" />
 
     <FrameLayout
         android:id="@+id/exerciseLayoutButtonFrameLayout"
@@ -45,7 +45,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/dividerHeight"
             android:alpha="@dimen/bars_alpha"
-            android:background="?page_background_color"/>
+            android:background="?page_background_color" />
 
         <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/exerciseLayoutButton"

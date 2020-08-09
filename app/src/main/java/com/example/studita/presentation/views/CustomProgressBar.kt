@@ -9,14 +9,14 @@ class CustomProgressBar @JvmOverloads constructor(
 ) : ProgressBar(context, attrs, defStyleAttr) {
 
     var percentProgress: Float
-        set(value){
+        set(value) {
             progress = (value * max).toInt()
         }
         get() {
-            return progress/max.toFloat()
+            return progress / max.toFloat()
         }
 
-    fun clearProgress(){
+    fun clearProgress() {
         this.percentProgress = 0F
     }
 }

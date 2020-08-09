@@ -6,21 +6,21 @@
 
     <ScrollView
         android:id="@+id/exercisesDetailedStatLayoutScrollView"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
         android:paddingTop="@dimen/toolbarHeight"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false">
+        android:paddingBottom="16dp">
 
         <LinearLayout
             android:id="@+id/exercisesDetailedStatLayoutLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/defaultRLMargin"
             android:background="@drawable/main_blocks_rectangle"
+            android:orientation="vertical"
             android:padding="16dp">
 
             <TextView
@@ -28,66 +28,65 @@
                 style="@style/Regular16Secondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/detailed_stat_title1"/>
+                android:text="@string/detailed_stat_title1" />
 
             <TextView
                 android:id="@+id/exercisesDetailedStatLayoutXPSubtitle"
                 style="@style/Medium18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"/>
+                android:layout_marginTop="12dp" />
 
             <TextView
                 android:id="@+id/exercisesDetailedStatLayoutTimeTitle"
                 style="@style/Regular16Secondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/detailed_stat_title2"
-                android:layout_marginTop="24dp"/>
+                android:layout_marginTop="24dp"
+                android:text="@string/detailed_stat_title2" />
 
             <TextView
                 android:id="@+id/exercisesDetailedStatLayoutTimeSubtitle"
                 style="@style/Medium18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"/>
+                android:layout_marginTop="12dp" />
 
             <TextView
                 android:id="@+id/exercisesDetailedStatLayoutTrueAnswersTitle"
                 style="@style/Regular16Green"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/detailed_stat_title3"
-                android:layout_marginTop="24dp"/>
+                android:layout_marginTop="24dp"
+                android:text="@string/detailed_stat_title3" />
 
             <TextView
                 android:id="@+id/exercisesDetailedStatLayoutTrueAnswersSubtitle"
                 style="@style/Medium18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"/>
+                android:layout_marginTop="12dp" />
 
             <TextView
                 android:id="@+id/exercisesDetailedStatLayoutFalseAnswersTitle"
                 style="@style/Regular16Red"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/detailed_stat_title4"
-                android:layout_marginTop="24dp"/>
+                android:layout_marginTop="24dp"
+                android:text="@string/detailed_stat_title4" />
 
             <TextView
                 android:id="@+id/exercisesDetailedStatLayoutFalseAnswersSubtitle"
                 style="@style/Medium18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"/>
+                android:layout_marginTop="12dp" />
 
         </LinearLayout>
 
     </ScrollView>
 
 
-    <include
-        layout="@layout/toolbar_layout"/>
+    <include layout="@layout/toolbar_layout" />
 
 </RelativeLayout>

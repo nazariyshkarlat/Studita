@@ -2,19 +2,22 @@ package com.example.studita.domain.interactor.exercises
 
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
-import com.example.studita.domain.interactor.ExercisesStatus
 import com.example.studita.domain.interactor.ExercisesCacheStatus
+import com.example.studita.domain.interactor.ExercisesStatus
 import com.example.studita.domain.repository.ExercisesRepository
 import kotlinx.coroutines.delay
-import java.lang.Exception
 
 class ExercisesInteractorImpl(
     private val repository: ExercisesRepository
-): ExercisesInteractor {
+) : ExercisesInteractor {
 
     private val retryDelay = 1000L
 
-    override suspend fun getExercises(chapterPartNumber: Int, offlineMode: Boolean, retryCount: Int): ExercisesStatus =
+    override suspend fun getExercises(
+        chapterPartNumber: Int,
+        offlineMode: Boolean,
+        retryCount: Int
+    ): ExercisesStatus =
         try {
             val results = repository.getExercises(chapterPartNumber, offlineMode)
 
@@ -36,20 +39,20 @@ class ExercisesInteractorImpl(
                         delay(retryDelay)
                     getExercises(chapterPartNumber, offlineMode, retryCount - 1)
                 }
-            }else
+            } else
                 ExercisesStatus.Failure
         }
 
     override suspend fun downloadOfflineExercises(retryCount: Int): ExercisesCacheStatus =
         try {
             val result = repository.downloadOfflineExercises()
-            if(result == 200)
+            if (result == 200)
                 ExercisesCacheStatus.Success
             else
                 ExercisesCacheStatus.IsCached
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException)
                         ExercisesCacheStatus.NoConnection
@@ -60,8 +63,8 @@ class ExercisesInteractorImpl(
                         delay(retryDelay)
                     downloadOfflineExercises(retryCount - 1)
                 }
-            }else
+            } else
                 ExercisesCacheStatus.Failure
-    }
+        }
 
 }

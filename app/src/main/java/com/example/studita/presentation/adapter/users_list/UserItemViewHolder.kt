@@ -14,9 +14,12 @@ import com.example.studita.presentation.fragments.ProfileFragment
 import com.example.studita.presentation.model.UsersRecyclerUiModel
 import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.friend_item.view.*
-import kotlinx.android.synthetic.main.profile_friend_item.view.*
 
-class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsCallback, private val lifecycleOwner: LifecycleOwner) : UsersViewHolder<UsersRecyclerUiModel.UserItemUiModel>(view), View.OnTouchListener{
+class UserItemViewHolder(
+    view: View,
+    private val changeIsMyFriend: AddToFriendsCallback,
+    private val lifecycleOwner: LifecycleOwner
+) : UsersViewHolder<UsersRecyclerUiModel.UserItemUiModel>(view), View.OnTouchListener {
 
     lateinit var model: UsersRecyclerUiModel.UserItemUiModel
 
@@ -31,11 +34,11 @@ class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsC
 
             clearAvatar()
 
-            if(!isMyProfile) {
+            if (!isMyProfile) {
                 friendItemAvatar.fillAvatar(model.avatarLink, model.userName, model.userId)
                 friendItemUserName.text =
                     resources.getString(R.string.user_name_template, model.userName)
-            }else{
+            } else {
                 UserUtils.userDataLiveData.observe(lifecycleOwner, androidx.lifecycle.Observer {
                     friendItemAvatar.fillAvatar(it.avatarLink, it.userName!!, it.userId!!)
                     friendItemUserName.text =
@@ -69,24 +72,28 @@ class UserItemViewHolder(view: View, private val changeIsMyFriend: AddToFriendsC
         }
     }
 
-    private fun clearAvatar(){
+    private fun clearAvatar() {
         Glide.with(itemView.context)
             .clear(itemView.friendItemAvatar)
     }
 
-    interface AddToFriendsCallback{
+    interface AddToFriendsCallback {
         fun addFriend(friendId: Int)
         fun removeFriend(friendId: Int)
     }
 
-    private fun navigateToProfile(activity: AppCompatActivity, model: UsersRecyclerUiModel.UserItemUiModel){
+    private fun navigateToProfile(
+        activity: AppCompatActivity,
+        model: UsersRecyclerUiModel.UserItemUiModel
+    ) {
         val isMyProfile = model.userId == UserUtils.userData.userId
-        activity.navigateTo((if(isMyProfile) MyProfileFragment() else ProfileFragment()).apply {
-            arguments = bundleOf( "USER_ID" to model.userId)}, R.id.doubleFrameLayoutFrameLayout)
+        activity.navigateTo((if (isMyProfile) MyProfileFragment() else ProfileFragment()).apply {
+            arguments = bundleOf("USER_ID" to model.userId)
+        }, R.id.doubleFrameLayoutFrameLayout)
     }
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
-        if(event.action == ACTION_DOWN){
+        if (event.action == ACTION_DOWN) {
             v.getAppCompatActivity()?.hideKeyboard()
         }
         return false

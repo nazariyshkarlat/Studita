@@ -4,14 +4,13 @@ import com.example.studita.domain.entity.*
 import com.example.studita.domain.entity.authorization.LogInResponseData
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
 import com.example.studita.domain.entity.exercise.ExercisesResponseData
-import com.google.gson.annotations.SerializedName
-import java.util.ArrayList
+import java.util.*
 
 
 sealed class LevelsStatus {
     object ServiceUnavailable : LevelsStatus()
     object NoConnection : LevelsStatus()
-    object Failure: LevelsStatus()
+    object Failure : LevelsStatus()
     data class Success(val result: List<LevelData>) : LevelsStatus()
 }
 
@@ -24,159 +23,160 @@ sealed class LevelsCacheStatus {
     object Failure : LevelsCacheStatus()
 }
 
-sealed class SignUpStatus{
+sealed class SignUpStatus {
     object ServiceUnavailable : SignUpStatus()
     object NoConnection : SignUpStatus()
-    object Failure: SignUpStatus()
+    object Failure : SignUpStatus()
     object UserAlreadyExists : SignUpStatus()
-    object Success: SignUpStatus()
+    object Success : SignUpStatus()
 }
 
-sealed class LogInStatus{
+sealed class LogInStatus {
     object ServiceUnavailable : LogInStatus()
     object NoConnection : LogInStatus()
-    object Failure: LogInStatus()
+    object Failure : LogInStatus()
     object NoUserFound : LogInStatus()
-    data class Success(val result: LogInResponseData): LogInStatus()
+    data class Success(val result: LogInResponseData) : LogInStatus()
 }
 
-sealed class SignInWithGoogleStatus{
+sealed class SignInWithGoogleStatus {
     object ServiceUnavailable : SignInWithGoogleStatus()
     object NoConnection : SignInWithGoogleStatus()
-    object Failure: SignInWithGoogleStatus()
-    data class Success(val result: LogInResponseData): SignInWithGoogleStatus()
+    object Failure : SignInWithGoogleStatus()
+    data class Success(val result: LogInResponseData) : SignInWithGoogleStatus()
 }
 
-sealed class ChapterStatus{
+sealed class ChapterStatus {
     object ServiceUnavailable : ChapterStatus()
     object NoConnection : ChapterStatus()
-    object NoChapterFound: ChapterStatus()
-    object Failure: ChapterStatus()
-    data class Success(val result: ChapterData): ChapterStatus()
+    object NoChapterFound : ChapterStatus()
+    object Failure : ChapterStatus()
+    data class Success(val result: ChapterData) : ChapterStatus()
 }
 
-sealed class ChaptersCacheStatus{
+sealed class ChaptersCacheStatus {
     object ServiceUnavailable : ChaptersCacheStatus()
     object NoConnection : ChaptersCacheStatus()
     object IsCached : ChaptersCacheStatus()
-    object Failure: ChaptersCacheStatus()
-    object Success: ChaptersCacheStatus()
+    object Failure : ChaptersCacheStatus()
+    object Success : ChaptersCacheStatus()
 }
 
-sealed class ExercisesStatus{
+sealed class ExercisesStatus {
     object ServiceUnavailable : ExercisesStatus()
     object Failure : ExercisesStatus()
     object NoConnection : ExercisesStatus()
-    object NoChapterPartFound: ExercisesStatus()
-    data class Success(val result: ExercisesResponseData): ExercisesStatus()
+    object NoChapterPartFound : ExercisesStatus()
+    data class Success(val result: ExercisesResponseData) : ExercisesStatus()
 }
 
-sealed class ExerciseResultStatus{
+sealed class ExerciseResultStatus {
     object ServiceUnavailable : ExerciseResultStatus()
     object NoConnection : ExerciseResultStatus()
-    object NoExerciseFound: ExerciseResultStatus()
-    object Failure: ExerciseResultStatus()
-    data class Success(val result: ExerciseResponseData): ExerciseResultStatus()
+    object NoExerciseFound : ExerciseResultStatus()
+    object Failure : ExerciseResultStatus()
+    data class Success(val result: ExerciseResponseData) : ExerciseResultStatus()
 }
 
-sealed class UserDataStatus{
+sealed class UserDataStatus {
     object ServiceUnavailable : UserDataStatus()
     object NoConnection : UserDataStatus()
-    object Failure: UserDataStatus()
-    data class Success(val result: UserDataData): UserDataStatus()
+    object Failure : UserDataStatus()
+    data class Success(val result: UserDataData) : UserDataStatus()
 }
 
-sealed class UserStatisticsStatus{
+sealed class UserStatisticsStatus {
     object ServiceUnavailable : UserStatisticsStatus()
     object NoConnection : UserStatisticsStatus()
-    object Failure: UserStatisticsStatus()
-    data class Success(val results: List<UserStatisticsData>): UserStatisticsStatus()
+    object Failure : UserStatisticsStatus()
+    data class Success(val results: List<UserStatisticsData>) : UserStatisticsStatus()
 }
 
-sealed class InterestingStatus{
+sealed class InterestingStatus {
     object ServiceUnavailable : InterestingStatus()
     object NoConnection : InterestingStatus()
-    object NoInterestingFound: InterestingStatus()
+    object NoInterestingFound : InterestingStatus()
     object Failure : InterestingStatus()
 
-    data class Success(val result: InterestingData): InterestingStatus()
+    data class Success(val result: InterestingData) : InterestingStatus()
 }
 
-sealed class InterestingCacheStatus{
+sealed class InterestingCacheStatus {
     object ServiceUnavailable : InterestingCacheStatus()
     object NoConnection : InterestingCacheStatus()
     object IsCached : InterestingCacheStatus()
-    object Success: InterestingCacheStatus()
+    object Success : InterestingCacheStatus()
     object Failure : InterestingCacheStatus()
 }
 
-sealed class SubscribeEmailResultStatus{
+sealed class SubscribeEmailResultStatus {
     object ServiceUnavailable : SubscribeEmailResultStatus()
     object NoConnection : SubscribeEmailResultStatus()
-    object Failure: SubscribeEmailResultStatus()
-    data class Success(val result: SubscribeEmailResultData): SubscribeEmailResultStatus()
+    object Failure : SubscribeEmailResultStatus()
+    data class Success(val result: SubscribeEmailResultData) : SubscribeEmailResultStatus()
 }
 
-sealed class SaveObtainedExercisesDataStatus{
+sealed class SaveObtainedExercisesDataStatus {
     object ServiceUnavailable : SaveObtainedExercisesDataStatus()
     object NoConnection : SaveObtainedExercisesDataStatus()
-    object Failure: SaveObtainedExercisesDataStatus()
-    object Success: SaveObtainedExercisesDataStatus()
+    object Failure : SaveObtainedExercisesDataStatus()
+    object Success : SaveObtainedExercisesDataStatus()
 }
 
-sealed class ExercisesCacheStatus{
+sealed class ExercisesCacheStatus {
     object ServiceUnavailable : ExercisesCacheStatus()
     object NoConnection : ExercisesCacheStatus()
     object IsCached : ExercisesCacheStatus()
-    object Success: ExercisesCacheStatus()
+    object Success : ExercisesCacheStatus()
     object Failure : ExercisesCacheStatus()
 }
 
-sealed class CompleteExercisesStatus{
+sealed class CompleteExercisesStatus {
     object ServiceUnavailable : CompleteExercisesStatus()
     object NoConnection : CompleteExercisesStatus()
     object Failure : CompleteExercisesStatus()
-    object Success: CompleteExercisesStatus()
+    object Success : CompleteExercisesStatus()
 }
 
-sealed class EditProfileStatus{
+sealed class EditProfileStatus {
     object ServiceUnavailable : EditProfileStatus()
     object NoConnection : EditProfileStatus()
-    object Failure: EditProfileStatus()
-    class Success(val avatarLink: String?): EditProfileStatus()
+    object Failure : EditProfileStatus()
+    class Success(val avatarLink: String?) : EditProfileStatus()
 }
 
-sealed class UserNameAvailableStatus{
-    object Failure: UserNameAvailableStatus()
-    object Available: UserNameAvailableStatus()
-    object IsTaken: UserNameAvailableStatus()
+sealed class UserNameAvailableStatus {
+    object Failure : UserNameAvailableStatus()
+    object Available : UserNameAvailableStatus()
+    object Unavailable : UserNameAvailableStatus()
+    object IsTaken : UserNameAvailableStatus()
 }
 
-sealed class PrivacySettingsStatus{
+sealed class PrivacySettingsStatus {
     object ServiceUnavailable : PrivacySettingsStatus()
     object NoConnection : PrivacySettingsStatus()
-    object Failure: PrivacySettingsStatus()
-    class Success(val privacySettingsData: PrivacySettingsData): PrivacySettingsStatus()
+    object Failure : PrivacySettingsStatus()
+    class Success(val privacySettingsData: PrivacySettingsData) : PrivacySettingsStatus()
 }
 
-sealed class EditPrivacySettingsStatus{
+sealed class EditPrivacySettingsStatus {
     object ServiceUnavailable : EditPrivacySettingsStatus()
     object NoConnection : EditPrivacySettingsStatus()
-    object Failure: EditPrivacySettingsStatus()
-    object Success: EditPrivacySettingsStatus()
+    object Failure : EditPrivacySettingsStatus()
+    object Success : EditPrivacySettingsStatus()
 }
 
-sealed class GetUsersStatus{
+sealed class GetUsersStatus {
     object ServiceUnavailable : GetUsersStatus()
     object NoConnection : GetUsersStatus()
-    object Failure: GetUsersStatus()
-    object NoUsersFound: GetUsersStatus()
-    class Success(val friendsResponseData: UsersResponseData): GetUsersStatus()
+    object Failure : GetUsersStatus()
+    object NoUsersFound : GetUsersStatus()
+    class Success(val friendsResponseData: UsersResponseData) : GetUsersStatus()
 }
 
-sealed class IsMyFriendStatus{
+sealed class IsMyFriendStatus {
 
-    sealed class Success(@Transient open val userId: Int) : IsMyFriendStatus(){
+    sealed class Success(@Transient open val userId: Int) : IsMyFriendStatus() {
         class IsMyFriend(override val userId: Int) : Success(userId)
         class IsNotMyFriend(override val userId: Int) : Success(userId)
         class GotMyFriendshipRequest(override val userId: Int) : Success(userId)
@@ -185,61 +185,62 @@ sealed class IsMyFriendStatus{
 
     object ServiceUnavailable : IsMyFriendStatus()
     object NoConnection : IsMyFriendStatus()
-    object Failure: IsMyFriendStatus()
+    object Failure : IsMyFriendStatus()
 }
 
-sealed class FriendActionStatus{
+sealed class FriendActionStatus {
     object ServiceUnavailable : FriendActionStatus()
     object NoConnection : FriendActionStatus()
-    object Failure: FriendActionStatus()
-    object Success: FriendActionStatus()
+    object Failure : FriendActionStatus()
+    object Success : FriendActionStatus()
 }
 
-sealed class PrivacySettingsDuelsExceptionsStatus{
+sealed class PrivacySettingsDuelsExceptionsStatus {
     object ServiceUnavailable : PrivacySettingsDuelsExceptionsStatus()
     object NoConnection : PrivacySettingsDuelsExceptionsStatus()
-    object NoUsersFound: PrivacySettingsDuelsExceptionsStatus()
-    object Failure: PrivacySettingsDuelsExceptionsStatus()
-    class Success(val privacySettingsDuelsExceptionsItems: List<PrivacyDuelsExceptionData>): PrivacySettingsDuelsExceptionsStatus()
+    object NoUsersFound : PrivacySettingsDuelsExceptionsStatus()
+    object Failure : PrivacySettingsDuelsExceptionsStatus()
+    class Success(val privacySettingsDuelsExceptionsItems: List<PrivacyDuelsExceptionData>) :
+        PrivacySettingsDuelsExceptionsStatus()
 }
 
-sealed class EditDuelsExceptionsStatus{
+sealed class EditDuelsExceptionsStatus {
     object ServiceUnavailable : EditDuelsExceptionsStatus()
     object NoConnection : EditDuelsExceptionsStatus()
-    object Failure: EditDuelsExceptionsStatus()
-    object Success: EditDuelsExceptionsStatus()
+    object Failure : EditDuelsExceptionsStatus()
+    object Success : EditDuelsExceptionsStatus()
 }
 
-sealed class HasFriendsStatus{
+sealed class HasFriendsStatus {
     object ServiceUnavailable : HasFriendsStatus()
     object NoConnection : HasFriendsStatus()
-    object Failure: HasFriendsStatus()
-    object HasFriends: HasFriendsStatus()
-    object HasNoFriends: HasFriendsStatus()
+    object Failure : HasFriendsStatus()
+    object HasFriends : HasFriendsStatus()
+    object HasNoFriends : HasFriendsStatus()
 }
 
-sealed class GetNotificationsStatus{
+sealed class GetNotificationsStatus {
     object ServiceUnavailable : GetNotificationsStatus()
     object NoConnection : GetNotificationsStatus()
-    object Failure: GetNotificationsStatus()
-    object NoNotificationsFound: GetNotificationsStatus()
-    class Success(val notificationsData: ArrayList<NotificationData>): GetNotificationsStatus()
+    object Failure : GetNotificationsStatus()
+    object NoNotificationsFound : GetNotificationsStatus()
+    class Success(val notificationsData: ArrayList<NotificationData>) : GetNotificationsStatus()
 }
 
-sealed class CheckTokenIsCorrectStatus{
+sealed class CheckTokenIsCorrectStatus {
     object ServiceUnavailable : CheckTokenIsCorrectStatus()
     object NoConnection : CheckTokenIsCorrectStatus()
-    object Failure: CheckTokenIsCorrectStatus()
-    object Correct: CheckTokenIsCorrectStatus()
-    object Waiting: CheckTokenIsCorrectStatus()
-    object Incorrect: CheckTokenIsCorrectStatus()
+    object Failure : CheckTokenIsCorrectStatus()
+    object Correct : CheckTokenIsCorrectStatus()
+    object Waiting : CheckTokenIsCorrectStatus()
+    object Incorrect : CheckTokenIsCorrectStatus()
 }
 
-sealed class SetNotificationsAreCheckedStatus{
+sealed class SetNotificationsAreCheckedStatus {
     object ServiceUnavailable : SetNotificationsAreCheckedStatus()
     object NoConnection : SetNotificationsAreCheckedStatus()
-    object Failure: SetNotificationsAreCheckedStatus()
-    object Success: SetNotificationsAreCheckedStatus()
+    object Failure : SetNotificationsAreCheckedStatus()
+    object Success : SetNotificationsAreCheckedStatus()
 }
 
 

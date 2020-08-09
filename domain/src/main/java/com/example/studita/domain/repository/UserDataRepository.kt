@@ -1,10 +1,9 @@
 package com.example.studita.domain.repository
 
 import com.example.studita.domain.entity.UserDataData
-import com.example.studita.domain.entity.UserIdTokenData
 
 
-interface UserDataRepository{
+interface UserDataRepository {
 
     suspend fun getUserData(userId: Int?, offlineMode: Boolean): Pair<Int, UserDataData>
 

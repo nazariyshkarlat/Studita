@@ -8,7 +8,8 @@ import com.example.studita.domain.interactor.UserStatisticsStatus
 import com.example.studita.domain.repository.UserStatisticsRepository
 import kotlinx.coroutines.delay
 
-class UserStatisticsInteractorImpl(private val repository: UserStatisticsRepository) : UserStatisticsInteractor {
+class UserStatisticsInteractorImpl(private val repository: UserStatisticsRepository) :
+    UserStatisticsInteractor {
 
     private val retryDelay = 1000L
 
@@ -24,7 +25,7 @@ class UserStatisticsInteractorImpl(private val repository: UserStatisticsReposit
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException) {
                         UserStatisticsStatus.NoConnection
@@ -35,12 +36,15 @@ class UserStatisticsInteractorImpl(private val repository: UserStatisticsReposit
                         delay(retryDelay)
                     getUserStatistics(userId, retryCount - 1)
                 }
-            }else
+            } else
                 UserStatisticsStatus.Failure
         }
 
-    override suspend fun saveUserStatistics(idTokenData: UserIdTokenData?, userStatisticsRowData: UserStatisticsRowData) {
-        if(idTokenData == null)
+    override suspend fun saveUserStatistics(
+        idTokenData: UserIdTokenData?,
+        userStatisticsRowData: UserStatisticsRowData
+    ) {
+        if (idTokenData == null)
             repository.saveUserStatistics(userStatisticsRowData)
     }
 

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Regular12White"
-    android:gravity="center"
-    android:textAlignment="center"
     android:layout_width="match_parent"
+    android:layout_height="@dimen/connectionSnackbarHeight"
     android:background="?page_background_color"
-    android:layout_height="@dimen/connectionSnackbarHeight"/>
+    android:gravity="center"
+    android:textAlignment="center" />

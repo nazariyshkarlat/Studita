@@ -19,30 +19,44 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.accept_friendship_dialog_alert.*
 
-class AcceptFriendshipDialogAlertFragment : BaseDialogFragment(R.layout.accept_friendship_dialog_alert){
+class AcceptFriendshipDialogAlertFragment :
+    BaseDialogFragment(R.layout.accept_friendship_dialog_alert) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val acceptFriendshipDialogAlertViewModel = ViewModelProviders.of(this).get(AcceptFriendshipDialogAlertViewModel::class.java)
+        val acceptFriendshipDialogAlertViewModel =
+            ViewModelProviders.of(this).get(AcceptFriendshipDialogAlertViewModel::class.java)
 
         val json = arguments?.getString("USER_DATA")
 
         val userData = json?.let {
             GsonBuilder().apply {
-                registerTypeAdapter(IsMyFriendStatus.Success::class.java, IsMyFriendStatusDeserializer())
-            }.create().fromJson<UserData>(json, object  : TypeToken<UserData>() {}.type)
+                registerTypeAdapter(
+                    IsMyFriendStatus.Success::class.java,
+                    IsMyFriendStatusDeserializer()
+                )
+            }.create().fromJson<UserData>(json, object : TypeToken<UserData>() {}.type)
         }
 
-        if(userData != null){
-            acceptFriendshipDialogAlertSubtitle.text = resources.getString(R.string.accept_friendship_dialog_alert_subtitle, userData.userName)
+        if (userData != null) {
+            acceptFriendshipDialogAlertSubtitle.text = resources.getString(
+                R.string.accept_friendship_dialog_alert_subtitle,
+                userData.userName
+            )
 
             acceptFriendshipDialogRightButton.setOnClickListener {
-                acceptFriendshipDialogAlertViewModel.acceptFriendshipRequest(UserUtils.getUserIDTokenData()!!, userData)
+                acceptFriendshipDialogAlertViewModel.acceptFriendshipRequest(
+                    UserUtils.getUserIDTokenData()!!,
+                    userData
+                )
                 dismiss()
             }
             acceptFriendshipDialogLeftButton.setOnClickListener {
-                acceptFriendshipDialogAlertViewModel.rejectFriendshipRequest(UserUtils.getUserIDTokenData()!!, userData)
+                acceptFriendshipDialogAlertViewModel.rejectFriendshipRequest(
+                    UserUtils.getUserIDTokenData()!!,
+                    userData
+                )
                 dismiss()
             }
         }
@@ -53,13 +67,19 @@ class AcceptFriendshipDialogAlertFragment : BaseDialogFragment(R.layout.accept_f
             when (it) {
                 is UsersInteractor.FriendActionState.FriendshipRequestIsAccepted -> {
                     CustomSnackbar(context).show(
-                        context.resources.getString(R.string.friend_added_snackbar, userData?.userName),
+                        context.resources.getString(
+                            R.string.friend_added_snackbar,
+                            userData?.userName
+                        ),
                         ThemeUtils.getAccentColor(context)
                     )
                 }
                 is UsersInteractor.FriendActionState.FriendshipRequestIsRejected -> {
                     CustomSnackbar(context).show(
-                        context.resources.getString(R.string.friendship_request_is_rejected_snackbar, userData?.userName),
+                        context.resources.getString(
+                            R.string.friendship_request_is_rejected_snackbar,
+                            userData?.userName
+                        ),
                         ThemeUtils.getAccentColor(context)
                     )
                 }

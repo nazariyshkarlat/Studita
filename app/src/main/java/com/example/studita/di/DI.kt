@@ -5,7 +5,7 @@ import com.example.studita.di.data.*
 import com.example.studita.di.data.exercise.ExerciseResultModule
 import com.example.studita.di.data.exercise.ExercisesModule
 
-object DI{
+object DI {
 
 
     sealed class Config {

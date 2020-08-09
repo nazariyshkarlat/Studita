@@ -19,14 +19,16 @@ import kotlinx.android.synthetic.main.incorrect_time_layout.*
 import java.util.*
 
 
-class IncorrectTimeFragment : BaseFragment(R.layout.incorrect_time_layout){
+class IncorrectTimeFragment : BaseFragment(R.layout.incorrect_time_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val dateTime = TimeUtils.IncorrectTimeDateTimeFormat().format(Date())
-        incorrectTimeLayoutTitle.text = resources.getString(R.string.incorrect_time_layout_title, dateTime)
-        incorrectTimeLayoutSubtitle.text = resources.getString(R.string.incorrect_time_layout_subtitle)
+        incorrectTimeLayoutTitle.text =
+            resources.getString(R.string.incorrect_time_layout_title, dateTime)
+        incorrectTimeLayoutSubtitle.text =
+            resources.getString(R.string.incorrect_time_layout_subtitle)
 
         incorrectTimeLayoutInSettingsButton.setOnClickListener {
             startActivityForResult(Intent(Settings.ACTION_DATE_SETTINGS), 0)
@@ -48,12 +50,12 @@ class IncorrectTimeFragment : BaseFragment(R.layout.incorrect_time_layout){
         context?.let { checkIfTimeIsAutomatically(it) }
     }
 
-    private fun checkIfTimeIsAutomatically(context: Context){
-        if(TimeUtils.timeIsAutomatically(context))
+    private fun checkIfTimeIsAutomatically(context: Context) {
+        if (TimeUtils.timeIsAutomatically(context))
             (activity as AppCompatActivity).replace(MainFragment(), R.id.frameLayout)
     }
 
-    private fun animateRefreshButton(textView: TextView){
+    private fun animateRefreshButton(textView: TextView) {
         val refreshDrawable = (textView.compoundDrawables[0] as RotateDrawable)
 
         val anim = ObjectAnimator.ofPropertyValuesHolder(

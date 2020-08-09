@@ -1,8 +1,11 @@
 package com.example.studita.data.repository.datasource.exercises.result
 
-import com.example.studita.data.entity.exercise.*
-import com.example.studita.data.net.connection.ConnectionManager
+import com.example.studita.data.entity.exercise.ExerciseRequestEntity
+import com.example.studita.data.entity.exercise.ExerciseResponseDescriptionContent
+import com.example.studita.data.entity.exercise.ExerciseResponseDescriptionDeserializer
+import com.example.studita.data.entity.exercise.ExerciseResponseEntity
 import com.example.studita.data.net.ExerciseResultService
+import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.google.gson.Gson
@@ -13,16 +16,20 @@ import java.lang.reflect.Type
 
 class ExerciseResultDataStoreImpl(
     private val connectionManager: ConnectionManager,
-    private val  exerciseResultService: ExerciseResultService
+    private val exerciseResultService: ExerciseResultService
 ) : ExerciseResultDataStore {
 
     private val gsonBuilder = GsonBuilder()
-    private val deserializer: ExerciseResponseDescriptionDeserializer = ExerciseResponseDescriptionDeserializer()
+    private val deserializer: ExerciseResponseDescriptionDeserializer =
+        ExerciseResponseDescriptionDeserializer()
     private val descriptionGson: Gson
     private val type: Type
 
     init {
-        gsonBuilder.registerTypeAdapter(ExerciseResponseDescriptionContent::class.java, deserializer)
+        gsonBuilder.registerTypeAdapter(
+            ExerciseResponseDescriptionContent::class.java,
+            deserializer
+        )
         descriptionGson = gsonBuilder.create()
         type = object : TypeToken<ExerciseResponseDescriptionContent>() {}.type
     }
@@ -34,7 +41,6 @@ class ExerciseResultDataStoreImpl(
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         } else {
-            try {
                 val exerciseResult =
                     exerciseResultService.getExerciseResult(
                         exerciseNumber,
@@ -46,12 +52,6 @@ class ExerciseResultDataStoreImpl(
                     )
                 )
                 return exerciseResult.code() to result
-            }catch (e: Exception) {
-                if(e is CancellationException)
-                    throw e
-                else
-                    throw ServerUnavailableException()
-            }
         }
     }
 }

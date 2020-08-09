@@ -21,7 +21,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
-import androidx.core.view.OneShotPreDrawListener;
 
 import static android.graphics.Paint.FILTER_BITMAP_FLAG;
 
@@ -51,215 +50,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     private CropGestureDetector detector;
 
     private boolean hasAspectRatioDialog;
-
-    private class CropState implements Parcelable {
-        private float width;
-        private float height;
-
-        private float rotation;
-        private float x;
-        private float y;
-        private float scale;
-        private float minimumScale;
-        private float baseRotation;
-        private float orientation;
-        private Matrix matrix;
-        private float cropWidth;
-
-        private CropState(Bitmap bitmap, int bRotation) {
-            width = bitmap.getWidth();
-            height = bitmap.getHeight();
-
-            x = 0.0f;
-            y = 0.0f;
-            scale = 1.0f;
-            baseRotation = bRotation;
-            rotation = 0.0f;
-            matrix = new Matrix();
-        }
-
-        private void updateBitmap(Bitmap bitmap, int rotation) {
-            float ps = width / bitmap.getWidth();
-            scale *= ps;
-            width = bitmap.getWidth();
-            height = bitmap.getHeight();
-            updateMinimumScale();
-            float[] values = new float[9];
-            matrix.getValues(values);
-            matrix.reset();
-            matrix.postScale(scale, scale);
-            matrix.postTranslate(values[2], values[5]);
-            updateMatrix();
-        }
-
-        private boolean hasChanges() {
-            return Math.abs(x) > EPSILON || Math.abs(y) > EPSILON || Math.abs(scale - minimumScale) > EPSILON
-                    || Math.abs(rotation) > EPSILON || Math.abs(orientation) > EPSILON;
-        }
-
-        private float getWidth() {
-            return width;
-        }
-
-        private float getHeight() {
-            return height;
-        }
-
-        private float getOrientedWidth() {
-            return (orientation + baseRotation) % 180 != 0 ? height : width;
-        }
-
-        private float getOrientedHeight() {
-            return (orientation + baseRotation) % 180 != 0 ? width : height;
-        }
-
-        private void translate(float x, float y) {
-            this.x += x;
-            this.y += y;
-            matrix.postTranslate(x, y);
-        }
-
-        private float getX() {
-            return x;
-        }
-
-        private float getY() {
-            return y;
-        }
-
-        private void scale(float s, float pivotX, float pivotY) {
-            scale *= s;
-            matrix.postScale(s, s, pivotX, pivotY);
-        }
-
-        private float getScale() {
-            return scale;
-        }
-
-        private float getMinimumScale() {
-            return minimumScale;
-        }
-
-        private void rotate(float angle, float pivotX, float pivotY) {
-            rotation += angle;
-            matrix.postRotate(angle, pivotX, pivotY);
-        }
-
-        private float getRotation() {
-            return rotation;
-        }
-
-        private float getOrientation() {
-            return orientation + baseRotation;
-        }
-
-        private float getBaseRotation() {
-            return baseRotation;
-        }
-
-        private void reset(CropAreaView areaView, float orient, boolean freeform, boolean recreate) {
-
-            if(!recreate) {
-                matrix.reset();
-                x = 0.0f;
-                y = 0.0f;
-            }
-            orientation = orient;
-
-            if(!recreate) {
-                updateMinimumScale();
-                scale = minimumScale;
-                matrix.postScale(scale, scale);
-            }else {
-                float ratio = areaView.getCropWidth() / state.cropWidth;
-                this.scale(ratio, 0, 0);
-            }
-
-        }
-
-        private void updateMinimumScale() {
-            float w = (orientation + baseRotation) % 180 != 0 ? height : width;
-            float h = (orientation + baseRotation) % 180 != 0 ? width : height;
-            if (freeform) {
-                minimumScale = areaView.getCropWidth() / w;
-            } else {
-                float wScale = areaView.getCropWidth() / w;
-                float hScale = areaView.getCropHeight() / h;
-                minimumScale = Math.max(wScale, hScale);
-            }
-        }
-
-
-        private void getConcatMatrix(Matrix toMatrix) {
-            toMatrix.postConcat(matrix);
-        }
-
-        private Matrix getMatrix() {
-            Matrix m = new Matrix();
-            m.set(matrix);
-            return m;
-        }
-
-        protected CropState(Parcel in) {
-            width = in.readFloat();
-            height = in.readFloat();
-            rotation = in.readFloat();
-            x = in.readFloat();
-            y = in.readFloat();
-            scale = in.readFloat();
-            minimumScale = in.readFloat();
-            baseRotation = in.readFloat();
-            orientation = in.readFloat();
-            float[] matrixValues = new float[9];
-            in.readFloatArray(matrixValues);
-            matrix = new Matrix();
-            matrix.setValues(matrixValues);
-            cropWidth = in.readFloat();
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeFloat(width);
-            dest.writeFloat(height);
-            dest.writeFloat(rotation);
-            dest.writeFloat(x);
-            dest.writeFloat(y);
-            dest.writeFloat(scale);
-            dest.writeFloat(minimumScale);
-            dest.writeFloat(baseRotation);
-            dest.writeFloat(orientation);
-            float[] matrixValues = new float[9];
-            matrix.getValues(matrixValues);
-            dest.writeFloatArray(matrixValues);
-            dest.writeFloat(cropWidth);
-        }
-
-        @SuppressWarnings("unused")
-        public final Parcelable.Creator<CropState> CREATOR = new Parcelable.Creator<CropState>() {
-            @Override
-            public CropState createFromParcel(Parcel in) {
-                return new CropState(in);
-            }
-
-            @Override
-            public CropState[] newArray(int size) {
-                return new CropState[size];
-            }
-        };
-    }
     private CropState state;
-
-    public interface CropViewListener {
-        void onChange(boolean reset);
-
-        void onAspectLock(boolean enabled);
-    }
-
     private CropViewListener listener;
 
     public CropView(Context context) {
@@ -325,7 +116,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             bitmap = b;
             if (state == null || !same) {
                 final boolean recreate = state != null;
-                if(!recreate)
+                if (!recreate)
                     state = new CropState(bitmap, rotation);
                 imageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
@@ -506,32 +297,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             w = (float) Math.floor(h * sizeRect.width() / sizeRect.height());
         }
         return w;
-    }
-
-    private class CropRectangle {
-        float[] coords = new float[8];
-
-        CropRectangle() {
-        }
-
-        void setRect(RectF rect) {
-            coords[0] = rect.left;
-            coords[1] = rect.top;
-            coords[2] = rect.right;
-            coords[3] = rect.top;
-            coords[4] = rect.right;
-            coords[5] = rect.bottom;
-            coords[6] = rect.left;
-            coords[7] = rect.bottom;
-        }
-
-        void applyMatrix(Matrix m) {
-            m.mapPoints(coords);
-        }
-
-        void getRect(RectF rect) {
-            rect.set(coords[0], coords[1], coords[2], coords[7]);
-        }
     }
 
     private void fitContentInBounds(boolean allowScale, boolean maximize, boolean animated) {
@@ -876,6 +641,236 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             this.state = bundle.getParcelable("savedState");
         }
         super.onRestoreInstanceState(state);
+    }
+
+    public interface CropViewListener {
+        void onChange(boolean reset);
+
+        void onAspectLock(boolean enabled);
+    }
+
+    private class CropState implements Parcelable {
+        @SuppressWarnings("unused")
+        public final Parcelable.Creator<CropState> CREATOR = new Parcelable.Creator<CropState>() {
+            @Override
+            public CropState createFromParcel(Parcel in) {
+                return new CropState(in);
+            }
+
+            @Override
+            public CropState[] newArray(int size) {
+                return new CropState[size];
+            }
+        };
+        private float width;
+        private float height;
+        private float rotation;
+        private float x;
+        private float y;
+        private float scale;
+        private float minimumScale;
+        private float baseRotation;
+        private float orientation;
+        private Matrix matrix;
+        private float cropWidth;
+
+        private CropState(Bitmap bitmap, int bRotation) {
+            width = bitmap.getWidth();
+            height = bitmap.getHeight();
+
+            x = 0.0f;
+            y = 0.0f;
+            scale = 1.0f;
+            baseRotation = bRotation;
+            rotation = 0.0f;
+            matrix = new Matrix();
+        }
+
+        protected CropState(Parcel in) {
+            width = in.readFloat();
+            height = in.readFloat();
+            rotation = in.readFloat();
+            x = in.readFloat();
+            y = in.readFloat();
+            scale = in.readFloat();
+            minimumScale = in.readFloat();
+            baseRotation = in.readFloat();
+            orientation = in.readFloat();
+            float[] matrixValues = new float[9];
+            in.readFloatArray(matrixValues);
+            matrix = new Matrix();
+            matrix.setValues(matrixValues);
+            cropWidth = in.readFloat();
+        }
+
+        private void updateBitmap(Bitmap bitmap, int rotation) {
+            float ps = width / bitmap.getWidth();
+            scale *= ps;
+            width = bitmap.getWidth();
+            height = bitmap.getHeight();
+            updateMinimumScale();
+            float[] values = new float[9];
+            matrix.getValues(values);
+            matrix.reset();
+            matrix.postScale(scale, scale);
+            matrix.postTranslate(values[2], values[5]);
+            updateMatrix();
+        }
+
+        private boolean hasChanges() {
+            return Math.abs(x) > EPSILON || Math.abs(y) > EPSILON || Math.abs(scale - minimumScale) > EPSILON
+                    || Math.abs(rotation) > EPSILON || Math.abs(orientation) > EPSILON;
+        }
+
+        private float getWidth() {
+            return width;
+        }
+
+        private float getHeight() {
+            return height;
+        }
+
+        private float getOrientedWidth() {
+            return (orientation + baseRotation) % 180 != 0 ? height : width;
+        }
+
+        private float getOrientedHeight() {
+            return (orientation + baseRotation) % 180 != 0 ? width : height;
+        }
+
+        private void translate(float x, float y) {
+            this.x += x;
+            this.y += y;
+            matrix.postTranslate(x, y);
+        }
+
+        private float getX() {
+            return x;
+        }
+
+        private float getY() {
+            return y;
+        }
+
+        private void scale(float s, float pivotX, float pivotY) {
+            scale *= s;
+            matrix.postScale(s, s, pivotX, pivotY);
+        }
+
+        private float getScale() {
+            return scale;
+        }
+
+        private float getMinimumScale() {
+            return minimumScale;
+        }
+
+        private void rotate(float angle, float pivotX, float pivotY) {
+            rotation += angle;
+            matrix.postRotate(angle, pivotX, pivotY);
+        }
+
+        private float getRotation() {
+            return rotation;
+        }
+
+        private float getOrientation() {
+            return orientation + baseRotation;
+        }
+
+        private float getBaseRotation() {
+            return baseRotation;
+        }
+
+        private void reset(CropAreaView areaView, float orient, boolean freeform, boolean recreate) {
+
+            if (!recreate) {
+                matrix.reset();
+                x = 0.0f;
+                y = 0.0f;
+            }
+            orientation = orient;
+
+            if (!recreate) {
+                updateMinimumScale();
+                scale = minimumScale;
+                matrix.postScale(scale, scale);
+            } else {
+                float ratio = areaView.getCropWidth() / state.cropWidth;
+                this.scale(ratio, 0, 0);
+            }
+
+        }
+
+        private void updateMinimumScale() {
+            float w = (orientation + baseRotation) % 180 != 0 ? height : width;
+            float h = (orientation + baseRotation) % 180 != 0 ? width : height;
+            if (freeform) {
+                minimumScale = areaView.getCropWidth() / w;
+            } else {
+                float wScale = areaView.getCropWidth() / w;
+                float hScale = areaView.getCropHeight() / h;
+                minimumScale = Math.max(wScale, hScale);
+            }
+        }
+
+        private void getConcatMatrix(Matrix toMatrix) {
+            toMatrix.postConcat(matrix);
+        }
+
+        private Matrix getMatrix() {
+            Matrix m = new Matrix();
+            m.set(matrix);
+            return m;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeFloat(width);
+            dest.writeFloat(height);
+            dest.writeFloat(rotation);
+            dest.writeFloat(x);
+            dest.writeFloat(y);
+            dest.writeFloat(scale);
+            dest.writeFloat(minimumScale);
+            dest.writeFloat(baseRotation);
+            dest.writeFloat(orientation);
+            float[] matrixValues = new float[9];
+            matrix.getValues(matrixValues);
+            dest.writeFloatArray(matrixValues);
+            dest.writeFloat(cropWidth);
+        }
+    }
+
+    private class CropRectangle {
+        float[] coords = new float[8];
+
+        CropRectangle() {
+        }
+
+        void setRect(RectF rect) {
+            coords[0] = rect.left;
+            coords[1] = rect.top;
+            coords[2] = rect.right;
+            coords[3] = rect.top;
+            coords[4] = rect.right;
+            coords[5] = rect.bottom;
+            coords[6] = rect.left;
+            coords[7] = rect.bottom;
+        }
+
+        void applyMatrix(Matrix m) {
+            m.mapPoints(coords);
+        }
+
+        void getRect(RectF rect) {
+            rect.set(coords[0], coords[1], coords[2], coords[7]);
+        }
     }
 
 }

@@ -5,15 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import java.io.IOException
 import java.io.Serializable
 
-inline fun <reified T: Activity> Context.startActivity(vararg params: Pair<String, Any?>) =
+inline fun <reified T : Activity> Context.startActivity(vararg params: Pair<String, Any?>) =
     Internals.internalStartActivity(this, T::class.java, params)
 
-object Internals{
+object Internals {
     fun internalStartActivity(
         ctx: Context,
         activity: Class<out Activity>,
@@ -22,7 +20,11 @@ object Internals{
         ctx.startActivity(createIntent(ctx, activity, params))
     }
 
-    private fun <T> createIntent(ctx: Context, clazz: Class<out T>, params: Array<out Pair<String, Any?>>): Intent {
+    private fun <T> createIntent(
+        ctx: Context,
+        clazz: Class<out T>,
+        params: Array<out Pair<String, Any?>>
+    ): Intent {
         val intent = Intent(ctx, clazz)
         if (params.isNotEmpty()) fillIntentArguments(intent, params)
         return intent

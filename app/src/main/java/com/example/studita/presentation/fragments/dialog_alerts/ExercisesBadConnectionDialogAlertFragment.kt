@@ -11,7 +11,8 @@ import com.example.studita.utils.PrefsUtils
 import kotlinx.android.synthetic.main.exercises_bad_connection_dialog_alert.*
 
 
-class ExercisesBadConnectionDialogAlertFragment : BaseDialogFragment(R.layout.exercises_bad_connection_dialog_alert){
+class ExercisesBadConnectionDialogAlertFragment :
+    BaseDialogFragment(R.layout.exercises_bad_connection_dialog_alert) {
 
     var exercisesViewModel: ExercisesViewModel? = null
 
@@ -27,7 +28,7 @@ class ExercisesBadConnectionDialogAlertFragment : BaseDialogFragment(R.layout.ex
         exercisesBadConnectionDialogRightButton.setOnClickListener {
             dismiss()
             exercisesViewModel?.waitingJob?.cancel()
-            exercisesViewModel?.let{
+            exercisesViewModel?.let {
                 PrefsUtils.setOfflineMode(true)
                 it.getExercises(it.chapterPartNumber)
             }
@@ -40,7 +41,7 @@ class ExercisesBadConnectionDialogAlertFragment : BaseDialogFragment(R.layout.ex
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        if(activity?.isDestroyed == false)
+        if (activity?.isDestroyed == false)
             (targetFragment as? DialogInterface.OnDismissListener)?.onDismiss(dialog)
     }
 

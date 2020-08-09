@@ -8,9 +8,16 @@ import com.example.studita.data.repository.datasource.edit_profile.EditProfileDa
 import com.example.studita.domain.entity.EditProfileRequestData
 import com.example.studita.domain.repository.EditProfileRepository
 
-class EditProfileRepositoryImpl(private val editProfileDataStoreFactory: EditProfileDataStoreFactory, private val context: Context) : EditProfileRepository{
-    override suspend fun editProfile(editProfileRequestData: EditProfileRequestData, newAvatar: Bitmap?): Pair<String?, Int> =
-            editProfileDataStoreFactory.create().tryEditProfile(editProfileRequestData.toRawEntity(), newAvatar?.toFile(context))
+class EditProfileRepositoryImpl(
+    private val editProfileDataStoreFactory: EditProfileDataStoreFactory,
+    private val context: Context
+) : EditProfileRepository {
+    override suspend fun editProfile(
+        editProfileRequestData: EditProfileRequestData,
+        newAvatar: Bitmap?
+    ): Pair<String?, Int> =
+        editProfileDataStoreFactory.create()
+            .tryEditProfile(editProfileRequestData.toRawEntity(), newAvatar?.toFile(context))
 
     override suspend fun isUserNameAvailable(userName: String): Pair<Int, Boolean?> =
         editProfileDataStoreFactory.create().isUserNameAvailable(userName)

@@ -1,6 +1,6 @@
 package com.example.studita.data.cache.exercises
 
-interface ExercisesCache{
+interface ExercisesCache {
     fun saveExercisesJson(json: String)
 
     fun getExercises(chapterPartNumber: Int): String?

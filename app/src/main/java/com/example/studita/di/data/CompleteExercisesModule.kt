@@ -1,6 +1,5 @@
 package com.example.studita.di.data
 
-import com.example.studita.service.SyncCompletedExercisesImpl
 import com.example.studita.data.net.CompleteExercisesService
 import com.example.studita.data.repository.CompleteExercisesRepositoryImpl
 import com.example.studita.data.repository.datasource.complete_exercises.CompleteExercisesDataStoreFactoryImpl
@@ -10,6 +9,7 @@ import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.complete_chapter_part.CompleteExercisesInteractor
 import com.example.studita.domain.interactor.complete_chapter_part.CompleteExercisesInteractorImpl
 import com.example.studita.domain.repository.CompleteExercisesRepository
+import com.example.studita.service.SyncCompletedExercisesImpl
 
 object CompleteExercisesModule {
 

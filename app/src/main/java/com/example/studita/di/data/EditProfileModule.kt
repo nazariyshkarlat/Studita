@@ -28,10 +28,10 @@ object EditProfileModule {
     fun getEditProfileInteractorImpl(): EditProfileInteractor {
         if (config == DI.Config.RELEASE && editProfileInteractor == null)
             editProfileInteractor =
-                    makeEditProfileIntercator(
-                            getEditProfileRepository(),
-                            UserDataModule.getUserDataRepository()
-                    )
+                makeEditProfileIntercator(
+                    getEditProfileRepository(),
+                    UserDataModule.getUserDataRepository()
+                )
         return editProfileInteractor!!
     }
 
@@ -44,22 +44,25 @@ object EditProfileModule {
         return repository!!
     }
 
-    private fun makeEditProfileIntercator(editProfileRepository: EditProfileRepository, userDataRepository: UserDataRepository) =
-            EditProfileInteractorImpl(
-                    editProfileRepository,
-                    userDataRepository
-            )
+    private fun makeEditProfileIntercator(
+        editProfileRepository: EditProfileRepository,
+        userDataRepository: UserDataRepository
+    ) =
+        EditProfileInteractorImpl(
+            editProfileRepository,
+            userDataRepository
+        )
 
 
     private fun getEditProfileDataStoreFactory() =
-            EditProfileDataStoreFactoryImpl(
-                    getEditProfileDataStore()
-            )
+        EditProfileDataStoreFactoryImpl(
+            getEditProfileDataStore()
+        )
 
     private fun getEditProfileDataStore() =
-            EditProfileDataStoreImpl(
-                    NetworkModule.connectionManager,
-                    NetworkModule.getService(EditProfileService::class.java)
-            )
+        EditProfileDataStoreImpl(
+            NetworkModule.connectionManager,
+            NetworkModule.getService(EditProfileService::class.java)
+        )
 
 }

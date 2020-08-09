@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="LightTheme" parent="AppTheme">
         <item name="main_blocks_color">@color/black6</item>
         <item name="disabled_color">@color/black6</item>

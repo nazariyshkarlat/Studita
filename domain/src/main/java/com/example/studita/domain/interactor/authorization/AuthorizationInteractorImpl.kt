@@ -6,15 +6,20 @@ import com.example.studita.domain.entity.authorization.AuthorizationRequestData
 import com.example.studita.domain.entity.authorization.SignInWithGoogleRequestData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
-import com.example.studita.domain.interactor.*
-import com.example.studita.domain.interactor.user_data.UserDataInteractor
+import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
+import com.example.studita.domain.interactor.LogInStatus
+import com.example.studita.domain.interactor.SignInWithGoogleStatus
+import com.example.studita.domain.interactor.SignUpStatus
 import com.example.studita.domain.repository.AuthorizationRepository
 import com.example.studita.domain.repository.UserDataRepository
 import com.example.studita.domain.service.SyncSignOut
 import kotlinx.coroutines.delay
-import kotlin.time.seconds
 
-class AuthorizationInteractorImpl(private val authorizationRepository: AuthorizationRepository, private val userDataRepository: UserDataRepository, private val syncSignOut: SyncSignOut) :
+class AuthorizationInteractorImpl(
+    private val authorizationRepository: AuthorizationRepository,
+    private val userDataRepository: UserDataRepository,
+    private val syncSignOut: SyncSignOut
+) :
     AuthorizationInteractor {
 
     val retryDelay = 1000L
@@ -26,7 +31,7 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
         try {
             val result = authorizationRepository.checkTokenIsCorrect(userIdTokenData)
             when (result.first) {
-                200 -> if(result.second == true) CheckTokenIsCorrectStatus.Correct else CheckTokenIsCorrectStatus.Incorrect
+                200 -> if (result.second == true) CheckTokenIsCorrectStatus.Correct else CheckTokenIsCorrectStatus.Incorrect
                 else -> CheckTokenIsCorrectStatus.Failure
             }
         } catch (e: Exception) {
@@ -46,16 +51,19 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
                 CheckTokenIsCorrectStatus.Failure
         }
 
-    override suspend fun signUp(authorizationRequestData: AuthorizationRequestData, retryCount: Int): SignUpStatus =
+    override suspend fun signUp(
+        authorizationRequestData: AuthorizationRequestData,
+        retryCount: Int
+    ): SignUpStatus =
         try {
-             when (authorizationRepository.signUp(authorizationRequestData)) {
+            when (authorizationRepository.signUp(authorizationRequestData)) {
                 200 -> SignUpStatus.Success
                 409 -> SignUpStatus.UserAlreadyExists
                 else -> SignUpStatus.Failure
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException)
                         SignUpStatus.NoConnection
@@ -66,11 +74,14 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
                         delay(retryDelay)
                     signUp(authorizationRequestData, retryCount - 1)
                 }
-            }else
+            } else
                 SignUpStatus.Failure
         }
 
-    override suspend fun logIn(authorizationRequestData: AuthorizationRequestData, retryCount: Int): LogInStatus =
+    override suspend fun logIn(
+        authorizationRequestData: AuthorizationRequestData,
+        retryCount: Int
+    ): LogInStatus =
         try {
             val logInResult = authorizationRepository.logIn(authorizationRequestData)
             when (logInResult.first) {
@@ -85,7 +96,7 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
             }
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException)
                         LogInStatus.NoConnection
@@ -96,13 +107,17 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
                         delay(retryDelay)
                     logIn(authorizationRequestData, retryCount - 1)
                 }
-            }else
+            } else
                 LogInStatus.Failure
         }
 
-    override suspend fun signInWithGoogle(signInWithGoogleRequestData: SignInWithGoogleRequestData, retryCount: Int): SignInWithGoogleStatus =
+    override suspend fun signInWithGoogle(
+        signInWithGoogleRequestData: SignInWithGoogleRequestData,
+        retryCount: Int
+    ): SignInWithGoogleStatus =
         try {
-            val signInWithGoogleResult = authorizationRepository.signInWithGoogle(signInWithGoogleRequestData)
+            val signInWithGoogleResult =
+                authorizationRepository.signInWithGoogle(signInWithGoogleRequestData)
             when (signInWithGoogleResult.first) {
                 400 -> SignInWithGoogleStatus.Failure
                 else -> signInWithGoogleResult.second?.let {
@@ -114,7 +129,7 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException)
                         SignInWithGoogleStatus.NoConnection
@@ -125,7 +140,7 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
                         delay(retryDelay)
                     signInWithGoogle(signInWithGoogleRequestData, retryCount - 1)
                 }
-            }else
+            } else
                 SignInWithGoogleStatus.Failure
         }
 
@@ -134,7 +149,7 @@ class AuthorizationInteractorImpl(private val authorizationRepository: Authoriza
             authorizationRepository.signOut(signOutRequestData)
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 when {
                     e is NetworkConnectionException -> {
                         syncSignOut.scheduleSignOut(signOutRequestData)

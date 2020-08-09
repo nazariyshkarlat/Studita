@@ -8,7 +8,7 @@ import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercises_start_screen_layout.*
 
-class ExercisesStartScreenFragment : BaseFragment(R.layout.exercises_start_screen_layout){
+class ExercisesStartScreenFragment : BaseFragment(R.layout.exercises_start_screen_layout) {
 
     var exercisesViewModel: ExercisesViewModel? = null
 
@@ -22,7 +22,7 @@ class ExercisesStartScreenFragment : BaseFragment(R.layout.exercises_start_scree
             exercisesStartScreenLayoutTitle.text = startScreenModel.title
             exercisesStartScreenLayoutSubtitle.text = startScreenModel.subtitle
 
-            when(it.chapterPartNumber){
+            when (it.chapterPartNumber) {
                 1 -> exercisesStartScreenLayoutImage.setImageResource(R.drawable.ic_chapter_part_one_start_screen_image)
                 2 -> exercisesStartScreenLayoutImage.setImageResource(R.drawable.ic_chapter_part_two_start_screen_image)
                 else -> exercisesStartScreenLayoutImage.visibility = View.GONE

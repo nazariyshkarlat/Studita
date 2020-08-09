@@ -3,7 +3,7 @@ package com.example.studita.data.repository.datasource.chapter
 class ChapterJsonDataStoreFactoryImpl(
     private val cloudChapterJsonDataStore: CloudChapterJsonDataStore,
     private val diskChapterJsonDataStore: DiskChapterJsonDataStore
-) : ChapterJsonDataStoreFactory{
+) : ChapterJsonDataStoreFactory {
 
     override fun create(priority: ChapterJsonDataStoreFactory.Priority) =
         if (priority == ChapterJsonDataStoreFactory.Priority.CLOUD)

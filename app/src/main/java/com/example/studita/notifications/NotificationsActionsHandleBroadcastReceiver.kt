@@ -1,19 +1,15 @@
 package com.example.studita.notifications
 
 import android.app.NotificationManager
-import android.app.TaskStackBuilder
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.example.studita.di.data.UsersModule
 import com.example.studita.domain.entity.FriendActionRequestData
 import com.example.studita.domain.entity.UserData
 import com.example.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.users.UsersInteractor
-import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.utils.UserUtils
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -21,17 +17,23 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver(){
+class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver() {
 
 
     override fun onReceive(context: Context, intent: Intent) {
         val notificationId = intent.getIntExtra("NOTIFICATION_ID", 0)
         val userData = GsonBuilder().apply {
-            registerTypeAdapter(IsMyFriendStatus.Success::class.java, IsMyFriendStatusDeserializer())
-        }.create().fromJson<UserData>(intent.getStringExtra("USER_DATA"), object  : TypeToken<UserData>() {}.type)
+            registerTypeAdapter(
+                IsMyFriendStatus.Success::class.java,
+                IsMyFriendStatusDeserializer()
+            )
+        }.create().fromJson<UserData>(
+            intent.getStringExtra("USER_DATA"),
+            object : TypeToken<UserData>() {}.type
+        )
 
-        when(intent.action?.toNotificationAction()){
-            NotificationAction.ACCEPT_FRIENDSHIP ->{
+        when (intent.action?.toNotificationAction()) {
+            NotificationAction.ACCEPT_FRIENDSHIP -> {
 
                 GlobalScope.launch {
                     UsersModule.getUsersInteractorImpl().acceptFriendship(
@@ -41,9 +43,10 @@ class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver(){
                         )
                     )
                 }
-                UserUtils.isMyFriendLiveData.value = UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(userData.apply {
-                    isMyFriendStatus = IsMyFriendStatus.Success.IsMyFriend(userData.userId)
-                })
+                UserUtils.isMyFriendLiveData.value =
+                    UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(userData.apply {
+                        isMyFriendStatus = IsMyFriendStatus.Success.IsMyFriend(userData.userId)
+                    })
             }
             NotificationAction.REJECT_FRIENDSHIP -> {
                 GlobalScope.launch {
@@ -54,33 +57,37 @@ class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver(){
                         )
                     )
                 }
-                UserUtils.isMyFriendLiveData.value = UsersInteractor.FriendActionState.FriendshipRequestIsRejected(userData.apply {
-                    isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userData.userId)
-                })
+                UserUtils.isMyFriendLiveData.value =
+                    UsersInteractor.FriendActionState.FriendshipRequestIsRejected(userData.apply {
+                        isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userData.userId)
+                    })
             }
         }
 
-        if(UserUtils.userDataNotNull()) {
+        if (UserUtils.userDataNotNull()) {
             UserUtils.userDataLiveData.postValue(UserUtils.userData.apply {
                 notificationsAreChecked = true
             })
         }
-        (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(notificationId)
+        (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(
+            notificationId
+        )
     }
 
-    enum class NotificationAction{
+    enum class NotificationAction {
         ACCEPT_FRIENDSHIP,
         REJECT_FRIENDSHIP
     }
 
 }
 
-fun String.toNotificationAction() = when(this){
+fun String.toNotificationAction() = when (this) {
     "ACCEPT_FRIENDSHIP" -> NotificationsActionsHandleBroadcastReceiver.NotificationAction.ACCEPT_FRIENDSHIP
     "REJECT_FRIENDSHIP" -> NotificationsActionsHandleBroadcastReceiver.NotificationAction.REJECT_FRIENDSHIP
     else -> throw UnsupportedOperationException("unknown notifications action")
 }
-fun NotificationsActionsHandleBroadcastReceiver.NotificationAction.toActionString() = when(this){
+
+fun NotificationsActionsHandleBroadcastReceiver.NotificationAction.toActionString() = when (this) {
     NotificationsActionsHandleBroadcastReceiver.NotificationAction.ACCEPT_FRIENDSHIP -> "ACCEPT_FRIENDSHIP"
     NotificationsActionsHandleBroadcastReceiver.NotificationAction.REJECT_FRIENDSHIP -> "REJECT_FRIENDSHIP"
 }

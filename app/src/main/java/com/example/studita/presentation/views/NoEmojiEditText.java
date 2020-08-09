@@ -6,7 +6,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
 public class NoEmojiEditText extends androidx.appcompat.widget.AppCompatEditText {
     public NoEmojiEditText(Context context) {
@@ -24,9 +23,15 @@ public class NoEmojiEditText extends androidx.appcompat.widget.AppCompatEditText
         init();
     }
 
+    private static boolean isCharAllowed(char c) {
+        return Character.isLetterOrDigit(c) || Character.isSpaceChar(c);
+    }
+
     private void init() {
         setFilters(new InputFilter[]{new EmojiExcludeFilter()});
     }
+
+    ;
 
     private class EmojiExcludeFilter implements InputFilter {
         @Override
@@ -56,9 +61,5 @@ public class NoEmojiEditText extends androidx.appcompat.widget.AppCompatEditText
                 }
             }
         }
-    };
-
-    private static boolean isCharAllowed(char c) {
-        return Character.isLetterOrDigit(c) || Character.isSpaceChar(c);
     }
 }

@@ -4,14 +4,18 @@ import com.example.studita.domain.entity.CompleteExercisesRequestData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.example.studita.domain.interactor.CompleteExercisesStatus
-import com.example.studita.domain.interactor.FriendActionStatus
 import com.example.studita.domain.repository.CompleteExercisesRepository
 import com.example.studita.domain.service.SyncCompletedExercises
-import com.example.studita.domain.service.SyncFriendship
 
-class CompleteExercisesInteractorImpl(private val repository: CompleteExercisesRepository, private val syncCompletedExercises: SyncCompletedExercises) : CompleteExercisesInteractor{
-    override suspend fun completeExercises(completeExercisesRequestData: CompleteExercisesRequestData, retryCount: Int): CompleteExercisesStatus  =
-        if(completeExercisesRequestData.userIdToken != null) {
+class CompleteExercisesInteractorImpl(
+    private val repository: CompleteExercisesRepository,
+    private val syncCompletedExercises: SyncCompletedExercises
+) : CompleteExercisesInteractor {
+    override suspend fun completeExercises(
+        completeExercisesRequestData: CompleteExercisesRequestData,
+        retryCount: Int
+    ): CompleteExercisesStatus =
+        if (completeExercisesRequestData.userIdToken != null) {
             try {
                 when (repository.completeExercises(completeExercisesRequestData)) {
                     200 -> CompleteExercisesStatus.Success
@@ -19,7 +23,7 @@ class CompleteExercisesInteractorImpl(private val repository: CompleteExercisesR
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                if(e is NetworkConnectionException || e is ServerUnavailableException) {
+                if (e is NetworkConnectionException || e is ServerUnavailableException) {
                     when {
                         e is NetworkConnectionException -> {
                             syncCompletedExercises.scheduleCompleteExercises(
@@ -32,10 +36,10 @@ class CompleteExercisesInteractorImpl(private val repository: CompleteExercisesR
                             completeExercises(completeExercisesRequestData, retryCount - 1)
                         }
                     }
-                }else
+                } else
                     CompleteExercisesStatus.Failure
             }
-        }else
+        } else
             CompleteExercisesStatus.Success
 
 }

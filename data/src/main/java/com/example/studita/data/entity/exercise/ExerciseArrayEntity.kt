@@ -1,7 +1,6 @@
 package com.example.studita.data.entity.exercise
 
 import com.google.gson.annotations.SerializedName
-import retrofit2.http.Body
 
 sealed class ExerciseArrayEntity(open val exerciseNumber: Int?) {
     data class ExerciseEntity(
@@ -11,7 +10,10 @@ sealed class ExerciseArrayEntity(open val exerciseNumber: Int?) {
         ) val exerciseInfo: ExerciseInfo,
         @SerializedName("answer") val exerciseAnswer: String?,
         @SerializedName("is_bonus") val isBonus: Boolean
-    ): ExerciseArrayEntity(exerciseNumber)
+    ) : ExerciseArrayEntity(exerciseNumber)
 
-    data class ScreenEntity(override val exerciseNumber: Int?, @SerializedName("screen_info") val screenInfo: ScreenInfo) : ExerciseArrayEntity(exerciseNumber)
+    data class ScreenEntity(
+        override val exerciseNumber: Int?,
+        @SerializedName("screen_info") val screenInfo: ScreenInfo
+    ) : ExerciseArrayEntity(exerciseNumber)
 }

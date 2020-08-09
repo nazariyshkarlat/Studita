@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.studita.R
 
-class ShareActivity : DefaultActivity(){
+class ShareActivity : DefaultActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

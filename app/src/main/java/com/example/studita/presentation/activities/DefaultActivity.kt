@@ -25,18 +25,18 @@ open class DefaultActivity : AppCompatActivity(),
         setTheme()
         super.onCreate(savedInstanceState)
 
-        App.authenticationState.observe(this, Observer { checkTokenIsCorrect ->
-            when (checkTokenIsCorrect) {
+        App.authenticationState.observe(this, Observer { pair ->
+            when (pair.first) {
                 CheckTokenIsCorrectStatus.Incorrect -> {
                     UserUtils.deviceSignOut(this)
-                    App.authenticate(UserUtils.getUserIDTokenData())
+                    App.authenticate(UserUtils.getUserIDTokenData(), false)
                     startLogInActivityStack()
                 }
             }
         })
     }
 
-    private fun startLogInActivityStack(){
+    private fun startLogInActivityStack() {
         val intent = Intent(
             this,
             MainMenuActivity::class.java
@@ -46,32 +46,33 @@ open class DefaultActivity : AppCompatActivity(),
         startActivity(intent)
     }
 
-    private fun setTheme(){
+    private fun setTheme() {
         themeState = Theme.values()[PrefsUtils.getTheme().ordinal]
-        if(themeState == Theme.DEFAULT)
+        if (themeState == Theme.DEFAULT)
             themeState = getDefaultTheme()
         setTheme(themes[themeState.ordinal])
         PrefsUtils.setTheme(themeState)
         window.setBackgroundDrawable(resources.getDrawable(R.drawable.page_background, theme))
     }
 
-    private fun getDefaultTheme(): Theme{
-        return if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-            if (currentNightMode == Configuration.UI_MODE_NIGHT_NO)  Theme.LIGHT else Theme.DARK
-        }else
+    private fun getDefaultTheme(): Theme {
+        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            val currentNightMode =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            if (currentNightMode == Configuration.UI_MODE_NIGHT_NO) Theme.LIGHT else Theme.DARK
+        } else
             Theme.DARK
     }
 
     override fun onThemeChanged(theme: Theme) {
-        if(themeState != theme) {
+        if (themeState != theme) {
             themeState = theme
             PrefsUtils.setTheme(themeState)
             finish()
         }
     }
 
-    enum class Theme{
+    enum class Theme {
         DARK,
         LIGHT,
         DEFAULT

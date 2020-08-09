@@ -67,11 +67,13 @@ object TimeUtils {
         }
     }
 
-    fun getHours(timeInSeconds: Long) = timeInSeconds/hourInSeconds
+    fun getHours(timeInSeconds: Long) = timeInSeconds / hourInSeconds
 
-    fun getMinutes(timeInSeconds: Long) = (((timeInSeconds % weekInSeconds) % dayInSeconds) % hourInSeconds) / minuteInSeconds
+    fun getMinutes(timeInSeconds: Long) =
+        (((timeInSeconds % weekInSeconds) % dayInSeconds) % hourInSeconds) / minuteInSeconds
 
-    fun getSeconds(timeInSeconds: Long) = (((timeInSeconds % weekInSeconds) % dayInSeconds) % hourInSeconds) % minuteInSeconds
+    fun getSeconds(timeInSeconds: Long) =
+        (((timeInSeconds % weekInSeconds) % dayInSeconds) % hourInSeconds) % minuteInSeconds
 
     fun styleTimeText(context: Context, text: String): SpannableStringBuilder {
         val secondaryColor = ThemeUtils.getSecondaryColor(context)
@@ -123,5 +125,9 @@ object TimeUtils {
             }
         }.trim()
 
-    fun timeIsAutomatically(context: Context) = android.provider.Settings.Global.getInt(context.contentResolver, android.provider.Settings.Global.AUTO_TIME, 0) == 1
+    fun timeIsAutomatically(context: Context) = android.provider.Settings.Global.getInt(
+        context.contentResolver,
+        android.provider.Settings.Global.AUTO_TIME,
+        0
+    ) == 1
 }

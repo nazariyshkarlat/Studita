@@ -7,9 +7,10 @@ import android.view.View
 import com.example.studita.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class PressFab @JvmOverloads constructor(context: Context,
-                                         attrs: AttributeSet? = null,
-                                         defStyleAttr: Int = 0
+class PressFab @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FloatingActionButton(context, attrs, defStyleAttr) {
     private val pressViewImpl: PressView
 
@@ -17,21 +18,23 @@ class PressFab @JvmOverloads constructor(context: Context,
         val a: TypedArray = context.theme.obtainStyledAttributes(
             attrs,
             R.styleable.PressView,
-            0, 0);
+            0, 0
+        );
 
-        val withMinClickInterval = a.getBoolean(R.styleable.PressView_with_min_click_interval, false)
+        val withMinClickInterval =
+            a.getBoolean(R.styleable.PressView_with_min_click_interval, false)
 
         pressViewImpl = PressView(this, withMinClickInterval)
 
         pressViewImpl.setPressAlpha(R.attr.press_view_press_alpha)
     }
 
-    fun setOnClickListener(work: (View) ->Unit) {
+    fun setOnClickListener(work: (View) -> Unit) {
         pressViewImpl.onClick = work
     }
 
 
-    fun setWithMinClickInterval(withMinClickInterval: Boolean){
+    fun setWithMinClickInterval(withMinClickInterval: Boolean) {
         pressViewImpl.withMinClickInterval = withMinClickInterval
     }
 }

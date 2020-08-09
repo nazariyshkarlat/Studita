@@ -1,7 +1,8 @@
 package com.example.studita.data.repository.datasource.user_statistics
 
 class UserStatisticsJsonDataStoreFactoryImpl(
-    private val cloudUserStatisticsStatisticsDataStore: CloudUserStatisticsJsonDataStore): UserStatisticsJsonDataStoreFactory{
+    private val cloudUserStatisticsStatisticsDataStore: CloudUserStatisticsJsonDataStore
+) : UserStatisticsJsonDataStoreFactory {
 
     override fun create() = cloudUserStatisticsStatisticsDataStore
 

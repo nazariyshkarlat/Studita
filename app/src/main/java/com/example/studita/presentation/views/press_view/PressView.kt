@@ -9,7 +9,7 @@ import androidx.annotation.AttrRes
 import com.example.studita.presentation.listeners.ViewOnTouch
 
 
-class PressView(val view: View, var withMinClickInterval: Boolean = false){
+class PressView(val view: View, var withMinClickInterval: Boolean = false) {
 
 
     var onClick: (View) -> Unit = {}
@@ -20,9 +20,11 @@ class PressView(val view: View, var withMinClickInterval: Boolean = false){
     private var elapsedTime = 0L
 
     private val tooFastClick: Boolean
-    get() { val currentClickTime = SystemClock.uptimeMillis()
-        elapsedTime = currentClickTime - lastClickTime
-        return elapsedTime <= MIN_CLICK_INTERVAL}
+        get() {
+            val currentClickTime = SystemClock.uptimeMillis()
+            elapsedTime = currentClickTime - lastClickTime
+            return elapsedTime <= MIN_CLICK_INTERVAL
+        }
 
 
     companion object {
@@ -30,17 +32,17 @@ class PressView(val view: View, var withMinClickInterval: Boolean = false){
     }
 
     init {
-        view.setOnTouchListener(object: ViewOnTouch(){
-            override fun onDownTouchAction(x: Float, y: Float)  {
+        view.setOnTouchListener(object : ViewOnTouch() {
+            override fun onDownTouchAction(x: Float, y: Float) {
                 if (view.isEnabled)
                     onDown()
             }
 
-            override fun onUpTouchAction(x: Float, y: Float)  {
+            override fun onUpTouchAction(x: Float, y: Float) {
                 if (view.isEnabled) {
                     onUp()
 
-                    if(withMinClickInterval)
+                    if (withMinClickInterval)
                         if (tooFastClick) return
 
                     lastClickTime = SystemClock.uptimeMillis()
@@ -49,7 +51,7 @@ class PressView(val view: View, var withMinClickInterval: Boolean = false){
                 }
             }
 
-            override fun onCancelTouchAction(x: Float, y: Float)  {
+            override fun onCancelTouchAction(x: Float, y: Float) {
                 if (view.isEnabled) {
                     onUp()
                 }
@@ -59,7 +61,7 @@ class PressView(val view: View, var withMinClickInterval: Boolean = false){
         })
     }
 
-        fun setPressAlpha(@AttrRes attr: Int){
+    fun setPressAlpha(@AttrRes attr: Int) {
         val typedValue = TypedValue()
         val theme: Theme = view.context.theme
         theme.resolveAttribute(attr, typedValue, true)

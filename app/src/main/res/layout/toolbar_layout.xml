@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbarLayout"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/toolbarHeight">
+    android:layout_height="@dimen/toolbarHeight"
+    android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dividerHeight"
         android:alpha="@dimen/bars_alpha"
-        android:background="?page_background_color"
-        android:layout_marginBottom="@dimen/dividerHeight"/>
+        android:background="?page_background_color" />
 
     <ImageView
         android:id="@+id/toolbarLayoutBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/defaultRLMargin"
         android:background="@drawable/circle_background_16dp"
+        android:padding="@dimen/defaultRLMargin"
         app:srcCompat="@drawable/ic_arrow_back" />
 
     <TextView
         android:id="@+id/toolbarLayoutTitle"
         style="@style/Medium24"
-        android:paddingStart="56dp"
-        android:paddingEnd="56dp"
-        android:singleLine="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:paddingStart="56dp"
+        android:paddingEnd="56dp"
+        android:singleLine="true" />
 
 
     <ImageView
@@ -41,7 +39,7 @@
         android:layout_alignParentEnd="true"
         android:background="@drawable/circle_background_16dp"
         android:padding="@dimen/defaultRLMargin"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/toolbarLayoutRightButtonProgress"

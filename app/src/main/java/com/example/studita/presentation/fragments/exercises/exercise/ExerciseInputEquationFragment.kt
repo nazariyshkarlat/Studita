@@ -8,13 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.utils.hideKeyboard
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.example.studita.utils.hideKeyboard
 import kotlinx.android.synthetic.main.exercise_input_equation_layout.*
 
-class ExerciseInputEquationFragment : NavigatableFragment(R.layout.exercise_input_equation_layout), TextWatcher {
+class ExerciseInputEquationFragment : NavigatableFragment(R.layout.exercise_input_equation_layout),
+    TextWatcher {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -53,7 +54,7 @@ class ExerciseInputEquationFragment : NavigatableFragment(R.layout.exercise_inpu
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         var str = s.toString()
-        if(str.isNotEmpty()) {
+        if (str.isNotEmpty()) {
             val lastChar = str[str.lastIndex]
             if ((str[0].isCharacter()) or (str[0] == '0')) {
                 exerciseInputEquationLayoutEditText.setText(
@@ -106,20 +107,22 @@ class ExerciseInputEquationFragment : NavigatableFragment(R.layout.exercise_inpu
     private fun String.removeCharDuplicate(): String {
         var result = this
         this.forEachIndexed { index, c ->
-            if (c.isCharacter() and (index !=0))
+            if (c.isCharacter() and (index != 0))
                 if (this[index - 1].isCharacter()) {
-                    result = (this.substring(0, index) + this.substring(index + 1)).removeCharDuplicate()
+                    result =
+                        (this.substring(0, index) + this.substring(index + 1)).removeCharDuplicate()
                 }
         }
         return result
     }
 
-    private fun String.removeZeros() : String{
+    private fun String.removeZeros(): String {
         var result = this
         this.forEachIndexed { index, c ->
-            if ((c == '0') and (index !=0))
+            if ((c == '0') and (index != 0))
                 if (this[index - 1].isCharacter()) {
-                    result = (this.substring(0, index) + this.substring(index + 1)).removeCharDuplicate()
+                    result =
+                        (this.substring(0, index) + this.substring(index + 1)).removeCharDuplicate()
                 }
         }
         return result

@@ -1,6 +1,6 @@
 package com.example.studita.data.cache.interesting
 
-interface InterestingCache{
+interface InterestingCache {
     fun saveInterestingListJson(json: String)
 
     fun getInterestingJson(interestingNumber: Int): String?

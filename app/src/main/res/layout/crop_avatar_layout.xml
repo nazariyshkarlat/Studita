@@ -2,12 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/toolbarHeight"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_marginTop="@dimen/toolbarHeight">
 
     <com.example.studita.presentation.views.crop_view.CropView
         android:id="@+id/cropAvatarFragmentCropView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </FrameLayout>

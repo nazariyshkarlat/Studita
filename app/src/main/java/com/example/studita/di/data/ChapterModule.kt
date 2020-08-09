@@ -1,6 +1,5 @@
 package com.example.studita.di.data
 
-import com.example.studita.di.CacheModule
 import com.example.studita.data.cache.chapter.ChapterCacheImpl
 import com.example.studita.data.net.ChapterService
 import com.example.studita.data.net.ChaptersService
@@ -8,6 +7,7 @@ import com.example.studita.data.repository.ChapterRepositoryImpl
 import com.example.studita.data.repository.datasource.chapter.ChapterJsonDataStoreFactoryImpl
 import com.example.studita.data.repository.datasource.chapter.CloudChapterJsonDataStore
 import com.example.studita.data.repository.datasource.chapter.DiskChapterJsonDataStore
+import com.example.studita.di.CacheModule
 import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.chapter.ChapterInteractor

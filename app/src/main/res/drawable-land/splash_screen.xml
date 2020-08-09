@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="?splash_screen_color"/>
+    <item android:drawable="?splash_screen_color" />
     <item android:bottom="@dimen/splashScreenLogoMarginBottom">
-        <bitmap android:src="@drawable/logo" android:gravity="center"/>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/logo" />
     </item>
     <item android:top="@dimen/splashScreenPortraitLogoMarginBottom">
-        <bitmap android:src="@drawable/splash_screen_text" android:gravity="center" android:tint="?splash_screen_text_color"/>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/splash_screen_text"
+            android:tint="?splash_screen_text_color" />
     </item>
 </layer-list>

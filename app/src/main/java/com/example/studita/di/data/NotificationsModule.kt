@@ -9,7 +9,6 @@ import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.notifications.NotificationsInteractor
 import com.example.studita.domain.interactor.notifications.NotificationsInteractorImpl
 import com.example.studita.domain.repository.NotificationsRepository
-import com.example.studita.service.SyncFriendshipImpl
 
 object NotificationsModule {
 
@@ -47,11 +46,13 @@ object NotificationsModule {
 
     private fun getNotificationsDataStoreFactory() =
         NotificationsDataStoreFactoryImpl(
-            getNotificationsDataStore())
+            getNotificationsDataStore()
+        )
 
     private fun getNotificationsDataStore() =
         NotificationsDataStoreImpl(
             NetworkModule.connectionManager,
-            NetworkModule.getService(NotificationsService::class.java))
+            NetworkModule.getService(NotificationsService::class.java)
+        )
 
 }

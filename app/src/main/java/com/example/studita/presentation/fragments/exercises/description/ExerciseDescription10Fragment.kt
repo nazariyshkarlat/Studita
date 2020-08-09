@@ -6,16 +6,16 @@ import android.widget.TextView
 import androidx.core.view.children
 import com.example.studita.R
 import kotlinx.android.synthetic.main.exercises_description_10_layout.*
-import kotlinx.android.synthetic.main.exercises_description_9_layout.*
 
-class ExercisesDescription10Fragment : ExercisesDescriptionFragment(R.layout.exercises_description_10_layout) {
+class ExercisesDescription10Fragment :
+    ExercisesDescriptionFragment(R.layout.exercises_description_10_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exercisesDescriptionModel?.let {
             formView(it.textParts)
 
-            if(!isHidden)
+            if (!isHidden)
                 checkButtonDivider(view)
         }
     }

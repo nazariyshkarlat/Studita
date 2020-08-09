@@ -8,7 +8,7 @@ class SubscribeEmailDataStoreFactoryImpl(
         subscribeEmailDataStore
 }
 
-interface SubscribeEmailDataStoreFactory{
+interface SubscribeEmailDataStoreFactory {
 
     fun create(): SubscribeEmailDataStore
 

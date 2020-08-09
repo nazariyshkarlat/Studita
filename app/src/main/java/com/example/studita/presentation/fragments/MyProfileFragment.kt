@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import com.example.studita.utils.PrefsUtils
-import com.example.studita.utils.UserUtils
 
-class MyProfileFragment : ProfileFragment(){
+class MyProfileFragment : ProfileFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         arguments = bundleOf("USER_ID" to PrefsUtils.getUserId())

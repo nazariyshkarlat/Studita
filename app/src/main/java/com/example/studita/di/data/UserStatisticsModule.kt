@@ -1,14 +1,11 @@
 package com.example.studita.di.data
 
-import com.example.studita.data.entity.UserStatisticsRowEntity
-import com.example.studita.data.entity.mapper.*
 import com.example.studita.data.net.UserStatisticsService
 import com.example.studita.data.repository.UserStatisticsRepositoryImpl
 import com.example.studita.data.repository.datasource.user_statistics.CloudUserStatisticsJsonDataStore
 import com.example.studita.data.repository.datasource.user_statistics.DiskUserStatisticsJsonDataStore
 import com.example.studita.data.repository.datasource.user_statistics.UserStatisticsJsonDataStoreFactoryImpl
 import com.example.studita.di.DI
-import com.example.studita.di.CacheModule
 import com.example.studita.di.DatabaseModule
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.user_statistics.UserStatisticsInteractor

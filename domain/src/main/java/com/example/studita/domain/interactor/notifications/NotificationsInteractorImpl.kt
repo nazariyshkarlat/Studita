@@ -4,18 +4,21 @@ import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.example.studita.domain.interactor.GetNotificationsStatus
-import com.example.studita.domain.interactor.GetUsersStatus
-import com.example.studita.domain.interactor.LevelsStatus
 import com.example.studita.domain.interactor.SetNotificationsAreCheckedStatus
 import com.example.studita.domain.repository.NotificationsRepository
-import com.example.studita.domain.repository.UsersRepository
 import kotlinx.coroutines.delay
 
-class NotificationsInteractorImpl(private val repository: NotificationsRepository): NotificationsInteractor{
+class NotificationsInteractorImpl(private val repository: NotificationsRepository) :
+    NotificationsInteractor {
 
     val retryDelay = 1000L
 
-    override suspend fun getNotifications(userIdTokenData: UserIdTokenData, perPage: Int, pageNumber: Int, retryCount: Int): GetNotificationsStatus =
+    override suspend fun getNotifications(
+        userIdTokenData: UserIdTokenData,
+        perPage: Int,
+        pageNumber: Int,
+        retryCount: Int
+    ): GetNotificationsStatus =
         try {
             val pair =
                 repository.getNotifications(userIdTokenData, perPage, pageNumber)
@@ -29,7 +32,7 @@ class NotificationsInteractorImpl(private val repository: NotificationsRepositor
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException) {
                         GetNotificationsStatus.NoConnection
@@ -42,10 +45,10 @@ class NotificationsInteractorImpl(private val repository: NotificationsRepositor
                         userIdTokenData,
                         perPage,
                         pageNumber,
-                        retryCount-1
+                        retryCount - 1
                     )
                 }
-            }else
+            } else
                 GetNotificationsStatus.Failure
         }
 
@@ -60,7 +63,7 @@ class NotificationsInteractorImpl(private val repository: NotificationsRepositor
                 SetNotificationsAreCheckedStatus.Failure
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException) {
                         SetNotificationsAreCheckedStatus.NoConnection
@@ -71,10 +74,10 @@ class NotificationsInteractorImpl(private val repository: NotificationsRepositor
                         delay(retryDelay)
                     setNotificationsAreChecked(
                         userIdTokenData,
-                        retryCount-1
+                        retryCount - 1
                     )
                 }
-            }else
+            } else
                 SetNotificationsAreCheckedStatus.Failure
         }
 }

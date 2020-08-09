@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/notMyFriendPopupMenuFirst"
-        android:title="@string/go_to_profile"/>
+        android:title="@string/go_to_profile" />
     <item
         android:id="@+id/notMyFriendPopupMenuSecond"
-        android:title="@string/add_to_friends"/>
+        android:title="@string/add_to_friends" />
 </menu>

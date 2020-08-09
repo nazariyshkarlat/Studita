@@ -8,9 +8,10 @@ import android.widget.LinearLayout
 import com.example.studita.R
 
 
-class PressLinearLayout @JvmOverloads constructor(context: Context,
-                                                   attrs: AttributeSet? = null,
-                                                   defStyleAttr: Int = 0
+class PressLinearLayout @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr), IPressView {
 
     private val pressViewImpl: PressView
@@ -19,20 +20,22 @@ class PressLinearLayout @JvmOverloads constructor(context: Context,
         val a: TypedArray = context.theme.obtainStyledAttributes(
             attrs,
             R.styleable.PressView,
-            0, 0);
+            0, 0
+        );
 
-        val withMinClickInterval = a.getBoolean(R.styleable.PressView_with_min_click_interval, false)
+        val withMinClickInterval =
+            a.getBoolean(R.styleable.PressView_with_min_click_interval, false)
 
         pressViewImpl = PressView(this, withMinClickInterval)
 
         pressViewImpl.setPressAlpha(R.attr.press_view_press_alpha_lighter)
     }
 
-    fun setWithMinClickInterval(withMinClickInterval: Boolean){
+    fun setWithMinClickInterval(withMinClickInterval: Boolean) {
         pressViewImpl.withMinClickInterval = withMinClickInterval
     }
 
-    override fun setOnClickListener(work: (View) ->Unit) {
+    override fun setOnClickListener(work: (View) -> Unit) {
         pressViewImpl.onClick = work
     }
 }

@@ -11,21 +11,20 @@ import com.example.studita.R
 import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.activities.MainActivity.Companion.startMainActivityNewTask
-import com.example.studita.utils.navigateTo
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuLanguageDialogAlertFragment
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
 import com.example.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
-import com.example.studita.utils.PrefsUtils
 import com.example.studita.presentation.view_model.MainMenuFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
-import com.example.studita.utils.UserUtils
+import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.navigateTo
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import kotlinx.android.synthetic.main.main_menu_layout.*
 import kotlinx.android.synthetic.main.settings_offline_mode_item.*
 
 
-class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
+class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout) {
 
     private val RC_SIGN_IN: Int = 0
     private var mainMenuFragmentViewModel: MainMenuFragmentViewModel? = null
@@ -47,7 +46,10 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
                 androidx.lifecycle.Observer { state ->
                     if (state == MainMenuFragmentViewModel.SignUpMethod.WITH_GOOGLE) {
                         context?.let {
-                            startActivityForResult(mainMenuFragmentViewModel?.signIn(it)?.signInIntent, RC_SIGN_IN)
+                            startActivityForResult(
+                                mainMenuFragmentViewModel?.signIn(it)?.signInIntent,
+                                RC_SIGN_IN
+                            )
                         }
                     } else {
                         (activity as AppCompatActivity).navigateTo(
@@ -60,10 +62,10 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
             viewModel.googleSignInState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { signIn ->
-                    if(signIn) {
-                        if(activity?.isTaskRoot == false)
+                    if (signIn) {
+                        if (activity?.isTaskRoot == false)
                             MainActivity.needsRecreate = true
-                        App.authenticationState.value = CheckTokenIsCorrectStatus.Correct
+                        App.authenticationState.value = CheckTokenIsCorrectStatus.Correct to false
                         activity?.startMainActivityNewTask()
                     }
                 })
@@ -80,7 +82,10 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout){
         }
 
         mainMenuLayoutThemeView.setOnSingleClickListener {
-            MainMenuThemeDialogAlertFragment().show((activity as AppCompatActivity).supportFragmentManager, null)
+            MainMenuThemeDialogAlertFragment().show(
+                (activity as AppCompatActivity).supportFragmentManager,
+                null
+            )
         }
 
         mainMenuLayoutLanguageView.setOnSingleClickListener {

@@ -5,8 +5,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply from: "$rootProject.projectDir/android-library.gradle"
 
-android{
-    defaultConfig{
+android {
+    defaultConfig {
         applicationId "com.example.studita"
     }
 }

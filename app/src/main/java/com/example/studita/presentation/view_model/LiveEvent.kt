@@ -1,8 +1,13 @@
 package com.example.studita.presentation.view_model
 
-import androidx.annotation.MainThread
-import androidx.lifecycle.*
-import java.util.concurrent.atomic.AtomicBoolean
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
+import kotlin.collections.HashMap
+import kotlin.collections.MutableMap
+import kotlin.collections.forEach
+import kotlin.collections.set
 
 class LiveEvent<T> : MediatorLiveData<T>() {
 

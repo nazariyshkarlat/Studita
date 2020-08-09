@@ -8,10 +8,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.LoadFragment
-import com.example.studita.utils.replace
 import com.example.studita.presentation.view_model.InterestingViewModel
+import com.example.studita.utils.replace
 
-class InterestingLoadFragment : LoadFragment(){
+class InterestingLoadFragment : LoadFragment() {
 
     private var interestingViewModel: InterestingViewModel? = null
 
@@ -27,11 +27,16 @@ class InterestingLoadFragment : LoadFragment(){
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer<Boolean> { done ->
                     if (done) {
-                        (activity as AppCompatActivity).replace(InterestingFragment(), R.id.frameLayout, 0, android.R.animator.fade_out)
+                        (activity as AppCompatActivity).replace(
+                            InterestingFragment(),
+                            R.id.frameLayout,
+                            0,
+                            android.R.animator.fade_out
+                        )
                     }
                 })
 
-            it.errorState.observe(viewLifecycleOwner, Observer{ message->
+            it.errorState.observe(viewLifecycleOwner, Observer { message ->
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             })
         }

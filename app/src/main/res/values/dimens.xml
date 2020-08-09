@@ -30,5 +30,5 @@
     <dimen name="editProfileLayoutAvatarSize">56dp</dimen>
     <dimen name="dialogAlertTitleSubtitleMargin">14dp</dimen>
     <dimen name="minTouchTargetSize">0dp</dimen>
-    <item name="bars_alpha" type="dimen" format="float">0.98</item>
+    <item name="bars_alpha" format="float" type="dimen">0.98</item>
 </resources>

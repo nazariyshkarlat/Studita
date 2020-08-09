@@ -4,11 +4,18 @@ import com.example.studita.data.entity.FriendActionRequest
 import com.example.studita.data.entity.IsMyFriendEntity
 import com.example.studita.data.entity.UsersResponse
 
-interface UsersDataStore{
+interface UsersDataStore {
 
-    suspend fun tryGetUsers(userId: Int, friendOfUserId: Int?, perPage: Int, pageNumber: Int, sortBy: String?, startsWith: String?) : Pair<Int, UsersResponse?>
+    suspend fun tryGetUsers(
+        userId: Int,
+        friendOfUserId: Int?,
+        perPage: Int,
+        pageNumber: Int,
+        sortBy: String?,
+        startsWith: String?
+    ): Pair<Int, UsersResponse?>
 
-    suspend fun tryCheckIsMyFriend(myId: Int, userId: Int) : Pair<Int, IsMyFriendEntity?>
+    suspend fun tryCheckIsMyFriend(myId: Int, userId: Int): Pair<Int, IsMyFriendEntity?>
 
     suspend fun trySendFriendship(friendActionRequest: FriendActionRequest): Int
 

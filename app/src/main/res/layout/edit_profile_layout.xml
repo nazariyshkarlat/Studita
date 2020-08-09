@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:focusableInTouchMode="true"
-    android:focusable="true">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <ProgressBar
         android:id="@+id/editProfileLayoutProgressBar"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="@string/new_photo"
-                app:with_min_click_interval="true"/>
+                app:with_min_click_interval="true" />
 
             <com.example.studita.presentation.views.press_view.PressTextView
                 android:id="@+id/editProfileLayoutRemoveAvatar"
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/delete_photo"
-                app:with_min_click_interval="true"/>
+                app:with_min_click_interval="true" />
 
             <LinearLayout
                 android:layout_width="match_parent"

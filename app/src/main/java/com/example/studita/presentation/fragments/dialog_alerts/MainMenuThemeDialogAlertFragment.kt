@@ -6,16 +6,19 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.activities.DefaultActivity
 import com.example.studita.presentation.activities.MainActivity
-import com.example.studita.utils.PrefsUtils
 import com.example.studita.presentation.view_model.MainMenuActivityViewModel
+import com.example.studita.utils.PrefsUtils
 import kotlinx.android.synthetic.main.dialog_list_layout.*
 
-class MainMenuThemeDialogAlertFragment : RadioButtonListDialogAlertFragment(){
+class MainMenuThemeDialogAlertFragment : RadioButtonListDialogAlertFragment() {
 
     private var mainMenuActivityViewModel: MainMenuActivityViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        items = listOf(resources.getString(R.string.dark_theme), resources.getString(R.string.light_theme))
+        items = listOf(
+            resources.getString(R.string.dark_theme),
+            resources.getString(R.string.light_theme)
+        )
         selectedPos = PrefsUtils.getTheme().ordinal
 
         super.onViewCreated(view, savedInstanceState)
@@ -33,12 +36,12 @@ class MainMenuThemeDialogAlertFragment : RadioButtonListDialogAlertFragment(){
         }
     }
 
-    private fun changeTheme(position: Int){
+    private fun changeTheme(position: Int) {
         mainMenuActivityViewModel?.onThemeChangeListener?.onThemeChanged(DefaultActivity.Theme.values()[position])
         MainActivity.needsRefresh = true
     }
 
-    interface OnThemeChangeListener{
+    interface OnThemeChangeListener {
         fun onThemeChanged(theme: DefaultActivity.Theme)
     }
 }

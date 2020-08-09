@@ -4,6 +4,6 @@ import com.example.studita.domain.entity.CompleteExercisesRequestData
 
 interface CompleteExercisesRepository {
 
-    suspend fun completeExercises(completeExercisesRequestData: CompleteExercisesRequestData) : Int
+    suspend fun completeExercises(completeExercisesRequestData: CompleteExercisesRequestData): Int
 
 }

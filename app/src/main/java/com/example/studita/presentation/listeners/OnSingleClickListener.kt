@@ -9,8 +9,8 @@ abstract class OnSingleClickListener : View.OnClickListener {
     companion object {
         private const val MIN_CLICK_INTERVAL: Long = 600
 
-        fun View.setOnSingleClickListener(block: (View) -> Unit){
-            setOnClickListener(object : OnSingleClickListener(){
+        fun View.setOnSingleClickListener(block: (View) -> Unit) {
+            setOnClickListener(object : OnSingleClickListener() {
                 override fun onSingleClick(v: View) {
                     block.invoke(this@setOnSingleClickListener)
                 }

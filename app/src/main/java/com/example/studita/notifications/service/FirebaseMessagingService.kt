@@ -1,14 +1,12 @@
 package com.example.studita.notifications.service
 
 import android.content.Intent
-import android.util.Log
 import androidx.core.os.bundleOf
-import com.example.studita.utils.PrefsUtils
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 
-class FirebaseMessagingService : FirebaseMessagingService(){
+class FirebaseMessagingService : FirebaseMessagingService() {
 
 
     override fun onMessageReceived(p0: RemoteMessage) {

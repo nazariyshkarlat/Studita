@@ -1,165 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@drawable/popup_background"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:paddingBottom="8dp">
 
-        <TextView
-            style="@style/Medium20"
-            android:layout_width="match_parent"
+    <TextView
+        style="@style/Medium20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/sort" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sort"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="8dp"/>
+            android:orientation="vertical">
 
-        <ScrollView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content">
+            <LinearLayout
+                android:id="@+id/friendsFilterPopupLayoutItemAtoZ"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp">
 
-            <LinearLayout android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/friendsFilterPopupLayoutItemAtoZ"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/friendsFilterPopupLayoutItemTextView"
+                    style="@style/Medium16"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp"
-                    android:orientation="horizontal"
-                    android:background="?selectableItemBackground">
+                    android:text="@string/sort_by_A_Z"
+                    tools:ignore="DuplicateIds" />
 
-                    <TextView
-                        android:id="@+id/friendsFilterPopupLayoutItemTextView"
-                        style="@style/Medium16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sort_by_A_Z"
-                        tools:ignore="DuplicateIds" />
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <ImageView
-                        android:id="@+id/friendsFilterPopupLayoutItemCheckIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        app:srcCompat="@drawable/done_selector"
-                        tools:ignore="DuplicateIds" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/friendsFilterPopupLayoutItemZtoA"
-                    android:layout_width="match_parent"
+                <Space
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp"
-                    android:orientation="horizontal"
-                    android:background="?selectableItemBackground">
+                    android:layout_weight="1" />
 
-                    <TextView
-                        android:id="@+id/friendsFilterPopupLayoutItemTextView"
-                        style="@style/Medium16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sort_by_Z_A"
-                        tools:ignore="DuplicateIds" />
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <ImageView
-                        android:id="@+id/friendsFilterPopupLayoutItemCheckIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        app:srcCompat="@drawable/done_selector"
-                        tools:ignore="DuplicateIds" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/friendsFilterPopupLayoutItemNewToOld"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/friendsFilterPopupLayoutItemCheckIcon"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp"
-                    android:orientation="horizontal"
-                    android:background="?selectableItemBackground">
+                    android:layout_marginStart="24dp"
+                    app:srcCompat="@drawable/done_selector"
+                    tools:ignore="DuplicateIds" />
 
-                    <TextView
-                        android:id="@+id/friendsFilterPopupLayoutItemTextView"
-                        style="@style/Medium16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sort_by_new_old"
-                        tools:ignore="DuplicateIds" />
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <ImageView
-                        android:id="@+id/friendsFilterPopupLayoutItemCheckIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        app:srcCompat="@drawable/done_selector"
-                        tools:ignore="DuplicateIds" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/friendsFilterPopupLayoutItemOldToNew"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp"
-                    android:orientation="horizontal"
-                    android:background="?selectableItemBackground">
-
-                    <TextView
-                        android:id="@+id/friendsFilterPopupLayoutItemTextView"
-                        style="@style/Medium16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sort_by_old_new"
-                        tools:ignore="DuplicateIds" />
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <ImageView
-                        android:id="@+id/friendsFilterPopupLayoutItemCheckIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        app:srcCompat="@drawable/done_selector"
-                        tools:ignore="DuplicateIds" />
-
-                </LinearLayout>
             </LinearLayout>
-        </ScrollView>
+
+            <LinearLayout
+                android:id="@+id/friendsFilterPopupLayoutItemZtoA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:id="@+id/friendsFilterPopupLayoutItemTextView"
+                    style="@style/Medium16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sort_by_Z_A"
+                    tools:ignore="DuplicateIds" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/friendsFilterPopupLayoutItemCheckIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    app:srcCompat="@drawable/done_selector"
+                    tools:ignore="DuplicateIds" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/friendsFilterPopupLayoutItemNewToOld"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:id="@+id/friendsFilterPopupLayoutItemTextView"
+                    style="@style/Medium16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sort_by_new_old"
+                    tools:ignore="DuplicateIds" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/friendsFilterPopupLayoutItemCheckIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    app:srcCompat="@drawable/done_selector"
+                    tools:ignore="DuplicateIds" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/friendsFilterPopupLayoutItemOldToNew"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:id="@+id/friendsFilterPopupLayoutItemTextView"
+                    style="@style/Medium16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sort_by_old_new"
+                    tools:ignore="DuplicateIds" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/friendsFilterPopupLayoutItemCheckIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    app:srcCompat="@drawable/done_selector"
+                    tools:ignore="DuplicateIds" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -8,7 +8,8 @@ import com.example.studita.presentation.fragments.base.BaseFragment
 import kotlinx.android.synthetic.main.interesting_specific_drum_roll_layout.*
 
 
-class InterestingSpecificDrumRollFragment : BaseFragment(R.layout.interesting_specific_drum_roll_layout){
+class InterestingSpecificDrumRollFragment :
+    BaseFragment(R.layout.interesting_specific_drum_roll_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -19,7 +20,7 @@ class InterestingSpecificDrumRollFragment : BaseFragment(R.layout.interesting_sp
         }
     }
 
-    private fun playDrumRoll(sound: SoundPoolPlayer){
+    private fun playDrumRoll(sound: SoundPoolPlayer) {
         sound.playShortResource(R.raw.drum_roll)
     }
 

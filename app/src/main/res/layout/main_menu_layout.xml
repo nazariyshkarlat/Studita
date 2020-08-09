@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:id="@+id/mainMenuScrollView"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainMenuScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentTop="true"
-    android:paddingTop="@dimen/toolbarHeight"
     android:clipToPadding="false"
     android:fillViewport="true"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:paddingTop="@dimen/toolbarHeight">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -71,12 +71,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:paddingTop="12dp"
+                    android:background="@drawable/divider_top_drawable"
                     android:orientation="vertical"
-                    android:background="@drawable/divider_top_drawable">
+                    android:paddingTop="12dp">
 
-                    <include
-                        layout="@layout/settings_offline_mode_item"/>
+                    <include layout="@layout/settings_offline_mode_item" />
 
                     <com.example.studita.presentation.views.press_view.PressLinearLayout
                         android:id="@+id/mainMenuLayoutThemeView"
@@ -140,16 +139,16 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/mainMenuLayoutBottomText"
             style="@style/Regular12Secondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
+            android:padding="10dp"
             android:text="@string/main_menu_bottom_text"
-            android:padding="10dp"/>
+            android:textAlignment="center" />
 
     </LinearLayout>
 </ScrollView>

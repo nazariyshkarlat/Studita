@@ -1,11 +1,11 @@
 package com.example.studita.data.cache.subscribe_email
 
 import android.content.SharedPreferences
-import com.example.studita.data.cache.chapter.ChapterCacheImpl
 
-class SubscribeEmailCacheImpl(private val sharedPreferences: SharedPreferences) : SubscribeEmailCache{
+class SubscribeEmailCacheImpl(private val sharedPreferences: SharedPreferences) :
+    SubscribeEmailCache {
 
-    companion object{
+    companion object {
         const val SUBSCRIBE_EMAIL_PREFS = "subscribe_email_cache"
     }
 
@@ -13,7 +13,8 @@ class SubscribeEmailCacheImpl(private val sharedPreferences: SharedPreferences) 
         sharedPreferences.edit().putString(SUBSCRIBE_EMAIL_PREFS, json).apply()
     }
 
-    override fun getSubscribeEmailJson(): String? = sharedPreferences.getString(SUBSCRIBE_EMAIL_PREFS, null)
+    override fun getSubscribeEmailJson(): String? =
+        sharedPreferences.getString(SUBSCRIBE_EMAIL_PREFS, null)
 
     override fun deleteSubscribeEmailJson() {
         sharedPreferences.edit().remove(SUBSCRIBE_EMAIL_PREFS).apply()

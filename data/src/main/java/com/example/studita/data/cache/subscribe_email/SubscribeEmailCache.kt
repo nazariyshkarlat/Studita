@@ -1,6 +1,6 @@
 package com.example.studita.data.cache.subscribe_email
 
-interface SubscribeEmailCache{
+interface SubscribeEmailCache {
     fun saveSubscribeEmailJson(json: String)
 
     fun getSubscribeEmailJson(): String?

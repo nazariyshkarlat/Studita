@@ -7,17 +7,16 @@ import android.view.ViewTreeObserver
 import android.widget.ScrollView
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
-import com.example.studita.R
-import com.example.studita.domain.entity.exercise.ExercisesDescriptionData
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.InterestingUiModelScreen
-import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.presentation.view_model.InterestingViewModel
 
-open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(viewId), ViewTreeObserver.OnScrollChangedListener{
+open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(viewId),
+    ViewTreeObserver.OnScrollChangedListener {
 
     var interestingViewModel: InterestingViewModel? = null
-    var interestingExplanationModel: InterestingUiModelScreen.InterestingUiModelExplanationScreen? = null
+    var interestingExplanationModel: InterestingUiModelScreen.InterestingUiModelExplanationScreen? =
+        null
     private var maxScrollY = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -26,12 +25,13 @@ open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(vie
             ViewModelProviders.of(this).get(InterestingViewModel::class.java)
         }
         interestingViewModel?.let {
-            interestingExplanationModel = it.currentScreen as InterestingUiModelScreen.InterestingUiModelExplanationScreen
+            interestingExplanationModel =
+                it.currentScreen as InterestingUiModelScreen.InterestingUiModelExplanationScreen
         }
 
         view.viewTreeObserver.addOnScrollChangedListener(this)
 
-        if(!isHidden)
+        if (!isHidden)
             checkScrollY()
     }
 
@@ -39,7 +39,7 @@ open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(vie
         super.onHiddenChanged(hidden)
         if (!hidden) {
             checkScrollY()
-        }else {
+        } else {
             interestingViewModel?.showToolbarDivider(false)
             interestingViewModel?.showButtonDivider(false)
             view?.viewTreeObserver?.removeOnScrollChangedListener(this)
@@ -50,7 +50,7 @@ open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(vie
         checkScrollY()
     }
 
-    protected fun checkButtonDivider(view: View){
+    protected fun checkButtonDivider(view: View) {
         OneShotPreDrawListener.add(view) {
             maxScrollY = getMaxScrollY(view as ScrollView)
             if (view.height < (view as ViewGroup).getChildAt(
@@ -63,7 +63,7 @@ open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(vie
         }
     }
 
-    private fun checkScrollY(){
+    private fun checkScrollY() {
         view?.let {
             it.post {
                 if (it is ScrollView) {
@@ -75,6 +75,7 @@ open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(vie
         }
     }
 
-    private fun getMaxScrollY(scrollView: ScrollView) = 0.coerceAtLeast(scrollView.getChildAt(0).height - (scrollView.height- scrollView.paddingBottom - scrollView.paddingTop))
+    private fun getMaxScrollY(scrollView: ScrollView) =
+        0.coerceAtLeast(scrollView.getChildAt(0).height - (scrollView.height - scrollView.paddingBottom - scrollView.paddingTop))
 
 }

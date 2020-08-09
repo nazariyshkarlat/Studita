@@ -1,34 +1,24 @@
 package com.example.studita.presentation.activities
 
 import android.app.Activity
-import android.app.TaskStackBuilder
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.studita.App
 import com.example.studita.R
-import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.presentation.fragments.IncorrectTimeFragment
 import com.example.studita.presentation.fragments.MainFragment
-import com.example.studita.utils.*
 import com.example.studita.presentation.fragments.base.NavigatableFragment
-import com.example.studita.presentation.view_model.HomeFragmentViewModel
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.FirebaseApp
-import com.google.firebase.iid.FirebaseInstanceId
+import com.example.studita.utils.TimeUtils
+import com.example.studita.utils.addFragment
+import com.example.studita.utils.startActivity
 import kotlinx.android.synthetic.main.frame_layout.*
-import java.sql.Time
 
-class MainActivity : DefaultActivity(){
+class MainActivity : DefaultActivity() {
 
-    private lateinit var navigationViewModel : MainActivityNavigationViewModel
+    private lateinit var navigationViewModel: MainActivityNavigationViewModel
 
-    companion object{
+    companion object {
         var needsRefresh = false
         var needsRecreate = false
 
@@ -47,8 +37,8 @@ class MainActivity : DefaultActivity(){
         navigationViewModel =
             ViewModelProviders.of(this).get(MainActivityNavigationViewModel::class.java)
 
-        if(savedInstanceState == null) {
-            if(TimeUtils.timeIsAutomatically(frameLayout.context))
+        if (savedInstanceState == null) {
+            if (TimeUtils.timeIsAutomatically(frameLayout.context))
                 addFragment(MainFragment(), R.id.frameLayout)
             else
                 addFragment(IncorrectTimeFragment(), R.id.frameLayout)
@@ -61,10 +51,10 @@ class MainActivity : DefaultActivity(){
         if (needsRefresh) {
             this.recreate()
             needsRefresh = false
-        }else if(needsRecreate){
+        } else if (needsRecreate) {
             startActivity<MainActivity>()
-            this.finish()
             needsRecreate = false
+            this.finish()
         }
     }
 

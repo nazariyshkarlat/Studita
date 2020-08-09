@@ -1,15 +1,13 @@
 package com.example.studita.data.repository.datasource.user_data
 
 import com.example.studita.data.date.DateUtils
-import com.example.studita.data.entity.SaveUserDataRequest
 import com.example.studita.data.entity.UserDataEntity
-import com.example.studita.data.entity.UserIdToken
 
 interface UserDataDataStore {
 
     companion object {
         val defaultUserData = UserDataEntity(
-                null,
+            null,
             null,
             null,
             null,

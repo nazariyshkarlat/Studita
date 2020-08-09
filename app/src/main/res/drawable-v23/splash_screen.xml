@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="?splash_screen_color"/>
-    <item android:drawable="@drawable/logo_svg" android:gravity="center" android:bottom="@dimen/splashScreenLogoMarginBottom"/>
-    <item android:drawable="@drawable/splash_screen_text_svg" android:gravity="center" android:top="@dimen/splashScreenTextMarginTop"/>
+    <item android:drawable="?splash_screen_color" />
+    <item
+        android:bottom="@dimen/splashScreenLogoMarginBottom"
+        android:drawable="@drawable/logo_svg"
+        android:gravity="center" />
+    <item
+        android:drawable="@drawable/splash_screen_text_svg"
+        android:gravity="center"
+        android:top="@dimen/splashScreenTextMarginTop" />
 </layer-list>

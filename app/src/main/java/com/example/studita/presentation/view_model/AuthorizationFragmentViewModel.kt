@@ -17,14 +17,12 @@ import com.example.studita.domain.validator.AuthorizationValidator
 import com.example.studita.utils.DeviceUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchBlock
-import com.example.studita.utils.launchExt
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import java.lang.UnsupportedOperationException
 
-class AuthorizationFragmentViewModel : ViewModel(){
+class AuthorizationFragmentViewModel : ViewModel() {
 
     val passwordFieldIsEmptyState = MutableLiveData<Boolean>()
     val passwordIsVisibleState = MutableLiveData<Boolean>()
@@ -36,15 +34,15 @@ class AuthorizationFragmentViewModel : ViewModel(){
     private val userStatisticsInteractor = UserStatisticsModule.getUserStatisticsInteractorImpl()
     private val authorizationInteractor = AuthorizationModule.getAuthorizationInteractorImpl()
 
-    fun setPasswordEmpty(password: String){
+    fun setPasswordEmpty(password: String) {
         passwordFieldIsEmptyState.value = password.isEmpty()
     }
 
-    fun changePasswordVisible(nowVisible: Boolean){
+    fun changePasswordVisible(nowVisible: Boolean) {
         passwordIsVisibleState.value = !nowVisible
     }
 
-    private fun validate(dates : Pair<String, String>): AuthorizationResult{
+    private fun validate(dates: Pair<String, String>): AuthorizationResult {
         val validator = AuthorizationValidator()
         val result =
             when {
@@ -59,13 +57,13 @@ class AuthorizationFragmentViewModel : ViewModel(){
                 }
                 else -> throw UnsupportedOperationException("unknown authorization result")
             }
-        if(result != AuthorizationResult.Valid)
+        if (result != AuthorizationResult.Valid)
             authorizationState.value = result
         return result
     }
 
-    fun logIn(dates : Pair<String, String>, applicationRef: Application){
-        if(validate(dates) == AuthorizationResult.Valid){
+    fun logIn(dates: Pair<String, String>, applicationRef: Application) {
+        if (validate(dates) == AuthorizationResult.Valid) {
             FirebaseInstanceId.getInstance().instanceId
                 .addOnCompleteListener(OnCompleteListener { task ->
                     if (!task.isSuccessful) {
@@ -75,51 +73,71 @@ class AuthorizationFragmentViewModel : ViewModel(){
 
                     val token = task.result?.token
 
-                    job = GlobalScope.launchBlock(job){
-                        when(val result = authorizationInteractor.logIn(
+                    job = GlobalScope.launchBlock(job) {
+                        when (val result = authorizationInteractor.logIn(
                             AuthorizationRequestData(
                                 dates.first,
                                 dates.second,
                                 null,
                                 null,
-                                token?.let { PushTokenData(it, DeviceUtils.getDeviceId(applicationRef)) }
+                                token?.let {
+                                    PushTokenData(
+                                        it,
+                                        DeviceUtils.getDeviceId(applicationRef)
+                                    )
+                                }
                             )
-                        )){
+                        )) {
                             is LogInStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                             is LogInStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
-                            is LogInStatus.Failure -> authorizationState.postValue(AuthorizationResult.LogInFailure)
-                            is LogInStatus.NoUserFound -> authorizationState.postValue(AuthorizationResult.NoUserFound)
-                            is LogInStatus.Success ->{
+                            is LogInStatus.Failure -> authorizationState.postValue(
+                                AuthorizationResult.LogInFailure
+                            )
+                            is LogInStatus.NoUserFound -> authorizationState.postValue(
+                                AuthorizationResult.NoUserFound
+                            )
+                            is LogInStatus.Success -> {
                                 App.initUserData(result.result.userDataData)
 
-                                authorizationState.value = AuthorizationResult.LogInSuccess(result.result)
+                                authorizationState.value =
+                                    AuthorizationResult.LogInSuccess(result.result)
                             }
-                        }}
+                        }
+                    }
                 })
         }
     }
 
-    fun signUp(dates : Pair<String, String>){
-        if(validate(dates) == AuthorizationResult.Valid){
-            job = GlobalScope.launchBlock(job){
-                when(authorizationInteractor.signUp(
+    fun signUp(dates: Pair<String, String>) {
+        if (validate(dates) == AuthorizationResult.Valid) {
+            job = GlobalScope.launchBlock(job) {
+                when (authorizationInteractor.signUp(
                     AuthorizationRequestData(
                         dates.first,
                         dates.second,
-                        if(!UserUtils.isLoggedIn()) UserUtils.userData else null,
-                        if(!UserUtils.isLoggedIn()) userStatisticsInteractor.getUserStatisticsRecords() else null,
+                        if (!UserUtils.isLoggedIn()) UserUtils.userData else null,
+                        if (!UserUtils.isLoggedIn()) userStatisticsInteractor.getUserStatisticsRecords() else null,
                         null
-                    ))){
+                    )
+                )) {
                     is SignUpStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                     is SignUpStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                     is SignUpStatus.Failure -> authorizationState.postValue(AuthorizationResult.SignUpFailure)
-                    is SignUpStatus.UserAlreadyExists -> authorizationState.postValue(AuthorizationResult.UserAlreadyExists)
-                    is SignUpStatus.Success -> authorizationState.postValue(AuthorizationResult.SignUpSuccess(dates.first, dates.second))
-                }}
+                    is SignUpStatus.UserAlreadyExists -> authorizationState.postValue(
+                        AuthorizationResult.UserAlreadyExists
+                    )
+                    is SignUpStatus.Success -> authorizationState.postValue(
+                        AuthorizationResult.SignUpSuccess(
+                            dates.first,
+                            dates.second
+                        )
+                    )
+                }
+            }
         }
     }
 
-    sealed class AuthorizationResult{
+    sealed class AuthorizationResult {
         object IncorrectEmail : AuthorizationResult()
         object PasswordLessMixLength : AuthorizationResult()
         object Valid : AuthorizationResult()
@@ -128,7 +146,7 @@ class AuthorizationFragmentViewModel : ViewModel(){
         object NoUserFound : AuthorizationResult()
         object UserAlreadyExists : AuthorizationResult()
         data class LogInSuccess(val result: LogInResponseData) : AuthorizationResult()
-        data class  SignUpSuccess(val email: String, val password: String) : AuthorizationResult()
+        data class SignUpSuccess(val email: String, val password: String) : AuthorizationResult()
 
     }
 

@@ -25,34 +25,36 @@ object UsersModule {
     fun getUsersInteractorImpl(): UsersInteractor {
         if (config == DI.Config.RELEASE && usersInteractor == null)
             usersInteractor =
-                    makeUsersIntercator(
-                            getUsersRepository()
-                    )
+                makeUsersIntercator(
+                    getUsersRepository()
+                )
         return usersInteractor!!
     }
 
     private fun getUsersRepository(): UsersRepository {
         if (repository == null)
             repository = UsersRepositoryImpl(
-                    getUsersDataStoreFactory()
+                getUsersDataStoreFactory()
             )
         return repository!!
     }
 
     private fun makeUsersIntercator(repository: UsersRepository) =
-            UsersInteractorImpl(
-                repository,
-                syncFriendship = SyncFriendshipImpl()
-            )
+        UsersInteractorImpl(
+            repository,
+            syncFriendship = SyncFriendshipImpl()
+        )
 
 
     private fun getUsersDataStoreFactory() =
-            UsersDataStoreFactoryImpl(
-                    getUsersDataStore())
+        UsersDataStoreFactoryImpl(
+            getUsersDataStore()
+        )
 
     private fun getUsersDataStore() =
-            UsersDataStoreImpl(
-                    NetworkModule.connectionManager,
-                    NetworkModule.getService(UsersService::class.java))
+        UsersDataStoreImpl(
+            NetworkModule.connectionManager,
+            NetworkModule.getService(UsersService::class.java)
+        )
 
 }

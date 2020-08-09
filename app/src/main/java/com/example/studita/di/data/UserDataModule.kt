@@ -2,7 +2,9 @@ package com.example.studita.di.data
 
 import com.example.studita.data.net.UserDataService
 import com.example.studita.data.repository.UserDataRepositoryImpl
-import com.example.studita.data.repository.datasource.user_data.*
+import com.example.studita.data.repository.datasource.user_data.CloudUserDataDataStore
+import com.example.studita.data.repository.datasource.user_data.DiskUserDataDataStore
+import com.example.studita.data.repository.datasource.user_data.UserDataJsonDataStoreFactoryImpl
 import com.example.studita.di.DI
 import com.example.studita.di.DatabaseModule
 import com.example.studita.di.NetworkModule
@@ -43,7 +45,7 @@ object UserDataModule {
         UserDataInteractorImpl(
             repository
         )
-    
+
 
     private fun getUserDataJsonDataStoreFactory() =
         UserDataJsonDataStoreFactoryImpl(

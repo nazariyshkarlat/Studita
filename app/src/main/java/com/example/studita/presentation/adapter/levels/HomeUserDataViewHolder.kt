@@ -10,7 +10,8 @@ import com.example.studita.utils.LevelUtils.getNextLevel
 import kotlinx.android.synthetic.main.home_layout_user_data.view.*
 import java.util.*
 
-class HomeUserDataViewHolder(view: View) : LevelsViewHolder<HomeRecyclerUiModel.HomeUserDataUiModel>(view){
+class HomeUserDataViewHolder(view: View) :
+    LevelsViewHolder<HomeRecyclerUiModel.HomeUserDataUiModel>(view) {
 
     override fun bind(model: HomeRecyclerUiModel) {
 
@@ -20,7 +21,8 @@ class HomeUserDataViewHolder(view: View) : LevelsViewHolder<HomeRecyclerUiModel.
             homeLayoutUserDataXPLayoutMoreButton.setOnClickListener {
                 getAppCompatActivity()?.startActivity<UserStatActivity>("USER_ID" to UserUtils.userData.userId)
             }
-            homeLayoutUserDataLevelLayoutCurrentLevel.text = UserUtils.userData.currentLevel.toString()
+            homeLayoutUserDataLevelLayoutCurrentLevel.text =
+                UserUtils.userData.currentLevel.toString()
             homeLayoutUserDataLevelLayoutNextLevel.text =
                 getNextLevel(UserUtils.userData.currentLevel).toString()
             homeLayoutUserDataLevelLayoutXP.text = itemView.context.resources.getString(
@@ -31,12 +33,18 @@ class HomeUserDataViewHolder(view: View) : LevelsViewHolder<HomeRecyclerUiModel.
             homeLayoutUserDataLevelLayoutProgressBar.percentProgress =
                 UserUtils.userData.currentLevelXP / getLevelXP(UserUtils.userData.currentLevel).toFloat()
             homeLayoutUserDataXPLayoutStreakDays.text =
-                    LanguageUtils.getResourcesRussianLocale(itemView.context)?.getQuantityString(R.plurals.streak_plurals, UserUtils.userData.streakDays, UserUtils.userData.streakDays)
-            homeLayoutUserDataXPLayoutFireIcon.isActivated = streakActivated(UserUtils.userData.streakDatetime)
+                LanguageUtils.getResourcesRussianLocale(itemView.context)?.getQuantityString(
+                    R.plurals.streak_plurals,
+                    UserUtils.userData.streakDays,
+                    UserUtils.userData.streakDays
+                )
+            homeLayoutUserDataXPLayoutFireIcon.isActivated =
+                streakActivated(UserUtils.userData.streakDatetime)
         }
     }
 
-    private fun streakActivated(streakDate: Date) = TimeUtils.getCalendarDayCount(Date(), streakDate) == 0L
+    private fun streakActivated(streakDate: Date) =
+        TimeUtils.getCalendarDayCount(Date(), streakDate) == 0L
 
 
 }

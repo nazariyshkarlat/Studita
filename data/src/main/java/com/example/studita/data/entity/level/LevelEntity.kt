@@ -16,25 +16,38 @@ sealed class LevelChildEntity {
         @SerializedName("title") val chapterTitle: String,
         @SerializedName("subtitle") val chapterSubtitle: String,
         @SerializedName("chapter_parts_count") val chapterPartsCount: Int
-    ): LevelChildEntity()
+    ) : LevelChildEntity()
+
     data class LevelInterestingEntity(
         @SerializedName("interesting_number") val interestingNumber: Int,
         @SerializedName("title") val title: String,
         @SerializedName("subtitle") val subtitle: String,
         @SerializedName("tags") val tags: List<String>
-    ): LevelChildEntity()
+    ) : LevelChildEntity()
+
     data class LevelSubscribeEntity(
         @SerializedName("title") val title: String,
         @SerializedName("button") val button: List<String>
-    ): LevelChildEntity()
+    ) : LevelChildEntity()
 }
 
 fun LevelEntity.toBusinessEntity() = LevelData(
     levelNumber,
     levelChildren.map { it.toBusinessEntity() }
 )
-fun LevelChildEntity.toBusinessEntity() = when(this) {
-    is LevelChildEntity.LevelChapterEntity -> LevelChildData.LevelChapterData(chapterNumber, chapterTitle, chapterSubtitle, chapterPartsCount)
-    is LevelChildEntity.LevelInterestingEntity -> LevelChildData.LevelInterestingData(interestingNumber, title, subtitle, tags)
+
+fun LevelChildEntity.toBusinessEntity() = when (this) {
+    is LevelChildEntity.LevelChapterEntity -> LevelChildData.LevelChapterData(
+        chapterNumber,
+        chapterTitle,
+        chapterSubtitle,
+        chapterPartsCount
+    )
+    is LevelChildEntity.LevelInterestingEntity -> LevelChildData.LevelInterestingData(
+        interestingNumber,
+        title,
+        subtitle,
+        tags
+    )
     is LevelChildEntity.LevelSubscribeEntity -> LevelChildData.LevelSubscribeData(title, button)
 }

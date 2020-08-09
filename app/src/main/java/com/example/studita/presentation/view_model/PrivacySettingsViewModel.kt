@@ -6,8 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.di.data.PrivacySettingsModule
 import com.example.studita.di.data.UsersModule
-import com.example.studita.domain.entity.*
-import com.example.studita.domain.interactor.*
+import com.example.studita.domain.entity.PrivacySettingsData
+import com.example.studita.domain.entity.PrivacySettingsRequestData
+import com.example.studita.domain.entity.UserIdTokenData
+import com.example.studita.domain.interactor.HasFriendsStatus
+import com.example.studita.domain.interactor.PrivacySettingsStatus
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
@@ -16,7 +19,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class PrivacySettingsViewModel : ViewModel(){
+class PrivacySettingsViewModel : ViewModel() {
 
     private val privacySettingsInteractor = PrivacySettingsModule.getPrivacySettingsInteractorImpl()
     private val usersInteractor = UsersModule.getUsersInteractorImpl()
@@ -32,23 +35,24 @@ class PrivacySettingsViewModel : ViewModel(){
         UserUtils.getUserIDTokenData()?.let { getPrivacySettings(it) }
     }
 
-    private fun getPrivacySettings(userIdTokenData: UserIdTokenData){
-        viewModelScope.launch{
+    private fun getPrivacySettings(userIdTokenData: UserIdTokenData) {
+        viewModelScope.launch {
             val hasFriends = async { hasFriends() }
-            when(val result = privacySettingsInteractor.getPrivacySettings(userIdTokenData)){
+            when (val result = privacySettingsInteractor.getPrivacySettings(userIdTokenData)) {
                 is PrivacySettingsStatus.Failure -> errorState.postValue(R.string.no_connection)
                 is PrivacySettingsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is PrivacySettingsStatus.ServiceUnavailable -> errorState.postValue(R.string.no_connection)
                 is PrivacySettingsStatus.Success -> {
-                    this@PrivacySettingsViewModel.hasFriends = hasFriends.await() is HasFriendsStatus.HasFriends
+                    this@PrivacySettingsViewModel.hasFriends =
+                        hasFriends.await() is HasFriendsStatus.HasFriends
                     privacySettingsStatus.postValue(result.privacySettingsData)
                 }
             }
         }
     }
 
-    fun editPrivacySettings(privacySettingsRequestData: PrivacySettingsRequestData){
-        job = GlobalScope.launchExt(job){
+    fun editPrivacySettings(privacySettingsRequestData: PrivacySettingsRequestData) {
+        job = GlobalScope.launchExt(job) {
             privacySettingsInteractor.editPrivacySettings(privacySettingsRequestData)
         }
     }

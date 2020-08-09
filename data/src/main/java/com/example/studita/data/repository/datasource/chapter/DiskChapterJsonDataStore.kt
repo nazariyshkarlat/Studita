@@ -5,7 +5,7 @@ import com.example.studita.domain.exception.NetworkConnectionException
 
 class DiskChapterJsonDataStore(
     private val chapterCache: ChapterCache
-): ChapterJsonDataStore{
+) : ChapterJsonDataStore {
     override suspend fun getChapterJson(chapterNumber: Int): Pair<Int, String> {
         val json = chapterCache.getLevelsJson(chapterNumber)
         return 200 to (json ?: throw NetworkConnectionException())

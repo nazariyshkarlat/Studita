@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/myFriendPopupMenuFirst"
-        android:title="@string/go_to_profile"/>
+        android:title="@string/go_to_profile" />
     <item
         android:id="@+id/myFriendPopupMenuSecond"
-        android:title="@string/call_to_duel"/>
+        android:title="@string/call_to_duel" />
     <item
         android:id="@+id/myFriendPopupMenuThird"
-        android:title="@string/remove_from_friends"/>
+        android:title="@string/remove_from_friends" />
 </menu>

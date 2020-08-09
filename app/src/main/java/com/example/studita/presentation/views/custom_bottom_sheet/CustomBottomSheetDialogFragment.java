@@ -95,7 +95,8 @@ public class CustomBottomSheetDialogFragment extends AppCompatDialogFragment {
         }
 
         @Override
-        public void onSlide(@NonNull View bottomSheet, float slideOffset) {}
+        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+        }
     }
 }
 

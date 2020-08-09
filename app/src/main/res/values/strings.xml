@@ -1,5 +1,4 @@
-<!DOCTYPE resources [
-    <!ENTITY app_name "Studita">]>
+<!DOCTYPE resources [<!ENTITY app_name "Studita">]>
 <resources>
     <string name="app_name">&app_name;</string>
     <string name="no_connection">No connection to the server!</string>
@@ -186,9 +185,9 @@
     <string name="sort_by_old_new">От старых к новым</string>
     <string name="show_all">Показать всех</string>
     <string name="friends_count_template">Друзья (%1$d)</string>
-    <string name="profile_competitions_item_levels_rating_title">Недельный рейтинг уровнвывфывей</string>
+    <string name="profile_competitions_item_levels_rating_title">Недельный рейтинг уровней</string>
     <string name="profile_competitions_item_XP_rating_title">Недельный рейтинг</string>
-    <string name="profile_competitions_item_levels_rating_two_line_title">Недельный рейтинг\nуровнвывфывей</string>
+    <string name="profile_competitions_item_levels_rating_two_line_title">Недельный рейтинг\nуровней</string>
     <string name="profile_competitions_item_XP_rating_two_line_title">Недельный рейтинг\nопыта</string>
     <string name="profile_competitions_item_rating_subtitle_template">Место: %1$d (%2$s)</string>
     <string name="profile_competitions_item_secondary_subtitle_template">Ваше место: %1$d</string>

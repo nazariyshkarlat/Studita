@@ -4,7 +4,6 @@ import android.accounts.*
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import com.example.studita.R
 import com.example.studita.presentation.activities.MainMenuActivity
 
@@ -12,8 +11,8 @@ import com.example.studita.presentation.activities.MainMenuActivity
 class AccountAuthenticator(private val context: Context) :
     AbstractAccountAuthenticator(context) {
 
-    companion object{
-        fun addAccount(context: Context, email: String){
+    companion object {
+        fun addAccount(context: Context, email: String) {
             val accountManager =
                 AccountManager.get(context)
 
@@ -21,7 +20,7 @@ class AccountAuthenticator(private val context: Context) :
                 email,
                 context.getString(R.string.account_type)
             )
-            accountManager.addAccountExplicitly(account, null,null)
+            accountManager.addAccountExplicitly(account, null, null)
         }
     }
 
@@ -38,8 +37,8 @@ class AccountAuthenticator(private val context: Context) :
         accountType: String,
         authTokenType: String?,
         requiredFeatures: Array<String>?,
-        options: Bundle?): Bundle?
-    {
+        options: Bundle?
+    ): Bundle? {
         val intent = Intent(context, MainMenuActivity::class.java)
         val bundle = Bundle()
         bundle.putParcelable(AccountManager.KEY_INTENT, intent)

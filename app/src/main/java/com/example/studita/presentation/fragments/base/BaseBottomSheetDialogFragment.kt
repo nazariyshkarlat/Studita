@@ -9,14 +9,19 @@ import androidx.fragment.app.DialogFragment
 import com.example.studita.R
 import com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetDialogFragment
 
-open class BaseBottomSheetDialogFragment(@LayoutRes private val layoutResId: Int) : CustomBottomSheetDialogFragment() {
+open class BaseBottomSheetDialogFragment(@LayoutRes private val layoutResId: Int) :
+    CustomBottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogTheme);
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(layoutResId, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(layoutResId, container, false)
 
 
 }

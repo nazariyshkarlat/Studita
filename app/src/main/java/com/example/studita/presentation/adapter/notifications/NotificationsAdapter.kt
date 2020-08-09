@@ -4,17 +4,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
-import com.example.studita.presentation.adapter.users_list.ViewType
 import com.example.studita.presentation.model.NotificationsUiModel
 import com.example.studita.presentation.view_model.NotificationsFragmentViewModel
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.makeView
-import java.lang.UnsupportedOperationException
 
-class NotificationsAdapter(val items: ArrayList<NotificationsUiModel>, private val notificationsFragmentViewModel: NotificationsFragmentViewModel?) :
+class NotificationsAdapter(
+    val items: ArrayList<NotificationsUiModel>,
+    private val notificationsFragmentViewModel: NotificationsFragmentViewModel?
+) :
     RecyclerView.Adapter<NotificationsViewHolder<*>>(), LoadViewHolder.RequestMoreItems {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationsViewHolder<out NotificationsUiModel> = when (viewType) {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): NotificationsViewHolder<out NotificationsUiModel> = when (viewType) {
         NotificationsViewType.SWITCH.ordinal -> NotificationsSwitchViewHolder(parent.makeView(R.layout.notifications_layout_switch_item))
         NotificationsViewType.NOTIFICATION.ordinal -> NotificationViewHolder(parent.makeView(R.layout.notifications_layout_item))
         NotificationsViewType.ITEMS_LOAD.ordinal -> LoadViewHolder(
@@ -24,7 +28,10 @@ class NotificationsAdapter(val items: ArrayList<NotificationsUiModel>, private v
         else -> throw UnsupportedOperationException("unknown type of item")
     }
 
-    override fun onBindViewHolder(holder: NotificationsViewHolder<out NotificationsUiModel>, position: Int) {
+    override fun onBindViewHolder(
+        holder: NotificationsViewHolder<out NotificationsUiModel>,
+        position: Int
+    ) {
         holder.bind(items[position])
     }
 
@@ -44,7 +51,8 @@ class NotificationsAdapter(val items: ArrayList<NotificationsUiModel>, private v
 }
 
 
-abstract class NotificationsViewHolder<T : NotificationsUiModel>(view: View) : RecyclerView.ViewHolder(view) {
+abstract class NotificationsViewHolder<T : NotificationsUiModel>(view: View) :
+    RecyclerView.ViewHolder(view) {
 
     abstract fun bind(model: NotificationsUiModel)
 }

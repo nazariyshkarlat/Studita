@@ -4,6 +4,6 @@ import android.view.View
 
 interface IPressView {
 
-    fun setOnClickListener(work: (View) ->Unit){}
+    fun setOnClickListener(work: (View) -> Unit) {}
 
 }

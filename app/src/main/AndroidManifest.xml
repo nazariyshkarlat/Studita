@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.studita">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-feature android:name="android.hardware.camera"
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -32,44 +32,53 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.activities.MainMenuActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:parentActivityName=".presentation.activities.MainActivity">
-        </activity>
-        <activity android:name=".presentation.activities.ExercisesActivity"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
-        <activity android:name=".presentation.activities.InterestingActivity"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
-        <activity android:name=".presentation.activities.UserStatActivity"/>
+        <activity
+            android:name=".presentation.activities.MainMenuActivity"
+            android:parentActivityName=".presentation.activities.MainActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".presentation.activities.ExercisesActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".presentation.activities.InterestingActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".presentation.activities.UserStatActivity" />
         <activity android:name=".presentation.activities.ShareActivity">
             <intent-filter>
-                <data android:scheme="https"
+                <data
                     android:host="studita.com"
-                    android:pathPrefix="/user_stat" />
-                <data android:scheme="https"
+                    android:pathPrefix="/user_stat"
+                    android:scheme="https" />
+                <data
                     android:host="studita.com"
-                    android:pathPrefix="/exercise_stat" />
+                    android:pathPrefix="/exercise_stat"
+                    android:scheme="https" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-        <service android:name=".authenticator.AuthenticatorService" android:exported="false">
+
+        <service
+            android:name=".authenticator.AuthenticatorService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator"/>
+                android:resource="@xml/authenticator" />
         </service>
-        <service android:name=".notifications.service.FirebaseMessagingService"
+        <service
+            android:name=".notifications.service.FirebaseMessagingService"
             android:exported="false">
-        <intent-filter>
-            <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-        </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
         </service>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.studita.fileprovider"
@@ -79,19 +88,22 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <service android:name=".notifications.service.PushIntentService"
+
+        <service
+            android:name=".notifications.service.PushIntentService"
             android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-        </service>
-        <service android:name=".notifications.service.PushReceiverIntentService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <service
+            android:name=".notifications.service.PushReceiverIntentService"
             android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-        </service>
-        <receiver android:name=".notifications.NotificationsActionsHandleBroadcastReceiver"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+        <receiver
+            android:name=".notifications.NotificationsActionsHandleBroadcastReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="ACCEPT_FRIENDSHIP"/>
-                <action android:name="REJECT_FRIENDSHIP"/>
+                <action android:name="ACCEPT_FRIENDSHIP" />
+                <action android:name="REJECT_FRIENDSHIP" />
             </intent-filter>
         </receiver>
     </application>

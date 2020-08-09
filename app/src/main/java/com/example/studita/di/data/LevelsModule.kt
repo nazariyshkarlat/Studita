@@ -1,12 +1,12 @@
 package com.example.studita.di.data
 
-import com.example.studita.di.CacheModule
 import com.example.studita.data.cache.levels.LevelsCacheImpl
 import com.example.studita.data.net.LevelsService
 import com.example.studita.data.repository.LevelsRepositoryImpl
 import com.example.studita.data.repository.datasource.levels.CloudLevelsJsonDataStore
 import com.example.studita.data.repository.datasource.levels.DiskLevelsJsonDataStore
 import com.example.studita.data.repository.datasource.levels.LevelsJsonDataStoreFactoryImpl
+import com.example.studita.di.CacheModule
 import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.levels.LevelsInteractor

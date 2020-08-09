@@ -2,7 +2,6 @@ package com.example.studita.presentation.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
@@ -15,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseFragment
-import com.example.studita.utils.*
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.example.studita.presentation.view_model.MainFragmentViewModel
+import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MainFragment : BaseFragment(R.layout.main_layout){
+class MainFragment : BaseFragment(R.layout.main_layout) {
 
-    private var navigationViewModel : MainActivityNavigationViewModel? = null
+    private var navigationViewModel: MainActivityNavigationViewModel? = null
     private var mainFragmentViewModel: MainFragmentViewModel? = null
     var transValue = 0F
 
@@ -38,7 +37,7 @@ class MainFragment : BaseFragment(R.layout.main_layout){
             ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
         }
 
-        navigationViewModel?.let {viewModel ->
+        navigationViewModel?.let { viewModel ->
             viewModel.navigationState.observe(
                 this,
                 Observer {
@@ -47,7 +46,10 @@ class MainFragment : BaseFragment(R.layout.main_layout){
                         if (pair.first == MainActivityNavigationViewModel.BottomNavigationEnum.CLOSE_APP)
                             (activity as AppCompatActivity).finish()
 
-                        val fragment = (activity as AppCompatActivity).supportFragmentManager.findFragmentByTag(it.second)
+                        val fragment =
+                            (activity as AppCompatActivity).supportFragmentManager.findFragmentByTag(
+                                it.second
+                            )
 
                         if (fragment != null) {
 
@@ -84,7 +86,7 @@ class MainFragment : BaseFragment(R.layout.main_layout){
             })
         }
         mainFragmentViewModel?.let { viewModel ->
-                viewModel.fabState.observe(this, Observer<Boolean> { show ->
+            viewModel.fabState.observe(this, Observer<Boolean> { show ->
                 if (show) {
                     mainLayoutFAB.animate().translationY(0F).alpha(1F)
                         .setInterpolator(DecelerateInterpolator(2F)).start()
@@ -95,10 +97,10 @@ class MainFragment : BaseFragment(R.layout.main_layout){
                 }
             })
 
-            viewModel.progressState.observe(this, Observer{ hideProgress ->
-                if(hideProgress) {
+            viewModel.progressState.observe(this, Observer { hideProgress ->
+                if (hideProgress) {
                     mainLayoutProgressBar.visibility = View.GONE
-                }else{
+                } else {
                     mainLayoutProgressBar.visibility = View.VISIBLE
                 }
             })
@@ -109,8 +111,12 @@ class MainFragment : BaseFragment(R.layout.main_layout){
                 mainLayoutFAB.height.toFloat() + mainLayoutFAB.marginBottom + bottomNavigationView.height
         }
 
-        if(savedInstanceState != null){
-            showHideFabOnNavigation((activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.mainLayoutFrameLayout))
+        if (savedInstanceState != null) {
+            showHideFabOnNavigation(
+                (activity as AppCompatActivity).supportFragmentManager.findFragmentById(
+                    R.id.mainLayoutFrameLayout
+                )
+            )
         }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationViewModel)
@@ -118,7 +124,7 @@ class MainFragment : BaseFragment(R.layout.main_layout){
         handleNetworkChanges(view)
     }
 
-    private fun showHideFabOnNavigation(fragment: Fragment?){
+    private fun showHideFabOnNavigation(fragment: Fragment?) {
         if (fragment is HomeFragment) {
             mainLayoutFAB.show()
         } else {
@@ -129,31 +135,31 @@ class MainFragment : BaseFragment(R.layout.main_layout){
 
     private fun handleNetworkChanges(view: View) {
         NetworkUtils.getNetworkLiveData(view.context).observe(this, Observer { isConnected ->
-                val snackbar = connectionSnackbarLayout as TextView
-                if (!isConnected) {
-                    snackbar.text = resources.getString(R.string.network_absent)
-                    snackbar.setBackgroundColor(ContextCompat.getColor(view.context, R.color.gray88))
-                    mainLayoutBottomSection.animate().translationY(0F)
-                        .setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong())
-                        .start()
-                } else {
-                    snackbar.text = resources.getString(R.string.back_online)
-                    snackbar.setBackgroundColor(
-                        ContextCompat.getColor(
-                            view.context,
-                            R.color.green
-                        )
+            val snackbar = connectionSnackbarLayout as TextView
+            if (!isConnected) {
+                snackbar.text = resources.getString(R.string.network_absent)
+                snackbar.setBackgroundColor(ContextCompat.getColor(view.context, R.color.gray88))
+                mainLayoutBottomSection.animate().translationY(0F)
+                    .setDuration(resources.getInteger(R.integer.snackbar_anim_duration).toLong())
+                    .start()
+            } else {
+                snackbar.text = resources.getString(R.string.back_online)
+                snackbar.setBackgroundColor(
+                    ContextCompat.getColor(
+                        view.context,
+                        R.color.green
                     )
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        delay(resources.getInteger(R.integer.back_online_snackbar_duration).toLong())
-                        mainLayoutBottomSection.animate()
-                            .translationY(resources.getDimension(R.dimen.connectionSnackbarLayoutTranslationY))
-                            .setDuration(
-                                resources.getInteger(R.integer.snackbar_anim_duration).toLong()
-                            ).start()
-                    }
+                )
+                viewLifecycleOwner.lifecycleScope.launch {
+                    delay(resources.getInteger(R.integer.back_online_snackbar_duration).toLong())
+                    mainLayoutBottomSection.animate()
+                        .translationY(resources.getDimension(R.dimen.connectionSnackbarLayoutTranslationY))
+                        .setDuration(
+                            resources.getInteger(R.integer.snackbar_anim_duration).toLong()
+                        ).start()
                 }
-            })
+            }
+        })
     }
 
 }

@@ -1,13 +1,13 @@
-<FrameLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="start"
     android:clickable="true"
     android:focusable="true"
     android:orientation="horizontal"
     android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:layout_gravity="start"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:paddingEnd="16dp">
 
     <com.example.studita.presentation.views.press_view.PressLinearLayout
         android:id="@+id/mainMenuLayoutOfflineSwitchView"
@@ -33,13 +33,13 @@
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/mainMenuLayoutOfflineSwitch"
-        android:theme="@style/SwitchStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
         android:clickable="false"
         android:focusable="false"
-        android:minHeight="0dp"
         android:minWidth="0dp"
-        android:layout_gravity="end|center_vertical" />
+        android:minHeight="0dp"
+        android:theme="@style/SwitchStyle" />
 
 </FrameLayout>

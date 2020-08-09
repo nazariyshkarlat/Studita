@@ -1,15 +1,13 @@
 package com.example.studita.domain.entity.serializer
 
-import com.example.studita.domain.entity.UserData
 import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
-import java.io.IOException
 import java.lang.reflect.Type
 
-class IsMyFriendStatusSerializer : JsonSerializer<IsMyFriendStatus.Success>{
+class IsMyFriendStatusSerializer : JsonSerializer<IsMyFriendStatus.Success> {
     override fun serialize(
         src: IsMyFriendStatus.Success?,
         typeOfSrc: Type?,

@@ -1,8 +1,8 @@
 package com.example.studita.di.data.exercise
 
 import com.example.studita.data.net.ExerciseResultService
-import com.example.studita.data.repository.datasource.exercises.result.ExerciseResultDataStoreImpl
 import com.example.studita.data.repository.datasource.exercises.result.ExerciseResultDataStoreFactoryImpl
+import com.example.studita.data.repository.datasource.exercises.result.ExerciseResultDataStoreImpl
 import com.example.studita.data.repository.exercise.ExerciseResultRepositoryImpl
 import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule

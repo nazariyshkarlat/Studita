@@ -1,6 +1,5 @@
 package com.example.studita.utils
 
-import android.R.attr.bitmap
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -83,15 +82,19 @@ object ImageUtils {
     fun Bitmap.rotate(angle: Float): Bitmap? {
         val matrix = Matrix()
         matrix.postRotate(angle)
-        return Bitmap.createBitmap(this, 0, 0, this.width, this.height,
-                matrix, true)
+        return Bitmap.createBitmap(
+            this, 0, 0, this.width, this.height,
+            matrix, true
+        )
     }
 
-    fun Bitmap.rotateIfRequired(context: Context, path: Uri): Bitmap?{
+    fun Bitmap.rotateIfRequired(context: Context, path: Uri): Bitmap? {
         val input: InputStream? = context.contentResolver.openInputStream(path)
         val ei = if (Build.VERSION.SDK_INT > 23) ExifInterface(input) else ExifInterface(path.path)
-        val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED)
+        val orientation: Int = ei.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_UNDEFINED
+        )
 
         return when (orientation) {
             ExifInterface.ORIENTATION_ROTATE_90 -> this.rotate(90F)
@@ -108,20 +111,20 @@ object ImageUtils {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
-                "JPEG_${timeStamp}_", /* prefix */
-                ".jpg", /* suffix */
-                storageDir /* directory */
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
         )
     }
 
-    fun Bitmap.compress(): Bitmap?{
+    fun Bitmap.compress(): Bitmap? {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
         options.inSampleSize = calculateInSampleSize(options, 300, 300)
 
         options.inJustDecodeBounds = false
         val bos = ByteArrayOutputStream()
-        this.compress(CompressFormat.PNG, 0 , bos)
+        this.compress(CompressFormat.PNG, 0, bos)
         val bitmapdata = bos.toByteArray()
         val bs = ByteArrayInputStream(bitmapdata)
         val img = BitmapFactory.decodeStream(bs, null, options)
@@ -129,8 +132,10 @@ object ImageUtils {
     }
 
 
-    private fun calculateInSampleSize(options: BitmapFactory.Options,
-                                      reqWidth: Int, reqHeight: Int): Int {
+    private fun calculateInSampleSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int, reqHeight: Int
+    ): Int {
         // Raw height and width of image
         val height = options.outHeight
         val width = options.outWidth

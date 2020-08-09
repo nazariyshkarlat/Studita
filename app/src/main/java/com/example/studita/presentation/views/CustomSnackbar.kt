@@ -26,7 +26,10 @@ import com.example.studita.presentation.draw.getMultilineTextLayout
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.getAlphaAnimator
 import com.example.studita.utils.getScaleAnimator
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class CustomSnackbar @JvmOverloads constructor(
@@ -67,37 +70,44 @@ class CustomSnackbar @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = MeasureSpec.getSize(widthMeasureSpec)
 
-        textLayout = getMultilineTextLayout(text, textPaint, width - innerPadding*2)
+        textLayout = getMultilineTextLayout(text, textPaint, width - innerPadding * 2)
 
         textHeight = textLayout.height
-        desiredHeight = textHeight + innerPadding*2
+        desiredHeight = textHeight + innerPadding * 2
 
-        rectF.set(0F,0F, width.toFloat(), desiredHeight.toFloat())
+        rectF.set(0F, 0F, width.toFloat(), desiredHeight.toFloat())
 
-        textY = rectF.height()/2f + textHeight / 2f - textHeight
+        textY = rectF.height() / 2f + textHeight / 2f - textHeight
 
         setMeasuredDimension(width, desiredHeight)
     }
 
-    fun show(text: String, @ColorInt color: Int, duration: Long = 3000L, delay: Long = 0L, bottomMarginExtra: Int = 0, contentView: ViewGroup? = null){
+    fun show(
+        text: String,
+        @ColorInt color: Int,
+        duration: Long = 3000L,
+        delay: Long = 0L,
+        bottomMarginExtra: Int = 0,
+        contentView: ViewGroup? = null
+    ) {
         this.bottomMarginExtra = bottomMarginExtra
         val rootView = contentView
             ?: (context as Activity).window.decorView.rootView.findViewById(android.R.id.content) as ViewGroup
         val oldSnackbar: CustomSnackbar? = rootView.findViewById(R.id.customSnackbar)
-        oldSnackbar?.let{
+        oldSnackbar?.let {
             rootView.removeView(it)
         }
-        if(!rootView.contains(this)) {
+        if (!rootView.contains(this)) {
             initView(text, color)
             this.id = R.id.customSnackbar
             rootView.addView(this)
-            startAnimation(duration, delay = delay){
+            startAnimation(duration, delay = delay) {
                 rootView.removeView(this)
             }
         }
     }
 
-    private fun initView(text: String, @ColorInt color: Int){
+    private fun initView(text: String, @ColorInt color: Int) {
         backgroundPaint.color = color
         this.text = text
         setViewParams()
@@ -117,20 +127,24 @@ class CustomSnackbar @JvmOverloads constructor(
         startAnimationCoroutine(duration, onAnimationEnd)
     }
 
-    private fun View.startAnimationCoroutine (duration: Long, onAnimationEnd: () -> Unit){
+    private fun View.startAnimationCoroutine(duration: Long, onAnimationEnd: () -> Unit) {
         GlobalScope.launch(Dispatchers.Main) {
             delay(duration)
-            this@startAnimationCoroutine.animate().alpha(0F).setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    onAnimationEnd.invoke()
-                }
-            }).start()
+            this@startAnimationCoroutine.animate().alpha(0F)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        onAnimationEnd.invoke()
+                    }
+                }).start()
         }
     }
 
-    private fun setViewParams(){
-        params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
-            setMargins(margin, margin, margin, margin+bottomMarginExtra)
+    private fun setViewParams() {
+        params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            setMargins(margin, margin, margin, margin + bottomMarginExtra)
             gravity = Gravity.BOTTOM
         }
     }

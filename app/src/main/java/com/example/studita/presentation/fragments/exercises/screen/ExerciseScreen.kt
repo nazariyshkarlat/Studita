@@ -8,9 +8,12 @@ import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.utils.createSpannableString
 import java.util.regex.Pattern
 
-open class ExerciseScreen(viewId: Int) : NavigatableFragment(viewId){
+open class ExerciseScreen(viewId: Int) : NavigatableFragment(viewId) {
 
-    protected fun injectParts(subtitle: String, partsToInject: List<String>): SpannableStringBuilder{
+    protected fun injectParts(
+        subtitle: String,
+        partsToInject: List<String>
+    ): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
         context?.let {
             val m =

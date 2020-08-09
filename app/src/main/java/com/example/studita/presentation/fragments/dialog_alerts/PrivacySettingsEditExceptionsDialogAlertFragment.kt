@@ -11,26 +11,27 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.presentation.adapter.privacy_settings_duels_exceptions.PrivacySettingsDuelsExceptionsAdapter
-import com.example.studita.presentation.adapter.users_list.UsersAdapter
 import com.example.studita.presentation.fragments.base.BaseDialogFragment
-import com.example.studita.presentation.model.*
+import com.example.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
+import com.example.studita.presentation.model.toUiModel
 import com.example.studita.presentation.view_model.PrivacySettingsDuelsExceptionsViewModel
 import com.example.studita.presentation.views.CustomSnackbar
 import com.example.studita.utils.ThemeUtils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.privacy_duels_exceptions_dialog_alert.*
-import kotlinx.android.synthetic.main.recyclerview_layout.*
 
-class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.layout.privacy_duels_exceptions_dialog_alert){
+class PrivacySettingsEditExceptionsDialogAlertFragment :
+    BaseDialogFragment(R.layout.privacy_duels_exceptions_dialog_alert) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel = ViewModelProviders.of(this).get(PrivacySettingsDuelsExceptionsViewModel::class.java)
+        val viewModel =
+            ViewModelProviders.of(this).get(PrivacySettingsDuelsExceptionsViewModel::class.java)
 
         viewModel.privacySettingsDuelsExceptionsState.observe(
             viewLifecycleOwner,
-            Observer { pair->
+            Observer { pair ->
 
                 val canBeMoreItems = pair.first
 
@@ -41,7 +42,7 @@ class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.la
                             if (viewModel.recyclerItems != null) viewModel.recyclerItems!! else ArrayList(
                                 viewModel.getRecyclerItems(
                                     privacySettingsDuelsExceptionsResultState.results,
-                                    if(canBeMoreItems) PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel else null
+                                    if (canBeMoreItems) PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel else null
                                 )
                             )
                         val adapter = PrivacySettingsDuelsExceptionsAdapter(
@@ -56,10 +57,16 @@ class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.la
 
                         if (privacyDuelsExceptionsRecyclerView.adapter != null) {
 
-                            val items = listOf(*privacySettingsDuelsExceptionsResultState.results.map { it.toUiModel() }.toTypedArray(),
-                                *(if(canBeMoreItems) arrayOf(PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel) else emptyArray()))
+                            val items = listOf(
+                                *privacySettingsDuelsExceptionsResultState.results.map { it.toUiModel() }
+                                    .toTypedArray(),
+                                *(if (canBeMoreItems) arrayOf(
+                                    PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel
+                                ) else emptyArray())
+                            )
 
-                            val adapter = privacyDuelsExceptionsRecyclerView.adapter as PrivacySettingsDuelsExceptionsAdapter
+                            val adapter =
+                                privacyDuelsExceptionsRecyclerView.adapter as PrivacySettingsDuelsExceptionsAdapter
 
                             val removePos = adapter.items.lastIndex
                             adapter.items.removeAt(removePos)
@@ -72,9 +79,9 @@ class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.la
                                 items.size
                             )
 
-                            if(!canBeMoreItems){
+                            if (!canBeMoreItems) {
                                 adapter.items.removeAt(adapter.items.lastIndex)
-                                adapter.notifyItemRemoved(adapter.itemCount-1)
+                                adapter.notifyItemRemoved(adapter.itemCount - 1)
                             }
                         } else {
                             val adapter = PrivacySettingsDuelsExceptionsAdapter(
@@ -121,7 +128,7 @@ class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.la
         val context = activity as AppCompatActivity
 
         viewModel.privacySettingsEditDuelsExceptionsState.observe(context, Observer {
-            if(it) {
+            if (it) {
                 CustomSnackbar(context).show(
                     context.resources.getString(R.string.changes_are_saved),
                     ThemeUtils.getAccentColor(context)
@@ -136,13 +143,17 @@ class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.la
         privacyDuelsExceptionsRightButton.setOnClickListener {
             viewModel.editDuelsExceptions()
             targetFragment?.onActivityResult(345, Activity.RESULT_OK, Intent().apply {
-                if(viewModel.editedDuelsExceptionsData.isNotEmpty())
-                    putExtra("CHANGED_EXCEPTIONS", Gson().toJson(viewModel.editedDuelsExceptionsData))
+                if (viewModel.editedDuelsExceptionsData.isNotEmpty())
+                    putExtra(
+                        "CHANGED_EXCEPTIONS",
+                        Gson().toJson(viewModel.editedDuelsExceptionsData)
+                    )
             })
             dismiss()
         }
 
-        privacyDuelsExceptionsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        privacyDuelsExceptionsRecyclerView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 checkScrollY()
@@ -156,9 +167,12 @@ class PrivacySettingsEditExceptionsDialogAlertFragment : BaseDialogFragment(R.la
         super.onDestroyView()
     }
 
-    private fun checkScrollY(){
+    private fun checkScrollY() {
         privacyDuelsExceptionsRecyclerView.post {
-            if(privacyDuelsExceptionsRecyclerView.canScrollVertically(-1) || privacyDuelsExceptionsRecyclerView.canScrollVertically(1)) {
+            if (privacyDuelsExceptionsRecyclerView.canScrollVertically(-1) || privacyDuelsExceptionsRecyclerView.canScrollVertically(
+                    1
+                )
+            ) {
                 privacyDuelsExceptionsRecyclerView.background =
                     ContextCompat.getDrawable(
                         privacyDuelsExceptionsRecyclerView.context,

@@ -9,17 +9,23 @@ import com.example.studita.domain.service.SyncFriendship
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class SyncFriendshipImpl : SyncFriendship{
+class SyncFriendshipImpl : SyncFriendship {
 
     companion object {
         private const val SYNC_FRIENDSHIP_ID = "syncFriendshipId"
     }
 
 
-    override fun scheduleFriendAction(friendActionRequestData: FriendActionRequestData, friendActionType: SyncFriendship.FriendActionType) {
+    override fun scheduleFriendAction(
+        friendActionRequestData: FriendActionRequestData,
+        friendActionType: SyncFriendship.FriendActionType
+    ) {
         val data = Data.Builder()
         data.putInt("FRIEND_ACTION_TYPE", friendActionType.ordinal)
-        data.putString("FRIEND_ACTION_REQUEST_DATA", serializeFriendActionRequestData(friendActionRequestData))
+        data.putString(
+            "FRIEND_ACTION_REQUEST_DATA",
+            serializeFriendActionRequestData(friendActionRequestData)
+        )
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -33,19 +39,26 @@ class SyncFriendshipImpl : SyncFriendship{
     }
 
 
-    class SyncFriendshipWorker(val context: Context, val params: WorkerParameters) : CoroutineWorker(context, params){
+    class SyncFriendshipWorker(val context: Context, val params: WorkerParameters) :
+        CoroutineWorker(context, params) {
         override suspend fun doWork(): Result {
             val json = inputData.getString("FRIEND_ACTION_REQUEST_DATA")
-            val friendActionType = SyncFriendship.FriendActionType.values()[inputData.getInt("FRIEND_ACTION_TYPE", 0)]
+            val friendActionType =
+                SyncFriendship.FriendActionType.values()[inputData.getInt("FRIEND_ACTION_TYPE", 0)]
 
             val friendActionRequestData = json?.let { deserializeFriendActionRequestData(it) }
             friendActionRequestData?.let {
-                when(friendActionType){
-                    SyncFriendship.FriendActionType.ADD -> UsersModule.getUsersInteractorImpl().sendFriendship(friendActionRequestData)
-                    SyncFriendship.FriendActionType.REMOVE -> UsersModule.getUsersInteractorImpl().removeFriend(friendActionRequestData)
-                    SyncFriendship.FriendActionType.ACCEPT_REQUEST -> UsersModule.getUsersInteractorImpl().acceptFriendship(friendActionRequestData)
-                    SyncFriendship.FriendActionType.REJECT_REQUEST -> UsersModule.getUsersInteractorImpl().rejectFriendship(friendActionRequestData)
-                    SyncFriendship.FriendActionType.CANCEL_REQUEST ->  UsersModule.getUsersInteractorImpl().cancelFriendship(friendActionRequestData)
+                when (friendActionType) {
+                    SyncFriendship.FriendActionType.ADD -> UsersModule.getUsersInteractorImpl()
+                        .sendFriendship(friendActionRequestData)
+                    SyncFriendship.FriendActionType.REMOVE -> UsersModule.getUsersInteractorImpl()
+                        .removeFriend(friendActionRequestData)
+                    SyncFriendship.FriendActionType.ACCEPT_REQUEST -> UsersModule.getUsersInteractorImpl()
+                        .acceptFriendship(friendActionRequestData)
+                    SyncFriendship.FriendActionType.REJECT_REQUEST -> UsersModule.getUsersInteractorImpl()
+                        .rejectFriendship(friendActionRequestData)
+                    SyncFriendship.FriendActionType.CANCEL_REQUEST -> UsersModule.getUsersInteractorImpl()
+                        .cancelFriendship(friendActionRequestData)
                 }
             }
 
@@ -58,7 +71,7 @@ class SyncFriendshipImpl : SyncFriendship{
 
     }
 
-    private fun serializeFriendActionRequestData(friendActionRequestData: FriendActionRequestData): String{
+    private fun serializeFriendActionRequestData(friendActionRequestData: FriendActionRequestData): String {
         return Gson().toJson(friendActionRequestData)
     }
 

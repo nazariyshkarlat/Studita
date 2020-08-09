@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.studita.data.entity.UserDataEntity
 import com.example.studita.data.entity.UserStatisticsRowEntity
 
 @Dao

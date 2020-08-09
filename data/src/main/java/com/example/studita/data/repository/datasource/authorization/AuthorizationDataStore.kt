@@ -2,11 +2,11 @@ package com.example.studita.data.repository.datasource.authorization
 
 import com.example.studita.data.entity.*
 
-interface AuthorizationDataStore{
+interface AuthorizationDataStore {
 
     suspend fun tryCheckTokenIsCorrect(userIdToken: UserIdToken): Pair<Int, Boolean?>
 
-    suspend fun tryLogIn(authorizationRequestEntity: AuthorizationRequestEntity) : Pair<Int, LogInResponseEntity?>
+    suspend fun tryLogIn(authorizationRequestEntity: AuthorizationRequestEntity): Pair<Int, LogInResponseEntity?>
 
     suspend fun trySignUp(authorizationRequestEntity: AuthorizationRequestEntity): Int
 

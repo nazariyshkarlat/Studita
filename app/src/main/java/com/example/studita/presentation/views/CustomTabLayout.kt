@@ -13,12 +13,14 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.studita.R
 import com.example.studita.presentation.views.press_view.PressTextView
-import com.example.studita.utils.*
+import com.example.studita.utils.ColorUtils
+import com.example.studita.utils.ThemeUtils
+import com.example.studita.utils.dpToPx
 
 
 class CustomTabLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr), ViewPager.OnPageChangeListener{
+) : LinearLayout(context, attrs, defStyleAttr), ViewPager.OnPageChangeListener {
 
     private val padding = 8.dpToPx()
     private val textColor = ThemeUtils.getSecondaryColor(context)
@@ -28,7 +30,8 @@ class CustomTabLayout @JvmOverloads constructor(
     private var fragments: List<Fragment>? = null
 
     private var viewPager: ViewPager? = null
-    private var tabColor: Pair<Int, Int> = ThemeUtils.getSecondaryColor(context) to ThemeUtils.getAccentColor(context)
+    private var tabColor: Pair<Int, Int> =
+        ThemeUtils.getSecondaryColor(context) to ThemeUtils.getAccentColor(context)
     private var selectedPos = 0
     private var click: Boolean = false
 
@@ -36,8 +39,8 @@ class CustomTabLayout @JvmOverloads constructor(
         gravity = Gravity.CENTER
     }
 
-    fun setItems(items: List<String>){
-        for(item in items){
+    fun setItems(items: List<String>) {
+        for (item in items) {
 
             val textView = PressTextView(context)
 
@@ -53,7 +56,7 @@ class CustomTabLayout @JvmOverloads constructor(
         }
     }
 
-    fun syncWithViewPager(viewPager: ViewPager, fragmentManager: FragmentManager){
+    fun syncWithViewPager(viewPager: ViewPager, fragmentManager: FragmentManager) {
         this.viewPager = viewPager
         viewPager.adapter = TabsPagerAdapter(fragmentManager)
         viewPager.addOnPageChangeListener(this)
@@ -72,7 +75,7 @@ class CustomTabLayout @JvmOverloads constructor(
         positionOffset: Float,
         positionOffsetPixels: Int
     ) {
-        if(!click) {
+        if (!click) {
             if (position != childCount - 1) {
                 (getChildAt(position + 1) as TextView).setTextColor(
                     ColorUtils.compositeColors(tabColor.first, tabColor.second, positionOffset)
@@ -82,19 +85,19 @@ class CustomTabLayout @JvmOverloads constructor(
                 ColorUtils.compositeColors(tabColor.first, tabColor.second, 1F - positionOffset)
             )
         }
-        if((position == selectedPos) and (positionOffset == 0.0F))
+        if ((position == selectedPos) and (positionOffset == 0.0F))
             click = false
     }
 
     override fun onPageSelected(position: Int) {
-        if(click) {
+        if (click) {
             (getChildAt(selectedPos) as TextView).setTextColor(tabColor.first)
             (getChildAt(position) as TextView).setTextColor(tabColor.second)
         }
         selectedPos = position
     }
 
-    fun setFragments(fragments: List<Fragment>){
+    fun setFragments(fragments: List<Fragment>) {
         this.fragments = fragments
     }
 

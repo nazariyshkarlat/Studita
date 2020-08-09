@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
     android:layout_marginStart="@dimen/defaultRLMargin"
     android:layout_marginEnd="@dimen/defaultRLMargin"
-    android:background="@drawable/main_blocks_rectangle_clickable">
+    android:background="@drawable/main_blocks_rectangle_clickable"
+    android:paddingStart="16dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="16dp">
 
     <TextView
         style="@style/Medium16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/notifications"
-        android:layout_gravity="start|center_vertical" />
+        android:layout_gravity="start|center_vertical"
+        android:text="@string/notifications" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/notificationsLayoutSwitchItemSwitch"
-        android:theme="@style/SwitchStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+        android:background="@null"
         android:clickable="false"
         android:focusable="false"
-        android:background="@null"
-        android:minHeight="0dp"
         android:minWidth="0dp"
-        android:layout_gravity="end|center_vertical" />
+        android:minHeight="0dp"
+        android:theme="@style/SwitchStyle" />
 
 </FrameLayout>

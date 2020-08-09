@@ -1,6 +1,5 @@
 package com.example.studita.presentation.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -31,7 +30,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout), TextWatcher, OnViewSizeChangeListener{
+class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout), TextWatcher,
+    OnViewSizeChangeListener {
 
     private var authorizationFragmentViewModel: AuthorizationFragmentViewModel? = null
     private lateinit var signUpOnClick: () -> Unit
@@ -49,51 +49,81 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
         authorizationFragmentViewModel = activity?.run {
             ViewModelProviders.of(this).get(AuthorizationFragmentViewModel::class.java)
         }
-        authorizationFragmentViewModel?.let{viewModel->
+        authorizationFragmentViewModel?.let { viewModel ->
 
             viewModel.passwordIsVisibleState.observe(
                 viewLifecycleOwner,
-                androidx.lifecycle.Observer<Boolean> {visible ->
-                    val anim = context?.let { AnimatedVectorDrawableCompat.create(it, if (visible) R.drawable.eye_back_anim else R.drawable.eye_anim) }
+                androidx.lifecycle.Observer<Boolean> { visible ->
+                    val anim = context?.let {
+                        AnimatedVectorDrawableCompat.create(
+                            it,
+                            if (visible) R.drawable.eye_back_anim else R.drawable.eye_anim
+                        )
+                    }
                     authorizationVisible.setImageDrawable(anim)
                     anim?.start()
-                    if(visible) {
+                    if (visible) {
                         authorizationPasswordEditText.transformationMethod = null
-                    }else{
-                        authorizationPasswordEditText.transformationMethod = PasswordTransformationMethod()
+                    } else {
+                        authorizationPasswordEditText.transformationMethod =
+                            PasswordTransformationMethod()
                     }
                     authorizationPasswordEditText.setSelection(authorizationPasswordEditText.text.toString().length)
                 })
 
-            viewModel.errorState.observe(viewLifecycleOwner, Observer{ message->
+            viewModel.errorState.observe(viewLifecycleOwner, Observer { message ->
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             })
 
             viewModel.passwordFieldIsEmptyState.observe(
                 viewLifecycleOwner,
-                androidx.lifecycle.Observer<Boolean> {isEmpty ->
-                    if(isEmpty) {
+                androidx.lifecycle.Observer<Boolean> { isEmpty ->
+                    if (isEmpty) {
                         authorizationVisible.visibility = View.GONE
-                        if(authorizationPasswordEditText.transformationMethod == null)
+                        if (authorizationPasswordEditText.transformationMethod == null)
                             viewModel.changePasswordVisible(true)
-                    }else{
+                    } else {
                         authorizationVisible.visibility = View.VISIBLE
                     }
                 })
 
             viewModel.authorizationState.observe(
                 viewLifecycleOwner,
-                androidx.lifecycle.Observer<AuthorizationFragmentViewModel.AuthorizationResult> {result ->
-                    when(result){
-                        is AuthorizationFragmentViewModel.AuthorizationResult.IncorrectEmail -> showError(R.string.incorrect_mail, true)
-                        is AuthorizationFragmentViewModel.AuthorizationResult.PasswordLessMixLength -> showError(R.string.to_short_password, false)
-                        is AuthorizationFragmentViewModel.AuthorizationResult.NoUserFound -> showError(R.string.no_user_with_mail, true)
-                        is AuthorizationFragmentViewModel.AuthorizationResult.UserAlreadyExists -> showError(R.string.user_already_exists, true)
-                        is AuthorizationFragmentViewModel.AuthorizationResult.LogInFailure -> showError(R.string.incorrect_password, false)
+                androidx.lifecycle.Observer<AuthorizationFragmentViewModel.AuthorizationResult> { result ->
+                    when (result) {
+                        is AuthorizationFragmentViewModel.AuthorizationResult.IncorrectEmail -> showError(
+                            R.string.incorrect_mail,
+                            true
+                        )
+                        is AuthorizationFragmentViewModel.AuthorizationResult.PasswordLessMixLength -> showError(
+                            R.string.to_short_password,
+                            false
+                        )
+                        is AuthorizationFragmentViewModel.AuthorizationResult.NoUserFound -> showError(
+                            R.string.no_user_with_mail,
+                            true
+                        )
+                        is AuthorizationFragmentViewModel.AuthorizationResult.UserAlreadyExists -> showError(
+                            R.string.user_already_exists,
+                            true
+                        )
+                        is AuthorizationFragmentViewModel.AuthorizationResult.LogInFailure -> showError(
+                            R.string.incorrect_password,
+                            false
+                        )
                         is AuthorizationFragmentViewModel.AuthorizationResult.SignUpSuccess -> {
-                            Toast.makeText(context, resources.getString(R.string.sign_up_success), Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                context,
+                                resources.getString(R.string.sign_up_success),
+                                Toast.LENGTH_LONG
+                            ).show()
                             AccountAuthenticator.addAccount(view.context, result.email)
-                            activity?.application?.let {viewModel.logIn(result.email to result.password,  it)}
+                            activity?.application?.let {
+                                viewModel.logIn(
+                                    result.email to result.password,
+                                    it
+                                )
+                            }
                         }
                         is AuthorizationFragmentViewModel.AuthorizationResult.LogInSuccess -> {
                             Toast.makeText(
@@ -102,27 +132,40 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                                 Toast.LENGTH_LONG
                             ).show()
 
-                            if(activity?.isTaskRoot == false)
+                            if (activity?.isTaskRoot == false)
                                 MainActivity.needsRecreate = true
-                            App.authenticationState.value = CheckTokenIsCorrectStatus.Correct
+                            App.authenticationState.value = CheckTokenIsCorrectStatus.Correct to false
                             activity?.startMainActivityNewTask()
                         }
-                        null ->{}
-                        else -> Toast.makeText(context, resources.getString(R.string.server_failure), Toast.LENGTH_LONG).show()
+                        null -> {
+                        }
+                        else -> Toast.makeText(
+                            context,
+                            resources.getString(R.string.server_failure),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 })
 
-            signUpOnClick = {viewModel.signUp(authorizationEmailEditText.text.toString() to authorizationPasswordEditText.text.toString())}
+            signUpOnClick =
+                { viewModel.signUp(authorizationEmailEditText.text.toString() to authorizationPasswordEditText.text.toString()) }
             authorizationLogInButton.setOnClickListener {
                 activity?.application?.let {
-                    viewModel.logIn(authorizationEmailEditText.text.toString() to authorizationPasswordEditText.text.toString(), it)
+                    viewModel.logIn(
+                        authorizationEmailEditText.text.toString() to authorizationPasswordEditText.text.toString(),
+                        it
+                    )
                 }
             }
-            authorizationSignUpButton.setOnClickListener{signUpOnClick.invoke()}
-            authorizationVisible.setOnClickListener {viewModel.changePasswordVisible(authorizationPasswordEditText.transformationMethod == null)}
+            authorizationSignUpButton.setOnClickListener { signUpOnClick.invoke() }
+            authorizationVisible.setOnClickListener {
+                viewModel.changePasswordVisible(
+                    authorizationPasswordEditText.transformationMethod == null
+                )
+            }
         }
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             authorizationFragmentViewModel?.authorizationState?.value = null
         }
 
@@ -148,18 +191,26 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
 
     override fun onViewSizeChanged(view: View) {
 
-        val viewHeight = authorizationCenterLinearLayout.height + authorizationBottomSection.height + resources.getDimension(R.dimen.toolbarHeight)
+        val viewHeight =
+            authorizationCenterLinearLayout.height + authorizationBottomSection.height + resources.getDimension(
+                R.dimen.toolbarHeight
+            )
 
-        if((viewHeight > getScreenHeight())){
-            if(!buttonHidden) {
-                authorizationCenterLinearLayout.setPadding(0, resources.getDimension(R.dimen.toolbarHeight).toInt(), 0, 0)
+        if ((viewHeight > getScreenHeight())) {
+            if (!buttonHidden) {
+                authorizationCenterLinearLayout.setPadding(
+                    0,
+                    resources.getDimension(R.dimen.toolbarHeight).toInt(),
+                    0,
+                    0
+                )
                 authorizationSignUpButton.visibility = View.GONE
                 authorizationForgotPassword.text = resources.getString(R.string.create_new_account)
                 authorizationForgotPassword.setOnClickListener { signUpOnClick.invoke() }
                 buttonHidden = true
             }
-        }else{
-            if(buttonHidden) {
+        } else {
+            if (buttonHidden) {
                 authorizationCenterLinearLayout.setPadding(0, 0, 0, 0)
                 authorizationSignUpButton.visibility = View.VISIBLE
                 authorizationForgotPassword.text = resources.getString(R.string.forgot_password)
@@ -170,11 +221,11 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
 
     }
 
-    private fun showError(resId: Int, email: Boolean){
-        if(email) {
+    private fun showError(resId: Int, email: Boolean) {
+        if (email) {
             authorizationEmailEditText.hasError = true
             authorizationEmailEditText.requestFocus()
-        }else {
+        } else {
             authorizationPasswordEditText.hasError = true
             authorizationPasswordEditText.requestFocus()
         }
@@ -191,17 +242,20 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
         }
     }
 
-    private fun hideError(){
+    private fun hideError() {
         authorizationEmailEditText.hasError = false
         authorizationPasswordEditText.hasError = false
-        authorizationBottomSection.animate().translationY(authorizationErrorSnackbar.measuredHeight.toFloat()).setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong()).setInterpolator(FastOutSlowInInterpolator()).start()
+        authorizationBottomSection.animate()
+            .translationY(authorizationErrorSnackbar.measuredHeight.toFloat())
+            .setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong())
+            .setInterpolator(FastOutSlowInInterpolator()).start()
     }
 
-    private fun initErrorSnackbar(){
+    private fun initErrorSnackbar() {
         authorizationBottomSection.translationY = authorizationErrorSnackbar.height.toFloat()
     }
 
-    private fun getScreenHeight() : Int {
+    private fun getScreenHeight(): Int {
         return authorizationRelativeLayout.height
     }
 

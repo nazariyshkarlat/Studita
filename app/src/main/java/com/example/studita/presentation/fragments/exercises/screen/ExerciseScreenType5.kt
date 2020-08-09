@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
@@ -12,10 +13,9 @@ import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.makeView
-import kotlinx.android.synthetic.main.exercise_screen_type_1.*
 import kotlinx.android.synthetic.main.exercise_screen_type_5.*
 
-class ExerciseScreenType5 : ExerciseScreen(R.layout.exercise_screen_type_5){
+class ExerciseScreenType5 : ExerciseScreen(R.layout.exercise_screen_type_5) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -28,7 +28,8 @@ class ExerciseScreenType5 : ExerciseScreen(R.layout.exercise_screen_type_5){
 
         exercisesViewModel?.let {
             if (it.exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen.ScreenType5UiModel) {
-                val screenUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelScreen.ScreenType5UiModel
+                val screenUiModel =
+                    it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelScreen.ScreenType5UiModel
                 exerciseScreenType5SymbolTitle.text = screenUiModel.title.symbol
                 exerciseScreenType5SymbolNameTitle.text = screenUiModel.title.symbolName
                 fillHorizontalPlatesView(view.context, screenUiModel.variants)
@@ -36,25 +37,28 @@ class ExerciseScreenType5 : ExerciseScreen(R.layout.exercise_screen_type_5){
         }
     }
 
-    private fun fillHorizontalPlatesView(context: Context, platesText: List<String>){
+    private fun fillHorizontalPlatesView(context: Context, platesText: List<String>) {
         val contentView = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
         }
 
-        platesText.forEachIndexed{idx, text->
-            contentView.addView(exerciseScreenType5SnapHorizontalScrollView.makeView(R.layout.exercise_screen_type_5_plate_item).apply {
-                val params = layoutParams as ViewGroup.MarginLayoutParams
-                if(idx != 0)
-                    params.marginStart = 8.dpToPx()
-                if(idx != platesText.size-1)
-                    params.marginEnd = 8.dpToPx()
-                this.layoutParams = params
-
-                (this as TextView).text = text
-            })
-        }
-
         exerciseScreenType5SnapHorizontalScrollView.addView(contentView)
+
+        platesText.forEachIndexed { idx, text ->
+            val plateView =
+                contentView.makeView(R.layout.exercise_screen_type_5_plate_item)
+                    .apply {
+                        val params = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+                        if (idx != 0)
+                            params.leftMargin = 8.dpToPx()
+                        if (idx != platesText.size - 1)
+                            params.rightMargin = 8.dpToPx()
+                        this.layoutParams = params
+
+                        (this as TextView).text = text
+                    }
+            contentView.addView(plateView)
+        }
 
     }
 

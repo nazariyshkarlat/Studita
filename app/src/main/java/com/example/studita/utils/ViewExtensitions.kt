@@ -19,9 +19,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.forEach
-import androidx.core.view.marginEnd
-import androidx.core.view.marginStart
+import androidx.core.view.*
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -36,7 +34,7 @@ import com.example.studita.presentation.views.CustomProgressBar
 import kotlin.reflect.KClass
 
 
-fun View.getRelativeLeft(parent: ViewGroup): Int{
+fun View.getRelativeLeft(parent: ViewGroup): Int {
     val offsetViewBounds = Rect()
     getDrawingRect(offsetViewBounds)
     parent.offsetDescendantRectToMyCoords(this, offsetViewBounds)
@@ -47,7 +45,9 @@ fun NestedScrollView.setOnScrollChangeFabListener(fabScrollListener: FabScrollLi
     this.setOnScrollChangeListener(FabScrollImpl(fabScrollListener))
 }
 
-fun View.postExt(block: (View) -> Unit){post { block.invoke(this) }}
+inline fun <reified T : View>View.postExt(crossinline block: (T) -> Unit) {
+    post { block.invoke(this as T) }
+}
 
 fun View.isContains(rx: Int, ry: Int): Boolean {
     val l = IntArray(2)
@@ -60,21 +60,45 @@ fun View.isContains(rx: Int, ry: Int): Boolean {
 }
 
 fun View.childContainsParentX(rx: Int): Boolean {
-     val bounds =  Rect()
+    val bounds = Rect()
     getHitRect(bounds)
     bounds.left -= marginStart
     bounds.right += marginEnd
     return bounds.contains(rx, bounds.centerY())
 }
 
-fun View.asNotificationIndicator(notificationsAreChecked: Boolean){
-    if(notificationsAreChecked || !UserUtils.isLoggedIn()){
-        this.animate().scaleX(0F).scaleY(0F).setListener(object : AnimatorListenerAdapter(){
+fun View.childContainsParentY(ry: Int): Boolean {
+    val bounds = Rect()
+    getHitRect(bounds)
+    bounds.top -= marginTop
+    bounds.bottom += marginBottom
+    return bounds.contains(bounds.centerX(), ry)
+}
+
+fun View.childIsInParentX(leftX: Int, rightX: Int): Boolean {
+    val bounds = Rect()
+    getHitRect(bounds)
+    bounds.left -= marginStart
+    bounds.right += marginEnd
+    return bounds.contains(leftX, bounds.centerY()) && bounds.contains(rightX, bounds.centerY())
+}
+
+fun View.childIsInParentY(topY: Int, bottomY: Int): Boolean {
+    val bounds = Rect()
+    getHitRect(bounds)
+    bounds.top -= marginTop
+    bounds.bottom += marginBottom
+    return bounds.contains(bounds.centerX(), topY) && bounds.contains(bounds.centerX(), bottomY)
+}
+
+fun View.asNotificationIndicator(notificationsAreChecked: Boolean) {
+    if (notificationsAreChecked || !UserUtils.isLoggedIn()) {
+        this.animate().scaleX(0F).scaleY(0F).setListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
                 this@asNotificationIndicator.visibility = View.GONE
             }
         }).start()
-    }else{
+    } else {
         with(this) {
             visibility = android.view.View.VISIBLE
             scaleX = 0F
@@ -96,7 +120,7 @@ fun Activity.hideKeyboard() {
     hideKeyboard(currentFocus ?: View(this))
 }
 
-fun Activity.showKeyboard(){
+fun Activity.showKeyboard() {
     (this as Context).showKeyboard()
 }
 
@@ -105,11 +129,14 @@ fun Context.hideKeyboard(view: View) {
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-fun Context.showKeyboard(){
-    (this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+fun Context.showKeyboard() {
+    (this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
+        InputMethodManager.SHOW_FORCED,
+        InputMethodManager.HIDE_IMPLICIT_ONLY
+    )
 }
 
-fun Context.getAppCompatActivity(): AppCompatActivity?{
+fun Context.getAppCompatActivity(): AppCompatActivity? {
     var context = this
     while (this is ContextWrapper) {
         if (context is AppCompatActivity) {
@@ -129,8 +156,9 @@ fun View.setOnViewSizeChangeListener(viewSizeChangeListener: OnViewSizeChangeLis
 fun ViewGroup.makeView(@LayoutRes layoutResId: Int): View =
     LayoutInflater.from(this.context).inflate(layoutResId, this, false)
 
-fun View.onViewCreated(block: () ->Unit){
-    this.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener{
+fun View.onViewCreated(block: () -> Unit) {
+    this.viewTreeObserver.addOnGlobalLayoutListener(object :
+        ViewTreeObserver.OnGlobalLayoutListener {
         override fun onGlobalLayout() {
             block()
             this@onViewCreated.viewTreeObserver.removeOnGlobalLayoutListener(this);
@@ -138,7 +166,7 @@ fun View.onViewCreated(block: () ->Unit){
     })
 }
 
-fun View.getAppCompatActivity(): AppCompatActivity?{
+fun View.getAppCompatActivity(): AppCompatActivity? {
     var context = this.context
     while (context is ContextWrapper) {
         if (context is AppCompatActivity) {
@@ -149,15 +177,21 @@ fun View.getAppCompatActivity(): AppCompatActivity?{
     return null
 }
 
-fun CustomProgressBar.animateProgress(toPercent: Float, onAnimEnd: ()->Unit = {}, duration: Long = 300L, delay: Long = 0L, fromPercent: Float = this.percentProgress) {
+fun CustomProgressBar.animateProgress(
+    toPercent: Float,
+    onAnimEnd: () -> Unit = {},
+    duration: Long = 300L,
+    delay: Long = 0L,
+    fromPercent: Float = this.percentProgress
+) {
     val progressAnimation = ProgressBarAnimation(
-            this,
-            fromPercent,
-            toPercent
+        this,
+        fromPercent,
+        toPercent
     )
     progressAnimation.startOffset = delay
     progressAnimation.interpolator =
-            androidx.interpolator.view.animation.FastOutSlowInInterpolator()
+        androidx.interpolator.view.animation.FastOutSlowInInterpolator()
     progressAnimation.duration = duration
     progressAnimation.setAnimationListener(object : Animation.AnimationListener {
         override fun onAnimationRepeat(animation: Animation?) {}
@@ -170,29 +204,29 @@ fun CustomProgressBar.animateProgress(toPercent: Float, onAnimEnd: ()->Unit = {}
     })
     this.startAnimation(progressAnimation)
 }
+
 fun <T : View> ViewGroup.allViewsOfTypeT(type: KClass<T>, f: (T) -> Unit) {
-    this.forEach {child->
+    this.forEach { child ->
         if (type.isInstance(child)) f(child as T)
         if (child is ViewGroup) child.allViewsOfTypeT(type, f)
     }
 }
 
-inline fun <reified T : View> ViewGroup.allViewsOfTypeT(noinline f: (T) -> Unit)
-        = allViewsOfTypeT(T::class, f)
+inline fun <reified T : View> ViewGroup.allViewsOfTypeT(noinline f: (T) -> Unit) =
+    allViewsOfTypeT(T::class, f)
 
 fun <T : View> ViewGroup.getAllViewsOfTypeT(type: KClass<T>): List<T> {
     val allViews = ArrayList<T>()
-    this.forEach {child->
+    this.forEach { child ->
         if (type.isInstance(child)) allViews.add(child as T)
         if (child is ViewGroup) allViews.addAll(child.getAllViewsOfTypeT(type))
     }
     return allViews
 }
 
-inline fun <reified T : View> ViewGroup.getAllViewsOfTypeT()
-        = getAllViewsOfTypeT<T>(T::class)
+inline fun <reified T : View> ViewGroup.getAllViewsOfTypeT() = getAllViewsOfTypeT<T>(T::class)
 
-fun ImageView.fillAvatar(avatarLink: String?, userName: String, userId: Int){
+fun ImageView.fillAvatar(avatarLink: String?, userName: String, userId: Int) {
     if (avatarLink == null) {
         Glide
             .with(this.context)
@@ -200,11 +234,11 @@ fun ImageView.fillAvatar(avatarLink: String?, userName: String, userId: Int){
         AvaDrawer.drawAvatar(this, userName, userId)
     } else {
         Glide
-                .with(this)
-                .load(avatarLink)
-                .centerCrop()
-                .apply(RequestOptions.circleCropTransform())
-                .into(this)
+            .with(this)
+            .load(avatarLink)
+            .centerCrop()
+            .apply(RequestOptions.circleCropTransform())
+            .into(this)
     }
 }
 

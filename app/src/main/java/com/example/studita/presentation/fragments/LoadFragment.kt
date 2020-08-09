@@ -13,17 +13,15 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseFragment
 import kotlinx.android.synthetic.main.exercises_load_layout.*
-import kotlinx.android.synthetic.main.exercises_load_layout.view.*
-import kotlinx.android.synthetic.main.exercises_load_layout.view.exercisesLoadLayoutLoadImage
 
-open class LoadFragment : BaseFragment(R.layout.exercises_load_layout){
+open class LoadFragment : BaseFragment(R.layout.exercises_load_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startAnim()
     }
 
-    private fun startAnim(){
+    private fun startAnim() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             startHighApiAnimation(exercisesLoadLayoutLoadImage)
         } else {
@@ -32,11 +30,16 @@ open class LoadFragment : BaseFragment(R.layout.exercises_load_layout){
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun startHighApiAnimation(view: ImageView){
+    private fun startHighApiAnimation(view: ImageView) {
         val listener =
             object : Animatable2.AnimationCallback() {
                 override fun onAnimationEnd(drawable: Drawable) {
-                    view.setImageDrawable(AppCompatResources.getDrawable(view.context, R.drawable.load_anim))
+                    view.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            view.context,
+                            R.drawable.load_anim
+                        )
+                    )
                     val anim = view.drawable as Animatable2
                     anim.registerAnimationCallback(this)
                     anim.start()
@@ -48,10 +51,15 @@ open class LoadFragment : BaseFragment(R.layout.exercises_load_layout){
         anim.start()
     }
 
-    private fun startLowApiAnimation(view: ImageView){
+    private fun startLowApiAnimation(view: ImageView) {
         val listener = object : Animatable2Compat.AnimationCallback() {
             override fun onAnimationEnd(drawable: Drawable) {
-                view.setImageDrawable(AppCompatResources.getDrawable(view.context, R.drawable.load_anim))
+                view.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        view.context,
+                        R.drawable.load_anim
+                    )
+                )
                 val anim = view.drawable as Animatable2Compat
                 anim.registerAnimationCallback(this)
                 anim.start()

@@ -6,7 +6,11 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import com.example.studita.presentation.views.CustomTypefaceSpan
 
-fun String.createSpannableString(color: Int? = null, fontSize: Int? = null, typeFace: Typeface? = null): SpannableString{
+fun String.createSpannableString(
+    color: Int? = null,
+    fontSize: Int? = null,
+    typeFace: Typeface? = null
+): SpannableString {
     val span = SpannableString(this)
     fontSize?.let {
         span.setSpan(AbsoluteSizeSpan(fontSize.spToPx()), 0, span.length, 0)

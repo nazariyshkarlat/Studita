@@ -9,21 +9,21 @@
         android:id="@+id/exerciseBonusLayoutCounterLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/defaultRLMargin"
         android:layout_marginStart="@dimen/defaultRLMargin"
-        android:background="@drawable/main_blocks_rectangle">
+        android:layout_marginTop="@dimen/defaultRLMargin"
+        android:background="@drawable/main_blocks_rectangle"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp">
 
         <ImageView
             android:id="@+id/exerciseBonusLayoutCounterIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            app:srcCompat="@drawable/ic_access_time_secondary"/>
+            app:srcCompat="@drawable/ic_access_time_secondary" />
 
         <TextView
             android:id="@+id/exerciseBonusLayoutCounterText"
@@ -31,8 +31,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginBottom="1dp"
-            android:layout_marginStart="6dp"/>
+            android:layout_marginStart="6dp"
+            android:layout_marginBottom="1dp" />
 
     </LinearLayout>
 

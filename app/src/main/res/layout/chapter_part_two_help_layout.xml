@@ -1,46 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/chapterPartTwoHelpLayoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:background="@drawable/chapter_part_two_help_layout_accent_press_transparent_button"
-        app:srcCompat="@drawable/ic_help_outline_accent"/>
+        android:padding="10dp"
+        app:srcCompat="@drawable/ic_help_outline_accent" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:background="?main_blocks_color">
+        android:background="?main_blocks_color"
+        android:gravity="center">
+
         <TextView
             android:id="@+id/chapterPartTwoHelpLayoutNumberText"
             style="@style/Medium24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"/>
-        
+            android:layout_marginEnd="24dp" />
+
         <View
             android:id="@+id/chapterPartTwoHelpLayoutDivider"
-            android:layout_width="0.5dp"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:background="?divider_color"/>
-        
+            android:background="?divider_color" />
+
         <TextView
             android:id="@+id/chapterPartTwoHelpLayoutNumberNameText"
             style="@style/Regular20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginEnd="16dp" />
     </LinearLayout>
-    
+
 </LinearLayout>

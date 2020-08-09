@@ -4,9 +4,8 @@ import android.content.Context
 import androidx.work.*
 import com.example.studita.di.NetworkModule
 import com.example.studita.di.data.CompleteExercisesModule
-import com.example.studita.domain.entity.*
+import com.example.studita.domain.entity.CompleteExercisesRequestData
 import com.example.studita.domain.service.SyncCompletedExercises
-import com.example.studita.utils.UserUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -32,11 +31,12 @@ class SyncCompletedExercisesImpl : SyncCompletedExercises {
         workManager.enqueueUniqueWork(SYNC_COMPLETED_EXERCISES_ID, ExistingWorkPolicy.APPEND, work)
     }
 
-    class CompleteChapterPartWorker(val context: Context, val params: WorkerParameters) : CoroutineWorker(context, params){
+    class CompleteChapterPartWorker(val context: Context, val params: WorkerParameters) :
+        CoroutineWorker(context, params) {
         override suspend fun doWork(): Result {
             val json = inputData.getString("COMPLETED_EXERCISES_REQUEST_DATA")
 
-            if(json != null)
+            if (json != null)
                 CompleteExercisesModule.getCompleteExercisesInteractorImpl().completeExercises(
                     deserializeCompletedChapterPartRequest(json)
                 )
@@ -45,12 +45,15 @@ class SyncCompletedExercisesImpl : SyncCompletedExercises {
         }
 
         private fun deserializeCompletedChapterPartRequest(json: String): CompleteExercisesRequestData {
-            return Gson().fromJson(json, TypeToken.get(CompleteExercisesRequestData::class.java).type)
+            return Gson().fromJson(
+                json,
+                TypeToken.get(CompleteExercisesRequestData::class.java).type
+            )
         }
 
     }
 
-    private fun serializeCompletedChapterPartRequest(completedExercisesRequestData: CompleteExercisesRequestData): String{
+    private fun serializeCompletedChapterPartRequest(completedExercisesRequestData: CompleteExercisesRequestData): String {
         return Gson().toJson(completedExercisesRequestData)
     }
 

@@ -19,8 +19,6 @@ import com.example.studita.domain.entity.PrivacySettingsRequestData
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.dialog_alerts.PrivacySettingsEditExceptionsDialogAlertFragment
 import com.example.studita.presentation.view_model.PrivacySettingsViewModel
-import com.example.studita.presentation.views.CustomSnackbar
-import com.example.studita.utils.ThemeUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.allViewsOfTypeT
 import com.google.gson.Gson
@@ -28,57 +26,60 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.privacy_settings_layout.*
 
 
-class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_layout){
+class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_layout) {
 
     private lateinit var privacySettingsViewModel: PrivacySettingsViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        privacySettingsViewModel = ViewModelProviders.of(this).get(PrivacySettingsViewModel::class.java)
+        privacySettingsViewModel =
+            ViewModelProviders.of(this).get(PrivacySettingsViewModel::class.java)
 
-        privacySettingsViewModel.let{ viewModel->
+        privacySettingsViewModel.let { viewModel ->
 
             viewModel.errorState.observe(viewLifecycleOwner, Observer { message ->
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             })
 
-            viewModel.privacySettingsStatus.observe(viewLifecycleOwner, Observer {privacySettings->
+            viewModel.privacySettingsStatus.observe(
+                viewLifecycleOwner,
+                Observer { privacySettings ->
 
-                (view as ViewGroup).removeView(privacySettingsLayoutProgressBar)
+                    (view as ViewGroup).removeView(privacySettingsLayoutProgressBar)
 
-                privacySettingsLayoutScrollView.visibility = View.VISIBLE
+                    privacySettingsLayoutScrollView.visibility = View.VISIBLE
 
-                privacySettings.duelsInvitesFrom?.let { setDuelsInvitesFormCheckboxes(it) }
+                    privacySettings.duelsInvitesFrom?.let { setDuelsInvitesFormCheckboxes(it) }
 
-                val duelsExceptions = privacySettings.duelsExceptions
-                formExceptionsView(duelsExceptions)
+                    val duelsExceptions = privacySettings.duelsExceptions
+                    formExceptionsView(duelsExceptions)
 
-                if(privacySettings.showInRatings == true) {
-                    privacySettingsLayoutRatingsBlockShowRadio.isChecked = true
-                    privacySettingsLayoutRatingsBlockShowRadio.jumpDrawablesToCurrentState()
-                }else {
-                    privacySettingsLayoutRatingsBlockHideRadio.isChecked = true
-                    privacySettingsLayoutRatingsBlockHideRadio.jumpDrawablesToCurrentState()
-                }
+                    if (privacySettings.showInRatings == true) {
+                        privacySettingsLayoutRatingsBlockShowRadio.isChecked = true
+                        privacySettingsLayoutRatingsBlockShowRadio.jumpDrawablesToCurrentState()
+                    } else {
+                        privacySettingsLayoutRatingsBlockHideRadio.isChecked = true
+                        privacySettingsLayoutRatingsBlockHideRadio.jumpDrawablesToCurrentState()
+                    }
 
-                if(privacySettings.profileIsVisible == true) {
-                    privacySettingsLayoutVisibilityBlockShowRadio.isChecked = true
-                    privacySettingsLayoutVisibilityBlockShowRadio.jumpDrawablesToCurrentState()
-                }else {
-                    privacySettingsLayoutVisibilityBlockHideRadio.isChecked = true
-                    privacySettingsLayoutVisibilityBlockHideRadio.jumpDrawablesToCurrentState()
-                }
+                    if (privacySettings.profileIsVisible == true) {
+                        privacySettingsLayoutVisibilityBlockShowRadio.isChecked = true
+                        privacySettingsLayoutVisibilityBlockShowRadio.jumpDrawablesToCurrentState()
+                    } else {
+                        privacySettingsLayoutVisibilityBlockHideRadio.isChecked = true
+                        privacySettingsLayoutVisibilityBlockHideRadio.jumpDrawablesToCurrentState()
+                    }
 
-                view.setRadioButtonsListeners(viewModel)
-            })
+                    view.setRadioButtonsListeners(viewModel)
+                })
 
 
-            privacySettingsContentLayout.forEach {parent->
+            privacySettingsContentLayout.forEach { parent ->
                 parent as ViewGroup
-                parent.forEach{view->
-                    if(view is ViewGroup){
-                        view.setOnClickListener {child->
+                parent.forEach { view ->
+                    if (view is ViewGroup) {
+                        view.setOnClickListener { child ->
                             parent.forEach {
                                 if (it is ViewGroup) {
                                     (it.getChildAt(1) as RadioButton).isChecked = it == child
@@ -92,34 +93,54 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
 
         privacySettingsLayoutDuelsBlockEditExceptions.setOnClickListener {
             PrivacySettingsEditExceptionsDialogAlertFragment().apply {
-                 setTargetFragment(this@PrivacySettingsFragment, 0)
+                setTargetFragment(this@PrivacySettingsFragment, 0)
             }.show((activity as AppCompatActivity).supportFragmentManager, null)
         }
 
         scrollingView = privacySettingsLayoutScrollView
     }
 
-    private fun ViewGroup.setRadioButtonsListeners(viewModel: PrivacySettingsViewModel){
+    private fun ViewGroup.setRadioButtonsListeners(viewModel: PrivacySettingsViewModel) {
         this.allViewsOfTypeT<RadioButton> {
             it.setOnCheckedChangeListener { view, isChecked ->
                 if (isChecked) {
-                    viewModel.editPrivacySettings(PrivacySettingsRequestData(UserUtils.getUserIDTokenData()!!, when (view.id) {
-                        R.id.privacySettingsLayoutDuelsBlockMyFriendsRadio -> PrivacySettingsData(duelsInvitesFrom = DuelsInvitesFrom.FRIENDS)
-                        R.id.privacySettingsLayoutDuelsBlockNobodyRadio -> PrivacySettingsData(duelsInvitesFrom = DuelsInvitesFrom.NOBODY)
-                        R.id.privacySettingsLayoutDuelsBlockExceptRadio -> PrivacySettingsData(duelsInvitesFrom = DuelsInvitesFrom.EXCEPT)
-                        R.id.privacySettingsLayoutRatingsBlockShowRadio -> PrivacySettingsData(showInRatings = true)
-                        R.id.privacySettingsLayoutRatingsBlockHideRadio -> PrivacySettingsData(showInRatings = false)
-                        R.id.privacySettingsLayoutVisibilityBlockShowRadio -> PrivacySettingsData(profileIsVisible = true)
-                        R.id.privacySettingsLayoutVisibilityBlockHideRadio -> PrivacySettingsData(profileIsVisible = false)
-                        else -> {PrivacySettingsData()}
-                    }))
+                    viewModel.editPrivacySettings(
+                        PrivacySettingsRequestData(
+                            UserUtils.getUserIDTokenData()!!, when (view.id) {
+                                R.id.privacySettingsLayoutDuelsBlockMyFriendsRadio -> PrivacySettingsData(
+                                    duelsInvitesFrom = DuelsInvitesFrom.FRIENDS
+                                )
+                                R.id.privacySettingsLayoutDuelsBlockNobodyRadio -> PrivacySettingsData(
+                                    duelsInvitesFrom = DuelsInvitesFrom.NOBODY
+                                )
+                                R.id.privacySettingsLayoutDuelsBlockExceptRadio -> PrivacySettingsData(
+                                    duelsInvitesFrom = DuelsInvitesFrom.EXCEPT
+                                )
+                                R.id.privacySettingsLayoutRatingsBlockShowRadio -> PrivacySettingsData(
+                                    showInRatings = true
+                                )
+                                R.id.privacySettingsLayoutRatingsBlockHideRadio -> PrivacySettingsData(
+                                    showInRatings = false
+                                )
+                                R.id.privacySettingsLayoutVisibilityBlockShowRadio -> PrivacySettingsData(
+                                    profileIsVisible = true
+                                )
+                                R.id.privacySettingsLayoutVisibilityBlockHideRadio -> PrivacySettingsData(
+                                    profileIsVisible = false
+                                )
+                                else -> {
+                                    PrivacySettingsData()
+                                }
+                            }
+                        )
+                    )
                 }
             }
         }
     }
 
-    private fun formExceptionsView(duelsExceptions: ArrayList<String>?){
-        if(privacySettingsViewModel.hasFriends) {
+    private fun formExceptionsView(duelsExceptions: ArrayList<String>?) {
+        if (privacySettingsViewModel.hasFriends) {
             privacySettingsLayoutDuelsBlockEditExceptions.visibility = View.VISIBLE
             if (duelsExceptions != null && duelsExceptions.isNotEmpty()) {
                 privacySettingsLayoutDuelsBlockEditExceptions.text =
@@ -156,13 +177,13 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
         }
     }
 
-    private fun setDuelsInvitesFormCheckboxes(duelsInvitesFrom: DuelsInvitesFrom){
+    private fun setDuelsInvitesFormCheckboxes(duelsInvitesFrom: DuelsInvitesFrom) {
 
         privacySettingsLayoutDuelsBlockMyFriendsRadio.isChecked = false
         privacySettingsLayoutDuelsBlockNobodyRadio.isChecked = false
         privacySettingsLayoutDuelsBlockExceptRadio.isChecked = false
 
-        when(duelsInvitesFrom){
+        when (duelsInvitesFrom) {
             DuelsInvitesFrom.FRIENDS -> {
                 privacySettingsLayoutDuelsBlockMyFriendsRadio.isChecked = true
             }
@@ -181,14 +202,17 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == RESULT_OK && requestCode == 345){
-            if(data?.extras?.containsKey("CHANGED_EXCEPTIONS") == true) {
+        if (resultCode == RESULT_OK && requestCode == 345) {
+            if (data?.extras?.containsKey("CHANGED_EXCEPTIONS") == true) {
                 val json = data.getStringExtra("CHANGED_EXCEPTIONS") as String
-                val changedExceptions = Gson().fromJson<ArrayList<EditDuelsExceptionsData>>(json, object: TypeToken<ArrayList<EditDuelsExceptionsData>>(){}.type)
+                val changedExceptions = Gson().fromJson<ArrayList<EditDuelsExceptionsData>>(
+                    json,
+                    object : TypeToken<ArrayList<EditDuelsExceptionsData>>() {}.type
+                )
 
                 val privacySettingsData = privacySettingsViewModel.privacySettingsStatus.value
-                
-                if(privacySettingsData != null) {
+
+                if (privacySettingsData != null) {
 
                     changedExceptions.forEach { exceptionData ->
                         if (exceptionData.deleteFromExceptions)

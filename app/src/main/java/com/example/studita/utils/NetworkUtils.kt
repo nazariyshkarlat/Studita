@@ -18,7 +18,7 @@ object NetworkUtils {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        if(NetworkModule.connectionManager.isNetworkAbsent())
+        if (NetworkModule.connectionManager.isNetworkAbsent())
             networkLiveData.postValue(false)
 
         val networkCallback = object : ConnectivityManager.NetworkCallback() {

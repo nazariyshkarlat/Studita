@@ -1,4 +1,5 @@
 <resources xmlns:http="http://schemas.android.com/apk/res-auto">
+
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorAccent10">@color/blue10</item>
         <item name="colorAccent14">@color/blue14</item>
@@ -485,8 +486,7 @@
         <item name="cardElevation">0dp</item>
     </style>
 
-    <style name="AppBottomSheetDialogTheme"
-        parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
         <item name="android:colorEdgeEffect">@color/gray80</item>
         <item name="colorAccent">@color/blue</item>
@@ -498,8 +498,7 @@
         <item name="cornerSizeTopRight">16dp</item>
     </style>
 
-    <style name="AppModalStyle"
-        parent="Widget.Design.BottomSheet.Modal">
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="backgroundTint">?attr/dialogs_color</item>
         <item name="shapeAppearance">@style/ShapeAppearance.BottomSheet</item>
     </style>

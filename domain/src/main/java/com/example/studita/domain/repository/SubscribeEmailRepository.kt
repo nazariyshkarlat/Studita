@@ -11,6 +11,6 @@ interface SubscribeEmailRepository {
 
     suspend fun saveSyncedResult(subscribeEmailResultData: SubscribeEmailResultData)
 
-    fun getSyncedResult() : SubscribeEmailResultData?
+    fun getSyncedResult(): SubscribeEmailResultData?
 
 }

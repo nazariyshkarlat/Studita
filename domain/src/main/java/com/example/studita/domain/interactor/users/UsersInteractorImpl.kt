@@ -4,17 +4,18 @@ import com.example.studita.domain.entity.FriendActionRequestData
 import com.example.studita.domain.entity.toStatus
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
-import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.FriendActionStatus
 import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.interactor.HasFriendsStatus
+import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.repository.UsersRepository
 import com.example.studita.domain.service.SyncFriendship
 import kotlinx.coroutines.delay
 
-class UsersInteractorImpl(private val repository: UsersRepository,
-                          override val defSortBy: UsersRepository.SortBy = UsersRepository.SortBy.NEW_TO_OLD,
-                          private val syncFriendship: SyncFriendship
+class UsersInteractorImpl(
+    private val repository: UsersRepository,
+    override val defSortBy: UsersRepository.SortBy = UsersRepository.SortBy.NEW_TO_OLD,
+    private val syncFriendship: SyncFriendship
 ) : UsersInteractor {
 
     private val retryDelay = 1000L
@@ -41,7 +42,7 @@ class UsersInteractorImpl(private val repository: UsersRepository,
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException) {
                         GetUsersStatus.NoConnection
@@ -60,11 +61,15 @@ class UsersInteractorImpl(private val repository: UsersRepository,
                         retryCount - 1
                     )
                 }
-            }else
+            } else
                 GetUsersStatus.Failure
         }
 
-    override suspend fun checkIsMyFriend(myId: Int, userId: Int, retryCount: Int): IsMyFriendStatus =
+    override suspend fun checkIsMyFriend(
+        myId: Int,
+        userId: Int,
+        retryCount: Int
+    ): IsMyFriendStatus =
         try {
             val pair = repository.checkIsMyFriend(myId, userId)
             val code = pair.first
@@ -75,7 +80,7 @@ class UsersInteractorImpl(private val repository: UsersRepository,
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException)
                         IsMyFriendStatus.NoConnection
@@ -85,11 +90,14 @@ class UsersInteractorImpl(private val repository: UsersRepository,
                     delay(retryDelay)
                     checkIsMyFriend(myId, userId, retryCount - 1)
                 }
-            }else
+            } else
                 IsMyFriendStatus.Failure
         }
 
-    override suspend fun sendFriendship(friendActionRequestData: FriendActionRequestData, retryCount: Int): FriendActionStatus =
+    override suspend fun sendFriendship(
+        friendActionRequestData: FriendActionRequestData,
+        retryCount: Int
+    ): FriendActionStatus =
         try {
             when (repository.sendFriendship(friendActionRequestData)) {
                 200 -> FriendActionStatus.Success
@@ -97,7 +105,7 @@ class UsersInteractorImpl(private val repository: UsersRepository,
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (e is NetworkConnectionException) {
                     syncFriendship.scheduleFriendAction(
                         friendActionRequestData,
@@ -110,11 +118,14 @@ class UsersInteractorImpl(private val repository: UsersRepository,
                     else
                         sendFriendship(friendActionRequestData, retryCount - 1)
                 }
-            }else
+            } else
                 FriendActionStatus.Failure
         }
 
-    override suspend fun removeFriend(friendActionRequestData: FriendActionRequestData, retryCount: Int): FriendActionStatus =
+    override suspend fun removeFriend(
+        friendActionRequestData: FriendActionRequestData,
+        retryCount: Int
+    ): FriendActionStatus =
         try {
             when (repository.removeFriend(friendActionRequestData)) {
                 200 -> FriendActionStatus.Success
@@ -122,7 +133,7 @@ class UsersInteractorImpl(private val repository: UsersRepository,
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 when {
                     e is NetworkConnectionException -> {
                         syncFriendship.scheduleFriendAction(
@@ -134,7 +145,7 @@ class UsersInteractorImpl(private val repository: UsersRepository,
                     retryCount == 0 -> FriendActionStatus.ServiceUnavailable
                     else -> removeFriend(friendActionRequestData, retryCount - 1)
                 }
-            }else
+            } else
                 FriendActionStatus.Failure
         }
 
@@ -149,7 +160,7 @@ class UsersInteractorImpl(private val repository: UsersRepository,
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 when {
                     e is NetworkConnectionException -> {
                         syncFriendship.scheduleFriendAction(
@@ -161,11 +172,14 @@ class UsersInteractorImpl(private val repository: UsersRepository,
                     retryCount == 0 -> FriendActionStatus.ServiceUnavailable
                     else -> cancelFriendship(friendActionRequestData, retryCount - 1)
                 }
-            }else
+            } else
                 FriendActionStatus.Failure
         }
 
-    override suspend fun acceptFriendship(friendActionRequestData: FriendActionRequestData, retryCount: Int): FriendActionStatus =
+    override suspend fun acceptFriendship(
+        friendActionRequestData: FriendActionRequestData,
+        retryCount: Int
+    ): FriendActionStatus =
         try {
             when (repository.acceptFriendship(friendActionRequestData)) {
                 200 -> FriendActionStatus.Success
@@ -173,7 +187,7 @@ class UsersInteractorImpl(private val repository: UsersRepository,
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 when {
                     e is NetworkConnectionException -> {
                         syncFriendship.scheduleFriendAction(
@@ -185,7 +199,7 @@ class UsersInteractorImpl(private val repository: UsersRepository,
                     retryCount == 0 -> FriendActionStatus.ServiceUnavailable
                     else -> acceptFriendship(friendActionRequestData, retryCount - 1)
                 }
-            }else
+            } else
                 FriendActionStatus.Failure
         }
 
@@ -193,12 +207,12 @@ class UsersInteractorImpl(private val repository: UsersRepository,
         try {
             val result = repository.hasFriends(userId)
             when (result.first) {
-                200 -> if(result.second == true) HasFriendsStatus.HasFriends else HasFriendsStatus.HasNoFriends
+                200 -> if (result.second == true) HasFriendsStatus.HasFriends else HasFriendsStatus.HasNoFriends
                 else -> HasFriendsStatus.Failure
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException) {
                         HasFriendsStatus.NoConnection
@@ -209,12 +223,15 @@ class UsersInteractorImpl(private val repository: UsersRepository,
                         delay(retryDelay)
                     hasFriends(userId, retryCount - 1)
                 }
-            }else
+            } else
                 HasFriendsStatus.Failure
         }
 
 
-    override suspend fun rejectFriendship(friendActionRequestData: FriendActionRequestData, retryCount: Int): FriendActionStatus  =
+    override suspend fun rejectFriendship(
+        friendActionRequestData: FriendActionRequestData,
+        retryCount: Int
+    ): FriendActionStatus =
         try {
             when (repository.rejectFriendship(friendActionRequestData)) {
                 200 -> FriendActionStatus.Success
@@ -222,18 +239,21 @@ class UsersInteractorImpl(private val repository: UsersRepository,
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 when {
-                e is NetworkConnectionException -> {
-                    syncFriendship.scheduleFriendAction(friendActionRequestData, SyncFriendship.FriendActionType.REJECT_REQUEST)
-                    FriendActionStatus.NoConnection
+                    e is NetworkConnectionException -> {
+                        syncFriendship.scheduleFriendAction(
+                            friendActionRequestData,
+                            SyncFriendship.FriendActionType.REJECT_REQUEST
+                        )
+                        FriendActionStatus.NoConnection
+                    }
+                    retryCount == 0 -> FriendActionStatus.ServiceUnavailable
+                    else -> {
+                        rejectFriendship(friendActionRequestData, retryCount - 1)
+                    }
                 }
-                retryCount == 0 -> FriendActionStatus.ServiceUnavailable
-                else -> {
-                    rejectFriendship(friendActionRequestData, retryCount-1)
-                }
-                }
-            }else
+            } else
                 FriendActionStatus.Failure
         }
 

@@ -1,9 +1,7 @@
 package com.example.studita.domain.validator
 
-import java.util.*
 
-
-class AuthorizationValidator{
+class AuthorizationValidator {
 
     companion object {
         const val MINIMUM_PASSWORD_LENGTH = 6
@@ -15,10 +13,10 @@ class AuthorizationValidator{
 
     fun isValid(source: Pair<String, String>): Pair<Boolean, Boolean> {
         var result: Pair<Boolean, Boolean> = false to false
-        if(source.first.isValidEmail()){
+        if (source.first.isValidEmail()) {
             result = result.copy(first = true)
         }
-        if(source.second.length >= MINIMUM_PASSWORD_LENGTH){
+        if (source.second.length >= MINIMUM_PASSWORD_LENGTH) {
             result = result.copy(second = true)
         }
         return result

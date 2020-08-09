@@ -11,25 +11,32 @@ import com.example.studita.utils.startActivity
 import kotlinx.android.synthetic.main.chapter_part_item.view.*
 
 
-class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view){
+class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view) {
 
     override fun bind(model: ChapterPartUiModel, chapterUiModel: ChapterUiModel) {
         with(itemView) {
             this as ViewGroup
             chapterPartItemText.text = model.chapterPartName
-            val chapterPartInChapterNumber = chapterUiModel.parts.indexOfFirst { it.chapterPartNumber == model.chapterPartNumber } + 1
+            val chapterPartInChapterNumber =
+                chapterUiModel.parts.indexOfFirst { it.chapterPartNumber == model.chapterPartNumber } + 1
             when {
-                chapterPartInChapterNumber-1 <= UserUtils.userData.completedParts[chapterUiModel.chapterNumber-1] -> {
-                    if (isCurrentChapterPart(chapterPartInChapterNumber, chapterUiModel.chapterNumber)) {
+                chapterPartInChapterNumber - 1 <= UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1] -> {
+                    if (isCurrentChapterPart(
+                            chapterPartInChapterNumber,
+                            chapterUiModel.chapterNumber
+                        )
+                    ) {
                         setItemSelected()
-                    }else{
+                    } else {
                         setItemEnabled()
                     }
                     chapterPartItemButton.setOnClickListener {
-                        getAppCompatActivity()?.startActivity<ExercisesActivity>("CHAPTER_NUMBER" to chapterUiModel.chapterNumber,
+                        getAppCompatActivity()?.startActivity<ExercisesActivity>(
+                            "CHAPTER_NUMBER" to chapterUiModel.chapterNumber,
                             "CHAPTER_PART_NUMBER" to model.chapterPartNumber,
                             "CHAPTER_PARTS_COUNT" to chapterUiModel.parts.size,
-                            "IS_TRAINING" to (chapterPartInChapterNumber-1 != UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1]))
+                            "IS_TRAINING" to (chapterPartInChapterNumber - 1 != UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1])
+                        )
                     }
                 }
                 else -> {
@@ -39,27 +46,28 @@ class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view){
         }
     }
 
-    private fun setItemSelected(){
+    private fun setItemSelected() {
         itemView.chapterPartItemIcon.isSelected = true
         itemView.chapterPartItemButton.isSelected = true
         itemView.chapterPartItemIcon.isEnabled = true
         itemView.chapterPartItemButton.isEnabled = true
     }
 
-    private fun setItemEnabled(){
+    private fun setItemEnabled() {
         itemView.chapterPartItemIcon.isEnabled = true
         itemView.chapterPartItemButton.isEnabled = true
         itemView.chapterPartItemIcon.isSelected = false
         itemView.chapterPartItemButton.isSelected = false
     }
 
-    private fun setItemDisabled(){
+    private fun setItemDisabled() {
         itemView.chapterPartItemIcon.isEnabled = false
         itemView.chapterPartItemButton.isEnabled = false
         itemView.chapterPartItemIcon.isSelected = false
         itemView.chapterPartItemButton.isSelected = false
     }
 
-    private fun isCurrentChapterPart(chapterPartInChapterNumber: Int, chapterNumber: Int) = (chapterPartInChapterNumber - 1) == UserUtils.userData.completedParts[chapterNumber - 1]
+    private fun isCurrentChapterPart(chapterPartInChapterNumber: Int, chapterNumber: Int) =
+        (chapterPartInChapterNumber - 1) == UserUtils.userData.completedParts[chapterNumber - 1]
 
 }

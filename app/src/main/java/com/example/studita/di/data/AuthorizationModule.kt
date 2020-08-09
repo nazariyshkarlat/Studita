@@ -1,13 +1,11 @@
 package com.example.studita.di.data
 
-import com.example.studita.di.CacheModule
 import com.example.studita.data.cache.authentication.LogInCacheImpl
-import com.example.studita.data.entity.mapper.*
 import com.example.studita.data.net.AuthorizationService
 import com.example.studita.data.repository.AuthorizationRepositoryImpl
-import com.example.studita.data.repository.UserDataRepositoryImpl
 import com.example.studita.data.repository.datasource.authorization.AuthorizationDataStoreFactoryImpl
 import com.example.studita.data.repository.datasource.authorization.AuthorizationDataStoreImpl
+import com.example.studita.di.CacheModule
 import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.authorization.AuthorizationInteractor
@@ -45,7 +43,10 @@ object AuthorizationModule {
         return repository!!
     }
 
-    private fun makeAuthorizationInteractor(authorizationRepository: AuthorizationRepository, userDataRepository: UserDataRepository) =
+    private fun makeAuthorizationInteractor(
+        authorizationRepository: AuthorizationRepository,
+        userDataRepository: UserDataRepository
+    ) =
         AuthorizationInteractorImpl(
             authorizationRepository,
             userDataRepository,

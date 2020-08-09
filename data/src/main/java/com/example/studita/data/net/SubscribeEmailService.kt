@@ -1,7 +1,6 @@
 package com.example.studita.data.net
 
 import com.example.studita.data.entity.UserIdToken
-import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

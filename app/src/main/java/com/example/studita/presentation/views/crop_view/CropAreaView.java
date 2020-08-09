@@ -12,7 +12,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,18 +25,12 @@ import com.example.studita.utils.NumberExtensionsKt;
 
 public class CropAreaView extends View {
 
-    private enum Control {
-        NONE, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TOP, LEFT, BOTTOM, RIGHT
-    }
-
-    interface AreaViewListener {
-        void onAreaChangeBegan();
-
-        void onAreaChange();
-
-        void onAreaChangeEnded();
-    }
-
+    Paint dimPaint;
+    Paint shadowPaint;
+    Paint linePaint;
+    Paint handlePaint;
+    Paint framePaint;
+    AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
     private RectF topLeftCorner = new RectF();
     private RectF topRightCorner = new RectF();
     private RectF bottomLeftCorner = new RectF();
@@ -46,49 +39,27 @@ public class CropAreaView extends View {
     private RectF leftEdge = new RectF();
     private RectF bottomEdge = new RectF();
     private RectF rightEdge = new RectF();
-
     private float lockAspectRatio;
-
     private Control activeControl;
     private RectF actualRect = new RectF();
     private RectF tempRect = new RectF();
     private int previousX;
     private int previousY;
-
     private float bottomPadding;
     private boolean dimVisibile;
     private boolean frameVisible;
-
-    Paint dimPaint;
-    Paint shadowPaint;
-    Paint linePaint;
-    Paint handlePaint;
-    Paint framePaint;
-
-    AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
-
     private float sidePadding;
     private float minWidth;
-
-    enum GridType {
-        NONE, MINOR, MAJOR
-    }
-
     private GridType previousGridType;
     private GridType gridType;
     private float gridProgress;
     private Animator gridAnimator;
-
     private AreaViewListener listener;
-
     private boolean isDragging;
-
     private boolean freeform = true;
     private Bitmap circleBitmap;
     private Paint eraserPaint;
-
     private Animator animator;
-
     public CropAreaView(Context context) {
         super(context);
 
@@ -126,8 +97,7 @@ public class CropAreaView extends View {
         eraserPaint.setStyle(Paint.Style.FILL);
         eraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
     }
-
-    public CropAreaView(Context context, AttributeSet attributeSet){
+    public CropAreaView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         frameVisible = true;
         dimVisibile = true;
@@ -379,14 +349,14 @@ public class CropAreaView extends View {
     }
 
     @Keep
-    private void setGridProgress(float value) {
-        gridProgress = value;
-        invalidate();
+    private float getGridProgress() {
+        return gridProgress;
     }
 
     @Keep
-    private float getGridProgress() {
-        return gridProgress;
+    private void setGridProgress(float value) {
+        gridProgress = value;
+        invalidate();
     }
 
     public float getAspectRatio() {
@@ -438,19 +408,13 @@ public class CropAreaView extends View {
     }
 
     @Keep
-    private void setCropLeft(float value) {
-        actualRect.left = value;
-        invalidate();
-    }
-
-    @Keep
     public float getCropLeft() {
         return actualRect.left;
     }
 
     @Keep
-    private void setCropTop(float value) {
-        actualRect.top = value;
+    private void setCropLeft(float value) {
+        actualRect.left = value;
         invalidate();
     }
 
@@ -460,8 +424,8 @@ public class CropAreaView extends View {
     }
 
     @Keep
-    private void setCropRight(float value) {
-        actualRect.right = value;
+    private void setCropTop(float value) {
+        actualRect.top = value;
         invalidate();
     }
 
@@ -471,14 +435,20 @@ public class CropAreaView extends View {
     }
 
     @Keep
-    private void setCropBottom(float value) {
-        actualRect.bottom = value;
+    private void setCropRight(float value) {
+        actualRect.right = value;
         invalidate();
     }
 
     @Keep
     public float getCropBottom() {
         return actualRect.bottom;
+    }
+
+    @Keep
+    private void setCropBottom(float value) {
+        actualRect.bottom = value;
+        invalidate();
     }
 
     public float getCropCenterX() {
@@ -511,7 +481,7 @@ public class CropAreaView extends View {
         float width = getMeasuredWidth() - 2 * sidePadding;
         float height = measuredHeight - 2 * sidePadding;
         float centerX = getMeasuredWidth() / 2.0f;
-        float centerY =  measuredHeight / 2.0f;
+        float centerY = measuredHeight / 2.0f;
 
         if (Math.abs(1.0f - cropAspectRatio) < 0.0001) {
             left = centerX - (minSide / 2.0f);
@@ -713,7 +683,7 @@ public class CropAreaView extends View {
                 }
             }
 
-            float topPadding =  sidePadding;
+            float topPadding = sidePadding;
             float finalBottomPadidng = bottomPadding + sidePadding;
             if (tempRect.top < topPadding) {
                 if (lockAspectRatio > 0) {
@@ -778,5 +748,21 @@ public class CropAreaView extends View {
 
     public void getCropRect(RectF rect) {
         rect.set(actualRect);
+    }
+
+    private enum Control {
+        NONE, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TOP, LEFT, BOTTOM, RIGHT
+    }
+
+    enum GridType {
+        NONE, MINOR, MAJOR
+    }
+
+    interface AreaViewListener {
+        void onAreaChangeBegan();
+
+        void onAreaChange();
+
+        void onAreaChangeEnded();
     }
 }

@@ -6,10 +6,11 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-class ExercisesDataStoreImpl(private val exercisesJsonDataStore: ExercisesJsonDataStore) : ExercisesDataStore {
+class ExercisesDataStoreImpl(private val exercisesJsonDataStore: ExercisesJsonDataStore) :
+    ExercisesDataStore {
 
     private val gsonBuilder = GsonBuilder()
-    private val deserializer: ExerciseArrayEntityDeserializer  = ExerciseArrayEntityDeserializer()
+    private val deserializer: ExerciseArrayEntityDeserializer = ExerciseArrayEntityDeserializer()
     private val exercisesGson: Gson
     private val type: Type
 

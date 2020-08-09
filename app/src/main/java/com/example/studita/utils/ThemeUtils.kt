@@ -1,14 +1,11 @@
 package com.example.studita.utils
 
 import android.content.Context
-import android.graphics.Color
 import android.util.TypedValue
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import com.example.studita.R
-import kotlin.math.roundToInt
 
 object ThemeUtils {
     @ColorInt
@@ -42,7 +39,11 @@ object ThemeUtils {
     @ColorInt
     fun getSwipeRefreshBackgroundColor(context: Context): Int {
         val typedValue = TypedValue()
-        context.theme.resolveAttribute(R.attr.swipe_refresh_layout_background_color, typedValue, true)
+        context.theme.resolveAttribute(
+            R.attr.swipe_refresh_layout_background_color,
+            typedValue,
+            true
+        )
         return ContextCompat.getColor(context, typedValue.resourceId)
     }
 

@@ -6,10 +6,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import kotlinx.android.synthetic.main.exercise_screen_type_3.*
 import kotlinx.android.synthetic.main.exercise_screen_type_4.*
 
-class ExerciseScreenType4 : ExerciseScreen(R.layout.exercise_screen_type_4){
+class ExerciseScreenType4 : ExerciseScreen(R.layout.exercise_screen_type_4) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -21,8 +20,9 @@ class ExerciseScreenType4 : ExerciseScreen(R.layout.exercise_screen_type_4){
         }
 
         exercisesViewModel?.let {
-            if(it.exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen.ScreenType4UiModel){
-                val screenUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelScreen.ScreenType4UiModel
+            if (it.exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen.ScreenType4UiModel) {
+                val screenUiModel =
+                    it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelScreen.ScreenType4UiModel
                 exerciseScreenType4Title.text = screenUiModel.title
                 exerciseScreenType4Subtitle.text = screenUiModel.subtitle
                 exerciseScreenType4Image.background = screenUiModel.image

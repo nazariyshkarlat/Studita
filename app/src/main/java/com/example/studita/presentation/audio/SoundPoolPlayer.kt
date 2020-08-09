@@ -17,7 +17,7 @@ class SoundPoolPlayer(val context: Context) {
         }
         shortPlayer?.setOnLoadCompleteListener { soundPool, sampleId, status ->
             val soundId = sounds[piResource] as Int
-            if((sampleId == soundId) and (status == 0))
+            if ((sampleId == soundId) and (status == 0))
                 soundPool.play(soundId, 1f, 1f, 0, 0, 1F)
         }
     }
@@ -29,7 +29,7 @@ class SoundPoolPlayer(val context: Context) {
     }
 
     init {
-        val attributes =  AudioAttributes.Builder()
+        val attributes = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_GAME)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()

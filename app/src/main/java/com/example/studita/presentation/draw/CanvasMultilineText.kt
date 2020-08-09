@@ -25,14 +25,20 @@ fun getMultilineTextLayout(
     maxLines: Int = Int.MAX_VALUE,
     breakStrategy: Int = Layout.BREAK_STRATEGY_SIMPLE,
     hyphenationFrequency: Int = Layout.HYPHENATION_FREQUENCY_NONE,
-    justificationMode: Int = Layout.JUSTIFICATION_MODE_NONE) : StaticLayout{
+    justificationMode: Int = Layout.JUSTIFICATION_MODE_NONE
+): StaticLayout {
 
     val cacheKey = "$text-$start-$end-$textPaint-$width-$alignment-$textDir-" +
             "$spacingMult-$spacingAdd-$includePad-$ellipsizedWidth-$ellipsize-" +
             "$maxLines-$breakStrategy-$hyphenationFrequency-$justificationMode"
 
-    return StaticLayoutCache[cacheKey] ?:
-    StaticLayout.Builder.obtain(text, start, end, textPaint, width)
+    return StaticLayoutCache[cacheKey] ?: StaticLayout.Builder.obtain(
+        text,
+        start,
+        end,
+        textPaint,
+        width
+    )
         .setAlignment(alignment)
         .setTextDirection(textDir)
         .setLineSpacing(spacingAdd, spacingMult)
@@ -62,14 +68,20 @@ fun getMultilineTextLayout(
     ellipsize: TextUtils.TruncateAt? = null,
     maxLines: Int = Int.MAX_VALUE,
     breakStrategy: Int = Layout.BREAK_STRATEGY_SIMPLE,
-    hyphenationFrequency: Int = Layout.HYPHENATION_FREQUENCY_NONE) : StaticLayout {
+    hyphenationFrequency: Int = Layout.HYPHENATION_FREQUENCY_NONE
+): StaticLayout {
 
     val cacheKey = "$text-$start-$end-$textPaint-$width-$alignment-$textDir-" +
             "$spacingMult-$spacingAdd-$includePad-$ellipsizedWidth-$ellipsize-" +
             "$maxLines-$breakStrategy-$hyphenationFrequency"
 
-    return StaticLayoutCache[cacheKey] ?:
-    StaticLayout.Builder.obtain(text, start, end, textPaint, width)
+    return StaticLayoutCache[cacheKey] ?: StaticLayout.Builder.obtain(
+        text,
+        start,
+        end,
+        textPaint,
+        width
+    )
         .setAlignment(alignment)
         .setTextDirection(textDir)
         .setLineSpacing(spacingAdd, spacingMult)
@@ -93,7 +105,8 @@ fun getMultilineTextLayout(
     spacingAdd: Float = 0f,
     includePad: Boolean = true,
     ellipsizedWidth: Int = width,
-    ellipsize: TextUtils.TruncateAt? = null) : StaticLayout {
+    ellipsize: TextUtils.TruncateAt? = null
+): StaticLayout {
 
     val cacheKey = "$text-$start-$end-$textPaint-$width-$alignment-" +
             "$spacingMult-$spacingAdd-$includePad-$ellipsizedWidth-$ellipsize"
@@ -101,8 +114,7 @@ fun getMultilineTextLayout(
     // The public constructor was deprecated in API level 28,
     // but the builder is only available from API level 23 onwards
 
-    return StaticLayoutCache[cacheKey] ?:
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    return StaticLayoutCache[cacheKey] ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         StaticLayout.Builder.obtain(text, start, end, textPaint, width)
             .setAlignment(alignment)
             .setLineSpacing(spacingAdd, spacingMult)
@@ -111,8 +123,10 @@ fun getMultilineTextLayout(
             .setEllipsize(ellipsize)
             .build()
     } else {
-        StaticLayout(text, start, end, textPaint, width, alignment,
-            spacingMult, spacingAdd, includePad, ellipsize, ellipsizedWidth)
+        StaticLayout(
+            text, start, end, textPaint, width, alignment,
+            spacingMult, spacingAdd, includePad, ellipsize, ellipsizedWidth
+        )
             .apply { StaticLayoutCache[cacheKey] = this }
     }
 }

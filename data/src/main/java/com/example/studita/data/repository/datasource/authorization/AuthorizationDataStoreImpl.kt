@@ -8,7 +8,11 @@ import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import kotlinx.coroutines.CancellationException
 
-class AuthorizationDataStoreImpl(private val connectionManager: ConnectionManager, private val authorizationService: AuthorizationService, private val logInCache: LogInCache) :
+class AuthorizationDataStoreImpl(
+    private val connectionManager: ConnectionManager,
+    private val authorizationService: AuthorizationService,
+    private val logInCache: LogInCache
+) :
     AuthorizationDataStore {
     override suspend fun tryCheckTokenIsCorrect(userIdToken: UserIdToken): Pair<Int, Boolean?> =
         if (connectionManager.isNetworkAbsent()) {
@@ -34,40 +38,40 @@ class AuthorizationDataStoreImpl(private val connectionManager: ConnectionManage
                 val logIn = authorizationService.logIn(authorizationRequestEntity)
                 logInResult = logIn.body()
                 val statusCode = logIn.code()
-                if(logInResult != null)
+                if (logInResult != null)
                     logInCache.saveUserAuthenticationInfo(logInResult.userId, logInResult.userToken)
                 statusCode to logInResult
             } catch (exception: Exception) {
                 throw ServerUnavailableException()
             }
-    }
+        }
 
     override suspend fun trySignUp(authorizationRequestEntity: AuthorizationRequestEntity): Int =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
-        }else{
+        } else {
             try {
                 val signUp = authorizationService.signUp(authorizationRequestEntity)
                 signUp.code()
             } catch (e: Exception) {
-                if(e is CancellationException)
+                if (e is CancellationException)
                     throw e
                 else
                     throw ServerUnavailableException()
             }
         }
 
-    override suspend fun trySignOut(signOutRequestEntity: SignOutRequestEntity): Int{
+    override suspend fun trySignOut(signOutRequestEntity: SignOutRequestEntity): Int {
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
-        }else {
+        } else {
             try {
-                val signOutCode =  authorizationService.signOut(signOutRequestEntity).code()
-                if(signOutCode == 200)
+                val signOutCode = authorizationService.signOut(signOutRequestEntity).code()
+                if (signOutCode == 200)
                     logInCache.clearUserAuthenticationInfo()
                 return signOutCode
             } catch (e: Exception) {
-                if(e is CancellationException)
+                if (e is CancellationException)
                     throw e
                 else
                     throw ServerUnavailableException()
@@ -78,18 +82,21 @@ class AuthorizationDataStoreImpl(private val connectionManager: ConnectionManage
     override suspend fun trySignInWithGoogle(signInWithGoogleRequest: SignInWithGoogleRequest): Pair<Int, LogInResponseEntity?> =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
-        }else {
+        } else {
             val signInResult: LogInResponseEntity?
             try {
                 val signIn =
                     authorizationService.signInWithGoogle(signInWithGoogleRequest)
                 signInResult = signIn.body()
-                if(signInResult != null)
-                    logInCache.saveUserAuthenticationInfo(signInResult.userId, signInResult.userToken)
+                if (signInResult != null)
+                    logInCache.saveUserAuthenticationInfo(
+                        signInResult.userId,
+                        signInResult.userToken
+                    )
                 val statusCode = signIn.code()
                 statusCode to signInResult
             } catch (e: Exception) {
-                if(e is CancellationException)
+                if (e is CancellationException)
                     throw e
                 else
                     throw ServerUnavailableException()

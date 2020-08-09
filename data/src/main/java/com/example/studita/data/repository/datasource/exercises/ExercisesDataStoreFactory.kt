@@ -6,7 +6,7 @@ class ExercisesDataStoreFactoryImpl(
 ) : ExercisesDataStoreFactory {
 
     override fun create(priority: ExercisesDataStoreFactory.Priority) =
-        if(priority == ExercisesDataStoreFactory.Priority.CLOUD)
+        if (priority == ExercisesDataStoreFactory.Priority.CLOUD)
             cloudExercisesJsonDataStore
         else
             diskExercisesJsonDataStore

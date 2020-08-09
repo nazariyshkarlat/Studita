@@ -1,8 +1,5 @@
 package com.example.studita.data.entity.level
 
-import com.example.studita.data.entity.exercise.ExerciseArrayEntity
-import com.example.studita.data.entity.exercise.ExerciseInfo
-import com.example.studita.data.entity.exercise.ScreenInfo
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -11,7 +8,11 @@ import java.io.IOException
 import java.lang.reflect.Type
 
 class LevelsDeserializer : JsonDeserializer<LevelEntity> {
-    override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): LevelEntity {
+    override fun deserialize(
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): LevelEntity {
         checkNotNull(json)
         checkNotNull(typeOfT)
         checkNotNull(context)

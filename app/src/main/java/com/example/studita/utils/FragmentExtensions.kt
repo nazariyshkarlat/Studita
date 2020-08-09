@@ -1,11 +1,9 @@
 package com.example.studita.utils
 
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.studita.R
-import kotlinx.android.synthetic.main.frame_layout.view.*
 
 fun AppCompatActivity.addFragment(fragment: Fragment, container: Int) {
     supportFragmentManager.beginTransaction()
@@ -13,19 +11,19 @@ fun AppCompatActivity.addFragment(fragment: Fragment, container: Int) {
         .commit()
 }
 
-fun AppCompatActivity.showFragment(fragment: Fragment){
+fun AppCompatActivity.showFragment(fragment: Fragment) {
     supportFragmentManager.beginTransaction()
         .show(fragment)
         .commit()
 }
 
-fun AppCompatActivity.removeFragment(fragment: Fragment){
+fun AppCompatActivity.removeFragment(fragment: Fragment) {
     supportFragmentManager.beginTransaction()
         .remove(fragment)
         .commit()
 }
 
-fun AppCompatActivity.hideFragment(fragment: Fragment){
+fun AppCompatActivity.hideFragment(fragment: Fragment) {
     supportFragmentManager.beginTransaction()
         .hide(fragment)
         .commit()
@@ -50,7 +48,12 @@ fun AppCompatActivity.navigateBack(fragment: Fragment): Fragment? {
     return supportFragmentManager.findFragmentById(R.id.doubleFrameLayoutFrameLayout)
 }
 
-fun AppCompatActivity.replace(fragment: Fragment, container: Int, startAnim: Int = 0, endAnim: Int = 0) {
+fun AppCompatActivity.replace(
+    fragment: Fragment,
+    container: Int,
+    startAnim: Int = 0,
+    endAnim: Int = 0
+) {
     supportFragmentManager.beginTransaction()
         .setCustomAnimations(startAnim, endAnim, 0, 0)
         .replace(container, fragment)

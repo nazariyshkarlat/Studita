@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/exercisesEndLayoutFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <LinearLayout
         android:id="@+id/exercisesEndLayoutButtonsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/exercisesEndLayoutTextButton"
             style="@style/BlueTextButton16"
-            android:text="@string/detailed_stat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp"
+            android:text="@string/detailed_stat" />
 
         <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/exercisesEndLayoutButton"
             style="@style/Button"
             android:layout_width="match_parent"
             android:layout_height="@dimen/buttonHeight"
-            android:text="@string/complete"
             android:layout_marginStart="@dimen/defaultRLMargin"
             android:layout_marginEnd="@dimen/defaultRLMargin"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            android:text="@string/complete" />
 
     </LinearLayout>
 

@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginStart="@dimen/defaultRLMargin"
-    android:layout_marginEnd="@dimen/defaultRLMargin"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_marginEnd="@dimen/defaultRLMargin">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
         android:layout_centerInParent="true"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:srcCompat="@drawable/ic_watch_later_accent"/>
+            app:srcCompat="@drawable/ic_watch_later_accent" />
 
         <TextView
-            style="@style/Regular16"
             android:id="@+id/incorrectTimeLayoutTitle"
+            style="@style/Regular16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
 
         <TextView
-            style="@style/Regular16Secondary"
             android:id="@+id/incorrectTimeLayoutSubtitle"
+            style="@style/Regular16Secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

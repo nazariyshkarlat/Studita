@@ -2,8 +2,8 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/exerciseVariantTextItem"
     style="@style/ExerciseVariant"
-    android:layout_weight="1"
-    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:layout_margin="8dp"/>
+    android:layout_margin="8dp"
+    android:layout_weight="1"
+    android:gravity="center" />

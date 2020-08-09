@@ -20,7 +20,8 @@ import com.google.android.flexbox.FlexboxLayout
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
 import kotlinx.android.synthetic.main.exercise_variants_linear_fragment.*
 
-class ExerciseVariantsType17Fragment : ExerciseVariantsFragment(R.layout.exercise_variants_linear_fragment) {
+class ExerciseVariantsType17Fragment :
+    ExerciseVariantsFragment(R.layout.exercise_variants_linear_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,24 +38,27 @@ class ExerciseVariantsType17Fragment : ExerciseVariantsFragment(R.layout.exercis
             }
 
             if (selectedPos != -1)
-                exerciseVariantsLinearFragmentCenterLinearLayout.postExt {
-                    it as ViewGroup
+                exerciseVariantsLinearFragmentCenterLinearLayout.postExt<ViewGroup> {
                     selectVariant(it, selectedPos)
                 }
             observeAnswered(vm, exerciseVariantsLinearFragmentCenterLinearLayout)
         }
     }
 
-    private fun fillVariants(variants: List<ExerciseShapeUiModel>){
+    private fun fillVariants(variants: List<ExerciseShapeUiModel>) {
         variants.forEach { variant ->
             val variantView: View
-            if(variant.count == 0){
-                variantView = exerciseVariantsLinearFragmentCenterLinearLayout.makeView(R.layout.exercise_variant_text_item) as TextView
-                variantView.exerciseVariantTextItem.text = resources.getString(R.string.exercise_image_0_count)
-            }else {
-                variantView = exerciseVariantsLinearFragmentCenterLinearLayout.makeView(R.layout.exercise_variant_linear_item) as FlexboxLayout
+            if (variant.count == 0) {
+                variantView =
+                    exerciseVariantsLinearFragmentCenterLinearLayout.makeView(R.layout.exercise_variant_text_item) as TextView
+                variantView.exerciseVariantTextItem.text =
+                    resources.getString(R.string.exercise_image_0_count)
+            } else {
+                variantView =
+                    exerciseVariantsLinearFragmentCenterLinearLayout.makeView(R.layout.exercise_variant_linear_item) as FlexboxLayout
                 for (i in 0 until variant.count) {
-                    val shapeView = SquareView(exerciseVariantsLinearFragmentCenterLinearLayout.context)
+                    val shapeView =
+                        SquareView(exerciseVariantsLinearFragmentCenterLinearLayout.context)
                     val params = FlexboxLayout.LayoutParams(
                         FlexboxLayout.LayoutParams.WRAP_CONTENT,
                         FlexboxLayout.LayoutParams.WRAP_CONTENT
@@ -67,16 +71,20 @@ class ExerciseVariantsType17Fragment : ExerciseVariantsFragment(R.layout.exercis
                 }
             }
             variantView.setOnClickListener {
-                selectVariant(exerciseVariantsLinearFragmentCenterLinearLayout, exerciseVariantsLinearFragmentCenterLinearLayout.indexOfChild(it))
-                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant.count.toString())
+                selectVariant(
+                    exerciseVariantsLinearFragmentCenterLinearLayout,
+                    exerciseVariantsLinearFragmentCenterLinearLayout.indexOfChild(it)
+                )
+                exercisesViewModel?.exerciseRequestData =
+                    ExerciseRequestData(variant.count.toString())
             }
             exerciseVariantsLinearFragmentCenterLinearLayout.addView(variantView)
         }
     }
 
-    private fun fillLinearLayout(exerciseUiModel: ExerciseUiModel.ExerciseUiModelExercise.ExerciseType17UiModel){
+    private fun fillLinearLayout(exerciseUiModel: ExerciseUiModel.ExerciseUiModelExercise.ExerciseType17UiModel) {
         (exerciseUiModel.exerciseShapeEquationUiModel).forEach {
-            if(it is ExerciseShapeUiModel) {
+            if (it is ExerciseShapeUiModel) {
                 (0 until it.count).forEach { _ ->
                     val shapeView =
                         SquareView(exerciseVariantsLinearFragmentTopFlexboxLayout.context)
@@ -93,11 +101,14 @@ class ExerciseVariantsType17Fragment : ExerciseVariantsFragment(R.layout.exercis
                     )
                     exerciseVariantsLinearFragmentTopFlexboxLayout.addView(shapeView)
                 }
-            }else{
+            } else {
                 val operatorView = TextView(exerciseVariantsLinearFragmentTopFlexboxLayout.context)
                 TextViewCompat.setTextAppearance(operatorView, R.style.Medium24)
                 with(operatorView) {
-                    val params = ViewGroup.MarginLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    val params = ViewGroup.MarginLayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
                     params.marginStart = (-4).dpToPx()
                     params.marginEnd = (-4).dpToPx()
                     layoutParams = params

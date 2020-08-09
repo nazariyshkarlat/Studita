@@ -5,9 +5,8 @@ import com.example.studita.data.net.ExercisesService
 import com.example.studita.data.net.OfflineExercisesService
 import com.example.studita.data.repository.datasource.exercises.CloudExercisesJsonDataStore
 import com.example.studita.data.repository.datasource.exercises.DiskExercisesJsonDataStore
-import com.example.studita.data.repository.datasource.exercises.ExercisesDataStore
-import com.example.studita.data.repository.exercise.ExercisesRepositoryImpl
 import com.example.studita.data.repository.datasource.exercises.ExercisesDataStoreFactoryImpl
+import com.example.studita.data.repository.exercise.ExercisesRepositoryImpl
 import com.example.studita.di.CacheModule
 import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule
@@ -46,7 +45,7 @@ object ExercisesModule {
     }
 
     private fun makeExercisesInteractor(repository: ExercisesRepository) =
-       ExercisesInteractorImpl(
+        ExercisesInteractorImpl(
             repository
         )
 

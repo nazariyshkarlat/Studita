@@ -1,6 +1,5 @@
 package com.example.studita.presentation.fragments.dialog_alerts
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
@@ -12,15 +11,11 @@ import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.activities.MainActivity.Companion.startMainActivityNewTask
 import com.example.studita.presentation.fragments.base.BaseDialogFragment
 import com.example.studita.presentation.view_model.ProfileMenuFragmentViewModel
-import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.UserUtils.deviceSignOut
 import kotlinx.android.synthetic.main.sign_out_dialog_alert.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
-class ProfileMenuSignOutDialogAlertFragment : BaseDialogFragment(R.layout.sign_out_dialog_alert){
+class ProfileMenuSignOutDialogAlertFragment : BaseDialogFragment(R.layout.sign_out_dialog_alert) {
 
     private var profileMenuFragmentViewModel: ProfileMenuFragmentViewModel? = null
 
@@ -43,7 +38,7 @@ class ProfileMenuSignOutDialogAlertFragment : BaseDialogFragment(R.layout.sign_o
                 deviceSignOut(activity as FragmentActivity)
                 MainActivity.needsRecreate = true
                 dialog?.dismiss()
-                App.authenticationState.value = CheckTokenIsCorrectStatus.Correct
+                App.authenticationState.value = CheckTokenIsCorrectStatus.Correct to false
                 activity?.startMainActivityNewTask()
             }
         }

@@ -17,7 +17,8 @@ import com.example.studita.utils.hideKeyboard
 import kotlinx.android.synthetic.main.exercise_input_missed_part_layout.*
 
 
-class ExerciseMissedCharacterFragment : NavigatableFragment(R.layout.exercise_input_missed_part_layout), TextWatcher {
+class ExerciseMissedCharacterFragment :
+    NavigatableFragment(R.layout.exercise_input_missed_part_layout), TextWatcher {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -41,7 +42,7 @@ class ExerciseMissedCharacterFragment : NavigatableFragment(R.layout.exercise_in
                 val exerciseUiModel =
                     it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType16UiModel
                 exerciseMissedPartLayoutLeftTextView.text = exerciseUiModel.titleParts[0]
-                exerciseMissedPartLayoutRightTextView.text =  exerciseUiModel.titleParts[1]
+                exerciseMissedPartLayoutRightTextView.text = exerciseUiModel.titleParts[1]
                 exerciseMissedPartLayoutBottomTextView.text = exerciseUiModel.subtitle
             }
         }
@@ -72,11 +73,11 @@ class ExerciseMissedCharacterFragment : NavigatableFragment(R.layout.exercise_in
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        if(s?.isNotEmpty() == true){
+        if (s?.isNotEmpty() == true) {
             exercisesViewModel?.setButtonEnabled(true)
             exercisesViewModel?.exerciseRequestData =
                 ExerciseRequestData(s.toString())
-        }else{
+        } else {
             exercisesViewModel?.setButtonEnabled(false)
         }
     }

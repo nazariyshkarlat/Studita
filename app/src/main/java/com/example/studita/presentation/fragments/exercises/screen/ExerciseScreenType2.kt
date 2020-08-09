@@ -10,7 +10,7 @@ import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercise_screen_type_2.*
 
 
-class ExerciseScreenType2 :  NavigatableFragment(R.layout.exercise_screen_type_2){
+class ExerciseScreenType2 : NavigatableFragment(R.layout.exercise_screen_type_2) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -22,8 +22,9 @@ class ExerciseScreenType2 :  NavigatableFragment(R.layout.exercise_screen_type_2
         }
 
         exercisesViewModel?.let {
-            if(it.exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel){
-                val screenUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel
+            if (it.exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel) {
+                val screenUiModel =
+                    it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel
                 exerciseScreenType2Text.text = screenUiModel.title
             }
         }

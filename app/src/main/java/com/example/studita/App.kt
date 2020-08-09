@@ -1,27 +1,14 @@
 package com.example.studita
 
 import android.app.Application
-import android.content.Context
-import android.net.wifi.WifiManager
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.studita.data.entity.FriendActionRequest
 import com.example.studita.di.DI
 import com.example.studita.di.data.*
 import com.example.studita.di.data.exercise.ExercisesModule
-import com.example.studita.domain.entity.FriendActionRequestData
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.UserIdTokenData
-import com.example.studita.domain.entity.authorization.AuthorizationRequestData
 import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
-import com.example.studita.domain.interactor.PrivacySettingsDuelsExceptionsStatus
-import com.example.studita.domain.interactor.PrivacySettingsStatus
 import com.example.studita.domain.interactor.UserDataStatus
-import com.example.studita.domain.interactor.user_data.UserDataInteractor
-import com.example.studita.presentation.view_model.LiveEvent
-import com.example.studita.presentation.view_model.SingleLiveEvent
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.TimeUtils
 import com.example.studita.utils.UserUtils
@@ -29,18 +16,22 @@ import com.example.studita.utils.launchExt
 import kotlinx.coroutines.*
 import java.util.*
 
-class App : Application(){
+class App : Application() {
 
-    companion object{
+    companion object {
         lateinit var userDataDeferred: Deferred<UserDataStatus>
         val applicationScope = CoroutineScope(Dispatchers.Main)
-        val authenticationState = MutableLiveData<CheckTokenIsCorrectStatus>()
+        val authenticationState = MutableLiveData<Pair<CheckTokenIsCorrectStatus, Boolean>>()
         var authenticationJob: Job? = null
 
-        fun initUserData(userDataData: UserDataData){
+        fun initUserData(userDataData: UserDataData) {
             UserUtils.userDataLiveData.value = userDataData
 
-            if((TimeUtils.getCalendarDayCount(userDataData.streakDatetime, Date()) > 1F) && (userDataData.streakDays != 0)){
+            if ((TimeUtils.getCalendarDayCount(
+                    userDataData.streakDatetime,
+                    Date()
+                ) > 1F) && (userDataData.streakDays != 0)
+            ) {
                 userDataData.streakDays = 0
                 userDataData.todayCompletedExercises = 0
                 GlobalScope.launch {
@@ -49,7 +40,7 @@ class App : Application(){
             }
         }
 
-        fun getUserData(){
+        fun getUserData() {
             userDataDeferred = applicationScope.async {
                 val userDataStatus = UserDataModule.getUserDataInteractorImpl()
                     .getUserData(PrefsUtils.getUserId(), PrefsUtils.isOfflineModeEnabled())
@@ -63,17 +54,19 @@ class App : Application(){
             }
         }
 
-        fun authenticate(userIdTokenData: UserIdTokenData?){
-            authenticationState.value = CheckTokenIsCorrectStatus.Waiting
-            if(PrefsUtils.isOfflineModeEnabled() || !UserUtils.isLoggedIn()){
-                getUserData()
-                authenticationState.value = CheckTokenIsCorrectStatus.Correct
-            }else {
+        fun authenticate(userIdTokenData: UserIdTokenData?, isOfflineModeChanged: Boolean) {
+            authenticationState.value = CheckTokenIsCorrectStatus.Waiting to isOfflineModeChanged
+            if (PrefsUtils.isOfflineModeEnabled() || !UserUtils.isLoggedIn()) {
+
+                if(UserUtils.userDataIsNull())
+                    getUserData()
+                authenticationState.value = CheckTokenIsCorrectStatus.Correct to isOfflineModeChanged
+            } else {
                 authenticationJob = applicationScope.launchExt(authenticationJob) {
                     val tokenIsCorrectStatus = AuthorizationModule.getAuthorizationInteractorImpl()
                         .checkTokenIsCorrect(userIdTokenData!!)
                     getUserData()
-                    authenticationState.postValue(tokenIsCorrectStatus)
+                    authenticationState.postValue(tokenIsCorrectStatus to isOfflineModeChanged)
                     userDataDeferred.await()
                 }
             }
@@ -86,10 +79,10 @@ class App : Application(){
         downloadCache()
         initDefPrefs()
 
-        authenticate(UserUtils.getUserIDTokenData())
+        authenticate(UserUtils.getUserIDTokenData(), false)
     }
 
-    private fun downloadCache(){
+    private fun downloadCache() {
         GlobalScope.launch {
             LevelsModule.getLevelsInteractorImpl().downloadLevels()
             ChapterModule.getChapterInteractorImpl().downloadChapters()
@@ -98,10 +91,10 @@ class App : Application(){
         }
     }
 
-    private fun initDefPrefs(){
-        if(!PrefsUtils.containsOfflineMode())
+    private fun initDefPrefs() {
+        if (!PrefsUtils.containsOfflineMode())
             PrefsUtils.setOfflineMode(false)
-        if(!PrefsUtils.containsNotificationsMode())
+        if (!PrefsUtils.containsNotificationsMode())
             PrefsUtils.setNotificationsMode(true)
     }
 

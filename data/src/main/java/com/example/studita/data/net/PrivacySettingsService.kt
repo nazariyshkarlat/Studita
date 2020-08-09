@@ -16,9 +16,11 @@ interface PrivacySettingsService {
     suspend fun editPrivacySettings(@Body privacySettingsRequest: PrivacySettingsRequest): Response<ResponseBody>
 
     @POST("privacy_duels_exceptions")
-    suspend fun getPrivacyDuelsExceptionsList(@Body userIdToken: UserIdToken,
-                                              @Query("per_page") perPage: Int,
-                                              @Query("page_number") page_number: Int): Response<List<PrivacyDuelsExceptionsEntity>>
+    suspend fun getPrivacyDuelsExceptionsList(
+        @Body userIdToken: UserIdToken,
+        @Query("per_page") perPage: Int,
+        @Query("page_number") page_number: Int
+    ): Response<List<PrivacyDuelsExceptionsEntity>>
 
     @POST("edit_duels_exceptions")
     suspend fun editDuelsExceptions(@Body editDuelsExceptionsRequest: EditDuelsExceptionsRequest): Response<ResponseBody>

@@ -2,7 +2,8 @@ package com.example.studita.presentation.listeners
 
 import androidx.core.widget.NestedScrollView
 
-class FabScrollImpl(private val fabScrollListener: FabScrollListener) : NestedScrollView.OnScrollChangeListener {
+class FabScrollImpl(private val fabScrollListener: FabScrollListener) :
+    NestedScrollView.OnScrollChangeListener {
 
     private var scrollDist = 0
     private var isVisible = true

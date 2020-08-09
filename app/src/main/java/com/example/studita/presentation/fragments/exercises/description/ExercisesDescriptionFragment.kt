@@ -1,7 +1,6 @@
 package com.example.studita.presentation.fragments.exercises.description
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -12,7 +11,8 @@ import com.example.studita.domain.entity.exercise.ExercisesDescriptionData
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
 
-open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewId), ViewTreeObserver.OnScrollChangedListener{
+open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewId),
+    ViewTreeObserver.OnScrollChangedListener {
 
     var exercisesViewModel: ExercisesViewModel? = null
     var exercisesDescriptionModel: ExercisesDescriptionData? = null
@@ -28,7 +28,7 @@ open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewI
             view.viewTreeObserver.addOnScrollChangedListener(this)
         }
 
-        if(!isHidden)
+        if (!isHidden)
             checkScrollY()
     }
 
@@ -36,7 +36,7 @@ open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewI
         super.onHiddenChanged(hidden)
         if (!hidden) {
             checkScrollY()
-        }else {
+        } else {
             exercisesViewModel?.showToolbarDivider(false)
             exercisesViewModel?.showButtonDivider(false)
             view?.viewTreeObserver?.removeOnScrollChangedListener(this)
@@ -47,7 +47,7 @@ open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewI
         checkScrollY()
     }
 
-    protected fun checkButtonDivider(view: View){
+    protected fun checkButtonDivider(view: View) {
         OneShotPreDrawListener.add(view) {
             maxScrollY = getMaxScrollY(view as ScrollView)
             if (view.height < (view as ViewGroup).getChildAt(
@@ -60,7 +60,7 @@ open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewI
         }
     }
 
-    private fun checkScrollY(){
+    private fun checkScrollY() {
         view?.let {
             it.post {
                 if (it is ScrollView) {
@@ -72,6 +72,7 @@ open class ExercisesDescriptionFragment(viewId: Int) : NavigatableFragment(viewI
         }
     }
 
-    private fun getMaxScrollY(scrollView: ScrollView) = 0.coerceAtLeast(scrollView.getChildAt(0).height - (scrollView.height- scrollView.paddingBottom - scrollView.paddingTop))
+    private fun getMaxScrollY(scrollView: ScrollView) =
+        0.coerceAtLeast(scrollView.getChildAt(0).height - (scrollView.height - scrollView.paddingBottom - scrollView.paddingTop))
 
 }

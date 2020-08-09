@@ -9,7 +9,6 @@ import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.privacy_settings.PrivacySettingsInteractor
 import com.example.studita.domain.interactor.privacy_settings.PrivacySettingsInteractorImpl
 import com.example.studita.domain.repository.PrivacySettingsRepository
-import com.example.studita.domain.service.SyncPrivacySettings
 import com.example.studita.service.SyncPrivacySettingsImpl
 
 object PrivacySettingsModule {
@@ -26,33 +25,35 @@ object PrivacySettingsModule {
     fun getPrivacySettingsInteractorImpl(): PrivacySettingsInteractor {
         if (config == DI.Config.RELEASE && privacySettingsInteractor == null)
             privacySettingsInteractor =
-                    makePrivacySettingsIntercator(
-                            getPrivacySettingsRepository()
-                    )
+                makePrivacySettingsIntercator(
+                    getPrivacySettingsRepository()
+                )
         return privacySettingsInteractor!!
     }
 
     private fun getPrivacySettingsRepository(): PrivacySettingsRepository {
         if (repository == null)
             repository = PrivacySettingsRepositoryImpl(
-                    getPrivacySettingsDataStoreFactory()
+                getPrivacySettingsDataStoreFactory()
             )
         return repository!!
     }
 
     private fun makePrivacySettingsIntercator(repository: PrivacySettingsRepository) =
-            PrivacySettingsInteractorImpl(
-                repository,
-                SyncPrivacySettingsImpl()
-            )
+        PrivacySettingsInteractorImpl(
+            repository,
+            SyncPrivacySettingsImpl()
+        )
 
 
     private fun getPrivacySettingsDataStoreFactory() =
-            PrivacySettingsDataStoreFactoryImpl(
-                    getCloudPrivacySettingsDataStore())
+        PrivacySettingsDataStoreFactoryImpl(
+            getCloudPrivacySettingsDataStore()
+        )
 
     private fun getCloudPrivacySettingsDataStore() =
-            PrivacySettingsDataStoreImpl(
-                    NetworkModule.connectionManager,
-                    NetworkModule.getService(PrivacySettingsService::class.java))
+        PrivacySettingsDataStoreImpl(
+            NetworkModule.connectionManager,
+            NetworkModule.getService(PrivacySettingsService::class.java)
+        )
 }

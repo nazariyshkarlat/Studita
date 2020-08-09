@@ -8,12 +8,22 @@ import android.widget.EditText
 
 
 interface GenericTextWatcher {
-    fun beforeTextChanged(view: View, charSequence: CharSequence?, start: Int, count: Int, after: Int)
+    fun beforeTextChanged(
+        view: View,
+        charSequence: CharSequence?,
+        start: Int,
+        count: Int,
+        after: Int
+    )
+
     fun onTextChanged(view: View, charSequence: CharSequence?, start: Int, before: Int, count: Int)
     fun afterTextChanged(view: View, editable: Editable?)
 }
 
-class GenericTextWatcherImpl(private val genericTextWatcher: GenericTextWatcher, private  val view: View): TextWatcher{
+class GenericTextWatcherImpl(
+    private val genericTextWatcher: GenericTextWatcher,
+    private val view: View
+) : TextWatcher {
     override fun afterTextChanged(s: Editable?) {
         genericTextWatcher.afterTextChanged(view, s)
     }
@@ -29,6 +39,6 @@ class GenericTextWatcherImpl(private val genericTextWatcher: GenericTextWatcher,
 
 }
 
-fun EditText.setGenericTextWatcher(genericTextWatcherImpl: GenericTextWatcherImpl){
+fun EditText.setGenericTextWatcher(genericTextWatcherImpl: GenericTextWatcherImpl) {
     addTextChangedListener(genericTextWatcherImpl)
 }

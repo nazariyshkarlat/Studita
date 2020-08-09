@@ -11,6 +11,7 @@ object CacheModule {
 
     fun initialize(app: Application) {
         sharedPreferences = app.getSharedPreferences(
-            PREFS_NAME, Context.MODE_PRIVATE)
+            PREFS_NAME, Context.MODE_PRIVATE
+        )
     }
 }

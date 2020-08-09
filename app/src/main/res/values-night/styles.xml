@@ -1,4 +1,5 @@
 <resources xmlns:http="http://schemas.android.com/apk/res-auto">
+
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorAccent10">@color/blue10</item>
         <item name="colorAccent14">@color/blue14</item>

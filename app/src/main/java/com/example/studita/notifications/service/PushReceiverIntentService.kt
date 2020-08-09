@@ -13,7 +13,6 @@ import com.example.studita.domain.entity.NotificationType
 import com.example.studita.domain.entity.serializer.IsMyFriendStatusSerializer
 import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.notifications.PushReceiver
-import com.example.studita.utils.IDUtils
 import com.google.gson.GsonBuilder
 
 
@@ -31,7 +30,8 @@ class PushReceiverIntentService : JobIntentService() {
 
     override fun onHandleWork(intent: Intent) {
 
-        val notificationType = (intent.getStringExtra("type") as String).first().toNotificationType()
+        val notificationType =
+            (intent.getStringExtra("type") as String).first().toNotificationType()
 
         val isMyFriendData = when (notificationType) {
             NotificationType.FRIENDSHIP_REQUEST -> IsMyFriendData(
@@ -67,11 +67,19 @@ class PushReceiverIntentService : JobIntentService() {
 
     }
 
-    private fun sendNotification(extras: Bundle){
+    private fun sendNotification(extras: Bundle) {
         val broadcast = Intent()
         broadcast.putExtras(extras)
         broadcast.action = BROADCAST_NOTIFICATION
-        sendOrderedBroadcast(broadcast, null, PushReceiver(),  null, Activity.RESULT_OK, null, extras)
+        sendOrderedBroadcast(
+            broadcast,
+            null,
+            PushReceiver(),
+            null,
+            Activity.RESULT_OK,
+            null,
+            extras
+        )
     }
 
 }

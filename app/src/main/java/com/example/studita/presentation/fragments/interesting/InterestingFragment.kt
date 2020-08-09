@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.android.synthetic.main.exercise_toolbar.*
 import java.io.IOException
 
-class InterestingFragment : BaseFragment(R.layout.exercise_layout){
+class InterestingFragment : BaseFragment(R.layout.exercise_layout) {
 
     private var interestingViewModel: InterestingViewModel? = null
 
@@ -32,7 +32,8 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout){
                             pair.second,
                             R.id.exerciseLayoutFrameLayout
                         )
-                        (activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.exerciseLayoutFrameLayout)?.let { (activity as AppCompatActivity).removeFragment(it) }
+                        (activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.exerciseLayoutFrameLayout)
+                            ?.let { (activity as AppCompatActivity).removeFragment(it) }
                     }
                     InterestingViewModel.InterestingNavigationState.ADD -> (activity as AppCompatActivity).addFragment(
                         pair.second,
@@ -64,8 +65,11 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout){
             viewModel.progressBarState.observe(viewLifecycleOwner, Observer { pair ->
                 val percent = pair.first
                 val last = pair.second
-                exerciseToolbarProgressBar.animateProgress(toPercent = percent, delay = (if((exerciseToolbarProgressBar.animation == null) || this.exerciseToolbarProgressBar.animation.hasEnded()) 100L else 0L))
-                if(last)
+                exerciseToolbarProgressBar.animateProgress(
+                    toPercent = percent,
+                    delay = (if ((exerciseToolbarProgressBar.animation == null) || this.exerciseToolbarProgressBar.animation.hasEnded()) 100L else 0L)
+                )
+                if (last)
                     exerciseLayoutButton.setOnClickListener {
                         activity?.finish()
                     }
@@ -78,7 +82,7 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout){
                         exerciseLayoutButton.text = resources.getString(R.string.begin)
                     }
                     InterestingViewModel.InterestingState.STEP -> {
-                        if(exerciseToolbarProgressBar.alpha == 0F)
+                        if (exerciseToolbarProgressBar.alpha == 0F)
                             exerciseToolbarProgressBar.animate().alpha(1F).start()
                         exerciseLayoutButton.text = resources.getString(R.string.next)
                     }
@@ -91,7 +95,7 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout){
 
             exerciseLayoutButton.setOnClickListener {
                 val isLastFragment = viewModel.progressBarState.value?.second == true
-                if(!isLastFragment)
+                if (!isLastFragment)
                     viewModel.initFragment()
                 else
                     activity?.finish()
@@ -101,7 +105,7 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout){
                 activity?.onBackPressed()
             }
 
-            if(savedInstanceState == null)
+            if (savedInstanceState == null)
                 viewModel.initFragment()
         }
     }

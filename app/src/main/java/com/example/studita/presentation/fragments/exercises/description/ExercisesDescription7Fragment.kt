@@ -9,14 +9,15 @@ import com.example.studita.utils.ThemeUtils
 import com.example.studita.utils.dpToPx
 import kotlinx.android.synthetic.main.exercises_description_pure_layout.*
 
-class ExercisesDescription7Fragment : ExercisesDescriptionFragment(R.layout.exercises_description_pure_layout) {
+class ExercisesDescription7Fragment :
+    ExercisesDescriptionFragment(R.layout.exercises_description_pure_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exercisesDescriptionModel?.let {
             formView(it.textParts)
 
-            if(!isHidden)
+            if (!isHidden)
                 checkButtonDivider(view)
         }
     }
@@ -25,16 +26,19 @@ class ExercisesDescription7Fragment : ExercisesDescriptionFragment(R.layout.exer
         val textColor = context?.let { ThemeUtils.getPrimaryColor(it) } ?: 0
         val margin = 16.dpToPx()
         textParts.forEachIndexed { index, s ->
-            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
             val textView = TextView(context)
             textView.text = s
             textView.textSize = 18F
             textView.setTextColor(textColor)
-            params.topMargin = if((index == 7) or (index == 8))
+            params.topMargin = if ((index == 7) or (index == 8))
                 24.dpToPx()
             else
                 margin
-            if(index == textParts.lastIndex)
+            if (index == textParts.lastIndex)
                 params.bottomMargin = margin
             textView.layoutParams = params
             exercisesDescriptionPureLayoutParentLinearLayout.addView(textView)

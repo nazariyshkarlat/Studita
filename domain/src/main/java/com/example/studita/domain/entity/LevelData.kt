@@ -11,15 +11,17 @@ sealed class LevelChildData {
         val chapterTitle: String,
         val chapterSubtitle: String,
         val chapterPartsCount: Int
-    ): LevelChildData()
+    ) : LevelChildData()
+
     data class LevelInterestingData(
         val interestingNumber: Int,
         val title: String,
         val subtitle: String,
         val tags: List<String>
-    ): LevelChildData()
+    ) : LevelChildData()
+
     data class LevelSubscribeData(
         val title: String,
         val button: List<String>
-    ): LevelChildData()
+    ) : LevelChildData()
 }

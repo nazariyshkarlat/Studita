@@ -1,10 +1,8 @@
 package com.example.studita.presentation.draw
 
-import android.R.attr.bitmap
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
 import com.example.studita.R
@@ -12,12 +10,13 @@ import com.example.studita.utils.dpToPx
 import com.example.studita.utils.spToPx
 
 
-object AvaDrawer{
+object AvaDrawer {
     private val imageSize = 56.dpToPx()
     private val textSize = 28.spToPx()
     private val textPaint = Paint()
     private val circlePaint = Paint()
-    private var colors = arrayListOf("#C2175B",
+    private var colors = arrayListOf(
+        "#C2175B",
         "#0098A6",
         "#AA47BC",
         "#00887A",

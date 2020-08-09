@@ -2,17 +2,16 @@ package com.example.studita.presentation.fragments.exercises.screen
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.model.ExerciseImagesRowUiModel
-import com.example.studita.utils.dpToPx
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.example.studita.utils.dpToPx
 import com.google.android.flexbox.FlexboxLayout
 import kotlinx.android.synthetic.main.exercise_screen_type_1.*
 
-class ExerciseScreenType1 :  ExerciseScreen(R.layout.exercise_screen_type_1){
+class ExerciseScreenType1 : ExerciseScreen(R.layout.exercise_screen_type_1) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -24,8 +23,9 @@ class ExerciseScreenType1 :  ExerciseScreen(R.layout.exercise_screen_type_1){
         }
 
         exercisesViewModel?.let {
-            if(it.exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel){
-                val screenUiModel = it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel
+            if (it.exerciseUiModel is ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel) {
+                val screenUiModel =
+                    it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel
                 exerciseScreenType1SymbolTitle.text = screenUiModel.title.symbol
                 exerciseScreenType1SymbolNameTitle.text = screenUiModel.title.symbolName
                 exerciseScreenType1Subtitle.text = screenUiModel.subtitle
@@ -35,14 +35,17 @@ class ExerciseScreenType1 :  ExerciseScreen(R.layout.exercise_screen_type_1){
 
     }
 
-    private fun fillFlexBoxLayout(imagesRowUiModel: ExerciseImagesRowUiModel){
-        for(i in 0 until imagesRowUiModel.count) {
+    private fun fillFlexBoxLayout(imagesRowUiModel: ExerciseImagesRowUiModel) {
+        for (i in 0 until imagesRowUiModel.count) {
             val shapeView = View(exerciseScreenType1FlexboxLayout.context)
-            val params = FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT)
+            val params = FlexboxLayout.LayoutParams(
+                FlexboxLayout.LayoutParams.WRAP_CONTENT,
+                FlexboxLayout.LayoutParams.WRAP_CONTENT
+            )
             params.height = 24.dpToPx()
             params.width = 24.dpToPx()
             shapeView.layoutParams = params
-            shapeView.background =  imagesRowUiModel.image
+            shapeView.background = imagesRowUiModel.image
             exerciseScreenType1FlexboxLayout.addView(shapeView)
         }
     }

@@ -2,9 +2,9 @@ package com.example.studita.data.cache.levels_data
 
 import android.content.SharedPreferences
 
-class LevelsDataCacheImpl(private val sharedPreferences: SharedPreferences) : LevelsDataCache{
+class LevelsDataCacheImpl(private val sharedPreferences: SharedPreferences) : LevelsDataCache {
 
-    companion object{
+    companion object {
         const val LEVELS_DATA_PREFS = "levels_data_cache"
     }
 

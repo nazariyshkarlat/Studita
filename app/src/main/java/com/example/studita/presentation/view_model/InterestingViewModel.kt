@@ -7,19 +7,22 @@ import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.di.data.InterestingModule
 import com.example.studita.domain.interactor.InterestingStatus
-import com.example.studita.presentation.fragments.interesting.*
+import com.example.studita.presentation.fragments.interesting.InterestingExplanation1Fragment
+import com.example.studita.presentation.fragments.interesting.InterestingSpecificDrumRollFragment
+import com.example.studita.presentation.fragments.interesting.InterestingStartScreenFragment
+import com.example.studita.presentation.fragments.interesting.InterestingStepFragment
 import com.example.studita.presentation.model.InterestingUiModelScreen
 import com.example.studita.presentation.model.toShapeUiModel
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.launchExt
 import kotlinx.coroutines.Job
 
-class InterestingViewModel : ViewModel(){
+class InterestingViewModel : ViewModel() {
 
     val interestingState = SingleLiveEvent<Boolean>()
     val errorState = SingleLiveEvent<Int>()
     val progressBarState = SingleLiveEvent<Pair<Float, Boolean>>()
-    var interestingProgress =  MutableLiveData<InterestingState>(InterestingState.START_SCREEN)
+    var interestingProgress = MutableLiveData<InterestingState>(InterestingState.START_SCREEN)
     var toolbarDividerState = SingleLiveEvent<Boolean>()
     var buttonDividerState = SingleLiveEvent<Boolean>()
     val navigationState = SingleLiveEvent<Pair<InterestingNavigationState, Fragment>>()
@@ -34,9 +37,12 @@ class InterestingViewModel : ViewModel(){
 
     private var job: Job? = null
 
-    fun getInteresting(interestingNumber: Int){
-        job = viewModelScope.launchExt(job){
-            when(val status = interestingInteractor.getInteresting(interestingNumber, PrefsUtils.isOfflineModeEnabled())){
+    fun getInteresting(interestingNumber: Int) {
+        job = viewModelScope.launchExt(job) {
+            when (val status = interestingInteractor.getInteresting(
+                interestingNumber,
+                PrefsUtils.isOfflineModeEnabled()
+            )) {
                 is InterestingStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is InterestingStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is InterestingStatus.Success -> {
@@ -48,7 +54,7 @@ class InterestingViewModel : ViewModel(){
         }
     }
 
-    fun initFragment(){
+    fun initFragment() {
         currentScreen = interestingScreens[currentScreenPosition]
         navigationState.value = getFragmentToAdd(currentScreen)
         setProgressPercent(getProgressPercent())
@@ -56,7 +62,7 @@ class InterestingViewModel : ViewModel(){
     }
 
     private fun getFragmentToAdd(interestingUiModelScreen: InterestingUiModelScreen) =
-        when(interestingUiModelScreen){
+        when (interestingUiModelScreen) {
             is InterestingUiModelScreen.InterestingUiModelStartScreen -> {
                 setInterestingProgress(InterestingState.START_SCREEN)
                 InterestingNavigationState.ADD to InterestingStartScreenFragment()
@@ -76,31 +82,32 @@ class InterestingViewModel : ViewModel(){
         }
 
 
-    fun showToolbarDivider(show: Boolean){
+    fun showToolbarDivider(show: Boolean) {
         toolbarDividerState.value = show
     }
 
-    fun showButtonDivider(show: Boolean){
+    fun showButtonDivider(show: Boolean) {
         buttonDividerState.value = show
     }
 
-    private fun setProgressPercent(percent: Float){
+    private fun setProgressPercent(percent: Float) {
         progressBarState.value = percent to (percent == 1F)
     }
 
-    private fun setInterestingProgress(state: InterestingState){
+    private fun setInterestingProgress(state: InterestingState) {
         interestingProgress.value = state
     }
 
-    private fun getProgressPercent(): Float = (currentScreenPosition-1)/(interestingScreens.lastIndex-1).toFloat()
+    private fun getProgressPercent(): Float =
+        (currentScreenPosition - 1) / (interestingScreens.lastIndex - 1).toFloat()
 
-    enum class InterestingNavigationState{
+    enum class InterestingNavigationState {
         ADD,
         NAVIGATE,
         REPLACE
     }
 
-    enum class InterestingState{
+    enum class InterestingState {
         START_SCREEN,
         STEP,
         EXPLANATION

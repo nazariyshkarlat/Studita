@@ -1,41 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:paddingTop="20dp"
     android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/changeAvatarDialogAlertTitle"
         style="@style/Medium18"
-        android:text="@string/change_avatar_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:text="@string/change_avatar_dialog_title" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:layout_marginTop="6dp"
-        android:orientation="vertical"
-        android:layout_gravity="start">
+        android:orientation="vertical">
 
         <FrameLayout
             android:id="@+id/changeAvatarDialogAlertChooseFromGallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:background="?selectableItemBackground">
+            android:paddingEnd="16dp"
+            android:paddingBottom="10dp">
 
             <TextView
                 style="@style/Regular16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/change_avatar_choose_from_gallery"/>
+                android:text="@string/change_avatar_choose_from_gallery" />
 
         </FrameLayout>
 
@@ -43,17 +44,17 @@
             android:id="@+id/changeAvatarDialogAlertTakePhoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:background="?selectableItemBackground">
+            android:paddingEnd="16dp"
+            android:paddingBottom="10dp">
 
             <TextView
                 style="@style/Regular16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/change_avatar_take_a_photo"/>
+                android:text="@string/change_avatar_take_a_photo" />
 
         </FrameLayout>
 

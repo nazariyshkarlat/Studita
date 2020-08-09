@@ -9,18 +9,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import com.example.studita.R
 import com.example.studita.presentation.fragments.LoadFragment
-import com.example.studita.utils.UserUtils
-import com.example.studita.utils.replace
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.UserUtils
+import com.example.studita.utils.replace
 import kotlinx.android.synthetic.main.exercises_load_layout.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-class ExercisesLoadFragment : LoadFragment(){
+class ExercisesLoadFragment : LoadFragment() {
 
     var exercisesViewModel: ExercisesViewModel? = null
 
@@ -31,35 +28,43 @@ class ExercisesLoadFragment : LoadFragment(){
             ViewModelProviders.of(this).get(ExercisesViewModel::class.java)
         }
 
-        exercisesViewModel?.let {viewModel->
+        exercisesViewModel?.let { viewModel ->
 
-            viewModel.loadScreenBadConnectionState.observe(viewLifecycleOwner, Observer { badConnection->
-                if(badConnection)
-                    formBadConnectionButton(viewModel)
-            })
+            viewModel.loadScreenBadConnectionState.observe(
+                viewLifecycleOwner,
+                Observer { badConnection ->
+                    if (badConnection)
+                        formBadConnectionButton(viewModel)
+                })
 
             viewModel.exercisesState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer<Boolean> { done ->
                     if (done) {
-                        (activity as AppCompatActivity).replace(ExercisesFragment(), R.id.frameLayout, 0, android.R.animator.fade_out)
-                    }else{
+                        (activity as AppCompatActivity).replace(
+                            ExercisesFragment(),
+                            R.id.frameLayout,
+                            0,
+                            android.R.animator.fade_out
+                        )
+                    } else {
                         formBadConnectionButton(viewModel)
                     }
                 })
 
-            viewModel.errorState.observe(viewLifecycleOwner, Observer{ message->
+            viewModel.errorState.observe(viewLifecycleOwner, Observer { message ->
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             })
         }
 
-        if(!UserUtils.isLoggedIn())
-            exercisesLoadLayoutTipTextView.text = resources.getString(R.string.load_screen_un_logged_text)
+        if (!UserUtils.isLoggedIn())
+            exercisesLoadLayoutTipTextView.text =
+                resources.getString(R.string.load_screen_un_logged_text)
 
     }
 
     override fun onCreateAnimator(transit: Int, enter: Boolean, nextAnim: Int): Animator? {
-        return if(!enter){
+        return if (!enter) {
             val animator = AnimatorInflater.loadAnimator(context, nextAnim)
             animator.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
@@ -68,11 +73,11 @@ class ExercisesLoadFragment : LoadFragment(){
                 }
             })
             animator
-        }else
+        } else
             null
     }
 
-    private fun formBadConnectionButton(viewModel: ExercisesViewModel){
+    private fun formBadConnectionButton(viewModel: ExercisesViewModel) {
 
         exercisesLoadLayoutTipTextView.text = resources.getString(R.string.issues_with_connecting)
         exercisesLoadLayoutButton.visibility = View.VISIBLE
@@ -85,7 +90,10 @@ class ExercisesLoadFragment : LoadFragment(){
 
         exercisesLoadLayoutBottomSection.alpha = 0F
 
-        exercisesLoadLayoutBottomSection.animate().alpha(1F).setDuration(resources.getInteger(R.integer.exercises_load_layout_bottom_section_alpha_anim_duration).toLong()).start()
+        exercisesLoadLayoutBottomSection.animate().alpha(1F).setDuration(
+            resources.getInteger(R.integer.exercises_load_layout_bottom_section_alpha_anim_duration)
+                .toLong()
+        ).start()
     }
 
 }

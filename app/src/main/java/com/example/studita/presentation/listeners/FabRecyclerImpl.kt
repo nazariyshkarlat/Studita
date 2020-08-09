@@ -2,7 +2,8 @@ package com.example.studita.presentation.listeners
 
 import androidx.recyclerview.widget.RecyclerView
 
-open class FabRecyclerImpl(private val fabScrollListener: FabScrollListener) : RecyclerView.OnScrollListener(){
+open class FabRecyclerImpl(private val fabScrollListener: FabScrollListener) :
+    RecyclerView.OnScrollListener() {
 
     private var scrollDist = 0
     private var isVisible = true

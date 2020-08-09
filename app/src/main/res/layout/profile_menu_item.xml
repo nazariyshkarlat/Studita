@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <com.example.studita.presentation.views.press_view.PressLinearLayout
         android:id="@+id/profileMenuItemLayout"
         android:layout_width="match_parent"
@@ -19,12 +19,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp" >
+            android:layout_marginBottom="12dp">
+
             <ImageView
                 android:id="@+id/profileMenuItemIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"/>
+                android:padding="2dp" />
         </FrameLayout>
 
         <TextView
@@ -32,7 +33,7 @@
             style="@style/Medium16_50"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"/>
+            android:layout_marginStart="14dp" />
 
     </com.example.studita.presentation.views.press_view.PressLinearLayout>
 </FrameLayout>

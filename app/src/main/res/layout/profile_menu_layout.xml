@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:id="@+id/profileMenuLayoutScrollView"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profileMenuLayoutScrollView"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_alignParentTop="true"
     android:clipToPadding="false"
-    android:paddingTop="@dimen/toolbarHeight"
     android:fillViewport="true"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:paddingTop="@dimen/toolbarHeight">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,25 +17,25 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/main_blocks_rectangle"
-            android:layout_marginTop="12dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp">
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/main_blocks_rectangle">
 
             <ImageView
                 android:id="@+id/profileMenuLayoutAvatar"
                 android:layout_width="@dimen/profileMenuAvatarSize"
                 android:layout_height="@dimen/profileMenuAvatarSize"
-                android:background="@drawable/avatar_oval"
-                android:layout_margin="12dp" />
+                android:layout_margin="12dp"
+                android:background="@drawable/avatar_oval" />
 
             <TextView
                 android:id="@+id/profileMenuLayoutUserName"
                 style="@style/Medium16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/profileMenuLayoutAvatar"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/profileMenuLayoutAvatar" />
 
             <ImageView
                 android:id="@+id/profileMenuLayoutEditProfile"
@@ -56,21 +56,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:orientation="vertical"/>
+            android:orientation="vertical" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/mainMenuLayoutBottomText"
             style="@style/Regular12Secondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
+            android:padding="10dp"
             android:text="@string/main_menu_bottom_text"
-            android:padding="10dp"/>
+            android:textAlignment="center" />
 
     </LinearLayout>
 </ScrollView>

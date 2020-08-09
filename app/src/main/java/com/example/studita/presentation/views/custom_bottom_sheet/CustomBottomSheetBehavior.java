@@ -45,65 +45,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
-import static com.google.android.material.resources.MaterialResources.getColorStateList;
 
 public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout.Behavior<V> {
 
-    /** Callback for monitoring events about bottom sheets. */
-    public abstract static class BottomSheetCallback {
-
-        /**
-         * Called when the bottom sheet changes its state.
-         *
-         * @param bottomSheet The bottom sheet view.
-         * @param newState The new state. This will be one of {@link #STATE_DRAGGING}, {@link
-         *     #STATE_SETTLING}, {@link #STATE_EXPANDED}, {@link #STATE_COLLAPSED}, {@link
-         *     #STATE_HIDDEN}, or {@link #STATE_HALF_EXPANDED}.
-         */
-        public abstract void onStateChanged(@NonNull View bottomSheet, @com.google.android.material.bottomsheet.BottomSheetBehavior.State int newState);
-
-        /**
-         * Called when the bottom sheet is being dragged.
-         *
-         * @param bottomSheet The bottom sheet view.
-         * @param slideOffset The new offset of this bottom sheet within [-1,1] range. Offset increases
-         *     as this bottom sheet is moving upward. From 0 to 1 the sheet is between collapsed and
-         *     expanded states and from -1 to 0 it is between hidden and collapsed states.
-         */
-        public abstract void onSlide(@NonNull View bottomSheet, float slideOffset);
-    }
-
-    /** The bottom sheet is dragging. */
+    /**
+     * The bottom sheet is dragging.
+     */
     public static final int STATE_DRAGGING = 1;
-
-    /** The bottom sheet is settling. */
+    /**
+     * The bottom sheet is settling.
+     */
     public static final int STATE_SETTLING = 2;
-
-    /** The bottom sheet is expanded. */
+    /**
+     * The bottom sheet is expanded.
+     */
     public static final int STATE_EXPANDED = 3;
-
-    /** The bottom sheet is collapsed. */
+    /**
+     * The bottom sheet is collapsed.
+     */
     public static final int STATE_COLLAPSED = 4;
-
-    /** The bottom sheet is hidden. */
+    /**
+     * The bottom sheet is hidden.
+     */
     public static final int STATE_HIDDEN = 5;
-
-    /** The bottom sheet is half-expanded (used when mFitToContents is false). */
+    /**
+     * The bottom sheet is half-expanded (used when mFitToContents is false).
+     */
     public static final int STATE_HALF_EXPANDED = 6;
-
-    /** @hide */
-    @RestrictTo(LIBRARY_GROUP)
-    @IntDef({
-            STATE_EXPANDED,
-            STATE_COLLAPSED,
-            STATE_DRAGGING,
-            STATE_SETTLING,
-            STATE_HIDDEN,
-            STATE_HALF_EXPANDED
-    })
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface State {}
-
     /**
      * Peek at the 16:9 ratio keyline of its parent.
      *
@@ -111,141 +79,250 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
      * will return this when the value is set.
      */
     public static final int PEEK_HEIGHT_AUTO = -1;
-
-    /** This flag will preserve the peekHeight int value on configuration change. */
+    /**
+     * This flag will preserve the peekHeight int value on configuration change.
+     */
     public static final int SAVE_PEEK_HEIGHT = 0x1;
-
-    /** This flag will preserve the fitToContents boolean value on configuration change. */
+    /**
+     * This flag will preserve the fitToContents boolean value on configuration change.
+     */
     public static final int SAVE_FIT_TO_CONTENTS = 1 << 1;
-
-    /** This flag will preserve the hideable boolean value on configuration change. */
+    /**
+     * This flag will preserve the hideable boolean value on configuration change.
+     */
     public static final int SAVE_HIDEABLE = 1 << 2;
-
-    /** This flag will preserve the skipCollapsed boolean value on configuration change. */
+    /**
+     * This flag will preserve the skipCollapsed boolean value on configuration change.
+     */
     public static final int SAVE_SKIP_COLLAPSED = 1 << 3;
-
-    /** This flag will preserve all aforementioned values on configuration change. */
+    /**
+     * This flag will preserve all aforementioned values on configuration change.
+     */
     public static final int SAVE_ALL = -1;
-
     /**
      * This flag will not preserve the aforementioned values set at runtime if the view is destroyed
      * and recreated. The only value preserved will be the positional state, e.g. collapsed, hidden,
      * expanded, etc. This is the default behavior.
      */
     public static final int SAVE_NONE = 0;
-
-    private int topOffset = 0;
-
-    /** @hide */
-    @RestrictTo(LIBRARY_GROUP)
-    @IntDef(
-            flag = true,
-            value = {
-                    SAVE_PEEK_HEIGHT,
-                    SAVE_FIT_TO_CONTENTS,
-                    SAVE_HIDEABLE,
-                    SAVE_SKIP_COLLAPSED,
-                    SAVE_ALL,
-                    SAVE_NONE,
-            })
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface SaveFlags {}
-
     private static final String TAG = "BottomSheetBehavior";
-
-    @com.google.android.material.bottomsheet.BottomSheetBehavior.SaveFlags
-    private int saveFlags = SAVE_NONE;
-
     private static final int SIGNIFICANT_VEL_THRESHOLD = 500;
-
     private static final float HIDE_THRESHOLD = 0.2f;
-
     private static final float HIDE_FRICTION = 0.1f;
-
     private static final int CORNER_ANIMATION_DURATION = 500;
-
-    private boolean fitToContents = true;
-
-    private boolean updateImportantForAccessibilityOnSiblings = false;
-
-    private float maximumVelocity;
-
-    /** Peek height set by the user. */
-    private int peekHeight;
-
-    /** Whether or not to use automatic peek height. */
-    private boolean peekHeightAuto;
-
-    /** Minimum peek height permitted. */
-    private int peekHeightMin;
-
-    /** True if Behavior has a non-null value for the @shapeAppearance attribute */
-    private boolean shapeThemingEnabled;
-
-    private MaterialShapeDrawable materialShapeDrawable;
-
-    /** Default Shape Appearance to be used in bottomsheet */
-    private ShapeAppearanceModel shapeAppearanceModelDefault;
-
-    private boolean isShapeExpanded;
-
-    private SettleRunnable settleRunnable = null;
-
-    @Nullable
-    private ValueAnimator interpolatorAnimator;
-
     private static final int DEF_STYLE_RES = R.style.Widget_Design_BottomSheet_Modal;
-
+    @NonNull
+    private final ArrayList<BottomSheetCallback> callbacks = new ArrayList<>();
     int expandedOffset;
-
     int fitToContentsOffset;
-
     int halfExpandedOffset;
-
     float halfExpandedRatio = 1f;
-
     int collapsedOffset;
-
     float elevation = -1;
-
     boolean hideable;
-
-    private boolean skipCollapsed;
-
-    private boolean draggable = true;
-
     int state = STATE_COLLAPSED;
-
     @Nullable
     ViewDragHelper viewDragHelper;
-
-    private boolean ignoreEvents;
-
-    private int lastNestedScrollDy;
-
-    private boolean nestedScrolled;
-
     int parentWidth;
     int parentHeight;
-
     @Nullable
     WeakReference<V> viewRef;
-
-    @Nullable WeakReference<View> nestedScrollingChildRef;
-
-    @NonNull private final ArrayList<BottomSheetCallback> callbacks = new ArrayList<>();
-
-    @Nullable private VelocityTracker velocityTracker;
-
+    @Nullable
+    WeakReference<View> nestedScrollingChildRef;
     int activePointerId;
-
-    private int initialY;
-
     boolean touchingScrollingChild;
+    private int topOffset = 0;
+    @com.google.android.material.bottomsheet.BottomSheetBehavior.SaveFlags
+    private int saveFlags = SAVE_NONE;
+    private boolean fitToContents = true;
+    private boolean updateImportantForAccessibilityOnSiblings = false;
+    private float maximumVelocity;
+    /**
+     * Peek height set by the user.
+     */
+    private int peekHeight;
+    /**
+     * Whether or not to use automatic peek height.
+     */
+    private boolean peekHeightAuto;
+    /**
+     * Minimum peek height permitted.
+     */
+    private int peekHeightMin;
+    /**
+     * True if Behavior has a non-null value for the @shapeAppearance attribute
+     */
+    private boolean shapeThemingEnabled;
+    private MaterialShapeDrawable materialShapeDrawable;
+    /**
+     * Default Shape Appearance to be used in bottomsheet
+     */
+    private ShapeAppearanceModel shapeAppearanceModelDefault;
+    private boolean isShapeExpanded;
+    private SettleRunnable settleRunnable = null;
+    @Nullable
+    private ValueAnimator interpolatorAnimator;
+    private boolean skipCollapsed;
+    private boolean draggable = true;
+    private boolean ignoreEvents;
+    private int lastNestedScrollDy;
+    private boolean nestedScrolled;
+    @Nullable
+    private VelocityTracker velocityTracker;
+    private int initialY;
+    @Nullable
+    private Map<View, Integer> importantForAccessibilityMap;
+    private final ViewDragHelper.Callback dragCallback =
+            new ViewDragHelper.Callback() {
 
-    @Nullable private Map<View, Integer> importantForAccessibilityMap;
+                @Override
+                public boolean tryCaptureView(@NonNull View child, int pointerId) {
+                    if (state == STATE_DRAGGING) {
+                        return false;
+                    }
+                    if (touchingScrollingChild) {
+                        return false;
+                    }
+                    if (state == STATE_EXPANDED && activePointerId == pointerId) {
+                        View scroll = nestedScrollingChildRef != null ? nestedScrollingChildRef.get() : null;
+                        if (scroll != null && scroll.canScrollVertically(-1)) {
+                            // Let the content scroll up
+                            return false;
+                        }
+                    }
+                    return viewRef != null && viewRef.get() == child;
+                }
 
-    public CustomBottomSheetBehavior() {}
+                @Override
+                public void onViewPositionChanged(
+                        @NonNull View changedView, int left, int top, int dx, int dy) {
+                    dispatchOnSlide(top);
+                }
+
+                @Override
+                public void onViewDragStateChanged(int state) {
+                    if (state == ViewDragHelper.STATE_DRAGGING && draggable) {
+                        setStateInternal(STATE_DRAGGING);
+                    }
+                }
+
+                private boolean releasedLow(@NonNull View child) {
+                    // Needs to be at least half way to the bottom.
+                    return child.getTop() > (parentHeight + getExpandedOffset()) / 2;
+                }
+
+                @Override
+                public void onViewReleased(@NonNull View releasedChild, float xvel, float yvel) {
+                    int top;
+                    @com.google.android.material.bottomsheet.BottomSheetBehavior.State int targetState;
+                    if (yvel < 0) { // Moving up
+                        if (fitToContents) {
+                            top = fitToContentsOffset;
+                            targetState = STATE_EXPANDED;
+                        } else {
+                            int currentTop = releasedChild.getTop();
+                            if (currentTop > halfExpandedOffset) {
+                                top = halfExpandedOffset;
+                                targetState = STATE_HALF_EXPANDED;
+                            } else {
+                                top = expandedOffset;
+                                targetState = STATE_EXPANDED;
+                            }
+                        }
+                    } else if (hideable && shouldHide(releasedChild, yvel)) {
+                        // Hide if the view was either released low or it was a significant vertical swipe
+                        // otherwise settle to closest expanded state.
+                        if ((Math.abs(xvel) < Math.abs(yvel) && yvel > SIGNIFICANT_VEL_THRESHOLD)
+                                || releasedLow(releasedChild)) {
+                            top = parentHeight;
+                            targetState = STATE_HIDDEN;
+                        } else if (fitToContents) {
+                            top = fitToContentsOffset;
+                            targetState = STATE_EXPANDED;
+                        } else if (Math.abs(releasedChild.getTop() - expandedOffset)
+                                < Math.abs(releasedChild.getTop() - halfExpandedOffset)) {
+                            top = expandedOffset;
+                            targetState = STATE_EXPANDED;
+                        } else {
+                            top = halfExpandedOffset;
+                            targetState = STATE_HALF_EXPANDED;
+                        }
+                    } else if (yvel == 0.f || Math.abs(xvel) > Math.abs(yvel)) {
+                        // If the Y velocity is 0 or the swipe was mostly horizontal indicated by the X velocity
+                        // being greater than the Y velocity, settle to the nearest correct height.
+                        int currentTop = releasedChild.getTop();
+                        if (fitToContents) {
+                            if (Math.abs(currentTop - fitToContentsOffset)
+                                    < Math.abs(currentTop - collapsedOffset)) {
+                                top = fitToContentsOffset;
+                                targetState = STATE_EXPANDED;
+                            } else {
+                                top = collapsedOffset;
+                                targetState = STATE_COLLAPSED;
+                            }
+                        } else {
+                            if (currentTop < halfExpandedOffset) {
+                                if (currentTop < Math.abs(currentTop - collapsedOffset)) {
+                                    top = expandedOffset;
+                                    targetState = STATE_EXPANDED;
+                                } else {
+                                    top = halfExpandedOffset;
+                                    targetState = STATE_HALF_EXPANDED;
+                                }
+                            } else {
+                                if (Math.abs(currentTop - halfExpandedOffset)
+                                        < Math.abs(currentTop - collapsedOffset)) {
+                                    top = halfExpandedOffset;
+                                    targetState = STATE_HALF_EXPANDED;
+                                } else {
+                                    top = collapsedOffset;
+                                    targetState = STATE_COLLAPSED;
+                                }
+                            }
+                        }
+                    } else { // Moving Down
+                        if (fitToContents) {
+                            top = collapsedOffset;
+                            targetState = STATE_COLLAPSED;
+                        } else {
+                            // Settle to the nearest correct height.
+                            int currentTop = releasedChild.getTop();
+                            if (Math.abs(currentTop - halfExpandedOffset)
+                                    < Math.abs(currentTop - collapsedOffset)) {
+                                top = halfExpandedOffset;
+                                targetState = STATE_HALF_EXPANDED;
+                            } else {
+                                top = collapsedOffset;
+                                targetState = STATE_COLLAPSED;
+                            }
+                        }
+                    }
+                    startSettlingAnimation(releasedChild, targetState, top, true);
+                }
+
+                @Override
+                public int clampViewPositionVertical(@NonNull View child, int top, int dy) {
+                    return MathUtils.clamp(
+                            top, getExpandedOffset(), hideable ? parentHeight : collapsedOffset);
+                }
+
+                @Override
+                public int clampViewPositionHorizontal(@NonNull View child, int left, int dx) {
+                    return child.getLeft();
+                }
+
+                @Override
+                public int getViewVerticalDragRange(@NonNull View child) {
+                    if (hideable) {
+                        return parentHeight;
+                    } else {
+                        return collapsedOffset;
+                    }
+                }
+            };
+
+    public CustomBottomSheetBehavior() {
+    }
 
     public CustomBottomSheetBehavior(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -262,7 +339,7 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
         }
         createShapeValueAnimator();
 
-        this.topOffset = (int)context.getResources().getDimension(R.dimen.homeLayoutToolbarHeight);
+        this.topOffset = (int) context.getResources().getDimension(R.dimen.homeLayoutToolbarHeight);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.elevation = a.getDimension(R.styleable.BottomSheetBehavior_Layout_android_elevation, -1);
         }
@@ -296,6 +373,49 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
         a.recycle();
         ViewConfiguration configuration = ViewConfiguration.get(context);
         maximumVelocity = configuration.getScaledMaximumFlingVelocity();
+    }
+
+    /**
+     * A utility function to get the {@link com.google.android.material.bottomsheet.BottomSheetBehavior} associated with the {@code view}.
+     *
+     * @param view The {@link View} with {@link com.google.android.material.bottomsheet.BottomSheetBehavior}.
+     * @return The {@link com.google.android.material.bottomsheet.BottomSheetBehavior} associated with the {@code view}.
+     */
+    @NonNull
+    @SuppressWarnings("unchecked")
+    public static <V extends View> CustomBottomSheetBehavior<V> from(@NonNull V view) {
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        if (!(params instanceof CoordinatorLayout.LayoutParams)) {
+            throw new IllegalArgumentException("The view is not a child of CoordinatorLayout");
+        }
+        CoordinatorLayout.Behavior<?> behavior =
+                ((CoordinatorLayout.LayoutParams) params).getBehavior();
+        if (!(behavior instanceof CustomBottomSheetBehavior)) {
+            throw new IllegalArgumentException("The view is not associated with BottomSheetBehavior");
+        }
+        return (CustomBottomSheetBehavior<V>) behavior;
+    }
+
+    public static ColorStateList getColorStateList(
+            @NonNull Context context, @NonNull TypedArray attributes, @StyleableRes int index) {
+        if (attributes.hasValue(index)) {
+            int resourceId = attributes.getResourceId(index, 0);
+            if (resourceId != 0) {
+                ColorStateList value = AppCompatResources.getColorStateList(context, resourceId);
+                if (value != null) {
+                    return value;
+                }
+            }
+        }
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+            int color = attributes.getColor(index, -1);
+            if (color != -1) {
+                return ColorStateList.valueOf(color);
+            }
+        }
+
+        return attributes.getColorStateList(index);
     }
 
     @NonNull
@@ -677,8 +797,8 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
 
     /**
      * @return whether the height of the expanded sheet is determined by the height of its contents,
-     *     or if it is expanded in two stages (half the height of the parent container, full height of
-     *     parent container).
+     * or if it is expanded in two stages (half the height of the parent container, full height of
+     * parent container).
      */
     public boolean isFitToContents() {
         return fitToContents;
@@ -709,26 +829,14 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
     }
 
     /**
-     * Sets the height of the bottom sheet when it is collapsed.
-     *
-     * @param peekHeight The height of the collapsed bottom sheet in pixels, or {@link
-     *     #PEEK_HEIGHT_AUTO} to configure the sheet to peek automatically at 16:9 ratio keyline.
-     * @attr ref
-     *     com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_peekHeight
-     */
-    public void setPeekHeight(int peekHeight) {
-        setPeekHeight(peekHeight, false);
-    }
-
-    /**
      * Sets the height of the bottom sheet when it is collapsed while optionally animating between the
      * old height and the new height.
      *
      * @param peekHeight The height of the collapsed bottom sheet in pixels, or {@link
-     *     #PEEK_HEIGHT_AUTO} to configure the sheet to peek automatically at 16:9 ratio keyline.
-     * @param animate Whether to animate between the old height and the new height.
+     *                   #PEEK_HEIGHT_AUTO} to configure the sheet to peek automatically at 16:9 ratio keyline.
+     * @param animate    Whether to animate between the old height and the new height.
      * @attr ref
-     *     com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_peekHeight
+     * com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_peekHeight
      */
     public final void setPeekHeight(int peekHeight, boolean animate) {
         boolean layout = false;
@@ -763,12 +871,34 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
      * Gets the height of the bottom sheet when it is collapsed.
      *
      * @return The height of the collapsed bottom sheet in pixels, or {@link #PEEK_HEIGHT_AUTO} if the
-     *     sheet is configured to peek automatically at 16:9 ratio keyline
+     * sheet is configured to peek automatically at 16:9 ratio keyline
      * @attr ref
-     *     com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_peekHeight
+     * com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_peekHeight
      */
     public int getPeekHeight() {
         return peekHeightAuto ? PEEK_HEIGHT_AUTO : peekHeight;
+    }
+
+    /**
+     * Sets the height of the bottom sheet when it is collapsed.
+     *
+     * @param peekHeight The height of the collapsed bottom sheet in pixels, or {@link
+     *                   #PEEK_HEIGHT_AUTO} to configure the sheet to peek automatically at 16:9 ratio keyline.
+     * @attr ref
+     * com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_peekHeight
+     */
+    public void setPeekHeight(int peekHeight) {
+        setPeekHeight(peekHeight, false);
+    }
+
+    /**
+     * Gets the ratio for the height of the BottomSheet in the {@link #STATE_HALF_EXPANDED} state.
+     *
+     * @attr com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_halfExpandedRatio
+     */
+    @FloatRange(from = 0.0f, to = 1.0f)
+    public float getHalfExpandedRatio() {
+        return halfExpandedRatio;
     }
 
     /**
@@ -778,8 +908,7 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
      * it is increased. The default value is 0.5.
      *
      * @param ratio a float between 0 and 1, representing the {@link #STATE_HALF_EXPANDED} ratio.
-     * @attr
-     *     com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_halfExpandedRatio
+     * @attr com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_halfExpandedRatio
      */
     public void setHalfExpandedRatio(@FloatRange(from = 0.0f, to = 1.0f) float ratio) {
 
@@ -795,14 +924,13 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
     }
 
     /**
-     * Gets the ratio for the height of the BottomSheet in the {@link #STATE_HALF_EXPANDED} state.
+     * Returns the current expanded offset. If {@code fitToContents} is true, it will automatically
+     * pick the offset depending on the height of the content.
      *
-     * @attr
-     *     com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_halfExpandedRatio
+     * @attr com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_expandedOffset
      */
-    @FloatRange(from = 0.0f, to = 1.0f)
-    public float getHalfExpandedRatio() {
-        return halfExpandedRatio;
+    public int getExpandedOffset() {
+        return fitToContents ? fitToContentsOffset : expandedOffset;
     }
 
     /**
@@ -811,9 +939,8 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
      * parent's top.
      *
      * @param offset an integer value greater than equal to 0, representing the {@link
-     *     #STATE_EXPANDED} offset. Value must not exceed the offset in the half expanded state.
-     * @attr
-     *     com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_expandedOffset
+     *               #STATE_EXPANDED} offset. Value must not exceed the offset in the half expanded state.
+     * @attr com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_expandedOffset
      */
     public void setExpandedOffset(int offset) {
         if (offset < 0) {
@@ -823,14 +950,13 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
     }
 
     /**
-     * Returns the current expanded offset. If {@code fitToContents} is true, it will automatically
-     * pick the offset depending on the height of the content.
+     * Gets whether this bottom sheet can hide when it is swiped down.
      *
-     * @attr
-     *     com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_expandedOffset
+     * @return {@code true} if this bottom sheet can hide.
+     * @attr ref com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_hideable
      */
-    public int getExpandedOffset() {
-        return fitToContents ? fitToContentsOffset : expandedOffset;
+    public boolean isHideable() {
+        return hideable;
     }
 
     /**
@@ -851,13 +977,15 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
     }
 
     /**
-     * Gets whether this bottom sheet can hide when it is swiped down.
+     * Sets whether this bottom sheet should skip the collapsed state when it is being hidden after it
+     * is expanded once.
      *
-     * @return {@code true} if this bottom sheet can hide.
-     * @attr ref com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_hideable
+     * @return Whether the bottom sheet should skip the collapsed state.
+     * @attr ref
+     * com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_skipCollapsed
      */
-    public boolean isHideable() {
-        return hideable;
+    public boolean getSkipCollapsed() {
+        return skipCollapsed;
     }
 
     /**
@@ -866,22 +994,14 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
      *
      * @param skipCollapsed True if the bottom sheet should skip the collapsed state.
      * @attr ref
-     *     com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_skipCollapsed
+     * com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_skipCollapsed
      */
     public void setSkipCollapsed(boolean skipCollapsed) {
         this.skipCollapsed = skipCollapsed;
     }
 
-    /**
-     * Sets whether this bottom sheet should skip the collapsed state when it is being hidden after it
-     * is expanded once.
-     *
-     * @return Whether the bottom sheet should skip the collapsed state.
-     * @attr ref
-     *     com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_skipCollapsed
-     */
-    public boolean getSkipCollapsed() {
-        return skipCollapsed;
+    public boolean isDraggable() {
+        return draggable;
     }
 
     /**
@@ -895,29 +1015,26 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
         this.draggable = draggable;
     }
 
-    public boolean isDraggable() {
-        return draggable;
+    /**
+     * Returns the save flags.
+     *
+     * @attr ref com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_saveFlags
+     * @see #setSaveFlags(int)
+     */
+    public int getSaveFlags() {
+        return this.saveFlags;
     }
 
     /**
      * Sets save flags to be preserved in bottomsheet on configuration change.
      *
      * @param flags bitwise int of {@link #SAVE_PEEK_HEIGHT}, {@link #SAVE_FIT_TO_CONTENTS}, {@link
-     *     #SAVE_HIDEABLE}, {@link #SAVE_SKIP_COLLAPSED}, {@link #SAVE_ALL} and {@link #SAVE_NONE}.
-     * @see #getSaveFlags()
+     *              #SAVE_HIDEABLE}, {@link #SAVE_SKIP_COLLAPSED}, {@link #SAVE_ALL} and {@link #SAVE_NONE}.
      * @attr ref com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_saveFlags
+     * @see #getSaveFlags()
      */
     public void setSaveFlags(int flags) {
         this.saveFlags = flags;
-    }
-    /**
-     * Returns the save flags.
-     *
-     * @see #setSaveFlags(int)
-     * @attr ref com.google.android.material.R.styleable#BottomSheetBehavior_Layout_behavior_saveFlags
-     */
-    public int getSaveFlags() {
-        return this.saveFlags;
     }
 
     /**
@@ -925,7 +1042,7 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
      *
      * @param callback The callback to notify when bottom sheet events occur.
      * @deprecated use {@link #addBottomSheetCallback(CustomBottomSheetBehavior.BottomSheetCallback)} and {@link
-     *     #removeBottomSheetCallback(BottomSheetCallback)} instead
+     * #removeBottomSheetCallback(BottomSheetCallback)} instead
      */
     @Deprecated
     public void setBottomSheetCallback(BottomSheetCallback callback) {
@@ -962,30 +1079,6 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
         callbacks.remove(callback);
     }
 
-    /**
-     * Sets the state of the bottom sheet. The bottom sheet will transition to that state with
-     * animation.
-     *
-     * @param state One of {@link #STATE_COLLAPSED}, {@link #STATE_EXPANDED}, {@link #STATE_HIDDEN},
-     *     or {@link #STATE_HALF_EXPANDED}.
-     */
-    public void setState(int state) {
-        if (state == this.state) {
-            return;
-        }
-        if (viewRef == null) {
-            // The view is not laid out yet; modify mState and let onLayoutChild handle it later
-            if (state == STATE_COLLAPSED
-                    || state == STATE_EXPANDED
-                    || state == STATE_HALF_EXPANDED
-                    || (hideable && state == STATE_HIDDEN)) {
-                this.state = state;
-            }
-            return;
-        }
-        settleToStatePendingLayout(state);
-    }
-
     private void settleToStatePendingLayout(int state) {
         final V child = viewRef.get();
         if (child == null) {
@@ -1011,10 +1104,34 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
      * Gets the current state of the bottom sheet.
      *
      * @return One of {@link #STATE_EXPANDED}, {@link #STATE_HALF_EXPANDED}, {@link #STATE_COLLAPSED},
-     *     {@link #STATE_DRAGGING}, {@link #STATE_SETTLING}, or {@link #STATE_HALF_EXPANDED}.
+     * {@link #STATE_DRAGGING}, {@link #STATE_SETTLING}, or {@link #STATE_HALF_EXPANDED}.
      */
     public int getState() {
         return state;
+    }
+
+    /**
+     * Sets the state of the bottom sheet. The bottom sheet will transition to that state with
+     * animation.
+     *
+     * @param state One of {@link #STATE_COLLAPSED}, {@link #STATE_EXPANDED}, {@link #STATE_HIDDEN},
+     *              or {@link #STATE_HALF_EXPANDED}.
+     */
+    public void setState(int state) {
+        if (state == this.state) {
+            return;
+        }
+        if (viewRef == null) {
+            // The view is not laid out yet; modify mState and let onLayoutChild handle it later
+            if (state == STATE_COLLAPSED
+                    || state == STATE_EXPANDED
+                    || state == STATE_HALF_EXPANDED
+                    || (hideable && state == STATE_HIDDEN)) {
+                this.state = state;
+            }
+            return;
+        }
+        settleToStatePendingLayout(state);
     }
 
     void setStateInternal(int state) {
@@ -1247,155 +1364,6 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
         }
     }
 
-    private final ViewDragHelper.Callback dragCallback =
-            new ViewDragHelper.Callback() {
-
-                @Override
-                public boolean tryCaptureView(@NonNull View child, int pointerId) {
-                    if (state == STATE_DRAGGING) {
-                        return false;
-                    }
-                    if (touchingScrollingChild) {
-                        return false;
-                    }
-                    if (state == STATE_EXPANDED && activePointerId == pointerId) {
-                        View scroll = nestedScrollingChildRef != null ? nestedScrollingChildRef.get() : null;
-                        if (scroll != null && scroll.canScrollVertically(-1)) {
-                            // Let the content scroll up
-                            return false;
-                        }
-                    }
-                    return viewRef != null && viewRef.get() == child;
-                }
-
-                @Override
-                public void onViewPositionChanged(
-                        @NonNull View changedView, int left, int top, int dx, int dy) {
-                    dispatchOnSlide(top);
-                }
-
-                @Override
-                public void onViewDragStateChanged(int state) {
-                    if (state == ViewDragHelper.STATE_DRAGGING && draggable) {
-                        setStateInternal(STATE_DRAGGING);
-                    }
-                }
-
-                private boolean releasedLow(@NonNull View child) {
-                    // Needs to be at least half way to the bottom.
-                    return child.getTop() > (parentHeight + getExpandedOffset()) / 2;
-                }
-
-                @Override
-                public void onViewReleased(@NonNull View releasedChild, float xvel, float yvel) {
-                    int top;
-                    @com.google.android.material.bottomsheet.BottomSheetBehavior.State int targetState;
-                    if (yvel < 0) { // Moving up
-                        if (fitToContents) {
-                            top = fitToContentsOffset;
-                            targetState = STATE_EXPANDED;
-                        } else {
-                            int currentTop = releasedChild.getTop();
-                            if (currentTop > halfExpandedOffset) {
-                                top = halfExpandedOffset;
-                                targetState = STATE_HALF_EXPANDED;
-                            } else {
-                                top = expandedOffset;
-                                targetState = STATE_EXPANDED;
-                            }
-                        }
-                    } else if (hideable && shouldHide(releasedChild, yvel)) {
-                        // Hide if the view was either released low or it was a significant vertical swipe
-                        // otherwise settle to closest expanded state.
-                        if ((Math.abs(xvel) < Math.abs(yvel) && yvel > SIGNIFICANT_VEL_THRESHOLD)
-                                || releasedLow(releasedChild)) {
-                            top = parentHeight;
-                            targetState = STATE_HIDDEN;
-                        } else if (fitToContents) {
-                            top = fitToContentsOffset;
-                            targetState = STATE_EXPANDED;
-                        } else if (Math.abs(releasedChild.getTop() - expandedOffset)
-                                < Math.abs(releasedChild.getTop() - halfExpandedOffset)) {
-                            top = expandedOffset;
-                            targetState = STATE_EXPANDED;
-                        } else {
-                            top = halfExpandedOffset;
-                            targetState = STATE_HALF_EXPANDED;
-                        }
-                    } else if (yvel == 0.f || Math.abs(xvel) > Math.abs(yvel)) {
-                        // If the Y velocity is 0 or the swipe was mostly horizontal indicated by the X velocity
-                        // being greater than the Y velocity, settle to the nearest correct height.
-                        int currentTop = releasedChild.getTop();
-                        if (fitToContents) {
-                            if (Math.abs(currentTop - fitToContentsOffset)
-                                    < Math.abs(currentTop - collapsedOffset)) {
-                                top = fitToContentsOffset;
-                                targetState = STATE_EXPANDED;
-                            } else {
-                                top = collapsedOffset;
-                                targetState = STATE_COLLAPSED;
-                            }
-                        } else {
-                            if (currentTop < halfExpandedOffset) {
-                                if (currentTop < Math.abs(currentTop - collapsedOffset)) {
-                                    top = expandedOffset;
-                                    targetState = STATE_EXPANDED;
-                                } else {
-                                    top = halfExpandedOffset;
-                                    targetState = STATE_HALF_EXPANDED;
-                                }
-                            } else {
-                                if (Math.abs(currentTop - halfExpandedOffset)
-                                        < Math.abs(currentTop - collapsedOffset)) {
-                                    top = halfExpandedOffset;
-                                    targetState = STATE_HALF_EXPANDED;
-                                } else {
-                                    top = collapsedOffset;
-                                    targetState = STATE_COLLAPSED;
-                                }
-                            }
-                        }
-                    } else { // Moving Down
-                        if (fitToContents) {
-                            top = collapsedOffset;
-                            targetState = STATE_COLLAPSED;
-                        } else {
-                            // Settle to the nearest correct height.
-                            int currentTop = releasedChild.getTop();
-                            if (Math.abs(currentTop - halfExpandedOffset)
-                                    < Math.abs(currentTop - collapsedOffset)) {
-                                top = halfExpandedOffset;
-                                targetState = STATE_HALF_EXPANDED;
-                            } else {
-                                top = collapsedOffset;
-                                targetState = STATE_COLLAPSED;
-                            }
-                        }
-                    }
-                    startSettlingAnimation(releasedChild, targetState, top, true);
-                }
-
-                @Override
-                public int clampViewPositionVertical(@NonNull View child, int top, int dy) {
-                    return MathUtils.clamp(
-                            top, getExpandedOffset(), hideable ? parentHeight : collapsedOffset);
-                }
-
-                @Override
-                public int clampViewPositionHorizontal(@NonNull View child, int left, int dx) {
-                    return child.getLeft();
-                }
-
-                @Override
-                public int getViewVerticalDragRange(@NonNull View child) {
-                    if (hideable) {
-                        return parentHeight;
-                    } else {
-                        return collapsedOffset;
-                    }
-                }
-            };
-
     void dispatchOnSlide(int top) {
         View bottomSheet = viewRef.get();
         if (bottomSheet != null && !callbacks.isEmpty()) {
@@ -1426,130 +1394,6 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
     public void disableShapeAnimations() {
         // Sets the shape value animator to null, prevents animations from occuring during testing.
         interpolatorAnimator = null;
-    }
-
-    private class SettleRunnable implements Runnable {
-
-        private final View view;
-
-        private boolean isPosted;
-
-        @com.google.android.material.bottomsheet.BottomSheetBehavior.State
-        int targetState;
-
-        SettleRunnable(View view, @com.google.android.material.bottomsheet.BottomSheetBehavior.State int targetState) {
-            this.view = view;
-            this.targetState = targetState;
-        }
-
-        @Override
-        public void run() {
-            if (viewDragHelper != null && viewDragHelper.continueSettling(true)) {
-                ViewCompat.postOnAnimation(view, this);
-            } else {
-                setStateInternal(targetState);
-            }
-            this.isPosted = false;
-        }
-    }
-
-    /** State persisted across instances */
-    protected static class SavedState extends AbsSavedState {
-        @com.google.android.material.bottomsheet.BottomSheetBehavior.State
-        final int state;
-        int peekHeight;
-        boolean fitToContents;
-        boolean hideable;
-        boolean skipCollapsed;
-
-        public SavedState(@NonNull Parcel source) {
-            this(source, null);
-        }
-
-        public SavedState(@NonNull Parcel source, ClassLoader loader) {
-            super(source, loader);
-            //noinspection ResourceType
-            state = source.readInt();
-            peekHeight = source.readInt();
-            fitToContents = source.readInt() == 1;
-            hideable = source.readInt() == 1;
-            skipCollapsed = source.readInt() == 1;
-        }
-
-        public SavedState(Parcelable superState, @NonNull CustomBottomSheetBehavior<?> behavior) {
-            super(superState);
-            this.state = behavior.state;
-            this.peekHeight = behavior.peekHeight;
-            this.fitToContents = behavior.fitToContents;
-            this.hideable = behavior.hideable;
-            this.skipCollapsed = behavior.skipCollapsed;
-        }
-
-        /**
-         * This constructor does not respect flags: {@link com.google.android.material.bottomsheet.BottomSheetBehavior#SAVE_PEEK_HEIGHT}, {@link
-         * com.google.android.material.bottomsheet.BottomSheetBehavior#SAVE_FIT_TO_CONTENTS}, {@link com.google.android.material.bottomsheet.BottomSheetBehavior#SAVE_HIDEABLE}, {@link
-         * com.google.android.material.bottomsheet.BottomSheetBehavior#SAVE_SKIP_COLLAPSED}. It is as if {@link com.google.android.material.bottomsheet.BottomSheetBehavior#SAVE_NONE}
-         * were set.
-         *
-         * @deprecated Use {@link SavedState (Parcelable, com.google.android.material.bottomsheet.BottomSheetBehavior )} instead.
-         */
-        @Deprecated
-        public SavedState(Parcelable superstate, int state) {
-            super(superstate);
-            this.state = state;
-        }
-
-        @Override
-        public void writeToParcel(@NonNull Parcel out, int flags) {
-            super.writeToParcel(out, flags);
-            out.writeInt(state);
-            out.writeInt(peekHeight);
-            out.writeInt(fitToContents ? 1 : 0);
-            out.writeInt(hideable ? 1 : 0);
-            out.writeInt(skipCollapsed ? 1 : 0);
-        }
-
-        public static final Creator<SavedState> CREATOR =
-                new ClassLoaderCreator<SavedState>() {
-                    @NonNull
-                    @Override
-                    public SavedState createFromParcel(@NonNull Parcel in, ClassLoader loader) {
-                        return new SavedState(in, loader);
-                    }
-
-                    @Nullable
-                    @Override
-                    public SavedState createFromParcel(@NonNull Parcel in) {
-                        return new SavedState(in, null);
-                    }
-
-                    @NonNull
-                    @Override
-                    public SavedState[] newArray(int size) {
-                        return new SavedState[size];
-                    }
-                };
-    }
-
-    /**
-     * A utility function to get the {@link com.google.android.material.bottomsheet.BottomSheetBehavior} associated with the {@code view}.
-     *
-     * @param view The {@link View} with {@link com.google.android.material.bottomsheet.BottomSheetBehavior}.
-     * @return The {@link com.google.android.material.bottomsheet.BottomSheetBehavior} associated with the {@code view}.
-     */
-    @NonNull
-    @SuppressWarnings("unchecked")
-    public static <V extends View> CustomBottomSheetBehavior<V> from(@NonNull V view) {
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        if (!(params instanceof CoordinatorLayout.LayoutParams)) {
-            throw new IllegalArgumentException("The view is not a child of CoordinatorLayout");
-        }
-        CoordinatorLayout.Behavior<?> behavior =
-                ((CoordinatorLayout.LayoutParams) params).getBehavior();
-        if (!(behavior instanceof CustomBottomSheetBehavior)) {
-            throw new IllegalArgumentException("The view is not associated with BottomSheetBehavior");
-        }
-        return (CustomBottomSheetBehavior<V>) behavior;
     }
 
     /**
@@ -1647,26 +1491,166 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
                 });
     }
 
-    public static ColorStateList getColorStateList(
-            @NonNull Context context, @NonNull TypedArray attributes, @StyleableRes int index) {
-        if (attributes.hasValue(index)) {
-            int resourceId = attributes.getResourceId(index, 0);
-            if (resourceId != 0) {
-                ColorStateList value = AppCompatResources.getColorStateList(context, resourceId);
-                if (value != null) {
-                    return value;
-                }
-            }
+    /**
+     * @hide
+     */
+    @RestrictTo(LIBRARY_GROUP)
+    @IntDef({
+            STATE_EXPANDED,
+            STATE_COLLAPSED,
+            STATE_DRAGGING,
+            STATE_SETTLING,
+            STATE_HIDDEN,
+            STATE_HALF_EXPANDED
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface State {
+    }
+
+    /**
+     * @hide
+     */
+    @RestrictTo(LIBRARY_GROUP)
+    @IntDef(
+            flag = true,
+            value = {
+                    SAVE_PEEK_HEIGHT,
+                    SAVE_FIT_TO_CONTENTS,
+                    SAVE_HIDEABLE,
+                    SAVE_SKIP_COLLAPSED,
+                    SAVE_ALL,
+                    SAVE_NONE,
+            })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface SaveFlags {
+    }
+
+    /**
+     * Callback for monitoring events about bottom sheets.
+     */
+    public abstract static class BottomSheetCallback {
+
+        /**
+         * Called when the bottom sheet changes its state.
+         *
+         * @param bottomSheet The bottom sheet view.
+         * @param newState    The new state. This will be one of {@link #STATE_DRAGGING}, {@link
+         *                    #STATE_SETTLING}, {@link #STATE_EXPANDED}, {@link #STATE_COLLAPSED}, {@link
+         *                    #STATE_HIDDEN}, or {@link #STATE_HALF_EXPANDED}.
+         */
+        public abstract void onStateChanged(@NonNull View bottomSheet, @com.google.android.material.bottomsheet.BottomSheetBehavior.State int newState);
+
+        /**
+         * Called when the bottom sheet is being dragged.
+         *
+         * @param bottomSheet The bottom sheet view.
+         * @param slideOffset The new offset of this bottom sheet within [-1,1] range. Offset increases
+         *                    as this bottom sheet is moving upward. From 0 to 1 the sheet is between collapsed and
+         *                    expanded states and from -1 to 0 it is between hidden and collapsed states.
+         */
+        public abstract void onSlide(@NonNull View bottomSheet, float slideOffset);
+    }
+
+    /**
+     * State persisted across instances
+     */
+    protected static class SavedState extends AbsSavedState {
+        public static final Creator<SavedState> CREATOR =
+                new ClassLoaderCreator<SavedState>() {
+                    @NonNull
+                    @Override
+                    public SavedState createFromParcel(@NonNull Parcel in, ClassLoader loader) {
+                        return new SavedState(in, loader);
+                    }
+
+                    @Nullable
+                    @Override
+                    public SavedState createFromParcel(@NonNull Parcel in) {
+                        return new SavedState(in, null);
+                    }
+
+                    @NonNull
+                    @Override
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
+        @com.google.android.material.bottomsheet.BottomSheetBehavior.State
+        final int state;
+        int peekHeight;
+        boolean fitToContents;
+        boolean hideable;
+        boolean skipCollapsed;
+
+        public SavedState(@NonNull Parcel source) {
+            this(source, null);
         }
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-            int color = attributes.getColor(index, -1);
-            if (color != -1) {
-                return ColorStateList.valueOf(color);
-            }
+        public SavedState(@NonNull Parcel source, ClassLoader loader) {
+            super(source, loader);
+            //noinspection ResourceType
+            state = source.readInt();
+            peekHeight = source.readInt();
+            fitToContents = source.readInt() == 1;
+            hideable = source.readInt() == 1;
+            skipCollapsed = source.readInt() == 1;
         }
 
-        return attributes.getColorStateList(index);
+        public SavedState(Parcelable superState, @NonNull CustomBottomSheetBehavior<?> behavior) {
+            super(superState);
+            this.state = behavior.state;
+            this.peekHeight = behavior.peekHeight;
+            this.fitToContents = behavior.fitToContents;
+            this.hideable = behavior.hideable;
+            this.skipCollapsed = behavior.skipCollapsed;
+        }
+
+        /**
+         * This constructor does not respect flags: {@link com.google.android.material.bottomsheet.BottomSheetBehavior#SAVE_PEEK_HEIGHT}, {@link
+         * com.google.android.material.bottomsheet.BottomSheetBehavior#SAVE_FIT_TO_CONTENTS}, {@link com.google.android.material.bottomsheet.BottomSheetBehavior#SAVE_HIDEABLE}, {@link
+         * com.google.android.material.bottomsheet.BottomSheetBehavior#SAVE_SKIP_COLLAPSED}. It is as if {@link com.google.android.material.bottomsheet.BottomSheetBehavior#SAVE_NONE}
+         * were set.
+         *
+         * @deprecated Use {@link SavedState (Parcelable, com.google.android.material.bottomsheet.BottomSheetBehavior )} instead.
+         */
+        @Deprecated
+        public SavedState(Parcelable superstate, int state) {
+            super(superstate);
+            this.state = state;
+        }
+
+        @Override
+        public void writeToParcel(@NonNull Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(state);
+            out.writeInt(peekHeight);
+            out.writeInt(fitToContents ? 1 : 0);
+            out.writeInt(hideable ? 1 : 0);
+            out.writeInt(skipCollapsed ? 1 : 0);
+        }
+    }
+
+    private class SettleRunnable implements Runnable {
+
+        private final View view;
+        @com.google.android.material.bottomsheet.BottomSheetBehavior.State
+        int targetState;
+        private boolean isPosted;
+
+        SettleRunnable(View view, @com.google.android.material.bottomsheet.BottomSheetBehavior.State int targetState) {
+            this.view = view;
+            this.targetState = targetState;
+        }
+
+        @Override
+        public void run() {
+            if (viewDragHelper != null && viewDragHelper.continueSettling(true)) {
+                ViewCompat.postOnAnimation(view, this);
+            } else {
+                setStateInternal(targetState);
+            }
+            this.isPosted = false;
+        }
     }
 
 }

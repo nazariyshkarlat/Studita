@@ -1,6 +1,7 @@
 package com.example.studita.domain.repository
 
-import com.example.studita.domain.entity.*
+import com.example.studita.domain.entity.UserStatisticsData
+import com.example.studita.domain.entity.UserStatisticsRowData
 
 interface UserStatisticsRepository {
 

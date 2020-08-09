@@ -1,7 +1,6 @@
 package com.example.studita.presentation.listeners
 
 import android.graphics.Rect
-import android.os.SystemClock
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.SoundEffectConstants
@@ -38,7 +37,7 @@ abstract class ViewOnTouch : OnTouchListener {
                 ) {
                     onCancelTouchAction(event.x, event.y)
                     touchStayedWithinViewBounds = false
-                }else{
+                } else {
                     onMoveTouchAction(event.x, event.y)
                 }
                 true
@@ -69,7 +68,7 @@ abstract class ViewOnTouch : OnTouchListener {
 
     /**
      * Method which is called when the down touch is moved on the [View]
-    */
+     */
 
     abstract fun onMoveTouchAction(x: Float, y: Float)
 

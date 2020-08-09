@@ -21,26 +21,27 @@ import com.example.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.notifications.service.PushReceiverIntentService
 import com.example.studita.presentation.adapter.notifications.NotificationsAdapter
-import com.example.studita.presentation.adapter.users_list.UsersAdapter
 import com.example.studita.presentation.fragments.base.NavigatableFragment
-import com.example.studita.presentation.model.*
+import com.example.studita.presentation.model.NotificationsUiModel
+import com.example.studita.presentation.model.toUiModel
 import com.example.studita.presentation.view_model.NotificationsFragmentViewModel
-import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.dpToPx
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.recyclerview_layout.*
-import java.lang.Exception
 
-class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
+class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
 
     lateinit var viewModel: NotificationsFragmentViewModel
 
-    private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver(){
+    private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val notificationData = GsonBuilder().apply {
-                registerTypeAdapter(IsMyFriendStatus.Success::class.java, IsMyFriendStatusDeserializer())
+                registerTypeAdapter(
+                    IsMyFriendStatus.Success::class.java,
+                    IsMyFriendStatusDeserializer()
+                )
             }.create().fromJson<NotificationData>(
                 intent.getStringExtra("NOTIFICATION_DATA"),
                 object : TypeToken<NotificationData>() {}.type
@@ -49,7 +50,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
             viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
             recyclerViewLayoutRecyclerView.adapter?.notifyItemInserted(1)
 
-            if(!isHidden) {
+            if (!isHidden) {
                 resultCode = Activity.RESULT_CANCELED
                 viewModel.setNotificationsAreChecked(UserUtils.getUserIDTokenData()!!)
                 (view?.context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
@@ -60,14 +61,19 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         viewModel = ViewModelProviders.of(this).get(NotificationsFragmentViewModel::class.java)
 
-        recyclerViewLayoutRecyclerView.setPadding(0, resources.getDimension(R.dimen.toolbarHeight).toInt() + 12.dpToPx(), 0, 12.dpToPx())
+        recyclerViewLayoutRecyclerView.setPadding(
+            0,
+            resources.getDimension(R.dimen.toolbarHeight).toInt() + 12.dpToPx(),
+            0,
+            12.dpToPx()
+        )
 
         viewModel.notificationsState.observe(
             viewLifecycleOwner,
-            Observer { pair->
+            Observer { pair ->
 
                 val canBeMoreItems = pair.first
 
@@ -79,7 +85,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                                 viewModel.getRecyclerItems(
                                     NotificationsUiModel.NotificationsSwitch,
                                     notificationsResultState.results,
-                                    if(canBeMoreItems) NotificationsUiModel.ProgressUiModel else null,
+                                    if (canBeMoreItems) NotificationsUiModel.ProgressUiModel else null,
                                     view.context
                                 )
                             )
@@ -94,10 +100,14 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
 
                         if (recyclerViewLayoutRecyclerView.adapter != null) {
 
-                            val items = listOf(*notificationsResultState.results.map { it.toUiModel(view.context) }.toTypedArray(),
-                                *(if(canBeMoreItems) arrayOf(NotificationsUiModel.ProgressUiModel) else emptyArray()))
+                            val items = listOf(
+                                *notificationsResultState.results.map { it.toUiModel(view.context) }
+                                    .toTypedArray(),
+                                *(if (canBeMoreItems) arrayOf(NotificationsUiModel.ProgressUiModel) else emptyArray())
+                            )
 
-                            val adapter = recyclerViewLayoutRecyclerView.adapter as NotificationsAdapter
+                            val adapter =
+                                recyclerViewLayoutRecyclerView.adapter as NotificationsAdapter
 
                             val removePos = adapter.items.lastIndex
                             adapter.items.removeAt(removePos)
@@ -109,9 +119,9 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                                 insertIndex,
                                 items.size
                             )
-                            if(!canBeMoreItems){
+                            if (!canBeMoreItems) {
                                 adapter.items.removeAt(adapter.items.lastIndex)
-                                adapter.notifyItemRemoved(adapter.itemCount-1)
+                                adapter.notifyItemRemoved(adapter.itemCount - 1)
                             }
                         } else {
                             val adapter = NotificationsAdapter(
@@ -145,11 +155,11 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
                     }
                 }
             })
-        
+
         viewModel.progressState.observe(
             viewLifecycleOwner,
             Observer { showProgress ->
-                recyclerViewLayoutProgressBar.visibility = if(showProgress) View.VISIBLE else {
+                recyclerViewLayoutProgressBar.visibility = if (showProgress) View.VISIBLE else {
                     registerReceiver()
                     (view.context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancelAll()
                     View.GONE
@@ -158,8 +168,9 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
 
         UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, Observer {
             viewModel.recyclerItems?.forEachIndexed { index, notificationsUiModel ->
-                if((notificationsUiModel is NotificationsUiModel.Notification) && notificationsUiModel.userData.userId == it.userData.userId){
-                    (viewModel.recyclerItems?.get(index) as NotificationsUiModel.Notification).userData.isMyFriendStatus = it.userData.isMyFriendStatus
+                if ((notificationsUiModel is NotificationsUiModel.Notification) && notificationsUiModel.userData.userId == it.userData.userId) {
+                    (viewModel.recyclerItems?.get(index) as NotificationsUiModel.Notification).userData.isMyFriendStatus =
+                        it.userData.isMyFriendStatus
                     recyclerViewLayoutRecyclerView.adapter?.notifyItemChanged(index, Unit)
                 }
             }
@@ -172,18 +183,19 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
         super.onDestroy()
         try {
             activity?.unregisterReceiver(notificationReceiver)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun showEmptyView(){
-        recyclerViewLayoutRecyclerView.adapter = NotificationsAdapter(arrayListOf(NotificationsUiModel.NotificationsSwitch), null)
+    private fun showEmptyView() {
+        recyclerViewLayoutRecyclerView.adapter =
+            NotificationsAdapter(arrayListOf(NotificationsUiModel.NotificationsSwitch), null)
         (view as ViewGroup).addView(TextView(context).apply {
             TextViewCompat.setTextAppearance(this, R.style.Regular16Secondary)
             text = resources.getString(R.string.notifications_are_empty)
 
-            post{
+            post {
                 updateLayoutParams {
                     gravity = Gravity.CENTER
                 }
@@ -191,14 +203,14 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout){
         })
     }
 
-    private fun registerReceiver(){
+    private fun registerReceiver() {
         try {
             val filter = IntentFilter().apply {
                 addAction(PushReceiverIntentService.BROADCAST_NOTIFICATION)
                 priority = 1
             }
             activity?.registerReceiver(notificationReceiver, filter)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

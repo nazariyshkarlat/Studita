@@ -1,7 +1,6 @@
 package com.example.studita.domain.interactor.privacy_settings
 
 import com.example.studita.domain.entity.EditDuelsExceptionsRequestData
-import com.example.studita.domain.entity.PrivacyDuelsExceptionData
 import com.example.studita.domain.entity.PrivacySettingsRequestData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.interactor.EditDuelsExceptionsStatus
@@ -11,11 +10,25 @@ import com.example.studita.domain.interactor.PrivacySettingsStatus
 
 interface PrivacySettingsInteractor {
 
-    suspend fun getPrivacySettings(userIdTokenData: UserIdTokenData, retryCount: Int = 30): PrivacySettingsStatus
+    suspend fun getPrivacySettings(
+        userIdTokenData: UserIdTokenData,
+        retryCount: Int = 30
+    ): PrivacySettingsStatus
 
-    suspend fun editPrivacySettings(privacySettingsRequestData: PrivacySettingsRequestData, retryCount: Int = 30): EditPrivacySettingsStatus
+    suspend fun editPrivacySettings(
+        privacySettingsRequestData: PrivacySettingsRequestData,
+        retryCount: Int = 30
+    ): EditPrivacySettingsStatus
 
-    suspend fun getPrivacyDuelsExceptionsList(userIdTokenData: UserIdTokenData, perPage: Int, pageNumber: Int, retryCount: Int = 30) : PrivacySettingsDuelsExceptionsStatus
+    suspend fun getPrivacyDuelsExceptionsList(
+        userIdTokenData: UserIdTokenData,
+        perPage: Int,
+        pageNumber: Int,
+        retryCount: Int = 30
+    ): PrivacySettingsDuelsExceptionsStatus
 
-    suspend fun editDuelsExceptions(editDuelsExceptionsRequestData: EditDuelsExceptionsRequestData, retryCount: Int = 30): EditDuelsExceptionsStatus
+    suspend fun editDuelsExceptions(
+        editDuelsExceptionsRequestData: EditDuelsExceptionsRequestData,
+        retryCount: Int = 30
+    ): EditDuelsExceptionsStatus
 }

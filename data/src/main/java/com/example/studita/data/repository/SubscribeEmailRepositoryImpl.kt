@@ -12,17 +12,22 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-class SubscribeEmailRepositoryImpl(private val subscribeEmailDataStoreFactory: SubscribeEmailDataStoreFactory, private val subscribeEmailCache: SubscribeEmailCache) : SubscribeEmailRepository{
+class SubscribeEmailRepositoryImpl(
+    private val subscribeEmailDataStoreFactory: SubscribeEmailDataStoreFactory,
+    private val subscribeEmailCache: SubscribeEmailCache
+) : SubscribeEmailRepository {
 
     private val type: Type = object : TypeToken<SubscribeEmailResultEntity>() {}.type
 
-    override suspend fun subscribe(userIdTokenData: UserIdTokenData): Pair<Int, SubscribeEmailResultData?>{
-        val pair = subscribeEmailDataStoreFactory.create().trySubscribe(userIdTokenData.toRawEntity())
+    override suspend fun subscribe(userIdTokenData: UserIdTokenData): Pair<Int, SubscribeEmailResultData?> {
+        val pair =
+            subscribeEmailDataStoreFactory.create().trySubscribe(userIdTokenData.toRawEntity())
         return pair.first to pair.second?.toBusinessEntity()
     }
 
     override suspend fun unsubscribe(userIdTokenData: UserIdTokenData): Pair<Int, SubscribeEmailResultData?> {
-        val pair = subscribeEmailDataStoreFactory.create().tryUnsubscribe(userIdTokenData.toRawEntity())
+        val pair =
+            subscribeEmailDataStoreFactory.create().tryUnsubscribe(userIdTokenData.toRawEntity())
         return pair.first to pair.second?.toBusinessEntity()
     }
 

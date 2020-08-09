@@ -1,6 +1,5 @@
 package com.example.studita.presentation.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -16,7 +15,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.studita.App
 import com.example.studita.R
 import com.example.studita.domain.entity.UserDataData
-import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.draw.AvaDrawer
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuLanguageDialogAlertFragment
@@ -24,15 +22,13 @@ import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDia
 import com.example.studita.presentation.fragments.dialog_alerts.ProfileMenuSignOutDialogAlertFragment
 import com.example.studita.presentation.view_model.ProfileMenuFragmentViewModel
 import com.example.studita.presentation.views.press_view.IPressView
-import com.example.studita.presentation.views.press_view.PressFrameLayout
-import com.example.studita.presentation.views.press_view.PressLinearLayout
 import com.example.studita.utils.*
-import kotlinx.android.synthetic.main.profile_menu_layout.*
 import kotlinx.android.synthetic.main.profile_menu_item.view.*
+import kotlinx.android.synthetic.main.profile_menu_layout.*
 import kotlinx.android.synthetic.main.settings_offline_mode_item.*
 import kotlinx.android.synthetic.main.settings_offline_mode_item.view.*
 
-class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
+class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
 
     private var profileMenuFragmentViewModel: ProfileMenuFragmentViewModel? = null
     private var profileMenuItemNotificationsIndicator: View? = null
@@ -52,21 +48,28 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
         initSettingList()
 
         profileMenuLayoutEditProfile.setOnClickListener {
-            (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineModeEnabled()) EditProfileOfflineModeFragment() else EditProfileFragment(), R.id.doubleFrameLayoutFrameLayout)
+            (activity as AppCompatActivity).navigateTo(
+                if (PrefsUtils.isOfflineModeEnabled()) EditProfileOfflineModeFragment() else EditProfileFragment(),
+                R.id.doubleFrameLayoutFrameLayout
+            )
         }
 
         scrollingView = profileMenuLayoutScrollView
     }
 
-    private fun fillUserData(userDataData: UserDataData){
-            profileMenuLayoutUserName.text =
-                resources.getString(R.string.user_name_template, userDataData.userName)
-            fillAvatar(userDataData)
+    private fun fillUserData(userDataData: UserDataData) {
+        profileMenuLayoutUserName.text =
+            resources.getString(R.string.user_name_template, userDataData.userName)
+        fillAvatar(userDataData)
     }
 
-    private fun fillAvatar(userDataData: UserDataData){
+    private fun fillAvatar(userDataData: UserDataData) {
         if (userDataData.avatarLink == null) {
-            AvaDrawer.drawAvatar(profileMenuLayoutAvatar, UserUtils.userData.userName!!, PrefsUtils.getUserId()!!)
+            AvaDrawer.drawAvatar(
+                profileMenuLayoutAvatar,
+                UserUtils.userData.userName!!,
+                PrefsUtils.getUserId()!!
+            )
         } else {
             Glide
                 .with(this)
@@ -77,30 +80,36 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
         }
     }
 
-    private fun getProfileMenuItems() = listOf(R.drawable.ic_person_secondary to resources.getString(R.string.my_profile),
+    private fun getProfileMenuItems() = listOf(
+        R.drawable.ic_person_secondary to resources.getString(R.string.my_profile),
         R.drawable.ic_notifications_secondary to resources.getString(R.string.notifications),
-            R.drawable.ic_people_secondary to resources.getString(R.string.my_friends),
-            R.drawable.ic_lock_secondary to resources.getString(R.string.privacy),
-            R.drawable.ic_cloud_secondary to resources.getString(R.string.offline_mode),
-            R.drawable.ic_palette_secondary to resources.getString(R.string.app_theme),
-            R.drawable.ic_language_secondary to resources.getString(R.string.language),
-            R.drawable.ic_exit_to_app_secondary to resources.getString(R.string.sign_out))
+        R.drawable.ic_people_secondary to resources.getString(R.string.my_friends),
+        R.drawable.ic_lock_secondary to resources.getString(R.string.privacy),
+        R.drawable.ic_cloud_secondary to resources.getString(R.string.offline_mode),
+        R.drawable.ic_palette_secondary to resources.getString(R.string.app_theme),
+        R.drawable.ic_language_secondary to resources.getString(R.string.language),
+        R.drawable.ic_exit_to_app_secondary to resources.getString(R.string.sign_out)
+    )
 
-    private fun initSettingList(){
+    private fun initSettingList() {
         getProfileMenuItems().forEachIndexed { index, pair ->
             val itemView: View
-            if(index != ListItems.OFFLINE_MODE.ordinal) {
-                itemView = profileMenuLayoutSettingsList.makeView(R.layout.profile_menu_item).apply {
-                    if(index == ListItems.LANGUAGE.ordinal || index == ListItems.THEME.ordinal)
-                        profileMenuItemLayout.setWithMinClickInterval(true)
-                }
+            if (index != ListItems.OFFLINE_MODE.ordinal) {
+                itemView =
+                    profileMenuLayoutSettingsList.makeView(R.layout.profile_menu_item).apply {
+                        if (index == ListItems.LANGUAGE.ordinal || index == ListItems.THEME.ordinal)
+                            profileMenuItemLayout.setWithMinClickInterval(true)
+                    }
 
-                with(itemView)ItemView@ {
+                with(itemView) ItemView@{
 
-                    if(index == ListItems.NOTIFICATIONS.ordinal){
+                    if (index == ListItems.NOTIFICATIONS.ordinal) {
 
                         with(View(context).apply {
-                            background = ContextCompat.getDrawable(context, R.drawable.new_notifications_indicator)
+                            background = ContextCompat.getDrawable(
+                                context,
+                                R.drawable.new_notifications_indicator
+                            )
                             visibility = View.GONE
                         }) {
 
@@ -121,8 +130,9 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
                     profileMenuItemText.text = pair.second
                     profileMenuItemLayout.setListOnClick(index)
                 }
-            }else{
-                itemView = profileMenuLayoutSettingsList.makeView(R.layout.settings_offline_mode_item)
+            } else {
+                itemView =
+                    profileMenuLayoutSettingsList.makeView(R.layout.settings_offline_mode_item)
                 with(itemView) {
                     mainMenuLayoutOfflineSwitch.isChecked = PrefsUtils.isOfflineModeEnabled()
                     mainMenuLayoutOfflineSwitchView.setListOnClick(index)
@@ -133,22 +143,28 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
         }
     }
 
-    private fun View.setListDividers(position: Int){
+    private fun View.setListDividers(position: Int) {
         if (position == ListItems.MY_PROFILE.ordinal || position == ListItems.PRIVACY.ordinal) {
             setPadding(0, 12.dpToPx(), 0, 0)
             background =
-                androidx.core.content.ContextCompat.getDrawable(context, R.drawable.divider_top_drawable)
+                androidx.core.content.ContextCompat.getDrawable(
+                    context,
+                    R.drawable.divider_top_drawable
+                )
         }
-        if(position == ListItems.FRIENDS.ordinal){
+        if (position == ListItems.FRIENDS.ordinal) {
             setPadding(0, 0, 0, 12.dpToPx())
         }
     }
 
-    private fun IPressView.setListOnClick(position: Int){
+    private fun IPressView.setListOnClick(position: Int) {
         setOnClickListener {
             when (position) {
                 ListItems.MY_PROFILE.ordinal -> {
-                    (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineModeEnabled())  MyProfileOfflineModeFragment() else MyProfileFragment(), R.id.doubleFrameLayoutFrameLayout)
+                    (activity as AppCompatActivity).navigateTo(
+                        if (PrefsUtils.isOfflineModeEnabled()) MyProfileOfflineModeFragment() else MyProfileFragment(),
+                        R.id.doubleFrameLayoutFrameLayout
+                    )
                 }
                 ListItems.THEME.ordinal -> {
                     MainMenuThemeDialogAlertFragment().show(
@@ -160,28 +176,41 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout){
                     MainMenuLanguageDialogAlertFragment()
                         .show((activity as AppCompatActivity).supportFragmentManager, null)
                 }
-                ListItems.SIGN_OUT.ordinal ->{
-                    ProfileMenuSignOutDialogAlertFragment().show((activity as AppCompatActivity).supportFragmentManager, null)
+                ListItems.SIGN_OUT.ordinal -> {
+                    ProfileMenuSignOutDialogAlertFragment().show(
+                        (activity as AppCompatActivity).supportFragmentManager,
+                        null
+                    )
                 }
-                ListItems.OFFLINE_MODE.ordinal ->{
+                ListItems.OFFLINE_MODE.ordinal -> {
                     PrefsUtils.setOfflineMode(!mainMenuLayoutOfflineSwitch.isChecked)
                     mainMenuLayoutOfflineSwitch.isChecked = !mainMenuLayoutOfflineSwitch.isChecked
-                    App.authenticate(UserUtils.getUserIDTokenData())
+
+                    App.authenticate(UserUtils.getUserIDTokenData(), true)
                 }
-                ListItems.PRIVACY.ordinal ->{
-                    (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineModeEnabled()) PrivacySettingsOfflineModeFragment() else PrivacySettingsFragment(), R.id.doubleFrameLayoutFrameLayout)
+                ListItems.PRIVACY.ordinal -> {
+                    (activity as AppCompatActivity).navigateTo(
+                        if (PrefsUtils.isOfflineModeEnabled()) PrivacySettingsOfflineModeFragment() else PrivacySettingsFragment(),
+                        R.id.doubleFrameLayoutFrameLayout
+                    )
                 }
-                ListItems.FRIENDS.ordinal ->{
-                    (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineModeEnabled()) MyProfileOfflineModeFragment() else MyFriendsFragment(), R.id.doubleFrameLayoutFrameLayout)
+                ListItems.FRIENDS.ordinal -> {
+                    (activity as AppCompatActivity).navigateTo(
+                        if (PrefsUtils.isOfflineModeEnabled()) MyProfileOfflineModeFragment() else MyFriendsFragment(),
+                        R.id.doubleFrameLayoutFrameLayout
+                    )
                 }
-                ListItems.NOTIFICATIONS.ordinal->{
-                    (activity as AppCompatActivity).navigateTo(if(PrefsUtils.isOfflineModeEnabled()) NotificationsOfflineModeFragment() else NotificationsFragment(), R.id.doubleFrameLayoutFrameLayout)
+                ListItems.NOTIFICATIONS.ordinal -> {
+                    (activity as AppCompatActivity).navigateTo(
+                        if (PrefsUtils.isOfflineModeEnabled()) NotificationsOfflineModeFragment() else NotificationsFragment(),
+                        R.id.doubleFrameLayoutFrameLayout
+                    )
                 }
             }
         }
     }
 
-    enum class ListItems{
+    enum class ListItems {
         MY_PROFILE,
         NOTIFICATIONS,
         FRIENDS,

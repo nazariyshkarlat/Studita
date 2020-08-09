@@ -14,7 +14,7 @@ import com.example.studita.presentation.view_model.CropAvatarFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import kotlinx.android.synthetic.main.crop_avatar_layout.*
 
-class CropAvatarFragment : NavigatableFragment(R.layout.crop_avatar_layout){
+class CropAvatarFragment : NavigatableFragment(R.layout.crop_avatar_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,21 +27,27 @@ class CropAvatarFragment : NavigatableFragment(R.layout.crop_avatar_layout){
 
             val bitmap = viewModel.getBitmap(it, view.context)
 
-            if(bitmap != null) {
-                cropAvatarFragmentCropView.post{
+            if (bitmap != null) {
+                cropAvatarFragmentCropView.post {
                     cropAvatarFragmentCropView.setBitmap(bitmap, 0, false, false)
                 }
             }
         }
 
         OneShotPreDrawListener.add(view) {
-            toolbarFragmentViewModel?.setToolbarRightButtonState(ToolbarFragmentViewModel.ToolbarRightButtonState.IsEnabled(R.drawable.ic_done_accent) {
-                val resultPhoto = cropAvatarFragmentCropView.result
-                super.onBackClick()
-                targetFragment?.onActivityResult(345, RESULT_OK, Intent().apply {
-                    putExtra("SELECTED_IMAGE", Bitmap.createScaledBitmap(resultPhoto, 128, 128, false))
+            toolbarFragmentViewModel?.setToolbarRightButtonState(
+                ToolbarFragmentViewModel.ToolbarRightButtonState.IsEnabled(
+                    R.drawable.ic_done_accent
+                ) {
+                    val resultPhoto = cropAvatarFragmentCropView.result
+                    super.onBackClick()
+                    targetFragment?.onActivityResult(345, RESULT_OK, Intent().apply {
+                        putExtra(
+                            "SELECTED_IMAGE",
+                            Bitmap.createScaledBitmap(resultPhoto, 128, 128, false)
+                        )
+                    })
                 })
-            })
         }
     }
 

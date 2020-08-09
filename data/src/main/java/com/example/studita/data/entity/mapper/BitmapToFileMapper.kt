@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import java.io.*
 
 
-fun Bitmap.toFile(context: Context): File{
+fun Bitmap.toFile(context: Context): File {
     val f = File(context.cacheDir, "avatar")
     f.createNewFile()
 

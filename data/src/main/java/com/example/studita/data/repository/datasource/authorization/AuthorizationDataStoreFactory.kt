@@ -8,7 +8,7 @@ class AuthorizationDataStoreFactoryImpl(
         authorizationDataStoreImpl
 }
 
-interface AuthorizationDataStoreFactory{
+interface AuthorizationDataStoreFactory {
 
-    fun  create(): AuthorizationDataStore
+    fun create(): AuthorizationDataStore
 }

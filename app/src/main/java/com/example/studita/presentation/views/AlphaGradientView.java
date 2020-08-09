@@ -15,13 +15,11 @@ import android.util.TypedValue;
 import android.widget.FrameLayout;
 
 import com.example.studita.R;
-import com.google.android.material.card.MaterialCardView;
 
 public class AlphaGradientView extends FrameLayout {
 
-    private static final int DEFAULT_GRADIENT_SIZE_DP = 80;
-
     public static final int FADE_EDGE_TOP = 1;
+    private static final int DEFAULT_GRADIENT_SIZE_DP = 80;
     private static final int DIRTY_FLAG_TOP = 1;
 
     private static final int[] FADE_COLORS = new int[]{Color.BLACK, Color.TRANSPARENT};
@@ -79,14 +77,13 @@ public class AlphaGradientView extends FrameLayout {
         this.gradientSizeTop = gradientSizeTop;
     }
 
+    public boolean getFadeTop() {
+        return this.fadeTop;
+    }
+
     public void setFadeTop(boolean fadeTop) {
         this.fadeTop = fadeTop;
         this.gradientDirtyFlags = DIRTY_FLAG_TOP;
-    }
-
-
-    public boolean getFadeTop() {
-        return this.fadeTop;
     }
 
     @Override
@@ -118,7 +115,7 @@ public class AlphaGradientView extends FrameLayout {
             gradientDirtyFlags &= ~DIRTY_FLAG_TOP;
 
             int actualHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-            if(gradientSizeTop == 0)
+            if (gradientSizeTop == 0)
                 gradientSizeTop = actualHeight;
             int size = Math.min(gradientSizeTop, actualHeight);
             int l = getPaddingLeft();

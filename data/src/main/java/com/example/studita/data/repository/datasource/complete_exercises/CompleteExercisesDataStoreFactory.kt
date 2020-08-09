@@ -8,7 +8,7 @@ class CompleteExercisesDataStoreFactoryImpl(
         completeExercisesDataStoreImpl
 }
 
-interface CompleteExercisesDataStoreFactory{
+interface CompleteExercisesDataStoreFactory {
 
     fun create(): CompleteExercisesDataStoreImpl
 

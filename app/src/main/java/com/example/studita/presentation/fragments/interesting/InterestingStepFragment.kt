@@ -9,7 +9,7 @@ import com.example.studita.presentation.model.InterestingUiModelScreen
 import com.example.studita.presentation.view_model.InterestingViewModel
 import kotlinx.android.synthetic.main.interesting_step_layout.*
 
-class InterestingStepFragment : NavigatableFragment(R.layout.interesting_step_layout){
+class InterestingStepFragment : NavigatableFragment(R.layout.interesting_step_layout) {
 
     var interestingViewModel: InterestingViewModel? = null
 
@@ -19,14 +19,15 @@ class InterestingStepFragment : NavigatableFragment(R.layout.interesting_step_la
             ViewModelProviders.of(this).get(InterestingViewModel::class.java)
         }
         interestingViewModel?.let {
-            val stepScreenModel = it.currentScreen as InterestingUiModelScreen.InterestingUiModelStepScreen
+            val stepScreenModel =
+                it.currentScreen as InterestingUiModelScreen.InterestingUiModelStepScreen
 
-            if(stepScreenModel.title != null)
+            if (stepScreenModel.title != null)
                 interestingStepLayoutTitle.text = stepScreenModel.title
             else
                 interestingStepLayoutTitle.visibility = View.GONE
 
-            if(stepScreenModel.subtitle != null)
+            if (stepScreenModel.subtitle != null)
                 interestingStepLayoutSubtitle.text = stepScreenModel.subtitle
             else
                 interestingStepLayoutSubtitle.visibility = View.GONE

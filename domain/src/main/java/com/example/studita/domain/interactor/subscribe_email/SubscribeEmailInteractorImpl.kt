@@ -4,15 +4,14 @@ import com.example.studita.domain.entity.SubscribeEmailResultData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
-import com.example.studita.domain.interactor.FriendActionStatus
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
-import com.example.studita.domain.interactor.UserDataStatus
 import com.example.studita.domain.repository.SubscribeEmailRepository
-import com.example.studita.domain.service.SyncFriendship
 import com.example.studita.domain.service.SyncSubscribeEmail
-import kotlinx.coroutines.delay
 
-class SubscribeEmailInteractorImpl(private val repository: SubscribeEmailRepository, private val syncSubscribeEmail: SyncSubscribeEmail) : SubscribeEmailInteractor {
+class SubscribeEmailInteractorImpl(
+    private val repository: SubscribeEmailRepository,
+    private val syncSubscribeEmail: SyncSubscribeEmail
+) : SubscribeEmailInteractor {
 
     val retryDelay = 1000L
 
@@ -28,7 +27,7 @@ class SubscribeEmailInteractorImpl(private val repository: SubscribeEmailReposit
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 when {
                     e is NetworkConnectionException -> {
                         syncSubscribeEmail.scheduleSubscribeEmail(true)
@@ -39,7 +38,7 @@ class SubscribeEmailInteractorImpl(private val repository: SubscribeEmailReposit
                         subscribe(userIdTokenData, retryCount - 1)
                     }
                 }
-            }else
+            } else
                 SubscribeEmailResultStatus.Failure
         }
 
@@ -53,9 +52,9 @@ class SubscribeEmailInteractorImpl(private val repository: SubscribeEmailReposit
                 200 -> SubscribeEmailResultStatus.Success(result.second!!)
                 else -> SubscribeEmailResultStatus.Failure
             }
-        }  catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
-            if(e is NetworkConnectionException || e is ServerUnavailableException) {
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 when {
                     e is NetworkConnectionException -> {
                         syncSubscribeEmail.scheduleSubscribeEmail(false)
@@ -66,12 +65,12 @@ class SubscribeEmailInteractorImpl(private val repository: SubscribeEmailReposit
                         subscribe(userIdTokenData, retryCount - 1)
                     }
                 }
-            }else
+            } else
                 SubscribeEmailResultStatus.Failure
         }
 
     override suspend fun saveSyncedResult(status: SubscribeEmailResultStatus) {
-        if(status is SubscribeEmailResultStatus.Success) {
+        if (status is SubscribeEmailResultStatus.Success) {
             repository.saveSyncedResult(status.result)
         }
     }

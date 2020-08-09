@@ -15,7 +15,7 @@ import com.example.studita.utils.removeFragment
 import com.example.studita.utils.replace
 import kotlinx.android.synthetic.main.exercise_bonus_layout.*
 
-class ExercisesBonusFragment : NavigatableFragment(R.layout.exercise_bonus_layout){
+class ExercisesBonusFragment : NavigatableFragment(R.layout.exercise_bonus_layout) {
 
     var exercisesViewModel: ExercisesViewModel? = null
 
@@ -38,7 +38,7 @@ class ExercisesBonusFragment : NavigatableFragment(R.layout.exercise_bonus_layou
 
             viewModel.exercisesBonusRemainingTimeState.observe(viewLifecycleOwner, Observer {
 
-                if(it == 0L){
+                if (it == 0L) {
                     viewModel.endBonusExercises()
                     showBonusEndFragment(viewModel.getExercisesBonusEndFragment())
                     return@Observer
@@ -60,27 +60,28 @@ class ExercisesBonusFragment : NavigatableFragment(R.layout.exercise_bonus_layou
 
             viewModel.exerciseBonusNavigationState.observe(viewLifecycleOwner, Observer {
                 val bonusFragment = viewModel.initBonusFragment()
-                if(bonusFragment !is ExercisesBonusEndScreenFragment) {
+                if (bonusFragment !is ExercisesBonusEndScreenFragment) {
                     (activity as AppCompatActivity).replace(
                         bonusFragment,
                         R.id.exerciseBonusLayoutFrameLayout,
                         R.anim.slide_in_left,
                         R.anim.slide_out_right
                     )
-                }else{
+                } else {
                     showBonusEndFragment(bonusFragment)
                 }
             })
         }
     }
 
-    private fun showBonusEndFragment(bonusEndScreenFragment: ExercisesBonusEndScreenFragment){
+    private fun showBonusEndFragment(bonusEndScreenFragment: ExercisesBonusEndScreenFragment) {
         (activity as AppCompatActivity).navigateTo(
             bonusEndScreenFragment,
             R.id.frameLayout
         )
         (activity as AppCompatActivity).removeFragment(this)
-        (activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.exerciseBonusLayoutFrameLayout)?.let { (activity as AppCompatActivity).removeFragment(it) }
+        (activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.exerciseBonusLayoutFrameLayout)
+            ?.let { (activity as AppCompatActivity).removeFragment(it) }
     }
 
 }

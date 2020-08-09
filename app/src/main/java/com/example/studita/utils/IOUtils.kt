@@ -1,13 +1,9 @@
 package com.example.studita.utils
 
 import android.content.Context
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.provider.MediaStore
-import androidx.loader.content.CursorLoader
-import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream

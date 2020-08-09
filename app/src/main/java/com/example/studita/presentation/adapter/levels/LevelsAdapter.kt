@@ -5,23 +5,36 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.presentation.model.HomeRecyclerUiModel
-import com.example.studita.utils.makeView
 import com.example.studita.presentation.view_model.HomeFragmentViewModel
-import java.lang.UnsupportedOperationException
+import com.example.studita.utils.makeView
 
-class LevelsAdapter(private val items: List<HomeRecyclerUiModel>, private val homeFragmentViewModel: HomeFragmentViewModel) :
+class LevelsAdapter(
+    private val items: List<HomeRecyclerUiModel>,
+    private val homeFragmentViewModel: HomeFragmentViewModel
+) :
     RecyclerView.Adapter<LevelsViewHolder<*>>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LevelsViewHolder<out HomeRecyclerUiModel> = when (viewType) {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): LevelsViewHolder<out HomeRecyclerUiModel> = when (viewType) {
         LevelsViewType.USER_STATE.ordinal -> HomeUserDataViewHolder(parent.makeView(R.layout.home_layout_user_data))
         LevelsViewType.LEVEL.ordinal -> LevelViewHolder(parent.makeView(R.layout.level_item))
-        LevelsViewType.CHAPTER.ordinal -> ChapterViewHolder(parent.makeView(R.layout.chapter_item), items.count { it is HomeRecyclerUiModel.LevelChapterUiModel })
+        LevelsViewType.CHAPTER.ordinal -> ChapterViewHolder(
+            parent.makeView(R.layout.chapter_item),
+            items.count { it is HomeRecyclerUiModel.LevelChapterUiModel })
         LevelsViewType.INTERESTING.ordinal -> InterestingViewHolder(parent.makeView(R.layout.interesting_item))
-        LevelsViewType.SUBSCRIBE.ordinal -> SubscribeViewHolder(parent.makeView(R.layout.level_subscribe_item), homeFragmentViewModel)
+        LevelsViewType.SUBSCRIBE.ordinal -> SubscribeViewHolder(
+            parent.makeView(R.layout.level_subscribe_item),
+            homeFragmentViewModel
+        )
         else -> throw UnsupportedOperationException("unknown type of item")
     }
 
-    override fun onBindViewHolder(holder: LevelsViewHolder<out HomeRecyclerUiModel>, position: Int) {
+    override fun onBindViewHolder(
+        holder: LevelsViewHolder<out HomeRecyclerUiModel>,
+        position: Int
+    ) {
         holder.bind(items[position])
     }
 
@@ -39,7 +52,8 @@ class LevelsAdapter(private val items: List<HomeRecyclerUiModel>, private val ho
 }
 
 
-abstract class LevelsViewHolder<T : HomeRecyclerUiModel>(view: View) : RecyclerView.ViewHolder(view) {
+abstract class LevelsViewHolder<T : HomeRecyclerUiModel>(view: View) :
+    RecyclerView.ViewHolder(view) {
 
     abstract fun bind(model: HomeRecyclerUiModel)
 }

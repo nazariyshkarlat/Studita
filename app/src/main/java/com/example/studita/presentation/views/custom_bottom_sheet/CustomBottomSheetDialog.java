@@ -25,18 +25,32 @@ import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import com.example.studita.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-/** Base class for {@link android.app.Dialog}s styled as a bottom sheet. */
+/**
+ * Base class for {@link android.app.Dialog}s styled as a bottom sheet.
+ */
 public class CustomBottomSheetDialog extends AppCompatDialog {
 
-    private CustomBottomSheetBehavior<FrameLayout> behavior;
-
-    private FrameLayout container;
-
     boolean dismissWithAnimation;
-
     boolean cancelable = true;
+    private CustomBottomSheetBehavior<FrameLayout> behavior;
+    private FrameLayout container;
     private boolean canceledOnTouchOutside = true;
     private boolean canceledOnTouchOutsideSet;
+    @NonNull
+    private CustomBottomSheetBehavior.BottomSheetCallback bottomSheetCallback =
+            new CustomBottomSheetBehavior.BottomSheetCallback() {
+                @Override
+                public void onStateChanged(
+                        @NonNull View bottomSheet, @BottomSheetBehavior.State int newState) {
+                    if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                        cancel();
+                    }
+                }
+
+                @Override
+                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                }
+            };
 
     public CustomBottomSheetDialog(@NonNull Context context) {
         this(context, 0);
@@ -54,6 +68,20 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
         super(context, cancelable, cancelListener);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         this.cancelable = cancelable;
+    }
+
+    private static int getThemeResId(@NonNull Context context, int themeId) {
+        if (themeId == 0) {
+            // If the provided theme is 0, then retrieve the dialogTheme from our theme
+            TypedValue outValue = new TypedValue();
+            if (context.getTheme().resolveAttribute(R.attr.bottomSheetDialogTheme, outValue, true)) {
+                themeId = outValue.resourceId;
+            } else {
+                // bottomSheetDialogTheme is not provided; we default to our light theme
+                themeId = R.style.Theme_Design_Light_BottomSheetDialog;
+            }
+        }
+        return themeId;
     }
 
     @Override
@@ -150,6 +178,14 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
     }
 
     /**
+     * Returns if dismissing will perform the swipe down animation on the bottom sheet, rather than
+     * the window animation for the dialog.
+     */
+    public boolean getDismissWithAnimation() {
+        return dismissWithAnimation;
+    }
+
+    /**
      * Set to perform the swipe down animation when dismissing instead of the window animation for the
      * dialog.
      *
@@ -160,14 +196,8 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
     }
 
     /**
-     * Returns if dismissing will perform the swipe down animation on the bottom sheet, rather than
-     * the window animation for the dialog.
+     * Creates the container layout which must exist to find the behavior
      */
-    public boolean getDismissWithAnimation() {
-        return dismissWithAnimation;
-    }
-
-    /** Creates the container layout which must exist to find the behavior */
     private FrameLayout ensureContainerAndBehavior() {
         if (container == null) {
             container =
@@ -248,7 +278,7 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
         if (!canceledOnTouchOutsideSet) {
             TypedArray a =
                     getContext()
-                            .obtainStyledAttributes(new int[] {android.R.attr.windowCloseOnTouchOutside});
+                            .obtainStyledAttributes(new int[]{android.R.attr.windowCloseOnTouchOutside});
             canceledOnTouchOutside = a.getBoolean(0, true);
             a.recycle();
             canceledOnTouchOutsideSet = true;
@@ -256,36 +286,7 @@ public class CustomBottomSheetDialog extends AppCompatDialog {
         return canceledOnTouchOutside;
     }
 
-    private static int getThemeResId(@NonNull Context context, int themeId) {
-        if (themeId == 0) {
-            // If the provided theme is 0, then retrieve the dialogTheme from our theme
-            TypedValue outValue = new TypedValue();
-            if (context.getTheme().resolveAttribute(R.attr.bottomSheetDialogTheme, outValue, true)) {
-                themeId = outValue.resourceId;
-            } else {
-                // bottomSheetDialogTheme is not provided; we default to our light theme
-                themeId = R.style.Theme_Design_Light_BottomSheetDialog;
-            }
-        }
-        return themeId;
-    }
-
     void removeDefaultCallback() {
         behavior.removeBottomSheetCallback(bottomSheetCallback);
     }
-
-    @NonNull
-    private CustomBottomSheetBehavior.BottomSheetCallback bottomSheetCallback =
-            new CustomBottomSheetBehavior.BottomSheetCallback() {
-                @Override
-                public void onStateChanged(
-                        @NonNull View bottomSheet, @BottomSheetBehavior.State int newState) {
-                    if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                        cancel();
-                    }
-                }
-
-                @Override
-                public void onSlide(@NonNull View bottomSheet, float slideOffset) {}
-            };
 }

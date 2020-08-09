@@ -1,6 +1,6 @@
 package com.example.studita.data.cache.chapter
 
-interface ChapterCache{
+interface ChapterCache {
     fun saveChaptersJson(json: String)
 
     fun getLevelsJson(chapterNumber: Int): String?

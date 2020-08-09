@@ -1,89 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/exercisesDescription10LayoutScrollView"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/toolbarHeight"
     android:clipToPadding="false"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/toolbarHeight"
     android:paddingBottom="@dimen/buttonWithPaddingHeight">
 
     <LinearLayout
+        android:id="@+id/exercisesDescription10ParentLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/exercisesDescription10ParentLinearLayout"
-        android:orientation="vertical"
         android:layout_marginStart="@dimen/defaultRLMargin"
-        android:layout_marginEnd="@dimen/defaultRLMargin">
+        android:layout_marginEnd="@dimen/defaultRLMargin"
+        android:orientation="vertical">
 
         <TextView
             style="@style/Medium24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/exercises_description_title"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:text="@string/exercises_description_title" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp" />
 
         <LinearLayout
             android:id="@+id/exercisesDescription10LayoutLinearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
 
             <View
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/exercise_rectangle_green"/>
+                android:background="@drawable/exercise_rectangle_green" />
 
             <View
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="16dp"
-                android:background="@drawable/exercise_rectangle_green"/>
+                android:background="@drawable/exercise_rectangle_green" />
 
             <TextView
                 style="@style/Regular18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
-                android:text="@string/minus"
-                android:layout_gravity="center_vertical"/>
+                android:text="@string/minus" />
 
             <View
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/exercise_rectangle_green"/>
+                android:background="@drawable/exercise_rectangle_green" />
 
         </LinearLayout>
 
@@ -92,39 +91,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp" />
 
         <LinearLayout
             android:id="@+id/exercisesDescription10LayoutLinearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
 
             <View
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/exercise_rectangle_green"/>
+                android:background="@drawable/exercise_rectangle_green" />
 
             <View
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="16dp"
-                android:background="@drawable/exercise_rectangle_blue"/>
+                android:background="@drawable/exercise_rectangle_blue" />
 
             <TextView
                 style="@style/Regular18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
-                android:text="@string/minus"
-                android:layout_gravity="center_vertical"/>
+                android:text="@string/minus" />
 
             <View
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/exercise_rectangle_blue"/>
+                android:background="@drawable/exercise_rectangle_blue" />
 
         </LinearLayout>
 
@@ -132,86 +131,86 @@
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <TextView
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
     </LinearLayout>
 

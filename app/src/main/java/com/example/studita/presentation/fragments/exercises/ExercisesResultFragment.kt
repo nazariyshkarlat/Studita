@@ -11,9 +11,10 @@ import com.example.studita.R
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.model.ExerciseResultAnimation
-import com.example.studita.utils.*
 import com.example.studita.presentation.view_model.ExercisesEndFragmentViewModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.example.studita.presentation.views.CustomProgressBar
+import com.example.studita.utils.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.exercises_result_layout.*
@@ -21,7 +22,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
+class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
 
     var exercisesViewModel: ExercisesViewModel? = null
     var exercisesEndFragmentViewModel: ExercisesEndFragmentViewModel? = null
@@ -44,9 +45,9 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
         arguments?.let {
             val percent = it.getFloat("ANSWERS_PERCENT")
             val userDataToAnimation = Gson().fromJson<UserDataData>(
-                    it.getString("OLD_USER_DATA"),
-                    object : TypeToken<UserDataData>() {}.type
-                )
+                it.getString("OLD_USER_DATA"),
+                object : TypeToken<UserDataData>() {}.type
+            )
 
             val exercisesBonusCorrectCount = it.getInt("EXERCISES_BONUS_CORRECT_COUNT")
 
@@ -60,13 +61,13 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if(!hidden){
+        if (!hidden) {
             exercisesViewModel?.showExercisesEndTextButton(true)
             checkScrollable()
         }
     }
 
-    private fun checkScrollable(){
+    private fun checkScrollable() {
         OneShotPreDrawListener.add(exercisesResultLayoutScrollView) {
             val isScrollable: Boolean =
                 exercisesResultLayoutScrollView.height < exercisesResultLayoutScrollView.getChildAt(
@@ -87,13 +88,33 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
         }
     }
 
-    private fun startAnimation(userData: UserDataData, percent: Float, isTraining: Boolean, exercisesBonusCorrectCount: Int){
-        val anims = LevelUtils.getExerciseResultAnimation(userData, percent, isTraining,  exercisesBonusCorrectCount)
-        animateProgress(anims.iterator(), anims.filter { it.to == 1F }.count(), null,  LevelUtils.getObtainedExercisesBonusXP(exercisesBonusCorrectCount, isTraining))
+    private fun startAnimation(
+        userData: UserDataData,
+        percent: Float,
+        isTraining: Boolean,
+        exercisesBonusCorrectCount: Int
+    ) {
+        val anims = LevelUtils.getExerciseResultAnimation(
+            userData,
+            percent,
+            isTraining,
+            exercisesBonusCorrectCount
+        )
+        animateProgress(
+            anims.iterator(),
+            anims.filter { it.to == 1F }.count(),
+            null,
+            LevelUtils.getObtainedExercisesBonusXP(exercisesBonusCorrectCount, isTraining)
+        )
     }
 
-    private fun animateProgress(animations: Iterator<ExerciseResultAnimation>, newLevels: Int, lastAnimation: ExerciseResultAnimation?, exercisesBonusObtainedXP: Int){
-        if(animations.hasNext()) {
+    private fun animateProgress(
+        animations: Iterator<ExerciseResultAnimation>,
+        newLevels: Int,
+        lastAnimation: ExerciseResultAnimation?,
+        exercisesBonusObtainedXP: Int
+    ) {
+        if (animations.hasNext()) {
 
             val anim = animations.next()
 
@@ -116,13 +137,13 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
                                     LevelUtils.NEXT_LEVEL_BONUS * newLevels
                                 )
                             }
-                            is ExerciseResultAnimation.SequenceBonus ->{
+                            is ExerciseResultAnimation.SequenceBonus -> {
                                 exercisesResultLayoutProgressBarText.text = resources.getString(
                                     R.string.exercises_XP_bonus,
                                     LevelUtils.SEQUENCE_BONUS
                                 )
                             }
-                            is ExerciseResultAnimation.BonusExercisesBonus ->{
+                            is ExerciseResultAnimation.BonusExercisesBonus -> {
                                 exercisesResultLayoutProgressBarText.text = resources.getString(
                                     R.string.exercises_XP_bonus,
                                     exercisesBonusObtainedXP
@@ -137,10 +158,15 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
                     duration = resources.getInteger(R.integer.exercises_progress_XP_duration)
                         .toLong(), onAnimEnd = {
                         if (anim.to == 1F) {
-                            animateLevelUp{
-                                animateProgress(animations, newLevels, anim, exercisesBonusObtainedXP)
+                            animateLevelUp {
+                                animateProgress(
+                                    animations,
+                                    newLevels,
+                                    anim,
+                                    exercisesBonusObtainedXP
+                                )
                             }
-                        }else{
+                        } else {
                             animateProgress(animations, newLevels, anim, exercisesBonusObtainedXP)
                         }
                     })
@@ -148,22 +174,30 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
         }
     }
 
-    private fun initAnimation(userData: UserDataData, viewModel: ExercisesViewModel, percent: Float, exercisesBonusCorrectCount: Int){
+    private fun initAnimation(
+        userData: UserDataData,
+        viewModel: ExercisesViewModel,
+        percent: Float,
+        exercisesBonusCorrectCount: Int
+    ) {
 
-        exercisesResultLayoutProgressBar?.postExt {
+        exercisesResultLayoutProgressBar?.postExt<CustomProgressBar> {
             exercisesResultLayoutProgressBar.percentProgress =
                 LevelUtils.getLevelProgressPercent(userData)
             startAnimation(userData, percent, viewModel.isTraining, exercisesBonusCorrectCount)
         }
-        exercisesResultLayoutProgressBarText.text = resources.getString(R.string.exercises_XP_result, LevelUtils.percentToXP(percent, viewModel.isTraining))
+        exercisesResultLayoutProgressBarText.text = resources.getString(
+            R.string.exercises_XP_result,
+            LevelUtils.percentToXP(percent, viewModel.isTraining)
+        )
         updateTextLevels(userData.currentLevel)
         exercisesResultLayoutAnswersPercent.text = resources.getString(
             R.string.answers_percent,
-            (percent*100).toInt()
+            (percent * 100).toInt()
         )
     }
 
-    private fun animateLevelUp(onAnimationEnd: () -> Unit){
+    private fun animateLevelUp(onAnimationEnd: () -> Unit) {
         viewLifecycleOwner.lifecycleScope.launch {
             delay(200)
             exercisesResultLayoutProgressBar.clearProgress()
@@ -187,7 +221,7 @@ class  ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout){
         animatorSet.start()
     }
 
-    private fun updateTextLevels(currentLevel: Int){
+    private fun updateTextLevels(currentLevel: Int) {
         exercisesResultLayoutCurrentLevel.text = currentLevel.toString()
         exercisesResultLayoutNextLevel.text = LevelUtils.getNextLevel(currentLevel).toString()
     }

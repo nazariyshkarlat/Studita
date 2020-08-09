@@ -6,14 +6,16 @@ import android.view.ViewTreeObserver
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.utils.*
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesEndFragmentViewModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.example.studita.utils.TimeUtils
+import com.example.studita.utils.dpToPx
 import kotlinx.android.synthetic.main.exercises_detailed_stat_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
-class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_detailed_stat_layout), ViewTreeObserver.OnScrollChangedListener{
+class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_detailed_stat_layout),
+    ViewTreeObserver.OnScrollChangedListener {
 
     var exercisesViewModel: ExercisesViewModel? = null
     private var exercisesEndFragmentViewModel: ExercisesEndFragmentViewModel? = null
@@ -31,27 +33,29 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
 
         exercisesViewModel?.showExercisesEndTextButton(false)
 
-        val trueAnswers : Int? = arguments?.getInt("TRUE_ANSWERS")
-        val falseAnswers : Int? = arguments?.getInt("FALSE_ANSWERS")
-        val timeInSeconds : Long? = arguments?.getLong("PROCESS_SECONDS")
-        val obtainedXP : Int? = arguments?.getInt("OBTAINED_XP")
-        timeInSeconds?.let{ time ->
-            exercisesDetailedStatLayoutTimeSubtitle.text = context?.let {context->
+        val trueAnswers: Int? = arguments?.getInt("TRUE_ANSWERS")
+        val falseAnswers: Int? = arguments?.getInt("FALSE_ANSWERS")
+        val timeInSeconds: Long? = arguments?.getLong("PROCESS_SECONDS")
+        val obtainedXP: Int? = arguments?.getInt("OBTAINED_XP")
+        timeInSeconds?.let { time ->
+            exercisesDetailedStatLayoutTimeSubtitle.text = context?.let { context ->
                 TimeUtils.styleTimeText(
                     context,
-                    TimeUtils.getTimeText(TimeUtils.getHours(time) to resources.getString(R.string.hours),
+                    TimeUtils.getTimeText(
+                        TimeUtils.getHours(time) to resources.getString(R.string.hours),
                         TimeUtils.getMinutes(time) to resources.getString(R.string.minutes),
-                        TimeUtils.getSeconds(time) to  resources.getString(R.string.seconds))
+                        TimeUtils.getSeconds(time) to resources.getString(R.string.seconds)
+                    )
                 )
             }
         }
-        trueAnswers?.let{
+        trueAnswers?.let {
             exercisesDetailedStatLayoutTrueAnswersSubtitle.text = it.toString()
         }
-        falseAnswers?.let{
+        falseAnswers?.let {
             exercisesDetailedStatLayoutFalseAnswersSubtitle.text = it.toString()
         }
-        obtainedXP?.let{
+        obtainedXP?.let {
             exercisesDetailedStatLayoutXPSubtitle.text = (obtainedXP).toString()
         }
         toolbarLayoutBackButton.setOnClickListener {
@@ -66,13 +70,22 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
 
     }
 
-    private fun changeLayoutIfScrollable(){
+    private fun changeLayoutIfScrollable() {
         OneShotPreDrawListener.add(exercisesDetailedStatLayoutScrollView) {
             if (exercisesDetailedStatLayoutScrollView.height < exercisesDetailedStatLayoutScrollView.getChildAt(
                     0
-                ).height + exercisesDetailedStatLayoutScrollView.paddingTop + exercisesDetailedStatLayoutScrollView.paddingBottom) {
-                exercisesDetailedStatLayoutScrollView.setPadding(exercisesDetailedStatLayoutScrollView.paddingLeft, exercisesDetailedStatLayoutScrollView.paddingTop, exercisesDetailedStatLayoutScrollView.paddingRight, 16.dpToPx())
-                exercisesEndFragmentViewModel?.setScrollViewDividerAndPadding(R.drawable.divider_top_drawable, 16.dpToPx())
+                ).height + exercisesDetailedStatLayoutScrollView.paddingTop + exercisesDetailedStatLayoutScrollView.paddingBottom
+            ) {
+                exercisesDetailedStatLayoutScrollView.setPadding(
+                    exercisesDetailedStatLayoutScrollView.paddingLeft,
+                    exercisesDetailedStatLayoutScrollView.paddingTop,
+                    exercisesDetailedStatLayoutScrollView.paddingRight,
+                    16.dpToPx()
+                )
+                exercisesEndFragmentViewModel?.setScrollViewDividerAndPadding(
+                    R.drawable.divider_top_drawable,
+                    16.dpToPx()
+                )
             }
         }
     }

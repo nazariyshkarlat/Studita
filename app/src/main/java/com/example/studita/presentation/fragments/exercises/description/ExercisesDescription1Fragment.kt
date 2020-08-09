@@ -17,7 +17,8 @@ import kotlinx.android.synthetic.main.exercises_description_1_layout.*
 import java.util.regex.Pattern
 
 
-class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exercises_description_1_layout){
+class ExercisesDescription1Fragment :
+    ExercisesDescriptionFragment(R.layout.exercises_description_1_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -25,18 +26,18 @@ class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exer
             OneShotPreDrawListener.add(exercisesDescription1ParentLinearLayout) {
                 formView(it)
 
-                if(!isHidden)
+                if (!isHidden)
                     checkButtonDivider(view)
             }
         }
     }
 
-    private fun formView(exercisesDescriptionModel: ExercisesDescriptionData){
+    private fun formView(exercisesDescriptionModel: ExercisesDescriptionData) {
         var childIndex = -1
         var insideBrackets = "0"
         exercisesDescription1ParentLinearLayout.children.forEach { child ->
-            if(child is TextView){
-                if(childIndex >= 0) {
+            if (child is TextView) {
+                if (childIndex >= 0) {
                     val text = exercisesDescriptionModel.textParts[childIndex]
                     val m =
                         Pattern.compile("\\{.*?\\}").matcher(text)
@@ -49,34 +50,47 @@ class ExercisesDescription1Fragment : ExercisesDescriptionFragment(R.layout.exer
                                 ""
                             ).toInt()]
                         val textSpanParts: ArrayList<SpannableString> = ArrayList(text.split(
-                            "\\{.*?\\}".toRegex()).map{span -> SpannableString(span) })
-                        textSpanParts.add(spanIndex, insideBrackets.createSpannableString(color = ContextCompat.getColor(child.context, R.color.yellow)))
-                        textSpanParts.forEach{part-> builder.append(part)}
+                            "\\{.*?\\}".toRegex()
+                        ).map { span -> SpannableString(span) })
+                        textSpanParts.add(
+                            spanIndex,
+                            insideBrackets.createSpannableString(
+                                color = ContextCompat.getColor(
+                                    child.context,
+                                    R.color.yellow
+                                )
+                            )
+                        )
+                        textSpanParts.forEach { part -> builder.append(part) }
                         spanIndex++
                     }
-                    if(spanIndex == 1)
+                    if (spanIndex == 1)
                         child.text = text
                     else
                         child.text = builder
                 }
                 childIndex++
-            }else{
-                if(child is LinearLayout)
+            } else {
+                if (child is LinearLayout)
                     fillLinearLayout(child, insideBrackets.toInt())
             }
         }
     }
 
-    private fun fillLinearLayout(child: LinearLayout, imgCount: Int){
-        for(i in 0 until imgCount) {
+    private fun fillLinearLayout(child: LinearLayout, imgCount: Int) {
+        for (i in 0 until imgCount) {
             val shapeView = View(child.context)
-            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
             params.height = 24.dpToPx()
             params.width = 24.dpToPx()
-            if(i != imgCount-1)
+            if (i != imgCount - 1)
                 params.marginEnd = 12.dpToPx()
             shapeView.layoutParams = params
-            shapeView.background =  ContextCompat.getDrawable(child.context, R.drawable.slightly_smiling_face)
+            shapeView.background =
+                ContextCompat.getDrawable(child.context, R.drawable.slightly_smiling_face)
             child.addView(shapeView)
         }
     }

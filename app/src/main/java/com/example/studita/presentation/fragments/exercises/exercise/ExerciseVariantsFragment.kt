@@ -4,14 +4,11 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.ScrollView
-import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
-import com.example.studita.R
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
 
-open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
+open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId) {
 
     protected var exercisesViewModel: ExercisesViewModel? = null
 
@@ -24,7 +21,7 @@ open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
             ViewModelProviders.of(this).get(ExercisesViewModel::class.java)
         }
 
-        if(savedInstanceState != null)
+        if (savedInstanceState != null)
             selectedPos = savedInstanceState.getInt("SELECTED_POSITION")
     }
 
@@ -39,7 +36,7 @@ open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
         }
     }
 
-    private fun View.disableAllItems(){
+    private fun View.disableAllItems() {
         this.isEnabled = false
         if (this is ViewGroup) {
             for (i in 0 until this.childCount) {
@@ -49,7 +46,7 @@ open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
         }
     }
 
-    protected fun observeAnswered(viewModel: ExercisesViewModel, variantsLayout: LinearLayout){
+    protected fun observeAnswered(viewModel: ExercisesViewModel, variantsLayout: LinearLayout) {
         viewModel.answered.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer { answered ->
@@ -61,10 +58,16 @@ open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId){
             })
     }
 
-    fun getSelectedChild(centerLayout: ViewGroup): View = if(centerLayout.getChildAt(0) !is LinearLayout) centerLayout.getChildAt(selectedPos) else (centerLayout.getChildAt(selectedPos/2)as ViewGroup).getChildAt(selectedPos%2)
+    fun getSelectedChild(centerLayout: ViewGroup): View =
+        if (centerLayout.getChildAt(0) !is LinearLayout) centerLayout.getChildAt(selectedPos) else (centerLayout.getChildAt(
+            selectedPos / 2
+        ) as ViewGroup).getChildAt(selectedPos % 2)
 
-    fun selectVariant(centerLayout: ViewGroup, position: Int){
-        val childView= if(centerLayout.getChildAt(0) !is LinearLayout) centerLayout.getChildAt(position) else (centerLayout.getChildAt(position/2)as ViewGroup).getChildAt(position%2)
+    fun selectVariant(centerLayout: ViewGroup, position: Int) {
+        val childView =
+            if (centerLayout.getChildAt(0) !is LinearLayout) centerLayout.getChildAt(position) else (centerLayout.getChildAt(
+                position / 2
+            ) as ViewGroup).getChildAt(position % 2)
         exercisesViewModel?.setButtonEnabled(true)
         centerLayout.refreshVariants()
         childView.isEnabled = false

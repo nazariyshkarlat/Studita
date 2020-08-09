@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 class LogInCacheImpl(private val sharedPreferences: SharedPreferences) :
     LogInCache {
 
-    companion object{
+    companion object {
         const val USER_ID_PREFS = "user_id"
         const val TOKEN_PREFS = "token"
     }

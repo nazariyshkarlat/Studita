@@ -1,7 +1,6 @@
 package com.example.studita.service
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
 import androidx.work.*
 import com.example.studita.di.NetworkModule
 import com.example.studita.di.data.SubscribeEmailModule
@@ -13,7 +12,7 @@ import com.example.studita.utils.UserUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class SyncSubscribeEmailImpl : SyncSubscribeEmail{
+class SyncSubscribeEmailImpl : SyncSubscribeEmail {
 
 
     companion object {
@@ -21,7 +20,7 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail{
         var syncSubscribeEmailLiveData = SingleLiveEvent<SubscribeEmailResultStatus>()
     }
 
-    override fun scheduleSubscribeEmail(subscribe: Boolean){
+    override fun scheduleSubscribeEmail(subscribe: Boolean) {
         val data = Data.Builder()
         data.putBoolean("SUBSCRIBE", subscribe)
         data.putString("USER_ID_TOKEN_DATA",
@@ -38,7 +37,8 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail{
         workManager.enqueueUniqueWork(SYNC_SUBSCRIBE_EMAIL_ID, ExistingWorkPolicy.REPLACE, work)
     }
 
-    class SubscribeEmailWorker(val context: Context, val params: WorkerParameters) : CoroutineWorker(context, params){
+    class SubscribeEmailWorker(val context: Context, val params: WorkerParameters) :
+        CoroutineWorker(context, params) {
         override suspend fun doWork(): Result {
             val json = inputData.getString("USER_ID_TOKEN_DATA")
             val subscribe = inputData.getBoolean("SUBSCRIBE", false)
@@ -50,8 +50,8 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail{
                 else
                     SubscribeEmailModule.getSubscribeEmailInteractorImpl().unsubscribe(it)
 
-                    SubscribeEmailModule.getSubscribeEmailInteractorImpl().saveSyncedResult(result)
-                    syncSubscribeEmailLiveData.postValue(result)
+                SubscribeEmailModule.getSubscribeEmailInteractorImpl().saveSyncedResult(result)
+                syncSubscribeEmailLiveData.postValue(result)
             }
 
             return Result.success()
@@ -63,7 +63,7 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail{
 
     }
 
-    private fun serializeUserIdTokenData(userIdTokenData: UserIdTokenData): String{
+    private fun serializeUserIdTokenData(userIdTokenData: UserIdTokenData): String {
         return Gson().toJson(userIdTokenData)
     }
 

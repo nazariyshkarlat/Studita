@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/exercisesResultLayoutScrollView"
-    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:clipToPadding="false"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:clipToPadding="false"
     android:gravity="center">
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/exercisesResultLayoutLevelTextView"
             style="@style/Medium18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/level"/>
+            android:text="@string/level" />
 
         <TextView
             android:id="@+id/exercisesResultLayoutCurrentLevel"
             style="@style/Regular14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"/>
+            android:layout_marginTop="24dp" />
 
         <FrameLayout
             android:layout_width="@dimen/exercisesResultProgressBarSize"
@@ -37,9 +37,9 @@
                 style="@style/Medium20Blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_gravity="center"
                 android:textAlignment="center"
                 android:textAllCaps="true" />
 
@@ -47,7 +47,7 @@
                 android:id="@+id/exercisesResultLayoutProgressBar"
                 style="@style/CustomCircleProgressBar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
         </FrameLayout>
 
@@ -56,22 +56,22 @@
             style="@style/Regular14Secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp" />
 
         <TextView
-           android:id="@+id/exercisesResultLayoutGoodJob"
+            android:id="@+id/exercisesResultLayoutGoodJob"
             style="@style/Medium24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/good_job"/>
+            android:text="@string/good_job" />
 
         <TextView
             android:id="@+id/exercisesResultLayoutAnswersPercent"
             style="@style/Regular16Secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"/>
+            android:layout_marginTop="24dp" />
 
     </LinearLayout>
 </ScrollView>

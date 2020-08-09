@@ -8,28 +8,28 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExercisesDescriptionData
-import com.example.studita.utils.allViewsOfTypeT
 import com.example.studita.utils.createSpannableString
 import com.example.studita.utils.getAllViewsOfTypeT
 import kotlinx.android.synthetic.main.exercises_description_2_layout.*
-import org.w3c.dom.Text
 import java.util.regex.Pattern
 
-class ExercisesDescription2Fragment : ExercisesDescriptionFragment(R.layout.exercises_description_2_layout) {
+class ExercisesDescription2Fragment :
+    ExercisesDescriptionFragment(R.layout.exercises_description_2_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exercisesDescriptionModel?.let {
             formView(it)
 
-            if(!isHidden)
+            if (!isHidden)
                 checkButtonDivider(view)
         }
     }
 
     private fun formView(exercisesDescriptionModel: ExercisesDescriptionData) {
         exercisesDescriptionModel.textParts.forEachIndexed { index, part ->
-            val child = exercisesDescription2ParentLinearLayout.getAllViewsOfTypeT<TextView>()[index + 1]
+            val child =
+                exercisesDescription2ParentLinearLayout.getAllViewsOfTypeT<TextView>()[index + 1]
             val m =
                 Pattern.compile("\\{.*?\\}").matcher(part)
             val builder = SpannableStringBuilder()
@@ -42,7 +42,8 @@ class ExercisesDescription2Fragment : ExercisesDescriptionFragment(R.layout.exer
                 val textSpanParts: ArrayList<SpannableString> = ArrayList(part.split(
                     "\\{.*?\\}".toRegex()
                 ).map { span -> SpannableString(span) })
-                textSpanParts.add(0,
+                textSpanParts.add(
+                    0,
                     insideBrackets.createSpannableString(
                         color = ContextCompat.getColor(
                             child.context,

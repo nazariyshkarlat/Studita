@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="page_background_color" format="reference"/>
-    <attr name="transparent_bar_color" format="reference"/>
-    <attr name="divider_color" format="reference"/>
-    <attr name="blue_transparent_button_color" format="reference"/>
-    <attr name="secondary_color" format="reference"/>
-    <attr name="primary_color" format="reference"/>
-    <attr name="progress_bar_color" format="reference"/>
-    <attr name="next_level_color" format="reference"/>
-    <attr name="main_blocks_color" format="reference"/>
-    <attr name="popup_background_color" format="reference"/>
-    <attr name="splash_screen_color" format="reference"/>
-    <attr name="splash_screen_text_color" format="reference"/>
-    <attr name="exercise_variant_button_divider_color" format="reference"/>
-    <attr name="swipe_refresh_layout_background_color" format="reference"/>
-    <attr name="disabled_color" format="reference"/>
-    <attr name="dialogs_color" format="reference"/>
-    <attr name="press_view_press_alpha_lighter" format="float"/>
-    <attr name="press_view_press_alpha" format="float"/>
-    <attr name="switch_inactive_thumb_color" format="reference"/>
-    <attr name="switch_inactive_track_color" format="reference"/>
-    <attr name="colorAccent10" format="reference"/>
-    <attr name="colorAccent14" format="reference"/>
-    <attr name="colorAccent26" format="reference"/>
+    <attr name="page_background_color" format="reference" />
+    <attr name="transparent_bar_color" format="reference" />
+    <attr name="divider_color" format="reference" />
+    <attr name="blue_transparent_button_color" format="reference" />
+    <attr name="secondary_color" format="reference" />
+    <attr name="primary_color" format="reference" />
+    <attr name="progress_bar_color" format="reference" />
+    <attr name="next_level_color" format="reference" />
+    <attr name="main_blocks_color" format="reference" />
+    <attr name="popup_background_color" format="reference" />
+    <attr name="splash_screen_color" format="reference" />
+    <attr name="splash_screen_text_color" format="reference" />
+    <attr name="exercise_variant_button_divider_color" format="reference" />
+    <attr name="swipe_refresh_layout_background_color" format="reference" />
+    <attr name="disabled_color" format="reference" />
+    <attr name="dialogs_color" format="reference" />
+    <attr name="press_view_press_alpha_lighter" format="float" />
+    <attr name="press_view_press_alpha" format="float" />
+    <attr name="switch_inactive_thumb_color" format="reference" />
+    <attr name="switch_inactive_track_color" format="reference" />
+    <attr name="colorAccent10" format="reference" />
+    <attr name="colorAccent14" format="reference" />
+    <attr name="colorAccent26" format="reference" />
 
     <declare-styleable name="CircleProgress">
-        <attr name="circle_progress" format="integer"/>
-        <attr name="circle_unfinished_color" format="color"/>
-        <attr name="circle_finished_color" format="color"/>
-        <attr name="rightLeftPadding" format="dimension"/>
-        <attr name="topBottomPadding" format="dimension"/>
-        <attr name="timerDuration" format="float"/>
+        <attr name="circle_progress" format="integer" />
+        <attr name="circle_unfinished_color" format="color" />
+        <attr name="circle_finished_color" format="color" />
+        <attr name="rightLeftPadding" format="dimension" />
+        <attr name="topBottomPadding" format="dimension" />
+        <attr name="timerDuration" format="float" />
     </declare-styleable>
 
     <declare-styleable name="ErrorEditText">
@@ -47,21 +47,21 @@
 
     <declare-styleable name="AlphaGradientView">
         <attr name="fel_edge" format="integer">
-            <flag name="top" value="1"/>
-            <flag name="bottom" value="2"/>
-            <flag name="left" value="4"/>
-            <flag name="right" value="8"/>
+            <flag name="top" value="1" />
+            <flag name="bottom" value="2" />
+            <flag name="left" value="4" />
+            <flag name="right" value="8" />
         </attr>
-        <attr name="fel_size_top" format="dimension"/>
-        <attr name="fel_size_bottom" format="dimension"/>
-        <attr name="fel_size_left" format="dimension"/>
-        <attr name="fel_size_right" format="dimension"/>
+        <attr name="fel_size_top" format="dimension" />
+        <attr name="fel_size_bottom" format="dimension" />
+        <attr name="fel_size_left" format="dimension" />
+        <attr name="fel_size_right" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="CenterIconTextView">
-        <attr name="drawableTint" format="color"/>
-        <attr name="drawableSize" format="dimension"/>
-        <attr name="android:drawablePadding"/>
+        <attr name="drawableTint" format="color" />
+        <attr name="drawableSize" format="dimension" />
+        <attr name="android:drawablePadding" />
     </declare-styleable>
 
 </resources>

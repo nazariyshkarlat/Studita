@@ -10,11 +10,11 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.LinearInterpolator
+import android.widget.LinearLayout
 import com.example.studita.R
 import kotlin.math.acos
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import android.widget.LinearLayout
 
 class CircleProgress @JvmOverloads constructor(
     context: Context,
@@ -30,7 +30,7 @@ class CircleProgress @JvmOverloads constructor(
     var timerDuration = 0F
     lateinit var animatorListener: Animator.AnimatorListener
     lateinit var animator: ValueAnimator
-    var onEndAnim : () -> Unit = {
+    var onEndAnim: () -> Unit = {
     }
     var progress = 0
         set(progress) {
@@ -48,12 +48,12 @@ class CircleProgress @JvmOverloads constructor(
             }
         }
     var finishedColor: Int = 0
-        set(value){
+        set(value) {
             field = value
             this.invalidate()
         }
     var unfinishedColor: Int = 0
-        set(value){
+        set(value) {
             field = value
             this.invalidate()
         }
@@ -66,8 +66,10 @@ class CircleProgress @JvmOverloads constructor(
     init {
 
         val attributes =
-            context.theme.obtainStyledAttributes(attrs,
-                R.styleable.CircleProgress, defStyleAttr, 0)
+            context.theme.obtainStyledAttributes(
+                attrs,
+                R.styleable.CircleProgress, defStyleAttr, 0
+            )
         initByAttributes(attributes)
         attributes.recycle()
 
@@ -93,11 +95,11 @@ class CircleProgress @JvmOverloads constructor(
         vto.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
 
-                    this@CircleProgress.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                this@CircleProgress.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 dotSize = measuredHeight.toFloat()
                 this@CircleProgress.layoutParams = LinearLayout.LayoutParams(
-                    (dotSize + (rightLeftPadding*2)).toInt(),
-                    (dotSize + (topBottomPadding*2)).toInt()
+                    (dotSize + (rightLeftPadding * 2)).toInt(),
+                    (dotSize + (topBottomPadding * 2)).toInt()
                 )
             }
         })
@@ -127,14 +129,14 @@ class CircleProgress @JvmOverloads constructor(
 
     fun animateProgress(progress: Int = 100, animateAlpha: Boolean = true) {
         this.progress = progress
-        if(animateAlpha) {
+        if (animateAlpha) {
             alpha = 0.08F
         }
         animator = ValueAnimator.ofInt(progress, 0)
         animator.interpolator = LinearInterpolator()
-        animator.duration = (progress/max.toFloat() * timerDuration).toLong()
-        animator.addUpdateListener{ animation -> this.progress = animation.animatedValue as Int }
-        animatorListener = object: Animator.AnimatorListener{
+        animator.duration = (progress / max.toFloat() * timerDuration).toLong()
+        animator.addUpdateListener { animation -> this.progress = animation.animatedValue as Int }
+        animatorListener = object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
             }
 
@@ -151,7 +153,7 @@ class CircleProgress @JvmOverloads constructor(
 
         }
         animator.addListener(animatorListener)
-        if(animateAlpha) {
+        if (animateAlpha) {
             val alphaAnim = animate().alpha(1F).setDuration(300)
             alphaAnim.setListener(object : Animator.AnimatorListener {
                 override fun onAnimationRepeat(animation: Animator?) {
@@ -169,17 +171,17 @@ class CircleProgress @JvmOverloads constructor(
                 }
 
             }).start()
-        }else
+        } else
             animator.start()
         pause = false
     }
 
-    fun stopAnimation(){
+    fun stopAnimation() {
         animator.removeListener(animatorListener)
         animator.duration = 0
     }
 
-    fun pause(value: Long = animator.currentPlayTime){
+    fun pause(value: Long = animator.currentPlayTime) {
         animator.removeListener(animatorListener)
         animator.currentPlayTime = value
         pause = true

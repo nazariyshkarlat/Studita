@@ -8,11 +8,11 @@ import com.example.studita.di.data.ChapterModule
 import com.example.studita.domain.interactor.ChapterStatus
 import com.example.studita.presentation.model.ChapterUiModel
 import com.example.studita.presentation.model.toShapeUiModel
-import com.example.studita.utils.launchExt
 import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.launchExt
 import kotlinx.coroutines.Job
 
-class ChapterViewModel : ViewModel(){
+class ChapterViewModel : ViewModel() {
 
     val progressState = MutableLiveData<Boolean>()
     val errorState = SingleLiveEvent<Int>()
@@ -22,10 +22,11 @@ class ChapterViewModel : ViewModel(){
 
     private var job: Job? = null
 
-    fun getChapter(chapterNumber: Int){
-        job = viewModelScope.launchExt(job){
+    fun getChapter(chapterNumber: Int) {
+        job = viewModelScope.launchExt(job) {
             progressState.postValue(false)
-            when(val status = interactor.getChapter(chapterNumber, PrefsUtils.isOfflineModeEnabled())){
+            when (val status =
+                interactor.getChapter(chapterNumber, PrefsUtils.isOfflineModeEnabled())) {
                 is ChapterStatus.NoConnection -> errorState.postValue(R.string.no_connection)
                 is ChapterStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is ChapterStatus.Success -> {

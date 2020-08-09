@@ -9,17 +9,26 @@ import com.example.studita.data.repository.datasource.interesting.InterestingJso
 import com.example.studita.domain.entity.InterestingData
 import com.example.studita.domain.repository.InterestingRepository
 
-class InterestingRepositoryImpl(private val interestingJsonDataStoreFactory: InterestingJsonDataStoreFactory,
-                                private val connectionManager: ConnectionManager
-): InterestingRepository {
+class InterestingRepositoryImpl(
+    private val interestingJsonDataStoreFactory: InterestingJsonDataStoreFactory,
+    private val connectionManager: ConnectionManager
+) : InterestingRepository {
 
-    override suspend fun getInteresting(interestingNumber: Int, offlineMode: Boolean): Pair<Int, InterestingData> =
-        with(InterestingDataStoreImpl(interestingJsonDataStoreFactory.create(if(offlineMode || connectionManager.isNetworkAbsent()) InterestingJsonDataStoreFactory.Priority.CACHE else InterestingJsonDataStoreFactory.Priority.CLOUD)).getInterestingEntity(interestingNumber)){
+    override suspend fun getInteresting(
+        interestingNumber: Int,
+        offlineMode: Boolean
+    ): Pair<Int, InterestingData> =
+        with(
+            InterestingDataStoreImpl(interestingJsonDataStoreFactory.create(if (offlineMode || connectionManager.isNetworkAbsent()) InterestingJsonDataStoreFactory.Priority.CACHE else InterestingJsonDataStoreFactory.Priority.CLOUD)).getInterestingEntity(
+                interestingNumber
+            )
+        ) {
             this.first to this.second.toBusinessEntity()
         }
 
     override suspend fun downloadInterestingList(): Int {
-        val diskDataStore = (interestingJsonDataStoreFactory.create(InterestingJsonDataStoreFactory.Priority.CACHE) as DiskInterestingJsonDataStore)
+        val diskDataStore =
+            (interestingJsonDataStoreFactory.create(InterestingJsonDataStoreFactory.Priority.CACHE) as DiskInterestingJsonDataStore)
         return if (!diskDataStore.interestingIsCached()) {
             val json =
                 (interestingJsonDataStoreFactory.create(InterestingJsonDataStoreFactory.Priority.CLOUD) as CloudInterestingJsonDataStore).getInterestingListJson()

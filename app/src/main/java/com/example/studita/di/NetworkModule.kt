@@ -1,10 +1,11 @@
 package com.example.studita.di
+
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import com.example.data.BuildConfig
-import com.example.studita.data.net.connection.ConnectionManagerImpl
 import com.example.studita.data.net.connection.ConnectionManager
+import com.example.studita.data.net.connection.ConnectionManagerImpl
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 object NetworkModule {
 
-    private const val BASE_URL = "http://10.0.2.2:5000"
+    private const val BASE_URL = "http://37.53.93.223:5037"
 
     lateinit var connectionManager: ConnectionManager
     private lateinit var retrofit: Retrofit
