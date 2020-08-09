@@ -18,7 +18,7 @@ class SyncSignOutImpl : SyncSignOut {
 
     override fun scheduleSignOut(signOutRequestData: SignOutRequestData) {
         val data = Data.Builder()
-        data.putString("USER_ID_TOKEN_DATA", serializeSignOutData(signOutRequestData))
+        data.putString("SIGN_OUT_DATA", serializeSignOutData(signOutRequestData))
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -35,7 +35,7 @@ class SyncSignOutImpl : SyncSignOut {
         CoroutineWorker(context, params) {
         override suspend fun doWork(): Result {
 
-            val json = inputData.getString("USER_ID_TOKEN_DATA")
+            val json = inputData.getString("SIGN_OUT_DATA")
             if (json != null) {
                 val signOutRequestData =
                     deserializeSignOutData(json)

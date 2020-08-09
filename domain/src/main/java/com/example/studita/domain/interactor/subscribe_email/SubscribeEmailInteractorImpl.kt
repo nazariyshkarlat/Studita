@@ -30,7 +30,7 @@ class SubscribeEmailInteractorImpl(
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 when {
                     e is NetworkConnectionException -> {
-                        syncSubscribeEmail.scheduleSubscribeEmail(true)
+                        syncSubscribeEmail.scheduleSubscribeEmail(true, userIdTokenData)
                         SubscribeEmailResultStatus.NoConnection
                     }
                     retryCount == 0 -> SubscribeEmailResultStatus.ServiceUnavailable
@@ -57,7 +57,7 @@ class SubscribeEmailInteractorImpl(
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 when {
                     e is NetworkConnectionException -> {
-                        syncSubscribeEmail.scheduleSubscribeEmail(false)
+                        syncSubscribeEmail.scheduleSubscribeEmail(false, userIdTokenData)
                         SubscribeEmailResultStatus.NoConnection
                     }
                     retryCount == 0 -> SubscribeEmailResultStatus.ServiceUnavailable

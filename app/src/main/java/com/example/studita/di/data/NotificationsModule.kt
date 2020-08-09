@@ -9,6 +9,7 @@ import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.notifications.NotificationsInteractor
 import com.example.studita.domain.interactor.notifications.NotificationsInteractorImpl
 import com.example.studita.domain.repository.NotificationsRepository
+import com.example.studita.service.SyncNotificationsAreCheckedImpl
 
 object NotificationsModule {
 
@@ -40,7 +41,8 @@ object NotificationsModule {
 
     private fun makeNotificationsIntercator(repository: NotificationsRepository) =
         NotificationsInteractorImpl(
-            repository
+            repository,
+            SyncNotificationsAreCheckedImpl()
         )
 
 

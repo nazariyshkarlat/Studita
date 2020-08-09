@@ -5,10 +5,12 @@ import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.example.studita.domain.interactor.GetNotificationsStatus
 import com.example.studita.domain.interactor.SetNotificationsAreCheckedStatus
+import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.domain.repository.NotificationsRepository
+import com.example.studita.domain.service.SyncNotificationsAreChecked
 import kotlinx.coroutines.delay
 
-class NotificationsInteractorImpl(private val repository: NotificationsRepository) :
+class NotificationsInteractorImpl(private val repository: NotificationsRepository, private val syncNotificationsAreChecked: SyncNotificationsAreChecked) :
     NotificationsInteractor {
 
     val retryDelay = 1000L
@@ -64,18 +66,15 @@ class NotificationsInteractorImpl(private val repository: NotificationsRepositor
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
-                if (retryCount == 0) {
-                    if (e is NetworkConnectionException) {
+                when {
+                    e is NetworkConnectionException -> {
+                        syncNotificationsAreChecked.scheduleCheckNotifications( userIdTokenData)
                         SetNotificationsAreCheckedStatus.NoConnection
-                    } else
-                        SetNotificationsAreCheckedStatus.ServiceUnavailable
-                } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
-                    setNotificationsAreChecked(
-                        userIdTokenData,
-                        retryCount - 1
-                    )
+                    }
+                    retryCount == 0 -> SetNotificationsAreCheckedStatus.ServiceUnavailable
+                    else -> {
+                        setNotificationsAreChecked(userIdTokenData, retryCount - 1)
+                    }
                 }
             } else
                 SetNotificationsAreCheckedStatus.Failure

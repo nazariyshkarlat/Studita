@@ -20,11 +20,10 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail {
         var syncSubscribeEmailLiveData = SingleLiveEvent<SubscribeEmailResultStatus>()
     }
 
-    override fun scheduleSubscribeEmail(subscribe: Boolean) {
+    override fun scheduleSubscribeEmail(subscribe: Boolean, userIdTokenData: UserIdTokenData) {
         val data = Data.Builder()
         data.putBoolean("SUBSCRIBE", subscribe)
-        data.putString("USER_ID_TOKEN_DATA",
-            UserUtils.getUserIDTokenData()?.let { serializeUserIdTokenData(it) })
+        data.putString("USER_ID_TOKEN_DATA", serializeUserIdTokenData(userIdTokenData))
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)

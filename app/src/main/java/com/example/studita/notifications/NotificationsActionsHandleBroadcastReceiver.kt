@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.example.studita.di.data.NotificationsModule
 import com.example.studita.di.data.UsersModule
 import com.example.studita.domain.entity.FriendActionRequestData
 import com.example.studita.domain.entity.UserData
@@ -42,6 +43,7 @@ class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver() {
                             userData.userId
                         )
                     )
+                    NotificationsModule.getNotificationsInteractorImpl().setNotificationsAreChecked(UserUtils.getUserIDTokenData()!!)
                 }
                 UserUtils.isMyFriendLiveData.value =
                     UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(userData.apply {
@@ -56,6 +58,7 @@ class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver() {
                             userData.userId
                         )
                     )
+                    NotificationsModule.getNotificationsInteractorImpl().setNotificationsAreChecked(UserUtils.getUserIDTokenData()!!)
                 }
                 UserUtils.isMyFriendLiveData.value =
                     UsersInteractor.FriendActionState.FriendshipRequestIsRejected(userData.apply {

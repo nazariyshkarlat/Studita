@@ -107,15 +107,15 @@ object TimeUtils {
     ): String =
         when {
             hours.first > 0 -> {
-                "$hours ${hours.second} ${if (seconds.first > 0) {
-                    "${(if (minutes.first < 10) "0" else "")}${minutes.first} ${minutes.second}"
+                "${hours.first} ${hours.second} ${if (minutes.first > 0) {
+                    "${minutes.first} ${minutes.second}"
                 } else
                     ""
                 }"
             }
             minutes.first > 0 -> {
                 "${minutes.first} ${minutes.second} ${if (seconds.first > 0) {
-                    "${(if (seconds.first < 10) "0" else "")}${seconds.first} ${seconds.second}"
+                    "${seconds.first} ${seconds.second}"
                 } else
                     ""
                 }"
