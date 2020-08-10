@@ -462,10 +462,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                             }
                         })
                         chapterPartTwoHelpLayoutButton.setOnSingleClickListener {
-                            if (helpIsEnabled) {
-                                animate().translationX(if (translationX != 0F) 0F else (measuredWidth - it.measuredWidth).toFloat())
-                                    .setInterpolator(FastOutSlowInInterpolator()).start()
-                            }
+                            animate().translationX(if (translationX != 0F) 0F else (measuredWidth - it.measuredWidth).toFloat())
+                                .setInterpolator(FastOutSlowInInterpolator()).start()
                         }
 
                         alpha = 0F
@@ -507,6 +505,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
 
                 view?.findViewById<ViewGroup>(R.id.chapterPartTwoHelpLayout)?.let {
 
+                    it.chapterPartTwoHelpLayoutButton.isEnabled = true
                     it.measure(0, 0)
 
                     val prevMeasuredWidth = it.measuredWidth
