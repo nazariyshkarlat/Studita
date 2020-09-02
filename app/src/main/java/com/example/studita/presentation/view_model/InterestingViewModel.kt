@@ -23,6 +23,7 @@ class InterestingViewModel : ViewModel() {
     val errorState = SingleLiveEvent<Int>()
     val progressBarState = SingleLiveEvent<Pair<Float, Boolean>>()
     var interestingProgress = MutableLiveData<InterestingState>(InterestingState.START_SCREEN)
+    var feedbackState = MutableLiveData<FeedbackState>(FeedbackState.NO_FEEDBACK)
     var toolbarDividerState = SingleLiveEvent<Boolean>()
     var buttonDividerState = SingleLiveEvent<Boolean>()
     val navigationState = SingleLiveEvent<Pair<InterestingNavigationState, Fragment>>()
@@ -101,6 +102,10 @@ class InterestingViewModel : ViewModel() {
     private fun getProgressPercent(): Float =
         (currentScreenPosition - 1) / (interestingScreens.lastIndex - 1).toFloat()
 
+    fun setFeedback(feedbackState: FeedbackState){
+        this.feedbackState.value = feedbackState
+    }
+
     enum class InterestingNavigationState {
         ADD,
         NAVIGATE,
@@ -111,6 +116,12 @@ class InterestingViewModel : ViewModel() {
         START_SCREEN,
         STEP,
         EXPLANATION
+    }
+
+    enum class FeedbackState {
+        NO_FEEDBACK,
+        LIKE,
+        DISLIKE
     }
 
 }

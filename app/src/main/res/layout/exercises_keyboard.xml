@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:columnCount="4"
+    android:rowCount="4">
+
+    <TextView
+        style="@style/ExercisesKeyboardGrayButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"
+        android:text="1"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+
+    <TextView
+        style="@style/ExercisesKeyboardGrayButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_columnWeight="1"
+        android:text="2"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+
+    <TextView
+        style="@style/ExercisesKeyboardGrayButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_columnWeight="1"
+        android:text="3"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+
+    <com.example.studita.presentation.views.press_view.PressTextView
+        style="@style/ExercisesKeyboardBlueButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_columnWeight="1"
+        android:text="+"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+
+    <TextView
+        style="@style/ExercisesKeyboardGrayButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_rowWeight="1"
+        android:text="4"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+    <TextView
+        style="@style/ExercisesKeyboardGrayButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:text="5"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+
+    <TextView
+        style="@style/ExercisesKeyboardGrayButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:text="6"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+
+    <com.example.studita.presentation.views.press_view.PressTextView
+        style="@style/ExercisesKeyboardBlueButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:text="-"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+
+    <TextView
+        style="@style/ExercisesKeyboardGrayButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_rowWeight="1"
+        android:text="7"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+
+    <TextView
+        style="@style/ExercisesKeyboardGrayButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:text="8"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+    <TextView
+        style="@style/ExercisesKeyboardGrayButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:text="9"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+    <com.example.studita.presentation.views.press_view.PressTextView
+        style="@style/ExercisesKeyboardBlueButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:text="×"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="fill"/>
+
+
+    <TextView
+        style="@style/ExercisesKeyboardGrayButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_rowWeight="1"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:text="."
+        android:layout_gravity="fill"/>
+
+    <TextView
+        style="@style/ExercisesKeyboardGrayButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginStart="6dp"
+        android:text="0"
+        android:layout_gravity="fill"/>
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginStart="6dp"
+        android:background="@drawable/exercises_keyboard_gray_button"
+        android:scaleType="center"
+        app:srcCompat="@drawable/ic_backspace" />
+
+    <com.example.studita.presentation.views.press_view.PressTextView
+        style="@style/ExercisesKeyboardBlueButton"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="6dp"
+        android:text="÷"
+        android:layout_gravity="fill"/>
+
+</GridLayout>

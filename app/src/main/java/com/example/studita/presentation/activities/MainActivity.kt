@@ -6,12 +6,13 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.IncorrectTimeFragment
-import com.example.studita.presentation.fragments.MainFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
+import com.example.studita.presentation.fragments.main.MainFragment
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.example.studita.utils.TimeUtils
 import com.example.studita.utils.addFragment
 import com.example.studita.utils.startActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.frame_layout.*
 
 class MainActivity : DefaultActivity() {
@@ -33,7 +34,7 @@ class MainActivity : DefaultActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.frame_layout)
-
+        
         navigationViewModel =
             ViewModelProviders.of(this).get(MainActivityNavigationViewModel::class.java)
 

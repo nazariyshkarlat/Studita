@@ -2,6 +2,7 @@ package com.example.studita.presentation.views
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
@@ -9,6 +10,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
@@ -19,8 +21,9 @@ import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.TextViewCompat.setTextAppearance
 import com.example.studita.R
-import com.example.studita.utils.dpToPx
+import com.example.studita.utils.*
 import com.google.android.flexbox.*
+import java.lang.Math.abs
 
 
 class ArrangeNumbersView @JvmOverloads constructor(
@@ -36,7 +39,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
     private var answers = arrayOfNulls<Int?>(10)
     var variants = correctAnswers
 
-    var onNewAnswerListener: OnNewAnswerListener? = null
+    private var onNewAnswerListener: OnNewAnswerListener? = null
     var correctAnswersCount = 0
 
     private val topFlexboxLayout: FlexboxLayout
@@ -98,7 +101,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
                 background = ContextCompat.getDrawable(context, R.drawable.arrange_numbers_bottom_item_background)
                 setPadding(16.dpToPx(), 14.dpToPx(), 16.dpToPx(), 14.dpToPx())
                 text = it.toString()
-                setChildOnClick()
+                setChildOnTouch()
             }
             flexbox.addView(item)
         }
@@ -139,13 +142,92 @@ class ArrangeNumbersView @JvmOverloads constructor(
         }
     }
 
-    private fun View.setChildOnClick() {
-        setOnClickListener {
-            onSelect()
-        }
+    @SuppressLint("ClickableViewAccessibility")
+    private fun View.setChildOnTouch() {
+
+        setOnTouchListener(object : OnTouchListener {
+
+            private var dX: Float = 0F
+            private var dY: Float = 0F
+
+            override fun onTouch(v: View, event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        val maxTransZ =
+                            bottomFlexboxLayout.children.maxBy { it.translationZ }!!.translationZ
+                        v.translationZ = maxTransZ + 1
+                        dX = v.x - event.rawX
+                        dY = v.y - event.rawY
+                        return true
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+
+                        val newX = event.rawX + dX
+
+                        if (bottomFlexboxLayout.childIsInParentX(
+                                newX.toInt(),
+                                (newX + v.measuredWidth).toInt()
+                            )
+                        ) {
+                            v.x = newX
+                        } else {
+                            if (newX < 0F) {
+                                v.x = 0F
+                            } else {
+                                v.x =
+                                    (bottomFlexboxLayout.measuredWidth - v.measuredWidth).toFloat()
+                            }
+                        }
+                        val newY = event.rawY + dY
+                        if (bottomFlexboxLayout.childIsInParentY(
+                                newY.toInt(),
+                                (newY + v.measuredHeight).toInt()
+                            )
+                        ) {
+                            v.y = newY
+                        } else {
+                            if (newY < 0F) {
+                                v.y = 0F
+                            } else {
+                                v.y =
+                                    (bottomFlexboxLayout.measuredHeight - v.measuredHeight).toFloat()
+                            }
+                        }
+                        return true
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        when {
+                            v.isClick(event) -> {
+                                onSelect(true)
+                            }
+                            v.isAboveCell() -> {
+                                onSelect(false)
+                            }
+                            else -> {
+                                v.animate().translationX(0F).translationY(0F).start()
+                            }
+                        }
+                        return true
+                    }
+                    else -> return false
+                }
+            }
+
+        })
     }
 
-    private fun View.onSelect(){
+    private fun View.isClick(event: MotionEvent) = kotlin.math.abs(translationX) <= 5F && kotlin.math.abs(translationY) <= 5F && (event.eventTime - event.downTime) < 500F
+
+    private fun View.isAboveCell(): Boolean{
+        topFlexboxLayout.children.forEach {
+            if(this.isContainsAnotherView(it)){
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun View.onSelect(isClick: Boolean){
         isEnabled = false
         isClickable = false
         val currentIndex = answers.indexOfFirst { it == null }
@@ -160,6 +242,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
         animate()
             .x(newPlaceView.x)
             .y(newPlaceView.y)
+            .setDuration(300L)
             .setListener(object : AnimatorListenerAdapter(){
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
@@ -186,7 +269,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
                         super.onAnimationEnd(animation)
                         Handler().postDelayed({
                             falseView.visibility = View.INVISIBLE
-                        }, 100)
+                        }, 100L)
                     }
                 })
                 .start()

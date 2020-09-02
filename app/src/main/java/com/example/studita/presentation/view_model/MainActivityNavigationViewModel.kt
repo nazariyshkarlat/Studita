@@ -3,9 +3,9 @@ package com.example.studita.presentation.view_model
 import android.view.MenuItem
 import androidx.lifecycle.ViewModel
 import com.example.studita.R
-import com.example.studita.presentation.fragments.AchievementsFragment
-import com.example.studita.presentation.fragments.CompetitionsFragment
-import com.example.studita.presentation.fragments.HomeFragment
+import com.example.studita.presentation.fragments.main.AchievementsFragment
+import com.example.studita.presentation.fragments.main.CompetitionsFragment
+import com.example.studita.presentation.fragments.main.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivityNavigationViewModel : ViewModel(),

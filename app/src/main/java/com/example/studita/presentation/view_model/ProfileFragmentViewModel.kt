@@ -30,7 +30,6 @@ class ProfileFragmentViewModel : ViewModel() {
     val addFriendStatus = SingleLiveEvent<UsersInteractor.FriendActionState>()
 
     var addToFriendsJob: Job? = null
-    var getFriendsJob: Job? = null
 
     val userDataState = MutableLiveData<UserDataStatus>()
 

@@ -9,13 +9,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
+import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.makeView
 import kotlinx.android.synthetic.main.exercise_screen_type_5.*
 
-class ExerciseScreenType5 : ExerciseScreen(R.layout.exercise_screen_type_5) {
+class ExerciseScreenType5 : NavigatableFragment(R.layout.exercise_screen_type_5) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 

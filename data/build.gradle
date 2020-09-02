@@ -12,7 +12,6 @@ dependencies {
     //retrofit
     api "com.squareup.retrofit2:retrofit:$retrofit_version"
     api "com.squareup.retrofit2:converter-gson:$retrofit_version"
-
     api "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$coroutines_adapter_version"
 
     //okhttp

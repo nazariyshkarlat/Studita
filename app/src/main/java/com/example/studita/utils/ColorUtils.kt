@@ -6,6 +6,7 @@ import androidx.core.graphics.ColorUtils
 import kotlin.math.roundToInt
 
 object ColorUtils {
+
     @ColorInt
     fun compositeColors(backColor: Int, topColor: Int, factor: Float): Int {
         val factorRounded = factor.round(2)
@@ -15,4 +16,5 @@ object ColorUtils {
         val blue = Color.blue(topColor)
         return ColorUtils.compositeColors(Color.argb(alpha, red, green, blue), backColor)
     }
+
 }

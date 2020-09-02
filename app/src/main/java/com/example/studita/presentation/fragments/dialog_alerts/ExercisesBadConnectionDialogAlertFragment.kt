@@ -8,24 +8,31 @@ import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseDialogFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.utils.PrefsUtils
-import kotlinx.android.synthetic.main.exercises_bad_connection_dialog_alert.*
+import kotlinx.android.synthetic.main.dialog_alert_layout.*
 
 
 class ExercisesBadConnectionDialogAlertFragment :
-    BaseDialogFragment(R.layout.exercises_bad_connection_dialog_alert) {
+    BaseDialogFragment(R.layout.dialog_alert_layout) {
 
     var exercisesViewModel: ExercisesViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setText(resources.getString(R.string.exercises_bad_connection_dialog_alert_title),
+            resources.getString(R.string.exercises_bad_connection_dialog_alert_subtitle),
+            resources.getString(R.string.wait),
+            resources.getString(R.string.offline_mode)
+        )
+
         exercisesViewModel = activity?.run {
             ViewModelProviders.of(this).get(ExercisesViewModel::class.java)
         }
-        exercisesBadConnectionDialogLeftButton.setOnClickListener {
+        dialogAlertLeftButton.setOnClickListener {
             dismiss()
             exercisesViewModel?.checkExerciseResult()
         }
-        exercisesBadConnectionDialogRightButton.setOnClickListener {
+        dialogAlertRightButton.setOnClickListener {
             dismiss()
             exercisesViewModel?.waitingJob?.cancel()
             exercisesViewModel?.let {

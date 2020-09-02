@@ -17,7 +17,7 @@ class LevelViewHolder(view: View) :
             itemView.levelItemLevel.isEnabled =
                 model.chapterPartsCount == UserUtils.userData.completedParts.subList(
                     model.chaptersBounds.first,
-                    model.chaptersBounds.second
+                    model.chaptersBounds.second+1
                 ).sum()
         } else {
             itemView.levelItemLevel.isEnabled = false

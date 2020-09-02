@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.fragments.main.MainFragment
 import com.example.studita.utils.TimeUtils
 import com.example.studita.utils.replace
 import kotlinx.android.synthetic.main.incorrect_time_layout.*

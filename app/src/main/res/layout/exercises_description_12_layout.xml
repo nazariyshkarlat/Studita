@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/exercisesDescription12LayoutScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/toolbarHeight"
+    android:paddingBottom="@dimen/buttonWithPaddingHeight">
+
+    <LinearLayout
+        android:id="@+id/exercisesDescription12ParentLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/defaultRLMargin"
+        android:layout_marginEnd="@dimen/defaultRLMargin"
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
+
+        <TextView
+            style="@style/Medium24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/exercises_description_title" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/main_blocks_rectangle">
+
+            <ImageView
+                android:id="@+id/exercisesDescription12LayoutIcon1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/exercisesDescription12LayoutIcon2"
+                android:layout_marginEnd="24dp"
+                app:srcCompat="@drawable/ic_emoji_people_secondary" />
+
+            <ImageView
+                android:id="@+id/exercisesDescription12LayoutIcon2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_emoji_people_secondary" />
+
+            <ImageView
+                android:id="@+id/exercisesDescription12LayoutIcon3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/exercisesDescription12LayoutIcon2"
+                android:layout_marginStart="24dp"
+                app:srcCompat="@drawable/ic_emoji_people_secondary" />
+
+            <TextView
+                android:id="@+id/exercisesDescription12LayoutRelativeLayoutTextView1"
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/exercisesDescription12LayoutIcon1"
+                android:layout_alignStart="@+id/exercisesDescription12LayoutIcon1"
+                android:layout_alignEnd="@id/exercisesDescription12LayoutIcon1"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:textAlignment="center"
+                tools:text="2" />
+
+            <TextView
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/exercisesDescription12LayoutRelativeLayoutTextView1"
+                android:layout_toStartOf="@+id/exercisesDescription12LayoutRelativeLayoutTextView3"
+                android:layout_toEndOf="@+id/exercisesDescription12LayoutRelativeLayoutTextView1"
+                android:gravity="center"
+                android:textAlignment="center"
+                tools:text="+" />
+
+            <TextView
+                android:id="@+id/exercisesDescription12LayoutRelativeLayoutTextView3"
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/exercisesDescription12LayoutIcon2"
+                android:layout_alignStart="@+id/exercisesDescription12LayoutIcon2"
+                android:layout_alignEnd="@id/exercisesDescription12LayoutIcon2"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:textAlignment="center"
+                tools:text="2" />
+
+            <TextView
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/exercisesDescription12LayoutRelativeLayoutTextView5"
+                android:layout_alignBottom="@+id/exercisesDescription12LayoutRelativeLayoutTextView5"
+                android:layout_toStartOf="@+id/exercisesDescription12LayoutRelativeLayoutTextView5"
+                android:layout_toEndOf="@+id/exercisesDescription12LayoutRelativeLayoutTextView3"
+                android:gravity="center"
+                android:textAlignment="center"
+                tools:text="+" />
+
+            <TextView
+                android:id="@+id/exercisesDescription12LayoutRelativeLayoutTextView5"
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/exercisesDescription12LayoutIcon3"
+                android:layout_alignStart="@+id/exercisesDescription12LayoutIcon3"
+                android:layout_alignEnd="@id/exercisesDescription12LayoutIcon3"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:textAlignment="center"
+                tools:text="2" />
+
+            <TextView
+                style="@style/Medium18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/exercisesDescription12LayoutRelativeLayoutTextView3"
+                android:layout_alignStart="@+id/exercisesDescription12LayoutRelativeLayoutTextView1"
+                android:layout_alignEnd="@+id/exercisesDescription12LayoutRelativeLayoutTextView5"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:textAlignment="center" />
+
+        </RelativeLayout>
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            android:background="@drawable/main_blocks_rectangle">
+
+            <TextView
+                style="@style/Medium18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Medium18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:padding="16dp"
+            android:background="@drawable/main_blocks_rectangle"
+            android:gravity="center"
+            android:textAlignment="center" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+    </LinearLayout>
+
+</ScrollView>

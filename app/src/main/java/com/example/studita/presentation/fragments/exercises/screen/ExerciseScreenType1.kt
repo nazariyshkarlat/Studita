@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
+import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseImagesRowUiModel
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
@@ -11,7 +13,7 @@ import com.example.studita.utils.dpToPx
 import com.google.android.flexbox.FlexboxLayout
 import kotlinx.android.synthetic.main.exercise_screen_type_1.*
 
-class ExerciseScreenType1 : ExerciseScreen(R.layout.exercise_screen_type_1) {
+class ExerciseScreenType1 : NavigatableFragment(R.layout.exercise_screen_type_1) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 

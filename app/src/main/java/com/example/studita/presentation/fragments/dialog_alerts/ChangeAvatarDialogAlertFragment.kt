@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import com.example.studita.R
-import com.example.studita.presentation.fragments.CropAvatarFragment
+import com.example.studita.presentation.fragments.profile.edit.CropAvatarFragment
 import com.example.studita.presentation.fragments.base.BaseDialogFragment
 import com.example.studita.utils.ImageUtils.createImageFile
 import com.example.studita.utils.navigateTo
@@ -114,7 +114,9 @@ class ChangeAvatarDialogAlertFragment : BaseDialogFragment(R.layout.change_avata
         }
         selectedImagePath?.let {
             dismiss()
-            (activity as AppCompatActivity).navigateTo(CropAvatarFragment().apply {
+            (activity as AppCompatActivity).navigateTo(
+                CropAvatarFragment()
+                    .apply {
                 this@ChangeAvatarDialogAlertFragment.targetFragment?.let {
                     this.setTargetFragment(
                         it,

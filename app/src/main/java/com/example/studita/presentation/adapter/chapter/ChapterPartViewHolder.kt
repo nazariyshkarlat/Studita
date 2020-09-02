@@ -2,6 +2,7 @@ package com.example.studita.presentation.adapter.chapter
 
 import android.view.View
 import android.view.ViewGroup
+import com.example.studita.domain.entity.ChapterData
 import com.example.studita.presentation.activities.ExercisesActivity
 import com.example.studita.presentation.model.ChapterPartUiModel
 import com.example.studita.presentation.model.ChapterUiModel
@@ -13,17 +14,17 @@ import kotlinx.android.synthetic.main.chapter_part_item.view.*
 
 class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view) {
 
-    override fun bind(model: ChapterPartUiModel, chapterUiModel: ChapterUiModel) {
+    override fun bind(model: ChapterPartUiModel, chapterData: ChapterData) {
         with(itemView) {
             this as ViewGroup
             chapterPartItemText.text = model.chapterPartName
             val chapterPartInChapterNumber =
-                chapterUiModel.parts.indexOfFirst { it.chapterPartNumber == model.chapterPartNumber } + 1
+                chapterData.parts.indexOfFirst { it.number == model.chapterPartNumber } + 1
             when {
-                chapterPartInChapterNumber - 1 <= UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1] -> {
+                chapterPartInChapterNumber - 1 <= UserUtils.userData.completedParts[chapterData.chapterNumber - 1] -> {
                     if (isCurrentChapterPart(
                             chapterPartInChapterNumber,
-                            chapterUiModel.chapterNumber
+                            chapterData.chapterNumber
                         )
                     ) {
                         setItemSelected()
@@ -32,10 +33,13 @@ class ChapterPartViewHolder(view: View) : ChapterPartsViewHolder(view) {
                     }
                     chapterPartItemButton.setOnClickListener {
                         getAppCompatActivity()?.startActivity<ExercisesActivity>(
-                            "CHAPTER_NUMBER" to chapterUiModel.chapterNumber,
+                            "CHAPTER_NUMBER" to chapterData.chapterNumber,
                             "CHAPTER_PART_NUMBER" to model.chapterPartNumber,
-                            "CHAPTER_PARTS_COUNT" to chapterUiModel.parts.size,
-                            "IS_TRAINING" to (chapterPartInChapterNumber - 1 != UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1])
+                            "CHAPTER_PARTS_IN_CHAPTER_COUNT" to chapterData.parts.size,
+                            "CHAPTER_NAME" to chapterData.title,
+                            "EXERCISES_IN_CHAPTER_COUNT" to chapterData.exercisesCount,
+                            "CHAPTER_PART_IN_CHAPTER_NUMBER" to chapterPartInChapterNumber,
+                            "IS_TRAINING" to (chapterPartInChapterNumber - 1 != UserUtils.userData.completedParts[chapterData.chapterNumber - 1])
                         )
                     }
                 }

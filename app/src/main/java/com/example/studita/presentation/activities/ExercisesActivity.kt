@@ -5,10 +5,11 @@ import android.view.MotionEvent
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.NavigatableFragment
-import com.example.studita.presentation.fragments.exercises.ExercisesCloseDialogAlertFragment
+import com.example.studita.presentation.fragments.dialog_alerts.ExercisesCloseDialogAlertFragment
 import com.example.studita.presentation.fragments.exercises.ExercisesLoadFragment
 import com.example.studita.presentation.fragments.exercises.ExercisesResultFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.example.studita.utils.addFragment
 import com.example.studita.utils.navigateTo
 
 class ExercisesActivity : DefaultActivity() {
@@ -25,14 +26,17 @@ class ExercisesActivity : DefaultActivity() {
             val extras = intent.extras
             if (extras != null) {
                 exercisesViewModel?.let {
-                    it.chapterPartsCount = extras.getInt("CHAPTER_PARTS_COUNT")
+                    it.chapterPartsInChapterCount = extras.getInt("CHAPTER_PARTS_IN_CHAPTER_COUNT")
                     it.chapterPartNumber = extras.getInt("CHAPTER_PART_NUMBER")
                     it.chapterNumber = extras.getInt("CHAPTER_NUMBER")
+                    it.exercisesInChapterCount = extras.getInt("EXERCISES_IN_CHAPTER_COUNT")
+                    it.chapterName = extras.getString("CHAPTER_NAME")
+                    it.chapterPartInChapterNumber = extras.getInt("CHAPTER_PART_IN_CHAPTER_NUMBER")
                     it.isTraining = extras.getBoolean("IS_TRAINING")
                     it.getExercises(it.chapterPartNumber)
                 }
             }
-            navigateTo(ExercisesLoadFragment(), R.id.frameLayout)
+            addFragment(ExercisesLoadFragment(), R.id.frameLayout)
         }
     }
 
@@ -77,7 +81,8 @@ class ExercisesActivity : DefaultActivity() {
     }
 
     private fun onBackClick() {
-        val fragment = ExercisesCloseDialogAlertFragment()
+        val fragment =
+            ExercisesCloseDialogAlertFragment()
         fragment.show(supportFragmentManager, null)
         fragment.dialog?.setOnShowListener {
             exercisesViewModel?.stopSecondsCounter()

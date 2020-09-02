@@ -32,13 +32,10 @@ class ExerciseResultRepositoryImpl(private val exerciseResultDataStoreFactory: E
                         exerciseData.variants.first { it.count == exerciseData.exerciseAnswer!!.toInt() }
                     ExerciseResponseDescriptionContentData.DescriptionContentArray(correctAnswer)
                 }
-                /*   is ExerciseData.ExerciseDataExercise.ExerciseType17Data -> {
+                is ExerciseData.ExerciseDataExercise.ExerciseType17Data -> {
                        val correctAnswer =
                            exerciseData.variants.first { it.count == exerciseData.exerciseAnswer!!.toInt() }
                        ExerciseResponseDescriptionContentData.DescriptionContentArray(correctAnswer)
-                   }*/
-                is ExerciseData.ExerciseDataExercise.ExerciseType3Data -> {
-                    ExerciseResponseDescriptionContentData.DescriptionContentString(exerciseData.variants.first { it.symbol == exerciseData.exerciseAnswer }.symbolName)
                 }
                 else -> ExerciseResponseDescriptionContentData.DescriptionContentString(
                     exerciseData.exerciseAnswer!!

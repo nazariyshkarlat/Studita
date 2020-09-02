@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/exercisesDescription13LayoutScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/toolbarHeight"
+    android:paddingBottom="@dimen/buttonWithPaddingHeight">
+
+    <LinearLayout
+        android:id="@+id/exercisesDescription13ParentLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/defaultRLMargin"
+        android:layout_marginEnd="@dimen/defaultRLMargin"
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
+
+        <TextView
+            style="@style/Medium24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/exercises_description_title" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/main_blocks_rectangle">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:srcCompat="@drawable/yellow_oval"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/main_blocks_rectangle">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/yellow_oval_two_parts"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/main_blocks_rectangle">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/yellow_oval_four_parts"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/main_blocks_rectangle">
+
+            <TextView
+                android:id="@+id/exercisesDescription13LayoutConstraintLayoutTextView1"
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/exercisesDescription13LayoutConstraintLayoutOval"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/exercisesDescription13LayoutConstraintLayoutTextView2"
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@+id/exercisesDescription13LayoutConstraintLayoutOval"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Space
+                android:id="@+id/exercisesDescription13LayoutConstraintLayoutTopSpace"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="@+id/exercisesDescription13LayoutConstraintLayoutTextView1"
+                app:layout_constraintTop_toTopOf="@+id/exercisesDescription13LayoutConstraintLayoutTextView1" />
+
+            <ImageView
+                android:id="@+id/exercisesDescription13LayoutConstraintLayoutOval"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/exercisesDescription13LayoutConstraintLayoutTextView1"
+                android:layout_centerHorizontal="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/exercisesDescription13LayoutConstraintLayoutTopSpace"
+                app:srcCompat="@drawable/yellow_oval_four_parts" />
+
+            <Space
+                android:id="@+id/exercisesDescription13LayoutConstraintLayoutBottomSpace"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toBottomOf="@+id/exercisesDescription13LayoutConstraintLayoutOval"/>
+
+            <TextView
+                android:id="@+id/exercisesDescription13LayoutConstraintLayoutTextView3"
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/exercisesDescription13LayoutConstraintLayoutBottomSpace"
+                app:layout_constraintEnd_toStartOf="@+id/exercisesDescription13LayoutConstraintLayoutOval"
+                app:layout_constraintTop_toTopOf="@+id/exercisesDescription13LayoutConstraintLayoutBottomSpace" />
+
+            <TextView
+                android:id="@+id/exercisesDescription13LayoutConstraintLayoutTextView4"
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/exercisesDescription13LayoutConstraintLayoutBottomSpace"
+                app:layout_constraintTop_toTopOf="@+id/exercisesDescription13LayoutConstraintLayoutBottomSpace"
+                app:layout_constraintStart_toEndOf="@id/exercisesDescription13LayoutConstraintLayoutOval"/>
+
+            <TextView
+                style="@style/Regular18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_centerHorizontal="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/exercisesDescription13LayoutConstraintLayoutTextView3" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            style="@style/Regular18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp" />
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,15 +1,20 @@
 package com.example.studita.presentation.fragments.interesting
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ScrollView
+import androidx.core.content.ContextCompat
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
+import com.example.studita.R
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.InterestingUiModelScreen
 import com.example.studita.presentation.view_model.InterestingViewModel
+import com.example.studita.presentation.views.CustomSnackbar
+import com.example.studita.utils.ThemeUtils
 
 open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(viewId),
     ViewTreeObserver.OnScrollChangedListener {
@@ -74,6 +79,7 @@ open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(vie
             }
         }
     }
+
 
     private fun getMaxScrollY(scrollView: ScrollView) =
         0.coerceAtLeast(scrollView.getChildAt(0).height - (scrollView.height - scrollView.paddingBottom - scrollView.paddingTop))

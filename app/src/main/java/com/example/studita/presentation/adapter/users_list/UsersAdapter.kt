@@ -49,7 +49,7 @@ class UsersAdapter(
                 lifecycleOwner
             )
             ViewType.ITEMS_LOAD.ordinal -> LoadViewHolder(
-                parent.makeView(R.layout.friends_load_item),
+                parent.makeView(R.layout.list_load_item),
                 this
             )
             ViewType.TEXT.ordinal -> TextViewHolder(parent.makeView(R.layout.friends_search_text_item))

@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CancellationException
+import java.lang.Exception
 import java.lang.reflect.Type
 
 class ExerciseResultDataStoreImpl(
@@ -38,9 +39,10 @@ class ExerciseResultDataStoreImpl(
         exerciseNumber: Int,
         exerciseRequestEntity: ExerciseRequestEntity
     ): Pair<Int, ExerciseResponseEntity> {
-        if (connectionManager.isNetworkAbsent()) {
-            throw NetworkConnectionException()
-        } else {
+        try {
+            if (connectionManager.isNetworkAbsent()) {
+                throw NetworkConnectionException()
+            } else {
                 val exerciseResult =
                     exerciseResultService.getExerciseResult(
                         exerciseNumber,
@@ -52,6 +54,9 @@ class ExerciseResultDataStoreImpl(
                     )
                 )
                 return exerciseResult.code() to result
+            }
+        }catch (e: Exception){
+            throw ServerUnavailableException()
         }
     }
 }

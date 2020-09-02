@@ -11,7 +11,6 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -59,6 +58,17 @@ fun View.isContains(rx: Int, ry: Int): Boolean {
     return !(rx < x || rx > x + w || ry < y || ry > y + h)
 }
 
+fun View.isContainsAnotherView(secondView: View): Boolean {
+    val secondRect = Rect()
+    secondView.getHitRect(secondRect)
+
+    val firstRect = Rect()
+    getHitRect(firstRect)
+
+    return (secondRect.contains(firstRect.left, secondRect.centerY()) || secondRect.contains(firstRect.right, secondRect.centerY())) &&
+            (secondRect.contains(firstRect.centerX(), firstRect.top) || secondRect.contains(firstRect.centerX(), firstRect.bottom))
+}
+
 fun View.childContainsParentX(rx: Int): Boolean {
     val bounds = Rect()
     getHitRect(bounds)
@@ -89,6 +99,16 @@ fun View.childIsInParentY(topY: Int, bottomY: Int): Boolean {
     bounds.top -= marginTop
     bounds.bottom += marginBottom
     return bounds.contains(bounds.centerX(), topY) && bounds.contains(bounds.centerX(), bottomY)
+}
+
+fun View.centerIsInAnotherView(secondView: View): Boolean{
+    val secondRect = Rect()
+    secondView.getHitRect(secondRect)
+
+    val firstRect = Rect()
+    getHitRect(firstRect)
+
+    return secondRect.contains(firstRect.centerX(), firstRect.centerY())
 }
 
 fun View.asNotificationIndicator(notificationsAreChecked: Boolean) {
@@ -155,16 +175,6 @@ fun View.setOnViewSizeChangeListener(viewSizeChangeListener: OnViewSizeChangeLis
 
 fun ViewGroup.makeView(@LayoutRes layoutResId: Int): View =
     LayoutInflater.from(this.context).inflate(layoutResId, this, false)
-
-fun View.onViewCreated(block: () -> Unit) {
-    this.viewTreeObserver.addOnGlobalLayoutListener(object :
-        ViewTreeObserver.OnGlobalLayoutListener {
-        override fun onGlobalLayout() {
-            block()
-            this@onViewCreated.viewTreeObserver.removeOnGlobalLayoutListener(this);
-        }
-    })
-}
 
 fun View.getAppCompatActivity(): AppCompatActivity? {
     var context = this.context
@@ -260,4 +270,20 @@ fun TextView.isEllipsized(): Boolean {
         }
     }
     return false
+}
+
+fun TextView.removeLastChar(){
+    this.text = this.text.substring(
+        0,
+        this.text.length-1
+    )
+}
+
+fun TextView.clear(){
+    this.text = null
+}
+
+fun View.setAllClickable(clickable: Boolean) {
+    isClickable = clickable
+    if (this is ViewGroup) children.forEach { child -> child.setAllClickable(clickable) }
 }

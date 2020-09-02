@@ -2,7 +2,7 @@
 <resources>
     <attr name="page_background_color" format="reference" />
     <attr name="transparent_bar_color" format="reference" />
-    <attr name="divider_color" format="reference" />
+    <attr name="gray_focused_color" format="reference" />
     <attr name="blue_transparent_button_color" format="reference" />
     <attr name="secondary_color" format="reference" />
     <attr name="primary_color" format="reference" />
@@ -23,6 +23,7 @@
     <attr name="colorAccent10" format="reference" />
     <attr name="colorAccent14" format="reference" />
     <attr name="colorAccent26" format="reference" />
+    <attr name="grid_divider_color" format="reference"/>
 
     <declare-styleable name="CircleProgress">
         <attr name="circle_progress" format="integer" />

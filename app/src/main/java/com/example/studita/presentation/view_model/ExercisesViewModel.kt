@@ -25,13 +25,14 @@ import com.example.studita.domain.interactor.CompleteExercisesStatus
 import com.example.studita.domain.interactor.ExerciseResultStatus
 import com.example.studita.domain.interactor.ExercisesStatus
 import com.example.studita.domain.interactor.UserDataStatus
-import com.example.studita.presentation.fragments.ChapterBottomSheetFragment
-import com.example.studita.presentation.fragments.HomeFragment
+import com.example.studita.presentation.fragments.bottom_sheets.ChapterBottomSheetFragment
+import com.example.studita.presentation.fragments.main.HomeFragment
 import com.example.studita.presentation.fragments.exercises.ExercisesBonusEndScreenFragment
 import com.example.studita.presentation.fragments.exercises.ExercisesBonusFragment
 import com.example.studita.presentation.fragments.exercises.ExercisesEndFragment
 import com.example.studita.presentation.fragments.exercises.description.*
-import com.example.studita.presentation.fragments.exercises.exercise.*
+import com.example.studita.presentation.fragments.exercises.exercise_fragments.*
+import com.example.studita.presentation.fragments.exercises.explanation.ExerciseExplanation1Fragment
 import com.example.studita.presentation.fragments.exercises.screen.*
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.model.toUiModel
@@ -73,21 +74,25 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
 
     var isBonusCompleted = true
     var isTraining = false
-    var exerciseResultSuccess = false
+    var exercisesAreCompleted = false
+    private var exerciseResultSuccess = false
     var timeCounterIsPaused = true
 
-    var chapterPartsCount = 0
+    var chapterPartsInChapterCount = 0
     var chapterPartNumber = 0
+    var chapterPartInChapterNumber = 0
     var chapterNumber = 0
+    var exercisesInChapterCount = 0
     private var arrayIndex = 0
     private var bonusIndex = 0
     private var exerciseIndex = 0
     private var obtainedXP = 0
+    var chapterName: String? = null
 
     lateinit var exerciseData: ExerciseData
     lateinit var exerciseUiModel: ExerciseUiModel
     lateinit var exercisesResponseData: ExercisesResponseData
-    lateinit var exercises: List<ExerciseData>
+    lateinit var exercises: ArrayList<ExerciseData>
     private var bonusExercises = emptyList<ExerciseData>()
     private val exercisesToRetry = ArrayList<ExerciseData>()
 
@@ -105,13 +110,14 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
     private var secondsCounter: Timer? = null
 
     var saveObtainedExercisesDataJob: Job? = null
-    private var badConnectionJob: Job? = null
-    private var job: Job? = null
+    var badConnectionJob: Job? = null
+    private var getExercisesJob: Job? = null
+    private var checkExerciseResultJob: Job? = null
     var waitingJob: Job? = null
 
     fun getExercises(chapterPartNumber: Int) {
 
-        job = viewModelScope.launchExt(job) {
+        getExercisesJob = viewModelScope.launchExt(getExercisesJob) {
 
             runBadConnectionCoroutine()
 
@@ -122,23 +128,18 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                 is ExercisesStatus.NoConnection -> exercisesState.postValue(false)
                 is ExercisesStatus.ServiceUnavailable -> exercisesState.postValue(false)
                 is ExercisesStatus.Success -> {
-                    job = null
+                    getExercisesJob = null
                     badConnectionJob?.cancel()
                     exercisesState.postValue(true)
                     exercisesResponseData = status.result
 
                     if (exercisesResponseData.exercises.any { it is ExerciseData.ExerciseDataScreen.ScreenType4Data && it.isBonusStart }) {
-                        val bonusStartIndex =
-                            exercisesResponseData.exercises.indexOfFirst { it is ExerciseData.ExerciseDataScreen.ScreenType4Data && it.isBonusStart }
                         isBonusCompleted = false
-
-                        bonusExercises = exercisesResponseData.exercises.subList(
-                            bonusStartIndex,
-                            exercisesResponseData.exercises.size
-                        )
-                        exercises = exercisesResponseData.exercises.subList(0, bonusStartIndex)
+                        val splitExercises = getSplitExercisesAndBonuses()
+                        exercises = ArrayList(splitExercises.first)
+                        bonusExercises = ArrayList(splitExercises.second)
                     } else
-                        exercises = exercisesResponseData.exercises
+                        exercises = ArrayList(exercisesResponseData.exercises)
 
                     if (answered.value == true) {
                         if (exerciseData == (getCurrentExerciseData() as ExerciseData.ExerciseDataExercise).copy()) {
@@ -213,16 +214,16 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                         it.completedParts[chapterNumber - 1]++
                         it.todayCompletedExercises++
 
-                        if (chapterPartNumber == chapterPartsCount)
-                            ChapterBottomSheetFragment.snackbarShowReason =
-                                ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED
+                        if (chapterPartInChapterNumber == chapterPartsInChapterCount) {
+                            PrefsUtils.makeCompletedChapterDialogWasNotShown(
+                                exercisesInChapterCount,
+                                chapterName!!
+                            )
+                            ChapterBottomSheetFragment.needsDismiss = true
+                        }
 
                         if (getAnswersPercent() < 0.6F) {
-                            ChapterBottomSheetFragment.snackbarShowReason =
-                                if (ChapterBottomSheetFragment.snackbarShowReason == ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED)
-                                    ChapterBottomSheetFragment.Companion.SnackbarShowReason.CHAPTER_COMPLETED_AND_BAD_RESULT
-                                else
-                                    ChapterBottomSheetFragment.Companion.SnackbarShowReason.BAD_RESULT
+                            ChapterBottomSheetFragment.snackbarShowReason = ChapterBottomSheetFragment.Companion.SnackbarShowReason.BAD_RESULT
                         }
                         ChapterBottomSheetFragment.needsRefresh = true
                     }
@@ -248,7 +249,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                     completeExercises(
                         CompletedExercisesData(
                             chapterNumber,
-                            chapterPartNumber,
+                            chapterPartInChapterNumber,
                             getAnswersPercent(),
                             Date(),
                             seconds,
@@ -304,7 +305,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
         buttonDividerState.value = show
     }
 
-    fun showBars(show: Boolean) {
+    fun showTransparentLayouts(show: Boolean) {
         transparentLayoutsAreVisibleState.value = show
     }
 
@@ -315,10 +316,9 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
     fun initFragment() {
         answered.value = false
         snackbarState.value = null
-        if (exerciseIndex == getExercisesCount() && isBonusCompleted) {
+        if (exercisesAreCompleted && isBonusCompleted) {
             endExercises()
         } else {
-
             if (exerciseIndex != 0 && isBonusScreen()) {
                 timeCounterIsPaused = true
                 animateProgressBarVisibility(false)
@@ -330,19 +330,28 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                 bonusIndex++
             } else {
                 exerciseData = getCurrentExerciseData()
-                setButtonEnabled(exerciseData is ExerciseData.ExerciseDataScreen)
+                if (exerciseData is ExerciseData.ExerciseExplanationData) {
+                    showTransparentLayouts(true)
+                    setExercisesProgress(ExercisesState.EXPLANATION)
+                }
+                setButtonEnabled(exerciseData !is ExerciseData.ExerciseDataExercise)
             }
 
             exerciseUiModel = exerciseData.toUiModel(getApplication())
             val exerciseFragment = getFragmentToAdd(exerciseUiModel)
-            navigationState.value = when (arrayIndex) {
-                0 -> {
-                    ExercisesNavigationState.FIRST
-                }
-                else -> {
-                    ExercisesNavigationState.REPLACE
-                }
-            } to exerciseFragment
+            viewModelScope.launch(Dispatchers.Main) {
+                navigationState.value = when {
+                    arrayIndex == 0 -> {
+                        ExercisesNavigationState.FIRST
+                    }
+                    exerciseData is ExerciseData.ExerciseExplanationData -> {
+                        ExercisesNavigationState.NAVIGATE_IN_CONTAINER
+                    }
+                    else -> {
+                        ExercisesNavigationState.REPLACE
+                    }
+                } to exerciseFragment
+            }
         }
     }
 
@@ -395,61 +404,85 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun checkExerciseResult() {
 
-        if ((job == null || job?.isCompleted == true) && (waitingJob == null || waitingJob?.isCompleted == true)) {
+        if ((checkExerciseResultJob == null || checkExerciseResultJob?.isCompleted == true) && (waitingJob == null || waitingJob?.isCompleted == true)) {
             answered.value = true
             exerciseResultSuccess = false
-            job = viewModelScope.launchExt(job) {
                 if (exerciseUiModel is ExerciseUiModel.ExerciseUiModelExercise) {
-                    launchWaitingCoroutine()
+                    checkExerciseResultJob = viewModelScope.launchExt(checkExerciseResultJob) {
+                        launchWaitingCoroutine()
 
-                    when (val status =
-                        exerciseResultInteractor.getExerciseResult(
-                            exerciseData as ExerciseData.ExerciseDataExercise,
-                            exerciseRequestData,
-                            (exerciseData as ExerciseData.ExerciseDataExercise).exerciseAnswer != null
-                        )) {
-                        is ExerciseResultStatus.NoConnection -> errorState.postValue(R.string.no_connection)
-                        is ExerciseResultStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
-                        is ExerciseResultStatus.Success -> {
+                        when (val status =
+                            exerciseResultInteractor.getExerciseResult(
+                                exerciseData as ExerciseData.ExerciseDataExercise,
+                                exerciseRequestData,
+                                (exerciseData as ExerciseData.ExerciseDataExercise).exerciseAnswer != null
+                            )) {
+                            is ExerciseResultStatus.NoConnection -> errorState.postValue(R.string.no_connection)
+                            is ExerciseResultStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
+                            is ExerciseResultStatus.Success -> {
 
-                            exerciseResultSuccess = true
+                                exerciseResultSuccess = true
 
-                            showBadConnectionDialogAlertFragmentState.postValue(false)
-                            waitingJob?.cancel()
+                                showBadConnectionDialogAlertFragmentState.postValue(false)
+                                waitingJob?.cancel()
 
-                            snackbarState.postValue(exerciseUiModel to status.result)
-                            if (status.result.exerciseResult) {
-                                exerciseIndex++
+                                snackbarState.postValue(exerciseUiModel to status.result)
+                                if (status.result.exerciseResult) {
+                                    exerciseIndex++
+                                    if (exerciseIndex == getExercisesCount()) {
 
-                                if (exerciseIndex == getExercisesCount() && isBonusCompleted) {
-                                    stopSecondsCounter()
-                                    saveObtainedExercisesResult()
+                                        if (isBonusCompleted) {
+                                            stopSecondsCounter()
+                                            saveObtainedExercisesResult()
+                                        }
+                                    }
+
+                                    if (arrayIndex >= getSplitExercisesAndBonuses().first.size) {
+                                        exercisesToRetry.removeAt(0)
+                                    }
+
+                                    progressState.value = getProgressPercent() to false
+                                } else {
+
+                                    if (arrayIndex >= getSplitExercisesAndBonuses().first.size)
+                                        exercisesToRetry.removeAll(exercisesResponseData.exercises.filter {
+                                            exercisesResponseData.exercises.indexOf(
+                                                it
+                                            ) >= exercisesResponseData.exercises.indexOf(
+                                                exerciseData
+                                            ) && it.exerciseNumber == exerciseData.exerciseNumber
+                                        })
+                                    else
+                                        exercises.removeAll(exercises.filter {
+                                            exercises.indexOf(it) > exercises.indexOf(
+                                                exerciseData
+                                            ) && it.exerciseNumber == exerciseData.exerciseNumber
+                                        })
+
+                                    exercisesToRetry.addAll(exercisesResponseData.exercises.filter { it.exerciseNumber == exerciseData.exerciseNumber })
                                 }
 
-                                progressState.value = getProgressPercent() to false
-                            } else {
-                                exercisesToRetry.addAll(exercises.filter { it.exerciseNumber == exerciseData.exerciseNumber })
-                            }
+                                if (exerciseData.exerciseNumber == getSplitExercisesAndBonuses().first.last { it is ExerciseData.ExerciseDataExercise }.exerciseNumber && falseAnswers == 0)
+                                    falseAnswers =
+                                        exercisesToRetry.count { it is ExerciseData.ExerciseDataExercise }
 
-                            if (arrayIndex >= exercises.size) {
-                                exercisesToRetry.removeAt(0)
+                                if (((getSplitExercisesAndBonuses().first.indexOf(exerciseData) == getSplitExercisesAndBonuses().first.lastIndex) || (arrayIndex  >= getSplitExercisesAndBonuses().first.size)) && exercisesToRetry.isEmpty())
+                                    exercisesAreCompleted = true
+                                arrayIndex++
                             }
-
-                            if (arrayIndex == exercises.size - 1) {
-                                falseAnswers =
-                                    exercisesToRetry.count { it is ExerciseData.ExerciseDataExercise }
-                            }
-                            arrayIndex++
                         }
                     }
                 } else {
                     waitingJob?.cancel()
-                    if (arrayIndex >= exercises.size)
+                    if (arrayIndex >= getSplitExercisesAndBonuses().first.size) {
                         exercisesToRetry.removeAt(0)
+                    }
+                    if (((getSplitExercisesAndBonuses().first.indexOf(exerciseData) == getSplitExercisesAndBonuses().first.lastIndex) || (arrayIndex  >= getSplitExercisesAndBonuses().first.size)) && exercisesToRetry.isEmpty())
+                        exercisesAreCompleted = true
                     arrayIndex++
+
                     initFragment()
                 }
-            }
         } else if (showBadConnectionDialogAlertFragmentState.value == true) {
             waitingJob?.cancel()
             showBadConnectionDialogAlertFragmentState.postValue(true)
@@ -479,46 +512,63 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
 
     private fun getFragmentToAdd(exerciseUiModel: ExerciseUiModel) =
         when (exerciseUiModel) {
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel -> ExerciseVariantsType1Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel -> ExerciseVariantsType2Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel -> ExerciseVariantsType3Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel -> ExerciseVariantsType4Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6UiModel -> ExerciseVariantsType5and6Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel -> ExerciseVariantsType7Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8And12UiModel -> ExerciseVariantsType8Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel -> ExerciseVariantsTopTitleVariantsImagesFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel -> ExerciseVariantsTopLinearFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel -> ExerciseVariantsTopTitleFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel -> ExerciseVariantsTopTitleFragment()
+
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5UiModel,
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType6UiModel,
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType24UiModel,
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType25UiModel  -> ExerciseVariantsTopTitleFragment()
+
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel -> ExerciseVariantsTrueFalseFragment()
+
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8UiModel,
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType12UiModel -> ExerciseVariantsTopTitleDoubleHorizontalVariantsFragment()
+
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel -> ExerciseInputEquationFragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType10UiModel -> ExerciseMissedNumberFragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType11UiModel -> ExerciseInputCollectionFragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType13UiModel -> ExerciseVariantsType13Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType14UiModel -> ExerciseVariantsType2Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType15UiModel -> ExerciseVariantsType15Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType13UiModel -> ExerciseVariantsTopImagesEquationFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType14UiModel -> ExerciseVariantsTopLinearFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType15UiModel -> ExerciseVariantsTopTitleMultipleSelectFragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType16UiModel -> ExerciseMissedCharacterFragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType17UiModel -> ExerciseVariantsType17Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType18UiModel -> ExerciseVariantsType18Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType19UiModel -> ExerciseType19Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType20UiModel -> ExerciseVariantsType20Fragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType21UiModel -> ExerciseVariantsType21Fragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType17UiModel -> ExerciseVariantsTopImagesRowVariantsImagesFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType18UiModel -> ExerciseVariantsTopTitleImagesTrueFalseFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType19UiModel -> ExerciseArrangeNumbersFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType20UiModel -> ExerciseVariantsTitleNumberNumberNameTrueFalseFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType21UiModel -> ExerciseVariantsTitleNumberNumberNameFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType22UiModel -> ExerciseVariantsTrueFalseLongTitleFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType23UiModel -> ExerciseVariantsMissedOperatorBlocksFragment()
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType26UiModel -> ExerciseInputEquationResultFragment()
+
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel -> ExerciseScreenType1()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType2UiModel -> ExerciseScreenType2()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel -> ExerciseScreenType3()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType4UiModel -> ExerciseScreenType4()
             is ExerciseUiModel.ExerciseUiModelScreen.ScreenType5UiModel -> ExerciseScreenType5()
+
+            is ExerciseUiModel.ExplanationUiModel -> ExerciseExplanation1Fragment()
         }
 
     fun getDescriptionFragment(): ExercisesDescriptionFragment {
         return when (chapterPartNumber) {
             1 -> ExercisesDescription1Fragment()
             2 -> ExercisesDescription2Fragment()
-            4, 5 -> ExercisesDescriptionPureFragment()
+            4 -> ExercisesDescription4Fragment()
+            5 -> ExercisesDescription5Fragment()
             7 -> ExercisesDescription7Fragment()
             9 -> ExercisesDescription9Fragment()
             10 -> ExercisesDescription10Fragment()
-            else -> throw IOException("Unknown chapter part number")
+            12 -> ExercisesDescription12Fragment()
+            13 -> ExercisesDescription13Fragment()
+            else -> throw IOException("Unknown chapter part with description number")
         }
     }
 
 
-    private fun getProgressPercent(): Float = exerciseIndex / getExercisesCount().toFloat()
+    private fun getProgressPercent(): Float = exerciseIndex / getSplitExercisesAndBonuses().first.filterIsInstance<ExerciseData.ExerciseDataExercise>().size.toFloat()
 
     private fun getAnswersPercent(): Float =
         (getExercisesCount() - getFalseAnswers()) / getExercisesCount().toFloat()
@@ -559,6 +609,11 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
             progressState.value = 1F to true
     }
 
+    private fun getSplitExercisesAndBonuses(): Pair<List<ExerciseData>, List<ExerciseData>>{
+       return exercisesResponseData.exercises.filter { !(it is ExerciseData.ExerciseDataExercise && it.isBonus) && !(it is ExerciseData.ExerciseDataScreen.ScreenType4Data && it.isBonusStart)} to
+               exercisesResponseData.exercises.filter { (it is ExerciseData.ExerciseDataExercise && it.isBonus) || (it is ExerciseData.ExerciseDataScreen.ScreenType4Data && it.isBonusStart) }
+    }
+
     fun startSecondsCounter() {
         secondsCounter = Timer()
         secondsCounter?.schedule(object : TimerTask() {
@@ -584,25 +639,23 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun secondsCounterIsStopped() = secondsCounter == null
 
-    fun cancelExercisesJob() {
-        job?.cancel()
-    }
-
     fun startExercisesBonus() {
         navigationState.value =
-            ExercisesNavigationState.NAVIGATE to ExercisesBonusFragment()
+            ExercisesNavigationState.NAVIGATE_COMPLETELY to ExercisesBonusFragment()
     }
 
     enum class ExercisesNavigationState {
         FIRST,
         REPLACE,
-        NAVIGATE
+        NAVIGATE_COMPLETELY,
+        NAVIGATE_IN_CONTAINER
     }
 
     enum class ExercisesState {
         START_SCREEN,
         DESCRIPTION,
         EXERCISES,
-        BONUS_SCREEN
+        BONUS_SCREEN,
+        EXPLANATION
     }
 }

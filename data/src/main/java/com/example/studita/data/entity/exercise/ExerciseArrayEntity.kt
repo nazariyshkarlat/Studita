@@ -16,4 +16,9 @@ sealed class ExerciseArrayEntity(open val exerciseNumber: Int?) {
         override val exerciseNumber: Int?,
         @SerializedName("screen_info") val screenInfo: ScreenInfo
     ) : ExerciseArrayEntity(exerciseNumber)
+
+    data class ExplanationEntity(
+        override val exerciseNumber: Int?,
+        @SerializedName("explanation_info") val explanationInfo: ExplanationInfo
+    ) : ExerciseArrayEntity(exerciseNumber)
 }

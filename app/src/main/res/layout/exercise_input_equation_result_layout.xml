@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/defaultRLMargin"
+    android:paddingEnd="@dimen/defaultRLMargin"
+    android:layout_marginTop="@dimen/toolbarHeight">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/exerciseInputEquationResultLayoutKeyboard"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/exerciseInputEquationResultLayoutTopTextView"
+            style="@style/Regular16Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="16dp"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/main_blocks_rectangle">
+
+            <TextView
+                android:id="@+id/exerciseInputEquationResultLayoutEquationTextView"
+                style="@style/Medium32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0" />
+
+            <EditText
+                android:id="@+id/exerciseInputEquationResultLayoutResultEditText"
+                style="@style/CharacterEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:maxLength="6"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:digits="0123456789"
+                android:textAlignment="center"
+                android:layout_marginStart="12dp"
+                android:singleLine="true"
+                android:textAppearance="@style/Medium32" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.example.studita.presentation.views.ExercisesKeyboard
+        android:id="@+id/exerciseInputEquationResultLayoutKeyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/exerciseInputEquationResultLayoutButton"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp" />
+
+
+    <com.example.studita.presentation.views.press_view.PressTextView
+        android:id="@+id/exerciseInputEquationResultLayoutButton"
+        style="@style/TransitionButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/defaultRLMargin"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="@dimen/defaultRLMargin"
+        android:text="@string/check" />
+
+</RelativeLayout>

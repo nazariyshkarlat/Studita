@@ -2,9 +2,7 @@ package com.example.studita.presentation.model
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import com.example.studita.domain.entity.exercise.ExerciseData
-import com.example.studita.domain.entity.exercise.ExerciseSymbolData
-import com.example.studita.domain.entity.exercise.ExerciseType11Filter
+import com.example.studita.domain.entity.exercise.*
 
 sealed class ExerciseUiModel {
 
@@ -18,39 +16,45 @@ sealed class ExerciseUiModel {
         data class ExerciseType2UiModel(
             val title: ExerciseImagesRowUiModel,
             val subtitle: String,
-            val variants: List<String>
+            val variants: List<ExerciseVariantData>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType3UiModel(
             val title: ExerciseSymbolData,
             val subtitle: String,
-            val variants: List<ExerciseSymbolData>
+            val variants: List<ExerciseVariantData>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType4UiModel(
             val title: ExerciseSymbolData,
             val subtitle: String,
-            val variants: List<String>
+            val variants: List<ExerciseVariantData>
         ) : ExerciseUiModelExercise()
 
-        data class ExerciseType5And6UiModel(
+        data class ExerciseType5UiModel(
             val title: String,
             val subtitle: String,
-            val variants: List<String>
+            val variants: List<ExerciseVariantData>
+        ) : ExerciseUiModelExercise()
+
+        data class ExerciseType6UiModel(
+            val title: String,
+            val subtitle: String,
+            val variants: List<ExerciseVariantData>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType7UiModel(val title: String) : ExerciseUiModelExercise()
 
-        data class ExerciseType8And12UiModel(
+        data class ExerciseType8UiModel(
             val title: String,
             val subtitle: String,
-            val variants: List<String>
+            val variants: List<ExerciseVariantData>
         ) : ExerciseUiModelExercise()
 
-        data class ExerciseType9UiModel(val title: String) : ExerciseUiModelExercise()
+        data class ExerciseType9UiModel(val title: String, val subtitle: String) : ExerciseUiModelExercise()
 
         data class ExerciseType10UiModel(
-            val titleParts: List<String>,
+            val titleParts: Pair<String, String>,
             val subtitle: String,
             val isNumeral: Boolean
         ) : ExerciseUiModelExercise()
@@ -61,22 +65,28 @@ sealed class ExerciseUiModel {
             val compareNumber: String
         ) : ExerciseUiModel.ExerciseUiModelExercise()
 
-        data class ExerciseType13UiModel(
-            val exerciseShapeEquationUiModel: List<ExerciseShapeEquationMemberUiModel>,
+        data class ExerciseType12UiModel(
+            val title: String,
             val subtitle: String,
-            val variants: List<String>
+            val variants: List<ExerciseVariantData>
+        ) : ExerciseUiModelExercise()
+
+        data class ExerciseType13UiModel(
+            val exerciseImagesEquationUiModel: List<ExerciseImagesEquationMemberUiModel>,
+            val subtitle: String,
+            val variants: List<ExerciseVariantData>
         ) : ExerciseUiModel.ExerciseUiModelExercise()
 
         data class ExerciseType14UiModel(
-            val title: ExerciseShapeUiModel,
+            val title: ExerciseImagesRowUiModel,
             val subtitle: String,
-            val variants: List<String>
+            val variants: List<ExerciseVariantData>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType15UiModel(
             val title: String,
             val subtitle: String,
-            val variants: List<String>
+            val variants: List<ExerciseVariantData>
         ) : ExerciseUiModel.ExerciseUiModelExercise()
 
         data class ExerciseType16UiModel(
@@ -85,9 +95,9 @@ sealed class ExerciseUiModel {
         ) : ExerciseUiModel.ExerciseUiModelExercise()
 
         data class ExerciseType17UiModel(
-            val exerciseShapeEquationUiModel: List<ExerciseShapeEquationMemberUiModel>,
+            val title: List<ExerciseImagesEquationMemberUiModel>,
             val subtitle: String,
-            val variants: List<ExerciseShapeUiModel>
+            val variants: List<ExerciseImagesRowUiModel>
         ) : ExerciseUiModel.ExerciseUiModelExercise()
 
         data class ExerciseType18UiModel(
@@ -97,7 +107,7 @@ sealed class ExerciseUiModel {
 
         data class ExerciseType19UiModel(
             val title: String,
-            val variants: List<String>
+            val variants: List<ExerciseVariantData>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType20UiModel(
@@ -108,7 +118,37 @@ sealed class ExerciseUiModel {
             val title: ExerciseSymbolData,
             val variants: List<ExerciseSymbolData>
         ) : ExerciseUiModelExercise()
+
+        data class ExerciseType22UiModel(
+            val title: String
+        ) : ExerciseUiModelExercise()
+
+        data class ExerciseType23UiModel(
+            val titleParts: Pair<String, String>,
+            val subtitle: String,
+            val variants: Pair<String, String>
+        ) : ExerciseUiModel.ExerciseUiModelExercise()
+
+        data class ExerciseType24UiModel(
+            val title: String,
+            val subtitle: String,
+            val variants: List<ExerciseVariantData>
+        ) : ExerciseUiModel.ExerciseUiModelExercise()
+
+        data class ExerciseType25UiModel(
+            val title: String,
+            val subtitle: String,
+            val variants: List<ExerciseVariantData>
+        ) : ExerciseUiModel.ExerciseUiModelExercise()
+
+
+        data class ExerciseType26UiModel(
+            val title: String,
+            val subtitle: String
+        ) : ExerciseUiModel.ExerciseUiModelExercise()
+
     }
+
 
     sealed class ExerciseUiModelScreen : ExerciseUiModel() {
         data class ScreenType1UiModel(
@@ -121,8 +161,7 @@ sealed class ExerciseUiModel {
 
         data class ScreenType3UiModel(
             val title: String,
-            val subtitle: String,
-            val partsToInject: List<String>
+            val subtitle: String
         ) : ExerciseUiModelScreen()
 
         data class ScreenType4UiModel(
@@ -136,6 +175,10 @@ sealed class ExerciseUiModel {
             val variants: List<String>
         ) : ExerciseUiModelScreen()
     }
+
+    data class ExplanationUiModel(
+        val textParts: List<String>
+    ) : ExerciseUiModel()
 }
 
 fun ExerciseData.toUiModel(context: Context) = when (this) {
@@ -157,7 +200,12 @@ fun ExerciseData.toUiModel(context: Context) = when (this) {
         subtitle,
         variants
     )
-    is ExerciseData.ExerciseDataExercise.ExerciseType5And6Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5And6UiModel(
+    is ExerciseData.ExerciseDataExercise.ExerciseType5Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5UiModel(
+        title,
+        subtitle,
+        variants
+    )
+    is ExerciseData.ExerciseDataExercise.ExerciseType6Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType6UiModel(
         title,
         subtitle,
         variants
@@ -165,13 +213,14 @@ fun ExerciseData.toUiModel(context: Context) = when (this) {
     is ExerciseData.ExerciseDataExercise.ExerciseType7Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel(
         title
     )
-    is ExerciseData.ExerciseDataExercise.ExerciseType8And12Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8And12UiModel(
+    is ExerciseData.ExerciseDataExercise.ExerciseType8Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType8UiModel(
         title,
         subtitle,
         variants
     )
     is ExerciseData.ExerciseDataExercise.ExerciseType9Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType9UiModel(
-        title
+        title,
+        subtitle
     )
     is ExerciseData.ExerciseDataExercise.ExerciseType10Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType10UiModel(
         titleParts,
@@ -183,13 +232,18 @@ fun ExerciseData.toUiModel(context: Context) = when (this) {
         filter,
         compareNumber
     )
+    is ExerciseData.ExerciseDataExercise.ExerciseType12Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType12UiModel(
+        title,
+        subtitle,
+        variants
+    )
     is ExerciseData.ExerciseDataExercise.ExerciseType13Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType13UiModel(
-        exerciseShapeEquationData.map { it.toUiModel(context) },
+        exerciseImagesEquationData.map { it.toUiModel(context) },
         subtitle,
         variants
     )
     is ExerciseData.ExerciseDataExercise.ExerciseType14Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType14UiModel(
-        title.toShapeUiModel(context),
+        title.toUiModel(context),
         subtitle,
         variants
     )
@@ -203,9 +257,9 @@ fun ExerciseData.toUiModel(context: Context) = when (this) {
         subtitle
     )
     is ExerciseData.ExerciseDataExercise.ExerciseType17Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType17UiModel(
-        exerciseShapeEquationData.map { it.toUiModel(context) },
+        exerciseImagesEquationData.map { it.toUiModel(context) },
         subtitle,
-        variants.map { it.toShapeUiModel(context, false) })
+        variants.map { it.toUiModel(context) })
     is ExerciseData.ExerciseDataExercise.ExerciseType18Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType18UiModel(
         title,
         titleImages.toUiModel(context)
@@ -221,6 +275,29 @@ fun ExerciseData.toUiModel(context: Context) = when (this) {
         title,
         variants
     )
+    is ExerciseData.ExerciseDataExercise.ExerciseType22Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType22UiModel(
+        title
+    )
+    is ExerciseData.ExerciseDataExercise.ExerciseType23Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType23UiModel(
+        titleParts,
+        subtitle,
+        variants
+    )
+    is ExerciseData.ExerciseDataExercise.ExerciseType24Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType24UiModel(
+        title,
+        subtitle,
+        variants
+    )
+    is ExerciseData.ExerciseDataExercise.ExerciseType25Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType25UiModel(
+        title,
+        subtitle,
+        variants
+    )
+    is ExerciseData.ExerciseDataExercise.ExerciseType26Data -> ExerciseUiModel.ExerciseUiModelExercise.ExerciseType26UiModel(
+        title,
+        subtitle
+    )
+
 
     is ExerciseData.ExerciseDataScreen.ScreenType1Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType1UiModel(
         title,
@@ -232,8 +309,7 @@ fun ExerciseData.toUiModel(context: Context) = when (this) {
     )
     is ExerciseData.ExerciseDataScreen.ScreenType3Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel(
         title,
-        subtitle,
-        partsToInject
+        subtitle
     )
     is ExerciseData.ExerciseDataScreen.ScreenType4Data -> ExerciseUiModel.ExerciseUiModelScreen.ScreenType4UiModel(
         title,
@@ -244,4 +320,6 @@ fun ExerciseData.toUiModel(context: Context) = when (this) {
         title,
         variants
     )
+
+    is ExerciseData.ExerciseExplanationData -> ExerciseUiModel.ExplanationUiModel(textParts)
 }

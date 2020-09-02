@@ -5,7 +5,9 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.forEach
+import androidx.lifecycle.Observer
 import com.example.studita.R
+import com.example.studita.presentation.view_model.InterestingViewModel
 import com.example.studita.utils.ThemeUtils
 import com.example.studita.utils.dpToPx
 import kotlinx.android.synthetic.main.interesting_explanation_layout.*
@@ -20,13 +22,26 @@ class InterestingExplanation1Fragment :
             checkButtonDivider(view)
         }
 
-        interestingExplanationLayoutThumbsLayout.forEach {
-            it.setOnClickListener {
-                interestingExplanationLayoutThumbsLayout.isSelected = false
-                interestingExplanationLayoutThumbsLayout.forEach { it.isSelected = false }
-                it.isSelected = true
+        interestingExplanationLayoutThumbUp.setOnClickListener {
+            if(!it.isSelected) {
+                interestingViewModel?.setFeedback(InterestingViewModel.FeedbackState.LIKE)
             }
         }
+        interestingExplanationLayoutThumbDown.setOnClickListener {
+            if(!it.isSelected) {
+                interestingViewModel?.setFeedback(InterestingViewModel.FeedbackState.DISLIKE)
+            }
+        }
+
+        interestingViewModel?.feedbackState?.observe(viewLifecycleOwner, Observer {
+            if(it == InterestingViewModel.FeedbackState.LIKE){
+                interestingExplanationLayoutThumbUp.isSelected = true
+                interestingExplanationLayoutThumbDown.isSelected = false
+            }else if(it == InterestingViewModel.FeedbackState.DISLIKE){
+                interestingExplanationLayoutThumbUp.isSelected = false
+                interestingExplanationLayoutThumbDown.isSelected = true
+            }
+        })
     }
 
     private fun formView(textParts: List<String>) {

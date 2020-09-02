@@ -7,7 +7,7 @@ import com.example.studita.R
 import com.example.studita.domain.entity.NotificationType
 import com.example.studita.domain.entity.serializer.IsMyFriendStatusSerializer
 import com.example.studita.domain.interactor.IsMyFriendStatus
-import com.example.studita.presentation.fragments.ProfileFragment
+import com.example.studita.presentation.fragments.profile.ProfileFragment
 import com.example.studita.presentation.fragments.dialog_alerts.AcceptFriendshipDialogAlertFragment
 import com.example.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
 import com.example.studita.presentation.model.NotificationsUiModel
@@ -67,7 +67,8 @@ class NotificationViewHolder(view: View) :
     }
 
     private fun navigateToProfile(activity: AppCompatActivity, userId: Int) {
-        activity.navigateTo(ProfileFragment().apply {
+        activity.navigateTo(
+            ProfileFragment().apply {
             arguments = bundleOf("USER_ID" to userId)
         }, R.id.doubleFrameLayoutFrameLayout)
     }

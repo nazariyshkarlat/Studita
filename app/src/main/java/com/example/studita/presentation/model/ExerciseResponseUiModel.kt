@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.*
-import java.io.IOException
 
 data class ExerciseResponseUiModel(
     val exerciseResult: Boolean,
@@ -22,25 +21,12 @@ sealed class ExerciseResponseDescriptionContentUiModel {
         ExerciseResponseDescriptionContentUiModel()
 }
 
-sealed class ExerciseShapeEquationMemberUiModel
-data class ExerciseOperatorUiModel(val operator: Char) : ExerciseShapeEquationMemberUiModel()
-data class ExerciseShapeUiModel(val shape: Drawable, val count: Int) :
-    ExerciseShapeEquationMemberUiModel()
-
-data class ExerciseImagesRowUiModel(val image: Drawable, val count: Int)
-
-fun ExerciseShapeData.toShapeUiModel(context: Context, white: Boolean = false) =
-    ExerciseShapeUiModel(shape.getShapeByName(context, white), count)
+sealed class ExerciseImagesEquationMemberUiModel
+data class ExerciseOperatorUiModel(val operator: Char) : ExerciseImagesEquationMemberUiModel()
+data class ExerciseImagesRowUiModel(val image: Drawable, val count: Int) : ExerciseImagesEquationMemberUiModel()
 
 fun ExerciseImagesRowData.toUiModel(context: Context) =
     ExerciseImagesRowUiModel(imageType.getDrawable(context), count)
-
-fun String.getShapeByName(context: Context, white: Boolean = false): Drawable = when (this) {
-    "rect" -> if (white) context.getDrawable(R.drawable.exercise_rectangle_white)!! else context.getDrawable(
-        R.drawable.exercise_rectangle_green
-    )!!
-    else -> throw IOException("Unexpected shape name")
-}
 
 fun ImageType.getDrawable(context: Context): Drawable = ContextCompat.getDrawable(
     context, when (this) {
@@ -78,7 +64,7 @@ fun ExerciseResponseData.toUiModel(context: Context) = ExerciseResponseUiModel(
     description?.toUiModel(context)
 )
 
-fun ExerciseShapeEquationMemberData.toUiModel(context: Context) = when (this) {
+fun ExerciseImagesEquationMemberData.toUiModel(context: Context) = when (this) {
     is ExerciseOperatorData -> ExerciseOperatorUiModel(operator.toCharacter())
-    is ExerciseShapeData -> this.toShapeUiModel(context, false)
+    is ExerciseImagesRowData -> this.toUiModel(context)
 }

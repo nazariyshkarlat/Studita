@@ -3,6 +3,8 @@ package com.example.studita.utils
 import com.example.studita.data.cache.authentication.LogInCacheImpl
 import com.example.studita.di.CacheModule
 import com.example.studita.presentation.activities.DefaultActivity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 object PrefsUtils {
 
@@ -13,6 +15,23 @@ object PrefsUtils {
 
     fun setOfflineMode(enabled: Boolean) {
         CacheModule.sharedPreferences.edit().putBoolean("OFFLINE_MODE", enabled).apply()
+    }
+
+    fun makeCompletedChapterDialogWasNotShown(exercisesCount: Int, chapterName: String) {
+        CacheModule.sharedPreferences.edit().putString("COMPLETED_CHAPTER_DIALOG", Gson().toJson(
+            mapOf("EXERCISES_COUNT" to exercisesCount, "CHAPTER_NAME" to chapterName))).apply()
+    }
+
+    fun makeCompletedChapterDialogWasShown(){
+        CacheModule.sharedPreferences.edit().remove("COMPLETED_CHAPTER_DIALOG").apply()
+    }
+
+    fun isCompletedChapterDialogWasNotShown() = CacheModule.sharedPreferences.contains("COMPLETED_CHAPTER_DIALOG")
+
+    fun getCompletedChapterDialogData() : Pair<Int, String> {
+        return with(Gson().fromJson<Map<String, Any>>(CacheModule.sharedPreferences.getString("COMPLETED_CHAPTER_DIALOG", null), object : TypeToken<Map<String, Any>>() { }.type)){
+            (this["EXERCISES_COUNT"] as Double).toInt() to this["CHAPTER_NAME"] as String
+        }
     }
 
     fun setNotificationsMode(enabled: Boolean) {

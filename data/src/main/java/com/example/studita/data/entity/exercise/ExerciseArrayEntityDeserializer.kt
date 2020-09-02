@@ -39,19 +39,24 @@ class ExerciseArrayEntityDeserializer : JsonDeserializer<ExerciseArrayEntity> {
                             jsonObject.get("exercise_info"),
                             ExerciseInfo.ExerciseType4Info::class.java
                         )
-                        5, 6 -> context.deserialize<ExerciseInfo.ExerciseType5And6Info>(
+                        5 -> context.deserialize<ExerciseInfo.ExerciseType5Info>(
                             jsonObject.get(
                                 "exercise_info"
-                            ), ExerciseInfo.ExerciseType5And6Info::class.java
+                            ), ExerciseInfo.ExerciseType5Info::class.java
+                        )
+                        6 -> context.deserialize<ExerciseInfo.ExerciseType6Info>(
+                            jsonObject.get(
+                                "exercise_info"
+                            ), ExerciseInfo.ExerciseType6Info::class.java
                         )
                         7 -> context.deserialize<ExerciseInfo.ExerciseType7Info>(
                             jsonObject.get("exercise_info"),
                             ExerciseInfo.ExerciseType7Info::class.java
                         )
-                        8, 12 -> context.deserialize<ExerciseInfo.ExerciseType8And12Info>(
+                        8 -> context.deserialize<ExerciseInfo.ExerciseType8Info>(
                             jsonObject.get(
                                 "exercise_info"
-                            ), ExerciseInfo.ExerciseType8And12Info::class.java
+                            ), ExerciseInfo.ExerciseType8Info::class.java
                         )
                         9 -> context.deserialize<ExerciseInfo.ExerciseType9Info>(
                             jsonObject.get("exercise_info"),
@@ -64,6 +69,11 @@ class ExerciseArrayEntityDeserializer : JsonDeserializer<ExerciseArrayEntity> {
                         11 -> context.deserialize<ExerciseInfo.ExerciseType11Info>(
                             jsonObject.get("exercise_info"),
                             ExerciseInfo.ExerciseType11Info::class.java
+                        )
+                        12 -> context.deserialize<ExerciseInfo.ExerciseType12Info>(
+                            jsonObject.get(
+                                "exercise_info"
+                            ), ExerciseInfo.ExerciseType12Info::class.java
                         )
                         13 -> context.deserialize<ExerciseInfo.ExerciseType13Info>(
                             jsonObject.get("exercise_info"),
@@ -101,6 +111,26 @@ class ExerciseArrayEntityDeserializer : JsonDeserializer<ExerciseArrayEntity> {
                             jsonObject.get("exercise_info"),
                             ExerciseInfo.ExerciseType21Info::class.java
                         )
+                        22 -> context.deserialize<ExerciseInfo.ExerciseType22Info>(
+                            jsonObject.get("exercise_info"),
+                            ExerciseInfo.ExerciseType22Info::class.java
+                        )
+                        23 -> context.deserialize<ExerciseInfo.ExerciseType23Info>(
+                            jsonObject.get("exercise_info"),
+                            ExerciseInfo.ExerciseType23Info::class.java
+                        )
+                        24 -> context.deserialize<ExerciseInfo.ExerciseType24Info>(
+                            jsonObject.get("exercise_info"),
+                            ExerciseInfo.ExerciseType24Info::class.java
+                        )
+                        25 -> context.deserialize<ExerciseInfo.ExerciseType25Info>(
+                            jsonObject.get("exercise_info"),
+                            ExerciseInfo.ExerciseType25Info::class.java
+                        )
+                        26 -> context.deserialize<ExerciseInfo.ExerciseType26Info>(
+                            jsonObject.get("exercise_info"),
+                            ExerciseInfo.ExerciseType26Info::class.java
+                        )
                         else -> throw IOException("Unexpected exercise type")
                     },
                     if (!jsonObject.has("answer")) null else jsonObject.get("answer").asString,
@@ -134,6 +164,14 @@ class ExerciseArrayEntityDeserializer : JsonDeserializer<ExerciseArrayEntity> {
                         else -> throw IOException("Unexpected screen type")
                     }
                 )
+            }
+            "explanation" -> {
+                ExerciseArrayEntity.ExplanationEntity(
+                    if (!jsonObject.has("exercise_number")) null else jsonObject.get("exercise_number").asInt,
+                    context.deserialize<ExplanationInfo>(
+                        jsonObject.get("explanation_info"),
+                        ExplanationInfo::class.java
+                ))
             }
             else -> {
                 throw IOException("Unexpected type")

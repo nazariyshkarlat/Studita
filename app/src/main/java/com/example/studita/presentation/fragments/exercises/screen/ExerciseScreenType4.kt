@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
+import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercise_screen_type_4.*
 
-class ExerciseScreenType4 : ExerciseScreen(R.layout.exercise_screen_type_4) {
+class ExerciseScreenType4 : NavigatableFragment(R.layout.exercise_screen_type_4) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 

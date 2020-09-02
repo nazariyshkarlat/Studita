@@ -15,6 +15,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         PushReceiverIntentService.enqueueWork(this, intent)
     }
 
+
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
     }

@@ -37,8 +37,7 @@
             android:parentActivityName=".presentation.activities.MainActivity"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".presentation.activities.ExercisesActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:name=".presentation.activities.ExercisesActivity"/>
         <activity
             android:name=".presentation.activities.InterestingActivity"
             android:windowSoftInputMode="adjustResize"/>

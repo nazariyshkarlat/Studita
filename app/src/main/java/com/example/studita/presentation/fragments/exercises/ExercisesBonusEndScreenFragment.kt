@@ -10,6 +10,7 @@ import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.utils.LanguageUtils
 import com.example.studita.utils.navigateTo
+import com.example.studita.utils.replace
 import kotlinx.android.synthetic.main.exercises_bonus_end_layout.*
 
 class ExercisesBonusEndScreenFragment : NavigatableFragment(R.layout.exercises_bonus_end_layout) {
@@ -54,7 +55,7 @@ class ExercisesBonusEndScreenFragment : NavigatableFragment(R.layout.exercises_b
                 exercisesViewModel.saveUserDataState.observe(viewLifecycleOwner, Observer {
                     val saved = it.first
                     if (saved) {
-                        (activity as AppCompatActivity).navigateTo(
+                        (activity as AppCompatActivity).replace(
                             exercisesViewModel.getExercisesEndFragment(
                                 it.second
                             ), R.id.frameLayout

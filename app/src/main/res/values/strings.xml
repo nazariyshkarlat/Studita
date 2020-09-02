@@ -86,9 +86,7 @@
     <string name="exercise_type_5_title">%1$s … %2$s=%3$s</string>
     <string name="exercise_type_7_title">%1$s%2$s … =%3$s</string>
     <string name="exercise_type_3_hint">Введите правильный ответ</string>
-    <string name="exercise_type_11_hint">Сколько чисел %1$s вы видите?</string>
-    <string name="exercise_type_9_bottom_text">Введите любое уравнение, чтобы получился данный результат</string>
-    <string name="exercise_type_10_bottom_text">Вставьте пропущенный символ</string>
+    <string name="exercise_type_11_hint">Сколько чисел %1$s вы\nвидите?</string>
     <string name="next">Далее</string>
     <string name="good_job">Хорошая работа!</string>
     <string name="more">Подробнее</string>
@@ -213,10 +211,14 @@
     <string name="notifications_are_empty">Список ваших уведомлений пуст</string>
     <string name="friend_removed_snackbar">\@%1$s был удалён из ваших друзей</string>
     <string name="friend_added_snackbar">\@%1$s был добавлен в ваши друзья</string>
+    <string name="feedback_snackbar">Спасибо за ваш отзыв!</string>
     <string name="friendship_request_is_sent_snackbar">Запрос в друзья \@%1$s был отправлен</string>
     <string name="friendship_request_is_canceled_snackbar">Запрос в друзья \@%1$s был отменён</string>
     <string name="friendship_request_is_rejected_snackbar">Запрос в друзья \@%1$s был отклонён</string>
     <string name="privacy_exceptions_dialog_alert_title">Добавить исключения</string>
+    <string name="chapter_completed_dialog_alert_title">Поздравляем!</string>
+    <string name="chapter_completed_dialog_alert_subtitle_template">Вы полностью завершили тему \"%1$s\"</string>
+    <string name="chapter_completed_dialog_alert_counter_bottom_text">заданий позади</string>
     <string name="notification_type_duel_invite_text">вызвал вас на дуэль</string>
     <string name="notification_duel_missed_call_subtitle">вызывал вас на дуэль</string>
     <string name="notification_type_request_friendship">хочет добавить вас в друзья</string>
@@ -231,6 +233,7 @@
     <string name="just_now">только что</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
+    <string name="explanation">Объяснение</string>
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>

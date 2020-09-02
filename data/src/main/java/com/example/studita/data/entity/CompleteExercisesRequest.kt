@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 
 data class CompletedExercisesEntity(
     @SerializedName("chapter_number") val chapterNumber: Int,
-    @SerializedName("chapter_part_number") val chapterPartNumber: Int,
+    @SerializedName("chapter_part_in_chapter_number") val chapterPartNumber: Int,
     @SerializedName("percent") val percent: Float,
     @SerializedName("datetime") val datetime: String,
     @SerializedName("obtained_time") val obtainedTime: Long,

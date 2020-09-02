@@ -31,7 +31,8 @@
             android:background="@drawable/main_blocks_rectangle"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingTop="16dp">
+            android:paddingTop="16dp"
+            android:layout_marginBottom="8dp">
 
             <TextView
                 style="@style/Regular16"

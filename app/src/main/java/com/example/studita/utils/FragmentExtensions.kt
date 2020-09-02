@@ -1,6 +1,7 @@
 package com.example.studita.utils
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.studita.R
@@ -36,7 +37,12 @@ fun AppCompatActivity.navigateTo(fragment: Fragment, container: Int) {
     lastFragmentTransaction.addToBackStack(fragment.javaClass.toString())
     lastFragmentTransaction.commit()
     val fragmentTransaction = supportFragmentManager.beginTransaction()
-    fragmentTransaction.add(container, fragment)
+    fragmentTransaction.add(container, fragment.apply {
+        if(arguments != null)
+            arguments!!.putBoolean("IS_NAVIGATION", true)
+        else
+            arguments = bundleOf("IS_NAVIGATION" to true)
+    })
     fragmentTransaction.commit()
 }
 

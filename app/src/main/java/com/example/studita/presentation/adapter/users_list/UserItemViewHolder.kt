@@ -9,8 +9,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.example.studita.R
 import com.example.studita.domain.interactor.IsMyFriendStatus
-import com.example.studita.presentation.fragments.MyProfileFragment
-import com.example.studita.presentation.fragments.ProfileFragment
+import com.example.studita.presentation.fragments.profile.MyProfileFragment
+import com.example.studita.presentation.fragments.profile.ProfileFragment
 import com.example.studita.presentation.model.UsersRecyclerUiModel
 import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.friend_item.view.*

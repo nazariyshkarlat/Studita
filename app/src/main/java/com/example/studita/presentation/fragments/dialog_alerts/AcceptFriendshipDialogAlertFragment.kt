@@ -17,13 +17,19 @@ import com.example.studita.utils.ThemeUtils
 import com.example.studita.utils.UserUtils
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.accept_friendship_dialog_alert.*
+import kotlinx.android.synthetic.main.dialog_alert_layout.*
 
 class AcceptFriendshipDialogAlertFragment :
-    BaseDialogFragment(R.layout.accept_friendship_dialog_alert) {
+    BaseDialogFragment(R.layout.dialog_alert_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setText(resources.getString(R.string.accept_friendship_dialog_alert_title),
+            resources.getString(R.string.accept_friendship_dialog_alert_subtitle),
+            resources.getString(R.string.reject),
+            resources.getString(R.string.add)
+        )
 
         val acceptFriendshipDialogAlertViewModel =
             ViewModelProviders.of(this).get(AcceptFriendshipDialogAlertViewModel::class.java)
@@ -40,19 +46,19 @@ class AcceptFriendshipDialogAlertFragment :
         }
 
         if (userData != null) {
-            acceptFriendshipDialogAlertSubtitle.text = resources.getString(
+            dialogAlertSubtitle.text = resources.getString(
                 R.string.accept_friendship_dialog_alert_subtitle,
                 userData.userName
             )
 
-            acceptFriendshipDialogRightButton.setOnClickListener {
+            dialogAlertRightButton.setOnClickListener {
                 acceptFriendshipDialogAlertViewModel.acceptFriendshipRequest(
                     UserUtils.getUserIDTokenData()!!,
                     userData
                 )
                 dismiss()
             }
-            acceptFriendshipDialogLeftButton.setOnClickListener {
+            dialogAlertLeftButton.setOnClickListener {
                 acceptFriendshipDialogAlertViewModel.rejectFriendshipRequest(
                     UserUtils.getUserIDTokenData()!!,
                     userData

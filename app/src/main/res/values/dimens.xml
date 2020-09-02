@@ -6,6 +6,7 @@
     <dimen name="buttonRLMargin">16dp</dimen>
     <dimen name="tabIndicatorBottomMargin">16dp</dimen>
     <dimen name="defaultRLMargin">16dp</dimen>
+    <dimen name="defaultBlockPadding">16dp</dimen>
     <dimen name="textItemMinRLMargin">36dp</dimen>
     <dimen name="titleSubtitleMargin">16dp</dimen>
     <dimen name="defRadius">8dp</dimen>
@@ -29,6 +30,12 @@
     <dimen name="exercisesResultProgressBarSize">162dp</dimen>
     <dimen name="editProfileLayoutAvatarSize">56dp</dimen>
     <dimen name="dialogAlertTitleSubtitleMargin">14dp</dimen>
+    <dimen name="dialogPaddingStart">16dp</dimen>
+    <dimen name="dialogPaddingEnd">6dp</dimen>
+    <dimen name="dialogPaddingTop">20dp</dimen>
+    <dimen name="dialogPaddingBottom">12dp</dimen>
+    <dimen name="dialogTextMarginEnd">10dp</dimen>
+    <dimen name="dialogButtonsMarginTop">16dp</dimen>
     <dimen name="minTouchTargetSize">0dp</dimen>
     <item name="bars_alpha" format="float" type="dimen">0.98</item>
 </resources>

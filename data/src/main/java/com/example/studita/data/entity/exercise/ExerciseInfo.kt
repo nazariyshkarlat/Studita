@@ -18,7 +18,7 @@ sealed class ExerciseInfo {
     data class ExerciseType3Info(
         @SerializedName("title") val title: List<String>,
         @SerializedName("subtitle") val subtitle: String,
-        @SerializedName("variants") val variants: List<List<String>>
+        @SerializedName("variants") val variants: List<String>
     ) : ExerciseInfo()
 
     data class ExerciseType4Info(
@@ -27,7 +27,14 @@ sealed class ExerciseInfo {
         @SerializedName("variants") val variants: List<String>
     ) : ExerciseInfo()
 
-    data class ExerciseType5And6Info(
+    data class ExerciseType5Info(
+        @SerializedName("title") val title: String,
+        @SerializedName("subtitle") val subtitle: String,
+        @SerializedName("variants") val variants: List<String>
+    ) : ExerciseInfo()
+
+
+    data class ExerciseType6Info(
         @SerializedName("title") val title: String,
         @SerializedName("subtitle") val subtitle: String,
         @SerializedName("variants") val variants: List<String>
@@ -35,13 +42,19 @@ sealed class ExerciseInfo {
 
     data class ExerciseType7Info(@SerializedName("title") val title: String) : ExerciseInfo()
 
-    data class ExerciseType8And12Info(
+    data class ExerciseType8Info(
         @SerializedName("title") val title: String,
         @SerializedName("subtitle") val subtitle: String,
         @SerializedName("variants") val variants: List<String>
     ) : ExerciseInfo()
 
-    data class ExerciseType9Info(@SerializedName("title") val title: String) : ExerciseInfo()
+    data class ExerciseType12Info(
+        @SerializedName("title") val title: String,
+        @SerializedName("subtitle") val subtitle: String,
+        @SerializedName("variants") val variants: List<String>
+    ) : ExerciseInfo()
+
+    data class ExerciseType9Info(@SerializedName("title") val title: String, @SerializedName("subtitle")val subtitle: String) : ExerciseInfo()
 
     data class ExerciseType10Info(
         @SerializedName("title_parts") val titleParts: List<String>,
@@ -102,6 +115,33 @@ sealed class ExerciseInfo {
         @SerializedName("title") val title: List<String>,
         @SerializedName("variants") val variants: List<List<String>>
     ) : ExerciseInfo()
+
+    data class ExerciseType22Info(
+        @SerializedName("title") val title: String
+    ) : ExerciseInfo()
+
+    data class ExerciseType23Info(
+        @SerializedName("title_parts") val titleParts: List<String>,
+        @SerializedName("subtitle") val subtitle: String,
+        @SerializedName("variants") val variants: List<String>
+    ) : ExerciseInfo()
+
+    data class ExerciseType24Info(
+        @SerializedName("title") val title: String,
+        @SerializedName("subtitle") val subtitle: String,
+        @SerializedName("variants") val variants: List<String>
+    ) : ExerciseInfo()
+
+    data class ExerciseType25Info(
+        @SerializedName("title") val title: String,
+        @SerializedName("subtitle") val subtitle: List<String>,
+        @SerializedName("variants") val variants: List<List<String>>
+    ) : ExerciseInfo()
+
+    data class ExerciseType26Info(
+        @SerializedName("title") val title: String,
+        @SerializedName("subtitle") val subtitle: String
+    ) : ExerciseInfo()
 }
 
 sealed class ScreenInfo {
@@ -115,8 +155,7 @@ sealed class ScreenInfo {
 
     data class ScreenType3Info(
         @SerializedName("title") val title: String,
-        @SerializedName("subtitle") val subtitle: String,
-        @SerializedName("parts_to_inject") val partsToInject: List<String>
+        @SerializedName("subtitle") val subtitle: String
     ) : ScreenInfo()
 
     data class ScreenType4Info(
@@ -132,3 +171,5 @@ sealed class ScreenInfo {
         @SerializedName("variants") val variants: List<String>
     ) : ScreenInfo()
 }
+
+data class ExplanationInfo(@SerializedName("text_parts") val textParts: List<String>)

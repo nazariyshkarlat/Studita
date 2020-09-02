@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.di.data.ChapterModule
+import com.example.studita.domain.entity.ChapterData
 import com.example.studita.domain.interactor.ChapterStatus
 import com.example.studita.presentation.model.ChapterUiModel
 import com.example.studita.presentation.model.toShapeUiModel
@@ -17,7 +18,7 @@ class ChapterViewModel : ViewModel() {
     val progressState = MutableLiveData<Boolean>()
     val errorState = SingleLiveEvent<Int>()
 
-    lateinit var results: ChapterUiModel
+    lateinit var chapterData: ChapterData
     private val interactor = ChapterModule.getChapterInteractorImpl()
 
     private var job: Job? = null
@@ -31,7 +32,7 @@ class ChapterViewModel : ViewModel() {
                 is ChapterStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is ChapterStatus.Success -> {
                     progressState.postValue(true)
-                    results = status.result.toShapeUiModel()
+                    chapterData = status.result
                 }
             }
         }

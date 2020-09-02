@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/defaultRLMargin"
         android:layout_marginEnd="@dimen/defaultRLMargin"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        >
 
         <TextView
             style="@style/Medium24"

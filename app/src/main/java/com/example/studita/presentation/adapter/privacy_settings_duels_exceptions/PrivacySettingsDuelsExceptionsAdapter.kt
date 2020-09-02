@@ -28,7 +28,7 @@ class PrivacySettingsDuelsExceptionsAdapter(
                 this
             )
             ViewType.ITEMS_LOAD.ordinal -> LoadViewHolder(
-                parent.makeView(R.layout.friends_load_item),
+                parent.makeView(R.layout.list_load_item),
                 this
             )
             else -> throw UnsupportedOperationException("unknown type of item")

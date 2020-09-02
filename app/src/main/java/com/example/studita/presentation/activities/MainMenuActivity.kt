@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.fragments.MainMenuFragment
-import com.example.studita.presentation.fragments.NotificationsFragment
-import com.example.studita.presentation.fragments.ProfileMenuFragment
+import com.example.studita.presentation.fragments.main.MainMenuFragment
+import com.example.studita.presentation.fragments.notifications.NotificationsFragment
+import com.example.studita.presentation.fragments.profile.ProfileMenuFragment
 import com.example.studita.presentation.fragments.ToolbarFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.MainMenuActivityViewModel

@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.example.studita.presentation.fragments.ChapterBottomSheetFragment
+import com.example.studita.presentation.fragments.bottom_sheets.ChapterBottomSheetFragment
 import com.example.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
 import com.example.studita.presentation.model.HomeRecyclerUiModel
 import com.example.studita.presentation.views.AlphaGradientView
@@ -43,7 +43,8 @@ class ChapterViewHolder(view: View, val count: Int) :
     }
 
     private fun initBottomSheetFragment(chapterNumber: Int, context: Context) {
-        val bottomSheetFragment = ChapterBottomSheetFragment()
+        val bottomSheetFragment =
+            ChapterBottomSheetFragment()
         val bundle = Bundle()
         bundle.putInt("CHAPTER_NUMBER", chapterNumber)
         bottomSheetFragment.arguments = bundle

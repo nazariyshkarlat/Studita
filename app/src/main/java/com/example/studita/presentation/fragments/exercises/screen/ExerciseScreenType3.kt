@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
+import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.exercise_screen_type_3.*
 
-class ExerciseScreenType3 : ExerciseScreen(R.layout.exercise_screen_type_3) {
+class ExerciseScreenType3 : NavigatableFragment(R.layout.exercise_screen_type_3) {
 
     private var exercisesViewModel: ExercisesViewModel? = null
 
@@ -24,8 +25,7 @@ class ExerciseScreenType3 : ExerciseScreen(R.layout.exercise_screen_type_3) {
                 val screenUiModel =
                     it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelScreen.ScreenType3UiModel
                 exerciseScreenType3Title.text = screenUiModel.title
-                exerciseScreenType3Subtitle.text =
-                    injectParts(screenUiModel.subtitle, screenUiModel.partsToInject)
+                exerciseScreenType3Subtitle.text = screenUiModel.subtitle
             }
         }
     }

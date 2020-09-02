@@ -22,7 +22,7 @@ class NotificationsAdapter(
         NotificationsViewType.SWITCH.ordinal -> NotificationsSwitchViewHolder(parent.makeView(R.layout.notifications_layout_switch_item))
         NotificationsViewType.NOTIFICATION.ordinal -> NotificationViewHolder(parent.makeView(R.layout.notifications_layout_item))
         NotificationsViewType.ITEMS_LOAD.ordinal -> LoadViewHolder(
-            parent.makeView(R.layout.friends_load_item),
+            parent.makeView(R.layout.list_load_item),
             this
         )
         else -> throw UnsupportedOperationException("unknown type of item")

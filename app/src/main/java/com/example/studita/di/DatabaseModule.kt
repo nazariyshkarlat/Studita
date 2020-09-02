@@ -7,29 +7,13 @@ import com.example.studita.data.database.StuditaDatabase
 
 object DatabaseModule {
 
-    @Volatile
-    var studitaDatabase: StuditaDatabase? = null
-
-    private fun getInstance(context: Context): StuditaDatabase {
-        val tempInstance =
-            studitaDatabase
-        if (tempInstance != null) {
-            return tempInstance
-        }
-
-        synchronized(this) {
-            val instance = Room.databaseBuilder(
-                context.applicationContext,
-                StuditaDatabase::class.java,
-                StuditaDatabase.DB_NAME
-            ).build()
-
-            studitaDatabase = instance
-            return instance
-        }
-    }
+    lateinit var studitaDatabase: StuditaDatabase
 
     fun initialize(app: Application) {
-        getInstance(app)
+        studitaDatabase = Room.databaseBuilder(
+            app.applicationContext,
+            StuditaDatabase::class.java,
+            StuditaDatabase.DB_NAME
+        ).build()
     }
 }

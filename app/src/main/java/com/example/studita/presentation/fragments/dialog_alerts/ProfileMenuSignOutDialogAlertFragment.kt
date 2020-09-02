@@ -13,21 +13,26 @@ import com.example.studita.presentation.fragments.base.BaseDialogFragment
 import com.example.studita.presentation.view_model.ProfileMenuFragmentViewModel
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.UserUtils.deviceSignOut
+import kotlinx.android.synthetic.main.dialog_alert_layout.*
 import kotlinx.android.synthetic.main.sign_out_dialog_alert.*
 
-class ProfileMenuSignOutDialogAlertFragment : BaseDialogFragment(R.layout.sign_out_dialog_alert) {
+class ProfileMenuSignOutDialogAlertFragment : BaseDialogFragment(R.layout.dialog_alert_layout) {
 
     private var profileMenuFragmentViewModel: ProfileMenuFragmentViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setText(resources.getString(R.string.sign_out_dialog_alert_title),
+            resources.getString(R.string.sign_out_dialog_alert_subtitle),
+            resources.getString(R.string.cancel),
+            resources.getString(R.string.sign_out)
+        )
         profileMenuFragmentViewModel = activity?.run {
             ViewModelProviders.of(this).get(ProfileMenuFragmentViewModel::class.java)
         }
 
-        signOutDialogLeftButton.setOnClickListener { dismiss() }
-        signOutDialogRightButton.setOnClickListener {
+        dialogAlertLeftButton.setOnClickListener { dismiss() }
+        dialogAlertRightButton.setOnClickListener {
             activity?.application?.let {
 
                 profileMenuFragmentViewModel?.signOut(

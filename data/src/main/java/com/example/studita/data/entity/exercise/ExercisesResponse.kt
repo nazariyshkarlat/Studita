@@ -47,7 +47,7 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
                 isBonus,
                 exerciseInfo.title.toExerciseImagesRowData(),
                 exerciseInfo.subtitle,
-                exerciseInfo.variants,
+                exerciseInfo.variants.map{ it.toExerciseVariant()},
                 exerciseAnswer
             )
             is ExerciseInfo.ExerciseType3Info -> ExerciseData.ExerciseDataExercise.ExerciseType3Data(
@@ -55,7 +55,7 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
                 isBonus,
                 exerciseInfo.title.toExerciseSymbolData(),
                 exerciseInfo.subtitle,
-                exerciseInfo.variants.map { it.toExerciseSymbolData() },
+                exerciseInfo.variants.map{ it.toExerciseVariant()},
                 exerciseAnswer
             )
             is ExerciseInfo.ExerciseType4Info -> ExerciseData.ExerciseDataExercise.ExerciseType4Data(
@@ -63,15 +63,23 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
                 isBonus,
                 exerciseInfo.title.toExerciseSymbolData(),
                 exerciseInfo.subtitle,
-                exerciseInfo.variants,
+                exerciseInfo.variants.map{ it.toExerciseVariant()},
                 exerciseAnswer
             )
-            is ExerciseInfo.ExerciseType5And6Info -> ExerciseData.ExerciseDataExercise.ExerciseType5And6Data(
+            is ExerciseInfo.ExerciseType5Info -> ExerciseData.ExerciseDataExercise.ExerciseType5Data(
                 exerciseNumber!!,
                 isBonus,
                 exerciseInfo.title,
                 exerciseInfo.subtitle,
-                exerciseInfo.variants,
+                exerciseInfo.variants.map{ it.toExerciseVariant()},
+                exerciseAnswer
+            )
+            is ExerciseInfo.ExerciseType6Info -> ExerciseData.ExerciseDataExercise.ExerciseType6Data(
+                exerciseNumber!!,
+                isBonus,
+                exerciseInfo.title,
+                exerciseInfo.subtitle,
+                exerciseInfo.variants.map{ it.toExerciseVariant()},
                 exerciseAnswer
             )
             is ExerciseInfo.ExerciseType7Info -> ExerciseData.ExerciseDataExercise.ExerciseType7Data(
@@ -80,24 +88,25 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
                 exerciseInfo.title,
                 exerciseAnswer
             )
-            is ExerciseInfo.ExerciseType8And12Info -> ExerciseData.ExerciseDataExercise.ExerciseType8And12Data(
+            is ExerciseInfo.ExerciseType8Info -> ExerciseData.ExerciseDataExercise.ExerciseType8Data(
                 exerciseNumber!!,
                 isBonus,
                 exerciseInfo.title,
                 exerciseInfo.subtitle,
-                exerciseInfo.variants,
+                exerciseInfo.variants.map{ it.toExerciseVariant()},
                 exerciseAnswer
             )
             is ExerciseInfo.ExerciseType9Info -> ExerciseData.ExerciseDataExercise.ExerciseType9Data(
                 exerciseNumber!!,
                 isBonus,
                 exerciseInfo.title,
+                exerciseInfo.subtitle,
                 exerciseAnswer
             )
             is ExerciseInfo.ExerciseType10Info -> ExerciseData.ExerciseDataExercise.ExerciseType10Data(
                 exerciseNumber!!,
                 isBonus,
-                exerciseInfo.titleParts,
+                exerciseInfo.titleParts[0] to exerciseInfo.titleParts[1],
                 exerciseInfo.subtitle,
                 exerciseAnswer,
                 exerciseInfo.isNumeral
@@ -110,20 +119,28 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
                 exerciseInfo.compareNumber,
                 exerciseAnswer
             )
+            is ExerciseInfo.ExerciseType12Info -> ExerciseData.ExerciseDataExercise.ExerciseType12Data(
+                exerciseNumber!!,
+                isBonus,
+                exerciseInfo.title,
+                exerciseInfo.subtitle,
+                exerciseInfo.variants.map{ it.toExerciseVariant()},
+                exerciseAnswer
+            )
             is ExerciseInfo.ExerciseType13Info -> ExerciseData.ExerciseDataExercise.ExerciseType13Data(
                 exerciseNumber!!,
                 isBonus,
                 exerciseInfo.title.toExerciseShapeEquation(),
                 exerciseInfo.subtitle,
-                exerciseInfo.variants,
+                exerciseInfo.variants.map{ it.toExerciseVariant()},
                 exerciseAnswer
             )
             is ExerciseInfo.ExerciseType14Info -> ExerciseData.ExerciseDataExercise.ExerciseType14Data(
                 exerciseNumber!!,
                 isBonus,
-                exerciseInfo.title.toExerciseShapeData(),
+                exerciseInfo.title.toExerciseImagesRowData(),
                 exerciseInfo.subtitle,
-                exerciseInfo.variants,
+                exerciseInfo.variants.map{ it.toExerciseVariant()},
                 exerciseAnswer
             )
             is ExerciseInfo.ExerciseType15Info -> ExerciseData.ExerciseDataExercise.ExerciseType15Data(
@@ -131,7 +148,7 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
                 isBonus,
                 exerciseInfo.title,
                 exerciseInfo.subtitle,
-                exerciseInfo.variants,
+                exerciseInfo.variants.map{ it.toExerciseVariant()},
                 exerciseAnswer
             )
             is ExerciseInfo.ExerciseType16Info -> ExerciseData.ExerciseDataExercise.ExerciseType16Data(
@@ -146,7 +163,7 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
                 isBonus,
                 exerciseInfo.title.toExerciseShapeEquation(),
                 exerciseInfo.subtitle,
-                exerciseInfo.variants.map { it.toExerciseShapeData() },
+                exerciseInfo.variants.map { it.toExerciseImagesRowData() },
                 exerciseAnswer
             )
             is ExerciseInfo.ExerciseType18Info -> ExerciseData.ExerciseDataExercise.ExerciseType18Data(
@@ -160,7 +177,7 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
                 exerciseNumber!!,
                 isBonus,
                 exerciseInfo.title,
-                exerciseInfo.variants,
+                exerciseInfo.variants.map{ it.toExerciseVariant()},
                 exerciseAnswer
             )
             is ExerciseInfo.ExerciseType20Info -> ExerciseData.ExerciseDataExercise.ExerciseType20Data(
@@ -175,6 +192,43 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
                 isBonus,
                 exerciseInfo.title.toExerciseSymbolData(),
                 exerciseInfo.variants.map { it.toExerciseSymbolData() },
+                exerciseAnswer
+            )
+            is ExerciseInfo.ExerciseType22Info -> ExerciseData.ExerciseDataExercise.ExerciseType22Data(
+                exerciseNumber!!,
+                isBonus,
+                exerciseInfo.title,
+                exerciseAnswer
+            )
+            is ExerciseInfo.ExerciseType23Info -> ExerciseData.ExerciseDataExercise.ExerciseType23Data(
+                exerciseNumber!!,
+                isBonus,
+                exerciseInfo.titleParts[0] to exerciseInfo.titleParts[1],
+                exerciseInfo.subtitle,
+                exerciseInfo.variants[0] to exerciseInfo.variants[1],
+                exerciseAnswer
+            )
+            is ExerciseInfo.ExerciseType24Info -> ExerciseData.ExerciseDataExercise.ExerciseType24Data(
+                exerciseNumber!!,
+                isBonus,
+                exerciseInfo.title,
+                exerciseInfo.subtitle,
+                exerciseInfo.variants.map { it.toExerciseVariant() },
+                exerciseAnswer
+            )
+            is ExerciseInfo.ExerciseType25Info -> ExerciseData.ExerciseDataExercise.ExerciseType25Data(
+                exerciseNumber!!,
+                isBonus,
+                exerciseInfo.title,
+                exerciseInfo.subtitle[1],
+                exerciseInfo.variants.map{it.toExerciseVariant()},
+                exerciseAnswer
+            )
+            is ExerciseInfo.ExerciseType26Info -> ExerciseData.ExerciseDataExercise.ExerciseType26Data(
+                exerciseNumber!!,
+                isBonus,
+                exerciseInfo.title,
+                exerciseInfo.subtitle,
                 exerciseAnswer
             )
         }
@@ -194,8 +248,7 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
             is ScreenInfo.ScreenType3Info -> ExerciseData.ExerciseDataScreen.ScreenType3Data(
                 exerciseNumber,
                 screenInfo.title,
-                screenInfo.subtitle,
-                screenInfo.partsToInject
+                screenInfo.subtitle
             )
             is ScreenInfo.ScreenType4Info -> ExerciseData.ExerciseDataScreen.ScreenType4Data(
                 exerciseNumber,
@@ -212,15 +265,16 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
             )
         }
     }
+    is ExerciseArrayEntity.ExplanationEntity -> ExerciseData.ExerciseExplanationData(exerciseNumber, explanationInfo.textParts)
 }
 
-fun List<String>.toExerciseShapeEquation(): List<ExerciseShapeEquationMemberData> {
-    val resultList = ArrayList<ExerciseShapeEquationMemberData>()
-    val shape = this[0]
+fun List<String>.toExerciseShapeEquation(): List<ExerciseImagesEquationMemberData> {
+    val resultList = ArrayList<ExerciseImagesEquationMemberData>()
+    val imageTypeName = this[0]
     val equationParts = this[1].split(' ')
 
     equationParts.forEach { part ->
-        part.toIntOrNull()?.let { resultList.add(ExerciseShapeData(shape, it)) }
+        part.toIntOrNull()?.let { resultList.add(ExerciseImagesRowData(imageTypeName.toImageType(), it)) }
             ?: run { resultList.add(ExerciseOperatorData(part.first().toOperator())) }
     }
     return resultList

@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.fragments.LoadFragment
+import com.example.studita.presentation.fragments.exercises.LoadFragment
 import com.example.studita.presentation.view_model.InterestingViewModel
 import com.example.studita.utils.replace
 

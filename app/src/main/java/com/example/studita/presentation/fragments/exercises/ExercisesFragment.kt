@@ -13,12 +13,10 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.OneShotPreDrawListener
-import androidx.core.view.marginEnd
-import androidx.core.view.marginStart
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseData
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
@@ -33,7 +31,6 @@ import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.presentation.views.SquareView
 import com.example.studita.utils.*
 import com.google.android.flexbox.FlexboxLayout
-import kotlinx.android.synthetic.main.chapter_part_two_help_layout.*
 import kotlinx.android.synthetic.main.chapter_part_two_help_layout.view.*
 import kotlinx.android.synthetic.main.exercise_bottom_snackbar.*
 import kotlinx.android.synthetic.main.exercise_layout.*
@@ -48,7 +45,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
     ExercisesActivity.DispatchTouchEvent {
 
     var exercisesViewModel: ExercisesViewModel? = null
-    var snackbarTranslationY = 0F
+    private var snackbarTranslationY = 0F
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,7 +62,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
 
                         refreshExercisesView()
 
-                        (activity as AppCompatActivity).navigateTo(
+                        (activity as AppCompatActivity).replace(
                             pair.second,
                             R.id.exerciseLayoutFrameLayout
                         )
@@ -83,14 +80,17 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                             R.anim.slide_out_right
                         )
                     }
-                    ExercisesViewModel.ExercisesNavigationState.NAVIGATE -> {
-                        (activity as AppCompatActivity).navigateTo(
+                    ExercisesViewModel.ExercisesNavigationState.NAVIGATE_IN_CONTAINER -> {
+                        (activity as AppCompatActivity).replace(
+                            pair.second,
+                            R.id.exerciseLayoutFrameLayout
+                        )
+                    }
+                    ExercisesViewModel.ExercisesNavigationState.NAVIGATE_COMPLETELY -> {
+                        (activity as AppCompatActivity).replace(
                             pair.second,
                             R.id.frameLayout
                         )
-                        (activity as AppCompatActivity).supportFragmentManager.findFragmentById(R.id.exerciseLayoutFrameLayout)
-                            ?.let { (activity as AppCompatActivity).removeFragment(it) }
-                        (activity as AppCompatActivity).removeFragment(this)
                     }
                 }
                 setButtonText()
@@ -121,6 +121,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             })
 
             viewModel.buttonDividerState.observe(viewLifecycleOwner, Observer { show ->
+                println("show")
                 exerciseLayoutButtonFrameLayout.background = if (show) resources.getDrawable(
                     R.drawable.divider_top_drawable,
                     exerciseLayoutToolbar.context.theme
@@ -161,7 +162,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                     }
                     ExercisesViewModel.ExercisesState.DESCRIPTION -> {
                         if (activity?.supportFragmentManager?.findFragmentById(R.id.exerciseLayoutFrameLayout) !is ExercisesDescriptionFragment)
-                            (activity as AppCompatActivity).navigateTo(
+                            (activity as AppCompatActivity).replace(
                                 viewModel.getDescriptionFragment(),
                                 R.id.exerciseLayoutFrameLayout
                             )
@@ -172,6 +173,9 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                     }
                     ExercisesViewModel.ExercisesState.BONUS_SCREEN -> {
                         formBonusStartScreen()
+                    }
+                    ExercisesViewModel.ExercisesState.EXPLANATION -> {
+                        formExplanationView()
                     }
                     else -> throw IOException()
                 }
@@ -438,13 +442,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
         }
 
         if (exercisesViewModel?.chapterPartNumber == 2) {
-
-            val indexOfCurrentExercise =
-                exercisesViewModel?.exercises?.indexOf(exercisesViewModel?.exerciseData)!!
-            val indexOfExerciseScreen =
-                exercisesViewModel?.exercises?.indexOf(exercisesViewModel?.exercises?.first { it is ExerciseData.ExerciseDataScreen.ScreenType2Data })!!
-            val helpIsEnabled = indexOfCurrentExercise < indexOfExerciseScreen
-
             val helpView =
                 exerciseLayoutRelativeLayout.makeView(R.layout.chapter_part_two_help_layout)
                     .apply {
@@ -489,7 +486,24 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
         exerciseLayoutButton.setOnClickListener {
             exercisesViewModel?.startExercisesBonus()
         }
+    }
 
+    private fun formExplanationView(){
+        exercisesViewModel?.let {vm->
+            exerciseLayoutButton.setOnClickListener {
+                vm.checkExerciseResult()
+                vm.setExercisesProgress(ExercisesViewModel.ExercisesState.EXERCISES)
+                println(exercisesViewModel?.exercisesAreCompleted)
+                if(exercisesViewModel?.exercisesAreCompleted == false) {
+                    vm.viewModelScope.launch(Dispatchers.Main) {
+                        delay(
+                            resources.getInteger(R.integer.exercises_slide_anim_duration).toLong()
+                        )
+                        vm.showTransparentLayouts(false)
+                    }
+                }
+            }
+        }
     }
 
     private fun refreshExercisesView() {
@@ -568,6 +582,9 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                         else
                             resources.getString(R.string.next)
                     }
+                    exerciseData is ExerciseData.ExerciseExplanationData -> {
+                        resources.getString(R.string.continue_string)
+                    }
                     else -> throw IOException()
                 }
             )
@@ -580,9 +597,9 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             it.animateProgressBarVisibility(true)
             it.setExercisesProgress(ExercisesViewModel.ExercisesState.EXERCISES)
 
-            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            it.viewModelScope.launch(Dispatchers.Main) {
                 delay(resources.getInteger(R.integer.navigatable_fragment_anim_duration).toLong())
-                it.showBars(false)
+                it.showTransparentLayouts(false)
             }
         }
     }
@@ -602,7 +619,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                             Observer { pair ->
                                 val saved = pair.first
                                 if (saved) {
-                                    (activity as AppCompatActivity).navigateTo(
+                                    (activity as AppCompatActivity).replace(
                                         exercisesViewModel.getExercisesEndFragment(
                                             pair.second
                                         ), R.id.frameLayout

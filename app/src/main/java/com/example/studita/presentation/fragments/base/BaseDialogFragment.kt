@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import com.example.studita.R
+import kotlinx.android.synthetic.main.dialog_alert_layout.*
 
 
 open class BaseDialogFragment(@LayoutRes private val layoutResId: Int) : DialogFragment() {
@@ -32,6 +33,13 @@ open class BaseDialogFragment(@LayoutRes private val layoutResId: Int) : DialogF
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
+    }
+
+    protected fun setText(title: String, subtitle: String, leftButton: String, rightButton: String){
+        dialogAlertTitle.text = title
+        dialogAlertSubtitle.text = subtitle
+        dialogAlertLeftButton.text = leftButton
+        dialogAlertRightButton.text = rightButton
     }
 
 }

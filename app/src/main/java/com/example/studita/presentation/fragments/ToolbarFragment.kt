@@ -8,6 +8,17 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
+import com.example.studita.presentation.fragments.friends.FriendsFragment
+import com.example.studita.presentation.fragments.friends.MyFriendsFragment
+import com.example.studita.presentation.fragments.friends.MyFriendsOfflineModeFragment
+import com.example.studita.presentation.fragments.notifications.NotificationsFragment
+import com.example.studita.presentation.fragments.notifications.NotificationsOfflineModeFragment
+import com.example.studita.presentation.fragments.privacy.PrivacySettingsFragment
+import com.example.studita.presentation.fragments.privacy.PrivacySettingsOfflineModeFragment
+import com.example.studita.presentation.fragments.profile.*
+import com.example.studita.presentation.fragments.profile.edit.CropAvatarFragment
+import com.example.studita.presentation.fragments.profile.edit.EditProfileFragment
+import com.example.studita.presentation.fragments.profile.edit.EditProfileOfflineModeFragment
 import com.example.studita.presentation.fragments.user_statistics.UserStatFragment
 import com.example.studita.presentation.fragments.user_statistics.UserStatOfflineModeFragment
 import com.example.studita.presentation.fragments.user_statistics.UserStatUnLoggedInFragment

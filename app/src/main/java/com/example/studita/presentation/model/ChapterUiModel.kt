@@ -11,7 +11,7 @@ data class ChapterUiModel(
 
 data class ChapterPartUiModel(val chapterPartNumber: Int, val chapterPartName: String)
 
-fun ChapterData.toShapeUiModel() =
-    ChapterUiModel(chapterNumber, title, parts.map { it.toShapeUiModel() })
+fun ChapterData.toChapterUiModel() =
+    ChapterUiModel(chapterNumber, title, parts.map { it.toChapterPartUiModel() })
 
-fun ChapterPartData.toShapeUiModel() = ChapterPartUiModel(number, name)
+fun ChapterPartData.toChapterPartUiModel() = ChapterPartUiModel(number, name)

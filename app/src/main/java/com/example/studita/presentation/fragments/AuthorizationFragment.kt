@@ -13,6 +13,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.studita.App
 import com.example.studita.R
