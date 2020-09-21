@@ -11,8 +11,8 @@ import com.example.studita.utils.spToPx
 
 
 object AvaDrawer {
-    private val imageSize = 56.dpToPx()
-    private val textSize = 28.spToPx()
+    private val imageSize = 56F.dpToPx()
+    private val textSize = 28F.spToPx()
     private val textPaint = Paint()
     private val circlePaint = Paint()
     private var colors = arrayListOf(

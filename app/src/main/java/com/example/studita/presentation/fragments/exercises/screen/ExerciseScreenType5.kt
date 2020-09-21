@@ -51,9 +51,9 @@ class ExerciseScreenType5 : NavigatableFragment(R.layout.exercise_screen_type_5)
                     .apply {
                         val params = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
                         if (idx != 0)
-                            params.leftMargin = 8.dpToPx()
+                            params.leftMargin = 8F.dpToPx()
                         if (idx != platesText.size - 1)
-                            params.rightMargin = 8.dpToPx()
+                            params.rightMargin = 8F.dpToPx()
                         this.layoutParams = params
 
                         (this as TextView).text = text

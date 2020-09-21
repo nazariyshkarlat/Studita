@@ -457,18 +457,15 @@
         <item name="android:background">@drawable/edit_text_background</item>
     </style>
 
-    <style name="CustomProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
-        <item name="android:indeterminateOnly">false</item>
-        <item name="android:max">1000</item>
-        <item name="android:progressDrawable">@drawable/progress_bar</item>
+    <style name="ProgressBarStyle">
+        <item name="progress_background_color">?gray_focused_color</item>
+        <item name="progress_color">?colorAccent</item>
     </style>
 
-    <style name="CustomCircleProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
-        <item name="android:indeterminateOnly">false</item>
-        <item name="android:max">1000</item>
-        <item name="android:scaleX">1.33</item>
-        <item name="android:scaleY">1.33</item>
-        <item name="android:progressDrawable">@drawable/progress_bar_circle</item>
+    <style name="CircleProgressBarStyle">
+        <item name="progress_background_color">?gray_focused_color</item>
+        <item name="progress_color">?colorAccent</item>
+        <item name="is_circle_style">true</item>
     </style>
 
     <style name="FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">

@@ -47,7 +47,7 @@ class SearchViewHolder(
             formPopUp().showAsDropDown(
                 itemView.usersSearchItemFilter,
                 0,
-                (-4).dpToPx(),
+                (-4F).dpToPx(),
                 Gravity.START
             )
         }
@@ -207,7 +207,7 @@ class SearchViewHolder(
     private fun setSearchMargin() {
         val param =
             itemView.usersSearchItemSearchLayout.layoutParams as ViewGroup.MarginLayoutParams
-        param.setMargins(0, 0, 0, 8.dpToPx())
+        param.setMargins(0, 0, 0, 8F.dpToPx())
         itemView.usersSearchItemSearchLayout.layoutParams = param
     }
 

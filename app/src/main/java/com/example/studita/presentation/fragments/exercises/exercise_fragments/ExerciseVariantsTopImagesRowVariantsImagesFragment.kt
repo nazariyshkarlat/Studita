@@ -55,8 +55,8 @@ class ExerciseVariantsTopImagesRowVariantsImagesFragment :
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                     )
-                    params.height = 24.dpToPx()
-                    params.width = 24.dpToPx()
+                    params.height = 24F.dpToPx()
+                    params.width = 24F.dpToPx()
                     emojiView.layoutParams = params
                     emojiView.background = variant.image
                     variantView.addView(emojiView)
@@ -83,8 +83,8 @@ class ExerciseVariantsTopImagesRowVariantsImagesFragment :
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                     )
-                    params.height = 32.dpToPx()
-                    params.width = 32.dpToPx()
+                    params.height = 32F.dpToPx()
+                    params.width = 32F.dpToPx()
                     emojiView.layoutParams = params
                     emojiView.background = it.image
                     exerciseVariantsLinearLayoutTopFlexboxLayout.addView(emojiView)

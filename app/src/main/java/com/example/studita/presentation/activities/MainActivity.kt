@@ -35,8 +35,6 @@ class MainActivity : DefaultActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.frame_layout)
 
-        ChapterCompletedDialogAlertFragment.getInstance(132, "fsdfsd").show(supportFragmentManager, null)
-
         navigationViewModel =
             ViewModelProviders.of(this).get(MainActivityNavigationViewModel::class.java)
 

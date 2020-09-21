@@ -113,6 +113,12 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout) {
 
             if (savedInstanceState == null)
                 viewModel.initFragment()
+            else
+                childFragmentManager.findFragmentById(R.id.exerciseLayoutFrameLayout)?.let {
+                    setBackButtonIcon(
+                        it
+                    )
+                }
         }
     }
 

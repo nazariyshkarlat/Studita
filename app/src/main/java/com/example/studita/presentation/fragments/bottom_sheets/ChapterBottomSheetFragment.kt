@@ -87,7 +87,7 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(){
                         this
                 }
 
-                val titlePadding = ((if(factor > 0F) 16.dpToPx() else 0)  + (16.dpToPx() * factor)).roundToInt()
+                val titlePadding = ((if(factor > 0F) 16F.dpToPx() else 0)  + (16F.dpToPx() * factor)).roundToInt()
                 chapterHeaderTitle.updatePadding(left = titlePadding,right = titlePadding)
                 chapterHeaderCloseButton.alpha = factor
                 chapterHeaderCloseButton.isEnabled = factor > 0
@@ -112,7 +112,7 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(){
                 chapterLayoutNestedScrollView.visibility = View.VISIBLE
                 chapterHeaderTitle.text = chapterUiModel.title
                 chapterHeaderProgressText.text = getProgressText(chapterUiModel)
-                chapterHeaderProgressBar.percentProgress = getProgressPercent(chapterUiModel)
+                chapterHeaderProgressBar.currentProgress = getProgressPercent(chapterUiModel)
             }
         })
     }
@@ -159,7 +159,7 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(){
         super.onStart()
         bottomDrawerDialog?.behavior?.apply {
             topOffset =
-                (resources.getDimension(R.dimen.homeLayoutToolbarHeight) + 24.dpToPx()).toInt()
+                (resources.getDimension(R.dimen.homeLayoutToolbarHeight) + 24F.dpToPx()).toInt()
         }
     }
 
@@ -201,7 +201,7 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(){
 
     private fun updateView(chapterData: ChapterData){
         chapterHeaderProgressText.text = getProgressText(chapterData.toChapterUiModel())
-        chapterHeaderProgressBar.percentProgress = getProgressPercent(chapterData.toChapterUiModel())
+        chapterHeaderProgressBar.currentProgress = getProgressPercent(chapterData.toChapterUiModel())
         fillItems(chapterData)
     }
 

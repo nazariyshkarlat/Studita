@@ -44,8 +44,8 @@ class ExerciseScreenType1 : NavigatableFragment(R.layout.exercise_screen_type_1)
                 FlexboxLayout.LayoutParams.WRAP_CONTENT,
                 FlexboxLayout.LayoutParams.WRAP_CONTENT
             )
-            params.height = 24.dpToPx()
-            params.width = 24.dpToPx()
+            params.height = 24F.dpToPx()
+            params.width = 24F.dpToPx()
             shapeView.layoutParams = params
             shapeView.background = imagesRowUiModel.image
             exerciseScreenType1FlexboxLayout.addView(shapeView)

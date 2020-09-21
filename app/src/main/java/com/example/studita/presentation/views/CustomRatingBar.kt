@@ -20,9 +20,9 @@ class CustomRatingBar @JvmOverloads constructor(
 
     private val starsCount = 5
 
-    private val starHeight = 20.dpToPx()
-    private val starWidth = 20.dpToPx()
-    private val starMargin = 2.dpToPx()
+    private val starHeight = 20F.dpToPx()
+    private val starWidth = 20F.dpToPx()
+    private val starMargin = 2F.dpToPx()
 
     private val viewHeight = starHeight
     private val viewWidth = starWidth * starsCount + (starMargin * 2) * (starsCount - 1)

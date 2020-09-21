@@ -433,8 +433,8 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                     popupWidth = contentView.measuredWidth
                 }.showAsDropDown(
                     activity?.toolbarLayoutRightButton,
-                    -popupWidth - 16.dpToPx(),
-                    (-12).dpToPx(),
+                    -popupWidth - 16F.dpToPx(),
+                    (-12F).dpToPx(),
                     Gravity.END
                 )
             })

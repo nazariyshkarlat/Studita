@@ -80,11 +80,11 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
                     exercisesDetailedStatLayoutScrollView.paddingLeft,
                     exercisesDetailedStatLayoutScrollView.paddingTop,
                     exercisesDetailedStatLayoutScrollView.paddingRight,
-                    16.dpToPx()
+                    16F.dpToPx()
                 )
                 exercisesEndFragmentViewModel?.setScrollViewDividerAndPadding(
                     R.drawable.divider_top_drawable,
-                    16.dpToPx()
+                    16F.dpToPx()
                 )
             }
         }

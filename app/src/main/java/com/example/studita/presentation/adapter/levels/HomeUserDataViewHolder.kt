@@ -30,8 +30,7 @@ class HomeUserDataViewHolder(view: View) :
                 UserUtils.userData.currentLevelXP,
                 getLevelXP(UserUtils.userData.currentLevel)
             )
-            homeLayoutUserDataLevelLayoutProgressBar.percentProgress =
-                UserUtils.userData.currentLevelXP / getLevelXP(UserUtils.userData.currentLevel).toFloat()
+            homeLayoutUserDataLevelLayoutProgressBar.currentProgress = UserUtils.userData.currentLevelXP / getLevelXP(UserUtils.userData.currentLevel).toFloat()
             homeLayoutUserDataXPLayoutStreakDays.text =
                 LanguageUtils.getResourcesRussianLocale(itemView.context)?.getQuantityString(
                     R.plurals.streak_plurals,

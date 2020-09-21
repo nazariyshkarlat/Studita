@@ -39,9 +39,9 @@ class CustomSnackbar @JvmOverloads constructor(
     private var backgroundPaint = Paint()
     private val rectF = RectF()
     private var desiredHeight = 0
-    private val radius = 8.dpToPx().toFloat()
-    private val innerPadding = 16.dpToPx()
-    private val margin = 8.dpToPx()
+    private val radius = 8F.dpToPx().toFloat()
+    private val innerPadding = 16F.dpToPx()
+    private val margin = 8F.dpToPx()
     private var bottomMarginExtra = 0
 
     private lateinit var textLayout: StaticLayout
@@ -50,7 +50,7 @@ class CustomSnackbar @JvmOverloads constructor(
     private var text: String = ""
     private var textPaint = TextPaint().apply {
         color = ContextCompat.getColor(context, R.color.white)
-        textSize = 16.dpToPx().toFloat()
+        textSize = 16F.dpToPx().toFloat()
         textAlign = Paint.Align.LEFT
         isAntiAlias = true
         typeface = ResourcesCompat.getFont(context, R.font.roboto_regular)

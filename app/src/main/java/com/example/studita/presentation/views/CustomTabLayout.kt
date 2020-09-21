@@ -22,7 +22,7 @@ class CustomTabLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr), ViewPager.OnPageChangeListener {
 
-    private val padding = 8.dpToPx()
+    private val padding = 8F.dpToPx()
     private val textColor = ThemeUtils.getSecondaryColor(context)
     private val typeface = ResourcesCompat.getFont(context, R.font.roboto_regular)
     private val textSize = 16F

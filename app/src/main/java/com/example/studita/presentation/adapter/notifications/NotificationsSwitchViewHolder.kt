@@ -22,7 +22,7 @@ class NotificationsSwitchViewHolder(view: View) :
                 PrefsUtils.setNotificationsMode(notificationsLayoutSwitchItemSwitch.isChecked)
             }
             updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                this.bottomMargin = 12.dpToPx()
+                this.bottomMargin = 12F.dpToPx()
             }
         }
     }

@@ -65,7 +65,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
 
         val flexbox = formFlexbox().apply {
             layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            setPadding(16.dpToPx(), 16.dpToPx(), 16.dpToPx(), 16.dpToPx())
+            setPadding(16F.dpToPx(), 16F.dpToPx(), 16F.dpToPx(), 16F.dpToPx())
             background = ContextCompat.getDrawable(context, R.drawable.main_blocks_rectangle)
         }
 
@@ -75,7 +75,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 gravity = Gravity.CENTER
                 text = numberText.toString()
-                setPadding(16.dpToPx(), 14.dpToPx(), 16.dpToPx(), 14.dpToPx())
+                setPadding(16F.dpToPx(), 14F.dpToPx(), 16F.dpToPx(), 14F.dpToPx())
                 this.formTopChildItem(answers, index)
             }
             flexbox.addView(item)
@@ -90,7 +90,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
         val flexbox = formFlexbox().apply {
             alignContent = AlignContent.FLEX_END
             alignItems = AlignItems.FLEX_END
-            setPadding(16.dpToPx(), 32.dpToPx(), 16.dpToPx(), 0)
+            setPadding(16F.dpToPx(), 32F.dpToPx(), 16F.dpToPx(), 0)
         }
 
         correctAnswers.forEach {
@@ -99,7 +99,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 gravity = Gravity.CENTER
                 background = ContextCompat.getDrawable(context, R.drawable.arrange_numbers_bottom_item_background)
-                setPadding(16.dpToPx(), 14.dpToPx(), 16.dpToPx(), 14.dpToPx())
+                setPadding(16F.dpToPx(), 14F.dpToPx(), 16F.dpToPx(), 14F.dpToPx())
                 text = it.toString()
                 setChildOnTouch()
             }
@@ -300,7 +300,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
         clipToPadding = false
         justifyContent = JustifyContent.CENTER
         setDividerDrawable(GradientDrawable().apply {
-            setSize(16.dpToPx(), 16.dpToPx())
+            setSize(16F.dpToPx(), 16F.dpToPx())
         })
         setShowDivider(FlexboxLayout.SHOW_DIVIDER_MIDDLE)
     }

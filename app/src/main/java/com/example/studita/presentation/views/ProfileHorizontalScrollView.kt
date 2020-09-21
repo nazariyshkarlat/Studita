@@ -45,9 +45,9 @@ class ProfileHorizontalScrollView @JvmOverloads constructor(
         contentView.children.forEachIndexed { index, view ->
             val params = view.layoutParams as MarginLayoutParams
             if (index != 0)
-                params.marginStart = 8.dpToPx()
+                params.marginStart = 8F.dpToPx()
             if (index != contentView.childCount - 1)
-                params.marginEnd = 8.dpToPx()
+                params.marginEnd = 8F.dpToPx()
             params.width = (ScreenUtils.getScreenWidth() * 0.75).toInt()
             view.layoutParams = params
         }

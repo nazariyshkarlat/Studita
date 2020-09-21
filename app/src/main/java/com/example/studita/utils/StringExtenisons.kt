@@ -8,7 +8,7 @@ import com.example.studita.presentation.views.CustomTypefaceSpan
 
 fun String.createSpannableString(
     color: Int? = null,
-    fontSize: Int? = null,
+    fontSize: Float? = null,
     typeFace: Typeface? = null
 ): SpannableString {
     val span = SpannableString(this)

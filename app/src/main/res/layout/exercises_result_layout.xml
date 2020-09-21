@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/exercisesResultLayoutScrollView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -43,11 +44,12 @@
                 android:textAlignment="center"
                 android:textAllCaps="true" />
 
-            <com.example.studita.presentation.views.CustomProgressBar
+            <com.example.studita.presentation.views.ProgressBar
                 android:id="@+id/exercisesResultLayoutProgressBar"
-                style="@style/CustomCircleProgressBar"
+                style="@style/CircleProgressBarStyle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                app:stroke_width="8dp"/>
 
         </FrameLayout>
 

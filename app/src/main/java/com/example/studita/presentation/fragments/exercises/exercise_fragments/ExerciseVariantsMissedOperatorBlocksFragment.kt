@@ -48,7 +48,7 @@ class ExerciseVariantsMissedOperatorBlocksFragment : ExerciseVariantsFragment(R.
             exerciseVariantsMissedOperatorBlocksLayoutVariantsLinearLayout.updateLayoutParams<FrameLayout.LayoutParams> {
                 height = exerciseVariantsMissedOperatorBlocksLayoutVariantsLinearLayout.measuredHeight+
                         exerciseVariantsMissedOperatorBlocksLayoutTopLinearLayout.measuredHeight +
-                        32.dpToPx()
+                        32F.dpToPx()
             }
         }
     }

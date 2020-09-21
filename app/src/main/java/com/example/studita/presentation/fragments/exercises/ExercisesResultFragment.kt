@@ -1,7 +1,5 @@
 package com.example.studita.presentation.fragments.exercises
 
-import android.animation.AnimatorSet
-import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.OneShotPreDrawListener
@@ -13,7 +11,7 @@ import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.model.ExerciseResultAnimation
 import com.example.studita.presentation.view_model.ExercisesEndFragmentViewModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import com.example.studita.presentation.views.CustomProgressBar
+import com.example.studita.presentation.views.ProgressBar
 import com.example.studita.utils.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -72,13 +70,13 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
             if (isScrollable) {
                 exercisesEndFragmentViewModel?.setScrollViewDividerAndPadding(
                     R.drawable.divider_top_drawable,
-                    8.dpToPx()
+                    8F.dpToPx()
                 )
                 exercisesResultLayoutScrollView.setPadding(
                     exercisesResultLayoutScrollView.paddingLeft,
-                    16.dpToPx(),
+                    16F.dpToPx(),
                     exercisesResultLayoutScrollView.paddingRight,
-                    16.dpToPx()
+                    16F.dpToPx()
                 )
             }
         }
@@ -177,9 +175,8 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
         exercisesBonusCorrectCount: Int
     ) {
 
-        exercisesResultLayoutProgressBar?.postExt<CustomProgressBar> {
-            exercisesResultLayoutProgressBar.percentProgress =
-                LevelUtils.getLevelProgressPercent(userData)
+        exercisesResultLayoutProgressBar?.postExt<ProgressBar> {
+            exercisesResultLayoutProgressBar.currentProgress = LevelUtils.getLevelProgressPercent(userData)
             startAnimation(userData, percent, viewModel.isTraining, exercisesBonusCorrectCount)
         }
         exercisesResultLayoutProgressBarText.text = resources.getString(
@@ -196,7 +193,7 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
     private fun animateLevelUp(onAnimationEnd: () -> Unit) {
         viewLifecycleOwner.lifecycleScope.launch {
             delay(200)
-            exercisesResultLayoutProgressBar.clearProgress()
+            exercisesResultLayoutProgressBar.currentProgress = 0F
             exercisesResultLayoutProgressBarText.text = resources.getString(R.string.new_level)
             exercisesResultLayoutProgressBarText.animateFadeIn()
             updateTextLevels(exercisesResultLayoutCurrentLevel.text.toString().toInt() + 1)

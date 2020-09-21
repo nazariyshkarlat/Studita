@@ -66,9 +66,9 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) 
 
         recyclerViewLayoutRecyclerView.setPadding(
             0,
-            resources.getDimension(R.dimen.toolbarHeight).toInt() + 12.dpToPx(),
+            resources.getDimension(R.dimen.toolbarHeight).toInt() + 12F.dpToPx(),
             0,
-            12.dpToPx()
+            12F.dpToPx()
         )
 
         viewModel.notificationsState.observe(

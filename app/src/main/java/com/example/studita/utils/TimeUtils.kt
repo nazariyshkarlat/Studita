@@ -86,7 +86,7 @@ object TimeUtils {
             secondarySpans.add(
                 secondaryWord.createSpannableString(
                     secondaryColor,
-                    16,
+                    16F,
                     ResourcesCompat.getFont(context, R.font.roboto_regular)
                 )
             )

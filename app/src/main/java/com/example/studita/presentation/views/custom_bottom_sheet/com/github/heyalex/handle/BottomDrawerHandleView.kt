@@ -29,7 +29,7 @@ class BottomDrawerHandleView : View, TranslationUpdater {
     private var tempRect: RectF = RectF()
 
     private var paint = Paint()
-    private var thickness = 6.dpToPx().toFloat()
+    private var thickness = 6F.dpToPx().toFloat()
 
     constructor(context: Context) : this(context, null)
 

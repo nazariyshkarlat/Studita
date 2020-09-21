@@ -84,10 +84,10 @@ class ExercisesDescription1Fragment :
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            params.height = 24.dpToPx()
-            params.width = 24.dpToPx()
+            params.height = 24F.dpToPx()
+            params.width = 24F.dpToPx()
             if (i != imgCount - 1)
-                params.marginEnd = 12.dpToPx()
+                params.marginEnd = 12F.dpToPx()
             shapeView.layoutParams = params
             shapeView.background =
                 ContextCompat.getDrawable(child.context, R.drawable.slightly_smiling_face)

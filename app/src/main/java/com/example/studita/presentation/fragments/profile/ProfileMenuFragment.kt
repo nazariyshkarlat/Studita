@@ -133,8 +133,8 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
                             this@ItemView.profileMenuItemIconLayout.post {
                                 this.updateLayoutParams<FrameLayout.LayoutParams> {
                                     gravity = Gravity.TOP or Gravity.END
-                                    height = 12.dpToPx()
-                                    width = 12.dpToPx()
+                                    height = 12F.dpToPx()
+                                    width = 12F.dpToPx()
                                 }
                             }
                         }
@@ -159,7 +159,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
 
     private fun View.setListDividers(position: Int) {
         if (position == ListItems.MY_PROFILE.ordinal || position == ListItems.PRIVACY.ordinal) {
-            setPadding(0, 12.dpToPx(), 0, 0)
+            setPadding(0, 12F.dpToPx(), 0, 0)
             background =
                 androidx.core.content.ContextCompat.getDrawable(
                     context,
@@ -167,7 +167,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
                 )
         }
         if (position == ListItems.FRIENDS.ordinal) {
-            setPadding(0, 0, 0, 12.dpToPx())
+            setPadding(0, 0, 0, 12F.dpToPx())
         }
     }
 

@@ -41,9 +41,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp" />
 
-            <com.example.studita.presentation.views.CustomProgressBar
+            <com.example.studita.presentation.views.ProgressBar
                 android:id="@+id/chapterItemProgressBar"
-                style="@style/CustomProgressBar"
+                style="@style/ProgressBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginTop="14dp" />

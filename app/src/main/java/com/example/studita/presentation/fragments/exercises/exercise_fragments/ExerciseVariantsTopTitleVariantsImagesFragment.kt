@@ -57,8 +57,8 @@ class ExerciseVariantsTopTitleVariantsImagesFragment :
                         FlexboxLayout.LayoutParams.WRAP_CONTENT,
                         FlexboxLayout.LayoutParams.WRAP_CONTENT
                     )
-                    params.height = 24.dpToPx()
-                    params.width = 24.dpToPx()
+                    params.height = 24F.dpToPx()
+                    params.width = 24F.dpToPx()
                     emojiView.layoutParams = params
                     emojiView.background = variant.image
                     variantView.addView(emojiView)

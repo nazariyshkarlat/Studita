@@ -61,7 +61,7 @@ class InterestingExplanation1Fragment :
 
     private fun formView(textParts: List<String>) {
         val textColor = context?.let { ThemeUtils.getPrimaryColor(it) } ?: 0
-        val margin = 16.dpToPx()
+        val margin = 16F.dpToPx()
         textParts.forEachIndexed { index, s ->
             val params = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,

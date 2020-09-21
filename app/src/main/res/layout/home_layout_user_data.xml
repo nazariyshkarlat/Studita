@@ -67,12 +67,12 @@
             android:layout_toStartOf="@+id/homeLayoutUserDataLevelLayoutNextLevel"
             android:layout_toEndOf="@+id/homeLayoutUserDataLevelLayoutCurrentLevel">
 
-            <com.example.studita.presentation.views.CustomProgressBar
+            <com.example.studita.presentation.views.ProgressBar
                 android:id="@+id/homeLayoutUserDataLevelLayoutProgressBar"
-                style="@style/CustomProgressBar"
+                style="@style/ProgressBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="6dp"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"/>
 
         </FrameLayout>
 

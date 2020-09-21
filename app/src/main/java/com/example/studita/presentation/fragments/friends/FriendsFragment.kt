@@ -37,9 +37,9 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
 
         recyclerViewLayoutRecyclerView.setPadding(
             0,
-            resources.getDimension(R.dimen.toolbarHeight).toInt() + 10.dpToPx(),
+            resources.getDimension(R.dimen.toolbarHeight).toInt() + 10F.dpToPx(),
             0,
-            10.dpToPx()
+            10F.dpToPx()
         )
 
         friendsFragmentViewModel.searchResultState.observe(viewLifecycleOwner, Observer { pair ->
@@ -318,7 +318,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
 
     private fun setProgressMargin() {
         val param = recyclerViewLayoutProgressBar.layoutParams as ViewGroup.MarginLayoutParams
-        param.setMargins(0, 64.dpToPx(), 0, 0)
+        param.setMargins(0, 64F.dpToPx(), 0, 0)
         recyclerViewLayoutProgressBar.layoutParams = param
     }
 

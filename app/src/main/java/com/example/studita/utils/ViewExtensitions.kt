@@ -24,13 +24,12 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.studita.presentation.animations.ProgressBarAnimation
 import com.example.studita.presentation.draw.AvaDrawer
 import com.example.studita.presentation.listeners.FabScrollImpl
 import com.example.studita.presentation.listeners.FabScrollListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListenerImpl
-import com.example.studita.presentation.views.CustomProgressBar
+import com.example.studita.presentation.views.ProgressBar
 import kotlin.reflect.KClass
 
 
@@ -186,34 +185,6 @@ fun View.getAppCompatActivity(): AppCompatActivity? {
         context = context.baseContext
     }
     return null
-}
-
-fun CustomProgressBar.animateProgress(
-    toPercent: Float,
-    onAnimEnd: () -> Unit = {},
-    duration: Long = 300L,
-    delay: Long = 0L,
-    fromPercent: Float = this.percentProgress
-) {
-    val progressAnimation = ProgressBarAnimation(
-        this,
-        fromPercent,
-        toPercent
-    )
-    progressAnimation.startOffset = delay
-    progressAnimation.interpolator =
-        androidx.interpolator.view.animation.FastOutSlowInInterpolator()
-    progressAnimation.duration = duration
-    progressAnimation.setAnimationListener(object : Animation.AnimationListener {
-        override fun onAnimationRepeat(animation: Animation?) {}
-        override fun onAnimationEnd(animation: Animation?) {
-            this@animateProgress.clearAnimation()
-            onAnimEnd.invoke()
-        }
-
-        override fun onAnimationStart(animation: Animation?) {}
-    })
-    this.startAnimation(progressAnimation)
 }
 
 fun <T : View> ViewGroup.allViewsOfTypeT(type: KClass<T>, f: (T) -> Unit) {

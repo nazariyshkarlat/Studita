@@ -69,8 +69,8 @@ class ExerciseVariantsTopLinearFragment :
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            params.height = 32.dpToPx()
-            params.width = 32.dpToPx()
+            params.height = 32F.dpToPx()
+            params.width = 32F.dpToPx()
             emojiView.layoutParams = params
             emojiView.background = exerciseImagesRowUiModel.image
             exerciseVariantsLinearLayoutTopFlexboxLayout.addView(emojiView)

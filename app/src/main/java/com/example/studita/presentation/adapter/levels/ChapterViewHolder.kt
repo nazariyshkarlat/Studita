@@ -32,7 +32,7 @@ class ChapterViewHolder(view: View, val count: Int) :
                     model.chapterPartsCount,
                     context
                 )
-                chapterItemProgressBar.percentProgress = LevelUtils.getChapterProgressPercent(
+                chapterItemProgressBar.currentProgress  = LevelUtils.getChapterProgressPercent(
                     UserUtils.userData.completedParts[model.chapterNumber - 1],
                     model.chapterPartsCount
                 )
@@ -76,7 +76,7 @@ class ChapterViewHolder(view: View, val count: Int) :
                 chapterItemProgressText.visibility = View.VISIBLE
                 chapterItemProgressBar.visibility = View.VISIBLE
                 itemView.chapterItemCardView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = 8.dpToPx()
+                    bottomMargin = 8F.dpToPx()
                 }
                 chapterItemCardView.isClickable = true
                 fadeTop = false
