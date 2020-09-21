@@ -52,5 +52,9 @@ class UserStatisticsInteractorImpl(private val repository: UserStatisticsReposit
         return repository.getUserStatisticsRecords()
     }
 
+    override suspend fun clearUserStaticsRecords() {
+        repository.clearUserStatisticsRecords()
+    }
+
 
 }

@@ -33,7 +33,7 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail {
             .setInputData(data.build())
             .build()
         val workManager = WorkManager.getInstance(NetworkModule.context)
-        workManager.enqueueUniqueWork(SYNC_SUBSCRIBE_EMAIL_ID, ExistingWorkPolicy.REPLACE, work)
+        workManager.enqueueUniqueWork("$SYNC_SUBSCRIBE_EMAIL_ID ${userIdTokenData.userId}", ExistingWorkPolicy.REPLACE, work)
     }
 
     class SubscribeEmailWorker(val context: Context, val params: WorkerParameters) :

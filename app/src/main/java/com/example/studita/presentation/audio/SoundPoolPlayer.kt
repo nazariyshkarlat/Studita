@@ -11,7 +11,7 @@ class SoundPoolPlayer(val context: Context) {
     fun playShortResource(piResource: Int) {
         shortPlayer?.load(context, piResource, 1)?.let {
             sounds.put(
-                R.raw.drum_roll,
+                piResource,
                 it
             )
         }

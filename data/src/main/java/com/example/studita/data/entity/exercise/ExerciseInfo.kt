@@ -83,8 +83,9 @@ sealed class ExerciseInfo {
     data class ExerciseType15Info(
         @SerializedName("title") val title: String,
         @SerializedName("subtitle") val subtitle: String,
-        @SerializedName("variants") val variants: List<String>
-    ) : ExerciseInfo()
+        @SerializedName("variants") val variants: List<String>,
+        @SerializedName("count_to_select") val countToSelect: Int
+        ) : ExerciseInfo()
 
     data class ExerciseType16Info(
         @SerializedName("title_parts") val titleParts: List<String>,
@@ -134,8 +135,8 @@ sealed class ExerciseInfo {
 
     data class ExerciseType25Info(
         @SerializedName("title") val title: String,
-        @SerializedName("subtitle") val subtitle: List<String>,
-        @SerializedName("variants") val variants: List<List<String>>
+        @SerializedName("subtitle") val subtitle: String,
+        @SerializedName("variants") val variants: List<String>
     ) : ExerciseInfo()
 
     data class ExerciseType26Info(

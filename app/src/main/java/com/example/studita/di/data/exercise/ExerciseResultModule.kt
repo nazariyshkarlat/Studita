@@ -9,6 +9,8 @@ import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.exercises.ExerciseResultInteractor
 import com.example.studita.domain.interactor.exercises.ExerciseResultInteractorImpl
 import com.example.studita.domain.repository.ExerciseResultRepository
+import com.example.studita.domain.service.SyncExercisesReports
+import com.example.studita.service.SyncExercisesReportsImpl
 
 
 object ExerciseResultModule {
@@ -43,7 +45,8 @@ object ExerciseResultModule {
 
     private fun makeExerciseResultInteractor(repository: ExerciseResultRepository) =
         ExerciseResultInteractorImpl(
-            repository
+            repository,
+            SyncExercisesReportsImpl()
         )
 
     private fun getExerciseResultDataStore() =

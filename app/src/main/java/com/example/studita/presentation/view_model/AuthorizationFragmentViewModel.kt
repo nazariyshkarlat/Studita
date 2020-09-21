@@ -126,12 +126,15 @@ class AuthorizationFragmentViewModel : ViewModel() {
                     is SignUpStatus.UserAlreadyExists -> authorizationState.postValue(
                         AuthorizationResult.UserAlreadyExists
                     )
-                    is SignUpStatus.Success -> authorizationState.postValue(
-                        AuthorizationResult.SignUpSuccess(
-                            dates.first,
-                            dates.second
+                    is SignUpStatus.Success -> {
+                        userStatisticsInteractor.clearUserStaticsRecords()
+                        authorizationState.postValue(
+                            AuthorizationResult.SignUpSuccess(
+                                dates.first,
+                                dates.second
+                            )
                         )
-                    )
+                    }
                 }
             }
         }

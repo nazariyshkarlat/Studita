@@ -1,39 +1,37 @@
 <resources xmlns:http="http://schemas.android.com/apk/res-auto">
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorAccent10">@color/blue10</item>
-        <item name="colorAccent14">@color/blue14</item>
-        <item name="colorAccent26">@color/blue26</item>
-        <item name="colorAccent">@color/blue</item>
         <item name="popupMenuStyle">@style/PopupMenu</item>
-        <item name="colorPrimary">@color/gray11</item>
+        <item name="colorPrimary">@color/black</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
-        <item name="android:navigationBarColor">@color/gray11</item>
-        <item name="android:statusBarColor">@color/gray11</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
         <item name="android:colorEdgeEffect">@color/gray80</item>
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
-        <item name="splash_screen_color">@color/gray11</item>
+        <item name="splash_screen_color">@color/black</item>
         <item name="splash_screen_text_color">@color/white34</item>
         <item name="colorControlNormal">?secondary_color</item>
         <item name="android:scrollbarSize">4dp</item>
     </style>
 
     <style name="LightTheme" parent="AppTheme">
-        <item name="main_blocks_color">@color/black6</item>
-        <item name="disabled_color">@color/black6</item>
-        <item name="popup_background_color">@color/grayF0_98</item>
-        <item name="next_level_color">@color/black10</item>
-        <item name="progress_bar_color">@color/black10</item>
-        <item name="primary_color">@color/black87</item>
-        <item name="secondary_color">@color/black50</item>
+        <item name="colorAccent10">@color/blue10_light_theme</item>
+        <item name="colorAccent14">@color/blue14_light_theme</item>
+        <item name="colorAccent26">@color/blue26_light_theme</item>
+        <item name="colorAccent">@color/blue_light_theme</item>
+        <item name="main_blocks_color">@color/background_gray_light_theme</item>
+        <item name="disabled_color">@color/disabled_gray_color_light_theme</item>
+        <item name="modal_windows_color">@color/modal_windows_gray_light_theme_color</item>
+        <item name="primary_color">@color/black</item>
+        <item name="secondary_color">@color/secondary_gray_color_light_theme</item>
         <item name="blue_transparent_button_color">?colorAccent10</item>
         <item name="colorControlHighlight">@color/black6</item>
-        <item name="gray_focused_color">@color/black10</item>
+        <item name="gray_focused_color">@color/focused_gray_color_light_theme</item>
+        <item name="bottom_navigation_color">@color/bottom_navigation_gray_light_theme_color</item>
         <item name="page_background_color">@color/white</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="exercise_variant_button_divider_color">@color/black20</item>
-        <item name="dialogs_color">@color/white</item>
         <item name="swipe_refresh_layout_background_color">@color/white</item>
         <item name="press_view_press_alpha">0.64</item>
         <item name="press_view_press_alpha_lighter">0.3</item>
@@ -42,25 +40,31 @@
         <item name="android:scrollbarThumbHorizontal">?attr/gray_focused_color</item>
         <item name="grid_divider_color">@color/black30</item>
         <item name="android:scrollbarThumbVertical">?attr/gray_focused_color</item>
+        <item name="bottom_sheet_color">@color/bottom_sheet_gray_light_theme_color</item>
+        <item name="green_color">@color/green_light_theme</item>
+        <item name="red_color">@color/red_light_theme</item>
+        <item name="red_secondary_color">@color/red_secondary_light_theme</item>
     </style>
 
     <style name="DarkTheme" parent="AppTheme">
-        <item name="secondary_color">@color/white50</item>
-        <item name="primary_color">@color/white87</item>
-        <item name="progress_bar_color">@color/white12</item>
-        <item name="next_level_color">@color/white12</item>
-        <item name="android:statusBarColor">@color/gray11</item>
-        <item name="page_background_color">@color/gray11</item>
+        <item name="colorAccent10">@color/blue10_dark_theme</item>
+        <item name="colorAccent14">@color/blue14_dark_theme</item>
+        <item name="colorAccent26">@color/blue26_dark_theme</item>
+        <item name="colorAccent">@color/blue_dark_theme</item>
+        <item name="secondary_color">@color/secondary_gray_color_dark_theme</item>
+        <item name="primary_color">@color/white</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="page_background_color">@color/black</item>
         <item name="blue_transparent_button_color">?colorAccent14</item>
-        <item name="popup_background_color">@color/gray24_98</item>
-        <item name="main_blocks_color">@color/white8</item>
-        <item name="disabled_color">@color/white8</item>
-        <item name="gray_focused_color">@color/white12</item>
+        <item name="modal_windows_color">@color/modal_windows_gray_dark_theme_color</item>
+        <item name="main_blocks_color">@color/background_gray_dark_theme</item>
+        <item name="disabled_color">@color/disabled_gray_color_dark_theme</item>
+        <item name="bottom_navigation_color">@color/bottom_navigation_gray_dark_theme_color</item>
+        <item name="gray_focused_color">@color/focused_gray_color_dark_theme</item>
         <item name="colorControlHighlight">@color/white8</item>
-        <item name="android:navigationBarColor">@color/gray11</item>
+        <item name="android:navigationBarColor">@color/black</item>
         <item name="exercise_variant_button_divider_color">@color/white24</item>
         <item name="swipe_refresh_layout_background_color">@color/black</item>
-        <item name="dialogs_color">@color/gray20</item>
         <item name="press_view_press_alpha">0.68</item>
         <item name="press_view_press_alpha_lighter">0.34</item>
         <item name="switch_inactive_thumb_color">@color/gray8</item>
@@ -68,6 +72,10 @@
         <item name="android:scrollbarThumbHorizontal">?attr/gray_focused_color</item>
         <item name="grid_divider_color">@color/white30</item>
         <item name="android:scrollbarThumbVertical">?attr/gray_focused_color</item>
+        <item name="bottom_sheet_color">@color/bottom_sheet_gray_dark_theme_color</item>
+        <item name="green_color">@color/green_dark_theme</item>
+        <item name="red_color">@color/red_dark_theme</item>
+        <item name="red_secondary_color">@color/red_secondary_light_theme</item>
     </style>
 
     <!-- Fonts -->
@@ -145,7 +153,7 @@
 
     <style name="Regular14Green" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">@color/green</item>
+        <item name="android:textColor">?green_color</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -247,13 +255,13 @@
 
     <style name="Regular18Green" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">@color/green</item>
+        <item name="android:textColor">?red_color</item>
         <item name="android:textSize">18sp</item>
     </style>
 
     <style name="Medium18Green" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">@color/green</item>
+        <item name="android:textColor">?green_color</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -283,18 +291,18 @@
 
     <style name="Regular16Red" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">@color/red</item>
+        <item name="android:textColor">?red_color</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Regular16Green" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">@color/green</item>
+        <item name="android:textColor">?green_color</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="ErrorText" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/red</item>
+        <item name="android:textColor">?red_color</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textSize">14sp</item>
     </style>
@@ -380,7 +388,7 @@
 
     <style name="RedTextButton16" parent="TextButton">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/red</item>
+        <item name="android:textColor">?red_color</item>
     </style>
 
     <style name="BlueTextButton14" parent="TextButton">
@@ -431,8 +439,8 @@
     </style>
     <!-- EditTexts -->
     <style name="EditText" parent="Widget.AppCompat.EditText">
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColorHint">?attr/secondary_color</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
@@ -485,23 +493,6 @@
         <item name="android:layout_gravity">center</item>
         <item name="rippleColor">@color/white8</item>
         <item name="cardElevation">0dp</item>
-    </style>
-
-    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/AppModalStyle</item>
-        <item name="android:colorEdgeEffect">@color/gray80</item>
-        <item name="colorAccent">@color/blue</item>
-    </style>
-
-    <style name="ShapeAppearance.BottomSheet" parent="ShapeAppearance.MaterialComponents">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">16dp</item>
-        <item name="cornerSizeTopRight">16dp</item>
-    </style>
-
-    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="backgroundTint">?attr/dialogs_color</item>
-        <item name="shapeAppearance">@style/ShapeAppearance.BottomSheet</item>
     </style>
 
     <style name="BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
@@ -571,4 +562,10 @@
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
+    <style name="CheckBoxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:background">@null</item>
+        <item name="android:clickable">false</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+    </style>
 </resources>

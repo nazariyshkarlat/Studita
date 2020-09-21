@@ -15,67 +15,72 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp" />
 
-    <LinearLayout
-        android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutTopLinearLayout"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="@drawable/main_blocks_rectangle">
+        android:layout_marginEnd="16dp">
+        <LinearLayout
+            android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutTopLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-        <TextView
-            android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutTitleFirstPart"
-            style="@style/Medium32"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <View
-            android:layout_width="42dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/main_blocks_rectangle"/>
-
-        <TextView
-            android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutTitleSecondPart"
-            style="@style/Medium32"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutVariantsLinearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutLeftVariant"
-            style="@style/Medium18"
-            android:layout_width="42dp"
-            android:layout_height="48dp"
-            android:textAlignment="center"
-            android:background="@drawable/exercise_variant_transition"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginEnd="16dp"/>
+            android:background="@drawable/main_blocks_rectangle">
 
-        <TextView
-            android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutRightVariant"
-            style="@style/Medium18"
-            android:layout_width="42dp"
-            android:layout_height="48dp"
-            android:textAlignment="center"
-            android:background="@drawable/exercise_variant_transition"
-            android:gravity="center"/>
+            <TextView
+                android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutTitleFirstPart"
+                style="@style/Medium32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+            <View
+                android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutEmptyBlock"
+                android:layout_width="42dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/gray_focused_color_rectangle"/>
+
+            <TextView
+                android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutTitleSecondPart"
+                style="@style/Medium32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutVariantsLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center|bottom">
+
+            <TextView
+                android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutLeftVariant"
+                style="@style/Medium18"
+                android:layout_width="42dp"
+                android:layout_height="48dp"
+                android:textAlignment="center"
+                android:background="@drawable/exercise_variant_transition"
+                android:gravity="center"
+                android:layout_marginEnd="16dp"/>
+
+            <TextView
+                android:id="@+id/exerciseVariantsMissedOperatorBlocksLayoutRightVariant"
+                style="@style/Medium18"
+                android:layout_width="42dp"
+                android:layout_height="48dp"
+                android:textAlignment="center"
+                android:background="@drawable/exercise_variant_transition"
+                android:gravity="center"/>
+
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

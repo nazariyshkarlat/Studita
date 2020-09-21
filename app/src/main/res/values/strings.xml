@@ -48,8 +48,9 @@
     <string name="try_again">Попробовать снова</string>
     <string name="to_settings">Перейти в настройки</string>
     <string name="to_offline_mode">Перейти в оффлайн режим</string>
-    <string name="incorrect_time_layout_title">Упс! Кажется, время на вашем телефоне установлено неправильно (%1$s)</string>
-    <string name="incorrect_time_layout_subtitle">Пожалуйста, сделайте ваше время автоматическим и нажмите \"Попробовать снова\"</string>
+    <string name="incorrect_time_layout_title">Что-то пошло не так</string>
+    <string name="incorrect_time_layout_subtitle_first_part">Кажется, время на вашем телефоне установлено неправильно.</string>
+    <string name="incorrect_time_layout_subtitle_second_part">Пожалуйста, сделайте ваше время автоматическим и нажмите \"Попробовать снова\".</string>
     <string name="true_variant">Правда</string>
     <string name="and">и</string>
     <string name="false_variant">Неправда</string>
@@ -111,9 +112,10 @@
     <string name="hours">ч</string>
     <string name="minutes">мин</string>
     <string name="seconds">сек</string>
-    <string name="exercises_description_title">Введение в задание</string>
+    <string name="exercises_description_title">Введение</string>
     <string name="interesting_explanation_title">Объяснение</string>
     <string name="interesting_explanation_rating">Понравился фокус?</string>
+    <string name="interesting_explanation_rating_thanks">Спасибо за отзыв!</string>
     <string name="continue_string">Продолжить</string>
     <string name="exercise_image_0_count">Ни один эмоджи</string>
     <string name="exercises_XP_result">+%1$d XP</string>
@@ -134,7 +136,7 @@
     <string name="yesterday">Вчера</string>
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
-    <string name="account">Профиль</string>
+    <string name="account">Аккаунт</string>
     <string name="edit_profile">Редактировать профиль</string>
     <string name="cancel_friendship_request">Отменить запрос</string>
     <string name="profile">Профиль</string>
@@ -164,7 +166,7 @@
     <string name="edit_text_counter_template">%1$d/%2$d</string>
     <string name="privacy_settings_first_title">Принимать приглашения на дуэли от</string>
     <string name="privacy_settings_second_title">Показывать мой профиль в рейтингах</string>
-    <string name="privacy_settings_third_title">Сделать мой профиль видимым</string>
+    <string name="privacy_settings_third_title">Показывать мой профиль в поиске</string>
     <string name="privacy_settings_first_from_my_friends">Моих друзей</string>
     <string name="privacy_settings_first_from_nobody">Никого</string>
     <string name="privacy_settings_first_from_nobody_except">Никого, кроме %1$s</string>
@@ -175,6 +177,7 @@
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="search">Поиск</string>
+    <string name="search_hint">Поиск среди пользователей</string>
     <string name="sort">Сортировать</string>
     <string name="reject">Отклонить</string>
     <string name="sort_by_A_Z">По имени (От A до Z)</string>
@@ -205,7 +208,7 @@
     <string name="edit_profile_remove_photo_dialog_alert_title">Удалить фото?</string>
     <string name="edit_profile_remove_photo_dialog_alert_subtitle">Вы уверены, что хотите удалить фото?</string>
     <string name="global_search">Глобальный поиск</string>
-    <string name="enter_name_to_search">Введите имя для поиска</string>
+    <string name="enter_name_to_search">Введите имя, чтобы начать поиск</string>
     <string name="global_search_no_results">Результатов не найдено. Попробуйте другое имя</string>
     <string name="friends_not_found">Результатов среди ваших друзей не найдено. Поробуйте другое имя</string>
     <string name="notifications_are_empty">Список ваших уведомлений пуст</string>
@@ -218,7 +221,7 @@
     <string name="privacy_exceptions_dialog_alert_title">Добавить исключения</string>
     <string name="chapter_completed_dialog_alert_title">Поздравляем!</string>
     <string name="chapter_completed_dialog_alert_subtitle_template">Вы полностью завершили тему \"%1$s\"</string>
-    <string name="chapter_completed_dialog_alert_counter_bottom_text">заданий позади</string>
+    <string name="chapter_completed_dialog_alert_counter_bottom_text">упражнений позади</string>
     <string name="notification_type_duel_invite_text">вызвал вас на дуэль</string>
     <string name="notification_duel_missed_call_subtitle">вызывал вас на дуэль</string>
     <string name="notification_type_request_friendship">хочет добавить вас в друзья</string>
@@ -234,6 +237,15 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="explanation">Объяснение</string>
+    <string name="report_a_bug">Сообщить об ошибке</string>
+    <string name="exercise_report_bug_first_item">"В примере есть ошибка "</string>
+    <string name="exercise_report_bug_second_item">"Я не могу понять суть задания "</string>
+    <string name="exercise_report_bug_third_item">Мой ответ кажется мне верным</string>
+    <string name="exercise_report_bug_forth_item">Мой ответ не должен быть верным</string>
+    <string name="send">Отправить</string>
+    <string name="exercise_report_bug_thx_title">Спасибо за ваш отзыв!</string>
+    <string name="exercise_report_bug_thx_subtitle">Мы постараемся исправить это как можно скорее</string>
+    <string name="exercise_report_bug_thx_button_text">Вернуться к заданию</string>
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>

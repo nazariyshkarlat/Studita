@@ -2,15 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/bottomNavigationHeight"
-    android:background="@drawable/divider_top_drawable">
-
-    <View
-        android:id="@+id/bottomNavigationBlur"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dividerHeight"
-        android:alpha="@dimen/bars_alpha"
-        android:background="?page_background_color" />
+    android:background="@drawable/bottom_navigation_background">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

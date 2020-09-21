@@ -18,6 +18,7 @@ import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.example.studita.utils.ThemeUtils
 import com.example.studita.utils.setAllClickable
 import kotlinx.android.synthetic.main.exercise_input_equation_layout.*
 import kotlinx.android.synthetic.main.exercise_input_equation_result_layout.*
@@ -89,12 +90,10 @@ class ExerciseInputEquationResultFragment : NavigatableFragment(R.layout.exercis
     }
 
     private fun animateBonusResultTextColor(context: Context, answerIsCorrect: Boolean) {
-        val falseAnswerColor = ContextCompat.getColor(context, R.color.red)
-        val trueAnswerColor = ContextCompat.getColor(context, R.color.green)
         with(ValueAnimator.ofObject(
             ArgbEvaluator(),
             exerciseInputEquationResultLayoutResultEditText.currentTextColor,
-            if (answerIsCorrect) trueAnswerColor else falseAnswerColor
+            if (answerIsCorrect) ThemeUtils.getGreenColor(context) else ThemeUtils.getRedColor(context)
         ) ){
             addUpdateListener { animator ->
                 exerciseInputEquationResultLayoutResultEditText.setTextColor(

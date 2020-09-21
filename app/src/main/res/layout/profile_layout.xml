@@ -139,8 +139,8 @@
 
                     <ImageView
                         android:id="@+id/profileLayoutStreakIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
                         app:srcCompat="@drawable/ic_whatshot" />
 
                     <TextView
@@ -183,7 +183,7 @@
                         android:id="@+id/profileLayoutEmptyFriends"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="6dp"
                         android:orientation="vertical"
                         android:visibility="gone">
 
@@ -201,6 +201,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
+                            android:layout_marginTop="4dp"
                             android:layout_marginBottom="-10dp"
                             android:text="@string/find_friends"
                             android:visibility="gone" />

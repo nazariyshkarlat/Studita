@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.core.widget.TextViewCompat.setTextAppearance
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.domain.entity.exercise.ExerciseVariantData
 import com.example.studita.presentation.model.ExerciseImagesEquationMemberUiModel
 import com.example.studita.presentation.model.ExerciseImagesRowUiModel
 import com.example.studita.presentation.model.ExerciseOperatorUiModel
@@ -40,11 +39,11 @@ class ExerciseVariantsTopImagesEquationFragment :
         selectCurrentVariant(exerciseVariantsLinearLayoutCenterLinearLayout)
     }
 
-    private fun fillVariants(variants: List<ExerciseVariantData>) {
+    private fun fillVariants(variants: List<String>) {
         variants.forEach { variant ->
             val variantView =
                 exerciseVariantsLinearLayoutCenterLinearLayout.makeView(R.layout.exercise_variant_text_item)
-            variantView.exerciseVariantTextItem.text = variant.variantText
+            variantView.exerciseVariantTextItem.text = variant
             variantView.setOnClickListener {
                 exercisesViewModel?.let { viewModel ->
                     selectedPos =
@@ -53,7 +52,7 @@ class ExerciseVariantsTopImagesEquationFragment :
                         exerciseVariantsLinearLayoutCenterLinearLayout,
                         selectedPos
                     )
-                    viewModel.exerciseRequestData = ExerciseRequestData(variant.meta ?: variant.variantText)
+                    viewModel.exerciseRequestData = ExerciseRequestData(variant)
                 }
             }
             exerciseVariantsLinearLayoutCenterLinearLayout.addView(variantView)

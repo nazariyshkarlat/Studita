@@ -1,13 +1,14 @@
 package com.example.studita.presentation.fragments.profile
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.ContextThemeWrapper
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProviders
@@ -21,9 +22,9 @@ import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.UserDataStatus
 import com.example.studita.domain.interactor.users.UsersInteractor
+import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.friends.FriendsFragment
 import com.example.studita.presentation.fragments.friends.MyFriendsFragment
-import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.profile.edit.EditProfileFragment
 import com.example.studita.presentation.fragments.user_statistics.UserStatFragment
 import com.example.studita.presentation.view_model.ProfileFragmentViewModel
@@ -32,6 +33,8 @@ import com.example.studita.presentation.views.CustomSnackbar
 import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.profile_friend_item.view.*
 import kotlinx.android.synthetic.main.profile_layout.*
+import kotlinx.android.synthetic.main.profile_popup_menu_layout.view.*
+import kotlinx.android.synthetic.main.toolbar_layout.*
 import java.util.*
 
 open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
@@ -403,13 +406,16 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
             ToolbarFragmentViewModel.ToolbarRightButtonState.IsEnabled(
                 R.drawable.ic_more_vert
             ) {
-                val wrapper = ContextThemeWrapper(it.context, R.style.PopupMenu)
-                val popup = PopupMenu(wrapper, it, Gravity.END)
-                popup.menuInflater.inflate(R.menu.profile_popup_menu, popup.menu)
-                popup.show()
-                popup.setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.profilePopupMenuSecond -> (activity as AppCompatActivity).navigateTo(
+
+                var popupWidth = 0
+                PopupWindow(context).apply {
+                    contentView =
+                        (view as ViewGroup).makeView(R.layout.profile_popup_menu_layout) as ViewGroup
+                    contentView.profilePopupMenuLayoutShareProfile.setOnClickListener {
+                        dismiss()
+                    }
+                    contentView.profilePopupMenuLayoutShowStatistics.setOnClickListener {
+                        (activity as AppCompatActivity).navigateTo(
                             UserStatFragment().apply {
                                 arguments = bundleOf(
                                     "USER_ID" to userId,
@@ -418,9 +424,19 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                                 )
                             }, R.id.doubleFrameLayoutFrameLayout
                         )
+                        dismiss()
                     }
-                    true
-                }
+                    setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    isFocusable = true
+                    isOutsideTouchable = true
+                    contentView.measure(0, 0)
+                    popupWidth = contentView.measuredWidth
+                }.showAsDropDown(
+                    activity?.toolbarLayoutRightButton,
+                    -popupWidth - 16.dpToPx(),
+                    (-12).dpToPx(),
+                    Gravity.END
+                )
             })
     }
 

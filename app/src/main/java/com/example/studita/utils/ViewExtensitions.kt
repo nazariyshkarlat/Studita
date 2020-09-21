@@ -9,6 +9,7 @@ import android.graphics.Rect
 import android.text.InputFilter
 import android.text.TextUtils
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -66,7 +67,7 @@ fun View.isContainsAnotherView(secondView: View): Boolean {
     getHitRect(firstRect)
 
     return (secondRect.contains(firstRect.left, secondRect.centerY()) || secondRect.contains(firstRect.right, secondRect.centerY())) &&
-            (secondRect.contains(firstRect.centerX(), firstRect.top) || secondRect.contains(firstRect.centerX(), firstRect.bottom))
+            (secondRect.contains(secondRect.centerX(), firstRect.top) || secondRect.contains(secondRect.centerX(), firstRect.bottom))
 }
 
 fun View.childContainsParentX(rx: Int): Boolean {
@@ -287,3 +288,5 @@ fun View.setAllClickable(clickable: Boolean) {
     isClickable = clickable
     if (this is ViewGroup) children.forEach { child -> child.setAllClickable(clickable) }
 }
+
+fun View.isClick(event: MotionEvent) = kotlin.math.abs(translationX) <= 5F && kotlin.math.abs(translationY) <= 5F && (event.eventTime - event.downTime) < 500F

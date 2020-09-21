@@ -29,7 +29,7 @@ class ExerciseArrangeNumbersFragment : NavigatableFragment(R.layout.exercise_arr
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType19UiModel -> {
                     val exerciseUiModel = vm.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType19UiModel
                     exerciseArrangeNumbersLayoutTitle.text = exerciseUiModel.title
-                    exerciseArrangeNumbersLayoutNumbersView.setUpVariants(exerciseUiModel.variants.map { (it.meta ?: it.variantText).toInt() }, this)
+                    exerciseArrangeNumbersLayoutNumbersView.setUpVariants(exerciseUiModel.variants.map { it.toInt() }, this)
                 }
             }
         }

@@ -35,7 +35,7 @@ class SyncFriendshipImpl : SyncFriendship {
             .setInputData(data.build())
             .build()
         val workManager = WorkManager.getInstance(NetworkModule.context)
-        workManager.enqueueUniqueWork(SYNC_FRIENDSHIP_ID, ExistingWorkPolicy.REPLACE, work)
+        workManager.enqueueUniqueWork("$SYNC_FRIENDSHIP_ID${friendActionRequestData.userIdToken.userId} ${friendActionRequestData.friendId}", ExistingWorkPolicy.REPLACE, work)
     }
 
 

@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.IncorrectTimeFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
+import com.example.studita.presentation.fragments.dialog_alerts.ChapterCompletedDialogAlertFragment
 import com.example.studita.presentation.fragments.main.MainFragment
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.example.studita.utils.TimeUtils
 import com.example.studita.utils.addFragment
 import com.example.studita.utils.startActivity
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.frame_layout.*
 
 class MainActivity : DefaultActivity() {
@@ -25,7 +25,7 @@ class MainActivity : DefaultActivity() {
 
         fun Activity.startMainActivityNewTask() {
             val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            finishAffinity()
             startActivity(intent)
         }
     }
@@ -34,7 +34,9 @@ class MainActivity : DefaultActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.frame_layout)
-        
+
+        ChapterCompletedDialogAlertFragment.getInstance(132, "fsdfsd").show(supportFragmentManager, null)
+
         navigationViewModel =
             ViewModelProviders.of(this).get(MainActivityNavigationViewModel::class.java)
 

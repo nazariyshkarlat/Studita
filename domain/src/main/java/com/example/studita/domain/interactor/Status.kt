@@ -243,4 +243,11 @@ sealed class SetNotificationsAreCheckedStatus {
     object Success : SetNotificationsAreCheckedStatus()
 }
 
+sealed class ExerciseReportStatus {
+    object ServiceUnavailable : ExerciseReportStatus()
+    object NoConnection : ExerciseReportStatus()
+    object Failure : ExerciseReportStatus()
+    object Success : ExerciseReportStatus()
+}
+
 

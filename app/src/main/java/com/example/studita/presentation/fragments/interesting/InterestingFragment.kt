@@ -3,15 +3,22 @@ package com.example.studita.presentation.fragments.interesting
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.studita.App
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.view_model.InterestingViewModel
 import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.android.synthetic.main.exercise_toolbar.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.IOException
+import java.lang.Exception
 
 class InterestingFragment : BaseFragment(R.layout.exercise_layout) {
 
@@ -28,22 +35,28 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout) {
             viewModel.navigationState.observe(viewLifecycleOwner, Observer { pair ->
                 when (pair.first) {
                     InterestingViewModel.InterestingNavigationState.NAVIGATE -> {
-                        (activity as AppCompatActivity).replace(
+                        replace(
                             pair.second,
-                            R.id.exerciseLayoutFrameLayout
+                            R.id.exerciseLayoutFrameLayout,
+                            addToBackStack = true
                         )
                     }
-                    InterestingViewModel.InterestingNavigationState.ADD -> (activity as AppCompatActivity).addFragment(
+                    InterestingViewModel.InterestingNavigationState.ADD -> addFragment(
                         pair.second,
-                        R.id.exerciseLayoutFrameLayout
+                        R.id.exerciseLayoutFrameLayout,
+                        addToBackStack = true
                     )
-                    InterestingViewModel.InterestingNavigationState.REPLACE -> (activity as AppCompatActivity).replace(
+                    InterestingViewModel.InterestingNavigationState.REPLACE -> replace(
                         pair.second,
                         R.id.exerciseLayoutFrameLayout,
                         R.anim.slide_in_left,
-                        R.anim.slide_out_right
+                        R.anim.slide_out_right,
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left,
+                        addToBackStack = true
                     )
                 }
+                setBackButtonIcon(pair.second)
             })
 
             viewModel.toolbarDividerState.observe(viewLifecycleOwner, Observer { show ->
@@ -62,15 +75,10 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout) {
 
             viewModel.progressBarState.observe(viewLifecycleOwner, Observer { pair ->
                 val percent = pair.first
-                val last = pair.second
                 exerciseToolbarProgressBar.animateProgress(
                     toPercent = percent,
                     delay = (if ((exerciseToolbarProgressBar.animation == null) || this.exerciseToolbarProgressBar.animation.hasEnded()) 100L else 0L)
                 )
-                if (last)
-                    exerciseLayoutButton.setOnClickListener {
-                        activity?.finish()
-                    }
             })
 
             viewModel.interestingProgress.observe(viewLifecycleOwner, Observer { progress ->
@@ -99,13 +107,35 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout) {
                     activity?.finish()
             }
 
-            exerciseToolbarCloseButton.setOnClickListener {
+            exerciseToolbarLeftIcon.setOnClickListener {
                 activity?.onBackPressed()
             }
 
             if (savedInstanceState == null)
                 viewModel.initFragment()
         }
+    }
+
+    fun onBackClick(){
+        if(childFragmentManager.findFragmentById(R.id.exerciseLayoutFrameLayout) is InterestingStartScreenFragment) {
+            activity?.finish()
+            return
+        }else
+            childFragmentManager.popBackStack()
+
+        interestingViewModel?.onBackClick()
+        childFragmentManager.executePendingTransactions()
+        val currentFragment = childFragmentManager.findFragmentById(R.id.exerciseLayoutFrameLayout)
+        if (currentFragment != null) {
+            setBackButtonIcon(currentFragment)
+        }
+    }
+
+    private fun setBackButtonIcon(currentFragment: Fragment){
+        if(currentFragment is InterestingStartScreenFragment)
+            exerciseToolbarLeftIcon.setImageResource(R.drawable.ic_close)
+        else
+            exerciseToolbarLeftIcon.setImageResource(R.drawable.ic_arrow_back)
     }
 
 }

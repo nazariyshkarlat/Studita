@@ -37,5 +37,10 @@
     <dimen name="dialogTextMarginEnd">10dp</dimen>
     <dimen name="dialogButtonsMarginTop">16dp</dimen>
     <dimen name="minTouchTargetSize">0dp</dimen>
+    <dimen name="bottom_sheet_handle_width">32dp</dimen>
+    <dimen name="bottom_sheet_handle_height">4dp</dimen>
+    <dimen name="bottom_sheet_handle_top_margin">12dp</dimen>
+    <dimen name="exercisesHelpViewMarginTop">72dp</dimen>
+    <dimen name="fireIconSize">26dp</dimen>
     <item name="bars_alpha" format="float" type="dimen">0.98</item>
 </resources>

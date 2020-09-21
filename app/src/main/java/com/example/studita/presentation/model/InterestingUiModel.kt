@@ -26,10 +26,10 @@ sealed class InterestingUiModelScreen {
 
 }
 
-fun InterestingData.toShapeUiModel() =
-    InterestingUiModel(interestingNumber, screens.map { it.toShapeUiModel() })
+fun InterestingData.toInterestingUiModel() =
+    InterestingUiModel(interestingNumber, screens.map { it.toInterestingDataScreenUiModel() })
 
-fun InterestingDataScreen.toShapeUiModel() =
+fun InterestingDataScreen.toInterestingDataScreenUiModel() =
     when (this) {
         is InterestingDataScreen.InterestingDataStartScreen -> InterestingUiModelScreen.InterestingUiModelStartScreen(
             title,

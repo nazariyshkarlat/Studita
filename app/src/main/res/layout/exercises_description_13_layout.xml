@@ -80,7 +80,7 @@
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp" />
 
         <TextView
@@ -195,7 +195,7 @@
             style="@style/Regular18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp" />
 
         <TextView
@@ -214,7 +214,7 @@
 
             <TextView
                 android:id="@+id/exercisesDescription13LayoutConstraintLayoutTextView1"
-                style="@style/Regular18"
+                style="@style/Regular16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -223,7 +223,7 @@
 
             <TextView
                 android:id="@+id/exercisesDescription13LayoutConstraintLayoutTextView2"
-                style="@style/Regular18"
+                style="@style/Regular16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -256,7 +256,7 @@
 
             <TextView
                 android:id="@+id/exercisesDescription13LayoutConstraintLayoutTextView3"
-                style="@style/Regular18"
+                style="@style/Regular16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -266,7 +266,7 @@
 
             <TextView
                 android:id="@+id/exercisesDescription13LayoutConstraintLayoutTextView4"
-                style="@style/Regular18"
+                style="@style/Regular16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -275,7 +275,7 @@
                 app:layout_constraintStart_toEndOf="@id/exercisesDescription13LayoutConstraintLayoutOval"/>
 
             <TextView
-                style="@style/Regular18"
+                style="@style/Regular16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"

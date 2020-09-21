@@ -6,9 +6,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.studita.R
 
-fun AppCompatActivity.addFragment(fragment: Fragment, container: Int) {
+fun AppCompatActivity.addFragment(fragment: Fragment, container: Int, addToBackStack: Boolean = false) {
     supportFragmentManager.beginTransaction()
         .add(container, fragment, fragment::class.java.name)
+        .apply {
+            if(addToBackStack) addToBackStack(null)
+        }
+        .commit()
+}
+
+fun Fragment.addFragment(fragment: Fragment, container: Int, addToBackStack: Boolean = false) {
+    childFragmentManager.beginTransaction()
+        .add(container, fragment, fragment::class.java.name)
+        .apply {
+            if(addToBackStack) addToBackStack(null)
+        }
         .commit()
 }
 
@@ -58,10 +70,34 @@ fun AppCompatActivity.replace(
     fragment: Fragment,
     container: Int,
     startAnim: Int = 0,
-    endAnim: Int = 0
+    endAnim: Int = 0,
+    backStartAnim: Int = 0,
+    backEndAnim: Int = 0,
+    addToBackStack: Boolean
 ) {
     supportFragmentManager.beginTransaction()
-        .setCustomAnimations(startAnim, endAnim, 0, 0)
+        .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
         .replace(container, fragment)
+        .apply {
+            if(addToBackStack) addToBackStack(null)
+        }
+        .commit()
+}
+
+fun Fragment.replace(
+    fragment: Fragment,
+    container: Int,
+    startAnim: Int = 0,
+    endAnim: Int = 0,
+    backStartAnim: Int = 0,
+    backEndAnim: Int = 0,
+    addToBackStack: Boolean
+) {
+    childFragmentManager.beginTransaction()
+        .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
+        .replace(container, fragment)
+        .apply {
+            if(addToBackStack) addToBackStack(null)
+        }
         .commit()
 }

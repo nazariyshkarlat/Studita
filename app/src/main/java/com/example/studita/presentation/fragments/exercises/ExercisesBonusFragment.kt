@@ -9,10 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
-import com.example.studita.utils.addFragment
-import com.example.studita.utils.navigateTo
-import com.example.studita.utils.removeFragment
-import com.example.studita.utils.replace
+import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.exercise_bonus_layout.*
 
 class ExercisesBonusFragment : NavigatableFragment(R.layout.exercise_bonus_layout) {
@@ -49,10 +46,7 @@ class ExercisesBonusFragment : NavigatableFragment(R.layout.exercise_bonus_layou
                 if (it <= 5) {
                     exerciseBonusLayoutCounterIcon.setImageResource(R.drawable.ic_access_time_red)
                     exerciseBonusLayoutCounterText.setTextColor(
-                        ContextCompat.getColor(
-                            view.context,
-                            R.color.red
-                        )
+                        ThemeUtils.getRedColor(context!!)
                     )
                 }
 
@@ -65,7 +59,8 @@ class ExercisesBonusFragment : NavigatableFragment(R.layout.exercise_bonus_layou
                         bonusFragment,
                         R.id.exerciseBonusLayoutFrameLayout,
                         R.anim.slide_in_left,
-                        R.anim.slide_out_right
+                        R.anim.slide_out_right,
+                        addToBackStack = false
                     )
                 } else {
                     showBonusEndFragment(bonusFragment)

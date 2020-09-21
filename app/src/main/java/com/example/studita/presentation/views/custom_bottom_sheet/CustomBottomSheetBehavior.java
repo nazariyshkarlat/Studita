@@ -34,6 +34,8 @@ import androidx.customview.view.AbsSavedState;
 import androidx.customview.widget.ViewDragHelper;
 
 import com.example.studita.R;
+import com.example.studita.utils.NumberExtensionsKt;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
@@ -131,7 +133,7 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
     WeakReference<View> nestedScrollingChildRef;
     int activePointerId;
     boolean touchingScrollingChild;
-    private int topOffset = 0;
+    public int topOffset = 0;
     @com.google.android.material.bottomsheet.BottomSheetBehavior.SaveFlags
     private int saveFlags = SAVE_NONE;
     private boolean fitToContents = true;
@@ -339,7 +341,7 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
         }
         createShapeValueAnimator();
 
-        this.topOffset = (int) context.getResources().getDimension(R.dimen.homeLayoutToolbarHeight);
+        this.topOffset = (int)(a.getDimension(R.styleable.BottomSheetBehavior_Layout_behavior_topMargin, 0));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.elevation = a.getDimension(R.styleable.BottomSheetBehavior_Layout_android_elevation, -1);
         }
@@ -455,6 +457,7 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
         viewRef = null;
         viewDragHelper = null;
     }
+
 
     @Override
     public boolean onLayoutChild(
@@ -587,6 +590,10 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
         if (!child.isShown()) {
             return false;
         }
+
+        if(state == BottomSheetBehavior.STATE_COLLAPSED && event.getAction() == MotionEvent.ACTION_MOVE)
+            state = STATE_DRAGGING;
+
         int action = event.getActionMasked();
         if (state == STATE_DRAGGING && action == MotionEvent.ACTION_DOWN) {
             return true;

@@ -4,15 +4,17 @@ import com.example.studita.data.database.user_statistics.UserStatisticsDao
 import com.example.studita.data.entity.UserStatisticsRowEntity
 
 
-class DiskUserStatisticsJsonDataStore(private val userStatisticsDao: UserStatisticsDao) {
+class DiskUserStatisticsRecordsDataStore(private val userStatisticsDao: UserStatisticsDao) {
 
     suspend fun saveUserStatisticsRecord(userStatisticsRowEntity: UserStatisticsRowEntity) {
         userStatisticsDao.insertUserStatistics(userStatisticsRowEntity)
     }
 
     suspend fun getUserStatisticsRecords(): List<UserStatisticsRowEntity>? {
-        val statistics = userStatisticsDao.getUserStatistics()
+        return userStatisticsDao.getUserStatistics()
+    }
+
+    suspend fun clearUserStatisticsRecords(){
         userStatisticsDao.deleteUserStatistics()
-        return statistics
     }
 }

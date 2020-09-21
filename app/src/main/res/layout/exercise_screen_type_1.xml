@@ -20,7 +20,8 @@
             style="@style/Medium28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/main_blocks_rectangle"
+            android:background="@drawable/gray_focused_color_rectangle"
+            android:layout_gravity="center_vertical"
             android:paddingStart="24dp"
             android:paddingTop="16dp"
             android:paddingEnd="24dp"
@@ -28,7 +29,7 @@
 
         <TextView
             android:id="@+id/exerciseScreenType1SymbolNameTitle"
-            style="@style/Medium28"
+            style="@style/Regular24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

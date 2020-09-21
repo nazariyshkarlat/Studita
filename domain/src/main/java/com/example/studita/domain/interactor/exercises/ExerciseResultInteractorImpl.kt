@@ -1,15 +1,20 @@
 package com.example.studita.domain.interactor.exercises
 
 import com.example.studita.domain.entity.exercise.ExerciseData
+import com.example.studita.domain.entity.exercise.ExerciseReportData
+import com.example.studita.domain.entity.exercise.ExerciseReportRequestData
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
+import com.example.studita.domain.interactor.ExerciseReportStatus
 import com.example.studita.domain.interactor.ExerciseResultStatus
 import com.example.studita.domain.repository.ExerciseResultRepository
+import com.example.studita.domain.service.SyncExercisesReports
 import kotlinx.coroutines.delay
 
 class ExerciseResultInteractorImpl(
-    private val repository: ExerciseResultRepository
+    private val repository: ExerciseResultRepository,
+    private val syncExercisesReports: SyncExercisesReports
 ) : ExerciseResultInteractor {
 
     private val retryDelay = 1000L
@@ -54,5 +59,33 @@ class ExerciseResultInteractorImpl(
                     ExerciseResultStatus.Failure
             }
         }
+
+    override suspend fun sendExerciseReport(
+        exerciseReportRequestData: ExerciseReportRequestData,
+        retryCount: Int
+    ) : ExerciseReportStatus =
+        try {
+        if (repository.sendExerciseReport(exerciseReportRequestData) == 200)
+            ExerciseReportStatus.Success
+        else
+            ExerciseReportStatus.Failure
+    } catch (e: Exception) {
+        e.printStackTrace()
+        if (e is NetworkConnectionException || e is ServerUnavailableException) {
+            when {
+                e is NetworkConnectionException -> {
+                    syncExercisesReports.scheduleSendExerciseReport(
+                        exerciseReportRequestData
+                    )
+                    ExerciseReportStatus.Success
+                }
+                retryCount == 0 -> ExerciseReportStatus.ServiceUnavailable
+                else -> {
+                    sendExerciseReport(exerciseReportRequestData, retryCount - 1)
+                }
+            }
+        } else
+            ExerciseReportStatus.Failure
+    }
 
 }

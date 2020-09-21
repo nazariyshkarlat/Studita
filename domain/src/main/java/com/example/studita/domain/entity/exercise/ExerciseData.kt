@@ -20,7 +20,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val title: ExerciseImagesRowData,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -29,7 +29,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val title: ExerciseSymbolData,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -38,7 +38,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val title: ExerciseSymbolData,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -47,7 +47,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -56,7 +56,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -72,7 +72,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -106,7 +106,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -115,7 +115,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val exerciseImagesEquationData: List<ExerciseImagesEquationMemberData>,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -124,7 +124,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val title: ExerciseImagesRowData,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -133,15 +133,10 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
+            val countToSelect: Int,
             override val exerciseAnswer: String?
-        ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer){
-
-            companion object {
-                const val MAX_SELECTED_COUNT = 2
-            }
-
-        }
+        ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
         data class ExerciseType16Data(
             override val exerciseNumber: Int,
@@ -172,7 +167,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val exerciseNumber: Int,
             override val isBonus: Boolean,
             val title: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -213,7 +208,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -222,7 +217,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             override val isBonus: Boolean,
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>,
+            val variants: List<String>,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 
@@ -349,8 +344,3 @@ enum class Operator {
 sealed class ExerciseImagesEquationMemberData
 data class ExerciseOperatorData(val operator: Operator) : ExerciseImagesEquationMemberData()
 data class ExerciseImagesRowData(val imageType: ImageType, val count: Int): ExerciseImagesEquationMemberData()
-
-data class ExerciseVariantData(val meta: String? = null, val variantText: String)
-
-fun List<String>.toExerciseVariant() = ExerciseVariantData(this[0], this[1])
-fun String.toExerciseVariant() = ExerciseVariantData(variantText = this)

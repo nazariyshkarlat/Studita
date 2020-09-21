@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bottom_drawer_outside_background">#80000000</color>
+    <dimen name="bottom_sheet_corner_radius">16dp</dimen>
+    <dimen name="bottom_sheet_extra_padding">0dp</dimen>
+    <dimen name="bottom_sheet_handle_thickness">6dp</dimen>
+    <item name="handle_view" type="id"/>
+    <style name="BottomDialogTheme">
+        <item name="should_draw_content_under_handle_view">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+    <declare-styleable name="BottomDrawer">
+        <attr format="boolean" name="should_draw_under_status_bar"/>
+        <attr format="boolean" name="should_draw_content_under_handle_view"/>
+        <attr format="dimension" name="bottom_sheet_corner_radius"/>
+        <attr format="dimension" name="bottom_sheet_extra_padding"/>
+        <attr name="content_view" format="reference"/>
+    </declare-styleable>
+    <declare-styleable name="BottomDrawerDialog">
+        <attr format="boolean" name="is_cancelable_on_touch_outside"/>
+    </declare-styleable>
+</resources>

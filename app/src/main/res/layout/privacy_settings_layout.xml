@@ -38,7 +38,7 @@
                 android:background="@drawable/main_blocks_rectangle"
                 android:orientation="vertical"
                 android:paddingTop="16dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="8dp">
 
                 <TextView
                     style="@style/Medium16"
@@ -46,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="64dp"
                     android:text="@string/privacy_settings_first_title" />
 
                 <FrameLayout
@@ -140,7 +141,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:layout_marginBottom="-8dp"
                     android:visibility="gone"
                     app:with_min_click_interval="true" />
 
@@ -154,12 +154,13 @@
                 android:background="@drawable/main_blocks_rectangle"
                 android:orientation="vertical"
                 android:paddingTop="16dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="8dp">
 
                 <TextView
                     style="@style/Medium16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="64dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginBottom="8dp"
                     android:text="@string/privacy_settings_second_title" />
@@ -230,13 +231,14 @@
                 android:background="@drawable/main_blocks_rectangle"
                 android:orientation="vertical"
                 android:paddingTop="16dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="8dp">
 
                 <TextView
                     style="@style/Medium16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginEnd="64dp"
                     android:layout_marginBottom="8dp"
                     android:text="@string/privacy_settings_third_title" />
 

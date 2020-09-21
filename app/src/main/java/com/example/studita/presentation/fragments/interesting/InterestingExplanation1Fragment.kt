@@ -6,11 +6,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.forEach
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.example.studita.R
 import com.example.studita.presentation.view_model.InterestingViewModel
 import com.example.studita.utils.ThemeUtils
+import com.example.studita.utils.animateFadeIn
 import com.example.studita.utils.dpToPx
 import kotlinx.android.synthetic.main.interesting_explanation_layout.*
+import kotlinx.coroutines.launch
 
 class InterestingExplanation1Fragment :
     InterestingExplanationFragment(R.layout.interesting_explanation_layout) {
@@ -23,25 +26,37 @@ class InterestingExplanation1Fragment :
         }
 
         interestingExplanationLayoutThumbUp.setOnClickListener {
-            if(!it.isSelected) {
+            if (!it.isSelected) {
                 interestingViewModel?.setFeedback(InterestingViewModel.FeedbackState.LIKE)
             }
         }
         interestingExplanationLayoutThumbDown.setOnClickListener {
-            if(!it.isSelected) {
+            if (!it.isSelected) {
                 interestingViewModel?.setFeedback(InterestingViewModel.FeedbackState.DISLIKE)
             }
         }
 
-        interestingViewModel?.feedbackState?.observe(viewLifecycleOwner, Observer {
-            if(it == InterestingViewModel.FeedbackState.LIKE){
-                interestingExplanationLayoutThumbUp.isSelected = true
-                interestingExplanationLayoutThumbDown.isSelected = false
-            }else if(it == InterestingViewModel.FeedbackState.DISLIKE){
-                interestingExplanationLayoutThumbUp.isSelected = false
-                interestingExplanationLayoutThumbDown.isSelected = true
-            }
-        })
+        interestingViewModel?.let {vm->
+            vm.feedbackState.observe(viewLifecycleOwner, Observer {
+
+                if(vm.feedbackEvent.value != null){
+                    interestingExplanationLayoutThumbsText.text = resources.getText(R.string.interesting_explanation_rating_thanks)
+                }
+
+                if (it == InterestingViewModel.FeedbackState.LIKE) {
+                    interestingExplanationLayoutThumbUp.isSelected = true
+                    interestingExplanationLayoutThumbDown.isSelected = false
+                } else if (it == InterestingViewModel.FeedbackState.DISLIKE) {
+                    interestingExplanationLayoutThumbUp.isSelected = false
+                    interestingExplanationLayoutThumbDown.isSelected = true
+                }
+            })
+
+            vm.feedbackEvent.observe(viewLifecycleOwner, Observer {
+                interestingExplanationLayoutThumbsText.text = resources.getText(R.string.interesting_explanation_rating_thanks)
+                interestingExplanationLayoutThumbsText.animateFadeIn()
+            })
+        }
     }
 
     private fun formView(textParts: List<String>) {

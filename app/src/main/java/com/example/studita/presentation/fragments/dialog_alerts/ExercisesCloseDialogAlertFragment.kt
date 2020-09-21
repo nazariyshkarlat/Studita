@@ -24,7 +24,10 @@ class ExercisesCloseDialogAlertFragment :
             ViewModelProviders.of(this).get(ExercisesViewModel::class.java)
         }
         dialogAlertLeftButton.setOnClickListener { dialog?.dismiss() }
-        dialogAlertRightButton.setOnClickListener { activity?.finish() }
+        dialogAlertRightButton.setOnClickListener {
+            dismiss()
+            activity?.finish()
+        }
     }
 
 }

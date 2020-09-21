@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:id="@+id/exerciseReportBugLayoutContentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="74dp">
+
+        <TextView
+            style="@style/Medium20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/report_a_bug"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="10dp"/>
+
+        <FrameLayout
+            android:id="@+id/exerciseReportBugLayoutExerciseHasMistake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="?selectableItemBackground">
+            <TextView
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:text="@string/exercise_report_bug_first_item"/>
+            <androidx.appcompat.widget.AppCompatCheckBox
+                style="@style/CheckBoxStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/exerciseReportBugLayoutCantUnderstandExercise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="?selectableItemBackground">
+            <TextView
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:text="@string/exercise_report_bug_second_item"/>
+            <androidx.appcompat.widget.AppCompatCheckBox
+                style="@style/CheckBoxStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/exerciseReportBugLayoutMyAnswerIsCorrect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="?selectableItemBackground">
+            <TextView
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:text="@string/exercise_report_bug_third_item"/>
+            <androidx.appcompat.widget.AppCompatCheckBox
+                style="@style/CheckBoxStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/exerciseReportBugLayoutMyAnswerIsIncorrect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="?selectableItemBackground">
+            <TextView
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:text="@string/exercise_report_bug_forth_item"/>
+            <androidx.appcompat.widget.AppCompatCheckBox
+                style="@style/CheckBoxStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"/>
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/exerciseReportBugLayoutThanksLayout"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="64dp"
+        android:visibility="gone"
+        android:gravity="center">
+        
+        <View
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/smiling_face_with_sunglasses"/>
+
+        <TextView
+            style="@style/Medium20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginTop="16dp"
+            android:text="@string/exercise_report_bug_thx_title"/>
+
+        <TextView
+            style="@style/Regular16Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginTop="16dp"
+            android:text="@string/exercise_report_bug_thx_subtitle"/>
+
+    </LinearLayout>
+
+    <com.example.studita.presentation.views.press_view.PressTextView
+        android:id="@+id/exerciseReportBugLayoutButton"
+        style="@style/Button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_marginStart="@dimen/defaultRLMargin"
+        android:layout_marginEnd="@dimen/defaultRLMargin"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="14dp"
+        android:layout_gravity="bottom"
+        android:text="@string/send"/>
+
+</FrameLayout>

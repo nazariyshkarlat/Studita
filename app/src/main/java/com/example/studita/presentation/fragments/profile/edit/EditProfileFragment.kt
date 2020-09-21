@@ -68,10 +68,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                 editProfileLayoutUserNameStatusTextView.text =
                     resources.getString(R.string.edit_profile_user_name_available)
                 editProfileLayoutUserNameStatusTextView.setTextColor(
-                    ContextCompat.getColor(
-                        view.context,
-                        R.color.green
-                    )
+                    ThemeUtils.getGreenColor(context!!)
                 )
             } else {
                 if (it == EditProfileViewModel.UserNameAvailable.UNAVAILABLE)
@@ -81,10 +78,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                     editProfileLayoutUserNameStatusTextView.text =
                         resources.getString(R.string.edit_profile_user_name_is_taken)
                 editProfileLayoutUserNameStatusTextView.setTextColor(
-                    ContextCompat.getColor(
-                        view.context,
-                        R.color.red
-                    )
+                    ThemeUtils.getRedColor(context!!)
                 )
                 editProfileLayoutUserNameEditText.hasError = true
             }
@@ -106,7 +100,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
             editProfileLayoutUserNameCounter.setTextColor(
                 if (showError) {
                     editProfileLayoutUserNameEditText.hasError = true
-                    ContextCompat.getColor(view.context, R.color.red)
+                    ThemeUtils.getRedColor(context!!)
                 } else {
                     editProfileLayoutUserNameEditText.hasError = false
                     ThemeUtils.getSecondaryColor(view.context)

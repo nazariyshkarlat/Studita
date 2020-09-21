@@ -35,11 +35,14 @@ class CustomTabLayout @JvmOverloads constructor(
     private var selectedPos = 0
     private var click: Boolean = false
 
+    private var items: List<String> = emptyList<String>()
+
     init {
         gravity = Gravity.CENTER
     }
 
     fun setItems(items: List<String>) {
+        this.items = items
         for (item in items) {
 
             val textView = PressTextView(context)
@@ -100,6 +103,8 @@ class CustomTabLayout @JvmOverloads constructor(
     fun setFragments(fragments: List<Fragment>) {
         this.fragments = fragments
     }
+
+    fun getItemsSize() = this.items.size
 
     private inner class TabsPagerAdapter(fm: FragmentManager) :
         FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

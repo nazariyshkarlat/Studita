@@ -3,7 +3,7 @@ package com.example.studita.di.data
 import com.example.studita.data.net.UserStatisticsService
 import com.example.studita.data.repository.UserStatisticsRepositoryImpl
 import com.example.studita.data.repository.datasource.user_statistics.CloudUserStatisticsJsonDataStore
-import com.example.studita.data.repository.datasource.user_statistics.DiskUserStatisticsJsonDataStore
+import com.example.studita.data.repository.datasource.user_statistics.DiskUserStatisticsRecordsDataStore
 import com.example.studita.data.repository.datasource.user_statistics.UserStatisticsJsonDataStoreFactoryImpl
 import com.example.studita.di.DI
 import com.example.studita.di.DatabaseModule
@@ -60,7 +60,7 @@ object UserStatisticsModule {
         )
 
     private fun getDiskUserStatisticsDataStore() =
-        DiskUserStatisticsJsonDataStore(getUserStatisticsDao())
+        DiskUserStatisticsRecordsDataStore(getUserStatisticsDao())
 
     private fun getUserStatisticsDao() = DatabaseModule.studitaDatabase!!.getUserStatisticsDao()
 

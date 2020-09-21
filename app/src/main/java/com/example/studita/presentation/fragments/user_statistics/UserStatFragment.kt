@@ -47,6 +47,7 @@ class UserStatFragment : NavigatableFragment(R.layout.user_stat_layout) {
             )
         )
 
+        userStatLayoutViewPager.offscreenPageLimit = userStatLayoutTabs.getItemsSize()-1
         userStatLayoutTabs.syncWithViewPager(userStatLayoutViewPager, childFragmentManager)
 
         scrollingView = userStatLayoutScrollView

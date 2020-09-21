@@ -3,7 +3,7 @@ package com.example.studita.data.repository
 import com.example.studita.data.entity.toBusinessEntity
 import com.example.studita.data.entity.toRawEntity
 import com.example.studita.data.net.connection.ConnectionManager
-import com.example.studita.data.repository.datasource.user_statistics.DiskUserStatisticsJsonDataStore
+import com.example.studita.data.repository.datasource.user_statistics.DiskUserStatisticsRecordsDataStore
 import com.example.studita.data.repository.datasource.user_statistics.UserStatisticsDataStoreImpl
 import com.example.studita.data.repository.datasource.user_statistics.UserStatisticsJsonDataStoreFactory
 import com.example.studita.domain.entity.UserStatisticsData
@@ -12,7 +12,7 @@ import com.example.studita.domain.repository.UserStatisticsRepository
 
 class UserStatisticsRepositoryImpl(
     private val userStatisticsJsonDataStoreFactory: UserStatisticsJsonDataStoreFactory,
-    private val diskUserStatisticsJsonDataStore: DiskUserStatisticsJsonDataStore,
+    private val diskUserStatisticsRecordsDataStore: DiskUserStatisticsRecordsDataStore,
     private val connectionManager: ConnectionManager
 ) : UserStatisticsRepository {
 
@@ -25,14 +25,18 @@ class UserStatisticsRepositoryImpl(
     }
 
     override suspend fun saveUserStatistics(userStatisticsRowData: UserStatisticsRowData) {
-        diskUserStatisticsJsonDataStore.saveUserStatisticsRecord(
+        diskUserStatisticsRecordsDataStore.saveUserStatisticsRecord(
             userStatisticsRowData.toRawEntity()
         )
     }
 
     override suspend fun getUserStatisticsRecords(): List<UserStatisticsRowData>? {
-        val userStatisticsRowEntities = diskUserStatisticsJsonDataStore.getUserStatisticsRecords()
+        val userStatisticsRowEntities = diskUserStatisticsRecordsDataStore.getUserStatisticsRecords()
         return userStatisticsRowEntities?.map { it.toBusinessEntity() }
+    }
+
+    override suspend fun clearUserStatisticsRecords(){
+        diskUserStatisticsRecordsDataStore.clearUserStatisticsRecords()
     }
 
 }

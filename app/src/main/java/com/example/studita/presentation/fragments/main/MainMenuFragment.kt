@@ -82,14 +82,16 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout) {
             mainMenuLayoutOfflineSwitch.isChecked = !mainMenuLayoutOfflineSwitch.isChecked
         }
 
-        mainMenuLayoutThemeView.setOnSingleClickListener {
+        mainMenuLayoutThemeView.setWithMinClickInterval(true)
+        mainMenuLayoutThemeView.setOnClickListener {
             MainMenuThemeDialogAlertFragment().show(
                 (activity as AppCompatActivity).supportFragmentManager,
                 null
             )
         }
 
-        mainMenuLayoutLanguageView.setOnSingleClickListener {
+        mainMenuLayoutLanguageView.setWithMinClickInterval(true)
+        mainMenuLayoutLanguageView.setOnClickListener {
             MainMenuLanguageDialogAlertFragment()
                 .show((activity as AppCompatActivity).supportFragmentManager, null)
         }

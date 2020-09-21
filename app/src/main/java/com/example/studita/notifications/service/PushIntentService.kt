@@ -31,6 +31,7 @@ import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.presentation.draw.AvaDrawer
 import com.example.studita.utils.IDUtils.createID
 import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.ThemeUtils
 import com.example.studita.utils.UserUtils
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -144,7 +145,7 @@ class PushIntentService : JobIntentService() {
             .setContentIntent(openNotificationsPendingIntent)
             .setLargeIcon(largeIcon)
             .setAutoCancel(true)
-            .setColor(ContextCompat.getColor(this, R.color.blue))
+            .setColor(ContextCompat.getColor(this, if(ThemeUtils.getDefaultTheme(resources)== ThemeUtils.Theme.DARK) R.color.blue_dark_theme else R.color.blue_light_theme))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         when (notificationData.notificationType) {

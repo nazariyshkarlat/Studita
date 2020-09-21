@@ -21,4 +21,5 @@
     <integer name="name_max_length">30</integer>
     <integer name="bonus_exercises_delay">300</integer>
     <integer name="bonus_text_color_change_duration">200</integer>
+    <integer name="bottom_sheet_animation_duration">300</integer>
 </resources>

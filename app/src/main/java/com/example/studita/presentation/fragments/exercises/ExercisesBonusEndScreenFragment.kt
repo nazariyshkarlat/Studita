@@ -58,7 +58,8 @@ class ExercisesBonusEndScreenFragment : NavigatableFragment(R.layout.exercises_b
                         (activity as AppCompatActivity).replace(
                             exercisesViewModel.getExercisesEndFragment(
                                 it.second
-                            ), R.id.frameLayout
+                            ), R.id.frameLayout,
+                            addToBackStack = false
                         )
                     }
                 })

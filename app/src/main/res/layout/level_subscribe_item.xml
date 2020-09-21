@@ -27,6 +27,7 @@
         style="@style/BlueTextButton16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         app:with_min_click_interval="true" />
 
 </LinearLayout>

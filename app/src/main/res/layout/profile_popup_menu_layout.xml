@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/popup_background"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <FrameLayout
+        android:id="@+id/profilePopupMenuLayoutShareProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="32dp"
+        android:paddingTop="12dp"
+        android:background="?selectableItemBackground"
+        android:paddingBottom="12dp">
+        <TextView
+            style="@style/Medium16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/share_profile" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/profilePopupMenuLayoutShowStatistics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="32dp"
+        android:paddingTop="12dp"
+        android:background="?selectableItemBackground"
+        android:paddingBottom="12dp">
+        <TextView
+            style="@style/Medium16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/stat" />
+    </FrameLayout>
+
+</LinearLayout>

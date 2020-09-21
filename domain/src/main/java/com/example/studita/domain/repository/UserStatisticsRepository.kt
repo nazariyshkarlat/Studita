@@ -10,4 +10,6 @@ interface UserStatisticsRepository {
     suspend fun saveUserStatistics(userStatisticsRowData: UserStatisticsRowData)
 
     suspend fun getUserStatisticsRecords(): List<UserStatisticsRowData>?
+
+    suspend fun clearUserStatisticsRecords()
 }

@@ -216,15 +216,9 @@ class ArrangeNumbersView @JvmOverloads constructor(
         })
     }
 
-    private fun View.isClick(event: MotionEvent) = kotlin.math.abs(translationX) <= 5F && kotlin.math.abs(translationY) <= 5F && (event.eventTime - event.downTime) < 500F
-
     private fun View.isAboveCell(): Boolean{
-        topFlexboxLayout.children.forEach {
-            if(this.isContainsAnotherView(it)){
-                return true
-            }
-        }
-        return false
+        val currentIndex = answers.indexOfFirst { it == null }
+        return  this.isContainsAnotherView(topFlexboxLayout.getChildAt(currentIndex))
     }
 
     private fun View.onSelect(isClick: Boolean){

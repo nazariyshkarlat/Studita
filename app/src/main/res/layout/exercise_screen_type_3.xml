@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:padding="@dimen/defaultBlockPadding"
             android:textAlignment="center"
-            android:background="@drawable/main_blocks_rectangle"/>
+            android:background="@drawable/gray_focused_color_rectangle"/>
 
         <TextView
             android:id="@+id/exerciseScreenType3Subtitle"
@@ -32,7 +32,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:padding="@dimen/defaultBlockPadding" />
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"/>
     </LinearLayout>
 
 </LinearLayout>

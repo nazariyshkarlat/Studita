@@ -15,8 +15,7 @@
         android:text="1"
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
-
+        android:layout_gravity="fill_horizontal"/>
 
     <TextView
         style="@style/ExercisesKeyboardGrayButton"
@@ -27,8 +26,7 @@
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
-
+        android:layout_gravity="fill_horizontal"/>
 
     <TextView
         style="@style/ExercisesKeyboardGrayButton"
@@ -39,8 +37,7 @@
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
-
+        android:layout_gravity="fill_horizontal"/>
 
     <com.example.studita.presentation.views.press_view.PressTextView
         style="@style/ExercisesKeyboardBlueButton"
@@ -50,8 +47,7 @@
         android:text="+"
         android:layout_marginStart="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
-
+        android:layout_gravity="fill_horizontal"/>
 
     <TextView
         style="@style/ExercisesKeyboardGrayButton"
@@ -62,7 +58,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
+        android:layout_gravity="fill_horizontal"/>
 
     <TextView
         style="@style/ExercisesKeyboardGrayButton"
@@ -73,8 +69,7 @@
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
-
+        android:layout_gravity="fill_horizontal"/>
 
     <TextView
         style="@style/ExercisesKeyboardGrayButton"
@@ -85,8 +80,7 @@
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
-
+        android:layout_gravity="fill_horizontal"/>
 
     <com.example.studita.presentation.views.press_view.PressTextView
         style="@style/ExercisesKeyboardBlueButton"
@@ -96,8 +90,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginStart="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
-
+        android:layout_gravity="fill_horizontal"/>
 
     <TextView
         style="@style/ExercisesKeyboardGrayButton"
@@ -108,8 +101,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
-
+        android:layout_gravity="fill_horizontal"/>
 
     <TextView
         style="@style/ExercisesKeyboardGrayButton"
@@ -120,7 +112,7 @@
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
+        android:layout_gravity="fill_horizontal"/>
 
     <TextView
         style="@style/ExercisesKeyboardGrayButton"
@@ -131,7 +123,7 @@
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
+        android:layout_gravity="fill_horizontal"/>
 
     <com.example.studita.presentation.views.press_view.PressTextView
         style="@style/ExercisesKeyboardBlueButton"
@@ -141,8 +133,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginStart="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_gravity="fill"/>
-
+        android:layout_gravity="fill_horizontal"/>
 
     <TextView
         style="@style/ExercisesKeyboardGrayButton"
@@ -152,7 +143,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginEnd="6dp"
         android:text="."
-        android:layout_gravity="fill"/>
+        android:layout_gravity="fill_horizontal"/>
 
     <TextView
         style="@style/ExercisesKeyboardGrayButton"
@@ -162,7 +153,7 @@
         android:layout_marginEnd="6dp"
         android:layout_marginStart="6dp"
         android:text="0"
-        android:layout_gravity="fill"/>
+        android:layout_gravity="fill_horizontal"/>
 
     <ImageView
         android:layout_width="0dp"
@@ -182,6 +173,6 @@
         android:layout_marginTop="6dp"
         android:layout_marginStart="6dp"
         android:text="÷"
-        android:layout_gravity="fill"/>
+        android:layout_gravity="fill_horizontal"/>
 
 </GridLayout>

@@ -34,13 +34,16 @@ open class SnapHorizontalScrollView @JvmOverloads constructor(
         }
     }
 
+    var onTouchDownX = 0
     override fun onTouch(v: View, event: MotionEvent): Boolean {
+
+        if(event.action == MotionEvent.ACTION_DOWN)
+            onTouchDownX = scrollX
+
         return if (gestureDetector.onTouchEvent(event)) {
             true
         } else if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
-            activeFeatureIndex = getCurrentActiveFeatureByScrollX(scrollX)
-            val scrollTo = getScrollTo(activeFeatureIndex)
-            smoothScrollTo(scrollTo, 0)
+            scrollView((scrollX - onTouchDownX) > 0)
             true
         } else {
             false
@@ -56,14 +59,8 @@ open class SnapHorizontalScrollView @JvmOverloads constructor(
             velocityY: Float
         ): Boolean {
             try {
-                if (e1.x - e2.x > SWIPE_MIN_DISTANCE && abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    activeFeatureIndex =
-                        if (activeFeatureIndex < getItemsCount() - 1) activeFeatureIndex + 1 else getItemsCount() - 1
-                    smoothScrollTo(getScrollTo(activeFeatureIndex), 0)
-                    return true
-                } else if (e2.x - e1.x > SWIPE_MIN_DISTANCE && abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    activeFeatureIndex = if (activeFeatureIndex > 0) activeFeatureIndex - 1 else 0
-                    smoothScrollTo(getScrollTo(activeFeatureIndex), 0)
+                if (abs(e1.x - e2.x) > SWIPE_MIN_DISTANCE && abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    scrollView((e1.x - e2.x) > 0)
                     return true
                 }
             } catch (e: Exception) {
@@ -73,15 +70,18 @@ open class SnapHorizontalScrollView @JvmOverloads constructor(
         }
     }
 
+    private fun scrollView(scrollToRight: Boolean){
+        activeFeatureIndex = getCurrentActiveFeatureByScrollX(scrollX, scrollToRight)
+        val scrollTo = getScrollTo(activeFeatureIndex)
+        smoothScrollTo(scrollTo, 0)
+    }
+
     private fun getScrollTo(activeFeatureIndex: Int) =
         (this.getChildAt(0) as ViewGroup).getChildAt(activeFeatureIndex)
             .getRelativeLeft(this.getChildAt(0) as ViewGroup)
 
-    private fun getCurrentActiveFeatureByScrollX(scrollX: Int) =
-        (this.getChildAt(0) as ViewGroup).indexOfChild((this.getChildAt(0) as ViewGroup).children.first {
-            it.childContainsParentX(scrollX + it.measuredWidth)
-        })
-
-    private fun getItemsCount() = (getChildAt(this.activeFeatureIndex) as ViewGroup).childCount
-
+    private fun getCurrentActiveFeatureByScrollX(scrollX: Int, scrollToRight: Boolean) =
+        (this.getChildAt(0) as ViewGroup).children.indexOfFirst {
+            it.childContainsParentX(((scrollX + if(scrollToRight) (it.measuredWidth/1.2F) else (it.measuredWidth/5F)).toInt()))
+        }
 }

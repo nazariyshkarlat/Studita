@@ -16,31 +16,31 @@ sealed class ExerciseUiModel {
         data class ExerciseType2UiModel(
             val title: ExerciseImagesRowUiModel,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType3UiModel(
             val title: ExerciseSymbolData,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType4UiModel(
             val title: ExerciseSymbolData,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType5UiModel(
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType6UiModel(
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType7UiModel(val title: String) : ExerciseUiModelExercise()
@@ -48,7 +48,7 @@ sealed class ExerciseUiModel {
         data class ExerciseType8UiModel(
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType9UiModel(val title: String, val subtitle: String) : ExerciseUiModelExercise()
@@ -68,25 +68,25 @@ sealed class ExerciseUiModel {
         data class ExerciseType12UiModel(
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType13UiModel(
             val exerciseImagesEquationUiModel: List<ExerciseImagesEquationMemberUiModel>,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModel.ExerciseUiModelExercise()
 
         data class ExerciseType14UiModel(
             val title: ExerciseImagesRowUiModel,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType15UiModel(
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModel.ExerciseUiModelExercise()
 
         data class ExerciseType16UiModel(
@@ -107,7 +107,7 @@ sealed class ExerciseUiModel {
 
         data class ExerciseType19UiModel(
             val title: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModelExercise()
 
         data class ExerciseType20UiModel(
@@ -132,13 +132,13 @@ sealed class ExerciseUiModel {
         data class ExerciseType24UiModel(
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModel.ExerciseUiModelExercise()
 
         data class ExerciseType25UiModel(
             val title: String,
             val subtitle: String,
-            val variants: List<ExerciseVariantData>
+            val variants: List<String>
         ) : ExerciseUiModel.ExerciseUiModelExercise()
 
 

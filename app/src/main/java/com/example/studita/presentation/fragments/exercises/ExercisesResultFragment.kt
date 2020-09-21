@@ -27,10 +27,6 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
     var exercisesViewModel: ExercisesViewModel? = null
     var exercisesEndFragmentViewModel: ExercisesEndFragmentViewModel? = null
 
-    private val ANIMATION_SCALE_FROM_VALUE = 1.2f
-    private val ANIMATION_ALPHA_FROM_VALUE = 0.3f
-    private val ANIMATION_FADE_IN_DURATION = 500
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -207,18 +203,6 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
             delay(500)
             onAnimationEnd.invoke()
         }
-    }
-
-
-    private fun View.animateFadeIn(delay: Long = 0) {
-        val alphaAnimator: ValueAnimator? = getAlphaAnimator(ANIMATION_ALPHA_FROM_VALUE, 1f)
-        val scaleAnimator: ValueAnimator? =
-            getScaleAnimator(ANIMATION_SCALE_FROM_VALUE, 1f)
-        val animatorSet = AnimatorSet()
-        animatorSet.startDelay = delay
-        animatorSet.playTogether(alphaAnimator, scaleAnimator)
-        animatorSet.duration = ANIMATION_FADE_IN_DURATION.toLong()
-        animatorSet.start()
     }
 
     private fun updateTextLevels(currentLevel: Int) {

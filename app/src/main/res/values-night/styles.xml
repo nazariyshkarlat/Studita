@@ -1,19 +1,15 @@
 <resources xmlns:http="http://schemas.android.com/apk/res-auto">
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorAccent10">@color/blue10</item>
-        <item name="colorAccent14">@color/blue14</item>
-        <item name="colorAccent26">@color/blue26</item>
-        <item name="colorAccent">@color/blue</item>
-        <item name="colorPrimary">@color/gray11</item>
+        <item name="colorPrimary">@color/black</item>
         <item name="popupMenuStyle">@style/PopupMenu</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
-        <item name="android:navigationBarColor">@color/gray11</item>
-        <item name="android:statusBarColor">@color/gray11</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
         <item name="android:colorEdgeEffect">@color/gray80</item>
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
-        <item name="splash_screen_color">@color/gray11</item>
+        <item name="splash_screen_color">@color/black</item>
         <item name="splash_screen_text_color">@color/white34</item>
         <item name="colorControlNormal">?secondary_color</item>
         <item name="switch_inactive_thumb_color">@color/gray8</item>

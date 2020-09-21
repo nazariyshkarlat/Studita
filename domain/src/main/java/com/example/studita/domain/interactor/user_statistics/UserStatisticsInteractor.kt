@@ -15,4 +15,6 @@ interface UserStatisticsInteractor {
 
     suspend fun getUserStatisticsRecords(): List<UserStatisticsRowData>?
 
+    suspend fun clearUserStaticsRecords()
+
 }

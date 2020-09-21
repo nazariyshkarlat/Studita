@@ -77,6 +77,7 @@ class MainMenuFragmentViewModel : ViewModel() {
                                     )
                                 )
                                 if (result is SignInWithGoogleStatus.Success) {
+                                    userStatisticsInteractor.clearUserStaticsRecords()
                                     App.initUserData(result.result.userDataData)
                                     AccountAuthenticator.addAccount(
                                         applicationRef,

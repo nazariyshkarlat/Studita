@@ -68,7 +68,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             })
         }
 
-
         homeFragmentViewModel?.let {
 
             App.authenticationState.observe(viewLifecycleOwner, Observer { pair ->
@@ -94,6 +93,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                             }
                         }
                     }
+                }else if(savedInstanceState != null && checkTokenIsCorrect == CheckTokenIsCorrectStatus.Correct && homeFragmentViewModel?.results == null){
+                    it.initSubscribeEmailState()
+                    it.getLevels()
                 }
             })
 
@@ -106,7 +108,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                             LevelsAdapter(
                                 it.getRecyclerItems(
                                     HomeRecyclerUiModel.HomeUserDataUiModel,
-                                    it.results
+                                    it.results!!
                                 ),
                                 it
                             )
@@ -143,7 +145,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                     }
                 })
 
-            homeFragmentViewModel?.viewModelScope?.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 delay(1000L)
                 it.subscribeEmailState.observe(
                     viewLifecycleOwner,
@@ -165,6 +167,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             removeAppBarDrag()
         }
 
+        mainFragmentViewModel?.showFab(true)
         homeLayoutRecyclerView.addOnScrollListener(FabRecyclerImpl(this))
     }
 
@@ -177,7 +180,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
         if(PrefsUtils.isCompletedChapterDialogWasNotShown()){
             homeFragmentViewModel?.viewModelScope?.launch {
-                delay(1000L)
+                delay(500L)
                 val dialogData = PrefsUtils.getCompletedChapterDialogData()
                 activity?.supportFragmentManager?.let {
                     ChapterCompletedDialogAlertFragment.getInstance(

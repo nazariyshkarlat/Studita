@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.domain.entity.exercise.ExerciseVariantData
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.utils.makeView
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
@@ -39,13 +38,6 @@ class ExerciseVariantsTopTitleFragment :
                     exerciseVariantsTitleLayoutSubtitle.text = exerciseUiModel.subtitle
                     fillVariants(exerciseUiModel.variants)
                 }
-                is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType6UiModel -> {
-                    val exerciseUiModel =
-                        vm.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType6UiModel
-                    exerciseVariantsTitleLayoutTitle.text = exerciseUiModel.title
-                    exerciseVariantsTitleLayoutSubtitle.text = exerciseUiModel.subtitle
-                    fillVariants(exerciseUiModel.variants)
-                }
                 is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType24UiModel -> {
                     val exerciseUiModel =
                         vm.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType24UiModel
@@ -71,17 +63,17 @@ class ExerciseVariantsTopTitleFragment :
 
     }
 
-    private fun fillVariants(variants: List<ExerciseVariantData>) {
+    private fun fillVariants(variants: List<String>) {
         variants.forEach { variant ->
             val variantView =
                 exerciseVariantsTitleLayoutLinearLayout.makeView(R.layout.exercise_variant_text_item)
-            variantView.exerciseVariantTextItem.text = variant.variantText
+            variantView.exerciseVariantTextItem.text = variant
             variantView.setOnClickListener {
                 selectVariant(
                     exerciseVariantsTitleLayoutLinearLayout,
                     exerciseVariantsTitleLayoutLinearLayout.indexOfChild(it)
                 )
-                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant.meta ?: variant.variantText)
+                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant ?: variant)
                 if (isBonus)
                     exercisesViewModel?.checkBonusResult()
             }

@@ -29,7 +29,7 @@ class SyncNotificationsAreCheckedImpl : SyncNotificationsAreChecked {
             .setInputData(data.build())
             .build()
         val workManager = WorkManager.getInstance(NetworkModule.context)
-        workManager.enqueueUniqueWork(SYNC_NOTIFICATIONS_ARE_CHECKED_ID, ExistingWorkPolicy.REPLACE, work)
+        workManager.enqueueUniqueWork("$SYNC_NOTIFICATIONS_ARE_CHECKED_ID ${userIdTokenData.userId}", ExistingWorkPolicy.REPLACE, work)
     }
 
     class CheckNotificationsWorker(val context: Context, val params: WorkerParameters) :

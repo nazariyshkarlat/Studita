@@ -1,7 +1,10 @@
 package com.example.studita.data.net
 
+import com.example.studita.data.entity.exercise.ExerciseReportEntity
+import com.example.studita.data.entity.exercise.ExerciseReportRequest
 import com.example.studita.data.entity.exercise.ExerciseRequestEntity
 import com.example.studita.data.entity.exercise.ExerciseResponseRawEntity
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -14,5 +17,10 @@ interface ExerciseResultService {
         @Path("number") exerciseNumber: Int,
         @Body exerciseRequestEntity: ExerciseRequestEntity
     ): Response<ExerciseResponseRawEntity>
+
+    @POST("send_exercise_report")
+    suspend fun sendExerciseReport(
+        @Body exerciseReportRequest: ExerciseReportRequest
+    ) : Response<ResponseBody>
 
 }

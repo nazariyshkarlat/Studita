@@ -4,10 +4,13 @@
     <color name="colorPrimaryDark">#000000</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="white98">#FAFFFFFF</color>
     <color name="white87">#DEFFFFFF</color>
     <color name="white80">#CCFFFFFF</color>
     <color name="white68">#ADFFFFFF</color>
+    <color name="white60">#99FFFFFF</color>
     <color name="white50">#80FFFFFF</color>
+    <color name="white38">#61FFFFFF</color>
     <color name="white34">#57FFFFFF</color>
     <color name="white30">#4DFFFFFF</color>
     <color name="white28">#47FFFFFF</color>
@@ -15,22 +18,27 @@
     <color name="white12">#1FFFFFFF</color>
     <color name="white8">#14FFFFFF</color>
 
-    <color name="red">#FF5238</color>
-    <color name="red50">#80FF5238</color>
+    <color name="red_light_theme">#FF3B30</color>
+    <color name="red_dark_theme">#FF5238</color>
+    <color name="red_secondary_light_theme">#80FF3B30</color>
+    <color name="red_secondary_dark_theme">#80FF5238</color>
 
     <color name="yellow">#FFBF34</color>
     <color name="orange">#E0601F</color>
 
-    <color name="green">#4EBC38</color>
+    <color name="green_light_theme">#34C759</color>
+    <color name="green_dark_theme">#32D74B</color>
 
-    <color name="blue10">#1A1A73E8</color>
-    <color name="blue14">#241A73E8</color>
-    <color name="blue26">#421A73E8</color>
-    <color name="blue">#1A73E8</color>
+    <color name="blue10_light_theme">#1A007AFF</color>
+    <color name="blue14_light_theme">#24007AFF</color>
+    <color name="blue26_light_theme">#42007AFF</color>
+    <color name="blue_light_theme">#007AFF</color>
+    <color name="blue10_dark_theme">#1A0A84FF</color>
+    <color name="blue14_dark_theme">#240A84FF</color>
+    <color name="blue26_dark_theme">#420A84FF</color>
+    <color name="blue_dark_theme">#0A84FF</color>
     <color name="google_color">#3C7AFC</color>
 
-    <color name="gray11">#111111</color>
-    <color name="gray11_80">#CC111111</color>
     <color name="gray20">#202020</color>
     <color name="gray24_98">#FA242424</color>
     <color name="gray80">#808080</color>
@@ -38,6 +46,20 @@
     <color name="gray8">#888888</color>
     <color name="grayE6">#E6E6E6</color>
     <color name="grayF0_98">#FAF0F0F0</color>
+    <color name="background_gray_light_theme">#F2F2F7</color>
+    <color name="background_gray_dark_theme">#1C1C1E</color>
+    <color name="focused_gray_color_light_theme">#243C3C43</color>
+    <color name="focused_gray_color_dark_theme">#8A545458</color>
+    <color name="disabled_gray_color_light_theme">#613C3C43</color>
+    <color name="disabled_gray_color_dark_theme">#61EBEBF5</color>
+    <color name="secondary_gray_color_light_theme">#993C3C43</color>
+    <color name="secondary_gray_color_dark_theme">#99EBEBF5</color>
+    <color name="bottom_navigation_gray_light_theme_color">#FAF9F9F9</color>
+    <color name="bottom_navigation_gray_dark_theme_color">#FA161616</color>
+    <color name="modal_windows_gray_light_theme_color">#FAF2F2F2</color>
+    <color name="modal_windows_gray_dark_theme_color">#FA1E1E1E</color>
+    <color name="bottom_sheet_gray_light_theme_color">#F9F9F9</color>
+    <color name="bottom_sheet_gray_dark_theme_color">#1D1D1D</color>
 
     <color name="black6">#0F000000</color>
     <color name="black8">#14000000</color>
@@ -46,10 +68,13 @@
     <color name="black20">#33000000</color>
     <color name="black24">#3D000000</color>
     <color name="black30">#4D000000</color>
+    <color name="black38">#61000000</color>
     <color name="black40">#66000000</color>
     <color name="black50">#80000000</color>
+    <color name="black60">#99000000</color>
     <color name="black64">#A3000000</color>
     <color name="black80">#CC000000</color>
     <color name="black87">#DE000000</color>
+    <color name="black98">#FA000000</color>
     <color name="black">#000000</color>
 </resources>

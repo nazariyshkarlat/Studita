@@ -21,6 +21,7 @@ import com.example.studita.presentation.fragments.dialog_alerts.MainMenuLanguage
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
 import com.example.studita.presentation.fragments.dialog_alerts.ProfileMenuSignOutDialogAlertFragment
 import com.example.studita.presentation.fragments.friends.MyFriendsFragment
+import com.example.studita.presentation.fragments.friends.MyFriendsOfflineModeFragment
 import com.example.studita.presentation.fragments.notifications.NotificationsFragment
 import com.example.studita.presentation.fragments.notifications.NotificationsOfflineModeFragment
 import com.example.studita.presentation.fragments.privacy.PrivacySettingsFragment
@@ -49,6 +50,12 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
 
         UserUtils.userDataLiveData.observe(activity as FragmentActivity, Observer {
             fillUserData(it)
+            profileMenuLayoutAvatar.setOnClickListener {
+                (activity as AppCompatActivity).navigateTo(
+                    if (PrefsUtils.isOfflineModeEnabled()) MyProfileOfflineModeFragment() else MyProfileFragment(),
+                    R.id.doubleFrameLayoutFrameLayout
+                )
+            }
             profileMenuItemNotificationsIndicator?.asNotificationIndicator(it.notificationsAreChecked)
         })
 
@@ -104,7 +111,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
             if (index != ListItems.OFFLINE_MODE.ordinal) {
                 itemView =
                     profileMenuLayoutSettingsList.makeView(R.layout.profile_menu_item).apply {
-                        if (index == ListItems.LANGUAGE.ordinal || index == ListItems.THEME.ordinal)
+                        if (index == ListItems.LANGUAGE.ordinal || index == ListItems.THEME.ordinal || index == ListItems.SIGN_OUT.ordinal)
                             profileMenuItemLayout.setWithMinClickInterval(true)
                     }
 
@@ -203,7 +210,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
                 }
                 ListItems.FRIENDS.ordinal -> {
                     (activity as AppCompatActivity).navigateTo(
-                        if (PrefsUtils.isOfflineModeEnabled()) MyProfileOfflineModeFragment() else MyFriendsFragment(),
+                        if (PrefsUtils.isOfflineModeEnabled()) MyFriendsOfflineModeFragment() else MyFriendsFragment(),
                         R.id.doubleFrameLayoutFrameLayout
                     )
                 }

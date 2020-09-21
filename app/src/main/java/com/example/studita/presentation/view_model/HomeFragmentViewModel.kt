@@ -25,7 +25,7 @@ class HomeFragmentViewModel : ViewModel() {
     val errorState = SingleLiveEvent<Int>()
     val subscribeEmailState = SingleLiveEvent<SubscribeEmailResultStatus>()
 
-    lateinit var results: List<HomeRecyclerUiModel>
+    var results: List<HomeRecyclerUiModel>? = null
 
     private val levelsInteractor = LevelsModule.getLevelsInteractorImpl()
     private val subscribeEmailInteractor = SubscribeEmailModule.getSubscribeEmailInteractorImpl()

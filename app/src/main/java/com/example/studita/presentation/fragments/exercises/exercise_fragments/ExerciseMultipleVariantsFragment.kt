@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.exercise_variants_title_layout.*
 open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(viewId) {
 
     var selectedPositions = ArrayList<Int>()
+    var countToSelect = 0
 
     protected var exercisesViewModel: ExercisesViewModel? = null
 
@@ -53,17 +54,16 @@ open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(v
             selectedPositions.forEach { position ->
                 selectVariant(
                     it,
-                    position,
-                    ExerciseData.ExerciseDataExercise.ExerciseType15Data.MAX_SELECTED_COUNT
+                    position
                 )
             }
         }
     }
 
-    fun selectVariant(centerLayout: ViewGroup, position: Int, maxSelectedCount: Int) {
+    fun selectVariant(centerLayout: ViewGroup, position: Int) {
 
         if (!selectedPositions.contains(position)) {
-            if (maxSelectedCount == selectedPositions.size)
+            if (countToSelect == selectedPositions.size)
                 unSelectVariant(centerLayout, selectedPositions.last())
         }
 
@@ -76,7 +76,7 @@ open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(v
         if (!selectedPositions.contains(position))
             selectedPositions.add(position)
 
-        if (maxSelectedCount == selectedPositions.size)
+        if (countToSelect == selectedPositions.size)
             exercisesViewModel?.setButtonEnabled(true)
     }
 

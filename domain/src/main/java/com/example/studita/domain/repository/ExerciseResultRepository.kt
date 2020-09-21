@@ -1,8 +1,6 @@
 package com.example.studita.domain.repository
 
-import com.example.studita.domain.entity.exercise.ExerciseData
-import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.domain.entity.exercise.ExerciseResponseData
+import com.example.studita.domain.entity.exercise.*
 
 interface ExerciseResultRepository {
 
@@ -15,5 +13,9 @@ interface ExerciseResultRepository {
         exerciseData: ExerciseData.ExerciseDataExercise,
         exerciseRequestData: ExerciseRequestData
     ): ExerciseResponseData
+
+    suspend fun sendExerciseReport(
+        exerciseReportRequestData: ExerciseReportRequestData
+    ) : Int
 
 }

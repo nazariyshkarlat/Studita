@@ -1,9 +1,6 @@
 package com.example.studita.data.repository.datasource.exercises.result
 
-import com.example.studita.data.entity.exercise.ExerciseRequestEntity
-import com.example.studita.data.entity.exercise.ExerciseResponseDescriptionContent
-import com.example.studita.data.entity.exercise.ExerciseResponseDescriptionDeserializer
-import com.example.studita.data.entity.exercise.ExerciseResponseEntity
+import com.example.studita.data.entity.exercise.*
 import com.example.studita.data.net.ExerciseResultService
 import com.example.studita.data.net.connection.ConnectionManager
 import com.example.studita.domain.exception.NetworkConnectionException
@@ -39,24 +36,36 @@ class ExerciseResultDataStoreImpl(
         exerciseNumber: Int,
         exerciseRequestEntity: ExerciseRequestEntity
     ): Pair<Int, ExerciseResponseEntity> {
-        try {
             if (connectionManager.isNetworkAbsent()) {
                 throw NetworkConnectionException()
             } else {
-                val exerciseResult =
+                try {
+                    val exerciseResult =
                     exerciseResultService.getExerciseResult(
                         exerciseNumber,
                         exerciseRequestEntity
                     )
-                val result = ExerciseResponseEntity(
-                    exerciseResult.body()!!.exerciseResult, descriptionGson.fromJson(
-                        exerciseResult.body()!!.description, type
+                    val result = ExerciseResponseEntity(
+                        exerciseResult.body()!!.exerciseResult, descriptionGson.fromJson(
+                            exerciseResult.body()!!.description, type
+                        )
                     )
-                )
-                return exerciseResult.code() to result
+                    return exerciseResult.code() to result
+                }catch (e: Exception){
+                    throw ServerUnavailableException()
+                }
             }
-        }catch (e: Exception){
-            throw ServerUnavailableException()
+    }
+
+    override suspend fun sendExerciseReport(exerciseReportRequest: ExerciseReportRequest): Int {
+            if (connectionManager.isNetworkAbsent()) {
+                throw NetworkConnectionException()
+            } else {
+                try {
+                    return exerciseResultService.sendExerciseReport(exerciseReportRequest).code()
+                }catch (e: Exception){
+                        throw ServerUnavailableException()
+                    }
         }
     }
 }

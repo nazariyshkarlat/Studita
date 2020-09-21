@@ -11,13 +11,15 @@ import com.example.studita.R
 import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
 import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.ThemeUtils
+import com.example.studita.utils.ThemeUtils.getDefaultTheme
 import com.example.studita.utils.UserUtils
 
 @SuppressLint("Registered")
 open class DefaultActivity : AppCompatActivity(),
     MainMenuThemeDialogAlertFragment.OnThemeChangeListener {
 
-    private var themeState = Theme.DARK
+    private var themeState = ThemeUtils.Theme.DARK
 
     private val themes = mutableListOf(R.style.DarkTheme, R.style.LightTheme)
 
@@ -47,35 +49,20 @@ open class DefaultActivity : AppCompatActivity(),
     }
 
     private fun setTheme() {
-        themeState = Theme.values()[PrefsUtils.getTheme().ordinal]
-        if (themeState == Theme.DEFAULT)
-            themeState = getDefaultTheme()
+        themeState = ThemeUtils.Theme.values()[PrefsUtils.getTheme().ordinal]
+        if (themeState == ThemeUtils.Theme.DEFAULT)
+            themeState = getDefaultTheme(resources)
         setTheme(themes[themeState.ordinal])
         PrefsUtils.setTheme(themeState)
         window.setBackgroundDrawable(resources.getDrawable(R.drawable.page_background, theme))
     }
 
-    private fun getDefaultTheme(): Theme {
-        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-            val currentNightMode =
-                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-            if (currentNightMode == Configuration.UI_MODE_NIGHT_NO) Theme.LIGHT else Theme.DARK
-        } else
-            Theme.DARK
-    }
-
-    override fun onThemeChanged(theme: Theme) {
+    override fun onThemeChanged(theme: ThemeUtils.Theme) {
         if (themeState != theme) {
             themeState = theme
             PrefsUtils.setTheme(themeState)
             finish()
         }
-    }
-
-    enum class Theme {
-        DARK,
-        LIGHT,
-        DEFAULT
     }
 
 }

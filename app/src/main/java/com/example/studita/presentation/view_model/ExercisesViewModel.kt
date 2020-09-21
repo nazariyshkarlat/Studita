@@ -246,6 +246,8 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                         )
                     )
 
+                    delay(1000L)
+
                     completeExercises(
                         CompletedExercisesData(
                             chapterNumber,
@@ -453,11 +455,16 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                                             ) && it.exerciseNumber == exerciseData.exerciseNumber
                                         })
                                     else
-                                        exercises.removeAll(exercises.filter {
-                                            exercises.indexOf(it) > exercises.indexOf(
-                                                exerciseData
-                                            ) && it.exerciseNumber == exerciseData.exerciseNumber
-                                        })
+                                        exercises.forEach {
+                                            if (
+                                                exercises.indexOf(it) > exercises.indexOf(
+                                                    exerciseData
+                                                ) && it.exerciseNumber == exerciseData.exerciseNumber
+                                            ) {
+                                                arrayIndex++
+                                                exercises.remove(it)
+                                            }
+                                        }
 
                                     exercisesToRetry.addAll(exercisesResponseData.exercises.filter { it.exerciseNumber == exerciseData.exerciseNumber })
                                 }
@@ -514,13 +521,13 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
         when (exerciseUiModel) {
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType1UiModel -> ExerciseVariantsTopTitleVariantsImagesFragment()
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType2UiModel -> ExerciseVariantsTopLinearFragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel -> ExerciseVariantsTopTitleFragment()
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel -> ExerciseVariantsTopTitleFragment()
-
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel,
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel,
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType5UiModel,
-            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType6UiModel,
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType24UiModel,
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType25UiModel  -> ExerciseVariantsTopTitleFragment()
+
+            is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType6UiModel -> ExerciseVariantsTopTitleHorizontalVariantsFragment()
 
             is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType7UiModel -> ExerciseVariantsTrueFalseFragment()
 

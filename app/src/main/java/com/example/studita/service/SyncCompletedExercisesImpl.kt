@@ -28,7 +28,7 @@ class SyncCompletedExercisesImpl : SyncCompletedExercises {
             .setInputData(data.build())
             .build()
         val workManager = WorkManager.getInstance(NetworkModule.context)
-        workManager.enqueueUniqueWork(SYNC_COMPLETED_EXERCISES_ID, ExistingWorkPolicy.APPEND, work)
+        workManager.enqueueUniqueWork("$SYNC_COMPLETED_EXERCISES_ID ${completedExercisesRequestData.userIdToken!!.userId}", ExistingWorkPolicy.APPEND, work)
     }
 
     class CompleteChapterPartWorker(val context: Context, val params: WorkerParameters) :

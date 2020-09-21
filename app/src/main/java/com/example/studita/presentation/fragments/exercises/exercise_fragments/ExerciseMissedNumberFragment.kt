@@ -23,6 +23,7 @@ class ExerciseMissedNumberFragment :
     NavigatableFragment(R.layout.exercise_input_missed_part_layout),
     TextWatcher {
 
+    private var isNumeral = false
     private var exercisesViewModel: ExercisesViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,11 +48,13 @@ class ExerciseMissedNumberFragment :
                 exerciseMissedPartLayoutLeftTextView.text = exerciseUiModel.titleParts.first
                 exerciseMissedPartLayoutRightTextView.text = exerciseUiModel.titleParts.second
                 exerciseMissedPartLayoutBottomTextView.text = exerciseUiModel.subtitle
-
-                exerciseMissedPartLayoutEditText.keyListener =
-                    DigitsKeyListener.getInstance("0123456789")
+                isNumeral = exerciseUiModel.isNumeral
                 if (exerciseUiModel.isNumeral) {
+                    exerciseMissedPartLayoutEditText.keyListener = DigitsKeyListener.getInstance(if(exerciseUiModel.titleParts.first.endsWith("÷"))  "123456789" else "0123456789")
                     exerciseMissedPartLayoutEditText.filters += InputFilter.LengthFilter(1)
+                }else{
+                    exerciseMissedPartLayoutEditText.keyListener =
+                        DigitsKeyListener.getInstance("0123456789")
                 }
             }
         }
@@ -70,7 +73,7 @@ class ExerciseMissedNumberFragment :
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         val str = s.toString()
         if (str.isNotEmpty()) {
-            if (str[0] == '0') {
+            if (str[0] == '0' && !isNumeral) {
                 exerciseMissedPartLayoutEditText.text.delete(0, 1)
                 return
             } else {

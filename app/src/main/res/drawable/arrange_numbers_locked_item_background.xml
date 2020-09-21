@@ -6,5 +6,5 @@
             <solid android:color="?main_blocks_color"/>
         </shape>
     </item>
-    <item android:drawable="@drawable/ic_lock_secondary" android:gravity="center"/>
+    <item android:drawable="@drawable/ic_lock_disabled" android:gravity="center"/>
 </layer-list>

@@ -11,7 +11,7 @@
         android:focusable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="14dp"
+        android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
         <FrameLayout
@@ -24,8 +24,7 @@
             <ImageView
                 android:id="@+id/profileMenuItemIcon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="2dp" />
+                android:layout_height="wrap_content"/>
         </FrameLayout>
 
         <TextView
@@ -33,7 +32,7 @@
             style="@style/Medium16_50"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp" />
+            android:layout_marginStart="16dp" />
 
     </com.example.studita.presentation.views.press_view.PressLinearLayout>
 </FrameLayout>

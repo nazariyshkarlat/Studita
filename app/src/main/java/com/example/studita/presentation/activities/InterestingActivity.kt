@@ -1,9 +1,13 @@
 package com.example.studita.presentation.activities
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
+import com.example.studita.presentation.fragments.interesting.InterestingExplanationFragment
+import com.example.studita.presentation.fragments.interesting.InterestingFragment
 import com.example.studita.presentation.fragments.interesting.InterestingLoadFragment
+import com.example.studita.presentation.fragments.interesting.InterestingStartScreenFragment
 import com.example.studita.presentation.view_model.InterestingViewModel
 import com.example.studita.utils.navigateTo
 
@@ -26,7 +30,11 @@ class InterestingActivity : DefaultActivity() {
     }
 
     override fun onBackPressed() {
-        finish()
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
+        if(currentFragment is InterestingFragment)
+            currentFragment.onBackClick()
+        else
+            super.onBackPressed()
     }
 
 }

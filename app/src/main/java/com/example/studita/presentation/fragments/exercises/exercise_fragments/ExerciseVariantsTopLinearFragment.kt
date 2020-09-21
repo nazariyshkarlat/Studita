@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.domain.entity.exercise.ExerciseVariantData
 import com.example.studita.presentation.model.ExerciseImagesRowUiModel
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.views.SquareView
@@ -47,17 +46,17 @@ class ExerciseVariantsTopLinearFragment :
         selectCurrentVariant(exerciseVariantsLinearLayoutCenterLinearLayout)
     }
 
-    private fun fillVariants(variants: List<ExerciseVariantData>) {
+    private fun fillVariants(variants: List<String>) {
         variants.forEach { variant ->
             val variantView =
                 exerciseVariantsLinearLayoutCenterLinearLayout.makeView(R.layout.exercise_variant_text_item)
-            variantView.exerciseVariantTextItem.text = variant.variantText
+            variantView.exerciseVariantTextItem.text = variant
             variantView.setOnClickListener {
                 selectVariant(
                     exerciseVariantsLinearLayoutCenterLinearLayout,
                     exerciseVariantsLinearLayoutCenterLinearLayout.indexOfChild(it)
                 )
-                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant.meta ?: variant.variantText)
+                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant)
             }
             exerciseVariantsLinearLayoutCenterLinearLayout.addView(variantView)
         }

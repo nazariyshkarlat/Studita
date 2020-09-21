@@ -18,7 +18,7 @@ class UnsavedChangesDialogAlertFragment :
             resources.getString(R.string.leave)
         )
         dialogAlertLeftButton.setOnClickListener { dismiss() }
-        dialogAlertLeftButton.setOnClickListener {
+        dialogAlertRightButton.setOnClickListener {
             dismiss()
             if (targetFragment != null)
                 targetFragment?.onActivityResult(228, RESULT_OK, null)

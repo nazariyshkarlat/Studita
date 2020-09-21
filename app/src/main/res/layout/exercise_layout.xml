@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/exerciseParentLayout"
+<com.example.studita.presentation.views.ExerciseParentView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/exerciseLayoutParentView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/exerciseLayoutRelativeLayout"
+    <FrameLayout
+        android:id="@+id/exerciseLayoutFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+        android:layout_height="match_parent" />
 
-        <FrameLayout
-            android:id="@+id/exerciseLayoutFrameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <include
-            android:id="@+id/exerciseLayoutToolbar"
-            layout="@layout/exercise_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbarHeight" />
-
-    </RelativeLayout>
+    <include
+        android:id="@+id/exerciseLayoutToolbar"
+        layout="@layout/exercise_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarHeight" />
 
     <View
         android:id="@+id/exerciseLayoutButtonViewTransparent"
@@ -31,21 +21,21 @@
         android:layout_height="79dp"
         android:alpha="@dimen/bars_alpha"
         android:background="?page_background_color"
-        android:layout_alignParentBottom="true"/>
+        android:layout_gravity="bottom"/>
 
     <include
         android:id="@+id/exerciseLayoutSnackbar"
         layout="@layout/exercise_bottom_snackbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:visibility="invisible" />
 
     <FrameLayout
         android:id="@+id/exerciseLayoutButtonFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/buttonWithPaddingHeight"
-        android:layout_alignParentBottom="true">
+        android:layout_gravity="bottom">
 
         <com.example.studita.presentation.views.press_view.PressTextView
             android:id="@+id/exerciseLayoutButton"
@@ -60,4 +50,4 @@
 
     </FrameLayout>
 
-</RelativeLayout>
+</com.example.studita.presentation.views.ExerciseParentView>

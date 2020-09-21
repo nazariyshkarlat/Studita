@@ -6,10 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.di.data.ChapterModule
 import com.example.studita.domain.entity.ChapterData
+import com.example.studita.domain.entity.ChapterPartData
 import com.example.studita.domain.interactor.ChapterStatus
+import com.example.studita.presentation.model.ChapterPartUiModel
 import com.example.studita.presentation.model.ChapterUiModel
-import com.example.studita.presentation.model.toShapeUiModel
 import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
 import kotlinx.coroutines.Job
 
@@ -38,4 +40,10 @@ class ChapterViewModel : ViewModel() {
         }
     }
 
+    fun isCurrentChapterPart(chapterPartInChapterNumber: Int, chapterNumber: Int) =
+        (chapterPartInChapterNumber - 1) == UserUtils.userData.completedParts[chapterNumber - 1]
+
+    fun chapterPartIsOpen(chapterPartInChapterNumber: Int) = chapterPartInChapterNumber - 1 <= UserUtils.userData.completedParts[chapterData.chapterNumber - 1]
+
+    fun chapterPartInChapterNumber(chapterPart: ChapterPartData) = chapterData.parts.indexOfFirst { it.number == chapterPart.number } + 1
 }

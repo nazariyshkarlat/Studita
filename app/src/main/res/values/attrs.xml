@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="page_background_color" format="reference" />
+    <attr name="bottom_navigation_color" format="reference"/>
     <attr name="transparent_bar_color" format="reference" />
     <attr name="gray_focused_color" format="reference" />
     <attr name="blue_transparent_button_color" format="reference" />
     <attr name="secondary_color" format="reference" />
     <attr name="primary_color" format="reference" />
-    <attr name="progress_bar_color" format="reference" />
-    <attr name="next_level_color" format="reference" />
     <attr name="main_blocks_color" format="reference" />
-    <attr name="popup_background_color" format="reference" />
     <attr name="splash_screen_color" format="reference" />
     <attr name="splash_screen_text_color" format="reference" />
     <attr name="exercise_variant_button_divider_color" format="reference" />
     <attr name="swipe_refresh_layout_background_color" format="reference" />
     <attr name="disabled_color" format="reference" />
-    <attr name="dialogs_color" format="reference" />
+    <attr name="modal_windows_color" format="reference" />
+    <attr name="bottom_sheet_color" format="reference" />
     <attr name="press_view_press_alpha_lighter" format="float" />
     <attr name="press_view_press_alpha" format="float" />
     <attr name="switch_inactive_thumb_color" format="reference" />
@@ -24,6 +23,9 @@
     <attr name="colorAccent14" format="reference" />
     <attr name="colorAccent26" format="reference" />
     <attr name="grid_divider_color" format="reference"/>
+    <attr name="red_color" format="reference"/>
+    <attr name="red_secondary_color" format="reference"/>
+    <attr name="green_color" format="reference"/>
 
     <declare-styleable name="CircleProgress">
         <attr name="circle_progress" format="integer" />
@@ -46,6 +48,10 @@
         <attr name="with_min_click_interval" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="BottomSheetBehavior_Layout_behavior">
+        <attr name="topMargin" format="dimension"/>
+    </declare-styleable>
+
     <declare-styleable name="AlphaGradientView">
         <attr name="fel_edge" format="integer">
             <flag name="top" value="1" />
@@ -64,5 +70,4 @@
         <attr name="drawableSize" format="dimension" />
         <attr name="android:drawablePadding" />
     </declare-styleable>
-
 </resources>

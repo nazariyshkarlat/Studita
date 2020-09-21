@@ -1,6 +1,7 @@
 package com.example.studita.presentation.fragments.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -8,8 +9,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.OneShotPreDrawListener
+import androidx.core.view.forEach
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +22,8 @@ import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.example.studita.presentation.view_model.MainFragmentViewModel
 import com.example.studita.utils.*
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.bottom_navigation.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.coroutines.delay
@@ -67,17 +72,11 @@ class MainFragment : BaseFragment(R.layout.main_layout) {
                                 MainActivityNavigationViewModel.BottomNavigationEnum.HIDE -> (activity as AppCompatActivity).hideFragment(
                                     fragment
                                 )
-                                else -> throw UnsupportedOperationException("unknown navigation enum")
+                                else -> {}
                             }
                         } else {
                             if (pair.first == MainActivityNavigationViewModel.BottomNavigationEnum.ADD) {
-                                val addFragment =
-                                    Class.forName(pair.second).newInstance() as Fragment
-                                (activity as AppCompatActivity).addFragment(
-                                    addFragment,
-                                    R.id.mainLayoutFrameLayout
-                                )
-                                showHideFabOnNavigation(addFragment)
+                                addFirstFragment(pair.second)
                             }
                         }
                     }
@@ -123,6 +122,8 @@ class MainFragment : BaseFragment(R.layout.main_layout) {
 
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationViewModel)
 
+        bottomNavigationView.disableTooltipText()
+
         handleNetworkChanges(view)
     }
 
@@ -132,6 +133,27 @@ class MainFragment : BaseFragment(R.layout.main_layout) {
         } else {
             mainLayoutFAB.hide()
         }
+    }
+
+    fun BottomNavigationView.disableTooltipText() {
+        val menuViewField = this.javaClass.getDeclaredField("menuView")
+        menuViewField.isAccessible = true
+        val menuView = menuViewField.get(this) as BottomNavigationMenuView
+        menuView.forEach {
+            it.setOnLongClickListener {
+                true
+            }
+        }
+    }
+
+    private fun addFirstFragment(fragmentName: String){
+        val addFragment =
+            Class.forName(fragmentName).newInstance() as Fragment
+        (activity as AppCompatActivity).addFragment(
+            addFragment,
+            R.id.mainLayoutFrameLayout
+        )
+        showHideFabOnNavigation(addFragment)
     }
 
 
@@ -147,10 +169,7 @@ class MainFragment : BaseFragment(R.layout.main_layout) {
             } else {
                 snackbar.text = resources.getString(R.string.back_online)
                 snackbar.setBackgroundColor(
-                    ContextCompat.getColor(
-                        view.context,
-                        R.color.green
-                    )
+                    ThemeUtils.getGreenColor(context!!)
                 )
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(resources.getInteger(R.integer.back_online_snackbar_duration).toLong())

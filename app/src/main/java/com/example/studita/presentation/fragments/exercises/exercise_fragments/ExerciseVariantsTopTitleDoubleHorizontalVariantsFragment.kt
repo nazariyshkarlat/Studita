@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseData
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
-import com.example.studita.domain.entity.exercise.ExerciseVariantData
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.utils.makeView
 import com.example.studita.utils.postExt
@@ -50,7 +49,7 @@ class ExerciseVariantsTopTitleDoubleHorizontalVariantsFragment :
 
     }
 
-    private fun fillVariants(variants: List<ExerciseVariantData>) {
+    private fun fillVariants(variants: List<String>) {
         var childLinearLayout = LinearLayout(context)
         variants.forEachIndexed { idx, variant ->
             if (idx % 2 == 0) {
@@ -61,13 +60,13 @@ class ExerciseVariantsTopTitleDoubleHorizontalVariantsFragment :
             }
             val variantView =
                 exerciseVariantsTitleLayoutLinearLayout.makeView(R.layout.exercise_variant_text_item)
-            variantView.exerciseVariantTextItem.text = variant.variantText
+            variantView.exerciseVariantTextItem.text = variant
             variantView.setOnClickListener {
                 selectVariant(
                     exerciseVariantsTitleLayoutLinearLayout,
                     idx
                 )
-                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant.meta ?: variant.variantText)
+                exercisesViewModel?.exerciseRequestData = ExerciseRequestData(variant)
                 if (isBonus)
                     exercisesViewModel?.checkBonusResult()
             }

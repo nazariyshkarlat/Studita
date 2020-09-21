@@ -97,14 +97,9 @@ class ExerciseInputCollectionFragment :
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         val str = s.toString()
         if (str.isNotEmpty()) {
-            if (str[0] == '0') {
-                exerciseInputCollectionLayoutEditText.text.delete(0, 1)
-                return
-            } else {
-                exercisesViewModel?.buttonEnabledState?.value = true
-                exercisesViewModel?.exerciseRequestData =
-                    ExerciseRequestData(s.toString())
-            }
+            exercisesViewModel?.buttonEnabledState?.value = true
+            exercisesViewModel?.exerciseRequestData =
+                ExerciseRequestData(s.toString())
         } else {
             exercisesViewModel?.buttonEnabledState?.value = false
         }

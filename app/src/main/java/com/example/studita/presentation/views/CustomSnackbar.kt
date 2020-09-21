@@ -115,7 +115,6 @@ class CustomSnackbar @JvmOverloads constructor(
     }
 
     private fun startAnimation(duration: Long, delay: Long, onAnimationEnd: () -> Unit) {
-        alpha = 0F
         val alphaAnimator: ValueAnimator? = getAlphaAnimator(0f, 1f)
         val scaleAnimator: ValueAnimator? =
             getScaleAnimator(ANIMATION_SCALE_FROM_VALUE, 1f)

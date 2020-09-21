@@ -55,11 +55,11 @@ object PrefsUtils {
 
     fun containsNotificationsMode() = CacheModule.sharedPreferences.contains("NOTIFICATIONS_MODE")
 
-    fun getTheme() = DefaultActivity.Theme.values()[CacheModule.sharedPreferences.getInt(
+    fun getTheme() = ThemeUtils.Theme.values()[CacheModule.sharedPreferences.getInt(
         "theme",
-        DefaultActivity.Theme.DEFAULT.ordinal
+        ThemeUtils.Theme.DEFAULT.ordinal
     )]
 
-    fun setTheme(themeState: DefaultActivity.Theme) =
+    fun setTheme(themeState: ThemeUtils.Theme) =
         CacheModule.sharedPreferences.edit()?.putInt("theme", themeState.ordinal)?.apply()
 }

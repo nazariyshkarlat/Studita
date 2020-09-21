@@ -4,14 +4,12 @@ import android.content.DialogInterface
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.os.Handler
-import android.view.MotionEvent
-import android.view.MotionEvent.ACTION_DOWN
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.OneShotPreDrawListener
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
@@ -20,20 +18,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseData
 import com.example.studita.domain.entity.exercise.ExerciseResponseData
-import com.example.studita.presentation.activities.ExercisesActivity
 import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.fragments.bottom_sheets.ExerciseReportBugBottomSheetFragment
 import com.example.studita.presentation.fragments.dialog_alerts.ExercisesBadConnectionDialogAlertFragment
 import com.example.studita.presentation.fragments.exercises.description.ExercisesDescriptionFragment
-import com.example.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
-import com.example.studita.presentation.listeners.OnSwipeTouchListener
 import com.example.studita.presentation.model.*
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.presentation.views.SquareView
 import com.example.studita.utils.*
 import com.google.android.flexbox.FlexboxLayout
-import kotlinx.android.synthetic.main.chapter_part_two_help_layout.view.*
 import kotlinx.android.synthetic.main.exercise_bottom_snackbar.*
 import kotlinx.android.synthetic.main.exercise_layout.*
+import kotlinx.android.synthetic.main.exercise_layout.exerciseLayoutParentView
 import kotlinx.android.synthetic.main.exercise_toolbar.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -41,8 +37,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 
-class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterface.OnDismissListener,
-    ExercisesActivity.DispatchTouchEvent {
+class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterface.OnDismissListener{
 
     var exercisesViewModel: ExercisesViewModel? = null
     private var snackbarTranslationY = 0F
@@ -60,11 +55,10 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                 when (pair.first) {
                     ExercisesViewModel.ExercisesNavigationState.FIRST -> {
 
-                        refreshExercisesView()
-
-                        (activity as AppCompatActivity).replace(
+                        replace(
                             pair.second,
-                            R.id.exerciseLayoutFrameLayout
+                            R.id.exerciseLayoutFrameLayout,
+                            addToBackStack = false
                         )
                     }
                     ExercisesViewModel.ExercisesNavigationState.REPLACE -> {
@@ -73,23 +67,26 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                             refreshExercisesView()
                         }, 300)
 
-                        (activity as AppCompatActivity).replace(
+                        replace(
                             pair.second,
                             R.id.exerciseLayoutFrameLayout,
                             R.anim.slide_in_left,
-                            R.anim.slide_out_right
+                            R.anim.slide_out_right,
+                            addToBackStack = false
                         )
                     }
                     ExercisesViewModel.ExercisesNavigationState.NAVIGATE_IN_CONTAINER -> {
-                        (activity as AppCompatActivity).replace(
+                        replace(
                             pair.second,
-                            R.id.exerciseLayoutFrameLayout
+                            R.id.exerciseLayoutFrameLayout,
+                            addToBackStack = false
                         )
                     }
                     ExercisesViewModel.ExercisesNavigationState.NAVIGATE_COMPLETELY -> {
                         (activity as AppCompatActivity).replace(
                             pair.second,
-                            R.id.frameLayout
+                            R.id.frameLayout,
+                            addToBackStack = false
                         )
                     }
                 }
@@ -121,7 +118,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             })
 
             viewModel.buttonDividerState.observe(viewLifecycleOwner, Observer { show ->
-                println("show")
                 exerciseLayoutButtonFrameLayout.background = if (show) resources.getDrawable(
                     R.drawable.divider_top_drawable,
                     exerciseLayoutToolbar.context.theme
@@ -161,10 +157,11 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                         }
                     }
                     ExercisesViewModel.ExercisesState.DESCRIPTION -> {
-                        if (activity?.supportFragmentManager?.findFragmentById(R.id.exerciseLayoutFrameLayout) !is ExercisesDescriptionFragment)
-                            (activity as AppCompatActivity).replace(
+                        if (childFragmentManager.findFragmentById(R.id.exerciseLayoutFrameLayout) !is ExercisesDescriptionFragment)
+                            replace(
                                 viewModel.getDescriptionFragment(),
-                                R.id.exerciseLayoutFrameLayout
+                                R.id.exerciseLayoutFrameLayout,
+                                addToBackStack = false
                             )
                         formDescriptionView()
                     }
@@ -203,7 +200,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
         }
 
         if (savedInstanceState == null) {
-            (activity as AppCompatActivity).addFragment(
+            addFragment(
                 ExercisesStartScreenFragment(),
                 R.id.exerciseLayoutFrameLayout
             )
@@ -216,11 +213,16 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             }
         }
 
-        exerciseToolbarCloseButton.setOnClickListener {
+        exerciseToolbarLeftIcon.setImageResource(R.drawable.ic_close)
+        exerciseToolbarLeftIcon.setOnClickListener {
             (activity as AppCompatActivity).onBackPressed()
         }
 
-        exerciseBottomSnackbarIcon.setOnClickListener { }
+        exerciseBottomSnackbarIcon.setOnClickListener {
+            activity?.supportFragmentManager?.let{ExerciseReportBugBottomSheetFragment().apply {
+                arguments = bundleOf("EXERCISE_NUMBER" to exercisesViewModel?.exerciseData?.exerciseNumber)
+            }.show(it, null)}
+        }
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
@@ -231,38 +233,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             )
             it.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver())
         }
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        if (exercisesViewModel?.chapterPartNumber == 2) {
-
-            view?.findViewById<ViewGroup>(R.id.chapterPartTwoHelpLayout)?.let {
-
-                val indexOfCurrentExercise =
-                    exercisesViewModel?.exercises?.indexOf(exercisesViewModel?.exerciseData)!!
-                val indexOfExerciseScreen =
-                    exercisesViewModel?.exercises?.indexOf(exercisesViewModel?.exercisesResponseData?.exercises?.first { it is ExerciseData.ExerciseDataScreen.ScreenType2Data })!!
-                val helpIsEnabled = indexOfCurrentExercise < indexOfExerciseScreen
-
-                if (helpIsEnabled && exercisesViewModel?.exercisesProgress?.value == ExercisesViewModel.ExercisesState.EXERCISES) {
-
-                    val hiddenPartWidth =
-                        (it.measuredWidth - it.chapterPartTwoHelpLayoutButton.measuredWidth).toFloat()
-
-                    if (ev.action == ACTION_DOWN && it.translationX != hiddenPartWidth && !it.isContains(
-                            ev.x.toInt(),
-                            ev.y.toInt()
-                        )
-                    ) {
-                        it.animate()
-                            .translationX(hiddenPartWidth)
-                            .setInterpolator(FastOutSlowInInterpolator()).start()
-                        return true
-                    }
-                }
-            }
-        }
-        return false
     }
 
     private fun showSnackbar(
@@ -333,19 +303,16 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
 
     private fun formTrueSnackbarAnswerView() {
         exerciseBottomSnackbarTitle.text = resources.getString(R.string.true_answer)
-        exerciseLayoutSnackbar.setBackgroundColor(
-            ContextCompat.getColor(exerciseBottomSnackbarLinearLayout.context, R.color.green)
+        exerciseLayoutSnackbar.setBackgroundResource(
+            R.drawable.exercise_snackbar_correct_answer
         )
         exerciseBottomSnackbarFlexbox.visibility = View.GONE
         exerciseBottomSnackbarSubtitle.visibility = View.GONE
     }
 
     private fun formFalseAnswerSnackbarView(responseData: ExerciseResponseUiModel) {
-        exerciseLayoutSnackbar.setBackgroundColor(
-            ContextCompat.getColor(
-                exerciseBottomSnackbarLinearLayout.context,
-                R.color.red
-            )
+        exerciseLayoutSnackbar.setBackgroundResource(
+            R.drawable.exercise_snackbar_incorrect_answer
         )
         formFalseAnswerSnackbarTitle()
         formFalseAnswerSnackbarSubtitle(responseData)
@@ -442,43 +409,44 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
         }
 
         if (exercisesViewModel?.chapterPartNumber == 2) {
-            val helpView =
-                exerciseLayoutRelativeLayout.makeView(R.layout.chapter_part_two_help_layout)
-                    .apply {
 
-                        exerciseLayoutRelativeLayout.setOnTouchListener(object :
-                            OnSwipeTouchListener(context!!) {
-                            override fun onSwipeLeft() {
-                                if (this@apply.chapterPartTwoHelpLayoutButton.isEnabled) {
-                                    if (translationX != 0F) {
-                                        animate().translationX(0F)
-                                            .setInterpolator(FastOutSlowInInterpolator())
-                                            .start()
-                                    }
-                                }
-                            }
-                        })
-                        chapterPartTwoHelpLayoutButton.setOnSingleClickListener {
-                            animate().translationX(if (translationX != 0F) 0F else (measuredWidth - it.measuredWidth).toFloat())
-                                .setInterpolator(FastOutSlowInInterpolator()).start()
-                        }
-
-                        alpha = 0F
-                        id = R.id.chapterPartTwoHelpLayout
-                        layoutParams = RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.WRAP_CONTENT,
-                            RelativeLayout.LayoutParams.WRAP_CONTENT
-                        ).apply {
-                            topMargin = 16.dpToPx()
-                            addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
-                            addRule(RelativeLayout.BELOW, R.id.exerciseLayoutToolbar)
-                        }
-                    }
-
-            exerciseLayoutRelativeLayout.addView(helpView)
-
-            helpView.animate().alpha(1F).start()
+            exerciseLayoutParentView.enableHelpView()
             refreshExercisesView()
+
+        }
+    }
+
+    private fun refreshExercisesView(){
+
+        if (exercisesViewModel?.chapterPartNumber == 2) {
+            val indexOfCurrentExercise =
+                exercisesViewModel?.exercises?.indexOf(exercisesViewModel?.exerciseData)!!
+            val indexOfExerciseScreen =
+                exercisesViewModel?.exercises?.indexOf(exercisesViewModel?.exercises?.first { it is ExerciseData.ExerciseDataScreen.ScreenType2Data })!!
+            val helpIsEnabled = indexOfCurrentExercise < indexOfExerciseScreen
+
+            if (helpIsEnabled && exercisesViewModel?.exercisesProgress?.value == ExercisesViewModel.ExercisesState.EXERCISES) {
+
+                exerciseLayoutParentView.enableHelpView()
+
+                when (val exerciseUiModel = exercisesViewModel?.exerciseUiModel) {
+                    is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel -> {
+                        exerciseLayoutParentView.setText(
+                            exerciseUiModel.title.symbol,
+                            exerciseUiModel.title.symbolName
+                        )
+                    }
+                    is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel -> {
+                        exerciseLayoutParentView.setText(
+                            exerciseUiModel.title.symbol,
+                            exerciseUiModel.title.symbolName
+                        )
+                    }
+                }
+            } else {
+                exerciseLayoutParentView.disableHelpView()
+                exerciseLayoutParentView.hideView()
+            }
         }
     }
 
@@ -493,7 +461,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             exerciseLayoutButton.setOnClickListener {
                 vm.checkExerciseResult()
                 vm.setExercisesProgress(ExercisesViewModel.ExercisesState.EXERCISES)
-                println(exercisesViewModel?.exercisesAreCompleted)
                 if(exercisesViewModel?.exercisesAreCompleted == false) {
                     vm.viewModelScope.launch(Dispatchers.Main) {
                         delay(
@@ -501,67 +468,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                         )
                         vm.showTransparentLayouts(false)
                     }
-                }
-            }
-        }
-    }
-
-    private fun refreshExercisesView() {
-        if (exercisesViewModel?.chapterPartNumber == 2) {
-
-            val indexOfCurrentExercise =
-                exercisesViewModel?.exercises?.indexOf(exercisesViewModel?.exerciseData)!!
-            val indexOfExerciseScreen =
-                exercisesViewModel?.exercises?.indexOf(exercisesViewModel?.exercises?.first { it is ExerciseData.ExerciseDataScreen.ScreenType2Data })!!
-            val helpIsEnabled = indexOfCurrentExercise < indexOfExerciseScreen
-
-            if (helpIsEnabled && exercisesViewModel?.exercisesProgress?.value == ExercisesViewModel.ExercisesState.EXERCISES) {
-
-                view?.findViewById<ViewGroup>(R.id.chapterPartTwoHelpLayout)?.let {
-
-                    it.chapterPartTwoHelpLayoutButton.isEnabled = true
-                    it.measure(0, 0)
-
-                    val prevMeasuredWidth = it.measuredWidth
-
-                    when (val exerciseUiModel = exercisesViewModel?.exerciseUiModel) {
-                        is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType3UiModel -> {
-                            it.chapterPartTwoHelpLayoutNumberText.text =
-                                exerciseUiModel.title.symbol
-                            it.chapterPartTwoHelpLayoutNumberNameText.text =
-                                exerciseUiModel.title.symbolName
-                        }
-                        is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType4UiModel -> {
-                            it.chapterPartTwoHelpLayoutNumberText.text =
-                                exerciseUiModel.title.symbol
-                            it.chapterPartTwoHelpLayoutNumberNameText.text =
-                                exerciseUiModel.title.symbolName
-                        }
-                    }
-
-                    it.measure(0, 0)
-
-                    val translationX = (it.measuredWidth-it.chapterPartTwoHelpLayoutButton.measuredWidth).toFloat()
-
-                    if(it.translationX == prevMeasuredWidth.toFloat()) {
-                        it.translationX = it.measuredWidth.toFloat()
-                        it.animate()
-                            .translationX(translationX)
-                            .setInterpolator(FastOutSlowInInterpolator()).start()
-                    }else{
-                        it.translationX = translationX
-                    }
-                }
-            } else {
-                val helpView = view?.findViewById<ViewGroup>(R.id.chapterPartTwoHelpLayout)
-                helpView?.let {
-                    it.measure(0, 0)
-                    it.chapterPartTwoHelpLayoutButton.isEnabled = false
-
-                    if(it.translationX != 0F)
-                        it.animate().translationX(helpView.measuredWidth.toFloat()).setInterpolator(FastOutSlowInInterpolator())?.start()
-                    else
-                        it.translationX = helpView.measuredWidth.toFloat()
                 }
             }
         }
@@ -622,7 +528,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                                     (activity as AppCompatActivity).replace(
                                         exercisesViewModel.getExercisesEndFragment(
                                             pair.second
-                                        ), R.id.frameLayout
+                                        ), R.id.frameLayout,
+                                        addToBackStack = false
                                     )
                                 }
                             })

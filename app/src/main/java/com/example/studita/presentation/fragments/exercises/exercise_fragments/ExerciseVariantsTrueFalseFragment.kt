@@ -51,7 +51,6 @@ class ExerciseVariantsTrueFalseFragment :
                     exerciseVariantsTrueFalseLinearLayout,
                     exerciseVariantsTrueFalseLinearLayout.indexOfChild(it)
                 )
-                println(exerciseVariantsTrueFalseLinearLayout.indexOfChild(it))
                 exercisesViewModel?.exerciseRequestData = ExerciseRequestData(
                     if (exerciseVariantsTrueFalseLinearLayout.indexOfChild(
                             variantView

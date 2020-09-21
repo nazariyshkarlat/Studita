@@ -3,7 +3,7 @@
     android:insetLeft="@dimen/dialogAlertMargin"
     android:insetRight="@dimen/dialogAlertMargin">
     <shape android:shape="rectangle">
-        <solid android:color="?dialogs_color" />
+        <solid android:color="?modal_windows_color" />
         <corners android:radius="@dimen/defRadius" />
     </shape>
 </inset>

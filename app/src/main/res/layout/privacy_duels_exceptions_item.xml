@@ -24,15 +24,12 @@
         android:layout_toEndOf="@+id/privacyDuelsExceptionsItemAvatar" />
 
     <androidx.appcompat.widget.AppCompatCheckBox
+        style="@style/CheckBoxStyle"
         android:id="@+id/privacyDuelsExceptionsItemCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="8dp"
-        android:background="@null"
-        android:clickable="false"
-        android:minWidth="0dp"
-        android:minHeight="0dp" />
+        android:layout_marginEnd="12dp"/>
 
 </RelativeLayout>

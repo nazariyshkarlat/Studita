@@ -76,13 +76,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp" />
 
-        <TextView
-            style="@style/Regular18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,22 +86,22 @@
 
             <ImageView
                 android:id="@+id/exercisesDescription12LayoutIcon1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_toStartOf="@+id/exercisesDescription12LayoutIcon2"
                 android:layout_marginEnd="24dp"
                 app:srcCompat="@drawable/ic_emoji_people_secondary" />
 
             <ImageView
                 android:id="@+id/exercisesDescription12LayoutIcon2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 app:srcCompat="@drawable/ic_emoji_people_secondary" />
 
             <ImageView
                 android:id="@+id/exercisesDescription12LayoutIcon3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_toEndOf="@+id/exercisesDescription12LayoutIcon2"
                 android:layout_marginStart="24dp"
                 app:srcCompat="@drawable/ic_emoji_people_secondary" />

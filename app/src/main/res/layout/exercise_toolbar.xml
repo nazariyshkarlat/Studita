@@ -14,12 +14,11 @@
         android:background="?page_background_color" />
 
     <ImageView
-        android:id="@+id/exerciseToolbarCloseButton"
+        android:id="@+id/exerciseToolbarLeftIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/circle_background_16dp"
-        android:padding="16dp"
-        app:srcCompat="@drawable/ic_close" />
+        android:padding="16dp"/>
 
     <com.example.studita.presentation.views.CustomProgressBar
         android:id="@+id/exerciseToolbarProgressBar"
@@ -28,6 +27,6 @@
         android:layout_height="8dp"
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/defaultRLMargin"
-        android:layout_toEndOf="@+id/exerciseToolbarCloseButton" />
+        android:layout_toEndOf="@+id/exerciseToolbarLeftIcon" />
 
 </RelativeLayout>

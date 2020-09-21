@@ -80,6 +80,12 @@ open class InterestingExplanationFragment(viewId: Int) : NavigatableFragment(vie
         }
     }
 
+    override fun onDestroyView() {
+        interestingViewModel?.showToolbarDivider(false)
+        interestingViewModel?.showButtonDivider(false)
+        super.onDestroyView()
+    }
+
 
     private fun getMaxScrollY(scrollView: ScrollView) =
         0.coerceAtLeast(scrollView.getChildAt(0).height - (scrollView.height - scrollView.paddingBottom - scrollView.paddingTop))

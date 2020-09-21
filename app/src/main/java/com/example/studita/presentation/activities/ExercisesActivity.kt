@@ -44,7 +44,7 @@ class ExercisesActivity : DefaultActivity() {
         val childFragment =
             supportFragmentManager.findFragmentById(R.id.exercisesEndLayoutFrameLayout)
         if (childFragment == null) {
-            if (exercisesViewModel?.exercisesResultSentToServer() == false)
+            if (exercisesViewModel?.exercisesResultSentToServer() == false && supportFragmentManager.findFragmentById(R.id.frameLayout) !is ExercisesLoadFragment)
                 onBackClick()
             else
                 this.finish()
@@ -66,18 +66,6 @@ class ExercisesActivity : DefaultActivity() {
                 exercisesViewModel?.stopSecondsCounter()
             }
         }
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        val fragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
-        if (fragment is DispatchTouchEvent) {
-            fragment.dispatchTouchEvent(ev)
-        }
-        return super.dispatchTouchEvent(ev)
-    }
-
-    interface DispatchTouchEvent {
-        fun dispatchTouchEvent(ev: MotionEvent): Boolean
     }
 
     private fun onBackClick() {

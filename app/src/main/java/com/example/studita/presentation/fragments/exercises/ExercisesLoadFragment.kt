@@ -44,7 +44,8 @@ class ExercisesLoadFragment : LoadFragment() {
                             ExercisesFragment(),
                             R.id.frameLayout,
                             0,
-                            android.R.animator.fade_out
+                            android.R.animator.fade_out,
+                            addToBackStack = false
                         )
                     } else {
                         formBadConnectionButton(viewModel)

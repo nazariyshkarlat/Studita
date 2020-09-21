@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:layout_alignParentTop="true"
     android:clipToPadding="false"
-    android:fillViewport="true"
-    android:paddingTop="@dimen/toolbarHeight">
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:paddingTop="@dimen/toolbarHeight"
         android:orientation="vertical">
 
         <Space
@@ -91,8 +91,8 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="14dp"
-                            android:layout_marginBottom="14dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
                             app:srcCompat="@drawable/ic_palette_secondary" />
 
                         <TextView
@@ -117,8 +117,8 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="14dp"
-                            android:layout_marginBottom="14dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
                             app:srcCompat="@drawable/ic_language_secondary" />
 
                         <TextView

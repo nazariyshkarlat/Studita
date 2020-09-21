@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.updateLayoutParams
 import com.example.studita.presentation.fragments.bottom_sheets.ChapterBottomSheetFragment
 import com.example.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
 import com.example.studita.presentation.model.HomeRecyclerUiModel
@@ -56,26 +57,30 @@ class ChapterViewHolder(view: View, val count: Int) :
 
     private fun formClosedChapter() {
         itemView as AlphaGradientView
-        val params = itemView.chapterItemCardView.layoutParams as ViewGroup.MarginLayoutParams
-        params.bottomMargin = 0
-        itemView.chapterItemProgressText.visibility = View.GONE
-        itemView.chapterItemProgressBar.visibility = View.GONE
-        itemView.chapterItemCardView.layoutParams = params
-        itemView.chapterItemCardView.isClickable = false
-        itemView.fadeTop = true
-        itemView.setGradientSizeTop(0)
+        with(itemView) {
+            chapterItemProgressText.visibility = View.GONE
+            chapterItemProgressBar.visibility = View.GONE
+            itemView.chapterItemCardView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = 0
+            }
+            chapterItemCardView.isClickable = false
+            fadeTop = true
+            setGradientSizeTop(0)
+        }
     }
 
     private fun formOpenChapter() {
         itemView as AlphaGradientView
         if (itemView.fadeTop) {
-            val params = itemView.chapterItemCardView.layoutParams as ViewGroup.MarginLayoutParams
-            params.bottomMargin = 8.dpToPx()
-            itemView.chapterItemProgressText.visibility = View.VISIBLE
-            itemView.chapterItemProgressBar.visibility = View.VISIBLE
-            itemView.chapterItemCardView.layoutParams = params
-            itemView.chapterItemCardView.isClickable = true
-            itemView.fadeTop = false
+            with(itemView){
+                chapterItemProgressText.visibility = View.VISIBLE
+                chapterItemProgressBar.visibility = View.VISIBLE
+                itemView.chapterItemCardView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = 8.dpToPx()
+                }
+                chapterItemCardView.isClickable = true
+                fadeTop = false
+            }
         }
     }
 
