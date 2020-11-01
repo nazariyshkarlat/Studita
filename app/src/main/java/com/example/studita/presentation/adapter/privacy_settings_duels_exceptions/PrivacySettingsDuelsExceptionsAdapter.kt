@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.domain.entity.EditDuelsExceptionsData
+import com.example.studita.presentation.model.NotificationsUiModel
 import com.example.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
 import com.example.studita.presentation.view_model.PrivacySettingsDuelsExceptionsViewModel
 import com.example.studita.utils.UserUtils
@@ -15,7 +16,6 @@ class PrivacySettingsDuelsExceptionsAdapter(
     private val privacySettingsDuelsExceptionsViewModel: PrivacySettingsDuelsExceptionsViewModel
 ) :
     RecyclerView.Adapter<PrivacySettingsDuelsExceptionsViewHolder<*>>(),
-    LoadViewHolder.RequestMoreItems,
     UserItemViewHolder.ExceptionSelectCallback {
 
     override fun onCreateViewHolder(
@@ -28,8 +28,7 @@ class PrivacySettingsDuelsExceptionsAdapter(
                 this
             )
             ViewType.ITEMS_LOAD.ordinal -> LoadViewHolder(
-                parent.makeView(R.layout.list_load_item),
-                this
+                parent.makeView(R.layout.list_load_item)
             )
             else -> throw UnsupportedOperationException("unknown type of item")
         }
@@ -39,6 +38,10 @@ class PrivacySettingsDuelsExceptionsAdapter(
         holder: PrivacySettingsDuelsExceptionsViewHolder<out PrivacySettingsDuelsExceptionsRecyclerUiModel>,
         position: Int
     ) {
+        if ((position % privacySettingsDuelsExceptionsViewModel.perPage == privacySettingsDuelsExceptionsViewModel.perPage / 2) &&
+            (position+privacySettingsDuelsExceptionsViewModel.perPage > itemCount) &&
+            items.any { it is PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel} )
+            requestMoreItems()
         holder.bind(items[position])
     }
 
@@ -50,7 +53,7 @@ class PrivacySettingsDuelsExceptionsAdapter(
 
     override fun getItemCount() = items.size
 
-    override fun onRequestMoreItems() {
+    private fun requestMoreItems() {
         privacySettingsDuelsExceptionsViewModel.getPrivacySettingsDuelsExceptions(
             UserUtils.getUserIDTokenData()!!,
             true

@@ -13,7 +13,6 @@ class ShareActivity : DefaultActivity() {
 
         val data: Uri? = intent?.data
 
-        Log.d("SHARE_ACTIVITY", "QUERY PARAMS: ${data?.queryParameterNames}")
     }
 
 }

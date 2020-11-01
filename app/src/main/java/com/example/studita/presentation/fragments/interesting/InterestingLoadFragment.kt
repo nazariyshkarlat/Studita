@@ -23,6 +23,8 @@ class InterestingLoadFragment : LoadFragment() {
         }
 
         interestingViewModel?.let {
+
+
             it.interestingState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer<Boolean> { done ->
@@ -37,9 +39,11 @@ class InterestingLoadFragment : LoadFragment() {
                     }
                 })
 
-            it.errorState.observe(viewLifecycleOwner, Observer { message ->
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            it.loadScreenBadConnectionState.observe(viewLifecycleOwner, Observer { done->
+                if(done)
+                    formBadConnectionButton{it.getInteresting()}
             })
+
         }
 
     }

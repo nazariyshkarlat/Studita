@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import com.example.studita.R
+import com.example.studita.domain.entity.exercise.ExercisesDescriptionData
 import com.example.studita.utils.getAllViewsOfTypeT
+import com.example.studita.utils.injectParts
 import kotlinx.android.synthetic.main.exercises_description_4_layout.*
 import kotlinx.android.synthetic.main.exercises_description_5_layout.*
 
@@ -14,19 +16,19 @@ class ExercisesDescription5Fragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exercisesDescriptionModel?.let {
-            formView(it.textParts)
+            formView(it)
 
             if (!isHidden)
                 checkButtonDivider(view)
         }
     }
 
-    private fun formView(textParts: List<String>) {
-        var childIndex = -1
-        exercisesDescription5ParentLinearLayout.getAllViewsOfTypeT<TextView>().forEach { child ->
-            if (childIndex >= 0)
-                child.text = textParts[childIndex]
-            childIndex++
+    private fun formView(exercisesDescriptionModel: ExercisesDescriptionData) {
+        exercisesDescriptionModel.textParts.forEachIndexed { index, part ->
+            val child =
+                exercisesDescription5ParentLinearLayout.getAllViewsOfTypeT<TextView>()[index + 1]
+            val injected = injectParts(context!!, exercisesDescriptionModel.textParts[index], exercisesDescriptionModel.partsToInject!!)
+            child.text = injected.first
         }
     }
 }

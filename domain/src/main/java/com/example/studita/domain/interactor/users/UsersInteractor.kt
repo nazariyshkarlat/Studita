@@ -19,37 +19,37 @@ interface UsersInteractor {
         userId: Int,
         sortBy: UsersRepository.SortBy? = null,
         startsWith: String? = null,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): GetUsersStatus
 
-    suspend fun checkIsMyFriend(myId: Int, userId: Int, retryCount: Int = 30): IsMyFriendStatus
+    suspend fun checkIsMyFriend(myId: Int, userId: Int, retryCount: Int = 3): IsMyFriendStatus
 
     suspend fun sendFriendship(
         friendActionRequestData: FriendActionRequestData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): FriendActionStatus
 
     suspend fun removeFriend(
         friendActionRequestData: FriendActionRequestData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): FriendActionStatus
 
     suspend fun cancelFriendship(
         friendActionRequestData: FriendActionRequestData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): FriendActionStatus
 
     suspend fun acceptFriendship(
         friendActionRequestData: FriendActionRequestData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): FriendActionStatus
 
     suspend fun rejectFriendship(
         friendActionRequestData: FriendActionRequestData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): FriendActionStatus
 
-    suspend fun hasFriends(userId: Int, retryCount: Int = 30): HasFriendsStatus
+    suspend fun hasFriends(userId: Int, retryCount: Int = 3): HasFriendsStatus
 
     sealed class FriendActionState(open val userData: UserData) {
         data class FriendshipRequestIsAccepted(override val userData: UserData) :

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingStart="@dimen/defaultRLMargin"
+    android:paddingEnd="@dimen/defaultRLMargin"
+    android:paddingBottom="@dimen/bottomNavigationHeight"
+    android:background="?page_background_color">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+        <TextView
+            style="@style/Medium24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/server_unavailable"
+            android:textAlignment="center" />
+        <TextView
+            style="@style/Regular16Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/server_problems_main_layout_subtitle"
+            android:textAlignment="center" />
+
+        <com.example.studita.presentation.views.CenterIconTextView
+            android:id="@+id/serverProblemsMainLayoutTryAgainButton"
+            style="@style/SmallTryAgainButton"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_height="wrap_content"
+            android:text="@string/try_again"/>
+
+        <com.example.studita.presentation.views.press_view.PressTextView
+            android:id="@+id/serverProblemsMainLayoutEnableOfflineModeButton"
+            style="@style/BlueTextButton16"
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enable_offline_mode"
+            app:with_min_click_interval="true"/>
+    </LinearLayout>
+
+</FrameLayout>

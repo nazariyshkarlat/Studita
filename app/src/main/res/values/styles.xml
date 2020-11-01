@@ -1,81 +1,83 @@
 <resources xmlns:http="http://schemas.android.com/apk/res-auto">
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="popupMenuStyle">@style/PopupMenu</item>
         <item name="colorPrimary">@color/black</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:navigationBarColor">@color/black</item>
         <item name="android:statusBarColor">@color/black</item>
-        <item name="android:colorEdgeEffect">@color/gray80</item>
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
         <item name="splash_screen_color">@color/black</item>
-        <item name="splash_screen_text_color">@color/white34</item>
+        <item name="splash_screen_text_color">@color/tertiary_gray_dark_theme_color</item>
         <item name="colorControlNormal">?secondary_color</item>
         <item name="android:scrollbarSize">4dp</item>
     </style>
 
     <style name="LightTheme" parent="AppTheme">
-        <item name="colorAccent10">@color/blue10_light_theme</item>
-        <item name="colorAccent14">@color/blue14_light_theme</item>
-        <item name="colorAccent26">@color/blue26_light_theme</item>
         <item name="colorAccent">@color/blue_light_theme</item>
-        <item name="main_blocks_color">@color/background_gray_light_theme</item>
+        <item name="blocks_background_color">@color/background_gray_light_theme</item>п
         <item name="disabled_color">@color/disabled_gray_color_light_theme</item>
+        <item name="disabled_background_color">@color/disabled_background_gray_color_light_theme</item>
         <item name="modal_windows_color">@color/modal_windows_gray_light_theme_color</item>
         <item name="primary_color">@color/black</item>
         <item name="secondary_color">@color/secondary_gray_color_light_theme</item>
-        <item name="blue_transparent_button_color">?colorAccent10</item>
-        <item name="colorControlHighlight">@color/black6</item>
+        <item name="blue_transparent_button_color">@color/blue14_light_theme</item>
+        <item name="blue_transparent_button_ripple_color">@color/blue24_light_theme</item>
+        <item name="colorControlHighlight">?disabled_background_color</item>
+        <item name="android:colorEdgeEffect">#EDEDEE</item>
         <item name="gray_focused_color">@color/focused_gray_color_light_theme</item>
         <item name="bottom_navigation_color">@color/bottom_navigation_gray_light_theme_color</item>
         <item name="page_background_color">@color/white</item>
         <item name="android:statusBarColor">@color/black</item>
-        <item name="exercise_variant_button_divider_color">@color/black20</item>
-        <item name="swipe_refresh_layout_background_color">@color/white</item>
         <item name="press_view_press_alpha">0.64</item>
         <item name="press_view_press_alpha_lighter">0.3</item>
-        <item name="switch_inactive_thumb_color">@color/grayE6</item>
-        <item name="switch_inactive_track_color">@color/black</item>
+        <item name="switch_inactive_thumb_color">#8A8A8E</item>
+        <item name="switch_inactive_track_color">#A4A4A4</item>
         <item name="android:scrollbarThumbHorizontal">?attr/gray_focused_color</item>
-        <item name="grid_divider_color">@color/black30</item>
         <item name="android:scrollbarThumbVertical">?attr/gray_focused_color</item>
         <item name="bottom_sheet_color">@color/bottom_sheet_gray_light_theme_color</item>
         <item name="green_color">@color/green_light_theme</item>
         <item name="red_color">@color/red_light_theme</item>
         <item name="red_secondary_color">@color/red_secondary_light_theme</item>
+        <item name="orange_color">@color/orange_light_theme</item>
+        <item name="interesting_item_background_gradient_start_color">#0065FC</item>
+        <item name="interesting_item_background_gradient_end_color">#0085FF</item>
+        <item name="tertiary_gray">@color/tertiary_gray_light_theme_color</item>
+        <item name="secondary_accent_color">@color/blue60_light_theme</item>
     </style>
 
     <style name="DarkTheme" parent="AppTheme">
-        <item name="colorAccent10">@color/blue10_dark_theme</item>
-        <item name="colorAccent14">@color/blue14_dark_theme</item>
-        <item name="colorAccent26">@color/blue26_dark_theme</item>
         <item name="colorAccent">@color/blue_dark_theme</item>
         <item name="secondary_color">@color/secondary_gray_color_dark_theme</item>
         <item name="primary_color">@color/white</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="page_background_color">@color/black</item>
-        <item name="blue_transparent_button_color">?colorAccent14</item>
+        <item name="secondary_accent_color">@color/blue60_dark_theme</item>
+        <item name="blue_transparent_button_color">@color/blue18_dark_theme</item>
+        <item name="blue_transparent_button_ripple_color">@color/blue24_dark_theme</item>
         <item name="modal_windows_color">@color/modal_windows_gray_dark_theme_color</item>
-        <item name="main_blocks_color">@color/background_gray_dark_theme</item>
+        <item name="blocks_background_color">@color/background_gray_dark_theme</item>
         <item name="disabled_color">@color/disabled_gray_color_dark_theme</item>
+        <item name="disabled_background_color">@color/disabled_background_gray_color_dark_theme</item>
         <item name="bottom_navigation_color">@color/bottom_navigation_gray_dark_theme_color</item>
         <item name="gray_focused_color">@color/focused_gray_color_dark_theme</item>
-        <item name="colorControlHighlight">@color/white8</item>
+        <item name="colorControlHighlight">?disabled_background_color</item>
+        <item name="android:colorEdgeEffect">#39393B</item>
         <item name="android:navigationBarColor">@color/black</item>
-        <item name="exercise_variant_button_divider_color">@color/white24</item>
-        <item name="swipe_refresh_layout_background_color">@color/black</item>
         <item name="press_view_press_alpha">0.68</item>
         <item name="press_view_press_alpha_lighter">0.34</item>
-        <item name="switch_inactive_thumb_color">@color/gray8</item>
-        <item name="switch_inactive_track_color">@color/white</item>
+        <item name="switch_inactive_thumb_color">#8D8D93</item>
+        <item name="switch_inactive_track_color">#A8A8A8</item>
         <item name="android:scrollbarThumbHorizontal">?attr/gray_focused_color</item>
-        <item name="grid_divider_color">@color/white30</item>
         <item name="android:scrollbarThumbVertical">?attr/gray_focused_color</item>
         <item name="bottom_sheet_color">@color/bottom_sheet_gray_dark_theme_color</item>
         <item name="green_color">@color/green_dark_theme</item>
         <item name="red_color">@color/red_dark_theme</item>
         <item name="red_secondary_color">@color/red_secondary_light_theme</item>
+        <item name="orange_color">@color/orange_dark_theme</item>
+        <item name="interesting_item_background_gradient_start_color">#1070FF</item>
+        <item name="interesting_item_background_gradient_end_color">#0C8AFF</item>
+        <item name="tertiary_gray">@color/tertiary_gray_dark_theme_color</item>
     </style>
 
     <!-- Fonts -->
@@ -85,6 +87,13 @@
         <item name="android:textSize">32sp</item>
     </style>
 
+    <style name="Medium32White" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+
     <style name="Bold28" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_bold</item>
         <item name="android:textColor">?primary_color</item>
@@ -93,25 +102,37 @@
 
     <style name="Regular14" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">?primary_color</item>
+        <item name="android:textColor">@color/primary_enabled_disabled_color</item>
         <item name="android:textSize">14sp</item>
     </style>
 
     <style name="Regular20" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">?primary_color</item>
+        <item name="android:textColor">@color/primary_enabled_disabled_color</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <style name="Regular20Secondary" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">?secondary_color</item>
+        <item name="android:textColor">@color/secondary_enabled_disabled_color</item>
         <item name="android:textSize">20sp</item>
     </style>
 
     <style name="Regular16Secondary" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">?attr/secondary_color</item>
+        <item name="android:textColor">@color/secondary_enabled_disabled_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Regular18Secondary" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/secondary_enabled_disabled_color</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Regular16Tertiary" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?disabled_color</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -123,31 +144,37 @@
 
     <style name="Regular18" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">?attr/primary_color</item>
+        <item name="android:textColor">@color/primary_enabled_disabled_color</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Regular18DisabledSecondary" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/primary_enabled_selected_color</item>
         <item name="android:textSize">18sp</item>
     </style>
 
     <style name="Regular12Secondary" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">?attr/secondary_color</item>
+        <item name="android:textColor">@color/secondary_enabled_disabled_color</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="Regular13Secondary" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">?attr/secondary_color</item>
+        <item name="android:textColor">@color/secondary_enabled_disabled_color</item>
         <item name="android:textSize">13sp</item>
     </style>
 
     <style name="Regular12SecondarySelector" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">@color/secondary_accent_color</item>
+        <item name="android:textColor">@color/secondary_enabled_disabled_color</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="Regular14Secondary" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">?attr/secondary_color</item>
+        <item name="android:textColor">@color/secondary_enabled_disabled_color</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -169,6 +196,12 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="Regular14Tertiary" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?tertiary_gray</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="Regular12White" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textColor">@color/white87</item>
@@ -177,7 +210,7 @@
 
     <style name="Regular16" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">?primary_color</item>
+        <item name="android:textColor">@color/primary_enabled_disabled_color</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -189,7 +222,7 @@
 
     <style name="Medium16" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">?primary_color</item>
+        <item name="android:textColor">@color/primary_enabled_disabled_color</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -207,43 +240,55 @@
 
     <style name="Medium24" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">?primary_color</item>
+        <item name="android:textColor">@color/primary_enabled_disabled_color</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Medium24White" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textSize">24sp</item>
     </style>
 
     <style name="Medium24Secondary" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">?secondary_color</item>
+        <item name="android:textColor">@color/secondary_enabled_disabled_color</item>
         <item name="android:textSize">24sp</item>
     </style>
 
     <style name="Medium28" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">?primary_color</item>
+        <item name="android:textColor">@color/primary_enabled_disabled_color</item>
         <item name="android:textSize">28sp</item>
     </style>
 
     <style name="Regular24" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">?primary_color</item>
+        <item name="android:textColor">@color/primary_enabled_disabled_color</item>
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="Medium16_50" parent="TextAppearance.AppCompat">
+    <style name="Medium16Secondary" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">?attr/secondary_color</item>
+        <item name="android:textColor">@color/secondary_enabled_disabled_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Medium16SecondaryDarkTheme" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/secondary_gray_color_dark_theme</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Medium18" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">?primary_color</item>
+        <item name="android:textColor">@color/primary_enabled_disabled_color</item>
         <item name="android:textSize">18sp</item>
     </style>
 
     <style name="Medium20" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">?primary_color</item>
+        <item name="android:textColor">@color/primary_enabled_disabled_color</item>
         <item name="android:textSize">20sp</item>
     </style>
 
@@ -265,10 +310,10 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="Medium18Yellow" parent="TextAppearance.AppCompat">
+    <style name="Medium16Accent" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">@color/yellow</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?colorAccent</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Medium14Blue" parent="TextAppearance.AppCompat">
@@ -332,6 +377,13 @@
         <item name="android:textColor">@color/button_accent_8_text_color</item>
     </style>
 
+    <style name="WhiteButton" parent="android:Widget.TextView">
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:background">@drawable/button_white_8</item>
+        <item name="android:textAppearance">@style/Medium16Accent</item>
+    </style>
+
     <style name="WithGoogleButton" parent="android:Widget.TextView">
         <item name="android:gravity">center</item>
         <item name="android:drawableStart">@drawable/ic_google</item>
@@ -346,8 +398,20 @@
     <style name="TryAgainButton" parent="ButtonBlueTransparent">
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/Medium16Blue</item>
-        <item name="android:drawableLeft">@drawable/refresh_animation</item>
+        <item name="android:drawableStart">@drawable/refresh_animation</item>
         <item name="android:drawablePadding">8dp</item>
+        <item name="android:text">@string/try_again</item>
+    </style>
+
+    <style name="SmallTryAgainButton" parent="ButtonBlueTransparent">
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/Medium16Blue</item>
+        <item name="android:drawableStart">@drawable/refresh_animation</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:drawablePadding">12dp</item>
         <item name="android:text">@string/try_again</item>
     </style>
 
@@ -355,6 +419,7 @@
         <item name="android:textAlignment">center</item>
         <item name="android:background">@drawable/exercise_variant_transition</item>
         <item name="android:textAppearance">@style/Medium16</item>
+        <item name="android:textColor">?primary_color</item>
     </style>
 
     <style name="ButtonBlueTransparent" parent="android:Widget.TextView">
@@ -383,17 +448,17 @@
 
     <style name="BlueTextButton16" parent="TextButton">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">?colorAccent</item>
+        <item name="android:textColor">@color/accent_disabled_color</item>
     </style>
 
     <style name="RedTextButton16" parent="TextButton">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">?red_color</item>
+        <item name="android:textColor">@color/red_disabled_color</item>
     </style>
 
     <style name="BlueTextButton14" parent="TextButton">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?colorAccent</item>
+        <item name="android:textColor">@color/accent_disabled_color</item>
     </style>
 
     <style name="Level" parent="android:Widget.TextView">
@@ -472,8 +537,6 @@
         <item name="rippleColor">@android:color/transparent</item>
         <item name="backgroundTint">?colorAccent</item>
         <item name="tint">@color/white</item>
-        <item name="elevation">0dp</item>
-        <item name="pressedTranslationZ">0dp</item>
     </style>
 
     <style name="ChapterCardView" parent="Widget.MaterialComponents.CardView">
@@ -483,13 +546,6 @@
         <item name="strokeColor">?attr/gray_focused_color</item>
         <item name="cardElevation">0dp</item>
         <item name="strokeWidth">1dp</item>
-    </style>
-
-    <style name="InterestingCardView" parent="Widget.MaterialComponents.CardView">
-        <item name="cardCornerRadius">@dimen/defRadius</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="rippleColor">@color/white8</item>
-        <item name="cardElevation">0dp</item>
     </style>
 
     <style name="BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
@@ -512,15 +568,6 @@
         <item name="android:colorForeground">?switch_inactive_track_color</item>
     </style>
 
-    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:popupBackground">@drawable/popup_background</item>
-        <item name="android:popupElevation">0dp</item>
-        <item name="android:textColor">?primary_color</item>
-        <item name="android:dropDownHorizontalOffset">-16dp</item>
-        <item name="android:layout_marginEnd">0dp</item>
-        <item name="fontFamily">@font/roboto_medium</item>
-    </style>
-
     <style name="SearchEditText" parent="Widget.AppCompat.EditText">
         <item name="android:paddingStart">12dp</item>
         <item name="android:paddingEnd">16dp</item>
@@ -534,7 +581,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textColorHint">?secondary_color</item>
-        <item name="android:background">@drawable/main_blocks_rectangle</item>
+        <item name="android:background">@drawable/blocks_rectangle</item>
     </style>
     
     <style name="ExercisesKeyboardBlueButton" parent="Widget.AppCompat.TextView">
@@ -552,7 +599,7 @@
         <item name="android:background">@drawable/exercises_keyboard_gray_button</item>
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/button_primary_enabled_disabled_text_color</item>
+        <item name="android:textColor">@color/primary_enabled_disabled_color</item>
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:textSize">20sp</item>

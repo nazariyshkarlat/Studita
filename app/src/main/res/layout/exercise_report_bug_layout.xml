@@ -107,41 +107,6 @@
         </FrameLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/exerciseReportBugLayoutThanksLayout"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:layout_marginBottom="32dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp"
-        android:visibility="gone"
-        android:gravity="center">
-        
-        <View
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/smiling_face_with_sunglasses"/>
-
-        <TextView
-            style="@style/Medium20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:layout_marginTop="16dp"
-            android:text="@string/exercise_report_bug_thx_title"/>
-
-        <TextView
-            style="@style/Regular16Secondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:layout_marginTop="16dp"
-            android:text="@string/exercise_report_bug_thx_subtitle"/>
-
-    </LinearLayout>
-
     <com.example.studita.presentation.views.press_view.PressTextView
         android:id="@+id/exerciseReportBugLayoutButton"
         style="@style/Button"

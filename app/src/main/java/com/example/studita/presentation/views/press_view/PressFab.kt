@@ -30,6 +30,7 @@ class PressFab @JvmOverloads constructor(
     }
 
     fun setOnClickListener(work: (View) -> Unit) {
+        isClickable = true
         pressViewImpl.onClick = work
     }
 

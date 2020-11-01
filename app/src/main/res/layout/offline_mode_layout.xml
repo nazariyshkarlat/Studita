@@ -16,4 +16,13 @@
         android:text="@string/offline_mode_layout_text"
         android:textAlignment="center" />
 
+    <com.example.studita.presentation.views.press_view.PressTextView
+        android:id="@+id/offlineModeLayoutButton"
+        style="@style/Button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="bottom"
+        android:text="@string/offline_mode_layout_button_text"/>
+
 </FrameLayout>

@@ -32,7 +32,7 @@ class SyncExercisesReportsImpl : SyncExercisesReports {
             .setInputData(data.build())
             .build()
         val workManager = WorkManager.getInstance(NetworkModule.context)
-        workManager.enqueueUniqueWork("$SYNC_EXERCISES_REPORTS_ID ${exerciseReportRequestData.userIdTokenData?.userId ?: System.currentTimeMillis()}", ExistingWorkPolicy.APPEND, work)
+        workManager.enqueueUniqueWork(SYNC_EXERCISES_REPORTS_ID, ExistingWorkPolicy.APPEND, work)
     }
 
     class SendExerciseReportWorker(val context: Context, val params: WorkerParameters) :

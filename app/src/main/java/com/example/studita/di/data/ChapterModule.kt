@@ -1,6 +1,6 @@
 package com.example.studita.di.data
 
-import com.example.studita.data.cache.chapter.ChapterCacheImpl
+import com.example.studita.data.cache.chapter.ChaptersCacheImpl
 import com.example.studita.data.net.ChapterService
 import com.example.studita.data.net.ChaptersService
 import com.example.studita.data.repository.ChapterRepositoryImpl
@@ -60,7 +60,7 @@ object ChapterModule {
         DiskChapterJsonDataStore(getChapterCacheImpl())
 
     private fun getChapterCacheImpl() =
-        ChapterCacheImpl(CacheModule.sharedPreferences)
+        ChaptersCacheImpl(CacheModule.sharedPreferences)
 
     private fun getChapterJsonDataStoreFactory() =
         ChapterJsonDataStoreFactoryImpl(

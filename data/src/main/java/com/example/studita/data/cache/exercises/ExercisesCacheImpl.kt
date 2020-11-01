@@ -25,7 +25,7 @@ class ExercisesCacheImpl(private val sharedPreferences: SharedPreferences) : Exe
     }
 
     override fun isCached(): Boolean {
-        val value = sharedPreferences.getString("${EXERCISES_PREFS}_${1}", null)
+        val value = sharedPreferences.getString("${EXERCISES_PREFS}_${0}", null)
         return value?.isNotEmpty() ?: false
     }
 

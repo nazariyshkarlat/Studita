@@ -3,31 +3,26 @@ package com.example.studita.presentation.fragments.main
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.OneShotPreDrawListener
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.studita.App
 import com.example.studita.R
 import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
-import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.activities.MainMenuActivity
 import com.example.studita.presentation.adapter.levels.LevelsAdapter
-import com.example.studita.presentation.draw.AvaDrawer
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.dialog_alerts.ChapterCompletedDialogAlertFragment
+import com.example.studita.presentation.fragments.error_fragments.InternetIsDisabledMainFragment
+import com.example.studita.presentation.fragments.error_fragments.ServerProblemsMainFragment
 import com.example.studita.presentation.listeners.FabRecyclerImpl
 import com.example.studita.presentation.listeners.FabScrollListener
+import com.example.studita.presentation.listeners.ReloadPageCallback
 import com.example.studita.presentation.model.HomeRecyclerUiModel
-import com.example.studita.presentation.view_model.ChapterViewModel
 import com.example.studita.presentation.view_model.HomeFragmentViewModel
 import com.example.studita.presentation.view_model.MainFragmentViewModel
 import com.example.studita.presentation.views.CustomSnackbar
@@ -35,124 +30,140 @@ import com.example.studita.utils.*
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.home_layout_bar.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetChangedListener,
-    FabScrollListener {
+    FabScrollListener, ReloadPageCallback {
 
-    companion object {
-        var needsRefresh = false
+    val homeFragmentViewModel: HomeFragmentViewModel? by lazy {
+        activity?.run {
+            ViewModelProviders.of(this).get(HomeFragmentViewModel::class.java)
+        }
     }
-
-    private var homeFragmentViewModel: HomeFragmentViewModel? = null
-    private var chapterPartsViewModel: ChapterViewModel? = null
     private var mainFragmentViewModel: MainFragmentViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homeFragmentViewModel = activity?.run {
-            ViewModelProviders.of(this).get(HomeFragmentViewModel::class.java)
-        }
         mainFragmentViewModel = activity?.run {
             ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
         }
-        chapterPartsViewModel = activity?.run {
-            ViewModelProviders.of(this).get(ChapterViewModel::class.java)
-        }
 
-        chapterPartsViewModel?.let {
-            it.errorState.observe(viewLifecycleOwner, Observer { message ->
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-            })
-        }
+        homeFragmentViewModel?.let {vm->
 
-        homeFragmentViewModel?.let {
 
-            App.authenticationState.observe(viewLifecycleOwner, Observer { pair ->
-
+            App.authenticationState.observe(viewLifecycleOwner, Observer {pair->
                 val checkTokenIsCorrect = pair.first
                 val isOfflineModeChanged = pair.second
 
-                if ((savedInstanceState == null && !MainActivity.needsRecreate) || isOfflineModeChanged) {
-                    when (checkTokenIsCorrect) {
-                        CheckTokenIsCorrectStatus.Waiting -> {
-                            it.progressState.value = false
-                        }
-                        CheckTokenIsCorrectStatus.Correct -> {
+                if (isOfflineModeChanged) {
 
-                            if (isOfflineModeChanged) {
-                                if (homeFragmentViewModel?.results.isNullOrEmpty() || !PrefsUtils.isOfflineModeEnabled()) {
-                                    it.initSubscribeEmailState()
-                                    it.getLevels()
-                                }
-                            }else{
-                                it.initSubscribeEmailState()
-                                it.getLevels()
+                    when (checkTokenIsCorrect) {
+                        is CheckTokenIsCorrectStatus.Waiting -> {
+                            if(!(PrefsUtils.isOfflineModeEnabled() && vm.results?.isNotEmpty() == true)) {
+                                getLevels(vm)
                             }
                         }
+                        is CheckTokenIsCorrectStatus.Correct -> {
+                            if(PrefsUtils.isOfflineModeEnabled()){
+                                getLevels(vm)
+                            }else{
+                                if(vm.levelsJob?.isActive == false && vm.results.isNullOrEmpty()){
+                                    getLevels(vm)
+                                }
+                            }
+                        }
+
                     }
-                }else if(savedInstanceState != null && checkTokenIsCorrect == CheckTokenIsCorrectStatus.Correct && homeFragmentViewModel?.results == null){
-                    it.initSubscribeEmailState()
-                    it.getLevels()
+
+                    App.authenticationState.value = checkTokenIsCorrect to false
                 }
             })
 
-            it.progressState.observe(
+            vm.localUserDataState.observe(viewLifecycleOwner, Observer {
+                homeLayoutBarAccountImageView.fillAvatar(it.avatarLink, it.userName!!, it.userId!!)
+            })
+
+            vm.progressState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { done ->
                     if (done) {
-                        mainFragmentViewModel?.hideProgress(true)
+                        homeLayoutBarLogInButton.isEnabled = true
+                        homeLayoutProgressBar.visibility = View.GONE
+
                         homeLayoutRecyclerView.adapter =
                             LevelsAdapter(
-                                it.getRecyclerItems(
+                                vm.getRecyclerItems(
                                     HomeRecyclerUiModel.HomeUserDataUiModel,
-                                    it.results!!
+                                    vm.results!!,
                                 ),
-                                it
+                                vm,
+                                viewLifecycleOwner
                             )
                         homeLayoutRecyclerView.visibility = View.VISIBLE
+
+                        if(UserUtils.isLoggedIn())
+                            vm.initSubscribeEmailState()
+
+                        if(arguments?.containsKey("IS_AFTER_SIGN_UP") == true){
+                            vm.showLogInSnackbar(arguments!!.getBoolean("IS_AFTER_SIGN_UP"))
+                            arguments?.clear()
+                        }
                     } else {
-                        mainFragmentViewModel?.hideProgress(false)
+
+                        if(!PrefsUtils.offlineDataIsCached())
+                            homeLayoutBarLogInButton.isEnabled = false
+
+                        clearAppBarDivider()
+                        homeLayoutProgressBar.visibility = View.VISIBLE
                         homeLayoutRecyclerView.visibility = View.GONE
                     }
                 })
 
-            it.errorState.observe(viewLifecycleOwner, Observer { message ->
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            vm.logInSnackbarEvent.observe(viewLifecycleOwner, Observer {
+                showLogInSnackbar(it)
+            })
+
+            vm.errorEvent.observe(viewLifecycleOwner, Observer { isNetworkError->
+                if (isNetworkError) {
+                    addFragment(InternetIsDisabledMainFragment(), R.id.homeLayoutFrameLayout, false)
+                }else{
+                    addFragment(ServerProblemsMainFragment(), R.id.homeLayoutFrameLayout, false)
+                }
             })
 
             UserUtils.userDataLiveData.observe(
-                activity as FragmentActivity,
+                viewLifecycleOwner,
                 androidx.lifecycle.Observer { data ->
+
+                    if(vm.results != null && vm.progressState.value == false)
+                        vm.progressState.value = true
+
                     if (UserUtils.isLoggedIn() && data != null) {
                         homeLayoutBarAccountNotificationsIndicator.asNotificationIndicator(data.notificationsAreChecked)
-                        if (data.avatarLink == null) {
-                            AvaDrawer.drawAvatar(
-                                homeLayoutBarAccountImageView,
-                                UserUtils.userData.userName!!,
-                                PrefsUtils.getUserId()!!
-                            )
-                        } else {
-                            Glide
-                                .with(this@HomeFragment)
-                                .load(data.avatarLink)
-                                .centerCrop()
-                                .apply(RequestOptions.circleCropTransform())
-                                .into(homeLayoutBarAccountImageView)
-                        }
+                        homeLayoutBarAccountImageView.fillAvatar(data.avatarLink, data.userName!!, data.userId!!)
                     }
                 })
 
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(1000L)
-                it.subscribeEmailState.observe(
-                    viewLifecycleOwner,
-                    androidx.lifecycle.Observer { status ->
-                        showSnackbar(status, view.context)
-                    })
-            }
+            vm.subscribeEmailState.observe(
+                viewLifecycleOwner,
+                androidx.lifecycle.Observer { status ->
+                    showSnackbar(status, view.context)
+                })
+
+
+            vm.subscribeErrorEvent.observe(
+                viewLifecycleOwner,
+                androidx.lifecycle.Observer {
+                    CustomSnackbar(context!!).show(
+                        resources.getString(R.string.server_temporarily_unavailable),
+                        ThemeUtils.getRedColor(context!!),
+                        bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
+                            .toInt()
+                    )
+                })
 
             if (UserUtils.isLoggedIn()) {
                 homeLayoutBarLogInButton.visibility = View.GONE
@@ -163,7 +174,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         homeLayoutBarAccountImageLayout.setOnClickListener { (activity as AppCompatActivity).startActivity<MainMenuActivity>() }
         homeLayoutAppBar.addOnOffsetChangedListener(this)
 
-        OneShotPreDrawListener.add(view){
+        OneShotPreDrawListener.add(homeLayoutAppBar){
             removeAppBarDrag()
         }
 
@@ -173,13 +184,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
     override fun onResume() {
         super.onResume()
-        if (needsRefresh) {
-            homeLayoutRecyclerView.adapter?.notifyDataSetChanged()
-            needsRefresh = false
-        }
 
         if(PrefsUtils.isCompletedChapterDialogWasNotShown()){
-            homeFragmentViewModel?.viewModelScope?.launch {
+            homeFragmentViewModel?.viewModelScope?.launch (Dispatchers.Main){
                 delay(500L)
                 val dialogData = PrefsUtils.getCompletedChapterDialogData()
                 activity?.supportFragmentManager?.let {
@@ -200,6 +207,10 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
     ) {
         homeLayoutBar.background =
             if (scrollY != 0) context?.getDrawable(R.drawable.divider_bottom_drawable) else null
+    }
+
+    private fun clearAppBarDivider(){
+        homeLayoutBar.background = null
     }
 
     override fun show() {
@@ -223,6 +234,12 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 return false
             }
         })
+    }
+
+    private fun getLevels(vm: HomeFragmentViewModel){
+        vm.clearResults()
+        vm.progressState.value = false
+        vm.getLevels()
     }
 
     private fun showSnackbar(status: SubscribeEmailResultStatus, context: Context) {
@@ -274,5 +291,28 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 }
             }
         }
+    }
+
+    private fun showLogInSnackbar(isAfterSignUp: Boolean){
+        val snackbar = CustomSnackbar(context!!)
+            snackbar.show(
+                if(isAfterSignUp) resources.getString(R.string.welcome) else resources.getString(R.string.welcome_back),
+                ThemeUtils.getGreenColor(context!!),
+                resources.getInteger(R.integer.log_in_snackbar_duration)
+                .toLong(),
+            bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
+                .toInt()
+        )
+    }
+
+    override fun onPageReload() {
+        if(App.authenticationState.value?.first !is CheckTokenIsCorrectStatus.Correct)
+            App.authenticate(UserUtils.getUserIDTokenData(), false)
+
+        if(UserUtils.userDataIsNull())
+            App.getUserData()
+
+        if(!(PrefsUtils.isOfflineModeEnabled() && homeFragmentViewModel?.results?.isNotEmpty() == true))
+            homeFragmentViewModel?.getLevels()
     }
 }

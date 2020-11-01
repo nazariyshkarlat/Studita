@@ -33,8 +33,8 @@ class SyncPrivacySettingsImpl : SyncPrivacySettings {
             .build()
         val workManager = WorkManager.getInstance(NetworkModule.context)
         workManager.enqueueUniqueWork(
-            "$SYNC_EDIT_PRIVACY_SETTINGS_ID ${privacySettingsRequestData.userIdToken.userId}",
-            ExistingWorkPolicy.REPLACE,
+            SYNC_EDIT_PRIVACY_SETTINGS_ID,
+            ExistingWorkPolicy.APPEND,
             work
         )
     }
@@ -56,7 +56,7 @@ class SyncPrivacySettingsImpl : SyncPrivacySettings {
         val workManager = WorkManager.getInstance(NetworkModule.context)
         workManager.enqueueUniqueWork(
             SYNC_EDIT_DUELS_EXCEPTIONS_ID,
-            ExistingWorkPolicy.REPLACE,
+            ExistingWorkPolicy.APPEND,
             work
         )
     }

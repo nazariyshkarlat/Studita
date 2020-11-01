@@ -11,6 +11,7 @@ import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.studita.R
@@ -22,11 +23,16 @@ import com.example.studita.domain.interactor.GetUsersStatus
 import com.example.studita.domain.interactor.IsMyFriendStatus
 import com.example.studita.domain.interactor.UserDataStatus
 import com.example.studita.domain.interactor.users.UsersInteractor
+import com.example.studita.presentation.activities.promo.CompetitionsActivity
+import com.example.studita.presentation.activities.promo.TrainingsActivity
 import com.example.studita.presentation.fragments.base.NavigatableFragment
+import com.example.studita.presentation.fragments.error_fragments.InternetIsDisabledFragment
+import com.example.studita.presentation.fragments.error_fragments.ServerProblemsFragment
 import com.example.studita.presentation.fragments.friends.FriendsFragment
 import com.example.studita.presentation.fragments.friends.MyFriendsFragment
 import com.example.studita.presentation.fragments.profile.edit.EditProfileFragment
 import com.example.studita.presentation.fragments.user_statistics.UserStatFragment
+import com.example.studita.presentation.listeners.ReloadPageCallback
 import com.example.studita.presentation.view_model.ProfileFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.example.studita.presentation.views.CustomSnackbar
@@ -34,11 +40,12 @@ import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.profile_friend_item.view.*
 import kotlinx.android.synthetic.main.profile_layout.*
 import kotlinx.android.synthetic.main.profile_popup_menu_layout.view.*
+import kotlinx.android.synthetic.main.recyclerview_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import java.util.*
 
 open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
-    SwipeRefreshLayout.OnRefreshListener {
+    SwipeRefreshLayout.OnRefreshListener, ReloadPageCallback {
 
     private lateinit var profileFragmentViewModel: ProfileFragmentViewModel
 
@@ -117,18 +124,35 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                 )
             })
 
+        profileFragmentViewModel.errorEvent.observe(viewLifecycleOwner, Observer { isNetworkError->
+            clearToolbarDivider()
+            if (isNetworkError) {
+                addFragment(InternetIsDisabledFragment(), R.id.profileLayoutFrameLayout, false)
+            }else{
+                addFragment(ServerProblemsFragment(), R.id.profileLayoutFrameLayout, false)
+            }
+        })
+
+        profileFragmentViewModel.progressState.observe(viewLifecycleOwner, Observer {
+            val progress = it
+
+            if (profileLayoutProgressBar != null) {
+                if (progress) {
+                    profileLayoutProgressBar.visibility = View.VISIBLE
+                    profileLayoutScrollView.visibility = View.GONE
+                }else {
+                    profileLayoutProgressBar.visibility = View.GONE
+                    profileLayoutScrollView.visibility = View.VISIBLE
+                }
+            }
+        })
+
         profileFragmentViewModel.friendsState.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer {
 
                 if (it is GetUsersStatus.Success) {
                     fillFriends(it.friendsResponseData)
-
-                    if (profileLayoutProgressBar != null) {
-                        (view as ViewGroup).removeView(profileLayoutProgressBar)
-                        profileLayoutScrollView.visibility = View.VISIBLE
-                    }
-
                 } else if (it is GetUsersStatus.NoUsersFound) {
 
                     profileLayoutFriendsContentView.removeAllViews()
@@ -176,6 +200,15 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                 )
             })
 
+        profileFragmentViewModel.errorSnackbarEvent.observe(viewLifecycleOwner, Observer {
+            if(it){
+                CustomSnackbar(context!!).show(
+                    resources.getString(R.string.server_temporarily_unavailable),
+                    ThemeUtils.getRedColor(context!!)
+                )
+            }
+        })
+
         if (isMyProfile) {
             profileLayoutButton.setOnClickListener {
                 (activity as AppCompatActivity).navigateTo(
@@ -190,18 +223,30 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
 
         initRefreshLayout(view.context)
         scrollingView = profileLayoutScrollView
+
+        profileLayoutScrollView.post {
+            if (profileFragmentViewModel.errorState)
+                toolbarFragmentViewModel?.hideDivider()
+        }
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
+
+        if(!isHidden) {
+            if (profileFragmentViewModel.errorState)
+                toolbarFragmentViewModel?.hideDivider()
+            else
+                super.onHiddenChanged(hidden)
+        }
 
         if (!isHidden)
             initMenu()
+
     }
 
 
     override fun onRefresh() {
-        profileFragmentViewModel.getProfileData(PrefsUtils.getUserId()!!, userId)
+        profileFragmentViewModel.getProfileData(PrefsUtils.getUserId()!!, userId, true)
     }
 
     private fun fillData(userData: UserDataData, context: Context) {
@@ -230,7 +275,9 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                         userData
                     )
                 }
-                profileLayoutButton.setOnClickListener {}
+                profileLayoutButton.setOnClickListener {
+                    activity?.startActivity<CompetitionsActivity>()
+                }
             }
             is IsMyFriendStatus.Success.IsNotMyFriend -> {
                 profileLayoutButton.visibility = View.VISIBLE
@@ -301,7 +348,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
         profileHorizontalScrollView.setLevelRatingSubtitle(
             resources.getString(
                 R.string.profile_competitions_item_rating_subtitle_template,
-                UserUtils.userData.currentLevel + 1,
+                resources.getString(R.string.unavailable),
                 if (isMyProfile) resources.getString(R.string.You) else resources.getString(
                     R.string.user_name_template,
                     userDataData.userName
@@ -311,7 +358,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
         profileHorizontalScrollView.setXPRatingSubtitle(
             resources.getString(
                 R.string.profile_competitions_item_rating_subtitle_template,
-                userDataData.currentLevel,
+                resources.getString(R.string.unavailable),
                 if (isMyProfile) resources.getString(R.string.You) else resources.getString(
                     R.string.user_name_template,
                     userDataData.userName
@@ -323,13 +370,13 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
             profileHorizontalScrollView.setLevelSecondarySubtitle(
                 resources.getString(
                     R.string.profile_competitions_item_secondary_subtitle_template,
-                    UserUtils.userData.currentLevel + 1
+                    resources.getString(R.string.unavailable),
                 )
             )
             profileHorizontalScrollView.setXPSecondarySubtitle(
                 resources.getString(
                     R.string.profile_competitions_item_secondary_subtitle_template,
-                    userDataData.currentLevel
+                    resources.getString(R.string.unavailable),
                 )
             )
         }
@@ -411,9 +458,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                 PopupWindow(context).apply {
                     contentView =
                         (view as ViewGroup).makeView(R.layout.profile_popup_menu_layout) as ViewGroup
-                    contentView.profilePopupMenuLayoutShareProfile.setOnClickListener {
-                        dismiss()
-                    }
+                    contentView.profilePopupMenuLayoutShareProfile.disableAllItems()
                     contentView.profilePopupMenuLayoutShowStatistics.setOnClickListener {
                         (activity as AppCompatActivity).navigateTo(
                             UserStatFragment().apply {
@@ -463,7 +508,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
         )
         profileLayoutSwipeRefresh.setOnRefreshListener(this)
         profileLayoutSwipeRefresh.isEnabled = false
-        profileLayoutSwipeRefresh.setColorSchemeColors(ThemeUtils.getAccentColor(context))
+        profileLayoutSwipeRefresh.setColorSchemeColors(ThemeUtils.getSwipeRefreshIconColor(context))
         profileLayoutSwipeRefresh.setProgressBackgroundColorSchemeColor(
             ThemeUtils.getSwipeRefreshBackgroundColor(
                 context
@@ -473,5 +518,21 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
 
     private fun streakActivated(streakDate: Date) =
         TimeUtils.getCalendarDayCount(Date(), streakDate) == 0L
+
+
+    override fun onScrollChanged() {
+        if(!profileFragmentViewModel.errorState)
+            super.onScrollChanged()
+    }
+
+    override fun onPageReload() {
+        checkScroll()
+        profileFragmentViewModel.getProfileData(PrefsUtils.getUserId()!!, userId)
+        profileLayoutSwipeRefresh.isEnabled = false
+    }
+
+    private fun clearToolbarDivider(){
+        toolbarFragmentViewModel?.hideDivider()
+    }
 
 }

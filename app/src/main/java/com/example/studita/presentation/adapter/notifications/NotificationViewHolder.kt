@@ -1,5 +1,6 @@
 package com.example.studita.presentation.adapter.notifications
 
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -11,18 +12,22 @@ import com.example.studita.presentation.fragments.profile.ProfileFragment
 import com.example.studita.presentation.fragments.dialog_alerts.AcceptFriendshipDialogAlertFragment
 import com.example.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
 import com.example.studita.presentation.model.NotificationsUiModel
+import com.example.studita.utils.UserUtils
 import com.example.studita.utils.fillAvatar
 import com.example.studita.utils.getAppCompatActivity
 import com.example.studita.utils.navigateTo
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.notifications_layout_item.view.*
 
-class NotificationViewHolder(view: View) :
+class NotificationViewHolder(view: View, private val lastNotificationCheckCallback: LastNotificationCheckCallback) :
     NotificationsViewHolder<NotificationsUiModel.Notification>(view) {
 
     override fun bind(model: NotificationsUiModel) {
         model as NotificationsUiModel.Notification
 
+        if(adapterPosition == 1){
+            lastNotificationCheckCallback.onLastNotificationCheck()
+        }
 
         with(itemView) {
             notificationsLayoutItemAvatar.fillAvatar(
@@ -71,6 +76,10 @@ class NotificationViewHolder(view: View) :
             ProfileFragment().apply {
             arguments = bundleOf("USER_ID" to userId)
         }, R.id.doubleFrameLayoutFrameLayout)
+    }
+
+    interface LastNotificationCheckCallback{
+        fun onLastNotificationCheck()
     }
 
 }

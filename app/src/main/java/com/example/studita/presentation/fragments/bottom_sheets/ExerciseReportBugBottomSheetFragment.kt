@@ -11,9 +11,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseReportType
 import com.example.studita.presentation.view_model.ExerciseReportBugBottomSheetFragmentViewModel
+import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawerDialog
 import com.example.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawerFragment
+import com.example.studita.utils.makeView
 import kotlinx.android.synthetic.main.exercise_report_bug_layout.*
+import kotlinx.android.synthetic.main.exercise_report_bug_thx_layout.*
 import java.lang.UnsupportedOperationException
 
 class ExerciseReportBugBottomSheetFragment : BottomDrawerFragment(){
@@ -34,29 +37,45 @@ class ExerciseReportBugBottomSheetFragment : BottomDrawerFragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       viewModel = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+        viewModel = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : androidx.lifecycle.ViewModel?> create(modelClass: Class<T>): T {
                 return ExerciseReportBugBottomSheetFragmentViewModel(arguments!!.getInt("EXERCISE_NUMBER")) as T
             }
         })[ExerciseReportBugBottomSheetFragmentViewModel::class.java]
 
-        restoreSelectedState()
-        setItemsOnClick()
+        val exercisesViewModel = activity?.run {
+            ViewModelProviders.of(this).get(ExercisesViewModel::class.java)
+        }
+
+        exercisesViewModel?.let{
+            viewModel.isThxLayout = exercisesViewModel.feedbackWasSent
+        }
+
+        if(exercisesViewModel?.snackbarState?.value?.second?.exerciseResult == true){
+            exerciseReportBugLayoutMyAnswerIsCorrect.visibility = View.GONE
+        }else
+            exerciseReportBugLayoutMyAnswerIsIncorrect.visibility = View.GONE
 
         if(viewModel.isThxLayout){
-            formThxLayout()
-        }
+                formThxLayout()
+            }else{
+                restoreSelectedState()
+                setItemsOnClick()
+            }
 
         exerciseReportBugLayoutButton.setOnClickListener {
 
             if(!viewModel.isThxLayout) {
+                exercisesViewModel?.feedbackWasSent = true
                 viewModel.sendReport()
                 formThxLayout()
                 animateThxLayoutAlpha()
             }else
                 dismissWithBehavior()
         }
+
+        exerciseReportBugLayoutButton.isEnabled = viewModel.selectedItems.isNotEmpty() || viewModel.isThxLayout
     }
 
     private fun setItemsOnClick(){
@@ -78,6 +97,8 @@ class ExerciseReportBugBottomSheetFragment : BottomDrawerFragment(){
                         viewModel.selectedItems.add(reportType)
                     else
                         viewModel.selectedItems.remove(reportType)
+
+                    exerciseReportBugLayoutButton.isEnabled = viewModel.selectedItems.isNotEmpty()
                 }
             }
         }
@@ -102,8 +123,13 @@ class ExerciseReportBugBottomSheetFragment : BottomDrawerFragment(){
     }
 
     private fun formThxLayout(){
+        val thxLayout = (view as ViewGroup).makeView(R.layout.exercise_report_bug_thx_layout)
+
         exerciseReportBugLayoutContentLayout.visibility = View.INVISIBLE
-        exerciseReportBugLayoutThanksLayout.visibility = View.VISIBLE
-        exerciseReportBugLayoutButton.text = resources.getString(R.string.exercise_report_bug_thx_button_text)
+        exerciseReportBugLayoutButton.text =
+            resources.getString(R.string.exercise_report_bug_thx_button_text)
+
+        (view as ViewGroup).addView(thxLayout)
+
     }
 }

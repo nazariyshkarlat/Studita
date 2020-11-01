@@ -36,7 +36,7 @@ class ExerciseMissedNumberFragment :
         exercisesViewModel?.let {
             it.answered.observe(
                 viewLifecycleOwner,
-                androidx.lifecycle.Observer { answered ->
+                { answered ->
                     if (answered) {
                         exerciseMissedPartLayoutKeyboard.setAllClickable(false)
                         exerciseMissedPartLayoutEditText.isFocusable = false

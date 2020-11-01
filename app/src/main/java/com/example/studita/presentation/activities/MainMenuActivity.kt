@@ -2,6 +2,7 @@ package com.example.studita.presentation.activities
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.main.MainMenuFragment
@@ -53,7 +54,13 @@ class MainMenuActivity : DefaultActivity() {
         } else {
             val f =
                 supportFragmentManager.findFragmentById(R.id.doubleFrameLayoutFrameLayout) as NavigatableFragment
-            f.onBackClick()
+
+            if((f is NotificationsFragment) &&
+                (intent.getIntExtra("REQUEST_CODE", 0) == NOTIFICATIONS_REQUEST_CODE) &&
+                !isTaskRoot)
+                finish()
+            else
+                f.onBackClick()
         }
     }
 

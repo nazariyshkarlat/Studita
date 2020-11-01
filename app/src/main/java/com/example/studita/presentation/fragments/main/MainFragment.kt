@@ -1,7 +1,7 @@
 package com.example.studita.presentation.fragments.main
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -9,23 +9,20 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.OneShotPreDrawListener
-import androidx.core.view.forEach
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.example.studita.R
+import com.example.studita.presentation.activities.promo.TrainingsActivity
 import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.example.studita.presentation.view_model.MainFragmentViewModel
 import com.example.studita.utils.*
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.bottom_navigation.*
 import kotlinx.android.synthetic.main.main_layout.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -37,6 +34,7 @@ class MainFragment : BaseFragment(R.layout.main_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         navigationViewModel = activity?.run {
             ViewModelProviders.of(this).get(MainActivityNavigationViewModel::class.java)
         }
@@ -82,6 +80,10 @@ class MainFragment : BaseFragment(R.layout.main_layout) {
                     }
                 })
 
+            viewModel.startActivityState.observe(viewLifecycleOwner, Observer {
+                startActivity(Intent(activity, it))
+            })
+
             viewModel.navigationSelectedIdState.observe(this, Observer<Int> { id ->
                 bottomNavigationView.selectedItemId = id
             })
@@ -95,14 +97,6 @@ class MainFragment : BaseFragment(R.layout.main_layout) {
                     mainLayoutFAB.animate().translationY(transValue).alpha(
                         0F
                     ).setInterpolator(AccelerateInterpolator(2F)).start()
-                }
-            })
-
-            viewModel.progressState.observe(this, Observer { hideProgress ->
-                if (hideProgress) {
-                    mainLayoutProgressBar.visibility = View.GONE
-                } else {
-                    mainLayoutProgressBar.visibility = View.VISIBLE
                 }
             })
         }
@@ -122,7 +116,9 @@ class MainFragment : BaseFragment(R.layout.main_layout) {
 
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationViewModel)
 
-        bottomNavigationView.disableTooltipText()
+        mainLayoutFAB.setOnClickListener {
+            activity?.startActivity<TrainingsActivity>()
+        }
 
         handleNetworkChanges(view)
     }
@@ -135,22 +131,13 @@ class MainFragment : BaseFragment(R.layout.main_layout) {
         }
     }
 
-    fun BottomNavigationView.disableTooltipText() {
-        val menuViewField = this.javaClass.getDeclaredField("menuView")
-        menuViewField.isAccessible = true
-        val menuView = menuViewField.get(this) as BottomNavigationMenuView
-        menuView.forEach {
-            it.setOnLongClickListener {
-                true
-            }
-        }
-    }
-
     private fun addFirstFragment(fragmentName: String){
         val addFragment =
             Class.forName(fragmentName).newInstance() as Fragment
         (activity as AppCompatActivity).addFragment(
-            addFragment,
+            addFragment.apply {
+                this.arguments = this@MainFragment.arguments
+            },
             R.id.mainLayoutFrameLayout
         )
         showHideFabOnNavigation(addFragment)
@@ -171,7 +158,7 @@ class MainFragment : BaseFragment(R.layout.main_layout) {
                 snackbar.setBackgroundColor(
                     ThemeUtils.getGreenColor(context!!)
                 )
-                viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                     delay(resources.getInteger(R.integer.back_online_snackbar_duration).toLong())
                     mainLayoutBottomSection.animate()
                         .translationY(resources.getDimension(R.dimen.connectionSnackbarLayoutTranslationY))

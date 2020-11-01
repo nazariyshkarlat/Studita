@@ -102,7 +102,6 @@ class ProgressBar @JvmOverloads constructor(
         progressPaint.isAntiAlias = true
         progressPaint.strokeCap = if (roundedCorners) Paint.Cap.ROUND else Paint.Cap.BUTT
         progressPaint.style = Paint.Style.STROKE
-        println(calcSweepAngleFromProgress(currentProgress))
         canvas.drawArc(
             outerOval,
             -90F,

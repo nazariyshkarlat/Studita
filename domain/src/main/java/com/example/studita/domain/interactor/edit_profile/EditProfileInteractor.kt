@@ -9,14 +9,21 @@ import com.example.studita.domain.interactor.UserNameAvailableStatus
 
 interface EditProfileInteractor {
 
+    companion object{
+        const val NAME_MIN_LENGTH = 0
+        const val NAME_MAX_LENGTH = 30
+        const val USER_NAME_MIN_LENGTH = 0
+        const val USER_NAME_MAX_LENGTH = 25
+    }
+
     suspend fun editProfile(
         editProfileRequestData: EditProfileRequestData,
         userDataData: UserDataData,
         newAvatar: Bitmap?,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): EditProfileStatus
 
-    suspend fun isUserNameAvailable(userName: String, retryCount: Int = 30): UserNameAvailableStatus
+    suspend fun isUserNameAvailable(userName: String, retryCount: Int = 3): UserNameAvailableStatus
 
     fun isProfileDataChanged(
         oldProfileData: EditProfileData,

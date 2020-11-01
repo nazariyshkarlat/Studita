@@ -23,7 +23,7 @@
             app:srcCompat="@drawable/ic_cloud_secondary" />
 
         <TextView
-            style="@style/Medium16_50"
+            style="@style/Medium16Secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

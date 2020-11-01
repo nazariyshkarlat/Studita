@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/offlineModeDownloadLayoutCenterBlock"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/defaultRLMargin"
+        android:layout_marginEnd="@dimen/defaultRLMargin">
+
+        <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:srcCompat="@drawable/logo_svg" />
+
+        <TextView
+            style="@style/Medium24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:textAlignment="center"
+            android:text="@string/welcome_to_app" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/blocks_rectangle"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                style="@style/Regular16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/offline_mode_downloading"
+                android:textAlignment="center" />
+
+            <com.example.studita.presentation.views.ProgressBar
+                android:id="@+id/offlineModeDownloadLayoutProgressBar"
+                style="@style/ProgressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="16dp" />
+
+            <TextView
+                android:id="@+id/offlineModeDownloadLayoutProgressText"
+                style="@style/Regular14Secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/offline_mode_downloading"
+                android:textAlignment="center" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/offlineModeDownloadLayoutBottomSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/offlineModeDownloadLayoutBottomInfoText"
+            style="@style/Regular14Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="28dp"
+            android:layout_gravity="center"
+            android:text="@string/offline_mode_download_layout_bottom_info_text"
+            android:textAlignment="center" />
+
+        <include
+            android:id="@+id/offlineModeDownloadLayoutErrorSnackbar"
+            layout="@layout/snackbar_error" />
+
+    </LinearLayout>
+
+</FrameLayout>

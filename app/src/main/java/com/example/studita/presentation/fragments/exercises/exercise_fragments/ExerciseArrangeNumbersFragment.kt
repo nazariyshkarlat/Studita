@@ -10,6 +10,7 @@ import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.presentation.views.ArrangeNumbersView
 import kotlinx.android.synthetic.main.exercise_arrange_numbers_layout.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -37,7 +38,7 @@ class ExerciseArrangeNumbersFragment : NavigatableFragment(R.layout.exercise_arr
 
     override fun onViewIsFilled(correctAnswersCount: Int) {
         exercisesViewModel?.let{
-            it.viewModelScope.launch {
+            it.viewModelScope.launch(Dispatchers.Main) {
                 it.correctBonusAnswers =
                     exerciseArrangeNumbersLayoutNumbersView.correctAnswersCount
                 delay(500)

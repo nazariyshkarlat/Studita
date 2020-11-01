@@ -39,7 +39,7 @@ class ExerciseInputEquationResultFragment : NavigatableFragment(R.layout.exercis
         exercisesViewModel?.let {
             it.answered.observe(
                 viewLifecycleOwner,
-                androidx.lifecycle.Observer { answered ->
+                { answered ->
                     if (answered) {
                         exerciseInputEquationResultLayoutKeyboard.setAllClickable(false)
                         exerciseInputEquationResultLayoutResultEditText.isFocusable = false
@@ -48,13 +48,12 @@ class ExerciseInputEquationResultFragment : NavigatableFragment(R.layout.exercis
             if (!it.isBonusCompleted) {
                 it.exerciseBonusResultState.observe(
                     viewLifecycleOwner,
-                    Observer { answerIsCorrect ->
+                    { answerIsCorrect ->
                         if (answerIsCorrect != null) {
                             animateBonusResultTextColor(view.context, answerIsCorrect)
                         }
                     })
             }
-            it.exerciseBonusResultState.observe(viewLifecycleOwner, Observer {  })
             if (it.exerciseUiModel is ExerciseUiModel.ExerciseUiModelExercise.ExerciseType26UiModel) {
                 val exerciseUiModel =
                     it.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType26UiModel

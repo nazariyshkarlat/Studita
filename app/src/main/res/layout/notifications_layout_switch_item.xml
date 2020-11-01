@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/defaultRLMargin"
     android:layout_marginEnd="@dimen/defaultRLMargin"
-    android:background="@drawable/main_blocks_rectangle_clickable"
+    android:background="@drawable/blocks_rectangle_clickable"
     android:paddingStart="16dp"
     android:paddingTop="16dp"
     android:paddingEnd="13dp"

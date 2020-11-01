@@ -30,32 +30,7 @@ class ExercisesDescription2Fragment :
         exercisesDescriptionModel.textParts.forEachIndexed { index, part ->
             val child =
                 exercisesDescription2ParentLinearLayout.getAllViewsOfTypeT<TextView>()[index + 1]
-            val m =
-                Pattern.compile("\\{.*?\\}").matcher(part)
-            val builder = SpannableStringBuilder()
-            if (m.find()) {
-                val insideBrackets =
-                    exercisesDescriptionModel.partsToInject!![m.group(0).replace(
-                        """[{}]""".toRegex(),
-                        ""
-                    ).toInt()]
-                val textSpanParts: ArrayList<SpannableString> = ArrayList(part.split(
-                    "\\{.*?\\}".toRegex()
-                ).map { span -> SpannableString(span) })
-                textSpanParts.add(
-                    0,
-                    insideBrackets.createSpannableString(
-                        color = ContextCompat.getColor(
-                            child.context,
-                            R.color.yellow
-                        )
-                    )
-                )
-                textSpanParts.forEach { textPartPart -> builder.append(textPartPart) }
-                child.text = builder
-            } else {
                 child.text = part
-            }
         }
     }
 }

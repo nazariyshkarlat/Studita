@@ -9,6 +9,7 @@ import com.example.studita.presentation.fragments.interesting.InterestingFragmen
 import com.example.studita.presentation.fragments.interesting.InterestingLoadFragment
 import com.example.studita.presentation.fragments.interesting.InterestingStartScreenFragment
 import com.example.studita.presentation.view_model.InterestingViewModel
+import com.example.studita.utils.addFragment
 import com.example.studita.utils.navigateTo
 
 class InterestingActivity : DefaultActivity() {
@@ -23,9 +24,10 @@ class InterestingActivity : DefaultActivity() {
         if (savedInstanceState == null) {
             val extras = intent.extras
             if (extras != null) {
-                interestingViewModel?.getInteresting(1)
+                interestingViewModel?.interestingNumber = extras.getInt("INTERESTING_NUMBER")
+                interestingViewModel?.getInteresting()
             }
-            navigateTo(InterestingLoadFragment(), R.id.frameLayout)
+            addFragment(InterestingLoadFragment(), R.id.frameLayout, addToBackStack = false)
         }
     }
 

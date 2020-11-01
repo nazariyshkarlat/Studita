@@ -30,12 +30,11 @@ class AcceptFriendshipDialogAlertViewModel : ViewModel() {
                 )
             )
             if (result is FriendActionStatus.Success)
-                addFriendStatus.postValue(
+                addFriendStatus.value =
                     UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(
                         userData.apply {
                             isMyFriendStatus = IsMyFriendStatus.Success.IsMyFriend(userId)
                         })
-                )
         }
         UserUtils.isMyFriendLiveData.value =
             UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(userData.apply {
@@ -52,12 +51,11 @@ class AcceptFriendshipDialogAlertViewModel : ViewModel() {
                 )
             )
             if (result is FriendActionStatus.Success)
-                addFriendStatus.postValue(
+                addFriendStatus.value =
                     UsersInteractor.FriendActionState.FriendshipRequestIsRejected(
                         userData.apply {
                             isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
                         })
-                )
         }
         UserUtils.isMyFriendLiveData.value =
             UsersInteractor.FriendActionState.FriendshipRequestIsRejected(userData.apply {

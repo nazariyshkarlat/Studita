@@ -11,6 +11,7 @@ import android.view.WindowManager
 import androidx.annotation.LayoutRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatDialog
+import androidx.core.content.ContextCompat
 import com.example.studita.R
 import com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior
 import com.example.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.utils.BottomDialog
@@ -56,6 +57,7 @@ open class BottomDrawerDialog(context: Context, @StyleRes theme: Int = R.style.B
             }
         }
     }
+
 
     override fun setContentView(@LayoutRes layoutResId: Int) {
         super.setContentView(bottomDrawerDelegate.wrapInBottomSheet(layoutResId, null, null))
@@ -109,6 +111,7 @@ open class BottomDrawerDialog(context: Context, @StyleRes theme: Int = R.style.B
         var theme: Int = R.style.BottomDialogTheme
         var handleView: View? = null
         var isWrapContent = false
+        var isPeekView = false
         var isCancelableOnTouchOutside: Boolean? = null
 
         fun build() = BottomDrawerDialog(context, theme).apply {
@@ -120,6 +123,7 @@ open class BottomDrawerDialog(context: Context, @StyleRes theme: Int = R.style.B
                 bottomDrawerDelegate.handleView = it
             }
 
+            bottomDrawerDelegate.isPeekView = isPeekView
             bottomDrawerDelegate.isWrapContent = isWrapContent
         }
 

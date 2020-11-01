@@ -64,6 +64,15 @@ class SearchViewHolder(
 
         itemView.usersSearchItemEditTextClearTextButton.setOnClickListener {
             itemView.usersSearchItemEditText.text.clear()
+
+            if(globalSearchOnly) {
+                searchState.let {
+                    if (it is FriendsFragmentViewModel.SearchState.GlobalSearch && it.startsWith.isNullOrEmpty()) {
+                        itemView.usersSearchItemEditText.requestFocus()
+                        itemView.getAppCompatActivity()?.showKeyboard()
+                    }
+                }
+            }
         }
 
         if (searchState != FriendsFragmentViewModel.SearchState.NoSearch) {
@@ -73,8 +82,13 @@ class SearchViewHolder(
                 itemView.usersSearchItemSearchRadioGroup.visibility = View.VISIBLE
             else {
                 setSearchMargin()
-                itemView.usersSearchItemEditText.requestFocus()
-                itemView.getAppCompatActivity()?.showKeyboard()
+
+                searchState.let {
+                    if (it is FriendsFragmentViewModel.SearchState.GlobalSearch && it.startsWith.isNullOrEmpty()) {
+                        itemView.usersSearchItemEditText.requestFocus()
+                        itemView.getAppCompatActivity()?.showKeyboard()
+                    }
+                }
             }
 
 

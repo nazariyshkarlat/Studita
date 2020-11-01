@@ -22,6 +22,7 @@ sealed class LevelChildData {
 
     data class LevelSubscribeData(
         val title: String,
-        val button: List<String>
+        val button: List<String>,
+        val isLoggedIn: Boolean
     ) : LevelChildData()
 }

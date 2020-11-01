@@ -39,17 +39,13 @@ class BottomDrawerHandleView : View, TranslationUpdater {
         : super(context, attrs, defStyleAttr) {
         val typedValue = TypedValue()
         context.theme.resolveAttribute(
-            R.attr.gray_focused_color,
+            R.attr.disabled_background_color,
             typedValue,
             true
         )
 
         paint.apply {
-            color = ColorUtils.compositeColors(
-                ThemeUtils.getPageBackgroundColor(context),
-                ContextCompat.getColor(context, typedValue.resourceId),
-                1F
-            )
+            color = ContextCompat.getColor(context, typedValue.resourceId)
             strokeWidth = thickness
             flags = Paint.ANTI_ALIAS_FLAG
         }
@@ -82,7 +78,6 @@ class BottomDrawerHandleView : View, TranslationUpdater {
     }
 
     override fun onRestoreInstanceState(state: Parcelable) {
-        Log.d("show_handle", "restore")
         val customViewSavedState = state as PlainHandleViewSavedState
         currentOffset = customViewSavedState.offset
         val offset = (width.toFloat() * currentOffset) / 2

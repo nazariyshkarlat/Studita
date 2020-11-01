@@ -2,6 +2,7 @@ package com.example.studita.presentation.adapter.levels
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studita.R
 import com.example.studita.presentation.model.HomeRecyclerUiModel
@@ -10,7 +11,8 @@ import com.example.studita.utils.makeView
 
 class LevelsAdapter(
     private val items: List<HomeRecyclerUiModel>,
-    private val homeFragmentViewModel: HomeFragmentViewModel
+    private val homeFragmentViewModel: HomeFragmentViewModel,
+    private val lifecycleOwner: LifecycleOwner
 ) :
     RecyclerView.Adapter<LevelsViewHolder<*>>() {
 
@@ -18,15 +20,16 @@ class LevelsAdapter(
         parent: ViewGroup,
         viewType: Int
     ): LevelsViewHolder<out HomeRecyclerUiModel> = when (viewType) {
-        LevelsViewType.USER_STATE.ordinal -> HomeUserDataViewHolder(parent.makeView(R.layout.home_layout_user_data))
-        LevelsViewType.LEVEL.ordinal -> LevelViewHolder(parent.makeView(R.layout.level_item))
+        LevelsViewType.USER_STATE.ordinal -> {HomeUserDataViewHolder(parent.makeView(R.layout.home_layout_user_data), lifecycleOwner)}
+        LevelsViewType.LEVEL.ordinal -> LevelViewHolder(parent.makeView(R.layout.level_item), lifecycleOwner)
         LevelsViewType.CHAPTER.ordinal -> ChapterViewHolder(
             parent.makeView(R.layout.chapter_item),
-            items.count { it is HomeRecyclerUiModel.LevelChapterUiModel })
+            items.count { it is HomeRecyclerUiModel.LevelChapterUiModel }, lifecycleOwner)
         LevelsViewType.INTERESTING.ordinal -> InterestingViewHolder(parent.makeView(R.layout.interesting_item))
         LevelsViewType.SUBSCRIBE.ordinal -> SubscribeViewHolder(
             parent.makeView(R.layout.level_subscribe_item),
-            homeFragmentViewModel
+            homeFragmentViewModel,
+            lifecycleOwner
         )
         else -> throw UnsupportedOperationException("unknown type of item")
     }

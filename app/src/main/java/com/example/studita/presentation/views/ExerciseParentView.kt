@@ -73,7 +73,8 @@ class ExerciseParentView @JvmOverloads constructor(
                 if (helpViewState is HelpViewState.StateOpen && !clickIsOnHelpView(ev.rawX.toInt(), ev.rawY.toInt()))
                     closeView()
             }
-            helpGestureDetector.onTouchEvent(ev)
+            if(ev.action != ACTION_DOWN)
+                helpGestureDetector.onTouchEvent(ev)
             false
         }else
             super.onInterceptTouchEvent(ev)

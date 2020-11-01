@@ -35,8 +35,7 @@ class ChapterInteractorImpl(
                     else
                         ChapterStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     getChapter(chapterNumber, offlineMode, retryCount - 1)
                 }
             } else
@@ -59,8 +58,7 @@ class ChapterInteractorImpl(
                     else
                         ChaptersCacheStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     downloadChapters(retryCount - 1)
                 }
             } else

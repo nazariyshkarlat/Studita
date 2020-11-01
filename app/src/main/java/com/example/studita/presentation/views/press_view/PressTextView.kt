@@ -30,6 +30,7 @@ class PressTextView @JvmOverloads constructor(
     }
 
     override fun setOnClickListener(work: (View) -> Unit) {
+        isClickable = true
         pressViewImpl.onClick = work
     }
 

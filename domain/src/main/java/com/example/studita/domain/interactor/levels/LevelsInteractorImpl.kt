@@ -1,5 +1,8 @@
 package com.example.studita.domain.interactor.levels
 
+import com.example.studita.domain.entity.LevelChildData
+import com.example.studita.domain.entity.LevelData
+import com.example.studita.domain.entity.LevelsDataData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.example.studita.domain.interactor.LevelsCacheStatus
@@ -19,8 +22,8 @@ class LevelsInteractorImpl(
         retryCount: Int
     ): LevelsStatus =
         try {
-            val results = repository.getLevels(isLoggedIn, offlineMode)
-            LevelsStatus.Success(results)
+            val results = repository.getLevels(offlineMode)
+            LevelsStatus.Success(results.map { LevelData(it.levelNumber, it.levelChildren.filter { (it is LevelChildData.LevelSubscribeData && it.isLoggedIn == isLoggedIn) || (it !is LevelChildData.LevelSubscribeData) })   })
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
@@ -30,8 +33,7 @@ class LevelsInteractorImpl(
                     } else
                         LevelsStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     getLevels(isLoggedIn, offlineMode, retryCount - 1)
                 }
             } else
@@ -40,11 +42,11 @@ class LevelsInteractorImpl(
 
     override suspend fun downloadLevels(retryCount: Int): LevelsCacheStatus =
         try {
-            val result = repository.downloadLevels()
-            if (result == 200)
-                LevelsCacheStatus.Success
-            else
-                LevelsCacheStatus.IsCached
+            when (repository.downloadLevels()) {
+                200 -> LevelsCacheStatus.Success
+                409 -> LevelsCacheStatus.IsCached
+                else -> LevelsCacheStatus.Failure
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
@@ -54,8 +56,7 @@ class LevelsInteractorImpl(
                     } else
                         LevelsCacheStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     downloadLevels(retryCount - 1)
                 }
             } else

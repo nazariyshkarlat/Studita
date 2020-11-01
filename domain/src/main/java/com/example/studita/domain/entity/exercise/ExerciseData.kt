@@ -134,7 +134,7 @@ sealed class ExerciseData(open val exerciseNumber: Int?) {
             val title: String,
             val subtitle: String,
             val variants: List<String>,
-            val countToSelect: Int,
+            val correctCount: Int,
             override val exerciseAnswer: String?
         ) : ExerciseDataExercise(exerciseNumber, isBonus, exerciseAnswer)
 

@@ -8,12 +8,12 @@ interface SubscribeEmailInteractor {
 
     suspend fun subscribe(
         userIdTokenData: UserIdTokenData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): SubscribeEmailResultStatus
 
     suspend fun unsubscribe(
         userIdTokenData: UserIdTokenData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): SubscribeEmailResultStatus
 
     suspend fun saveSyncedResult(status: SubscribeEmailResultStatus)

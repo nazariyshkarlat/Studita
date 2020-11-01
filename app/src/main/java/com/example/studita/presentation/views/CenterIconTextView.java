@@ -60,6 +60,7 @@ public class CenterIconTextView extends AppCompatTextView {
 
             float defaultDrawablePadding = getResources().getDimension(R.dimen.centerDrawableButtonPadding);
             int drawablePadding = (int) typedArray.getDimension(R.styleable.CenterIconTextView_android_drawablePadding, defaultDrawablePadding);
+
             setCompoundDrawablePadding(drawablePadding);
 
             updateDrawables();

@@ -33,7 +33,7 @@ fun PrivacySettingsEntity.toBusinessEntity() = PrivacySettingsData(
     duelsExceptions?.let { ArrayList(it) })
 
 fun PrivacySettingsRequestData.toRawEntity() =
-    PrivacySettingsRequest(userIdToken.toRawEntity(), privacySettingsEntity.toRawEntity())
+    PrivacySettingsRequest(userIdTokenData.toRawEntity(), privacySettingsEntity.toRawEntity())
 
 fun Char.toDuelsInvitesFrom() = when (this) {
     'f' -> DuelsInvitesFrom.FRIENDS

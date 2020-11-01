@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.example.studita.presentation.fragments.bottom_sheets.ChapterBottomSheetFragment
 import com.example.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
 import com.example.studita.presentation.model.HomeRecyclerUiModel
@@ -15,27 +17,30 @@ import com.example.studita.utils.UserUtils
 import com.example.studita.utils.dpToPx
 import kotlinx.android.synthetic.main.chapter_item.view.*
 
-class ChapterViewHolder(view: View, val count: Int) :
+class ChapterViewHolder(view: View, val count: Int, private val lifecycleOwner: LifecycleOwner) :
     LevelsViewHolder<HomeRecyclerUiModel.LevelChapterUiModel>(view) {
 
     override fun bind(model: HomeRecyclerUiModel) {
         model as HomeRecyclerUiModel.LevelChapterUiModel
-        with(itemView.chapterItemCardView) {
+        with(itemView.chapterItemParentView) {
             chapterItemTitle.text = model.chapterTitle
             chapterItemSubtitle.text = model.chapterSubtitle
             if (model.chapterNumber == count) {
                 formClosedChapter()
             } else {
                 formOpenChapter()
-                chapterItemProgressText.text = LevelUtils.getProgressText(
-                    UserUtils.userData.completedParts[model.chapterNumber - 1],
-                    model.chapterPartsCount,
-                    context
-                )
-                chapterItemProgressBar.currentProgress  = LevelUtils.getChapterProgressPercent(
-                    UserUtils.userData.completedParts[model.chapterNumber - 1],
-                    model.chapterPartsCount
-                )
+
+                UserUtils.userDataLiveData.observe(lifecycleOwner, Observer {
+                    chapterItemProgressText.text = LevelUtils.getProgressText(
+                        it.completedParts[model.chapterNumber - 1],
+                        model.chapterPartsCount,
+                        context
+                    )
+                    chapterItemProgressBar.currentProgress  = LevelUtils.getChapterProgressPercent(
+                        it.completedParts[model.chapterNumber - 1],
+                        model.chapterPartsCount
+                    )
+                })
                 setOnSingleClickListener {
                     initBottomSheetFragment(model.chapterNumber, context)
                 }
@@ -57,15 +62,17 @@ class ChapterViewHolder(view: View, val count: Int) :
 
     private fun formClosedChapter() {
         itemView as AlphaGradientView
-        with(itemView) {
-            chapterItemProgressText.visibility = View.GONE
-            chapterItemProgressBar.visibility = View.GONE
-            itemView.chapterItemCardView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = 0
+        if (!itemView.fadeTop) {
+            with(itemView) {
+                chapterItemParentView.chapterItemProgressText.visibility = View.GONE
+                chapterItemParentView.chapterItemProgressBar.visibility = View.GONE
+                chapterItemParentView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = 0
+                }
+                chapterItemParentView.isClickable = false
+                fadeTop = true
+                setGradientSizeTop(0)
             }
-            chapterItemCardView.isClickable = false
-            fadeTop = true
-            setGradientSizeTop(0)
         }
     }
 
@@ -73,12 +80,12 @@ class ChapterViewHolder(view: View, val count: Int) :
         itemView as AlphaGradientView
         if (itemView.fadeTop) {
             with(itemView){
-                chapterItemProgressText.visibility = View.VISIBLE
-                chapterItemProgressBar.visibility = View.VISIBLE
-                itemView.chapterItemCardView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                chapterItemParentView.chapterItemProgressText.visibility = View.VISIBLE
+                chapterItemParentView.chapterItemProgressBar.visibility = View.VISIBLE
+                chapterItemParentView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     bottomMargin = 8F.dpToPx()
                 }
-                chapterItemCardView.isClickable = true
+                chapterItemParentView.isClickable = true
                 fadeTop = false
             }
         }

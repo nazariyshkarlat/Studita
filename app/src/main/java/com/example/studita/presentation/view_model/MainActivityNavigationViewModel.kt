@@ -1,11 +1,14 @@
 package com.example.studita.presentation.view_model
 
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import com.example.studita.R
-import com.example.studita.presentation.fragments.main.AchievementsFragment
-import com.example.studita.presentation.fragments.main.CompetitionsFragment
+import com.example.studita.presentation.activities.promo.AchievementsActivity
+import com.example.studita.presentation.activities.promo.CompetitionsActivity
 import com.example.studita.presentation.fragments.main.HomeFragment
+import com.example.studita.presentation.fragments.promo_fragments.AchievementsPromoFragment
+import com.example.studita.presentation.fragments.promo_fragments.CompetitionsPromoFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivityNavigationViewModel : ViewModel(),
@@ -13,6 +16,8 @@ class MainActivityNavigationViewModel : ViewModel(),
 
     val navigationSelectedIdState = SingleLiveEvent<Int>()
     val navigationState = SingleLiveEvent<Pair<BottomNavigationEnum, String>>()
+
+    val startActivityState = SingleLiveEvent<Class<out AppCompatActivity>>()
 
     private val backStack: ArrayList<Pair<Int, String>> =
         arrayListOf(R.id.bottomNavigationFirstItem to HomeFragment::class.java.name)
@@ -22,7 +27,7 @@ class MainActivityNavigationViewModel : ViewModel(),
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val lastId = backStack.last().first
+/*        val lastId = backStack.last().first
         if (item.itemId != lastId) {
             val fragmentTag: String
             navigationState.value = BottomNavigationEnum.HIDE to backStack.last().second
@@ -37,15 +42,22 @@ class MainActivityNavigationViewModel : ViewModel(),
                 navigationState.value = BottomNavigationEnum.ADD to fragmentTag
             }
             backStack.add(item.itemId to fragmentTag)
+        }*/
+
+        if(item.itemId == R.id.bottomNavigationSecondItem){
+            startActivityState.value = CompetitionsActivity::class.java
+        }else if(item.itemId == R.id.bottomNavigationThirdItem){
+            startActivityState.value = AchievementsActivity::class.java
         }
-        return true
+
+        return item.itemId == R.id.bottomNavigationFirstItem
     }
 
     private fun getFragmentToAdd(itemId: Int): String {
         return when (itemId) {
             R.id.bottomNavigationFirstItem -> HomeFragment::class.java.name
-            R.id.bottomNavigationSecondItem -> CompetitionsFragment::class.java.name
-            R.id.bottomNavigationThirdItem -> AchievementsFragment::class.java.name
+            R.id.bottomNavigationSecondItem -> CompetitionsPromoFragment::class.java.name
+            R.id.bottomNavigationThirdItem -> AchievementsPromoFragment::class.java.name
             else -> throw UnsupportedOperationException("unknown item id")
         }
     }

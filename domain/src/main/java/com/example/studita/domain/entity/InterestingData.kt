@@ -17,5 +17,8 @@ sealed class InterestingDataScreen {
 
     data class InterestingDataExplanationScreen(val textParts: List<String>) :
         InterestingDataScreen()
-
 }
+
+data class InterestingLikeRequestData(val userIdTokenData: UserIdTokenData?, val interestingLikeData: InterestingLikeData)
+
+data class InterestingLikeData(val interestingNumber: Int, val likeIt: Boolean)

@@ -8,9 +8,9 @@ interface ChapterInteractor {
     suspend fun getChapter(
         chapterNumber: Int,
         offlineMode: Boolean,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): ChapterStatus
 
-    suspend fun downloadChapters(retryCount: Int = 30): ChaptersCacheStatus
+    suspend fun downloadChapters(retryCount: Int = 3): ChaptersCacheStatus
 
 }

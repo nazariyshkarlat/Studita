@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_blocks_rectangle"
+        android:background="@drawable/blocks_rectangle"
         android:orientation="horizontal">
 
         <TextView
@@ -18,7 +18,7 @@
             style="@style/Medium28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/gray_focused_color_rectangle"
+            android:background="@drawable/gray_disabled_color_rectangle"
             android:paddingStart="24dp"
             android:paddingTop="16dp"
             android:paddingEnd="24dp"

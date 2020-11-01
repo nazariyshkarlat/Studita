@@ -2,17 +2,22 @@ package com.example.studita.di.data
 
 import com.example.studita.data.cache.interesting.InterestingCacheImpl
 import com.example.studita.data.net.InterestingListService
+import com.example.studita.data.net.InterestingResultService
 import com.example.studita.data.net.InterestingService
 import com.example.studita.data.repository.InterestingRepositoryImpl
 import com.example.studita.data.repository.datasource.interesting.CloudInterestingJsonDataStore
 import com.example.studita.data.repository.datasource.interesting.DiskInterestingJsonDataStore
 import com.example.studita.data.repository.datasource.interesting.InterestingJsonDataStoreFactoryImpl
+import com.example.studita.data.repository.datasource.interesting.result.InterestingResultDataStoreFactory
+import com.example.studita.data.repository.datasource.interesting.result.InterestingResultDataStoreFactoryImpl
+import com.example.studita.data.repository.datasource.interesting.result.InterestingResultDataStoreImpl
 import com.example.studita.di.CacheModule
 import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.interesting.InterestingInteractor
 import com.example.studita.domain.interactor.interesting.InterestingInteractorImpl
 import com.example.studita.domain.repository.InterestingRepository
+import com.example.studita.service.SyncInterestingLikesImpl
 
 object InterestingModule {
 
@@ -39,6 +44,7 @@ object InterestingModule {
         if (repository == null)
             repository = InterestingRepositoryImpl(
                 getInterestingJsonDataStoreFactory(),
+                getInterestingResultDataStoreFactory(),
                 NetworkModule.connectionManager
             )
         return repository!!
@@ -46,7 +52,8 @@ object InterestingModule {
 
     private fun makeInterestingInteractor(repository: InterestingRepository) =
         InterestingInteractorImpl(
-            repository
+            repository,
+            SyncInterestingLikesImpl()
         )
 
     private fun getCloudInterestingDataStore() =
@@ -67,4 +74,13 @@ object InterestingModule {
             getCloudInterestingDataStore(),
             getDiskInterestingDataStore()
         )
+
+    private fun getInterestingResultDataStoreFactory() =
+        InterestingResultDataStoreFactoryImpl(
+            getInterestingResultDataStoreImpl()
+        )
+
+    private fun getInterestingResultDataStoreImpl() =
+        InterestingResultDataStoreImpl(NetworkModule.connectionManager,
+            NetworkModule.getService(InterestingResultService::class.java))
 }

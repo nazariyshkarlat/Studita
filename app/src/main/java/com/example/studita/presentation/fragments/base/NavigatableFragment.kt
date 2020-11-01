@@ -16,6 +16,9 @@ import com.example.studita.utils.navigateBack
 
 open class NavigatableFragment(viewId: Int) : BaseFragment(viewId),
     ViewTreeObserver.OnScrollChangedListener {
+
+    var isLongAnim: Boolean = false
+
     lateinit var listener: Animator.AnimatorListener
 
     var toolbarFragmentViewModel: ToolbarFragmentViewModel? = null
@@ -74,7 +77,7 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId),
             view.alpha = 0F
             view.animate().alpha(1F).setDuration(
                 resources.getInteger(
-                    R.integer.navigatable_fragment_anim_duration
+                    if(!isLongAnim) R.integer.navigatable_fragment_anim_duration else R.integer.navigatable_fragment_long_anim_duration
                 ).toLong()
             ).start()
         }
@@ -99,7 +102,7 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId),
                 super.onScrolled(recyclerView, dx, dy)
                 scrollY += dy
                 if (!isHidden) {
-                    checkScroll()
+                    onScrollChanged()
                 }
             }
         })

@@ -8,5 +8,5 @@ import retrofit2.http.Query
 interface LevelsService {
 
     @GET("levels")
-    suspend fun getLevels(@Query("logged_in") isLoggedIn: Boolean): Response<JsonArray>
+    suspend fun getLevels(): Response<JsonArray>
 }

@@ -1,15 +1,11 @@
 package com.example.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.utils
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.FrameLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
@@ -21,6 +17,7 @@ import com.example.studita.R
 import com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior
 import com.example.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawer
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.math.abs
 
 class BottomDrawerDelegate(
     private val context: Context,
@@ -34,6 +31,7 @@ class BottomDrawerDelegate(
         CopyOnWriteArrayList()
 
     private var offset = 0f
+    var isPeekView = false
     var isWrapContent = false
     internal var isCancelableOnTouchOutside = true
     internal var handleView: View? = null
@@ -48,16 +46,19 @@ class BottomDrawerDelegate(
         val container = View.inflate(context, R.layout.bottom_drawer_layout, null) as FrameLayout
         coordinator = container.findViewById(R.id.bottom_sheet_coordinator)
 
+        val bottomDrawer = coordinator.findViewById<View>(R.id.bottom_sheet_drawer) as BottomDrawer
+
         if(isWrapContent){
-            coordinator.findViewById<View>(R.id.bottom_sheet_drawer).updateLayoutParams<CoordinatorLayout.LayoutParams> {
+            bottomDrawer.updateLayoutParams<CoordinatorLayout.LayoutParams> {
                 height = CoordinatorLayout.LayoutParams.WRAP_CONTENT
             }
+            bottomDrawer.isWrapContent = isWrapContent
         }
 
         if (layoutResId != 0 && wrappedView == null) {
             wrappedView = LayoutInflater.from(context).inflate(layoutResId, coordinator, false)
         }
-        drawer = coordinator.findViewById<View>(R.id.bottom_sheet_drawer) as BottomDrawer
+        drawer = bottomDrawer
         behavior = CustomBottomSheetBehavior.from(drawer)
         behavior?.state = CustomBottomSheetBehavior.STATE_HIDDEN
         behavior?.isHideable = true
@@ -69,7 +70,7 @@ class BottomDrawerDelegate(
         }
         drawer.addHandleView(handleView)
 
-        coordinator.setBackgroundColor(ContextCompat.getColor(context, R.color.bottom_drawer_outside_background))
+        coordinator.setBackgroundColor(ContextCompat.getColor(context, R.color.outside_background))
         coordinator.background.alpha = offset.toInt()
 
         behavior?.setBottomSheetCallback(object :
@@ -113,11 +114,31 @@ class BottomDrawerDelegate(
         }
 
         coordinator.findViewById<View>(R.id.touch_outside)
-            .setOnClickListener {
-                if (isCancelableOnTouchOutside) {
-                    behavior?.state = CustomBottomSheetBehavior.STATE_HIDDEN
+            .setOnTouchListener (object : View.OnTouchListener {
+
+                var downY = 0F
+                var maxMoveYOffset = 0F
+
+                override fun onTouch(v: View, event: MotionEvent): Boolean {
+
+                    if (event.action == MotionEvent.ACTION_UP) {
+
+                        if(maxMoveYOffset <= ViewConfiguration.get(context).scaledTouchSlop) {
+                            if(isCancelableOnTouchOutside)
+                                behavior?.state = CustomBottomSheetBehavior.STATE_HIDDEN
+                        }
+
+                        maxMoveYOffset = 0F
+                    }
+
+                    if(event.action == MotionEvent.ACTION_DOWN)
+                        downY = event.y
+                    else if(maxMoveYOffset < abs(downY - event.y))
+                        maxMoveYOffset = abs(downY - event.y)
+
+                    return true
                 }
-            }
+            })
 
         // Handle accessibility events
         ViewCompat.setAccessibilityDelegate(
@@ -161,10 +182,21 @@ class BottomDrawerDelegate(
     }
 
     private fun updateBackgroundOffset() {
-        if (offset <= 1) {
-            coordinator.background?.alpha = (255 * offset).toInt()
-        } else {
-            coordinator.background?.alpha = 255
+
+        if(!isPeekView) {
+            if (offset <= 1) {
+                coordinator.background?.alpha = (255 * offset).toInt()
+            } else {
+                coordinator.background?.alpha = 255
+            }
+        }else{
+            if(offset >= 1) {
+                if (offset <= 2) {
+                    coordinator.background?.alpha = (255 * (offset - 1)).toInt()
+                } else {
+                    coordinator.background?.alpha = 255
+                }
+            }
         }
     }
 
@@ -189,17 +221,10 @@ class BottomDrawerDelegate(
 
     fun onRestoreInstanceState(savedInstanceState: Bundle) {
         offset = savedInstanceState.getFloat("offset")
-        isWrapContent = savedInstanceState.getBoolean("isWrapContent")
         updateBackgroundOffset()
         drawer.onSlide(offset / 2)
         callbacks.forEach {
             it.onSlide(drawer, if (offset == 1F) 0F else 1F)
-        }
-
-        if (isWrapContent) {
-            coordinator.findViewById<View>(R.id.bottom_sheet_drawer).updateLayoutParams<CoordinatorLayout.LayoutParams> {
-                height = CoordinatorLayout.LayoutParams.WRAP_CONTENT
-            }
         }
     }
 

@@ -34,7 +34,7 @@
             android:paddingEnd="32dp"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            android:background="@drawable/main_blocks_rectangle">
+            android:background="@drawable/blocks_rectangle">
 
             <TextView
                 android:id="@+id/exerciseInputEquationResultLayoutEquationTextView"

@@ -16,6 +16,7 @@ import com.example.studita.utils.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.exercises_result_layout.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -46,7 +47,9 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
             val exercisesBonusCorrectCount = it.getInt("EXERCISES_BONUS_CORRECT_COUNT")
 
             exercisesViewModel?.let { viewModel ->
-                initAnimation(userDataToAnimation, viewModel, percent, exercisesBonusCorrectCount)
+
+                formView(if(savedInstanceState == null) userDataToAnimation else UserUtils.userData, viewModel, percent, exercisesBonusCorrectCount)
+
             }
         }
 
@@ -112,38 +115,12 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
 
             val anim = animations.next()
 
-            viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 delay(300L)
 
                 lastAnimation?.let {
                     if (lastAnimation.javaClass != anim.javaClass) {
-                        when (anim) {
-                            is ExerciseResultAnimation.AllCorrectBonus -> {
-
-                                exercisesResultLayoutProgressBarText.text = resources.getString(
-                                    R.string.exercises_XP_bonus,
-                                    LevelUtils.ALL_CORRECT_BONUS
-                                )
-                            }
-                            is ExerciseResultAnimation.LevelUPBonus -> {
-                                exercisesResultLayoutProgressBarText.text = resources.getString(
-                                    R.string.exercises_XP_bonus,
-                                    LevelUtils.NEXT_LEVEL_BONUS * newLevels
-                                )
-                            }
-                            is ExerciseResultAnimation.SequenceBonus -> {
-                                exercisesResultLayoutProgressBarText.text = resources.getString(
-                                    R.string.exercises_XP_bonus,
-                                    LevelUtils.SEQUENCE_BONUS
-                                )
-                            }
-                            is ExerciseResultAnimation.BonusExercisesBonus -> {
-                                exercisesResultLayoutProgressBarText.text = resources.getString(
-                                    R.string.exercises_XP_bonus,
-                                    exercisesBonusObtainedXP
-                                )
-                            }
-                        }
+                        exercisesResultLayoutProgressBarText.text = getProgressBarText(anim, newLevels, exercisesBonusObtainedXP, arguments!!.getInt("OBTAINED_XP"))
                         exercisesResultLayoutProgressBarText.animateFadeIn()
                     }
                 }
@@ -152,7 +129,8 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
                     duration = resources.getInteger(R.integer.exercises_progress_XP_duration)
                         .toLong(), onAnimEnd = {
                         if (anim.to == 1F) {
-                            animateLevelUp {
+                            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+                                animateLevelUp()
                                 animateProgress(
                                     animations,
                                     newLevels,
@@ -168,7 +146,40 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
         }
     }
 
-    private fun initAnimation(
+    private fun getProgressBarText(anim: ExerciseResultAnimation, newLevels: Int, exercisesBonusObtainedXP: Int, obtainedXP: Int) =
+        when (anim) {
+            is ExerciseResultAnimation.AllCorrectBonus -> {
+
+                resources.getString(
+                    R.string.exercises_XP_bonus,
+                    LevelUtils.ALL_CORRECT_BONUS
+                )
+            }
+            is ExerciseResultAnimation.LevelUPBonus -> {
+                resources.getString(
+                    R.string.exercises_XP_bonus,
+                    LevelUtils.NEXT_LEVEL_BONUS * newLevels
+                )
+            }
+            is ExerciseResultAnimation.SequenceBonus -> {
+                resources.getString(
+                    R.string.exercises_XP_bonus,
+                    LevelUtils.SEQUENCE_BONUS
+                )
+            }
+            is ExerciseResultAnimation.BonusExercisesBonus -> {
+                resources.getString(
+                    R.string.exercises_XP_bonus,
+                    exercisesBonusObtainedXP
+                )
+            }
+            is ExerciseResultAnimation.ObtainedXP -> resources.getString(
+                R.string.exercises_XP_result,
+                obtainedXP
+            )
+        }
+
+    private fun formView(
         userData: UserDataData,
         viewModel: ExercisesViewModel,
         percent: Float,
@@ -177,12 +188,19 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
 
         exercisesResultLayoutProgressBar?.postExt<ProgressBar> {
             exercisesResultLayoutProgressBar.currentProgress = LevelUtils.getLevelProgressPercent(userData)
-            startAnimation(userData, percent, viewModel.isTraining, exercisesBonusCorrectCount)
+
+            if(UserUtils.userData != userData) {
+                startAnimation(userData, percent, viewModel.isTraining, exercisesBonusCorrectCount)
+                exercisesResultLayoutProgressBarText.text = resources.getString(
+                    R.string.exercises_XP_result,
+                    LevelUtils.percentToXP(percent, viewModel.isTraining)
+                )
+            }else
+                exercisesResultLayoutProgressBarText.text = resources.getString(
+                    R.string.exercises_XP_result,
+                    arguments!!.getInt("OBTAINED_XP")
+                )
         }
-        exercisesResultLayoutProgressBarText.text = resources.getString(
-            R.string.exercises_XP_result,
-            LevelUtils.percentToXP(percent, viewModel.isTraining)
-        )
         updateTextLevels(userData.currentLevel)
         exercisesResultLayoutAnswersPercent.text = resources.getString(
             R.string.answers_percent,
@@ -190,16 +208,11 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
         )
     }
 
-    private fun animateLevelUp(onAnimationEnd: () -> Unit) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            delay(200)
+    private fun animateLevelUp() {
             exercisesResultLayoutProgressBar.currentProgress = 0F
             exercisesResultLayoutProgressBarText.text = resources.getString(R.string.new_level)
             exercisesResultLayoutProgressBarText.animateFadeIn()
             updateTextLevels(exercisesResultLayoutCurrentLevel.text.toString().toInt() + 1)
-            delay(500)
-            onAnimationEnd.invoke()
-        }
     }
 
     private fun updateTextLevels(currentLevel: Int) {

@@ -16,24 +16,19 @@ object AvaDrawer {
     private val textPaint = Paint()
     private val circlePaint = Paint()
     private var colors = arrayListOf(
+        "#9CCC65",
         "#C2175B",
         "#0098A6",
-        "#AA47BC",
-        "#00887A",
-        "#689F39",
-        "#90A4AE",
-        "#63AA55",
-        "#41A4A6",
-        "#F5511E",
-        "#512DA7",
-        "#DD4554",
-        "#9CCC65",
+        "#5856D6",
+        "#FF2D55",
         "#5E97F6",
         "#FF8A65",
-        "#9FA8DA",
-        "#FFA726",
-        "#BA68C8",
-        "#A1887F"
+        "#FF9500",
+        "#5AC8FA",
+        "#FF6347",
+        "#FF1493",
+        "#9400D3",
+        "#008B8B"
     )
 
     init {

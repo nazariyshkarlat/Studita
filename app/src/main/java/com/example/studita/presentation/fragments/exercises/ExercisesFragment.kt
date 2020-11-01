@@ -1,5 +1,7 @@
 package com.example.studita.presentation.fragments.exercises
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.DialogInterface
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
@@ -22,6 +24,7 @@ import com.example.studita.presentation.fragments.base.BaseFragment
 import com.example.studita.presentation.fragments.bottom_sheets.ExerciseReportBugBottomSheetFragment
 import com.example.studita.presentation.fragments.dialog_alerts.ExercisesBadConnectionDialogAlertFragment
 import com.example.studita.presentation.fragments.exercises.description.ExercisesDescriptionFragment
+import com.example.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
 import com.example.studita.presentation.model.*
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.presentation.views.SquareView
@@ -149,6 +152,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                 when (state) {
                     ExercisesViewModel.ExercisesState.START_SCREEN -> {
                         exerciseLayoutButton.setOnClickListener {
+                            exercisesViewModel?.startSecondsCounter()
+                            exercisesViewModel?.timeCounterIsPaused = false
                             if (viewModel.exercisesResponseData.exercisesDescription != null) {
                                 viewModel.setExercisesProgress(ExercisesViewModel.ExercisesState.DESCRIPTION)
                             } else {
@@ -181,7 +186,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             viewModel.showBadConnectionDialogAlertFragmentState.observe(
                 viewLifecycleOwner,
                 Observer { show ->
-                    if (show) {
+                    if (show && activity?.supportFragmentManager?.findFragmentByTag(ExercisesBadConnectionDialogAlertFragment.BAG_CONNECTION_DIALOG) == null) {
                         activity?.supportFragmentManager?.let {
                             viewModel.snackbarState.removeObservers(viewLifecycleOwner)
                             viewModel.progressState.removeObservers(viewLifecycleOwner)
@@ -192,7 +197,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
 
                             dialogFragment.show(
                                 it,
-                                null
+                                ExercisesBadConnectionDialogAlertFragment.BAG_CONNECTION_DIALOG
                             )
                         }
                     }
@@ -218,7 +223,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             (activity as AppCompatActivity).onBackPressed()
         }
 
-        exerciseBottomSnackbarIcon.setOnClickListener {
+        exerciseBottomSnackbarIcon.setOnSingleClickListener {
             activity?.supportFragmentManager?.let{ExerciseReportBugBottomSheetFragment().apply {
                 arguments = bundleOf("EXERCISE_NUMBER" to exercisesViewModel?.exerciseData?.exerciseNumber)
             }.show(it, null)}
@@ -240,6 +245,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
         animate: Boolean = true
     ) {
 
+        exerciseBottomSnackbarIcon.isEnabled = false
         data?.let {
             val exercisesResponseData = it.second
             formSnackBarView(
@@ -254,9 +260,15 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                         exerciseLayoutSnackbar.animate().translationY(0F)
                             .setDuration(
                                 resources.getInteger(R.integer.snackbar_anim_duration).toLong()
-                            )
+                            ).setListener(object : AnimatorListenerAdapter(){
+                                override fun onAnimationEnd(animation: Animator?) {
+                                    super.onAnimationEnd(animation)
+                                    exerciseBottomSnackbarIcon.isEnabled = true
+                                }
+                            })
                             .setInterpolator(FastOutSlowInInterpolator()).start()
                     } else {
+                        exerciseBottomSnackbarIcon.isEnabled = true
                         exerciseLayoutSnackbar.translationY = 0F
                     }
                     changeButton(true, animate)
@@ -266,7 +278,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
     }
 
     private fun hideSnackBar() {
-        exerciseLayoutSnackbar.animate().translationY(snackbarTranslationY)
+        exerciseBottomSnackbarIcon.isEnabled = false
+        exerciseLayoutSnackbar.animate().setListener(null).translationY(snackbarTranslationY)
             .setInterpolator(
                 FastOutSlowInInterpolator()
             ).setDuration(

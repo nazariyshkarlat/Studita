@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bottom_drawer_outside_background">#80000000</color>
+    <color name="outside_background">#80000000</color>
     <dimen name="bottom_sheet_corner_radius">16dp</dimen>
     <dimen name="bottom_sheet_extra_padding">0dp</dimen>
     <dimen name="bottom_sheet_handle_thickness">6dp</dimen>

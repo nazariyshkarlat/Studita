@@ -9,11 +9,10 @@ import com.google.gson.annotations.SerializedName
 data class ExerciseReportRequest(@SerializedName("auth_data")val userIdToken: UserIdToken?, @SerializedName("report_data") val exerciseReportEntity: ExerciseReportEntity)
 
 data class ExerciseReportEntity(
-    @SerializedName("user_id") val userId: Int?,
     @SerializedName("exercise_number") val exerciseNumber: Int,
     @SerializedName("bugs") val bugs: List<Int>
 )
 
 fun ExerciseReportRequestData.toRawEntity() = ExerciseReportRequest(userIdTokenData?.toRawEntity(), exerciseReportData.toRawEntity())
 
-fun ExerciseReportData.toRawEntity() = ExerciseReportEntity(userId, exerciseNumber, bugTypes.map { it.number })
+fun ExerciseReportData.toRawEntity() = ExerciseReportEntity(exerciseNumber, bugTypes.map { it.number })

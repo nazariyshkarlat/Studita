@@ -5,16 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProviders
-import com.example.studita.domain.entity.exercise.ExerciseData
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
 import com.example.studita.utils.postExt
-import kotlinx.android.synthetic.main.exercise_variants_title_layout.*
 
 open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(viewId) {
 
     var selectedPositions = ArrayList<Int>()
-    var countToSelect = 0
+    var correctCount = 0
 
     protected var exercisesViewModel: ExercisesViewModel? = null
 
@@ -63,7 +61,7 @@ open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(v
     fun selectVariant(centerLayout: ViewGroup, position: Int) {
 
         if (!selectedPositions.contains(position)) {
-            if (countToSelect == selectedPositions.size)
+            if (correctCount == selectedPositions.size)
                 unSelectVariant(centerLayout, selectedPositions.last())
         }
 
@@ -76,7 +74,7 @@ open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(v
         if (!selectedPositions.contains(position))
             selectedPositions.add(position)
 
-        if (countToSelect == selectedPositions.size)
+        if (correctCount == selectedPositions.size)
             exercisesViewModel?.setButtonEnabled(true)
     }
 

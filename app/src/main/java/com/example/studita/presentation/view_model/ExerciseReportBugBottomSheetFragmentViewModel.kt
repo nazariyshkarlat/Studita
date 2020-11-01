@@ -8,6 +8,7 @@ import com.example.studita.domain.entity.exercise.ExerciseReportRequestData
 import com.example.studita.domain.entity.exercise.ExerciseReportType
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ExerciseReportBugBottomSheetFragmentViewModel(private val exerciseNumber: Int) : ViewModel(){
@@ -20,8 +21,8 @@ class ExerciseReportBugBottomSheetFragmentViewModel(private val exerciseNumber: 
 
     fun sendReport(){
         isThxLayout = true
-        viewModelScope.launch {
-            exerciseResultInteractor.sendExerciseReport(ExerciseReportRequestData(UserUtils.getUserIDTokenData(), ExerciseReportData(PrefsUtils.getUserId(), exerciseNumber, selectedItems)))
+        viewModelScope.launch(Dispatchers.Main) {
+            exerciseResultInteractor.sendExerciseReport(ExerciseReportRequestData(UserUtils.getUserIDTokenData(), ExerciseReportData(exerciseNumber, selectedItems)))
         }
     }
 

@@ -3,13 +3,14 @@ package com.example.studita.di.data.exercise
 import com.example.studita.data.net.ExerciseResultService
 import com.example.studita.data.repository.datasource.exercises.result.ExerciseResultDataStoreFactoryImpl
 import com.example.studita.data.repository.datasource.exercises.result.ExerciseResultDataStoreImpl
+import com.example.studita.data.repository.datasource.interesting.result.InterestingResultDataStoreFactoryImpl
+import com.example.studita.data.repository.datasource.interesting.result.InterestingResultDataStoreImpl
 import com.example.studita.data.repository.exercise.ExerciseResultRepositoryImpl
 import com.example.studita.di.DI
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.exercises.ExerciseResultInteractor
 import com.example.studita.domain.interactor.exercises.ExerciseResultInteractorImpl
 import com.example.studita.domain.repository.ExerciseResultRepository
-import com.example.studita.domain.service.SyncExercisesReports
 import com.example.studita.service.SyncExercisesReportsImpl
 
 

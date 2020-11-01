@@ -9,28 +9,25 @@ import com.example.studita.R
 import com.example.studita.domain.entity.UserStatisticsData
 import com.example.studita.domain.interactor.UserStatisticsStatus
 import com.example.studita.presentation.fragments.base.BaseFragment
-import com.example.studita.presentation.view_model.UserStatisticsPageViewModel
+import com.example.studita.presentation.fragments.error_fragments.InternetIsDisabledFragment
+import com.example.studita.presentation.fragments.error_fragments.ServerProblemsFragment
+import com.example.studita.presentation.listeners.ReloadPageCallback
+import com.example.studita.presentation.view_model.UserStatisticsViewModel
 import com.example.studita.utils.TimeUtils
+import com.example.studita.utils.addFragment
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.user_stat_page_layout.*
 
 open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel: UserStatisticsPageViewModel =
-            ViewModelProviders.of(this).get(UserStatisticsPageViewModel::class.java)
 
-        if (savedInstanceState == null) {
-            arguments?.getInt("USER_ID")?.let {
-                viewModel.getUserStatistics(it)
-            }
+        arguments?.let{
+            formView(Gson().fromJson(it.getString("USER_STAT"), object : TypeToken<UserStatisticsData>(){}.type))
         }
 
-        val pageNumber = arguments?.getInt("PAGE_NUMBER") ?: 0
-        viewModel.userStatisticsState.observe(viewLifecycleOwner, Observer {
-            if (it is UserStatisticsStatus.Success)
-                formView(it.results[pageNumber])
-        })
     }
 
     private fun formView(userStatisticsData: UserStatisticsData) {
@@ -47,7 +44,6 @@ open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout) {
         }
         userStatPageLayoutLessonsSubtitle.text = userStatisticsData.obtainedExercises.toString()
         userStatPageLayoutTrainingsSubtitle.text = userStatisticsData.obtainedTrainings.toString()
-        (view as ViewGroup?)?.removeView(userStatPageLayoutProgressBar)
         userStatPageContentView.visibility = View.VISIBLE
     }
 

@@ -5,27 +5,28 @@
     <attr name="transparent_bar_color" format="reference" />
     <attr name="gray_focused_color" format="reference" />
     <attr name="blue_transparent_button_color" format="reference" />
+    <attr name="blue_transparent_button_ripple_color" format="reference"/>
     <attr name="secondary_color" format="reference" />
     <attr name="primary_color" format="reference" />
-    <attr name="main_blocks_color" format="reference" />
+    <attr name="blocks_background_color" format="reference" />
     <attr name="splash_screen_color" format="reference" />
     <attr name="splash_screen_text_color" format="reference" />
-    <attr name="exercise_variant_button_divider_color" format="reference" />
-    <attr name="swipe_refresh_layout_background_color" format="reference" />
     <attr name="disabled_color" format="reference" />
+    <attr name="disabled_background_color" format="reference" />
     <attr name="modal_windows_color" format="reference" />
     <attr name="bottom_sheet_color" format="reference" />
     <attr name="press_view_press_alpha_lighter" format="float" />
     <attr name="press_view_press_alpha" format="float" />
-    <attr name="switch_inactive_thumb_color" format="reference" />
-    <attr name="switch_inactive_track_color" format="reference" />
-    <attr name="colorAccent10" format="reference" />
-    <attr name="colorAccent14" format="reference" />
-    <attr name="colorAccent26" format="reference" />
-    <attr name="grid_divider_color" format="reference"/>
+    <attr name="switch_inactive_thumb_color" format="color" />
+    <attr name="switch_inactive_track_color" format="color" />
     <attr name="red_color" format="reference"/>
     <attr name="red_secondary_color" format="reference"/>
     <attr name="green_color" format="reference"/>
+    <attr name="orange_color" format="reference"/>
+    <attr name="interesting_item_background_gradient_start_color" format="color"/>
+    <attr name="interesting_item_background_gradient_end_color" format="color"/>
+    <attr name="tertiary_gray" format="reference"/>
+    <attr name="secondary_accent_color" format="reference"/>
 
     <declare-styleable name="CircleProgress">
         <attr name="circle_progress" format="integer" />
@@ -53,6 +54,7 @@
 
     <declare-styleable name="PressView">
         <attr name="with_min_click_interval" format="boolean" />
+        <attr name="press_alpha" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="BottomSheetBehavior_Layout_behavior">

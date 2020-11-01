@@ -13,7 +13,7 @@
         android:id="@+id/homeLayoutUserDataLevelLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_blocks_rectangle"
+        android:background="@drawable/blocks_rectangle"
         android:padding="16dp">
 
         <com.example.studita.presentation.views.SquareMinSizeTextView
@@ -83,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/main_blocks_rectangle"
+        android:background="@drawable/blocks_rectangle"
         android:paddingStart="16dp"
         android:paddingEnd="6dp">
 

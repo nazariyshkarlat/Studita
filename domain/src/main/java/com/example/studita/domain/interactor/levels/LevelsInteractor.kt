@@ -8,8 +8,8 @@ interface LevelsInteractor {
     suspend fun getLevels(
         isLoggedIn: Boolean,
         offlineMode: Boolean,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): LevelsStatus
 
-    suspend fun downloadLevels(retryCount: Int = 30): LevelsCacheStatus
+    suspend fun downloadLevels(retryCount: Int = 3): LevelsCacheStatus
 }

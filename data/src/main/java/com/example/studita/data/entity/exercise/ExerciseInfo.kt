@@ -84,7 +84,7 @@ sealed class ExerciseInfo {
         @SerializedName("title") val title: String,
         @SerializedName("subtitle") val subtitle: String,
         @SerializedName("variants") val variants: List<String>,
-        @SerializedName("count_to_select") val countToSelect: Int
+        @SerializedName("correct_count") val correctCount: Int
         ) : ExerciseInfo()
 
     data class ExerciseType16Info(

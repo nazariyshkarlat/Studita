@@ -31,6 +31,7 @@ class PressFrameLayout @JvmOverloads constructor(
     }
 
     override fun setOnClickListener(work: (View) -> Unit) {
+        isClickable = true
         pressViewImpl.onClick = work
     }
 

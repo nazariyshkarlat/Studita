@@ -1,7 +1,9 @@
 package com.example.studita.data.repository.datasource.user_data
 
+import android.util.Log
 import com.example.studita.data.database.user_data.UserDataDao
 import com.example.studita.data.entity.UserDataEntity
+import java.lang.Exception
 
 class DiskUserDataDataStore(private val userDataDao: UserDataDao) : UserDataDataStore {
 

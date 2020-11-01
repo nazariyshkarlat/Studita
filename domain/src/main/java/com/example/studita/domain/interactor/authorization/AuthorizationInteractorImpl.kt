@@ -6,10 +6,7 @@ import com.example.studita.domain.entity.authorization.AuthorizationRequestData
 import com.example.studita.domain.entity.authorization.SignInWithGoogleRequestData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
-import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
-import com.example.studita.domain.interactor.LogInStatus
-import com.example.studita.domain.interactor.SignInWithGoogleStatus
-import com.example.studita.domain.interactor.SignUpStatus
+import com.example.studita.domain.interactor.*
 import com.example.studita.domain.repository.AuthorizationRepository
 import com.example.studita.domain.repository.UserDataRepository
 import com.example.studita.domain.service.SyncSignOut
@@ -35,7 +32,6 @@ class AuthorizationInteractorImpl(
                 else -> CheckTokenIsCorrectStatus.Failure
             }
         } catch (e: Exception) {
-            e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
                     if (e is NetworkConnectionException)
@@ -43,8 +39,7 @@ class AuthorizationInteractorImpl(
                     else
                         CheckTokenIsCorrectStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     checkTokenIsCorrect(userIdTokenData, retryCount - 1)
                 }
             } else
@@ -70,8 +65,7 @@ class AuthorizationInteractorImpl(
                     else
                         SignUpStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     signUp(authorizationRequestData, retryCount - 1)
                 }
             } else
@@ -103,8 +97,7 @@ class AuthorizationInteractorImpl(
                     else
                         LogInStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     logIn(authorizationRequestData, retryCount - 1)
                 }
             } else
@@ -136,8 +129,7 @@ class AuthorizationInteractorImpl(
                     else
                         SignInWithGoogleStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     signInWithGoogle(signInWithGoogleRequestData, retryCount - 1)
                 }
             } else
@@ -150,14 +142,13 @@ class AuthorizationInteractorImpl(
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
-                when {
-                    e is NetworkConnectionException -> {
+                if (retryCount == 0) {
+                    if (e is NetworkConnectionException) {
                         syncSignOut.scheduleSignOut(signOutRequestData)
                     }
-                    retryCount == 0 -> return
-                    else -> {
+                }else {
+                    delay(retryDelay)
                         signOut(signOutRequestData, retryCount - 1)
-                    }
                 }
             }
         }

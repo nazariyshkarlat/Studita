@@ -9,6 +9,9 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.Shape
 import android.text.StaticLayout
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -30,13 +33,31 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class CustomSnackbar @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private var backgroundPaint = Paint()
+    companion object{
+
+        @Volatile
+        private var isHiding: AtomicBoolean = AtomicBoolean(false)
+
+        fun hide(parent: ViewGroup?){
+            if(!isHiding.get()) {
+                val snackbar = parent?.findViewById<View?>(R.id.customSnackbar)
+                snackbar
+                    ?.animate()
+                    ?.alpha(0F)
+                    ?.start()
+
+                isHiding.set(true)
+            }
+        }
+    }
+
     private val rectF = RectF()
     private var desiredHeight = 0
     private val radius = 8F.dpToPx().toFloat()
@@ -63,7 +84,6 @@ class CustomSnackbar @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawRoundRect(rectF, radius, radius, backgroundPaint)
         textLayout.draw(canvas, innerPadding.toFloat(), textY)
     }
 
@@ -104,17 +124,24 @@ class CustomSnackbar @JvmOverloads constructor(
             startAnimation(duration, delay = delay) {
                 rootView.removeView(this)
             }
+            isHiding.set(false)
         }
     }
 
     private fun initView(text: String, @ColorInt color: Int) {
-        backgroundPaint.color = color
+        this.background = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = radius
+            setColor(color)
+        }
         this.text = text
         setViewParams()
+        this.elevation = resources.getDimension(R.dimen.snackbarElevation)
         this.layoutParams = params
     }
 
     private fun startAnimation(duration: Long, delay: Long, onAnimationEnd: () -> Unit) {
+        alpha = 0F
         val alphaAnimator: ValueAnimator? = getAlphaAnimator(0f, 1f)
         val scaleAnimator: ValueAnimator? =
             getScaleAnimator(ANIMATION_SCALE_FROM_VALUE, 1f)
@@ -135,6 +162,7 @@ class CustomSnackbar @JvmOverloads constructor(
                         onAnimationEnd.invoke()
                     }
                 }).start()
+            isHiding.set(true)
         }
     }
 

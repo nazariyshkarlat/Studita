@@ -7,8 +7,9 @@ interface UserDataInteractor {
 
     suspend fun getUserData(
         userId: Int?,
-        offlineMode: Boolean,
-        retryCount: Int = 30
+        getFromLocalStorage: Boolean,
+        isMyUserData: Boolean,
+        retryCount: Int = 3
     ): UserDataStatus
 
     suspend fun saveUserData(userDataData: UserDataData)

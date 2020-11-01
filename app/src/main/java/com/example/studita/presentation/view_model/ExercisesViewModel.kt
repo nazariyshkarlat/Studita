@@ -45,7 +45,7 @@ import kotlin.collections.ArrayList
 
 class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
 
-    val exercisesState = SingleLiveEvent<Boolean>()
+    val exercisesState = MutableLiveData<Boolean>()
     val endButtonState = SingleLiveEvent<Boolean>()
     val navigationState = SingleLiveEvent<Pair<ExercisesNavigationState, Fragment>>()
     val progressBarVisibleState = MutableLiveData<Boolean>(false)
@@ -53,7 +53,6 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
     val answered = MutableLiveData<Boolean>(false)
     val snackbarState = SingleLiveEvent<Pair<ExerciseUiModel, ExerciseResponseData>?>()
     val toolbarProgressBarAnimEvent = SingleLiveEvent<Boolean>()
-    val errorState = SingleLiveEvent<Int>()
     val showBadConnectionDialogAlertFragmentState = SingleLiveEvent<Boolean>()
     val buttonEnabledState = MutableLiveData<Boolean>()
     val buttonTextState = MutableLiveData<String>()
@@ -69,14 +68,15 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
 
     lateinit var exerciseRequestData: ExerciseRequestData
 
-    private val connectionTimeout = 3000L
     private val waitingTime = 5000L
+    private val connectionTimeout = 3000L
 
     var isBonusCompleted = true
     var isTraining = false
     var exercisesAreCompleted = false
     private var exerciseResultSuccess = false
     var timeCounterIsPaused = true
+    var feedbackWasSent = false
 
     var chapterPartsInChapterCount = 0
     var chapterPartNumber = 0
@@ -117,20 +117,20 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun getExercises(chapterPartNumber: Int) {
 
-        getExercisesJob = viewModelScope.launchExt(getExercisesJob) {
+        runBadConnectionCoroutine()
 
-            runBadConnectionCoroutine()
+        getExercisesJob = viewModelScope.launchExt(getExercisesJob) {
 
             when (val status = exercisesInteractor.getExercises(
                 chapterPartNumber,
                 PrefsUtils.isOfflineModeEnabled()
             )) {
-                is ExercisesStatus.NoConnection -> exercisesState.postValue(false)
-                is ExercisesStatus.ServiceUnavailable -> exercisesState.postValue(false)
+                is ExercisesStatus.NoConnection -> loadScreenBadConnectionState.value = true
+                is ExercisesStatus.ServiceUnavailable ->loadScreenBadConnectionState.value = true
                 is ExercisesStatus.Success -> {
                     getExercisesJob = null
                     badConnectionJob?.cancel()
-                    exercisesState.postValue(true)
+                    exercisesState.value = true
                     exercisesResponseData = status.result
 
                     if (exercisesResponseData.exercises.any { it is ExerciseData.ExerciseDataScreen.ScreenType4Data && it.isBonusStart }) {
@@ -142,7 +142,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                         exercises = ArrayList(exercisesResponseData.exercises)
 
                     if (answered.value == true) {
-                        if (exerciseData == (getCurrentExerciseData() as ExerciseData.ExerciseDataExercise).copy()) {
+                        if ((exerciseData  as ExerciseData.ExerciseDataExercise).copy() == (getCurrentExerciseData() as ExerciseData.ExerciseDataExercise).copy()) {
                             exerciseData = getCurrentExerciseData()
                             checkExerciseResult()
                         } else
@@ -155,16 +155,19 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
 
     private fun runBadConnectionCoroutine() {
 
-        badConnectionJob = viewModelScope.launch {
+        badConnectionJob = viewModelScope.launch(Dispatchers.Main) {
             delay(connectionTimeout)
-            loadScreenBadConnectionState.postValue(true)
+
+            if(loadScreenBadConnectionState.value == null)
+                loadScreenBadConnectionState.value = true
         }
 
     }
 
     private suspend fun completeExercises(
         completedExercisesData: CompletedExercisesData,
-        oldUserDataData: UserDataData
+        oldUserDataData: UserDataData,
+        requestStartDatetime: Long
     ) {
         if (completeExercisesInteractor.completeExercises(
                 CompleteExercisesRequestData(
@@ -173,7 +176,10 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                 )
             ) is CompleteExercisesStatus.Success
         ) {
-            saveUserDataState.postValue(true to oldUserDataData)
+            if(System.currentTimeMillis() - requestStartDatetime < 1000) {
+                delay(1000 - (System.currentTimeMillis() - requestStartDatetime))
+                saveUserDataState.value = true to oldUserDataData
+            }
         }
     }
 
@@ -182,7 +188,8 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
         saveObtainedExercisesDataJob = GlobalScope.launchExt(saveObtainedExercisesDataJob) {
             val userDataStatus = userDataInteractor.getUserData(
                 UserUtils.userData.userId,
-                PrefsUtils.isOfflineModeEnabled()
+                PrefsUtils.isOfflineModeEnabled(),
+                true
             )
             if (userDataStatus is UserDataStatus.Success) {
                 val currentUserData = userDataStatus.result.copy()
@@ -228,7 +235,6 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                         ChapterBottomSheetFragment.needsRefresh = true
                     }
 
-                    HomeFragment.needsRefresh = true
 
                     withContext(Dispatchers.Main) {
                         UserUtils.userDataLiveData.value = it
@@ -246,18 +252,25 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                         )
                     )
 
-                    delay(1000L)
+                    val data = CompletedExercisesData(
+                        chapterNumber,
+                        chapterPartInChapterNumber,
+                        getAnswersPercent(),
+                        Date(),
+                        seconds,
+                        correctBonusAnswers
+                    )
+
+                    if(PrefsUtils.isOfflineModeEnabled()) {
+                        completeExercisesInteractor.addLocalCompletedExercises(data)
+                        delay(1000)
+                        saveUserDataState.value = true to userDataStatus.result
+                    }
 
                     completeExercises(
-                        CompletedExercisesData(
-                            chapterNumber,
-                            chapterPartInChapterNumber,
-                            getAnswersPercent(),
-                            Date(),
-                            seconds,
-                            correctBonusAnswers
-                        ),
-                        userDataStatus.result
+                        data,
+                        userDataStatus.result,
+                        System.currentTimeMillis()
                     )
                 }
             }
@@ -265,13 +278,13 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     private fun saveUserData(userDataData: UserDataData) {
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.Main) {
             userDataInteractor.saveUserData(userDataData)
         }
     }
 
     private fun saveUserStatistics(userStatisticsRowData: UserStatisticsRowData) {
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.Main) {
             userStatisticsInteractor.saveUserStatistics(
                 UserUtils.getUserIDTokenData(),
                 userStatisticsRowData
@@ -317,6 +330,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun initFragment() {
         answered.value = false
+        feedbackWasSent = false
         snackbarState.value = null
         if (exercisesAreCompleted && isBonusCompleted) {
             endExercises()
@@ -394,7 +408,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
     private fun launchWaitingCoroutine() {
         waitingJob = viewModelScope.launchExt(waitingJob) {
             delay(waitingTime)
-            showBadConnectionDialogAlertFragmentState.postValue(true)
+            showBadConnectionDialogAlertFragmentState.value = true
         }
     }
 
@@ -417,18 +431,24 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                             exerciseResultInteractor.getExerciseResult(
                                 exerciseData as ExerciseData.ExerciseDataExercise,
                                 exerciseRequestData,
-                                (exerciseData as ExerciseData.ExerciseDataExercise).exerciseAnswer != null
+                                PrefsUtils.isOfflineModeEnabled()
                             )) {
-                            is ExerciseResultStatus.NoConnection -> errorState.postValue(R.string.no_connection)
-                            is ExerciseResultStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
+                            is ExerciseResultStatus.NoConnection -> {
+                                waitingJob?.cancel()
+                                showBadConnectionDialogAlertFragmentState.value = true
+                            }
+                            is ExerciseResultStatus.ServiceUnavailable -> {
+                                waitingJob?.cancel()
+                                showBadConnectionDialogAlertFragmentState.value = true
+                            }
                             is ExerciseResultStatus.Success -> {
 
                                 exerciseResultSuccess = true
 
-                                showBadConnectionDialogAlertFragmentState.postValue(false)
+                                showBadConnectionDialogAlertFragmentState.value = false
                                 waitingJob?.cancel()
 
-                                snackbarState.postValue(exerciseUiModel to status.result)
+                                snackbarState.value = exerciseUiModel to status.result
                                 if (status.result.exerciseResult) {
                                     exerciseIndex++
                                     if (exerciseIndex == getExercisesCount()) {
@@ -492,7 +512,8 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
                 }
         } else if (showBadConnectionDialogAlertFragmentState.value == true) {
             waitingJob?.cancel()
-            showBadConnectionDialogAlertFragmentState.postValue(true)
+            checkExerciseResultJob?.cancel()
+            showBadConnectionDialogAlertFragmentState.value = true
         }
     }
 
@@ -510,8 +531,7 @@ class ExercisesViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun navigateBonuses(){
-
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             delay(app.resources.getInteger(R.integer.bonus_exercises_delay).toLong())
             exerciseBonusNavigationState.value = true
         }

@@ -8,14 +8,6 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/exercisesStartScreenLayoutImage"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/main_blocks_oval"
-        android:scaleType="center" />
-
     <TextView
         android:id="@+id/exercisesStartScreenLayoutTitle"
         style="@style/Medium24"

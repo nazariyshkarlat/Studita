@@ -32,8 +32,7 @@ class UserStatisticsInteractorImpl(private val repository: UserStatisticsReposit
                     } else
                         UserStatisticsStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     getUserStatistics(userId, retryCount - 1)
                 }
             } else

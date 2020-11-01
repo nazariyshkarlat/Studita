@@ -13,6 +13,7 @@ import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseData
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.example.studita.utils.disableAllItems
 import com.example.studita.utils.postExt
 import kotlinx.android.synthetic.main.exercise_variants_title_layout.*
 
@@ -44,16 +45,6 @@ open class ExerciseVariantsFragment(viewId: Int) : NavigatableFragment(viewId) {
             for (i in 0 until this.childCount) {
                 val child = this.getChildAt(i)
                 child.refreshVariants()
-            }
-        }
-    }
-
-    private fun View.disableAllItems() {
-        this.isEnabled = false
-        if (this is ViewGroup) {
-            for (i in 0 until this.childCount) {
-                val child = this.getChildAt(i)
-                child.disableAllItems()
             }
         }
     }

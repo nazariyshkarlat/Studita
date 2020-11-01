@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="bottom">
 
         <com.example.studita.presentation.views.ErrorEditText
             android:id="@+id/authorizationEmailEditText"
@@ -26,6 +27,7 @@
             android:layout_marginEnd="@dimen/defaultRLMargin"
             android:hint="@string/authorization_email_hint"
             android:imeOptions="actionNext"
+            android:maxLength="200"
             android:inputType="textEmailAddress"
             android:singleLine="true" />
 
@@ -38,10 +40,12 @@
                 style="@style/EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLength="100"
                 android:drawableStart="@drawable/ic_lock_secondary"
                 android:drawablePadding="16dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
+                android:paddingEnd="32dp"
                 android:layout_marginStart="@dimen/defaultRLMargin"
                 android:layout_marginEnd="@dimen/defaultRLMargin"
                 android:hint="@string/authorization_password_hint"
@@ -54,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center|end"
-                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:background="@drawable/circle_background_12dp"
                 android:padding="12dp"
                 android:visibility="gone"
@@ -79,6 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
+            android:visibility="invisible"
             android:text="@string/forgot_password" />
 
     </LinearLayout>

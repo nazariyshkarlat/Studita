@@ -8,6 +8,7 @@ import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.example.studita.domain.interactor.ExerciseReportStatus
 import com.example.studita.domain.interactor.ExerciseResultStatus
+import com.example.studita.domain.interactor.InterestingLikeStatus
 import com.example.studita.domain.repository.ExerciseResultRepository
 import com.example.studita.domain.service.SyncExercisesReports
 import kotlinx.coroutines.delay
@@ -46,8 +47,7 @@ class ExerciseResultInteractorImpl(
                         else
                             ExerciseResultStatus.ServiceUnavailable
                     } else {
-                        if (e is NetworkConnectionException)
-                            delay(retryDelay)
+                        delay(retryDelay)
                         getExerciseResult(
                             exerciseData,
                             exerciseRequestData,
@@ -72,17 +72,18 @@ class ExerciseResultInteractorImpl(
     } catch (e: Exception) {
         e.printStackTrace()
         if (e is NetworkConnectionException || e is ServerUnavailableException) {
-            when {
-                e is NetworkConnectionException -> {
+            if (retryCount == 0) {
+                if(e is NetworkConnectionException) {
                     syncExercisesReports.scheduleSendExerciseReport(
                         exerciseReportRequestData
                     )
-                    ExerciseReportStatus.Success
-                }
-                retryCount == 0 -> ExerciseReportStatus.ServiceUnavailable
-                else -> {
-                    sendExerciseReport(exerciseReportRequestData, retryCount - 1)
-                }
+                    ExerciseReportStatus.NoConnection
+                }else
+                    ExerciseReportStatus.ServiceUnavailable
+            }
+            else {
+                delay(retryDelay)
+                sendExerciseReport(exerciseReportRequestData, retryCount - 1)
             }
         } else
             ExerciseReportStatus.Failure

@@ -20,13 +20,10 @@ class UserStatActivity : DefaultActivity() {
         if (savedInstanceState == null) {
             addFragment(ToolbarFragment(), R.id.doubleTopFrameLayoutFrameLayout)
             if (UserUtils.isLoggedIn()) {
-                if (PrefsUtils.isOfflineModeEnabled())
-                    addFragment(UserStatOfflineModeFragment(), R.id.doubleFrameLayoutFrameLayout)
-                else
-                    addFragment(UserStatFragment().apply {
-                        arguments =
-                            bundleOf("USER_ID" to this@UserStatActivity.intent.extras?.getInt("USER_ID"))
-                    }, R.id.doubleFrameLayoutFrameLayout)
+                addFragment((if(PrefsUtils.isOfflineModeEnabled()) UserStatOfflineModeFragment() else UserStatFragment()).apply {
+                    arguments =
+                        bundleOf("USER_ID" to this@UserStatActivity.intent.extras?.getInt("USER_ID"))
+                }, R.id.doubleFrameLayoutFrameLayout)
             } else
                 addFragment(UserStatUnLoggedInFragment(), R.id.doubleFrameLayoutFrameLayout)
         }

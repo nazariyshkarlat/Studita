@@ -11,8 +11,10 @@ import androidx.core.view.OneShotPreDrawListener
 import androidx.core.view.children
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExercisesDescriptionData
+import com.example.studita.utils.ThemeUtils
 import com.example.studita.utils.createSpannableString
 import com.example.studita.utils.dpToPx
+import com.example.studita.utils.injectParts
 import kotlinx.android.synthetic.main.exercises_description_1_layout.*
 import java.util.regex.Pattern
 
@@ -34,45 +36,18 @@ class ExercisesDescription1Fragment :
 
     private fun formView(exercisesDescriptionModel: ExercisesDescriptionData) {
         var childIndex = -1
-        var insideBrackets = "0"
+        var insideBrackets: String? = null
         exercisesDescription1ParentLinearLayout.children.forEach { child ->
             if (child is TextView) {
                 if (childIndex >= 0) {
-                    val text = exercisesDescriptionModel.textParts[childIndex]
-                    val m =
-                        Pattern.compile("\\{.*?\\}").matcher(text)
-                    var spanIndex = 1
-                    val builder = SpannableStringBuilder()
-                    while (m.find()) {
-                        insideBrackets =
-                            exercisesDescriptionModel.partsToInject!![m.group(0).replace(
-                                """[{}]""".toRegex(),
-                                ""
-                            ).toInt()]
-                        val textSpanParts: ArrayList<SpannableString> = ArrayList(text.split(
-                            "\\{.*?\\}".toRegex()
-                        ).map { span -> SpannableString(span) })
-                        textSpanParts.add(
-                            spanIndex,
-                            insideBrackets.createSpannableString(
-                                color = ContextCompat.getColor(
-                                    child.context,
-                                    R.color.yellow
-                                )
-                            )
-                        )
-                        textSpanParts.forEach { part -> builder.append(part) }
-                        spanIndex++
-                    }
-                    if (spanIndex == 1)
-                        child.text = text
-                    else
-                        child.text = builder
+                    val injected = injectParts(context!!, exercisesDescriptionModel.textParts[childIndex], exercisesDescriptionModel.partsToInject!!)
+                    child.text = injected.first
+                    insideBrackets = injected.second
                 }
                 childIndex++
             } else {
                 if (child is LinearLayout)
-                    fillLinearLayout(child, insideBrackets.toInt())
+                    fillLinearLayout(child, insideBrackets!!.toInt())
             }
         }
     }

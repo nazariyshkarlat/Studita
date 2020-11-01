@@ -7,12 +7,18 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseDialogFragment
 import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.example.studita.presentation.views.CustomSnackbar
 import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.ThemeUtils
 import kotlinx.android.synthetic.main.dialog_alert_layout.*
 
 
 class ExercisesBadConnectionDialogAlertFragment :
     BaseDialogFragment(R.layout.dialog_alert_layout) {
+
+    companion object{
+        const val BAG_CONNECTION_DIALOG = "BAG_CONNECTION_DIALOG"
+    }
 
     var exercisesViewModel: ExercisesViewModel? = null
 
@@ -34,16 +40,14 @@ class ExercisesBadConnectionDialogAlertFragment :
         }
         dialogAlertRightButton.setOnClickListener {
             dismiss()
-            exercisesViewModel?.waitingJob?.cancel()
             exercisesViewModel?.let {
                 PrefsUtils.setOfflineMode(true)
+                CustomSnackbar(context!!).show(
+                    resources.getString(R.string.enable_offline_mode_snackbar), ThemeUtils.getAccentColor(context!!)
+                )
                 it.getExercises(it.chapterPartNumber)
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 
     override fun onDismiss(dialog: DialogInterface) {

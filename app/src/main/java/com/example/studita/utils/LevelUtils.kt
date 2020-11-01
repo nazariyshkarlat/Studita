@@ -17,6 +17,7 @@ object LevelUtils {
     private const val FIRST_LEVEL_XP = 500
     private const val SINGLE_BONUS_EXERCISE_XP = 10
     private const val SINGLE_BONUS_TRAINING_XP = 5
+    private const val MAX_EXERCISE_XP = 100
 
     fun getProgressText(
         completedParts: Int,
@@ -59,7 +60,7 @@ object LevelUtils {
         userData.currentLevelXP / getLevelXP(userData.currentLevel).toFloat()
 
     fun percentToXP(percent: Float, isTraining: Boolean) =
-        if (percent > 1F) throw IOException("percent more than 100!") else if (isTraining) TRAINING_XP else (percent * 100).toInt()
+        if (percent > 1F) throw IOException("percent more than 100!") else if (isTraining) TRAINING_XP else (percent * MAX_EXERCISE_XP).toInt()
 
     fun getObtainedXP(
         userData: UserDataData,

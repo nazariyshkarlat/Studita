@@ -3,10 +3,16 @@ package com.example.studita.utils
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View
+import android.view.WindowManager
+import androidx.annotation.ColorInt
 import java.io.IOException
 import java.io.Serializable
+
 
 inline fun <reified T : Activity> Context.startActivity(vararg params: Pair<String, Any?>) =
     Internals.internalStartActivity(this, T::class.java, params)
@@ -64,5 +70,42 @@ object Internals {
             }
             return@forEach
         }
+    }
+}
+
+fun Activity.setStatusBarColor(@ColorInt color: Int){
+    window.statusBarColor = color
+}
+
+fun Activity.setNavigationBarColor(@ColorInt color: Int){
+    window.navigationBarColor = color
+}
+
+fun Activity.clearBarsColor(){
+    window.statusBarColor = ThemeUtils.getStatusBarColor(this)
+    window.navigationBarColor = ThemeUtils.getNavigationBarColor(this)
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1){
+        if(ThemeUtils.getLightNavigation(this)){
+            window?.decorView?.setLightNavigation()
+        }else
+            window?.decorView?.clearLightNavigation()
+    }
+
+    if(ThemeUtils.getLightStatusBar(this))
+        window?.decorView?.setLightStatusBar()
+    else
+        window?.decorView?.clearLightStatusBar()
+}
+
+fun Activity.makeStatusBarTransparent(){
+    window?.let {
+        it.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        it.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+
+        it.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or it.decorView.systemUiVisibility
+        it.decorView.clearLightStatusBar()
+        it.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        it.statusBarColor = Color.TRANSPARENT
     }
 }

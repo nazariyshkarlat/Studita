@@ -1,7 +1,11 @@
 package com.example.studita.data.entity.interesting
 
+import com.example.studita.data.entity.UserIdToken
+import com.example.studita.data.entity.toRawEntity
 import com.example.studita.domain.entity.InterestingData
 import com.example.studita.domain.entity.InterestingDataScreen
+import com.example.studita.domain.entity.InterestingLikeData
+import com.example.studita.domain.entity.InterestingLikeRequestData
 import com.google.gson.annotations.SerializedName
 import java.io.IOException
 
@@ -36,3 +40,17 @@ fun InterestingEntity.toBusinessEntity() = InterestingData(
         InterestingDataScreen.InterestingDataExplanationScreen(explanationParts)
     )
 )
+
+data class InterestingLikeRequest(
+    @SerializedName("auth_data") val userIdToken: UserIdToken?,
+    @SerializedName("like_data") val likeData: InterestingLikeEntity
+)
+
+fun InterestingLikeRequestData.toRawEntity() = InterestingLikeRequest(userIdTokenData?.toRawEntity(), interestingLikeData.toRawEntity())
+
+data class InterestingLikeEntity(
+    @SerializedName("interesting_number") val interestingNumber: Int,
+    @SerializedName("like_it") val likeIt: Boolean
+)
+
+fun InterestingLikeData.toRawEntity() = InterestingLikeEntity(interestingNumber, likeIt)

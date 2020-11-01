@@ -22,7 +22,10 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="12dp"
-        android:layout_toEndOf="@+id/friendItemAvatar" />
+        android:layout_toStartOf="@+id/friendItemAddFriend"
+        android:layout_toEndOf="@+id/friendItemAvatar"
+        android:ellipsize="end"
+        android:maxLines="1" />
 
     <ImageView
         android:id="@+id/friendItemAddFriend"

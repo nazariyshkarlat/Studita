@@ -4,9 +4,12 @@ import com.example.studita.domain.entity.SubscribeEmailResultData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
+import com.example.studita.domain.interactor.FriendActionStatus
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
 import com.example.studita.domain.repository.SubscribeEmailRepository
+import com.example.studita.domain.service.SyncFriendship
 import com.example.studita.domain.service.SyncSubscribeEmail
+import kotlinx.coroutines.delay
 
 class SubscribeEmailInteractorImpl(
     private val repository: SubscribeEmailRepository,
@@ -28,15 +31,16 @@ class SubscribeEmailInteractorImpl(
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
-                when {
-                    e is NetworkConnectionException -> {
+                if (retryCount == 0) {
+                    if(e is NetworkConnectionException) {
                         syncSubscribeEmail.scheduleSubscribeEmail(true, userIdTokenData)
                         SubscribeEmailResultStatus.NoConnection
-                    }
-                    retryCount == 0 -> SubscribeEmailResultStatus.ServiceUnavailable
-                    else -> {
-                        subscribe(userIdTokenData, retryCount - 1)
-                    }
+                    }else
+                        SubscribeEmailResultStatus.ServiceUnavailable
+                }
+                else {
+                    delay(retryDelay)
+                    subscribe(userIdTokenData, retryCount - 1)
                 }
             } else
                 SubscribeEmailResultStatus.Failure
@@ -55,15 +59,16 @@ class SubscribeEmailInteractorImpl(
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
-                when {
-                    e is NetworkConnectionException -> {
+                if (retryCount == 0) {
+                    if(e is NetworkConnectionException) {
                         syncSubscribeEmail.scheduleSubscribeEmail(false, userIdTokenData)
                         SubscribeEmailResultStatus.NoConnection
-                    }
-                    retryCount == 0 -> SubscribeEmailResultStatus.ServiceUnavailable
-                    else -> {
-                        subscribe(userIdTokenData, retryCount - 1)
-                    }
+                    }else
+                        SubscribeEmailResultStatus.ServiceUnavailable
+                }
+                else {
+                    delay(retryDelay)
+                    subscribe(userIdTokenData, retryCount - 1)
                 }
             } else
                 SubscribeEmailResultStatus.Failure

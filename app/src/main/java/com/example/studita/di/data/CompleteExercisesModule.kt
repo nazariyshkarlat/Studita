@@ -1,10 +1,12 @@
 package com.example.studita.di.data
 
+import com.example.studita.data.database.completed_exercises.CompletedExercisesDao
 import com.example.studita.data.net.CompleteExercisesService
 import com.example.studita.data.repository.CompleteExercisesRepositoryImpl
 import com.example.studita.data.repository.datasource.complete_exercises.CompleteExercisesDataStoreFactoryImpl
 import com.example.studita.data.repository.datasource.complete_exercises.CompleteExercisesDataStoreImpl
 import com.example.studita.di.DI
+import com.example.studita.di.DatabaseModule
 import com.example.studita.di.NetworkModule
 import com.example.studita.domain.interactor.complete_chapter_part.CompleteExercisesInteractor
 import com.example.studita.domain.interactor.complete_chapter_part.CompleteExercisesInteractorImpl
@@ -54,7 +56,8 @@ object CompleteExercisesModule {
     private fun getCompleteExercisesDataStore() =
         CompleteExercisesDataStoreImpl(
             NetworkModule.connectionManager,
-            NetworkModule.getService(CompleteExercisesService::class.java)
+            NetworkModule.getService(CompleteExercisesService::class.java),
+            DatabaseModule.studitaDatabase.getCompletedExercisesDao()
         )
 
 }

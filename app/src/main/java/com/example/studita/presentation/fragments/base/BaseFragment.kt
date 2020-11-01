@@ -15,4 +15,6 @@ open class BaseFragment(@LayoutRes private val layoutResId: Int) : Fragment() {
         savedInstanceState: Bundle?
     ): View? =
         inflater.inflate(layoutResId, container, false)
+
+
 }

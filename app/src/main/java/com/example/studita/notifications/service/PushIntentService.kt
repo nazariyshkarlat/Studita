@@ -145,8 +145,9 @@ class PushIntentService : JobIntentService() {
             .setContentIntent(openNotificationsPendingIntent)
             .setLargeIcon(largeIcon)
             .setAutoCancel(true)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setColor(ContextCompat.getColor(this, if(ThemeUtils.getDefaultTheme(resources)== ThemeUtils.Theme.DARK) R.color.blue_dark_theme else R.color.blue_light_theme))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         when (notificationData.notificationType) {
             NotificationType.FRIENDSHIP_REQUEST -> {
@@ -227,7 +228,7 @@ class PushIntentService : JobIntentService() {
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = this.resources.getString(R.string.notifications_channel_name)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(CHANNEL_ID, name, importance)
             val notificationManager: NotificationManager =
                 this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager

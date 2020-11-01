@@ -133,6 +133,11 @@ class PrivacySettingsEditExceptionsDialogAlertFragment :
                     context.resources.getString(R.string.changes_are_saved),
                     ThemeUtils.getAccentColor(context)
                 )
+            }else{
+                CustomSnackbar(context).show(
+                    resources.getString(R.string.server_temporarily_unavailable),
+                    ThemeUtils.getRedColor(context)
+                )
             }
         })
 

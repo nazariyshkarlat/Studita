@@ -24,8 +24,12 @@ class AuthorizationDataStoreImpl(
                 checkTokenIsCorrectResult = tokenIsCorrect.body()
                 val statusCode = tokenIsCorrect.code()
                 statusCode to checkTokenIsCorrectResult
-            } catch (exception: Exception) {
-                throw ServerUnavailableException()
+            }catch (e: Exception) {
+                e.printStackTrace()
+                if (e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
 
@@ -41,8 +45,12 @@ class AuthorizationDataStoreImpl(
                 if (logInResult != null)
                     logInCache.saveUserAuthenticationInfo(logInResult.userId, logInResult.userToken)
                 statusCode to logInResult
-            } catch (exception: Exception) {
-                throw ServerUnavailableException()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                if (e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
             }
         }
 

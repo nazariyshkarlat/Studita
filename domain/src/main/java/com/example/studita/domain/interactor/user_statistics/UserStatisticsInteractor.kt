@@ -6,7 +6,7 @@ import com.example.studita.domain.interactor.UserStatisticsStatus
 
 interface UserStatisticsInteractor {
 
-    suspend fun getUserStatistics(userId: Int, retryCount: Int = 30): UserStatisticsStatus
+    suspend fun getUserStatistics(userId: Int, retryCount: Int = 3): UserStatisticsStatus
 
     suspend fun saveUserStatistics(
         idTokenData: UserIdTokenData?,

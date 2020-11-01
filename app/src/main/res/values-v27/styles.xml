@@ -1,72 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="LightTheme" parent="AppTheme">
-        <item name="colorAccent10">@color/blue10_light_theme</item>
-        <item name="colorAccent14">@color/blue14_light_theme</item>
-        <item name="colorAccent26">@color/blue26_light_theme</item>
         <item name="colorAccent">@color/blue_light_theme</item>
-        <item name="main_blocks_color">@color/background_gray_light_theme</item>
+        <item name="blocks_background_color">@color/background_gray_light_theme</item>
         <item name="disabled_color">@color/disabled_gray_color_light_theme</item>
+        <item name="disabled_background_color">@color/disabled_background_gray_color_light_theme</item>
         <item name="primary_color">@color/black</item>
-        <item name="blue_transparent_button_color">?colorAccent10</item>
-        <item name="colorControlHighlight">@color/black6</item>
+        <item name="blue_transparent_button_color">@color/blue14_light_theme</item>
+        <item name="blue_transparent_button_ripple_color">@color/blue24_light_theme</item>
+        <item name="colorControlHighlight">?disabled_background_color</item>
+        <item name="android:colorEdgeEffect">#EDEDEE</item>
         <item name="gray_focused_color">@color/focused_gray_color_light_theme</item>
         <item name="secondary_color">@color/secondary_gray_color_light_theme</item>
         <item name="page_background_color">@color/white</item>
         <item name="bottom_navigation_color">@color/bottom_navigation_gray_light_theme_color</item>
-        <item name="swipe_refresh_layout_background_color">@color/white</item>
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">@color/white</item>
         <item name="modal_windows_color">@color/modal_windows_gray_light_theme_color</item>
-        <item name="exercise_variant_button_divider_color">@color/black20</item>
         <item name="press_view_press_alpha">0.64</item>
         <item name="press_view_press_alpha_lighter">0.3</item>
-        <item name="colorControlNormal">?secondary_color</item>
-        <item name="switch_inactive_thumb_color">@color/grayE6</item>
-        <item name="switch_inactive_track_color">@color/black</item>
+        <item name="switch_inactive_thumb_color">#8A8A8E</item>
+        <item name="switch_inactive_track_color">#A4A4A4</item>
         <item name="android:scrollbarThumbHorizontal">?attr/gray_focused_color</item>
         <item name="android:scrollbarThumbVertical">?attr/gray_focused_color</item>
         <item name="bottom_sheet_color">@color/bottom_sheet_gray_light_theme_color</item>
-        <item name="grid_divider_color">@color/black30</item>
         <item name="green_color">@color/green_light_theme</item>
         <item name="red_color">@color/red_light_theme</item>
         <item name="red_secondary_color">@color/red_secondary_light_theme</item>
+        <item name="orange_color">@color/orange_light_theme</item>
+        <item name="interesting_item_background_gradient_start_color">#0065FC</item>
+        <item name="interesting_item_background_gradient_end_color">#0085FF</item>
+        <item name="tertiary_gray">@color/tertiary_gray_light_theme_color</item>
+        <item name="secondary_accent_color">@color/blue60_light_theme</item>
     </style>
 
     <style name="DarkTheme" parent="AppTheme">
-        <item name="colorAccent10">@color/blue10_dark_theme</item>
-        <item name="colorAccent14">@color/blue14_dark_theme</item>
-        <item name="colorAccent26">@color/blue26_dark_theme</item>
         <item name="colorAccent">@color/blue_dark_theme</item>
         <item name="secondary_color">@color/secondary_gray_color_dark_theme</item>
         <item name="primary_color">@color/white</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="page_background_color">@color/black</item>
-        <item name="blue_transparent_button_color">?colorAccent14</item>
-        <item name="main_blocks_color">@color/background_gray_dark_theme</item>
+        <item name="blue_transparent_button_color">@color/blue18_dark_theme</item>
+        <item name="blue_transparent_button_ripple_color">@color/blue24_dark_theme</item>
+        <item name="blocks_background_color">@color/background_gray_dark_theme</item>
         <item name="disabled_color">@color/disabled_gray_color_dark_theme</item>
+        <item name="disabled_background_color">@color/disabled_background_gray_color_dark_theme</item>
         <item name="bottom_navigation_color">@color/bottom_navigation_gray_dark_theme_color</item>
         <item name="gray_focused_color">@color/focused_gray_color_dark_theme</item>
         <item name="modal_windows_color">@color/modal_windows_gray_dark_theme_color</item>
-        <item name="swipe_refresh_layout_background_color">@color/black</item>
-        <item name="colorControlHighlight">@color/white8</item>
+        <item name="colorControlHighlight">?disabled_background_color</item>
+        <item name="android:colorEdgeEffect">#39393B</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
         <item name="android:navigationBarColor">@color/black</item>
-        <item name="exercise_variant_button_divider_color">@color/white24</item>
         <item name="press_view_press_alpha">0.68</item>
         <item name="press_view_press_alpha_lighter">0.34</item>
-        <item name="switch_inactive_thumb_color">@color/gray8</item>
-        <item name="switch_inactive_track_color">@color/white</item>
+        <item name="switch_inactive_thumb_color">#8D8D93</item>
+        <item name="switch_inactive_track_color">#A8A8A8</item>
         <item name="android:scrollbarThumbHorizontal">?attr/gray_focused_color</item>
         <item name="android:scrollbarThumbVertical">?attr/gray_focused_color</item>
-        <item name="grid_divider_color">@color/white30</item>
         <item name="bottom_sheet_color">@color/bottom_sheet_gray_dark_theme_color</item>
         <item name="green_color">@color/green_dark_theme</item>
         <item name="red_color">@color/red_dark_theme</item>
         <item name="red_secondary_color">@color/red_secondary_dark_theme</item>
+        <item name="orange_color">@color/orange_dark_theme</item>
+        <item name="interesting_item_background_gradient_start_color">#1070FF</item>
+        <item name="interesting_item_background_gradient_end_color">#0C8AFF</item>
+        <item name="tertiary_gray">@color/tertiary_gray_dark_theme_color</item>
+        <item name="secondary_accent_color">@color/blue60_dark_theme</item>
     </style>
 
 </resources>

@@ -15,7 +15,7 @@ enum class DuelsInvitesFrom {
 }
 
 data class PrivacySettingsRequestData(
-    val userIdToken: UserIdTokenData,
+    val userIdTokenData: UserIdTokenData,
     val privacySettingsEntity: PrivacySettingsData
 )
 

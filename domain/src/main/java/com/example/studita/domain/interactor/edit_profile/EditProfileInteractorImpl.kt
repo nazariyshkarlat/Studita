@@ -8,6 +8,8 @@ import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.example.studita.domain.interactor.EditProfileStatus
 import com.example.studita.domain.interactor.UserNameAvailableStatus
+import com.example.studita.domain.interactor.edit_profile.EditProfileInteractor.Companion.USER_NAME_MAX_LENGTH
+import com.example.studita.domain.interactor.edit_profile.EditProfileInteractor.Companion.USER_NAME_MIN_LENGTH
 import com.example.studita.domain.repository.EditProfileRepository
 import com.example.studita.domain.repository.UserDataRepository
 import kotlinx.coroutines.delay
@@ -41,8 +43,7 @@ class EditProfileInteractorImpl(
                     else
                         EditProfileStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     editProfile(editProfileRequestData, userDataData, newAvatar, retryCount - 1)
                 }
             } else
@@ -56,19 +57,20 @@ class EditProfileInteractorImpl(
         try {
             val pair = editProfileRepository.isUserNameAvailable(userName)
             val code = pair.first
-            val isMyFriend = pair.second == true
             when (code) {
-                200 -> if (isMyFriend) UserNameAvailableStatus.Available else UserNameAvailableStatus.IsTaken
-                else -> UserNameAvailableStatus.Failure
+                200 -> if (pair.second == true) UserNameAvailableStatus.Available else UserNameAvailableStatus.IsTaken
+                else -> UserNameAvailableStatus.Unavailable
             }
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
                 if (retryCount == 0) {
-                    UserNameAvailableStatus.Failure
-                } else {
                     if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                        UserNameAvailableStatus.NoConnection
+                    else
+                        UserNameAvailableStatus.ServiceUnavailable
+                } else {
+                    delay(retryDelay)
                     isUserNameAvailable(userName, retryCount - 1)
                 }
             } else
@@ -88,7 +90,7 @@ class EditProfileInteractorImpl(
     ): Boolean = oldProfileData.userName != newProfileData.userName
 
     override fun isValidUserNameLength(newProfileData: EditProfileData): Boolean =
-        newProfileData.userName?.length in 4..25
+        newProfileData.userName?.length in USER_NAME_MIN_LENGTH..USER_NAME_MAX_LENGTH
 
     override fun isValidData(
         oldProfileData: EditProfileData,

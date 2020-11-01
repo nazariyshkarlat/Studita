@@ -63,6 +63,6 @@ object UserDataModule {
     private fun getDiskUserDataDataStore() =
         DiskUserDataDataStore(getUserDataDao())
 
-    private fun getUserDataDao() = DatabaseModule.studitaDatabase!!.getUserDataDao()
+    private fun getUserDataDao() = DatabaseModule.studitaDatabase.getUserDataDao()
 
 }

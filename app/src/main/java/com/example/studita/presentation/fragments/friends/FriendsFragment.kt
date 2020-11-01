@@ -16,16 +16,20 @@ import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.presentation.adapter.users_list.SearchViewHolder
 import com.example.studita.presentation.adapter.users_list.UsersAdapter
 import com.example.studita.presentation.fragments.base.NavigatableFragment
+import com.example.studita.presentation.fragments.error_fragments.InternetIsDisabledFragment
+import com.example.studita.presentation.fragments.error_fragments.ServerProblemsFragment
+import com.example.studita.presentation.listeners.ReloadPageCallback
 import com.example.studita.presentation.model.UsersRecyclerUiModel
 import com.example.studita.presentation.model.toUserItemUiModel
 import com.example.studita.presentation.view_model.FriendsFragmentViewModel
 import com.example.studita.presentation.views.CustomSnackbar
 import com.example.studita.utils.*
+import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.my_friends_empty.*
 import kotlinx.android.synthetic.main.recyclerview_layout.*
 
 
-open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
+open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout), ReloadPageCallback {
 
     lateinit var friendsFragmentViewModel: FriendsFragmentViewModel
 
@@ -42,6 +46,25 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
             10F.dpToPx()
         )
 
+        friendsFragmentViewModel.errorEvent.observe(viewLifecycleOwner, Observer { isNetworkError->
+            activity?.hideKeyboard()
+            clearToolbarDivider()
+            if (isNetworkError) {
+                addFragment(InternetIsDisabledFragment(), R.id.recyclerViewLayoutFrameLayout, false)
+            }else{
+                addFragment(ServerProblemsFragment(), R.id.recyclerViewLayoutFrameLayout, false)
+            }
+        })
+
+        friendsFragmentViewModel.errorSnackbarEvent.observe(viewLifecycleOwner, Observer {
+            if(it){
+                CustomSnackbar(context!!).show(
+                    resources.getString(R.string.server_temporarily_unavailable),
+                    ThemeUtils.getRedColor(context!!)
+                )
+            }
+        })
+
         friendsFragmentViewModel.searchResultState.observe(viewLifecycleOwner, Observer { pair ->
 
             val canBeMoreItems = pair.first
@@ -52,7 +75,6 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
 
             if (recyclerViewLayoutRecyclerView.adapter is UsersAdapter)
                 (recyclerViewLayoutRecyclerView.adapter as UsersAdapter).isEmptyView = false
-
             when (searchResultState) {
                 is FriendsFragmentViewModel.SearchResultState.ResultsFound -> {
 
@@ -125,11 +147,6 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
                             insertIndex,
                             items.size
                         )
-
-                        if (!canBeMoreItems) {
-                            adapter.items.removeAt(adapter.items.lastIndex)
-                            adapter.notifyItemRemoved(adapter.itemCount - 1)
-                        }
                     } else {
                         val adapter = toolbarFragmentViewModel?.let { toolbarFragmentVM ->
                             UsersAdapter(
@@ -191,7 +208,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
 
                         adapter.notifyItemRangeRemoved(2, removeCount)
 
-                        adapter.notifyItemChanged(1, Unit)
+                        println(1.toString() + "IDX")
                     }
                 }
             }
@@ -241,6 +258,8 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
                     friendActionState.userData.isMyFriendStatus
                 (friendsFragmentViewModel.recyclerItems?.get(itemIndex) as UsersRecyclerUiModel.UserItemUiModel).isMyFriendStatus =
                     friendActionState.userData.isMyFriendStatus
+
+                println(itemIndex.toString() + "IDX")
                 recyclerViewLayoutRecyclerView.adapter?.notifyItemChanged(itemIndex, Unit)
             }
         })
@@ -280,13 +299,18 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
         }
 
         scrollingView = recyclerViewLayoutRecyclerView
+
+        recyclerViewLayoutRecyclerView.post {
+            if (friendsFragmentViewModel.errorState)
+                toolbarFragmentViewModel?.hideDivider()
+        }
     }
 
     override fun onBackClick() {
 
         val lastState = friendsFragmentViewModel.searchState
 
-        if (friendsFragmentViewModel.searchState != FriendsFragmentViewModel.SearchState.NoSearch && !friendsFragmentViewModel.globalSearchOnly) {
+        if ((friendsFragmentViewModel.searchState != FriendsFragmentViewModel.SearchState.NoSearch && !friendsFragmentViewModel.globalSearchOnly) && !friendsFragmentViewModel.errorState) {
             recyclerViewLayoutRecyclerView.scrollToPosition(0)
             friendsFragmentViewModel.searchState = FriendsFragmentViewModel.SearchState.NoSearch
             (recyclerViewLayoutRecyclerView.adapter as UsersAdapter).onSearchVisibilityChanged(false)
@@ -294,6 +318,8 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
                 if (recyclerViewLayoutRecyclerView.findViewHolderForAdapterPosition(0) is SearchViewHolder) {
                     (recyclerViewLayoutRecyclerView.findViewHolderForAdapterPosition(0) as SearchViewHolder).searchState =
                         FriendsFragmentViewModel.SearchState.NoSearch
+
+                    println(0.toString() + "IDX")
                     recyclerViewLayoutRecyclerView.adapter?.notifyItemChanged(0, Unit)
                 }
                 arguments?.getInt("USER_ID")?.let {
@@ -340,6 +366,37 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
         friendsFragmentViewModel.searchState = FriendsFragmentViewModel.SearchState.GlobalSearch("")
         friendsFragmentViewModel.searchResultState.value =
             (friendsFragmentViewModel.searchResultState.value?.first == true) to FriendsFragmentViewModel.SearchResultState.GlobalSearchEnterText
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        if(!isHidden) {
+            if (friendsFragmentViewModel.errorState)
+                toolbarFragmentViewModel?.hideDivider()
+            else
+                super.onHiddenChanged(hidden)
+        }
+    }
+
+    override fun onScrollChanged() {
+        if(!friendsFragmentViewModel.errorState)
+            super.onScrollChanged()
+    }
+
+    override fun onPageReload() {
+        arguments?.getInt("USER_ID")?.let {
+            checkScroll()
+            friendsFragmentViewModel.getUsers(
+                it,
+                friendsFragmentViewModel.sortBy,
+                false,
+                friendsFragmentViewModel.startsWith,
+                friendsFragmentViewModel.isGlobalSearch
+            )
+        }
+    }
+
+    private fun clearToolbarDivider(){
+        toolbarFragmentViewModel?.hideDivider()
     }
 
 }

@@ -60,7 +60,7 @@
             android:gravity="center"
             android:layout_marginTop="24dp"
             android:padding="16dp"
-            android:background="@drawable/main_blocks_rectangle">
+            android:background="@drawable/blocks_rectangle">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
             android:layout_marginTop="24dp"
             android:padding="16dp"
             android:orientation="vertical"
-            android:background="@drawable/main_blocks_rectangle">
+            android:background="@drawable/blocks_rectangle">
 
             <TextView
                 style="@style/Medium18"

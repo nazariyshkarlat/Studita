@@ -13,25 +13,25 @@ interface AuthorizationInteractor {
 
     suspend fun checkTokenIsCorrect(
         userIdTokenData: UserIdTokenData,
-        retryCount: Int = 30
+        retryCount: Int = Int.MAX_VALUE
     ): CheckTokenIsCorrectStatus
 
     suspend fun signUp(
         authorizationRequestData: AuthorizationRequestData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): SignUpStatus
 
     suspend fun logIn(
         authorizationRequestData: AuthorizationRequestData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): LogInStatus
 
     suspend fun signInWithGoogle(
         signInWithGoogleRequestData: SignInWithGoogleRequestData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): SignInWithGoogleStatus
 
-    suspend fun signOut(signOutRequestData: SignOutRequestData, retryCount: Int = 30)
+    suspend fun signOut(signOutRequestData: SignOutRequestData, retryCount: Int = 3)
     suspend fun deleteUserData()
 
 }

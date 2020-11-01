@@ -1,56 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/userStatLayoutScrollView"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/userStatLayoutFrameLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:clipToPadding="false"
-    android:paddingTop="@dimen/toolbarHeight"
-    android:paddingBottom="16dp">
-
-    <LinearLayout
+    android:layout_height="match_parent">
+    <ScrollView
+        android:id="@+id/userStatLayoutScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <com.example.studita.presentation.views.CustomTabLayout
-            android:id="@+id/userStatLayoutTabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/toolbarHeight"
+        android:fillViewport="true"
+        android:paddingBottom="16dp">
 
         <LinearLayout
-            android:id="@+id/userStatLayoutProfileInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/userStatLayoutProfileInfoAvatar"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/avatar_oval" />
+            <com.example.studita.presentation.views.CustomTabLayout
+                android:id="@+id/userStatLayoutTabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/userStatLayoutProfileInfoUserName"
-                style="@style/Regular16"
-                android:layout_width="wrap_content"
+            <com.example.studita.presentation.views.press_view.PressLinearLayout
+                android:id="@+id/userStatLayoutProfileInfo"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="12dp" />
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:press_alpha="?press_view_press_alpha"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/userStatLayoutProfileInfoAvatar"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/avatar_oval" />
+
+                <TextView
+                    android:id="@+id/userStatLayoutProfileInfoUserName"
+                    style="@style/Regular16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
+
+            </com.example.studita.presentation.views.press_view.PressLinearLayout>
+
+            <com.example.studita.presentation.views.EnhancedWrapContentViewPager
+                android:id="@+id/userStatLayoutViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false" />
 
         </LinearLayout>
 
-        <com.example.studita.presentation.views.EnhancedWrapContentViewPager
-            android:id="@+id/userStatLayoutViewPager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:clipToPadding="false" />
+    </ScrollView>
 
-    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/userStatLayoutProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 
-</ScrollView>
+</FrameLayout>

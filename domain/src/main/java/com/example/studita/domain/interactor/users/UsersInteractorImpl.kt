@@ -49,8 +49,7 @@ class UsersInteractorImpl(
                     } else
                         GetUsersStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     getUsers(
                         friendOfUserId,
                         perPage,
@@ -106,17 +105,19 @@ class UsersInteractorImpl(
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
-                if (e is NetworkConnectionException) {
-                    syncFriendship.scheduleFriendAction(
-                        friendActionRequestData,
-                        SyncFriendship.FriendActionType.ADD
-                    )
-                    FriendActionStatus.NoConnection
-                } else {
-                    if (retryCount == 0)
+                if (retryCount == 0) {
+                    if(e is NetworkConnectionException) {
+                        syncFriendship.scheduleFriendAction(
+                            friendActionRequestData,
+                            SyncFriendship.FriendActionType.ADD
+                        )
+                        FriendActionStatus.NoConnection
+                    }else
                         FriendActionStatus.ServiceUnavailable
-                    else
-                        sendFriendship(friendActionRequestData, retryCount - 1)
+                }
+                else {
+                    delay(retryDelay)
+                    rejectFriendship(friendActionRequestData, retryCount - 1)
                 }
             } else
                 FriendActionStatus.Failure
@@ -134,16 +135,19 @@ class UsersInteractorImpl(
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
-                when {
-                    e is NetworkConnectionException -> {
+                if (retryCount == 0) {
+                    if(e is NetworkConnectionException) {
                         syncFriendship.scheduleFriendAction(
                             friendActionRequestData,
                             SyncFriendship.FriendActionType.REMOVE
                         )
                         FriendActionStatus.NoConnection
-                    }
-                    retryCount == 0 -> FriendActionStatus.ServiceUnavailable
-                    else -> removeFriend(friendActionRequestData, retryCount - 1)
+                    }else
+                        FriendActionStatus.ServiceUnavailable
+                }
+                else {
+                    delay(retryDelay)
+                    rejectFriendship(friendActionRequestData, retryCount - 1)
                 }
             } else
                 FriendActionStatus.Failure
@@ -161,16 +165,19 @@ class UsersInteractorImpl(
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
-                when {
-                    e is NetworkConnectionException -> {
+                if (retryCount == 0) {
+                    if(e is NetworkConnectionException) {
                         syncFriendship.scheduleFriendAction(
                             friendActionRequestData,
                             SyncFriendship.FriendActionType.CANCEL_REQUEST
                         )
                         FriendActionStatus.NoConnection
-                    }
-                    retryCount == 0 -> FriendActionStatus.ServiceUnavailable
-                    else -> cancelFriendship(friendActionRequestData, retryCount - 1)
+                    }else
+                        FriendActionStatus.ServiceUnavailable
+                }
+                else {
+                    delay(retryDelay)
+                    rejectFriendship(friendActionRequestData, retryCount - 1)
                 }
             } else
                 FriendActionStatus.Failure
@@ -188,16 +195,19 @@ class UsersInteractorImpl(
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
-                when {
-                    e is NetworkConnectionException -> {
+                if (retryCount == 0) {
+                    if(e is NetworkConnectionException) {
                         syncFriendship.scheduleFriendAction(
                             friendActionRequestData,
                             SyncFriendship.FriendActionType.ACCEPT_REQUEST
                         )
                         FriendActionStatus.NoConnection
-                    }
-                    retryCount == 0 -> FriendActionStatus.ServiceUnavailable
-                    else -> acceptFriendship(friendActionRequestData, retryCount - 1)
+                    }else
+                        FriendActionStatus.ServiceUnavailable
+                }
+                else {
+                    delay(retryDelay)
+                    rejectFriendship(friendActionRequestData, retryCount - 1)
                 }
             } else
                 FriendActionStatus.Failure
@@ -219,8 +229,7 @@ class UsersInteractorImpl(
                     } else
                         HasFriendsStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     hasFriends(userId, retryCount - 1)
                 }
             } else
@@ -240,18 +249,19 @@ class UsersInteractorImpl(
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
-                when {
-                    e is NetworkConnectionException -> {
+                if (retryCount == 0) {
+                    if(e is NetworkConnectionException) {
                         syncFriendship.scheduleFriendAction(
                             friendActionRequestData,
                             SyncFriendship.FriendActionType.REJECT_REQUEST
                         )
                         FriendActionStatus.NoConnection
-                    }
-                    retryCount == 0 -> FriendActionStatus.ServiceUnavailable
-                    else -> {
-                        rejectFriendship(friendActionRequestData, retryCount - 1)
-                    }
+                    }else
+                        FriendActionStatus.ServiceUnavailable
+                }
+                else {
+                    delay(retryDelay)
+                    rejectFriendship(friendActionRequestData, retryCount - 1)
                 }
             } else
                 FriendActionStatus.Failure

@@ -9,9 +9,9 @@ interface ExercisesInteractor {
     suspend fun getExercises(
         chapterPartNumber: Int,
         offlineMode: Boolean,
-        retryCount: Int = 60
+        retryCount: Int = Int.MAX_VALUE
     ): ExercisesStatus
 
-    suspend fun downloadOfflineExercises(retryCount: Int = 30): ExercisesCacheStatus
+    suspend fun downloadOfflineExercises(retryCount: Int = 3): ExercisesCacheStatus
 
 }

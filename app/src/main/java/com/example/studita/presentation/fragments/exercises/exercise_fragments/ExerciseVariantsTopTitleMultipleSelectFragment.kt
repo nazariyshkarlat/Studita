@@ -2,13 +2,11 @@ package com.example.studita.presentation.fragments.exercises.exercise_fragments
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import com.example.studita.R
 import com.example.studita.domain.entity.exercise.ExerciseData
 import com.example.studita.domain.entity.exercise.ExerciseRequestData
 import com.example.studita.presentation.model.ExerciseUiModel
 import com.example.studita.utils.makeView
-import com.example.studita.utils.postExt
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
 import kotlinx.android.synthetic.main.exercise_variants_title_layout.*
 
@@ -24,7 +22,7 @@ class ExerciseVariantsTopTitleMultipleSelectFragment :
                         vm.exerciseUiModel as ExerciseUiModel.ExerciseUiModelExercise.ExerciseType15UiModel
                     exerciseVariantsTitleLayoutTitle.text = exerciseUiModel.title
                     exerciseVariantsTitleLayoutSubtitle.text = exerciseUiModel.subtitle
-                    countToSelect = (vm.exerciseData as ExerciseData.ExerciseDataExercise.ExerciseType15Data).countToSelect
+                    correctCount = (vm.exerciseData as ExerciseData.ExerciseDataExercise.ExerciseType15Data).correctCount
                     fillVariants(exerciseUiModel.variants)
                 }
             }

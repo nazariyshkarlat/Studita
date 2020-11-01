@@ -30,7 +30,18 @@ class CloudExercisesJsonDataStore(
     }
 
     suspend fun getOfflineExercisesJson(): Pair<Int, String> {
-        val response = offlineExercisesService.getOfflineExercises()
-        return response.code() to response.body()!!.toString()
+        if (connectionManager.isNetworkAbsent()) {
+            throw NetworkConnectionException()
+        } else {
+            try {
+                val response = offlineExercisesService.getOfflineExercises()
+                return response.code() to response.body()!!.toString()
+            } catch (e: Exception) {
+                if (e is CancellationException)
+                    throw e
+                else
+                    throw ServerUnavailableException()
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profileLayoutFrameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -44,24 +45,32 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginEnd="4dp"
+                        android:layout_toStartOf="@+id/profileLayoutAvatarLayout"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/profileLayoutUserName"
                             style="@style/Medium20"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
 
                         <TextView
                             android:id="@+id/profileLayoutName"
                             style="@style/Regular16Secondary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp" />
+                            android:layout_marginTop="8dp"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
                     </LinearLayout>
 
                     <FrameLayout
+                        android:id="@+id/profileLayoutAvatarLayout"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
                         android:layout_alignParentEnd="true"
@@ -133,7 +142,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:background="@drawable/main_blocks_rectangle"
+                    android:background="@drawable/blocks_rectangle"
                     android:orientation="horizontal"
                     android:padding="16dp">
 
@@ -160,18 +169,19 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:background="@drawable/main_blocks_rectangle"
+                    android:background="@drawable/blocks_rectangle"
                     android:orientation="vertical"
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp">
 
-                    <TextView
+                    <com.example.studita.presentation.views.press_view.PressTextView
                         android:id="@+id/profileLayoutFriendsTitle"
                         style="@style/Medium20"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        app:press_alpha="?press_view_press_alpha"/>
 
                     <LinearLayout
                         android:id="@+id/profileLayoutFriendsContentView"

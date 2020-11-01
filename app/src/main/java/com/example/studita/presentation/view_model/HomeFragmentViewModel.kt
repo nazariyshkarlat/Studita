@@ -1,5 +1,6 @@
 package com.example.studita.presentation.view_model
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,52 +8,97 @@ import com.example.studita.App
 import com.example.studita.R
 import com.example.studita.di.data.LevelsModule
 import com.example.studita.di.data.SubscribeEmailModule
+import com.example.studita.di.data.UserDataModule
+import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.interactor.LevelsStatus
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
+import com.example.studita.domain.interactor.UserDataStatus
 import com.example.studita.presentation.model.HomeRecyclerUiModel
 import com.example.studita.presentation.model.toHomeRecyclerItems
 import com.example.studita.service.SyncSubscribeEmailImpl
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 
 class HomeFragmentViewModel : ViewModel() {
 
     val progressState = MutableLiveData<Boolean>()
-    val errorState = SingleLiveEvent<Int>()
+    val errorEvent = SingleLiveEvent<Boolean>()
     val subscribeEmailState = SingleLiveEvent<SubscribeEmailResultStatus>()
+    val subscribeErrorEvent = SingleLiveEvent<Boolean>()
+    val logInSnackbarEvent = SingleLiveEvent<Boolean>()
 
     var results: List<HomeRecyclerUiModel>? = null
 
+    private val userDataInteractor = UserDataModule.getUserDataInteractorImpl()
     private val levelsInteractor = LevelsModule.getLevelsInteractorImpl()
     private val subscribeEmailInteractor = SubscribeEmailModule.getSubscribeEmailInteractorImpl()
+    val localUserDataState = MutableLiveData<UserDataData>()
 
-    private var levelsJob: Job? = null
+    var levelsJob: Job? = null
     private var subscribeJob: Job? = null
 
+    init {
+        if(!PrefsUtils.isOfflineModeEnabled() && UserUtils.isLoggedIn())
+            getUserDataLocal()
+        getLevels()
+    }
+
     fun getLevels() {
-        progressState.postValue(false)
+        progressState.value = false
         levelsJob = viewModelScope.launchExt(levelsJob) {
             when (val getLevelsStatus = levelsInteractor.getLevels(
                 UserUtils.isLoggedIn(),
                 PrefsUtils.isOfflineModeEnabled()
             )) {
-                is LevelsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
-                is LevelsStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
-                is LevelsStatus.Failure -> errorState.postValue(R.string.server_failure)
+                is LevelsStatus.NoConnection -> {
+                    errorEvent.value = true
+                }
+                is LevelsStatus.ServiceUnavailable -> {
+                    errorEvent.value = false
+                }
+                is LevelsStatus.Failure -> {
+
+                }
                 else -> {
                     getLevelsStatus as LevelsStatus.Success
                     results = getLevelsStatus.result.map { it.toHomeRecyclerItems() }.flatten()
 
-                    App.userDataDeferred.await()
-                    progressState.postValue(true)
+                    if(UserUtils.userDataNotNull()) {
+                        progressState.value = true
+                    }
                 }
             }
         }
     }
+
+    fun getOfflineLevels() {
+        progressState.value = false
+        levelsJob = viewModelScope.launchExt(levelsJob) {
+            when (val getLevelsStatus = levelsInteractor.getLevels(
+                UserUtils.isLoggedIn(),
+                true
+            )) {
+                is LevelsStatus.NoConnection -> {
+                    errorEvent.value = true
+                }
+                is LevelsStatus.ServiceUnavailable -> {
+                    errorEvent.value = false
+                }
+                is LevelsStatus.Failure -> {
+
+                }
+                else -> {
+                    getLevelsStatus as LevelsStatus.Success
+                    results = getLevelsStatus.result.map { it.toHomeRecyclerItems() }.flatten()
+                    progressState.value = true
+                }
+            }
+        }
+    }
+
 
     fun subscribeEmail(userIdTokenData: UserIdTokenData, subscribe: Boolean) {
         subscribeJob = GlobalScope.launchExt(subscribeJob) {
@@ -61,13 +107,25 @@ class HomeFragmentViewModel : ViewModel() {
             else
                 subscribeEmailInteractor.unsubscribe(userIdTokenData)) {
                 is SubscribeEmailResultStatus.NoConnection -> {
-                    subscribeEmailState.postValue(status)
+                    subscribeEmailState.value = status
                 }
-                is SubscribeEmailResultStatus.ServiceUnavailable -> errorState.postValue(R.string.server_unavailable)
                 is SubscribeEmailResultStatus.Success -> {
-                    subscribeEmailState.postValue(status)
+                    subscribeEmailState.value = status
+                }
+                else -> {
+                    subscribeErrorEvent.value = true
                 }
             }
+        }
+    }
+
+    fun clearResults(){
+        results = null
+    }
+
+    fun showLogInSnackbar(isAfterSignUp: Boolean){
+        viewModelScope.launch(Dispatchers.Main) {
+            logInSnackbarEvent.value = isAfterSignUp
         }
     }
 
@@ -85,9 +143,21 @@ class HomeFragmentViewModel : ViewModel() {
     fun initSubscribeEmailState() {
         SyncSubscribeEmailImpl.syncSubscribeEmailLiveData = subscribeEmailState
         subscribeEmailInteractor.getSyncedResult()?.let {
-            subscribeEmailState.value = SubscribeEmailResultStatus.Success(
-                it
-            )
+            viewModelScope.launch(Dispatchers.Main) {
+                delay(1000L)
+                subscribeEmailState.value = SubscribeEmailResultStatus.Success(
+                    it
+                )
+            }
+        }
+    }
+
+    private fun getUserDataLocal(){
+        viewModelScope.launch(Dispatchers.Main) {
+            val userDataStatus = userDataInteractor.getUserData(
+                PrefsUtils.getUserId()!!, true, true)
+            if(userDataStatus is UserDataStatus.Success)
+                localUserDataState.value = userDataStatus.result
         }
     }
 }

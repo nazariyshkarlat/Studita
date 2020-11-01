@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.lifecycle.Observer
@@ -18,15 +17,18 @@ import com.example.studita.domain.entity.PrivacySettingsData
 import com.example.studita.domain.entity.PrivacySettingsRequestData
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.dialog_alerts.PrivacySettingsEditExceptionsDialogAlertFragment
+import com.example.studita.presentation.fragments.error_fragments.InternetIsDisabledFragment
+import com.example.studita.presentation.fragments.error_fragments.ServerProblemsFragment
+import com.example.studita.presentation.listeners.ReloadPageCallback
 import com.example.studita.presentation.view_model.PrivacySettingsViewModel
-import com.example.studita.utils.UserUtils
-import com.example.studita.utils.allViewsOfTypeT
+import com.example.studita.presentation.views.CustomSnackbar
+import com.example.studita.utils.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.privacy_settings_layout.*
 
 
-class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_layout) {
+class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_layout), ReloadPageCallback {
 
     private lateinit var privacySettingsViewModel: PrivacySettingsViewModel
 
@@ -38,8 +40,23 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
 
         privacySettingsViewModel.let { viewModel ->
 
-            viewModel.errorState.observe(viewLifecycleOwner, Observer { message ->
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            viewModel.errorEvent.observe(viewLifecycleOwner, Observer { isNetworkError->
+                if (isNetworkError) {
+                    addFragment(InternetIsDisabledFragment(), R.id.privacySettingsLayoutFrameLayout, false)
+                }else{
+                    addFragment(ServerProblemsFragment(), R.id.privacySettingsLayoutFrameLayout, false)
+                }
+            })
+
+            val context = activity as AppCompatActivity
+
+            viewModel.errorSnackbarEvent.observe(context, Observer {
+                if(it){
+                    CustomSnackbar(context).show(
+                        context.resources.getString(R.string.server_temporarily_unavailable),
+                        ThemeUtils.getRedColor(context)
+                    )
+                }
             })
 
             viewModel.privacySettingsStatus.observe(
@@ -98,6 +115,7 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
         }
 
         scrollingView = privacySettingsLayoutScrollView
+        disableUnusedItems()
     }
 
     private fun ViewGroup.setRadioButtonsListeners(viewModel: PrivacySettingsViewModel) {
@@ -200,6 +218,11 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
         privacySettingsLayoutDuelsBlockExceptRadio.jumpDrawablesToCurrentState()
     }
 
+    private fun disableUnusedItems(){
+        privacySettingsLayoutDuelsBlock.disableAllItems()
+        privacySettingsLayoutRatingsBlock.disableAllItems()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == 345) {
@@ -223,16 +246,21 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
                             )
                     }
 
+                    val wasExcept = privacySettingsData.duelsInvitesFrom == DuelsInvitesFrom.EXCEPT
+
                     if (privacySettingsData.duelsExceptions?.isEmpty() == true && privacySettingsData.duelsInvitesFrom == DuelsInvitesFrom.EXCEPT)
                         privacySettingsData.duelsInvitesFrom = DuelsInvitesFrom.NOBODY
                     else
                         privacySettingsData.duelsInvitesFrom = DuelsInvitesFrom.EXCEPT
 
-                    privacySettingsData.duelsInvitesFrom?.let {
-                        setDuelsInvitesFormCheckboxes(
-                            it
-                        )
+                    if(!wasExcept) {
+                        privacySettingsData.duelsInvitesFrom?.let {
+                            setDuelsInvitesFormCheckboxes(
+                                it
+                            )
+                        }
                     }
+
                     privacySettingsData.duelsExceptions?.let {
                         formExceptionsView(
                             it
@@ -241,5 +269,9 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
                 }
             }
         }
+    }
+
+    override fun onPageReload() {
+        privacySettingsViewModel.getPrivacySettings(UserUtils.getUserIDTokenData()!!)
     }
 }

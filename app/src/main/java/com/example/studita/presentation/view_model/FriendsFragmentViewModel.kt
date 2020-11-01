@@ -29,6 +29,10 @@ class FriendsFragmentViewModel : ViewModel() {
 
     private var addToFriendsJob: Job? = null
 
+    val errorEvent = SingleLiveEvent<Boolean>()
+    val errorSnackbarEvent = SingleLiveEvent<Boolean>()
+    var errorState = false
+
     var globalSearchOnly = false
     var searchState: SearchState = SearchState.NoSearch
 
@@ -43,27 +47,33 @@ class FriendsFragmentViewModel : ViewModel() {
 
     private var searchUsersJob: Job? = null
 
-    private var currentPageNumber = 1
+    var currentPageNumber = 1
 
-    private val perPage: Int = 20
+    var startsWith: String? = null
+    var isGlobalSearch: Boolean = false
+
+    val perPage: Int = 20
 
     fun getUsers(
-        friendOfUserId: Int,
+        profileId: Int,
         sortBy: UsersRepository.SortBy?,
         newPage: Boolean = false,
         startsWith: String? = null,
         isGlobalSearch: Boolean
     ) {
 
-        val isMyProfile = PrefsUtils.getUserId() == friendOfUserId
+        errorState = false
+        val isMyProfile = PrefsUtils.getUserId() == profileId
 
         if (newPage)
             currentPageNumber++
-        else
+        else if(sortBy != this.sortBy || isGlobalSearch != this.isGlobalSearch || startsWith != this.startsWith) {
             currentPageNumber = 1
-
-        if (!newPage)
             progressState.value = true
+        }
+        
+        this.startsWith = startsWith
+        this.isGlobalSearch = isGlobalSearch
 
         if (sortBy != null)
             this.sortBy = sortBy
@@ -71,50 +81,60 @@ class FriendsFragmentViewModel : ViewModel() {
         searchUsersJob = viewModelScope.launchExt(searchUsersJob) {
             var searchResultState: SearchResultState? = null
             val getUsersStatus = friendsInteractor.getUsers(
-                if (isGlobalSearch) null else friendOfUserId,
+                if (isGlobalSearch) null else profileId,
                 perPage,
                 currentPageNumber,
                 PrefsUtils.getUserId()!!,
                 sortBy,
                 startsWith
             )
-            if (getUsersStatus is GetUsersStatus.Success) {
-                searchResultState = if (currentPageNumber == 1) {
-                    userData = ArrayList(getUsersStatus.friendsResponseData.users)
-                    SearchResultState.ResultsFound(getUsersStatus.friendsResponseData.users)
-                } else {
-                    userData?.addAll(getUsersStatus.friendsResponseData.users)
-                    SearchResultState.MoreResultsFound(getUsersStatus.friendsResponseData.users)
+            when (getUsersStatus) {
+                is GetUsersStatus.Success -> {
+                    searchResultState = if (currentPageNumber == 1) {
+                        userData = ArrayList(getUsersStatus.friendsResponseData.users)
+                        SearchResultState.ResultsFound(getUsersStatus.friendsResponseData.users)
+                    } else {
+                        userData?.addAll(getUsersStatus.friendsResponseData.users)
+                        SearchResultState.MoreResultsFound(getUsersStatus.friendsResponseData.users)
+                    }
                 }
-            } else if (getUsersStatus is GetUsersStatus.NoUsersFound) {
-                if (!isGlobalSearch) {
-                    if (startsWith != null) {
+                is GetUsersStatus.NoUsersFound -> {
+                    if (!isGlobalSearch) {
+                        if (startsWith != null) {
+                            searchResultState = if (currentPageNumber == 1)
+                                SearchResultState.SearchFriendsNotFound
+                            else
+                                SearchResultState.NoMoreResults
+                        } else {
+                            if (currentPageNumber == 1) {
+                                if (isMyProfile)
+                                    searchResultState = SearchResultState.MyProfileEmptyFriends
+                            } else {
+                                searchResultState = SearchResultState.NoMoreResults
+                            }
+                        }
+                    } else {
                         searchResultState = if (currentPageNumber == 1)
-                            SearchResultState.SearchFriendsNotFound
+                            SearchResultState.GlobalSearchNotFound
                         else
                             SearchResultState.NoMoreResults
-                    } else {
-                        if (currentPageNumber == 1) {
-                            if (isMyProfile)
-                                searchResultState = SearchResultState.MyProfileEmptyFriends
-                        } else {
-                            searchResultState = SearchResultState.NoMoreResults
-                        }
-                    }
-                } else {
-                    searchResultState = if (currentPageNumber == 1)
-                        SearchResultState.GlobalSearchNotFound
-                    else
-                        SearchResultState.NoMoreResults
 
+                    }
+                }
+                is GetUsersStatus.NoConnection -> {
+                    errorEvent.value = true
+                    errorState = true
+                }
+                is GetUsersStatus.ServiceUnavailable -> {
+                    errorEvent.value = false
+                    errorState = true
                 }
             }
 
             if (searchResultState != null) {
-                progressState.postValue(false)
-                this@FriendsFragmentViewModel.searchResultState.postValue(
+                progressState.value = false
+                this@FriendsFragmentViewModel.searchResultState.value =
                     (canBeMoreItems(searchResultState) to searchResultState)
-                )
             }
         }
     }
@@ -161,7 +181,9 @@ class FriendsFragmentViewModel : ViewModel() {
                 )
 
             if (result is FriendActionStatus.Success)
-                addFriendStatus.postValue(newValue)
+                addFriendStatus.value = newValue
+            else if(result is FriendActionStatus.ServiceUnavailable)
+                errorSnackbarEvent.value = true
         }
         UserUtils.isMyFriendLiveData.value = newValue
     }
@@ -198,7 +220,9 @@ class FriendsFragmentViewModel : ViewModel() {
                     )
 
             if (result is FriendActionStatus.Success)
-                addFriendStatus.postValue(newValue)
+                addFriendStatus.value = newValue
+            else if(result is FriendActionStatus.ServiceUnavailable)
+                errorSnackbarEvent.value = true
         }
         UserUtils.isMyFriendLiveData.value = newValue
     }
@@ -221,7 +245,7 @@ class FriendsFragmentViewModel : ViewModel() {
         is SearchResultState.GlobalSearchEnterText -> R.string.enter_name_to_search
         is SearchResultState.GlobalSearchNotFound -> R.string.global_search_no_results
         is SearchResultState.SearchFriendsNotFound -> R.string.friends_not_found
-        else -> R.string.server_failure
+        else -> R.string.server_temporarily_unavailable
     }
 
     sealed class SearchState {

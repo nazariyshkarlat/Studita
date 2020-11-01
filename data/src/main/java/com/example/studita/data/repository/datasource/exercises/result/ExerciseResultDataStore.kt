@@ -1,5 +1,6 @@
 package com.example.studita.data.repository.datasource.exercises.result
 
+import com.example.studita.data.entity.CompleteExercisesRequest
 import com.example.studita.data.entity.exercise.ExerciseReportEntity
 import com.example.studita.data.entity.exercise.ExerciseReportRequest
 import com.example.studita.data.entity.exercise.ExerciseRequestEntity
@@ -15,4 +16,5 @@ interface ExerciseResultDataStore {
     suspend fun sendExerciseReport(
         exerciseReportRequest: ExerciseReportRequest
     ) : Int
+
 }

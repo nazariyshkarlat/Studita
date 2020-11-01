@@ -1,19 +1,20 @@
 package com.example.studita.presentation.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
-import com.example.studita.presentation.fragments.IncorrectTimeFragment
 import com.example.studita.presentation.fragments.base.NavigatableFragment
-import com.example.studita.presentation.fragments.dialog_alerts.ChapterCompletedDialogAlertFragment
+import com.example.studita.presentation.fragments.error_fragments.IncorrectTimeFragment
+import com.example.studita.presentation.fragments.first_open.OfflineModeDownloadFragment
 import com.example.studita.presentation.fragments.main.MainFragment
 import com.example.studita.presentation.view_model.MainActivityNavigationViewModel
+import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.TimeUtils
 import com.example.studita.utils.addFragment
 import com.example.studita.utils.startActivity
-import kotlinx.android.synthetic.main.frame_layout.*
 
 class MainActivity : DefaultActivity() {
 
@@ -23,10 +24,18 @@ class MainActivity : DefaultActivity() {
         var needsRefresh = false
         var needsRecreate = false
 
-        fun Activity.startMainActivityNewTask() {
-            val intent = Intent(this, MainActivity::class.java)
+        fun Activity.startMainActivityNewTask(extras: Bundle? = null) {
+            val intent = Intent(this, MainActivity::class.java).apply {
+                extras?.let { this.putExtras(it) }
+            }
             finishAffinity()
             startActivity(intent)
+        }
+
+        fun getFragmentToAdd(context: Context) = when {
+            !TimeUtils.timeIsAutomatically(context) -> IncorrectTimeFragment()
+            !PrefsUtils.offlineDataIsCached() -> OfflineModeDownloadFragment()
+            else -> MainFragment()
         }
     }
 
@@ -35,16 +44,15 @@ class MainActivity : DefaultActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.frame_layout)
 
+        println(this)
         navigationViewModel =
             ViewModelProviders.of(this).get(MainActivityNavigationViewModel::class.java)
 
         if (savedInstanceState == null) {
-            if (TimeUtils.timeIsAutomatically(frameLayout.context))
-                addFragment(MainFragment(), R.id.frameLayout)
-            else
-                addFragment(IncorrectTimeFragment(), R.id.frameLayout)
+            addFragment(getFragmentToAdd(this).apply {
+                arguments = intent.extras
+            }, R.id.frameLayout)
         }
-
     }
 
     override fun onResume() {

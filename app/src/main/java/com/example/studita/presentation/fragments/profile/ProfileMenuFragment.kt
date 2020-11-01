@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.studita.App
 import com.example.studita.R
+import com.example.studita.di.data.UserDataModule
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.presentation.draw.AvaDrawer
 import com.example.studita.presentation.fragments.base.NavigatableFragment
@@ -48,18 +49,23 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
             ViewModelProviders.of(this).get(ProfileMenuFragmentViewModel::class.java)
         }
 
-        UserUtils.userDataLiveData.observe(activity as FragmentActivity, Observer {
+        profileMenuFragmentViewModel?.localUserDataState?.observe(viewLifecycleOwner, Observer {
             fillUserData(it)
-            profileMenuLayoutAvatar.setOnClickListener {
-                (activity as AppCompatActivity).navigateTo(
-                    if (PrefsUtils.isOfflineModeEnabled()) MyProfileOfflineModeFragment() else MyProfileFragment(),
-                    R.id.doubleFrameLayoutFrameLayout
-                )
-            }
+        })
+
+        UserUtils.userDataLiveData.observe(viewLifecycleOwner, {
+            fillUserData(it)
             profileMenuItemNotificationsIndicator?.asNotificationIndicator(it.notificationsAreChecked)
         })
 
-        initSettingList()
+        profileMenuLayoutAvatar.setOnClickListener {
+            (activity as AppCompatActivity).navigateTo(
+                if (PrefsUtils.isOfflineModeEnabled()) MyProfileOfflineModeFragment() else MyProfileFragment(),
+                R.id.doubleFrameLayoutFrameLayout
+            )
+        }
+
+        initSettingsList()
 
         profileMenuLayoutEditProfile.setOnClickListener {
             (activity as AppCompatActivity).navigateTo(
@@ -69,6 +75,11 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
         }
 
         scrollingView = profileMenuLayoutScrollView
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        mainMenuLayoutOfflineSwitch.isChecked = PrefsUtils.isOfflineModeEnabled()
     }
 
     private fun fillUserData(userDataData: UserDataData) {
@@ -81,8 +92,8 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
         if (userDataData.avatarLink == null) {
             AvaDrawer.drawAvatar(
                 profileMenuLayoutAvatar,
-                UserUtils.userData.userName!!,
-                PrefsUtils.getUserId()!!
+                userDataData.userName!!,
+                userDataData.userId!!
             )
         } else {
             Glide
@@ -105,7 +116,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
         R.drawable.ic_exit_to_app_secondary to resources.getString(R.string.sign_out)
     )
 
-    private fun initSettingList() {
+    private fun initSettingsList() {
         getProfileMenuItems().forEachIndexed { index, pair ->
             val itemView: View
             if (index != ListItems.OFFLINE_MODE.ordinal) {

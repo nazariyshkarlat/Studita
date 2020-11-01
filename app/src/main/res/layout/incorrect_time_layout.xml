@@ -15,18 +15,11 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:orientation="vertical">
-
-        <View
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/clock_face_one_oclock" />
-
         <TextView
             android:id="@+id/incorrectTimeLayoutTitle"
             style="@style/Medium24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="@string/incorrect_time_layout_title"
             android:textAlignment="center" />
 

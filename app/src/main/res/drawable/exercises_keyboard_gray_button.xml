@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_enabled="false" android:drawable="@drawable/main_blocks_rectangle"/>
+    <item android:state_enabled="false" android:drawable="@drawable/gray_disabled_color_rectangle"/>
 
     <item>
         <ripple
@@ -13,7 +13,7 @@
                 </shape>
             </item>
 
-            <item android:drawable="@drawable/gray_focused_color_rectangle" />
+            <item android:drawable="@drawable/gray_disabled_color_rectangle" />
 
         </ripple>
     </item>

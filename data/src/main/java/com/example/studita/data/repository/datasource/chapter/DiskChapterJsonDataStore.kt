@@ -1,19 +1,19 @@
 package com.example.studita.data.repository.datasource.chapter
 
-import com.example.studita.data.cache.chapter.ChapterCache
+import com.example.studita.data.cache.chapter.ChaptersCache
 import com.example.studita.domain.exception.NetworkConnectionException
 
 class DiskChapterJsonDataStore(
-    private val chapterCache: ChapterCache
+    private val chaptersCache: ChaptersCache
 ) : ChapterJsonDataStore {
     override suspend fun getChapterJson(chapterNumber: Int): Pair<Int, String> {
-        val json = chapterCache.getLevelsJson(chapterNumber)
+        val json = chaptersCache.getChaptersJson(chapterNumber)
         return 200 to (json ?: throw NetworkConnectionException())
     }
 
-    fun chaptersAreCached() = chapterCache.isCached(1)
+    fun chaptersAreCached() = chaptersCache.isCached()
 
-    fun saveChaptersJson(json: String) = chapterCache.saveChaptersJson(json)
+    fun saveChaptersJson(json: String) = chaptersCache.saveChaptersJson(json)
 
 
 }

@@ -23,15 +23,9 @@ public class NoEmojiEditText extends androidx.appcompat.widget.AppCompatEditText
         init();
     }
 
-    private static boolean isCharAllowed(char c) {
-        return Character.isLetterOrDigit(c) || Character.isSpaceChar(c);
-    }
-
     private void init() {
         setFilters(new InputFilter[]{new EmojiExcludeFilter()});
     }
-
-    ;
 
     private class EmojiExcludeFilter implements InputFilter {
         @Override
@@ -44,10 +38,7 @@ public class NoEmojiEditText extends androidx.appcompat.widget.AppCompatEditText
                     return "";
                 }
                 char c = source.charAt(index);
-                if (isCharAllowed(c))
-                    sb.append(c);
-                else
-                    keepOriginal = false;
+                sb.append(c);
             }
             if (keepOriginal)
                 return null;

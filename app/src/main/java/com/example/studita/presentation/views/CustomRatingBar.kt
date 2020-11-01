@@ -32,7 +32,7 @@ class CustomRatingBar @JvmOverloads constructor(
     private val starEmpty: VectorDrawableCompat =
         VectorDrawableCompat.create(
             context.resources,
-            R.drawable.ic_star_border_secondary,
+            R.drawable.ic_star_border_teritary,
             context.theme
         )!!.apply {
             setBounds(0, 0, starHeight, starWidth)

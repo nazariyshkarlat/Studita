@@ -33,7 +33,7 @@ class ExerciseInputEquationFragment : NavigatableFragment(R.layout.exercise_inpu
         exercisesViewModel?.let {
             it.answered.observe(
                 viewLifecycleOwner,
-                androidx.lifecycle.Observer { answered ->
+                { answered ->
                     if (answered) {
                         exerciseInputEquationLayoutKeyboard.setAllClickable(false)
                         exerciseInputEquationLayoutEditText.isFocusable = false
@@ -59,7 +59,6 @@ class ExerciseInputEquationFragment : NavigatableFragment(R.layout.exercise_inpu
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         var str = s.toString()
         if (str.isNotEmpty()) {
-            val lastChar = str[str.lastIndex]
             if ((str[0].isCharacter()) or (str[0] == '0')) {
                 exerciseInputEquationLayoutEditText.text.delete(0, 1)
                 return
@@ -70,6 +69,7 @@ class ExerciseInputEquationFragment : NavigatableFragment(R.layout.exercise_inpu
                 if (str != removeZeros)
                     exerciseInputEquationLayoutEditText.setText(removeZeros)
                 str = removeZeros
+                val lastChar = str[str.lastIndex]
                 if (!lastChar.isCharacter()) {
                     if (str.checkStringIsValidEquation()) {
                         exercisesViewModel?.buttonEnabledState?.value =
@@ -85,6 +85,9 @@ class ExerciseInputEquationFragment : NavigatableFragment(R.layout.exercise_inpu
                         false
                 return
             }
+        }else{
+            exercisesViewModel?.buttonEnabledState?.value =
+                false
         }
     }
 

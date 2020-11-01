@@ -31,6 +31,7 @@ object DI {
         PrivacySettingsModule.initialize(configuration)
         UsersModule.initialize(configuration)
         NotificationsModule.initialize(configuration)
+        OfflineDataModule.initialize(configuration)
     }
 
 }

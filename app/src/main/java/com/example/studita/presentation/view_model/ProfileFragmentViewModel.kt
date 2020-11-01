@@ -17,10 +17,7 @@ import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class ProfileFragmentViewModel : ViewModel() {
 
@@ -31,38 +28,60 @@ class ProfileFragmentViewModel : ViewModel() {
 
     var addToFriendsJob: Job? = null
 
+    val errorSnackbarEvent = SingleLiveEvent<Boolean>()
+    val errorEvent = SingleLiveEvent<Boolean>()
+    var errorState = false
+
     val userDataState = MutableLiveData<UserDataStatus>()
+
+    val progressState = MutableLiveData<Boolean>()
+    private var getProfileDataJob: Job? = null
 
     val friendsState = MutableLiveData<GetUsersStatus>()
     val isMyFriendState = MutableLiveData<IsMyFriendStatus.Success>()
 
-    fun getProfileData(myId: Int, friendOfUserId: Int) {
-        viewModelScope.launch {
-            val friendDataDeferred = async { getFriendData(friendOfUserId) }
-            val friendsDeferred = async { getFriendsAsync(friendOfUserId) }
-            val checkMyFriendDeferred = if (friendOfUserId != myId) async {
+    fun getProfileData(myId: Int, profileId: Int, isUpdate: Boolean = false) {
+        if(!isUpdate)
+            progressState.value = true
+
+        errorState = true
+        getProfileDataJob = viewModelScope.launchExt(getProfileDataJob) {
+            val friendDataDeferred = async { getUserData(profileId, myId == profileId) }
+            val friendsDeferred = async { getFriendsAsync(profileId) }
+            val checkMyFriendDeferred = if (profileId != myId) async {
                 checkIsMyFriend(
                     myId,
-                    friendOfUserId
+                    profileId
                 )
             } else null
             val userDataStatus = friendDataDeferred.await()
             val getFriendsStatus = friendsDeferred.await()
             val checkMyFriendStatus = checkMyFriendDeferred?.await()
-            if (userDataStatus is UserDataStatus.Success &&
-                (getFriendsStatus is GetUsersStatus.Success || getFriendsStatus is GetUsersStatus.NoUsersFound) &&
-                (checkMyFriendStatus == null || checkMyFriendStatus is IsMyFriendStatus.Success)
-            ) {
-                userDataState.postValue(userDataStatus)
-                friendsState.postValue(getFriendsStatus)
-                if (friendOfUserId != myId)
-                    isMyFriendState.postValue(checkMyFriendStatus as IsMyFriendStatus.Success)
+            when {
+                userDataStatus is UserDataStatus.Success &&
+                        (getFriendsStatus is GetUsersStatus.Success || getFriendsStatus is GetUsersStatus.NoUsersFound) &&
+                        (checkMyFriendStatus == null || checkMyFriendStatus is IsMyFriendStatus.Success) -> {
+                    userDataState.value = userDataStatus
+                    friendsState.value = getFriendsStatus
+                    if(!isUpdate)
+                        progressState.value = false
+                    if (profileId != myId)
+                        isMyFriendState.value = checkMyFriendStatus as IsMyFriendStatus.Success
+                }
+                userDataStatus is UserDataStatus.NoConnection || getFriendsStatus is GetUsersStatus.NoConnection || checkMyFriendStatus is IsMyFriendStatus.NoConnection -> {
+                    errorState = true
+                    errorEvent.value = true
+                }
+                else -> {
+                    errorState = true
+                    errorEvent.value = false
+                }
             }
         }
     }
 
-    private suspend fun getFriendData(userId: Int): UserDataStatus {
-        return userDataInteractor.getUserData(userId, false)
+    private suspend fun getUserData(userId: Int, isMyUserData: Boolean): UserDataStatus {
+        return userDataInteractor.getUserData(userId, false, isMyUserData)
     }
 
     private suspend fun checkIsMyFriend(userId: Int, anotherUserId: Int): IsMyFriendStatus {
@@ -91,9 +110,11 @@ class ProfileFragmentViewModel : ViewModel() {
                 )
             )
             if (result == FriendActionStatus.Success)
-                addFriendStatus.postValue(newValue)
+                addFriendStatus.value = newValue
+            else if(result == FriendActionStatus.ServiceUnavailable)
+                errorSnackbarEvent.value = true
         }
-        UserUtils.isMyFriendLiveData.postValue(newValue)
+        UserUtils.isMyFriendLiveData.value = newValue
     }
 
     fun removeFriend(userIdToken: UserIdTokenData, userData: UserData) {
@@ -110,9 +131,11 @@ class ProfileFragmentViewModel : ViewModel() {
                 )
             )
             if (result == FriendActionStatus.Success)
-                addFriendStatus.postValue(newValue)
+                addFriendStatus.value = newValue
+            else if(result == FriendActionStatus.ServiceUnavailable)
+                errorSnackbarEvent.value = true
         }
-        UserUtils.isMyFriendLiveData.postValue(newValue)
+        UserUtils.isMyFriendLiveData.value = newValue
     }
 
     fun cancelFriendshipRequest(userIdToken: UserIdTokenData, userData: UserData) {
@@ -129,9 +152,11 @@ class ProfileFragmentViewModel : ViewModel() {
                 )
             )
             if (result == FriendActionStatus.Success)
-                addFriendStatus.postValue(newValue)
+                addFriendStatus.value = newValue
+            else if(result == FriendActionStatus.ServiceUnavailable)
+                errorSnackbarEvent.value = true
         }
-        UserUtils.isMyFriendLiveData.postValue(newValue)
+        UserUtils.isMyFriendLiveData.value = newValue
     }
 
     fun sendFriendshipRequest(userIdToken: UserIdTokenData, userData: UserData) {
@@ -148,9 +173,11 @@ class ProfileFragmentViewModel : ViewModel() {
                 )
             )
             if (result == FriendActionStatus.Success)
-                addFriendStatus.postValue(newValue)
+                addFriendStatus.value = newValue
+            else if(result == FriendActionStatus.ServiceUnavailable)
+                errorSnackbarEvent.value = true
         }
-        UserUtils.isMyFriendLiveData.postValue(newValue)
+        UserUtils.isMyFriendLiveData.value = newValue
     }
 
     fun refreshFriends(changedUser: UserData) {

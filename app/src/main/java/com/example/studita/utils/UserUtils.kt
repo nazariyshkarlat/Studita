@@ -3,6 +3,9 @@ package com.example.studita.utils
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.example.studita.App
+import com.example.studita.data.database.StuditaDatabase
+import com.example.studita.di.DatabaseModule
+import com.example.studita.di.data.CompleteExercisesModule
 import com.example.studita.di.data.UserDataModule
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.UserIdTokenData
@@ -14,7 +17,7 @@ import kotlinx.coroutines.runBlocking
 
 object UserUtils {
 
-    val userDataLiveData = MutableLiveData<UserDataData>()
+    var userDataLiveData = MutableLiveData<UserDataData>()
     val userDataEventsLiveData = LiveEvent<UserDataData>().apply {
         addSource(userDataLiveData) {
             this.value = it
@@ -53,13 +56,18 @@ object UserUtils {
         PrefsUtils.clearUserIdToken()
     }
 
-    fun deviceSignOut(userDataLifecycleOwner: LifecycleOwner) {
+    fun deviceSignOut() {
         runBlocking {
-            GlobalScope.launch { UserDataModule.getUserDataInteractorImpl().deleteUserData() }
-            userDataLiveData.removeObservers(userDataLifecycleOwner)
+            GlobalScope.launch {
+                UserDataModule.getUserDataInteractorImpl().deleteUserData()
+                CompleteExercisesModule.getCompleteExercisesInteractorImpl().clearLocalCompletedExercises()
+            }
             clearUserIdToken()
-            userDataLiveData.value = null
-            App.getUserData()
+            userDataEventsLiveData.removeSource(userDataLiveData)
+            userDataLiveData = MutableLiveData<UserDataData>()
+            userDataEventsLiveData.addSource(userDataLiveData) {
+                 userDataEventsLiveData.value = it
+            }
         }
     }
 

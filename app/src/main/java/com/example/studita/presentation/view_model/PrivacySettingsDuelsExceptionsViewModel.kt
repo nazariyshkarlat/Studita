@@ -31,7 +31,7 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel() {
 
     val progressState = MutableLiveData<Boolean>()
 
-    private val perPage = 20
+    val perPage = 20
     var currentPageNumber = 1
 
     init {
@@ -51,13 +51,11 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel() {
                 perPage,
                 currentPageNumber
             )) {
-                is PrivacySettingsDuelsExceptionsStatus.Failure -> errorState.postValue(R.string.no_connection)
-                is PrivacySettingsDuelsExceptionsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
-                is PrivacySettingsDuelsExceptionsStatus.ServiceUnavailable -> errorState.postValue(R.string.no_connection)
+                is PrivacySettingsDuelsExceptionsStatus.NoConnection -> errorState.value = R.string.no_connection
+                is PrivacySettingsDuelsExceptionsStatus.ServiceUnavailable -> errorState.value = R.string.no_connection
                 is PrivacySettingsDuelsExceptionsStatus.NoUsersFound -> {
-                    privacySettingsDuelsExceptionsState.postValue(
+                    privacySettingsDuelsExceptionsState.value =
                         false to DuelsExceptionsResultState.NoMoreResultsFound
-                    )
                 }
                 is PrivacySettingsDuelsExceptionsStatus.Success -> {
 
@@ -68,13 +66,12 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel() {
                         result.privacySettingsDuelsExceptionsItems
                     )
 
-                    progressState.postValue(false)
+                    progressState.value = false
 
-                    privacySettingsDuelsExceptionsState.postValue(
+                    privacySettingsDuelsExceptionsState.value =
                         canBeMoreItems(
                             duelsExceptionsResultState
                         ) to duelsExceptionsResultState
-                    )
                 }
             }
         }
@@ -93,7 +90,11 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel() {
                         editedDuelsExceptionsData
                     )
                 )
-                privacySettingsEditDuelsExceptionsState.postValue(result is EditDuelsExceptionsStatus.Success)
+
+                if(result is EditDuelsExceptionsStatus.Success)
+                    privacySettingsEditDuelsExceptionsState.value = true
+                else if(result is EditDuelsExceptionsStatus.ServiceUnavailable)
+                    privacySettingsEditDuelsExceptionsState.value = false
             }
         }
     }

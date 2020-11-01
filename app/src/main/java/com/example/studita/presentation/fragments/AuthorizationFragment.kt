@@ -6,14 +6,17 @@ import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.OneShotPreDrawListener
+import androidx.core.view.marginTop
+import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.DialogFragment
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.studita.App
 import com.example.studita.R
@@ -22,13 +25,16 @@ import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.presentation.activities.MainActivity
 import com.example.studita.presentation.activities.MainActivity.Companion.startMainActivityNewTask
 import com.example.studita.presentation.fragments.base.NavigatableFragment
+import com.example.studita.presentation.fragments.dialog_alerts.ProgressDialogAlertFragment
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.presentation.view_model.AuthorizationFragmentViewModel
 import com.example.studita.utils.setOnViewSizeChangeListener
 import kotlinx.android.synthetic.main.authorization_layout.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 
 
 class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout), TextWatcher,
@@ -72,8 +78,16 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                     authorizationPasswordEditText.setSelection(authorizationPasswordEditText.text.toString().length)
                 })
 
-            viewModel.errorState.observe(viewLifecycleOwner, Observer { message ->
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            viewModel.errorEvent.observe(viewLifecycleOwner, Observer { message ->
+                showError(message, AuthorizationFragmentViewModel.ErrorType.NoTypeError)
+            })
+
+            viewModel.progressState.observe(viewLifecycleOwner, Observer {
+                if(it){
+                    ProgressDialogAlertFragment().show(fragmentManager!!, "PROGRESS_FRAGMENT")
+                }else{
+                    (fragmentManager?.findFragmentByTag("PROGRESS_FRAGMENT") as? DialogFragment)?.dismiss()
+                }
             })
 
             viewModel.passwordFieldIsEmptyState.observe(
@@ -94,57 +108,38 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                     when (result) {
                         is AuthorizationFragmentViewModel.AuthorizationResult.IncorrectEmail -> showError(
                             R.string.incorrect_mail,
-                            true
+                            AuthorizationFragmentViewModel.ErrorType.EmailError
                         )
                         is AuthorizationFragmentViewModel.AuthorizationResult.PasswordLessMixLength -> showError(
-                            R.string.to_short_password,
-                            false
+                            R.string.too_short_password,
+                            AuthorizationFragmentViewModel.ErrorType.PasswordError
                         )
                         is AuthorizationFragmentViewModel.AuthorizationResult.NoUserFound -> showError(
                             R.string.no_user_with_mail,
-                            true
+                            AuthorizationFragmentViewModel.ErrorType.EmailError
                         )
                         is AuthorizationFragmentViewModel.AuthorizationResult.UserAlreadyExists -> showError(
                             R.string.user_already_exists,
-                            true
+                            AuthorizationFragmentViewModel.ErrorType.EmailError
                         )
                         is AuthorizationFragmentViewModel.AuthorizationResult.LogInFailure -> showError(
                             R.string.incorrect_password,
-                            false
+                            AuthorizationFragmentViewModel.ErrorType.PasswordError
                         )
                         is AuthorizationFragmentViewModel.AuthorizationResult.SignUpSuccess -> {
-                            Toast.makeText(
-                                context,
-                                resources.getString(R.string.sign_up_success),
-                                Toast.LENGTH_LONG
-                            ).show()
                             AccountAuthenticator.addAccount(view.context, result.email)
                             activity?.application?.let {
                                 viewModel.logIn(
                                     result.email to result.password,
-                                    it
+                                    it, true
                                 )
                             }
                         }
                         is AuthorizationFragmentViewModel.AuthorizationResult.LogInSuccess -> {
-                            Toast.makeText(
-                                context,
-                                resources.getString(R.string.log_in_success),
-                                Toast.LENGTH_LONG
-                            ).show()
-
-                            if (activity?.isTaskRoot == false)
-                                MainActivity.needsRecreate = true
+                            AccountAuthenticator.addAccount(view.context, result.email)
                             App.authenticationState.value = CheckTokenIsCorrectStatus.Correct to false
-                            activity?.startMainActivityNewTask()
+                            activity?.startMainActivityNewTask(extras = bundleOf("IS_AFTER_SIGN_UP" to result.afterSignUp))
                         }
-                        null -> {
-                        }
-                        else -> Toast.makeText(
-                            context,
-                            resources.getString(R.string.server_failure),
-                            Toast.LENGTH_LONG
-                        ).show()
                     }
                 })
 
@@ -154,7 +149,7 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                 activity?.application?.let {
                     viewModel.logIn(
                         authorizationEmailEditText.text.toString() to authorizationPasswordEditText.text.toString(),
-                        it
+                        it, false
                     )
                 }
             }
@@ -193,28 +188,33 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
     override fun onViewSizeChanged(view: View) {
 
         val viewHeight =
-            authorizationCenterLinearLayout.height + authorizationBottomSection.height + resources.getDimension(
+            (authorizationCenterLinearLayout.height - authorizationCenterLinearLayout.getChildAt(0).marginTop) + authorizationBottomSection.height + resources.getDimension(
                 R.dimen.toolbarHeight
             )
 
-        if ((viewHeight > getScreenHeight())) {
+        if (viewHeight > getScreenHeight()) {
             if (!buttonHidden) {
-                authorizationCenterLinearLayout.setPadding(
-                    0,
-                    resources.getDimension(R.dimen.toolbarHeight).toInt(),
-                    0,
-                    0
-                )
-                authorizationSignUpButton.visibility = View.GONE
+                authorizationCenterLinearLayout.getChildAt(0).updateLayoutParams<LinearLayout.LayoutParams> {
+                    topMargin = resources.getDimension(R.dimen.toolbarHeight).toInt()
+                }
+                authorizationSignUpButton.visibility = View.INVISIBLE
+                authorizationSignUpButton.isEnabled = false
                 authorizationForgotPassword.text = resources.getString(R.string.create_new_account)
+                authorizationForgotPassword.visibility = View.VISIBLE
+                authorizationForgotPassword.isEnabled = true
                 authorizationForgotPassword.setOnClickListener { signUpOnClick.invoke() }
                 buttonHidden = true
             }
         } else {
             if (buttonHidden) {
-                authorizationCenterLinearLayout.setPadding(0, 0, 0, 0)
+                authorizationCenterLinearLayout.getChildAt(0).updateLayoutParams<LinearLayout.LayoutParams> {
+                    topMargin = 0
+                }
                 authorizationSignUpButton.visibility = View.VISIBLE
+                authorizationSignUpButton.isEnabled = true
                 authorizationForgotPassword.text = resources.getString(R.string.forgot_password)
+                authorizationForgotPassword.visibility = View.INVISIBLE
+                authorizationForgotPassword.isEnabled = false
                 authorizationForgotPassword.setOnClickListener {}
                 buttonHidden = false
             }
@@ -222,24 +222,30 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
 
     }
 
-    private fun showError(resId: Int, email: Boolean) {
-        if (email) {
-            authorizationEmailEditText.hasError = true
-            authorizationEmailEditText.requestFocus()
-        } else {
-            authorizationPasswordEditText.hasError = true
-            authorizationPasswordEditText.requestFocus()
-        }
-        (authorizationErrorSnackbar as TextView).text = resources.getString(resId)
-        initErrorSnackbar()
-        authorizationBottomSection.animate()
-            .translationY(0F)
-            .setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong())
-            .setInterpolator(FastOutSlowInInterpolator()).start()
-        errorJob?.cancel()
-        errorJob = viewLifecycleOwner.lifecycleScope.launch {
-            delay(resources.getInteger(R.integer.authorization_error_duration).toLong())
+    private fun showError(resId: Int, errorType: AuthorizationFragmentViewModel.ErrorType) {
+        if((authorizationErrorSnackbar as TextView).text != resources.getString(resId) || errorJob?.isCompleted == true) {
             hideError()
+            when (errorType) {
+                AuthorizationFragmentViewModel.ErrorType.EmailError -> {
+                    authorizationEmailEditText.hasError = true
+                    authorizationEmailEditText.requestFocus()
+                }
+                AuthorizationFragmentViewModel.ErrorType.PasswordError -> {
+                    authorizationPasswordEditText.hasError = true
+                    authorizationPasswordEditText.requestFocus()
+                }
+            }
+            (authorizationErrorSnackbar as TextView).text = resources.getString(resId)
+            initErrorSnackbar()
+            authorizationBottomSection.animate()
+                .translationY(0F)
+                .setDuration(resources.getInteger(R.integer.snackbar_error_anim_duration).toLong())
+                .setInterpolator(FastOutSlowInInterpolator()).start()
+            errorJob?.cancel()
+            errorJob = viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+                delay(resources.getInteger(R.integer.authorization_error_duration).toLong())
+                hideError()
+            }
         }
     }
 

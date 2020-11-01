@@ -2,11 +2,15 @@ package com.example.studita.utils
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Rect
-import android.text.InputFilter
+import android.graphics.drawable.RotateDrawable
+import android.os.Build
+import android.text.*
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -17,19 +21,24 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.*
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.studita.R
 import com.example.studita.presentation.draw.AvaDrawer
 import com.example.studita.presentation.listeners.FabScrollImpl
 import com.example.studita.presentation.listeners.FabScrollListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListener
 import com.example.studita.presentation.listeners.OnViewSizeChangeListenerImpl
 import com.example.studita.presentation.views.ProgressBar
+import org.w3c.dom.Text
+import java.util.regex.Pattern
 import kotlin.reflect.KClass
 
 
@@ -251,13 +260,103 @@ fun TextView.removeLastChar(){
     )
 }
 
+fun TextView.replaceLastChar(newChar: Char){
+    removeLastChar()
+    append(newChar.toString())
+}
+
+fun View.disableAllItems(accept: (View) -> Boolean = {true}) {
+    if(accept(this))
+        this.isEnabled = false
+    if (this is ViewGroup) {
+        for (i in 0 until this.childCount) {
+            val child = this.getChildAt(i)
+            child.disableAllItems()
+        }
+    }
+}
+
 fun TextView.clear(){
     this.text = null
 }
 
 fun View.setAllClickable(clickable: Boolean) {
     isClickable = clickable
+    isLongClickable = clickable
     if (this is ViewGroup) children.forEach { child -> child.setAllClickable(clickable) }
 }
 
-fun View.isClick(event: MotionEvent) = kotlin.math.abs(translationX) <= 5F && kotlin.math.abs(translationY) <= 5F && (event.eventTime - event.downTime) < 500F
+fun View.clearLightStatusBar() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        var flags: Int = systemUiVisibility
+        flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        systemUiVisibility = flags
+    }
+}
+
+fun View.setLightStatusBar() {
+    var flags: Int = systemUiVisibility
+    flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+    systemUiVisibility = flags
+}
+
+fun View.setLightNavigation(){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+        var flags: Int = systemUiVisibility
+        flags = flags and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        systemUiVisibility = flags
+    }
+}
+
+
+fun View.clearLightNavigation(){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        var flags: Int = systemUiVisibility
+        flags = flags and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
+        systemUiVisibility = flags
+    }
+}
+
+fun TextView.animateRefreshButton() {
+    val refreshDrawable = (this.compoundDrawables[0] as RotateDrawable)
+
+    refreshDrawable.mutate()
+
+    val anim = ObjectAnimator.ofPropertyValuesHolder(
+        refreshDrawable,
+        PropertyValuesHolder.ofInt("level", 0, 10000)
+    ).setDuration(resources.getInteger(R.integer.refresh_animation_time).toLong())
+
+    anim.interpolator = FastOutSlowInInterpolator()
+    anim.setAutoCancel(true)
+    anim.start()
+}
+
+fun injectParts(context: Context, text: String, partsToInject: List<String>) : Pair<CharSequence, String?> {
+    var insideBrackets: String? = null
+    val m =
+        Pattern.compile("\\{.*?\\}").matcher(text)
+    var spanIndex = 1
+    val builder = SpannableStringBuilder()
+    while (m.find()) {
+        insideBrackets =
+            partsToInject[m.group(0).replace(
+                """[{}]""".toRegex(),
+                ""
+            ).toInt()]
+        val textSpanParts: ArrayList<SpannableString> = ArrayList(text.split(
+            "\\{.*?\\}".toRegex()
+        ).map { span -> SpannableString(span) })
+        textSpanParts.add(
+            spanIndex,
+            insideBrackets.createSpannableString(
+                color = ThemeUtils.getGreenColor(context)
+            )
+        )
+        textSpanParts.forEach { part -> builder.append(part) }
+        spanIndex++
+    }
+    return if (spanIndex == 1)  text to insideBrackets else builder to insideBrackets
+}
+
+fun View.isClick(event: MotionEvent) = event.action == MotionEvent.ACTION_UP && kotlin.math.abs(translationX) <= 5F && kotlin.math.abs(translationY) <= 5F && (event.eventTime - event.downTime) < 500F

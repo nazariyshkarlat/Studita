@@ -16,6 +16,7 @@ import com.example.studita.presentation.views.press_view.PressTextView
 import com.example.studita.utils.clear
 import com.example.studita.utils.makeView
 import com.example.studita.utils.removeLastChar
+import com.example.studita.utils.replaceLastChar
 
 class ExercisesKeyboard@JvmOverloads constructor(
     context: Context,
@@ -83,9 +84,14 @@ class ExercisesKeyboard@JvmOverloads constructor(
     }
 
     private fun onButtonWithTextClick(child: TextView){
-        if(syncedView?.filters?.firstOrNull { it is InputFilter.LengthFilter && it.max == 1} != null) {
-            syncedView?.text = child.text
-        }else
-            syncedView?.append(child.text)
+        when {
+            syncedView?.filters?.firstOrNull { it is InputFilter.LengthFilter && it.max == 1} != null -> {
+                syncedView?.text = child.text
+            }
+            (syncedView?.text?.lastOrNull()?.isDigit() == false) && (!child.text.last().isDigit()) -> {
+                syncedView?.replaceLastChar(child.text.last())
+            }
+            else -> syncedView?.append(child.text)
+        }
     }
 }

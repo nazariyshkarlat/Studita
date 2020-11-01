@@ -1,13 +1,22 @@
 package com.example.studita.utils
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.studita.R
 
-fun AppCompatActivity.addFragment(fragment: Fragment, container: Int, addToBackStack: Boolean = false) {
+fun AppCompatActivity.addFragment(fragment: Fragment, container: Int, addToBackStack: Boolean = false,
+                                  startAnim: Int = 0,
+                                  endAnim: Int = 0,
+                                  backStartAnim: Int = 0,
+                                  backEndAnim: Int = 0) {
     supportFragmentManager.beginTransaction()
+        .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
         .add(container, fragment, fragment::class.java.name)
         .apply {
             if(addToBackStack) addToBackStack(null)
@@ -15,8 +24,41 @@ fun AppCompatActivity.addFragment(fragment: Fragment, container: Int, addToBackS
         .commit()
 }
 
-fun Fragment.addFragment(fragment: Fragment, container: Int, addToBackStack: Boolean = false) {
+fun AppCompatActivity.addFragmentAllowStateLoss(fragment: Fragment, container: Int, addToBackStack: Boolean = false,
+                                  startAnim: Int = 0,
+                                  endAnim: Int = 0,
+                                  backStartAnim: Int = 0,
+                                  backEndAnim: Int = 0) {
+    supportFragmentManager.beginTransaction()
+        .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
+        .add(container, fragment, fragment::class.java.name)
+        .apply {
+            if(addToBackStack) addToBackStack(null)
+        }
+        .commitAllowingStateLoss()
+}
+
+fun Fragment.addFragment(fragment: Fragment, container: Int, addToBackStack: Boolean = false,
+                         startAnim: Int = 0,
+                         endAnim: Int = 0,
+                         backStartAnim: Int = 0,
+                         backEndAnim: Int = 0) {
     childFragmentManager.beginTransaction()
+        .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
+        .add(container, fragment, fragment::class.java.name)
+        .apply {
+            if(addToBackStack) addToBackStack(null)
+        }
+        .commit()
+}
+
+fun FragmentManager.addFragment(fragment: Fragment, container: Int, addToBackStack: Boolean = false,
+                                startAnim: Int = 0,
+                                endAnim: Int = 0,
+                                backStartAnim: Int = 0,
+                                backEndAnim: Int = 0) {
+    beginTransaction()
+        .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
         .add(container, fragment, fragment::class.java.name)
         .apply {
             if(addToBackStack) addToBackStack(null)
@@ -34,6 +76,33 @@ fun AppCompatActivity.removeFragment(fragment: Fragment) {
     supportFragmentManager.beginTransaction()
         .remove(fragment)
         .commit()
+}
+
+fun AppCompatActivity.removeFragmentAllowStateLoss(fragment: Fragment) {
+    supportFragmentManager.beginTransaction()
+        .remove(fragment)
+        .commitAllowingStateLoss()
+}
+
+fun Fragment.removeFragmentWithAnimation(view: View){
+    view.animate().alpha(0F).setDuration(250L).setListener(object : AnimatorListenerAdapter(){
+        override fun onAnimationEnd(animation: Animator?) {
+            fragmentManager?.removeFragmentAllowStateLoss(this@removeFragmentWithAnimation)
+        }
+    }).start()
+}
+
+
+fun FragmentManager.removeFragment(fragment: Fragment) {
+    beginTransaction()
+        .remove(fragment)
+        .commit()
+}
+
+fun FragmentManager.removeFragmentAllowStateLoss(fragment: Fragment) {
+    beginTransaction()
+        .remove(fragment)
+        .commitAllowingStateLoss()
 }
 
 fun AppCompatActivity.hideFragment(fragment: Fragment) {

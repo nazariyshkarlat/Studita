@@ -35,8 +35,7 @@ class ExercisesInteractorImpl(
                     else
                         ExercisesStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     getExercises(chapterPartNumber, offlineMode, retryCount - 1)
                 }
             } else
@@ -45,11 +44,11 @@ class ExercisesInteractorImpl(
 
     override suspend fun downloadOfflineExercises(retryCount: Int): ExercisesCacheStatus =
         try {
-            val result = repository.downloadOfflineExercises()
-            if (result == 200)
-                ExercisesCacheStatus.Success
-            else
-                ExercisesCacheStatus.IsCached
+            when (repository.downloadOfflineExercises()) {
+                200 -> ExercisesCacheStatus.Success
+                409 -> ExercisesCacheStatus.IsCached
+                else -> ExercisesCacheStatus.Failure
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
@@ -59,8 +58,7 @@ class ExercisesInteractorImpl(
                     else
                         ExercisesCacheStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     downloadOfflineExercises(retryCount - 1)
                 }
             } else

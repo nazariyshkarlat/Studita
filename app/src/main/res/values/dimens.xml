@@ -17,6 +17,7 @@
     <dimen name="splashScreenLogoMarginBottom">72dp</dimen>
     <dimen name="splashScreenPortraitLogoMarginBottom">64dp</dimen>
     <dimen name="toolbarHeight">56dp</dimen>
+    <dimen name="statusBarHeight">24dp</dimen>
     <dimen name="bottomNavigationHeight">56dp</dimen>
     <dimen name="buttonHeight">48dp</dimen>
     <dimen name="buttonWithPaddingHeight">80dp</dimen>
@@ -24,6 +25,7 @@
     <dimen name="connectionSnackbarHeight">26dp</dimen>
     <dimen name="connectionSnackbarLayoutTranslationY">27dp</dimen>
     <dimen name="connectionSnackbarTextSize">12sp</dimen>
+    <dimen name="snackbarElevation">8dp</dimen>
     <dimen name="errorSnackbarTextSize">14sp</dimen>
     <dimen name="centerDrawableButtonPadding">4dp</dimen>
     <dimen name="profileMenuAvatarSize">44dp</dimen>
@@ -41,6 +43,7 @@
     <dimen name="bottom_sheet_handle_height">4dp</dimen>
     <dimen name="bottom_sheet_handle_top_margin">12dp</dimen>
     <dimen name="exercisesHelpViewMarginTop">72dp</dimen>
+    <dimen name="dialogAlertMaxWidth">556dp</dimen>
     <dimen name="fireIconSize">26dp</dimen>
     <item name="bars_alpha" format="float" type="dimen">0.98</item>
 </resources>

@@ -13,7 +13,7 @@ class SyncSignOutImpl : SyncSignOut {
 
 
     companion object {
-        private const val SYNC_SIGN_OUT_ID = "syncSubscribeEmailId"
+        private const val SYNC_SIGN_OUT_ID = "syncSignOutId"
     }
 
     override fun scheduleSignOut(signOutRequestData: SignOutRequestData) {
@@ -28,7 +28,7 @@ class SyncSignOutImpl : SyncSignOut {
             .setInputData(data.build())
             .build()
         val workManager = WorkManager.getInstance(NetworkModule.context)
-        workManager.enqueueUniqueWork("$SYNC_SIGN_OUT_ID ${signOutRequestData.userIdTokenData.userId}", ExistingWorkPolicy.REPLACE, work)
+        workManager.enqueueUniqueWork(SYNC_SIGN_OUT_ID, ExistingWorkPolicy.REPLACE, work)
     }
 
     class SignOutWorker(val context: Context, val params: WorkerParameters) :

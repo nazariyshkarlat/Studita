@@ -146,6 +146,8 @@ sealed class EditProfileStatus {
 }
 
 sealed class UserNameAvailableStatus {
+    object ServiceUnavailable : UserNameAvailableStatus()
+    object NoConnection : UserNameAvailableStatus()
     object Failure : UserNameAvailableStatus()
     object Available : UserNameAvailableStatus()
     object Unavailable : UserNameAvailableStatus()
@@ -248,6 +250,21 @@ sealed class ExerciseReportStatus {
     object NoConnection : ExerciseReportStatus()
     object Failure : ExerciseReportStatus()
     object Success : ExerciseReportStatus()
+}
+
+sealed class InterestingLikeStatus {
+    object ServiceUnavailable : InterestingLikeStatus()
+    object NoConnection : InterestingLikeStatus()
+    object Failure : InterestingLikeStatus()
+    object Success : InterestingLikeStatus()
+}
+
+sealed class DownloadOfflineDataStatus{
+    object ServiceUnavailable : DownloadOfflineDataStatus()
+    object NoConnection : DownloadOfflineDataStatus()
+    object IsCached : DownloadOfflineDataStatus()
+    object Success : DownloadOfflineDataStatus()
+    object Failure : DownloadOfflineDataStatus()
 }
 
 

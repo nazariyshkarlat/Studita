@@ -82,7 +82,7 @@
             android:gravity="center"
             android:padding="16dp"
             android:layout_marginTop="24dp"
-            android:background="@drawable/main_blocks_rectangle">
+            android:background="@drawable/blocks_rectangle">
 
             <ImageView
                 android:id="@+id/exercisesDescription12LayoutIcon1"
@@ -231,7 +231,7 @@
             android:padding="16dp"
             android:layout_marginTop="24dp"
             android:orientation="vertical"
-            android:background="@drawable/main_blocks_rectangle">
+            android:background="@drawable/blocks_rectangle">
 
             <TextView
                 style="@style/Medium18"
@@ -273,7 +273,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:padding="16dp"
-            android:background="@drawable/main_blocks_rectangle"
+            android:background="@drawable/blocks_rectangle"
             android:gravity="center"
             android:textAlignment="center" />
 

@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:background="@drawable/main_blocks_rectangle"
+            android:background="@drawable/blocks_rectangle"
             android:gravity="center"
             android:orientation="vertical"
             android:paddingTop="16dp"

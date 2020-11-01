@@ -24,7 +24,6 @@ class UsersAdapter(
 ) :
     RecyclerView.Adapter<UsersViewHolder<*>>(),
     SearchViewHolder.UpdateCallback,
-    LoadViewHolder.RequestMoreItems,
     SearchViewHolder.SearchCallback,
     SearchViewHolder.ShowSearchCallback,
     UserItemViewHolder.AddToFriendsCallback {
@@ -49,8 +48,7 @@ class UsersAdapter(
                 lifecycleOwner
             )
             ViewType.ITEMS_LOAD.ordinal -> LoadViewHolder(
-                parent.makeView(R.layout.list_load_item),
-                this
+                parent.makeView(R.layout.list_load_item)
             )
             ViewType.TEXT.ordinal -> TextViewHolder(parent.makeView(R.layout.friends_search_text_item))
             else -> throw UnsupportedOperationException("unknown type of item")
@@ -61,6 +59,15 @@ class UsersAdapter(
         holder: UsersViewHolder<out UsersRecyclerUiModel>,
         position: Int
     ) {
+
+        if ((position % friendsFragmentViewModel.perPage == friendsFragmentViewModel.perPage / 2) &&
+            (position+friendsFragmentViewModel.perPage > itemCount) &&
+                items.any { it is UsersRecyclerUiModel.ProgressUiModel }) {
+
+            if(!friendsFragmentViewModel.errorState)
+                requestMoreItems()
+        }
+
         holder.bind(
             if (!isEmptyView) items[position] else (if (position == 0) UsersRecyclerUiModel.SearchUiModel else UsersRecyclerUiModel.TextItemUiModel(
                 context.resources.getString(friendsFragmentViewModel.getEmptyText())
@@ -90,7 +97,7 @@ class UsersAdapter(
         friendsFragmentViewModel.getUsers(userId, sortBy, false, isGlobalSearch = false)
     }
 
-    override fun onRequestMoreItems() {
+    private fun requestMoreItems() {
         val startsWith: String? = friendsFragmentViewModel.searchState.let {
             when (it) {
                 is FriendsFragmentViewModel.SearchState.FriendsSearch -> it.startsWith
@@ -123,7 +130,7 @@ class UsersAdapter(
             } else {
                 if (searchState is FriendsFragmentViewModel.SearchState.GlobalSearch) {
                     friendsFragmentViewModel.formGlobalSearchEmptySearch()
-                } else if (searchState is FriendsFragmentViewModel.SearchState.FriendsSearch)
+                } else if (searchState is FriendsFragmentViewModel.SearchState.FriendsSearch) {
                     friendsFragmentViewModel.getUsers(
                         userId,
                         friendsFragmentViewModel.sortBy,
@@ -131,6 +138,7 @@ class UsersAdapter(
                         null,
                         false
                     )
+                }
             }
         }
     }

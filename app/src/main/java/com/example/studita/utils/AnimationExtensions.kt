@@ -1,9 +1,13 @@
 package com.example.studita.utils
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.view.View
+import androidx.core.animation.addListener
 import com.google.android.material.animation.AnimationUtils
+import java.time.Duration
 
 private const val ANIMATION_SCALE_FROM_VALUE = 1.2f
 private const val ANIMATION_ALPHA_FROM_VALUE = 0.3f
@@ -29,13 +33,19 @@ fun View.getScaleAnimator(vararg scaleValues: Float): ValueAnimator? {
     return animator
 }
 
-fun View.animateFadeIn(delay: Long = 0) {
+fun View.animateFadeIn(delay: Long = 0, duration: Int = ANIMATION_FADE_IN_DURATION, onAnimationEnd: () -> Unit = {}) {
     val alphaAnimator: ValueAnimator? = getAlphaAnimator(ANIMATION_ALPHA_FROM_VALUE, 1f)
     val scaleAnimator: ValueAnimator? =
         getScaleAnimator(ANIMATION_SCALE_FROM_VALUE, 1f)
     val animatorSet = AnimatorSet()
     animatorSet.startDelay = delay
     animatorSet.playTogether(alphaAnimator, scaleAnimator)
-    animatorSet.duration = ANIMATION_FADE_IN_DURATION.toLong()
+    animatorSet.duration = duration.toLong()
+    animatorSet.addListener(object : AnimatorListenerAdapter(){
+        override fun onAnimationEnd(animation: Animator?) {
+            super.onAnimationEnd(animation)
+            onAnimationEnd.invoke()
+        }
+    })
     animatorSet.start()
 }

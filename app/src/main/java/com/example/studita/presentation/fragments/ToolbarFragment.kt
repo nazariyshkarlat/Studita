@@ -1,8 +1,12 @@
 package com.example.studita.presentation.fragments
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.widget.FrameLayout
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
@@ -24,8 +28,14 @@ import com.example.studita.presentation.fragments.user_statistics.UserStatOfflin
 import com.example.studita.presentation.fragments.user_statistics.UserStatUnLoggedInFragment
 import com.example.studita.presentation.view_model.FriendsFragmentViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
+import com.example.studita.utils.ScreenUtils
+import com.example.studita.utils.dpToPx
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
@@ -75,6 +85,8 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
                         toolbarLayoutRightButton.visibility = View.GONE
                     }
                 }
+
+                formToolbarTitleWidth()
             })
 
             it.progressState.observe(viewLifecycleOwner, Observer { show ->
@@ -82,6 +94,8 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
                     toolbarLayoutRightButtonProgress.visibility = View.VISIBLE
                 else
                     toolbarLayoutRightButtonProgress.visibility = View.GONE
+
+                formToolbarTitleWidth()
             })
         }
 
@@ -95,7 +109,6 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
 
     override fun onNavigate(fragment: NavigatableFragment?) {
         toolbarFragmentViewModel?.let { viewModel ->
-            viewModel.setToolbarRightButtonState(ToolbarFragmentViewModel.ToolbarRightButtonState.Invisible)
             viewModel.hideProgress()
             viewModel.hideDivider()
             viewModel.setToolbarText(
@@ -137,6 +150,28 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
                     else -> null
                 }
             )
+            viewModel.setToolbarRightButtonState(ToolbarFragmentViewModel.ToolbarRightButtonState.Invisible)
+        }
+    }
+
+    private fun formToolbarTitleWidth(){
+        toolbarLayoutTitle.measure(0, 0)
+        toolbarLayoutBackButton.measure(0, 0)
+        toolbarLayoutRightButton.measure(0, 0)
+        if(toolbarLayoutTitle.measuredWidth +
+            toolbarLayoutBackButton.measuredWidth*2
+            > ScreenUtils.getScreenWidth()) {
+            toolbarLayoutTitle.updateLayoutParams<FrameLayout.LayoutParams> {
+                leftMargin = toolbarLayoutBackButton.measuredWidth
+                rightMargin = if(toolbarLayoutRightButton.visibility == View.VISIBLE || toolbarLayoutRightButtonProgress.visibility == View.VISIBLE) toolbarLayoutRightButton.measuredWidth - 8F.dpToPx() else 16F.dpToPx()
+                gravity = Gravity.START or Gravity.CENTER_VERTICAL
+            }
+        }else{
+            toolbarLayoutTitle.updateLayoutParams<FrameLayout.LayoutParams> {
+                leftMargin =0
+                rightMargin = 0
+                gravity = Gravity.CENTER
+            }
         }
     }
 

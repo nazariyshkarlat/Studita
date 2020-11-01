@@ -15,7 +15,8 @@ class InterestingViewHolder(view: View) :
         itemView.interestingItemTitle.text = model.title
         itemView.interestingItemSubtitle.text = model.subtitle
         fillTags(model)
-        itemView.interestingItemLayoutCardView.setOnClickListener {
+
+        itemView.interestingItemParentLayout.setOnClickListener {
             it.getAppCompatActivity()
                 ?.startActivity<InterestingActivity>("INTERESTING_NUMBER" to model.interestingNumber)
         }

@@ -13,12 +13,12 @@ interface ExerciseResultInteractor {
         exerciseData: ExerciseData.ExerciseDataExercise,
         exerciseRequestData: ExerciseRequestData,
         offlineMode: Boolean,
-        retryCount: Int = 60
+        retryCount: Int = 3
     ): ExerciseResultStatus
 
     suspend fun sendExerciseReport(
         exerciseReportRequestData: ExerciseReportRequestData,
-        retryCount: Int = 60
+        retryCount: Int = 3
     ) : ExerciseReportStatus
 
 }

@@ -1,14 +1,17 @@
 package com.example.studita.domain.interactor.interesting
 
+import com.example.studita.domain.entity.InterestingLikeRequestData
+import com.example.studita.domain.entity.exercise.ExerciseReportRequestData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
-import com.example.studita.domain.interactor.InterestingCacheStatus
-import com.example.studita.domain.interactor.InterestingStatus
+import com.example.studita.domain.interactor.*
 import com.example.studita.domain.repository.InterestingRepository
+import com.example.studita.domain.service.SyncInterestingLikes
 import kotlinx.coroutines.delay
 
 class InterestingInteractorImpl(
-    private val repository: InterestingRepository
+    private val repository: InterestingRepository,
+    private val syncInterestingLikes: SyncInterestingLikes
 ) : InterestingInteractor {
 
     private val retryDelay = 1000L
@@ -35,8 +38,7 @@ class InterestingInteractorImpl(
                     } else
                         InterestingStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     getInteresting(interestingNumber, offlineMode, retryCount - 1)
                 }
             } else
@@ -59,11 +61,39 @@ class InterestingInteractorImpl(
                     } else
                         InterestingCacheStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     downloadInterestingList(retryCount - 1)
                 }
             } else
                 InterestingCacheStatus.Failure
+        }
+
+    override suspend fun sendInterestingLike(
+        interestingLikeRequestData: InterestingLikeRequestData,
+        retryCount: Int
+    ) : InterestingLikeStatus =
+        try {
+            if (repository.sendInterestingLike(interestingLikeRequestData) == 200)
+                InterestingLikeStatus.Success
+            else
+                InterestingLikeStatus.Failure
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (e is NetworkConnectionException || e is ServerUnavailableException) {
+                if (retryCount == 0) {
+                    if(e is NetworkConnectionException) {
+                        syncInterestingLikes.scheduleSendInterestingLike(
+                            interestingLikeRequestData
+                        )
+                        InterestingLikeStatus.NoConnection
+                    }else
+                        InterestingLikeStatus.ServiceUnavailable
+                }
+                else {
+                    delay(retryDelay)
+                    sendInterestingLike(interestingLikeRequestData, retryCount - 1)
+                }
+            } else
+                InterestingLikeStatus.Failure
         }
 }

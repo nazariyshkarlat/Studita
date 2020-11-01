@@ -9,11 +9,11 @@ interface NotificationsInteractor {
         userIdTokenData: UserIdTokenData,
         perPage: Int,
         pageNumber: Int,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): GetNotificationsStatus
 
     suspend fun setNotificationsAreChecked(
         userIdTokenData: UserIdTokenData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): SetNotificationsAreCheckedStatus
 }

@@ -6,35 +6,34 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.studita.R
 import com.example.studita.domain.entity.EditProfileData
+import com.example.studita.domain.interactor.edit_profile.EditProfileInteractor
 import com.example.studita.presentation.draw.AvaDrawer
 import com.example.studita.presentation.fragments.base.NavigatableFragment
 import com.example.studita.presentation.fragments.dialog_alerts.ChangeAvatarDialogAlertFragment
 import com.example.studita.presentation.fragments.dialog_alerts.EditProfileRemovePhotoDialogAlertFragment
 import com.example.studita.presentation.fragments.dialog_alerts.UnsavedChangesDialogAlertFragment
+import com.example.studita.presentation.fragments.error_fragments.InternetIsDisabledFragment
+import com.example.studita.presentation.fragments.error_fragments.ServerProblemsFragment
 import com.example.studita.presentation.listeners.GenericTextWatcher
 import com.example.studita.presentation.listeners.GenericTextWatcherImpl
+import com.example.studita.presentation.listeners.ReloadPageCallback
 import com.example.studita.presentation.listeners.setGenericTextWatcher
 import com.example.studita.presentation.view_model.EditProfileViewModel
 import com.example.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.example.studita.presentation.views.CustomSnackbar
-import com.example.studita.utils.PrefsUtils
-import com.example.studita.utils.ThemeUtils
-import com.example.studita.utils.UserUtils
-import com.example.studita.utils.limitLength
+import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.edit_profile_layout.*
 
 
-class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), GenericTextWatcher {
+class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), GenericTextWatcher, ReloadPageCallback {
 
     private lateinit var editProfileViewModel: EditProfileViewModel
 
@@ -44,55 +43,83 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
         editProfileViewModel =
             ViewModelProviders.of(this@EditProfileFragment).get(EditProfileViewModel::class.java)
 
-        UserUtils.userDataLiveData.observe(viewLifecycleOwner, Observer { userData ->
+        editProfileViewModel.progressState.observe(viewLifecycleOwner, Observer { inProgress ->
 
-            if (savedInstanceState == null) {
-                editProfileViewModel.oldProfileData =
-                    EditProfileData(userData.userName, userData.name, userData.avatarLink)
-                editProfileViewModel.newProfileData = editProfileViewModel.oldProfileData.copy()
-                fillEditTexts(editProfileViewModel.newProfileData)
+            if(inProgress){
+                editProfileLayoutProgressBar.visibility = View.VISIBLE
+                editProfileLayoutScrollView.visibility = View.GONE
+            }else {
+                if (savedInstanceState == null) {
+                    editProfileViewModel.oldProfileData =
+                        EditProfileData(UserUtils.userData.userName, UserUtils.userData.name, UserUtils.userData.avatarLink)
+                    editProfileViewModel.newProfileData = editProfileViewModel.oldProfileData.copy()
+                    fillEditTexts(editProfileViewModel.newProfileData)
+                }
+
+                fillAvatar()
+                fillCounters(editProfileViewModel.newProfileData)
+                editProfileLayoutProgressBar.visibility = View.GONE
+                editProfileLayoutScrollView.visibility = View.VISIBLE
+
+                editProfileLayoutRemoveAvatar.setOnClickListener {
+                    if (editProfileViewModel.newProfileData.avatarLink != null || editProfileViewModel.selectedImage != null) {
+                        EditProfileRemovePhotoDialogAlertFragment().apply {
+                            setTargetFragment(this@EditProfileFragment, 23)
+                        }.show((activity as AppCompatActivity).supportFragmentManager, null)
+                    }
+                }
+
+                if (editProfileViewModel.newProfileData.avatarLink == null && !editProfileViewModel.avaChanged) {
+                    editProfileLayoutRemoveAvatar.isEnabled = false
+                }
             }
+        })
 
-            fillAvatar()
-            fillCounters(editProfileViewModel.newProfileData)
-            editProfileViewModel.userNameAvailableState.value =
-                EditProfileViewModel.UserNameAvailable.AVAILABLE
-            (view as ViewGroup).removeView(editProfileLayoutProgressBar)
-            editProfileLayoutScrollView.visibility = View.VISIBLE
+        editProfileViewModel.errorEvent.observe(viewLifecycleOwner, Observer { isNetworkError->
+            if (isNetworkError) {
+                addFragment(InternetIsDisabledFragment(), R.id.editProfileLayoutParentLayout, false)
+            }else{
+                addFragment(ServerProblemsFragment(), R.id.editProfileLayoutParentLayout, false)
+            }
         })
 
         editProfileViewModel.userNameAvailableState.observe(viewLifecycleOwner, Observer {
             editProfileViewModel.checkCorrectUserName()
-            if (it == EditProfileViewModel.UserNameAvailable.AVAILABLE) {
-                editProfileLayoutUserNameEditText.hasError = false
-                editProfileLayoutUserNameStatusTextView.text =
-                    resources.getString(R.string.edit_profile_user_name_available)
-                editProfileLayoutUserNameStatusTextView.setTextColor(
-                    ThemeUtils.getGreenColor(context!!)
-                )
-            } else {
-                if (it == EditProfileViewModel.UserNameAvailable.UNAVAILABLE)
+            when (it) {
+                EditProfileViewModel.UserNameAvailable.Available -> {
+                    editProfileLayoutUserNameEditText.hasError = false
                     editProfileLayoutUserNameStatusTextView.text =
-                        resources.getString(R.string.edit_profile_user_name_unavailable)
-                else
+                        resources.getString(R.string.edit_profile_user_name_available)
+                    editProfileLayoutUserNameStatusTextView.setTextColor(
+                        ThemeUtils.getGreenColor(context!!)
+                    )
+                }
+                is EditProfileViewModel.UserNameAvailable.Unavailable  -> {
+                    editProfileLayoutUserNameStatusTextView.setTextColor(
+                        ThemeUtils.getRedColor(context!!)
+                    )
+                    editProfileLayoutUserNameEditText.hasError = true
                     editProfileLayoutUserNameStatusTextView.text =
-                        resources.getString(R.string.edit_profile_user_name_is_taken)
-                editProfileLayoutUserNameStatusTextView.setTextColor(
-                    ThemeUtils.getRedColor(context!!)
-                )
-                editProfileLayoutUserNameEditText.hasError = true
+
+                        when(it.errorType){
+                            EditProfileViewModel.ErrorType.UNAVAILABLE -> resources.getString(R.string.edit_profile_user_name_unavailable)
+                            EditProfileViewModel.ErrorType.IS_TAKEN -> resources.getString(R.string.edit_profile_user_name_is_taken)
+                            EditProfileViewModel.ErrorType.CONNECTION_ERROR -> resources.getString(R.string.no_connection)
+                            EditProfileViewModel.ErrorType.SERVER_ERROR -> resources.getString(R.string.server_temporarily_unavailable)
+                        }
+
+                }
             }
         })
 
         editProfileViewModel.saveChangesButtonVisibleState.observe(viewLifecycleOwner, Observer {
+            println("STATE ${editProfileViewModel.userNameAvailableState.value}")
             if (it) {
                 showSaveChangesButton()
                 toolbarFragmentViewModel?.hideProgress()
             } else
                 toolbarFragmentViewModel?.setToolbarRightButtonState(
-                    ToolbarFragmentViewModel.ToolbarRightButtonState.Disabled(
-                        R.drawable.ic_done_selector
-                    )
+                    ToolbarFragmentViewModel.ToolbarRightButtonState.Invisible
                 )
         })
 
@@ -155,8 +182,8 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
             )
         )
 
-        editProfileLayoutUserNameEditText.limitLength(resources.getInteger(R.integer.user_name_max_length))
-        editProfileLayoutNameEditText.limitLength(resources.getInteger(R.integer.name_max_length))
+        editProfileLayoutUserNameEditText.limitLength(EditProfileInteractor.USER_NAME_MAX_LENGTH)
+        editProfileLayoutNameEditText.limitLength(EditProfileInteractor.NAME_MAX_LENGTH)
 
         editProfileLayoutNameEditText.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus)
@@ -168,14 +195,6 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                 ChangeAvatarDialogAlertFragment().apply {
                     setTargetFragment(this@EditProfileFragment as NavigatableFragment, 0)
                 }.show(manager, null)
-            }
-        }
-
-        editProfileLayoutRemoveAvatar.setOnClickListener {
-            if (editProfileViewModel.newProfileData.avatarLink != null || editProfileViewModel.selectedImage != null) {
-                EditProfileRemovePhotoDialogAlertFragment().apply {
-                    setTargetFragment(this@EditProfileFragment, 23)
-                }.show((activity as AppCompatActivity).supportFragmentManager, null)
             }
         }
 
@@ -191,11 +210,11 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
     private fun fillCounters(editProfileData: EditProfileData) {
         editProfileLayoutNameCounter.text = resources.getString(
             R.string.edit_text_counter_template, editProfileData.name?.length
-                ?: 0, resources.getInteger(R.integer.name_max_length)
+                ?: 0, EditProfileInteractor.NAME_MAX_LENGTH
         )
         editProfileLayoutUserNameCounter.text = resources.getString(
             R.string.edit_text_counter_template, editProfileData.userName?.length
-                ?: 0, resources.getInteger(R.integer.user_name_max_length)
+                ?: 0, EditProfileInteractor.USER_NAME_MAX_LENGTH
         )
     }
 
@@ -256,16 +275,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                 editProfileViewModel.verifyUserName()
             }
             R.id.editProfileLayoutNameEditText -> {
-
-                if ((charSequence?.length == resources.getInteger(R.integer.name_max_length)) && (charSequence.last() == ' ')) {
-                    editProfileLayoutNameEditText.text?.delete(
-                        charSequence.length - 1,
-                        charSequence.length
-                    )
-                    return
-                }
-
-                editProfileViewModel.formNewName(charSequence?.trim())
+                editProfileViewModel.formNewName(charSequence)
                 editProfileViewModel.checkShowSaveButton()
             }
         }
@@ -313,11 +323,18 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                 editProfileViewModel.selectedImage = data.extras?.get("SELECTED_IMAGE") as Bitmap?
                 if (editProfileViewModel.selectedImage == null) {
                     editProfileViewModel.newProfileData.avatarLink = null
+                    editProfileLayoutRemoveAvatar.isEnabled = false
+                }else{
+                    editProfileLayoutRemoveAvatar.isEnabled = true
                 }
             }
-            editProfileViewModel.avaChanged = true
+            editProfileViewModel.avaChanged = (editProfileViewModel.newProfileData.avatarLink != editProfileViewModel.oldProfileData.avatarLink) || editProfileViewModel.selectedImage != null
             editProfileViewModel.checkShowSaveButton()
             fillAvatar()
         }
+    }
+
+    override fun onPageReload() {
+        editProfileViewModel.getUserData()
     }
 }

@@ -14,6 +14,7 @@ import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.utils.UserUtils
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -36,7 +37,7 @@ class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver() {
         when (intent.action?.toNotificationAction()) {
             NotificationAction.ACCEPT_FRIENDSHIP -> {
 
-                GlobalScope.launch {
+                GlobalScope.launch(Dispatchers.Main) {
                     UsersModule.getUsersInteractorImpl().acceptFriendship(
                         FriendActionRequestData(
                             UserUtils.getUserIDTokenData()!!,
@@ -51,7 +52,7 @@ class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver() {
                     })
             }
             NotificationAction.REJECT_FRIENDSHIP -> {
-                GlobalScope.launch {
+                GlobalScope.launch(Dispatchers.Main) {
                     UsersModule.getUsersInteractorImpl().rejectFriendship(
                         FriendActionRequestData(
                             UserUtils.getUserIDTokenData()!!,
@@ -68,9 +69,9 @@ class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver() {
         }
 
         if (UserUtils.userDataNotNull()) {
-            UserUtils.userDataLiveData.postValue(UserUtils.userData.apply {
+            UserUtils.userDataLiveData.value = UserUtils.userData.apply {
                 notificationsAreChecked = true
-            })
+            }
         }
         (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(
             notificationId

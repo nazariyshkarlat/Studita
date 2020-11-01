@@ -34,12 +34,12 @@ class PressView(val view: View, var withMinClickInterval: Boolean = false) {
     init {
         view.setOnTouchListener(object : ViewOnTouch() {
             override fun onDownTouchAction(x: Float, y: Float) {
-                if (view.isEnabled)
+                if (view.isEnabled && view.isClickable)
                     onDown()
             }
 
             override fun onUpTouchAction(x: Float, y: Float) {
-                if (view.isEnabled) {
+                if (view.isEnabled && view.isClickable) {
                     onUp()
 
                     if (withMinClickInterval)

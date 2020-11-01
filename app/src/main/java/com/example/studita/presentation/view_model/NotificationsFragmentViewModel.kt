@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.studita.R
 import com.example.studita.di.data.NotificationsModule
 import com.example.studita.domain.entity.NotificationData
 import com.example.studita.domain.entity.UserIdTokenData
@@ -13,6 +12,7 @@ import com.example.studita.presentation.model.NotificationsUiModel
 import com.example.studita.presentation.model.toUiModel
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -21,14 +21,17 @@ class NotificationsFragmentViewModel : ViewModel() {
     private val notificationsInteractor = NotificationsModule.getNotificationsInteractorImpl()
 
     val notificationsState = MutableLiveData<Pair<Boolean, NotificationsResultState>>()
-    val errorState = SingleLiveEvent<Int>()
     val progressState = MutableLiveData<Boolean>()
+
+    val errorEvent = SingleLiveEvent<Boolean>()
+    var errorState = false
 
     var recyclerItems: ArrayList<NotificationsUiModel>? = null
 
     private var notificationsAreCheckedJob: Job? = null
+    private var getNotificationsJob: Job? = null
 
-    private val perPage = 20
+    val perPage = 20
     var currentPageNumber = 1
 
 
@@ -38,38 +41,42 @@ class NotificationsFragmentViewModel : ViewModel() {
 
     fun getNotifications(userIdTokenData: UserIdTokenData, newPage: Boolean) {
 
+        errorState = false
+
         if (newPage)
             currentPageNumber++
-        else
-            currentPageNumber = 1
 
-        viewModelScope.launch {
+        getNotificationsJob = viewModelScope.launchExt(getNotificationsJob) {
             when (val result = notificationsInteractor.getNotifications(
                 userIdTokenData,
                 perPage,
                 currentPageNumber
             )) {
-                is GetNotificationsStatus.Failure -> errorState.postValue(R.string.no_connection)
-                is GetNotificationsStatus.NoConnection -> errorState.postValue(R.string.no_connection)
-                is GetNotificationsStatus.ServiceUnavailable -> errorState.postValue(R.string.no_connection)
+                is GetNotificationsStatus.NoConnection -> {
+                    errorState = true
+                    errorEvent.value = true
+                }
+                is GetNotificationsStatus.ServiceUnavailable -> {
+                    errorState = true
+                    errorEvent.value = false
+                }
                 is GetNotificationsStatus.NoNotificationsFound -> {
-                    progressState.postValue(false)
-                    notificationsState.postValue(false to (if (currentPageNumber == 1) NotificationsResultState.NoResultsFound else NotificationsResultState.NoMoreResultsFound))
+                    progressState.value = false
+                    notificationsState.value = false to (if (currentPageNumber == 1) NotificationsResultState.NoResultsFound else NotificationsResultState.NoMoreResultsFound)
                 }
                 is GetNotificationsStatus.Success -> {
-
                     val notificationsResultState =
                         if (currentPageNumber == 1) NotificationsResultState.FirstResults(result.notificationsData) else NotificationsResultState.MoreResults(
                             result.notificationsData
                         )
 
-                    if (UserUtils.userDataNotNull()) {
-                        UserUtils.userDataLiveData.postValue(UserUtils.userData.apply {
+                    if (UserUtils.userDataNotNull() && !UserUtils.userData.notificationsAreChecked) {
+                        UserUtils.userDataLiveData.value = UserUtils.userData.apply {
                             notificationsAreChecked = true
-                        })
+                        }
                     }
-                    progressState.postValue(false)
-                    notificationsState.postValue(canBeMoreItems(notificationsResultState) to notificationsResultState)
+                    progressState.value = false
+                    notificationsState.value = canBeMoreItems(notificationsResultState) to notificationsResultState
                 }
             }
         }

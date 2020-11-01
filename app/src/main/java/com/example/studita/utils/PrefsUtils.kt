@@ -55,11 +55,25 @@ object PrefsUtils {
 
     fun containsNotificationsMode() = CacheModule.sharedPreferences.contains("NOTIFICATIONS_MODE")
 
+    fun containsNightThemeOnPhoneIsEnabled() = CacheModule.sharedPreferences.contains("NIGHT_MODE_WHEN_SAVE_ENABLED")
+
     fun getTheme() = ThemeUtils.Theme.values()[CacheModule.sharedPreferences.getInt(
         "theme",
         ThemeUtils.Theme.DEFAULT.ordinal
     )]
 
-    fun setTheme(themeState: ThemeUtils.Theme) =
+    fun nightModeWhenSaveWasEnabled() = CacheModule.sharedPreferences.getBoolean("NIGHT_MODE_WHEN_SAVE_ENABLED", true)
+
+    fun offlineDataIsCached() = CacheModule.sharedPreferences.getBoolean("OFFLINE_DATA_IS_CACHED", false)
+
+    fun setOfflineDataIsCached(){
+        CacheModule.sharedPreferences.edit()?.putBoolean("OFFLINE_DATA_IS_CACHED", true)?.apply()
+    }
+
+    fun setTheme(themeState: ThemeUtils.Theme, nightModeIsEnabled: Boolean) {
         CacheModule.sharedPreferences.edit()?.putInt("theme", themeState.ordinal)?.apply()
+
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P)
+            CacheModule.sharedPreferences.edit()?.putBoolean("NIGHT_MODE_WHEN_SAVE_ENABLED", nightModeIsEnabled)?.apply()
+    }
 }

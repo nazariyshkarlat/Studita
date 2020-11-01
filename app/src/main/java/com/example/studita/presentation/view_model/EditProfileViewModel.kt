@@ -8,15 +8,16 @@ import com.example.studita.di.data.EditProfileModule
 import com.example.studita.di.data.UserDataModule
 import com.example.studita.domain.entity.EditProfileData
 import com.example.studita.domain.entity.EditProfileRequestData
-import com.example.studita.domain.interactor.EditProfileStatus
-import com.example.studita.domain.interactor.UserNameAvailableStatus
+import com.example.studita.domain.interactor.*
+import com.example.studita.utils.PrefsUtils
 import com.example.studita.utils.UserUtils
 import com.example.studita.utils.launchExt
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class EditProfileViewModel : ViewModel() {
+class EditProfileViewModel() : ViewModel() {
 
     private val editProfileInteractor = EditProfileModule.getEditProfileInteractorImpl()
     private val userDataInteractor = UserDataModule.getUserDataInteractorImpl()
@@ -28,11 +29,32 @@ class EditProfileViewModel : ViewModel() {
 
     var avaChanged = false
 
+    val errorEvent = SingleLiveEvent<Boolean>()
+    val progressState = MutableLiveData(true)
+
     var userNameAvailableState = MutableLiveData<UserNameAvailable>()
     var saveChangesButtonVisibleState = MutableLiveData<Boolean>(false)
     var countersErrorState = MutableLiveData<Boolean>()
     var backClickState = SingleLiveEvent<BackClickState>()
     var saveProfileChangesState = MutableLiveData<SaveProfileChangesState>()
+
+    init {
+        getUserData()
+    }
+
+    fun getUserData(){
+        progressState.value = true
+        viewModelScope.launch {
+            when(val userData = userDataInteractor.getUserData(PrefsUtils.getUserId(), false, true)){
+                is UserDataStatus.NoConnection -> errorEvent.value = true
+                is UserDataStatus.ServiceUnavailable -> errorEvent.value = false
+                is UserDataStatus.Success -> {
+                    UserUtils.userDataLiveData.value = userData.result
+                    progressState.value = false
+                }
+            }
+        }
+    }
 
     fun saveProfileChanges() {
         saveProfileChangesState.value = SaveProfileChangesState.LOADING
@@ -45,11 +67,23 @@ class EditProfileViewModel : ViewModel() {
             )) {
                 is EditProfileStatus.Success -> {
                     applyLocalChanges(result.avatarLink)
-                    saveProfileChangesState.postValue(SaveProfileChangesState.SUCCESS)
+                    saveProfileChangesState.value = SaveProfileChangesState.SUCCESS
                 }
-                EditProfileStatus.Failure -> saveProfileChangesState.postValue(
-                    SaveProfileChangesState.FAILURE
-                )
+                is EditProfileStatus.NoConnection -> {
+                    saveProfileChangesState.value =
+                        SaveProfileChangesState.FAILURE
+                    userNameAvailableState.value = UserNameAvailable.Unavailable(ErrorType.CONNECTION_ERROR)
+                }
+                is EditProfileStatus.ServiceUnavailable -> {
+                    saveProfileChangesState.value =
+                        SaveProfileChangesState.FAILURE
+                    userNameAvailableState.value = UserNameAvailable.Unavailable(ErrorType.SERVER_ERROR)
+                }
+                is EditProfileStatus.Failure -> {
+                    saveProfileChangesState.value =
+                        SaveProfileChangesState.FAILURE
+                    userNameAvailableState.value = UserNameAvailable.Unavailable(ErrorType.SERVER_ERROR)
+                }
             }
         }
     }
@@ -57,15 +91,19 @@ class EditProfileViewModel : ViewModel() {
     private fun checkUserNameAvailable() {
         job = viewModelScope.launchExt(job) {
             when (editProfileInteractor.isUserNameAvailable(newProfileData.userName!!)) {
-                is UserNameAvailableStatus.Available -> userNameAvailableState.postValue(
-                    UserNameAvailable.AVAILABLE
-                )
-                is UserNameAvailableStatus.IsTaken -> userNameAvailableState.postValue(
-                    UserNameAvailable.IS_TAKEN
-                )
-                is UserNameAvailableStatus.Failure -> userNameAvailableState.postValue(
-                    UserNameAvailable.UNAVAILABLE
-                )
+                is UserNameAvailableStatus.Available -> userNameAvailableState.value =
+                    UserNameAvailable.Available
+
+                is UserNameAvailableStatus.IsTaken -> userNameAvailableState.value =
+                    UserNameAvailable.Unavailable(ErrorType.IS_TAKEN)
+                is UserNameAvailableStatus.Unavailable -> userNameAvailableState.value =
+                    UserNameAvailable.Unavailable(ErrorType.UNAVAILABLE)
+                is UserNameAvailableStatus.ServiceUnavailable -> userNameAvailableState.value =
+                    UserNameAvailable.Unavailable(ErrorType.SERVER_ERROR)
+                is UserNameAvailableStatus.Failure -> userNameAvailableState.value =
+                    UserNameAvailable.Unavailable(ErrorType.SERVER_ERROR)
+                is UserNameAvailableStatus.NoConnection -> userNameAvailableState.value =
+                    UserNameAvailable.Unavailable(ErrorType.CONNECTION_ERROR)
             }
         }
     }
@@ -77,18 +115,17 @@ class EditProfileViewModel : ViewModel() {
                 avaChanged
             )
         ) {
-            if (userNameAvailableState.value == UserNameAvailable.AVAILABLE)
+            if (userNameAvailableState.value == UserNameAvailable.Available)
                 saveChangesButtonVisibleState.value = true
         }
     }
 
     fun backClick() {
-        backClickState.value = if (editProfileInteractor.isProfileDataChanged(
+        backClickState.value = if ((progressState.value == false) && editProfileInteractor.isProfileDataChanged(
                 oldProfileData,
                 newProfileData,
                 avaChanged
-            )
-        ) BackClickState.SHOW_DIALOG else BackClickState.CLOSE
+            )) BackClickState.SHOW_DIALOG else BackClickState.CLOSE
     }
 
     fun verifyUserName() {
@@ -97,13 +134,13 @@ class EditProfileViewModel : ViewModel() {
                 countersErrorState.value = false
                 checkUserNameAvailable()
             } else {
-                userNameAvailableState.value = UserNameAvailable.UNAVAILABLE
+                userNameAvailableState.value = UserNameAvailable.Unavailable(ErrorType.UNAVAILABLE)
                 countersErrorState.value = true
                 job?.cancel()
             }
         } else {
             countersErrorState.value = false
-            userNameAvailableState.value = UserNameAvailable.AVAILABLE
+            userNameAvailableState.value = UserNameAvailable.Available
         }
     }
 
@@ -116,7 +153,7 @@ class EditProfileViewModel : ViewModel() {
         ) && userNameAvailable()
     }
 
-    private fun userNameAvailable() = userNameAvailableState.value == UserNameAvailable.AVAILABLE
+    private fun userNameAvailable() = userNameAvailableState.value == UserNameAvailable.Available
 
     fun formNewUserName(charSequence: CharSequence?) {
         newProfileData.userName = charSequence?.toString()?.takeIf { it.isNotEmpty() }
@@ -130,16 +167,22 @@ class EditProfileViewModel : ViewModel() {
         UserUtils.userData.userName = newProfileData.userName
         UserUtils.userData.name = newProfileData.name
         UserUtils.userData.avatarLink = avatarLink
-        UserUtils.userDataLiveData.postValue(UserUtils.userData)
-        GlobalScope.launch {
+        UserUtils.userDataLiveData.value = UserUtils.userData
+        GlobalScope.launch(Dispatchers.Main){
             userDataInteractor.saveUserData(UserUtils.userData)
         }
     }
 
-    enum class UserNameAvailable {
-        AVAILABLE,
-        IS_TAKEN,
-        UNAVAILABLE
+    sealed class UserNameAvailable {
+        object Available : UserNameAvailable()
+        class Unavailable(val errorType: ErrorType) : UserNameAvailable()
+    }
+
+    enum class ErrorType{
+        SERVER_ERROR,
+        CONNECTION_ERROR,
+        UNAVAILABLE,
+        IS_TAKEN
     }
 
 

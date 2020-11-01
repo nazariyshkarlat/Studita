@@ -5,10 +5,7 @@ import com.example.studita.domain.entity.PrivacySettingsRequestData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
-import com.example.studita.domain.interactor.EditDuelsExceptionsStatus
-import com.example.studita.domain.interactor.EditPrivacySettingsStatus
-import com.example.studita.domain.interactor.PrivacySettingsDuelsExceptionsStatus
-import com.example.studita.domain.interactor.PrivacySettingsStatus
+import com.example.studita.domain.interactor.*
 import com.example.studita.domain.repository.PrivacySettingsRepository
 import com.example.studita.domain.service.SyncPrivacySettings
 import kotlinx.coroutines.delay
@@ -58,17 +55,18 @@ class PrivacySettingsInteractorImpl(
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
-                when {
-                    e is NetworkConnectionException -> {
+                if (retryCount == 0) {
+                    if(e is NetworkConnectionException) {
                         syncPrivacySettings.scheduleEditPrivacySettings(
                             privacySettingsRequestData
                         )
                         EditPrivacySettingsStatus.NoConnection
-                    }
-                    retryCount == 0 -> EditPrivacySettingsStatus.ServiceUnavailable
-                    else -> {
-                        editPrivacySettings(privacySettingsRequestData, retryCount - 1)
-                    }
+                    }else
+                        EditPrivacySettingsStatus.ServiceUnavailable
+                }
+                else {
+                    delay(retryDelay)
+                    editPrivacySettings(privacySettingsRequestData, retryCount - 1)
                 }
             } else
                 EditPrivacySettingsStatus.Failure
@@ -98,8 +96,7 @@ class PrivacySettingsInteractorImpl(
                     } else
                         PrivacySettingsDuelsExceptionsStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     getPrivacyDuelsExceptionsList(
                         userIdTokenData,
                         perPage,

@@ -19,15 +19,15 @@ object NetworkUtils {
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         if (NetworkModule.connectionManager.isNetworkAbsent())
-            networkLiveData.postValue(false)
+            networkLiveData.value = false
 
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network?) {
-                networkLiveData.postValue(true)
+                networkLiveData.postValue( true)
             }
 
             override fun onLost(network: Network?) {
-                networkLiveData.postValue(false)
+                networkLiveData.postValue( false)
             }
         }
 

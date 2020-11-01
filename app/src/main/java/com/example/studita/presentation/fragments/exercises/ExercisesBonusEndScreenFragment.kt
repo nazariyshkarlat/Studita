@@ -15,6 +15,10 @@ import kotlinx.android.synthetic.main.exercises_bonus_end_layout.*
 
 class ExercisesBonusEndScreenFragment : NavigatableFragment(R.layout.exercises_bonus_end_layout) {
 
+    init {
+        isLongAnim = true
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

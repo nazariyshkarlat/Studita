@@ -13,11 +13,12 @@ class UserDataInteractorImpl(private val repository: UserDataRepository) : UserD
 
     override suspend fun getUserData(
         userId: Int?,
-        offlineMode: Boolean,
+        getFromLocalStorage: Boolean,
+        isMyUserData: Boolean,
         retryCount: Int
     ): UserDataStatus =
         try {
-            val result = repository.getUserData(userId, offlineMode)
+            val result = repository.getUserData(userId, getFromLocalStorage, isMyUserData)
             when (result.first) {
                 200 -> UserDataStatus.Success(result.second)
                 else -> UserDataStatus.Failure
@@ -31,9 +32,8 @@ class UserDataInteractorImpl(private val repository: UserDataRepository) : UserD
                     } else
                         UserDataStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
-                    getUserData(userId, offlineMode, retryCount - 1)
+                    delay(retryDelay)
+                    getUserData(userId, getFromLocalStorage, isMyUserData,retryCount - 1)
                 }
             } else
                 UserDataStatus.Failure

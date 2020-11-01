@@ -39,6 +39,12 @@
         <activity
             android:name=".presentation.activities.ExercisesActivity"/>
         <activity
+            android:name=".presentation.activities.promo.TrainingsActivity"/>
+        <activity
+            android:name=".presentation.activities.promo.CompetitionsActivity"/>
+        <activity
+            android:name=".presentation.activities.promo.AchievementsActivity"/>
+        <activity
             android:name=".presentation.activities.InterestingActivity"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".presentation.activities.UserStatActivity" />

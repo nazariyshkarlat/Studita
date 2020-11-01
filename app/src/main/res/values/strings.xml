@@ -1,9 +1,13 @@
 <!DOCTYPE resources [<!ENTITY app_name "Studita">]>
 <resources>
     <string name="app_name">&app_name;</string>
-    <string name="no_connection">No connection to the server!</string>
-    <string name="server_unavailable">Server is unavailable!</string>
-    <string name="server_failure">Failure!</string>
+    <string name="welcome_to_app">Добро пожаловать в &app_name;!</string>
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="welcome_back">C возвращением!</string>
+    <string name="no_connection">Доступ к интернету отсутствует</string>
+    <string name="server_temporarily_unavailable">Сервер временно недоступен</string>
+    <string name="server_unavailable">Сервер недоступен</string>
+    <string name="you_are_offline">Вы оффлайн</string>
     <string name="with_google">Продолжить с Google</string>
     <string name="use_email">Использовать эл. почту</string>
     <string name="sign_in">Войти</string>
@@ -11,15 +15,13 @@
     <string name="forgot_password">Забыли пароль?</string>
     <string name="create_new_account">Создать новый аккаунт</string>
     <string name="false_password">Пароль введён неверно</string>
-    <string name="to_short_password">Длина пароля меньше 6-и символов</string>
+    <string name="too_short_password">Пароль должен быть не короче 6 символов</string>
     <string name="user_already_exists">Данный аккаунт уже существует</string>
     <string name="user_already_exists_button_text">Войти в аккаунт</string>
     <string name="incorrect_mail">Проверьте правильность ввода эл. почты</string>
     <string name="incorrect_password">Пароль неверный, проверьте правильность ввода</string>
     <string name="no_user_with_mail">Данный аккаунт не найден, проверьте правильность ввода эл. почты</string>
     <string name="account_already_exists">Введите электронную почту</string>
-    <string name="sign_up_success">Аккаунт успешно зарегистрирован!</string>
-    <string name="log_in_success">Добро пожаловать!</string>
     <string name="authorization_email_hint">Электронная почта</string>
     <string name="user_name">Имя пользователя</string>
     <string name="name">Имя</string>
@@ -153,7 +155,7 @@
     <string name="unsubscribe_email">Вы отписались от рассылки на почту</string>
     <string name="changes_are_saved">Внесённые изменения сохранены</string>
     <string name="un_logged_statistics_text">Войдите, чтобы получить доступ к статистике и другим функциям</string>
-    <string name="offline_mode_layout_text">Данная функция не работает в оффлайн режиме. Вернитесь сюда позже с доступом к интернету</string>
+    <string name="offline_mode_layout_text">Данная функция не работает в оффлайн режиме. Вы можете его отключить</string>
     <string name="change_avatar_dialog_title">Новое фото</string>
     <string name="change_avatar_choose_from_gallery">Выбрать из галереи</string>
     <string name="change_avatar_take_a_photo">Сделать фото</string>
@@ -187,11 +189,11 @@
     <string name="show_all">Показать всех</string>
     <string name="friends_count_template">Друзья (%1$d)</string>
     <string name="profile_competitions_item_levels_rating_title">Недельный рейтинг уровней</string>
-    <string name="profile_competitions_item_XP_rating_title">Недельный рейтинг</string>
+    <string name="profile_competitions_item_XP_rating_title">Недельный рейтинг опыта</string>
     <string name="profile_competitions_item_levels_rating_two_line_title">Недельный рейтинг\nуровней</string>
     <string name="profile_competitions_item_XP_rating_two_line_title">Недельный рейтинг\nопыта</string>
-    <string name="profile_competitions_item_rating_subtitle_template">Место: %1$d (%2$s)</string>
-    <string name="profile_competitions_item_secondary_subtitle_template">Ваше место: %1$d</string>
+    <string name="profile_competitions_item_rating_subtitle_template">Место: %1$s (%2$s)</string>
+    <string name="profile_competitions_item_secondary_subtitle_template">Ваше место: %1$s</string>
     <string name="my_friends_empty">Список ваших друзей пока пуст</string>
     <string name="friends_empty">У данного пользователя пока ещё нет друзей</string>
     <string name="You">Вы</string>
@@ -209,8 +211,8 @@
     <string name="edit_profile_remove_photo_dialog_alert_subtitle">Вы уверены, что хотите удалить фото?</string>
     <string name="global_search">Глобальный поиск</string>
     <string name="enter_name_to_search">Введите имя, чтобы начать поиск</string>
-    <string name="global_search_no_results">Результатов не найдено. Попробуйте другое имя</string>
-    <string name="friends_not_found">Результатов среди ваших друзей не найдено. Поробуйте другое имя</string>
+    <string name="global_search_no_results">Результатов не найдено. Попробуйте ввести другое имя</string>
+    <string name="friends_not_found">Результатов среди ваших друзей не найдено. Поробуйте ввести другое имя</string>
     <string name="notifications_are_empty">Список ваших уведомлений пуст</string>
     <string name="friend_removed_snackbar">\@%1$s был удалён из ваших друзей</string>
     <string name="friend_added_snackbar">\@%1$s был добавлен в ваши друзья</string>
@@ -246,6 +248,66 @@
     <string name="exercise_report_bug_thx_title">Спасибо за ваш отзыв!</string>
     <string name="exercise_report_bug_thx_subtitle">Мы постараемся исправить это как можно скорее</string>
     <string name="exercise_report_bug_thx_button_text">Вернуться к заданию</string>
+    <string name="unavailable">Недоступно</string>
+    <string name="offline_mode_layout_button_text">Отключить оффлайн режим</string>
+    <string name="internet_is_disabled_text">Доступ к интернету отсутствует. Проверьте соединение или вернитесь сюда позже.</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="enable_offline_mode">Включить оффлайн режим</string>
+    <string name="server_problems_layout_text">Мы испытываем небольшие неполадки. Попробуйте вернуться сюда позже.</string>
+    <string name="server_problems_layout_second_text_part">Попробуйте вернуться сюда позже.</string>
+    <string name="internet_is_disabled_main_layout_subtitle">Доступ к интернету отсутсвует. Проверьте соединение или включите оффлайн режим.</string>
+    <string name="internet_is_disabled_chapter_bottom_sheet_layout_subtitle">Доступ к интернету отсутсвует. Проверьте соединение или включите оффлайн режим.</string>
+    <string name="server_problems_main_layout_subtitle">Сервер временно недоступен. Включите оффлайн режим или вернитесь сюда позже.</string>
+    <string name="server_problems_chapter_bottom_sheet_layout_subtitle">Сервер временно недоступен. Включите оффлайн режим или вернитесь сюда позже.</string>
+    <string name="offline_mode_download_error_bottom_sheet_title">Ошибка загрузки</string>
+    <string name="offline_mode_download_error_bottom_sheet_network_error_subtitle">Из-за отсутствуия интернета загрузка была прервана. Попробовать снова?</string>
+    <string name="offline_mode_download_error_bottom_sheet_server_error_subtitle">Сервер временно недоступен</string>
+    <string name="offline_mode_download_error_bottom_sheet_network_error_button_text">Попробовать снова</string>
+    <string name="offline_mode_download_error_bottom_sheet_server_error_button_text">Попробовать снова</string>
+    <string name="sign_in_with_google_error_text">Вы испытываете неполадки с подключением к интернету. Попробуйте авторизоваться ещё раз.</string>
+
+    <!-- PROMO SCREENS -->
+
+    <string name="trainings_promo_screen_first_title">Добро пожаловать на тренировку!</string>
+    <string name="trainings_promo_screen_second_title">Кастомизация</string>
+    <string name="trainings_promo_screen_third_title">Прогресс</string>
+    <string name="trainings_promo_screen_forth_title">Веселье</string>
+    
+    <string name="competitions_promo_screen_first_title">Добро пожаловать в состязания!</string>
+    <string name="competitions_promo_screen_second_title">Соревновательность</string>
+    <string name="competitions_promo_screen_third_title">Знания</string>
+    <string name="competitions_promo_screen_forth_title">Рейтинги</string>
+    
+    <string name="achievements_promo_screen_first_title">Добро пожаловать в ачивки!</string>
+    <string name="achievements_promo_screen_second_title">Увлекательность</string>
+    <string name="achievements_promo_screen_third_title">Дополнительные XP</string>
+    <string name="achievements_promo_screen_forth_title">Мотивация</string>
+
+    
+    <string name="trainings_promo_screen_first_subtitle">Место, где вы закрепите свои знания с помощью увлекательных и кастомизируемых упражнений.</string>
+    <string name="trainings_promo_screen_second_subtitle">Кастомизируйте упражнения на свой вкус. Только вы решаете, какое упражнение вы хотите потренировать.</string>
+    <string name="trainings_promo_screen_third_subtitle">Отслеживайте прогресс тренировок и бейте свои прошлые рекорды. Это действительно интересно.</string>
+    <string name="trainings_promo_screen_forth_subtitle">Да, а ещё это просто весело! Это как игра, только лучше.</string>
+
+    <string name="competitions_promo_screen_first_subtitle">Место, где вы можете провести время с интересом, соревнуясь с друзьями и случайными игроками.</string>
+    <string name="competitions_promo_screen_second_subtitle">Отвечайте на задания на скорость со своими друзьями, получая опыт и попадая в различные рейтинги.</string>
+    <string name="competitions_promo_screen_third_subtitle">Проверьте свои знания по каждой из тем, решая разнообразные задания на время.</string>
+    <string name="competitions_promo_screen_forth_subtitle">Побеждайте в состязаниях, получайте XP, и попадайте в рейтинги. Люди в топе получают дополнительные призы.</string>
+
+    <string name="achievements_promo_screen_first_subtitle">Место, где вы сможете выполнить интересные ачивки и получить за них дополнительные XP.</string>
+    <string name="achievements_promo_screen_second_subtitle">Сотни различных ачивок на любой вкус. Находите интересные для себя и выполняйте их.</string>
+    <string name="achievements_promo_screen_third_subtitle">Получайте дополнительные XP выполняя ачивки, и повышайте свой уровень.</string>
+    <string name="achievements_promo_screen_forth_subtitle">Различные ачивки будут мотивировать выполнять больше заданий, а следовательно, вы будете получать больше знаний.</string>
+
+    <string name="promo_end_screen_title">Будет доступно скоро</string>
+    <string name="promo_end_screen_subtitle">Мы работаем над тем, чтобы завершить это как можно скорее. Вы получите уведомление как только этот раздел будет доступен. Спасибо за терпение!</string>
+    <string name="close">Закрыть</string>
+    <string name="swipe_top_to_show">Свайпните вверх, чтобы узнать больше</string>
+    <string name="offline_mode_downloading">Загрузка оффлайн режима</string>
+    <string name="download_progress_template">Загружено %1$s из %2$s мб</string>
+    <string name="offline_mode_download_layout_bottom_info_text">Для начала работы нам нужно загрузить оффлайн режим. Это займёт немного времени.</string>
+    <string name="enable_offline_mode_snackbar">Оффлайн режим включён. В дальнейшем вы можете отключить его в настройках</string>
+
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>

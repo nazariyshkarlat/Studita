@@ -1,11 +1,11 @@
 package com.example.studita.data.repository.datasource.authorization
 
 class AuthorizationDataStoreFactoryImpl(
-    private val authorizationDataStoreImpl: AuthorizationDataStoreImpl
+    private val authorizationDataStore: AuthorizationDataStore
 ) : AuthorizationDataStoreFactory {
 
     override fun create() =
-        authorizationDataStoreImpl
+        authorizationDataStore
 }
 
 interface AuthorizationDataStoreFactory {

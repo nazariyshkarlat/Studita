@@ -2,4 +2,6 @@
 <resources>
     <item name="chapterPartTwoHelpLayout" type="id" />
     <item name="customSnackbar" type="id"/>
+    <item name="promoBottomSheetPeeckView" type="id"/>
+    <item name="promoEndBottomSheetCloseButton" type="id"/>
 </resources>

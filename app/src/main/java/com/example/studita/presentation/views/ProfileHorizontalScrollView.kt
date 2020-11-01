@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 import com.example.studita.R
 import com.example.studita.utils.ScreenUtils
+import com.example.studita.utils.disableAllItems
 import com.example.studita.utils.dpToPx
 import com.example.studita.utils.makeView
 import kotlinx.android.synthetic.main.profile_competitions_item.view.*
@@ -24,6 +25,7 @@ class ProfileHorizontalScrollView @JvmOverloads constructor(
     init {
         addView(getContentView())
         makeItemsSameHeight()
+        disableItems()
     }
 
     private fun getContentView(): ViewGroup {
@@ -79,6 +81,11 @@ class ProfileHorizontalScrollView @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    private fun disableItems(){
+        levelRatingItem?.disableAllItems()
+        XPRatingItem?.disableAllItems()
     }
 
     fun setLevelRatingSubtitle(text: String) {

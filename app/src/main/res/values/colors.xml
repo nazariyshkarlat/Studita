@@ -24,18 +24,19 @@
     <color name="red_secondary_dark_theme">#80FF5238</color>
 
     <color name="yellow">#FFBF34</color>
-    <color name="orange">#E0601F</color>
+    <color name="orange_light_theme">#E26322</color>
+    <color name="orange_dark_theme">#E0601F</color>
 
     <color name="green_light_theme">#34C759</color>
     <color name="green_dark_theme">#32D74B</color>
 
-    <color name="blue10_light_theme">#1A007AFF</color>
+    <color name="blue24_light_theme">#3D007AFF</color>
     <color name="blue14_light_theme">#24007AFF</color>
-    <color name="blue26_light_theme">#42007AFF</color>
+    <color name="blue60_light_theme">#99007AFF</color>
     <color name="blue_light_theme">#007AFF</color>
-    <color name="blue10_dark_theme">#1A0A84FF</color>
-    <color name="blue14_dark_theme">#240A84FF</color>
-    <color name="blue26_dark_theme">#420A84FF</color>
+    <color name="blue24_dark_theme">#3D0A84FF</color>
+    <color name="blue18_dark_theme">#2E0A84FF</color>
+    <color name="blue60_dark_theme">#990A84FF</color>
     <color name="blue_dark_theme">#0A84FF</color>
     <color name="google_color">#3C7AFC</color>
 
@@ -52,6 +53,8 @@
     <color name="focused_gray_color_dark_theme">#8A545458</color>
     <color name="disabled_gray_color_light_theme">#613C3C43</color>
     <color name="disabled_gray_color_dark_theme">#61EBEBF5</color>
+    <color name="disabled_background_gray_color_light_theme">#1A3C3C43</color>
+    <color name="disabled_background_gray_color_dark_theme">#1FEBEBF5</color>
     <color name="secondary_gray_color_light_theme">#993C3C43</color>
     <color name="secondary_gray_color_dark_theme">#99EBEBF5</color>
     <color name="bottom_navigation_gray_light_theme_color">#FAF9F9F9</color>
@@ -60,6 +63,8 @@
     <color name="modal_windows_gray_dark_theme_color">#FA1E1E1E</color>
     <color name="bottom_sheet_gray_light_theme_color">#F9F9F9</color>
     <color name="bottom_sheet_gray_dark_theme_color">#1D1D1D</color>
+    <color name="tertiary_gray_light_theme_color">#613C3C43</color>
+    <color name="tertiary_gray_dark_theme_color">#61EBEBF5</color>
 
     <color name="black6">#0F000000</color>
     <color name="black8">#14000000</color>

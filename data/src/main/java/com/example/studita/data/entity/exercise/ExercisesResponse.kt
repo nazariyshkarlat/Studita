@@ -149,7 +149,7 @@ fun ExerciseArrayEntity.toBusinessEntity() = when (this) {
                 exerciseInfo.title,
                 exerciseInfo.subtitle,
                 exerciseInfo.variants,
-                exerciseInfo.countToSelect,
+                exerciseInfo.correctCount,
                 exerciseAnswer
             )
             is ExerciseInfo.ExerciseType16Info -> ExerciseData.ExerciseDataExercise.ExerciseType16Data(

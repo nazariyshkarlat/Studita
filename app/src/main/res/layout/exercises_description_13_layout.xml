@@ -123,12 +123,12 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:layout_marginTop="24dp"
-            android:background="@drawable/main_blocks_rectangle">
+            android:background="@drawable/blocks_rectangle">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:srcCompat="@drawable/yellow_oval"
+                app:srcCompat="@drawable/exercises_description_13_oval"
                 android:layout_gravity="center"/>
 
         </FrameLayout>
@@ -145,12 +145,12 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:layout_marginTop="24dp"
-            android:background="@drawable/main_blocks_rectangle">
+            android:background="@drawable/blocks_rectangle">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/yellow_oval_two_parts"
+                app:srcCompat="@drawable/exercise_description_13_oval_two_parts"
                 android:layout_gravity="center"/>
 
         </FrameLayout>
@@ -167,12 +167,12 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:layout_marginTop="24dp"
-            android:background="@drawable/main_blocks_rectangle">
+            android:background="@drawable/blocks_rectangle">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/yellow_oval_four_parts"
+                app:srcCompat="@drawable/exercise_description_13_oval_four_parts"
                 android:layout_gravity="center"/>
 
         </FrameLayout>
@@ -210,7 +210,7 @@
             android:layout_height="wrap_content"
             android:padding="12dp"
             android:layout_marginTop="24dp"
-            android:background="@drawable/main_blocks_rectangle">
+            android:background="@drawable/blocks_rectangle">
 
             <TextView
                 android:id="@+id/exercisesDescription13LayoutConstraintLayoutTextView1"
@@ -246,7 +246,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/exercisesDescription13LayoutConstraintLayoutTopSpace"
-                app:srcCompat="@drawable/yellow_oval_four_parts" />
+                app:srcCompat="@drawable/exercise_description_13_oval_four_parts" />
 
             <Space
                 android:id="@+id/exercisesDescription13LayoutConstraintLayoutBottomSpace"

@@ -19,7 +19,7 @@
             android:layout_marginStart="@dimen/defaultRLMargin"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/defaultRLMargin"
-            android:background="@drawable/main_blocks_rectangle"
+            android:background="@drawable/blocks_rectangle"
             android:orientation="vertical"
             android:padding="@dimen/defaultBlockPadding">
 

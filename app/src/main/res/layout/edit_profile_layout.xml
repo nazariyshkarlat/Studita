@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/editProfileLayoutParentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
@@ -61,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/main_blocks_rectangle"
+                android:background="@drawable/blocks_rectangle"
                 android:orientation="vertical"
                 android:padding="@dimen/defaultBlockPadding">
 
@@ -110,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/main_blocks_rectangle"
+                android:background="@drawable/blocks_rectangle"
                 android:orientation="vertical"
                 android:padding="@dimen/defaultBlockPadding">
 

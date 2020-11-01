@@ -40,10 +40,9 @@ class ProfileMenuSignOutDialogAlertFragment : BaseDialogFragment(R.layout.dialog
                     it
                 )
 
-                deviceSignOut(activity as FragmentActivity)
-                MainActivity.needsRecreate = true
+                deviceSignOut()
                 dialog?.dismiss()
-                App.authenticationState.value = CheckTokenIsCorrectStatus.Correct to false
+                App.authenticate(null, false)
                 activity?.startMainActivityNewTask()
             }
         }

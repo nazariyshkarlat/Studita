@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_blocks_rectangle"
+        android:background="@drawable/blocks_rectangle"
         android:orientation="vertical">
 
         <TextView
@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:padding="@dimen/defaultBlockPadding"
             android:textAlignment="center"
-            android:background="@drawable/gray_focused_color_rectangle"/>
+            android:background="@drawable/gray_disabled_color_rectangle"/>
 
         <TextView
             android:id="@+id/exerciseScreenType3Subtitle"

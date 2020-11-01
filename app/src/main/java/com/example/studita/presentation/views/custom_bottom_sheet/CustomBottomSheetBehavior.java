@@ -560,9 +560,9 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
                         touchingScrollingChild = true;
                     }
                 }
-                ignoreEvents =
-                        activePointerId == MotionEvent.INVALID_POINTER_ID
-                                && !parent.isPointInChildBounds(child, initialX, initialY);
+                ignoreEvents = false;
+/*                        activePointerId == MotionEvent.INVALID_POINTER_ID;
+                                && !parent.isPointInChildBounds(child, initialX, initialY);*/
                 break;
             default: // fall out
         }
@@ -576,10 +576,9 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
         // happening over the scrolling content as nested scrolling logic handles that case.
         View scroll = nestedScrollingChildRef != null ? nestedScrollingChildRef.get() : null;
         return action == MotionEvent.ACTION_MOVE
-                && scroll != null
                 && !ignoreEvents
                 && state != STATE_DRAGGING
-                && !parent.isPointInChildBounds(scroll, (int) event.getX(), (int) event.getY())
+                && (scroll == null || !parent.isPointInChildBounds(scroll, (int) event.getX(), (int) event.getY()))
                 && viewDragHelper != null
                 && Math.abs(initialY - event.getY()) > viewDragHelper.getTouchSlop();
     }
@@ -1324,24 +1323,28 @@ public class CustomBottomSheetBehavior<V extends View> extends CoordinatorLayout
     }
 
     void settleToState(@NonNull View child, int state) {
-        int top;
-        if (state == STATE_COLLAPSED) {
-            top = collapsedOffset;
-        } else if (state == STATE_HALF_EXPANDED) {
-            top = halfExpandedOffset;
-            if (fitToContents && top <= fitToContentsOffset) {
-                // Skip to the expanded state if we would scroll past the height of the contents.
-                state = STATE_EXPANDED;
-                top = fitToContentsOffset;
+        try {
+            int top;
+            if (state == STATE_COLLAPSED) {
+                top = collapsedOffset;
+            } else if (state == STATE_HALF_EXPANDED) {
+                top = halfExpandedOffset;
+                if (fitToContents && top <= fitToContentsOffset) {
+                    // Skip to the expanded state if we would scroll past the height of the contents.
+                    state = STATE_EXPANDED;
+                    top = fitToContentsOffset;
+                }
+            } else if (state == STATE_EXPANDED) {
+                top = getExpandedOffset();
+            } else if (hideable && state == STATE_HIDDEN) {
+                top = parentHeight;
+            } else {
+                throw new IllegalArgumentException("Illegal state argument: " + state);
             }
-        } else if (state == STATE_EXPANDED) {
-            top = getExpandedOffset();
-        } else if (hideable && state == STATE_HIDDEN) {
-            top = parentHeight;
-        } else {
-            throw new IllegalArgumentException("Illegal state argument: " + state);
+            startSettlingAnimation(child, state, top, false);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        startSettlingAnimation(child, state, top, false);
     }
 
     void startSettlingAnimation(View child, int state, int top, boolean settleFromViewDragHelper) {

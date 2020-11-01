@@ -12,6 +12,10 @@ import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.studita.R
 import com.example.studita.presentation.fragments.base.BaseFragment
+import com.example.studita.presentation.view_model.ExercisesViewModel
+import com.example.studita.presentation.views.CustomSnackbar
+import com.example.studita.utils.PrefsUtils
+import com.example.studita.utils.ThemeUtils
 import kotlinx.android.synthetic.main.exercises_load_layout.*
 
 open class LoadFragment : BaseFragment(R.layout.exercises_load_layout) {
@@ -69,6 +73,28 @@ open class LoadFragment : BaseFragment(R.layout.exercises_load_layout) {
 
         anim.registerAnimationCallback(listener)
         anim.start()
+    }
+
+    protected fun formBadConnectionButton(onOfflineModeEnabled: () -> Unit) {
+
+        exercisesLoadLayoutTipTextView.text = resources.getString(R.string.issues_with_connecting)
+        exercisesLoadLayoutButton.visibility = View.VISIBLE
+        exercisesLoadLayoutButton.text = resources.getString(R.string.to_offline_mode)
+        exercisesLoadLayoutButton.setOnClickListener {
+            PrefsUtils.setOfflineMode(true)
+            CustomSnackbar(context!!).show(
+                resources.getString(R.string.enable_offline_mode_snackbar), ThemeUtils.getAccentColor(context!!)
+            )
+            onOfflineModeEnabled.invoke()
+        }
+
+
+        exercisesLoadLayoutBottomSection.alpha = 0F
+
+        exercisesLoadLayoutBottomSection.animate().alpha(1F).setDuration(
+            resources.getInteger(R.integer.exercises_load_layout_bottom_section_alpha_anim_duration)
+                .toLong()
+        ).start()
     }
 
 }

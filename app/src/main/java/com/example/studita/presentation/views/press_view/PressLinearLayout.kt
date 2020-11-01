@@ -26,9 +26,15 @@ class PressLinearLayout @JvmOverloads constructor(
         val withMinClickInterval =
             a.getBoolean(R.styleable.PressView_with_min_click_interval, false)
 
+        val pressAlpha =
+            a.getFloat(R.styleable.PressView_press_alpha, -1F)
+
         pressViewImpl = PressView(this, withMinClickInterval)
 
-        pressViewImpl.setPressAlpha(R.attr.press_view_press_alpha_lighter)
+        if(pressAlpha == -1F)
+            pressViewImpl.setPressAlpha(R.attr.press_view_press_alpha)
+        else
+            pressViewImpl.pressAlpha =  pressAlpha
     }
 
     fun setWithMinClickInterval(withMinClickInterval: Boolean) {
@@ -36,6 +42,7 @@ class PressLinearLayout @JvmOverloads constructor(
     }
 
     override fun setOnClickListener(work: (View) -> Unit) {
+        isClickable = true
         pressViewImpl.onClick = work
     }
 }

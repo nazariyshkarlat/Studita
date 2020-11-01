@@ -1,5 +1,6 @@
 package com.example.studita.presentation.fragments.bottom_sheets
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.Gravity
@@ -11,14 +12,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updatePadding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.example.studita.R
 import com.example.studita.domain.entity.ChapterData
+import com.example.studita.domain.entity.UserDataData
 import com.example.studita.presentation.activities.ExercisesActivity
+import com.example.studita.presentation.fragments.error_fragments.ChapterBottomSheetInternetIsDisabledFragment
+import com.example.studita.presentation.fragments.error_fragments.ChapterBottomSheetServerProblemsFragment
+import com.example.studita.presentation.fragments.error_fragments.InternetIsDisabledFragment
+import com.example.studita.presentation.fragments.error_fragments.ServerProblemsFragment
+import com.example.studita.presentation.listeners.ReloadPageCallback
 import com.example.studita.presentation.model.ChapterUiModel
 import com.example.studita.presentation.model.toChapterPartUiModel
 import com.example.studita.presentation.model.toChapterUiModel
 import com.example.studita.presentation.view_model.ChapterViewModel
 import com.example.studita.presentation.views.CustomSnackbar
+import com.example.studita.presentation.views.CustomSnackbar.Companion.hide
 import com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior
 import com.example.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawer
 import com.example.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawerDialog
@@ -28,11 +37,15 @@ import com.example.studita.utils.*
 import kotlinx.android.synthetic.main.chapter_layout.*
 import kotlinx.android.synthetic.main.chapter_layout_header.*
 import kotlinx.android.synthetic.main.chapter_part_item.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.roundToInt
 
 
-class ChapterBottomSheetFragment : BottomDrawerFragment(){
+class ChapterBottomSheetFragment : BottomDrawerFragment(), ReloadPageCallback{
 
     private lateinit var chapterViewModel: ChapterViewModel
 
@@ -80,19 +93,29 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(){
 
         addBottomSheetCallback {
             onSlide { _, slideOffset ->
-                val factor = with((slideOffset - 0.5F) * (1f / (1f - 0.5F))){
-                    if(this < 0F)
-                        0F
-                    else
-                        this
-                }
 
-                val titlePadding = ((if(factor > 0F) 16F.dpToPx() else 0)  + (16F.dpToPx() * factor)).roundToInt()
-                chapterHeaderTitle.updatePadding(left = titlePadding,right = titlePadding)
-                chapterHeaderCloseButton.alpha = factor
-                chapterHeaderCloseButton.isEnabled = factor > 0
+                if (this@ChapterBottomSheetFragment.view != null) {
+                    if (slideOffset < -0.5F) {
+                        CustomSnackbar.hide(chapterLayoutFrameLayout.parent.parent.parent.parent as ViewGroup)
+                    }
+
+                    val factor = with((slideOffset - 0.5F) * (1f / (1f - 0.5F))) {
+                        if (this < 0F)
+                            0F
+                        else
+                            this
+                    }
+
+                    val titlePadding =
+                        ((if (factor > 0F) 16F.dpToPx() else 0) + (12F.dpToPx() * factor)).roundToInt()
+                    chapterHeaderTitle.updatePadding(left = titlePadding, right = titlePadding)
+                    chapterHeaderCloseButton.alpha = factor
+                    chapterHeaderCloseButton.isEnabled = factor > 0
+                }
             }
         }
+
+        addChildViews()
 
         chapterHeaderCloseButton.setOnClickListener {
             dismissWithBehavior()
@@ -104,26 +127,70 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(){
         }
         chapterViewModel.progressState.observe(viewLifecycleOwner, Observer { progress ->
             if (progress) {
-                val chapterUiModel = chapterViewModel.chapterData.toChapterUiModel()
-                (chapterLayoutLayoutProgressBar.parent as ViewGroup).removeView(
-                    chapterLayoutLayoutProgressBar
-                )
-                fillItems(chapterViewModel.chapterData)
-                chapterLayoutNestedScrollView.visibility = View.VISIBLE
-                chapterHeaderTitle.text = chapterUiModel.title
-                chapterHeaderProgressText.text = getProgressText(chapterUiModel)
-                chapterHeaderProgressBar.currentProgress = getProgressPercent(chapterUiModel)
+                    chapterLayoutLayoutProgressBar.visibility = View.GONE
+                    chapterLayoutNestedScrollView.visibility = View.VISIBLE
+                    UserUtils.userDataLiveData.observe(viewLifecycleOwner, Observer {
+                        val chapterUiModel = chapterViewModel.chapterData.toChapterUiModel()
+                        chapterHeaderTitle.text = chapterUiModel.title
+                        fillView(chapterViewModel.chapterData, it)
+                        checkShowSnackbar()
+                    })
+            }else{
+                chapterLayoutLayoutProgressBar.visibility = View.VISIBLE
+                chapterLayoutNestedScrollView.visibility = View.GONE
             }
         })
+
+        chapterViewModel.errorEvent.observe(viewLifecycleOwner, Observer {
+            val isNetworkError = it
+            if (isNetworkError) {
+                addFragment(ChapterBottomSheetInternetIsDisabledFragment(), R.id.chapterLayoutFrameLayout, false)
+            }else{
+                addFragment(ChapterBottomSheetServerProblemsFragment(), R.id.chapterLayoutFrameLayout, false)
+            }
+        })
+
+    }
+
+    private fun checkShowSnackbar(){
+        if (snackbarShowReason != SnackbarShowReason.NONE) {
+            activity?.let {
+                val snackbar = CustomSnackbar(it)
+
+                val text = when (snackbarShowReason) {
+                    SnackbarShowReason.BAD_RESULT -> resources.getString(R.string.exercise_snackbar_bad_result_reason)
+                    else -> throw IOException("unknown show snackbar reason")
+                }
+
+                snackbar.show(
+                    text,
+                    ThemeUtils.getGreenColor(snackbar.context),
+                    contentView = chapterLayoutFrameLayout.parent.parent.parent.parent as ViewGroup,
+                    duration = 5000L,
+                    delay = 1000L
+                )
+                snackbarShowReason =
+                    SnackbarShowReason.NONE
+            }
+        }
+    }
+
+    private fun addChildViews(){
+        chapterLayoutLinearLayout.removeAllViews()
+
+        (0..8).forEach { _ ->
+            val childItem = chapterLayoutLinearLayout.makeView(R.layout.chapter_part_item)
+            childItem.visibility = View.GONE
+            chapterLayoutLinearLayout.addView(childItem)
+        }
     }
 
     private fun fillItems(chapterData: ChapterData){
 
-        chapterLayoutLinearLayout.removeAllViews()
-
-        chapterData.parts.forEach { part->
+        chapterData.parts.forEachIndexed { idx, part->
             val partUiModel = part.toChapterPartUiModel()
-            val childItem = chapterLayoutLinearLayout.makeView(R.layout.chapter_part_item)
+            val childItem = chapterLayoutLinearLayout.getChildAt(idx)
+            childItem.visibility = View.VISIBLE
             val chapterPartInChapterNumber = chapterViewModel.chapterPartInChapterNumber(part)
 
             childItem.chapterPartItemText.text = partUiModel.chapterPartName
@@ -149,8 +216,6 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(){
             }else{
                 setItemDisabled(childItem)
             }
-
-            chapterLayoutLinearLayout.addView(childItem)
         }
 
     }
@@ -171,51 +236,27 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(){
             needsDismiss = false
             return
         }
+    }
 
-        if (needsRefresh) {
-            updateView(chapterViewModel.chapterData)
-
-            if (snackbarShowReason != SnackbarShowReason.NONE) {
-                activity?.let {
-                    val snackbar = CustomSnackbar(it)
-
-                    val text = when (snackbarShowReason) {
-                        SnackbarShowReason.BAD_RESULT -> resources.getString(R.string.exercise_snackbar_bad_result_reason)
-                        else -> throw IOException("unknown show snackbar reason")
-                    }
-
-                    snackbar.show(
-                        text,
-                        ThemeUtils.getGreenColor(snackbar.context),
-                        contentView = chapterLayoutFrameLayout.parent.parent.parent as ViewGroup,
-                        duration = 5000L,
-                        delay = 1000L
-                    )
-                    snackbarShowReason =
-                        SnackbarShowReason.NONE
-                }
-            }
-            needsRefresh = false
+    private fun fillView(chapterData: ChapterData, userDataData: UserDataData){
+        view?.post {
+            chapterHeaderProgressText.text = getProgressText(chapterData.toChapterUiModel(), userDataData)
+            chapterHeaderProgressBar.currentProgress = getProgressPercent(chapterData.toChapterUiModel(), userDataData)
+            fillItems(chapterData)
         }
     }
 
-    private fun updateView(chapterData: ChapterData){
-        chapterHeaderProgressText.text = getProgressText(chapterData.toChapterUiModel())
-        chapterHeaderProgressBar.currentProgress = getProgressPercent(chapterData.toChapterUiModel())
-        fillItems(chapterData)
-    }
-
-    private fun getProgressText(chapterUiModel: ChapterUiModel): SpannableStringBuilder {
+    private fun getProgressText(chapterUiModel: ChapterUiModel, userDataData: UserDataData): SpannableStringBuilder {
         return LevelUtils.getProgressText(
-            UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1],
+            userDataData.completedParts[chapterUiModel.chapterNumber - 1],
             chapterUiModel.parts.size,
             context!!
         )
     }
 
-    private fun getProgressPercent(chapterUiModel: ChapterUiModel): Float {
+    private fun getProgressPercent(chapterUiModel: ChapterUiModel, userDataData: UserDataData): Float {
         return LevelUtils.getChapterProgressPercent(
-            UserUtils.userData.completedParts[chapterUiModel.chapterNumber - 1],
+            userDataData.completedParts[chapterUiModel.chapterNumber - 1],
             chapterUiModel.parts.size
         )
     }
@@ -223,6 +264,7 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(){
     private fun setItemSelected(itemView: View) {
         itemView.chapterPartItemIcon.isSelected = true
         itemView.chapterPartItemButton.isSelected = true
+        itemView.chapterPartItemText.isEnabled = true
         itemView.chapterPartItemIcon.isEnabled = true
         itemView.chapterPartItemButton.isEnabled = true
     }
@@ -230,6 +272,7 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(){
     private fun setItemEnabled(itemView: View) {
         itemView.chapterPartItemIcon.isEnabled = true
         itemView.chapterPartItemButton.isEnabled = true
+        itemView.chapterPartItemText.isEnabled = true
         itemView.chapterPartItemIcon.isSelected = false
         itemView.chapterPartItemButton.isSelected = false
     }
@@ -237,8 +280,14 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(){
     private fun setItemDisabled(itemView: View) {
         itemView.chapterPartItemIcon.isEnabled = false
         itemView.chapterPartItemButton.isEnabled = false
+        itemView.chapterPartItemText.isEnabled = false
         itemView.chapterPartItemIcon.isSelected = false
         itemView.chapterPartItemButton.isSelected = false
+    }
+
+    override fun onPageReload() {
+        arguments?.getInt("CHAPTER_NUMBER")
+            ?.let { chapterNumber -> chapterViewModel.getChapter(chapterNumber) }
     }
 
 }

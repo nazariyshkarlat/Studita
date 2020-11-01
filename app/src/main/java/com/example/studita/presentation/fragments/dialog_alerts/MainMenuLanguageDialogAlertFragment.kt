@@ -2,7 +2,9 @@ package com.example.studita.presentation.fragments.dialog_alerts
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.get
 import com.example.studita.R
+import com.example.studita.utils.disableAllItems
 import kotlinx.android.synthetic.main.dialog_list_layout.*
 
 class MainMenuLanguageDialogAlertFragment : RadioButtonListDialogAlertFragment() {
@@ -16,6 +18,8 @@ class MainMenuLanguageDialogAlertFragment : RadioButtonListDialogAlertFragment()
         selectedPos = 0
 
         super.onViewCreated(view, savedInstanceState)
+
+        dialogListLayoutListLayout.getChildAt(1).disableAllItems()
 
         dialogListLayoutTitle.text = resources.getString(R.string.language)
 

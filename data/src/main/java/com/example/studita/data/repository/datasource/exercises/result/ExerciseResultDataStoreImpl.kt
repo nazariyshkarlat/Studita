@@ -1,14 +1,15 @@
 package com.example.studita.data.repository.datasource.exercises.result
 
+import com.example.studita.data.entity.CompleteExercisesRequest
 import com.example.studita.data.entity.exercise.*
 import com.example.studita.data.net.ExerciseResultService
 import com.example.studita.data.net.connection.ConnectionManager
+import com.example.studita.data.repository.datasource.interesting.result.InterestingResultDataStore
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CancellationException
 import java.lang.Exception
 import java.lang.reflect.Type
 
@@ -68,4 +69,5 @@ class ExerciseResultDataStoreImpl(
                     }
         }
     }
+
 }

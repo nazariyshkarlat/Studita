@@ -27,7 +27,6 @@ class CloudUserDataDataStore(
                         userId!!
                     )
                 val entity = userDataAsync.body()!!
-                userDataDao.insertUserData(entity)
                 return userDataAsync.code() to entity
             } catch (e: Exception) {
                 if (e is CancellationException)

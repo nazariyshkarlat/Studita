@@ -29,12 +29,6 @@ class ExercisesLoadFragment : LoadFragment() {
 
         exercisesViewModel?.let { viewModel ->
 
-            viewModel.loadScreenBadConnectionState.observe(
-                viewLifecycleOwner,
-                Observer { badConnection ->
-                    if (badConnection)
-                        formBadConnectionButton(viewModel)
-                })
 
             viewModel.exercisesState.observe(
                 viewLifecycleOwner,
@@ -47,53 +41,20 @@ class ExercisesLoadFragment : LoadFragment() {
                             android.R.animator.fade_out,
                             addToBackStack = false
                         )
-                    } else {
-                        formBadConnectionButton(viewModel)
                     }
                 })
 
-            viewModel.errorState.observe(viewLifecycleOwner, Observer { message ->
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            viewModel.loadScreenBadConnectionState.observe(viewLifecycleOwner, Observer {
+                if(it)
+                    formBadConnectionButton{viewModel.getExercises(viewModel.chapterPartNumber)}
             })
+
         }
 
         if (!UserUtils.isLoggedIn())
             exercisesLoadLayoutTipTextView.text =
                 resources.getString(R.string.load_screen_un_logged_text)
 
-    }
-
-    override fun onCreateAnimator(transit: Int, enter: Boolean, nextAnim: Int): Animator? {
-        return if (!enter) {
-            val animator = AnimatorInflater.loadAnimator(context, nextAnim)
-            animator.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    exercisesViewModel?.startSecondsCounter()
-                    exercisesViewModel?.timeCounterIsPaused = false
-                }
-            })
-            animator
-        } else
-            null
-    }
-
-    private fun formBadConnectionButton(viewModel: ExercisesViewModel) {
-
-        exercisesLoadLayoutTipTextView.text = resources.getString(R.string.issues_with_connecting)
-        exercisesLoadLayoutButton.visibility = View.VISIBLE
-        exercisesLoadLayoutButton.text = resources.getString(R.string.to_offline_mode)
-        exercisesLoadLayoutButton.setOnClickListener {
-            PrefsUtils.setOfflineMode(true)
-            viewModel.getExercises(viewModel.chapterPartNumber)
-        }
-
-
-        exercisesLoadLayoutBottomSection.alpha = 0F
-
-        exercisesLoadLayoutBottomSection.animate().alpha(1F).setDuration(
-            resources.getInteger(R.integer.exercises_load_layout_bottom_section_alpha_anim_duration)
-                .toLong()
-        ).start()
     }
 
 }

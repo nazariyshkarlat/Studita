@@ -17,21 +17,29 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.studita.R
 import com.example.studita.domain.entity.NotificationData
+import com.example.studita.domain.entity.NotificationType
+import com.example.studita.domain.entity.UserData
 import com.example.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.example.studita.domain.interactor.IsMyFriendStatus
+import com.example.studita.domain.interactor.users.UsersInteractor
 import com.example.studita.notifications.service.PushReceiverIntentService
 import com.example.studita.presentation.adapter.notifications.NotificationsAdapter
 import com.example.studita.presentation.fragments.base.NavigatableFragment
+import com.example.studita.presentation.fragments.error_fragments.InternetIsDisabledFragment
+import com.example.studita.presentation.fragments.error_fragments.ServerProblemsFragment
+import com.example.studita.presentation.listeners.ReloadPageCallback
 import com.example.studita.presentation.model.NotificationsUiModel
 import com.example.studita.presentation.model.toUiModel
 import com.example.studita.presentation.view_model.NotificationsFragmentViewModel
 import com.example.studita.utils.UserUtils
+import com.example.studita.utils.addFragment
 import com.example.studita.utils.dpToPx
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.recyclerview_layout.*
 
-class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) {
+class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
+    ReloadPageCallback {
 
     lateinit var viewModel: NotificationsFragmentViewModel
 
@@ -47,12 +55,44 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) 
                 object : TypeToken<NotificationData>() {}.type
             )
 
+            when (notificationData.notificationType) {
+                NotificationType.FRIENDSHIP_REQUEST -> {
+                    UserUtils.isMyFriendLiveData.postValue(
+                        UsersInteractor.FriendActionState.FriendshipRequestIsSent(
+                            UserData(
+                                notificationData.userId,
+                                notificationData.userName,
+                                notificationData.avatarLink,
+                                IsMyFriendStatus.Success.WaitingForFriendshipAccept(notificationData.userId)
+                            )
+                        )
+                    )
+                }
+                NotificationType.ACCEPTED_FRIENDSHIP -> {
+                    UserUtils.isMyFriendLiveData.postValue(
+                        UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(
+                            UserData(
+                                notificationData.userId,
+                                notificationData.userName,
+                                notificationData.avatarLink,
+                                IsMyFriendStatus.Success.IsMyFriend(notificationData.userId)
+                            )
+                        )
+                    )
+                }
+                else -> {}
+            }
+
             viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
             recyclerViewLayoutRecyclerView.adapter?.notifyItemInserted(1)
 
             if (!isHidden) {
                 resultCode = Activity.RESULT_CANCELED
-                viewModel.setNotificationsAreChecked(UserUtils.getUserIDTokenData()!!)
+
+                UserUtils.userDataLiveData.value = UserUtils.userData.apply {
+                    notificationsAreChecked = false
+                }
+
                 (view?.context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
             }
         }
@@ -90,6 +130,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) 
                                 )
                             )
                         val adapter = NotificationsAdapter(
+                            context!!,
                             items,
                             viewModel
                         )
@@ -119,12 +160,9 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) 
                                 insertIndex,
                                 items.size
                             )
-                            if (!canBeMoreItems) {
-                                adapter.items.removeAt(adapter.items.lastIndex)
-                                adapter.notifyItemRemoved(adapter.itemCount - 1)
-                            }
                         } else {
                             val adapter = NotificationsAdapter(
+                                context!!,
                                 viewModel.recyclerItems!!,
                                 viewModel
                             )
@@ -144,6 +182,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) 
                             }
                         } else {
                             val adapter = NotificationsAdapter(
+                                context!!,
                                 viewModel.recyclerItems!!,
                                 viewModel
                             )
@@ -166,6 +205,15 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) 
                 }
             })
 
+        viewModel.errorEvent.observe(viewLifecycleOwner, Observer { isNetworkError->
+            clearToolbarDivider()
+            if (isNetworkError) {
+                addFragment(InternetIsDisabledFragment(), R.id.recyclerViewLayoutFrameLayout, false)
+            }else{
+                addFragment(ServerProblemsFragment(), R.id.recyclerViewLayoutFrameLayout, false)
+            }
+        })
+
         UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, Observer {
             viewModel.recyclerItems?.forEachIndexed { index, notificationsUiModel ->
                 if ((notificationsUiModel is NotificationsUiModel.Notification) && notificationsUiModel.userData.userId == it.userData.userId) {
@@ -177,6 +225,11 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) 
         })
 
         scrollingView = recyclerViewLayoutRecyclerView
+
+        recyclerViewLayoutRecyclerView.post {
+            if (viewModel.errorState)
+                toolbarFragmentViewModel?.hideDivider()
+        }
     }
 
     override fun onDestroy() {
@@ -190,7 +243,9 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) 
 
     private fun showEmptyView() {
         recyclerViewLayoutRecyclerView.adapter =
-            NotificationsAdapter(arrayListOf(NotificationsUiModel.NotificationsSwitch), null)
+            NotificationsAdapter(context!!,
+                arrayListOf(NotificationsUiModel.NotificationsSwitch),
+                null)
         (view as ViewGroup).addView(TextView(context).apply {
             TextViewCompat.setTextAppearance(this, R.style.Regular16Secondary)
             text = resources.getString(R.string.notifications_are_empty)
@@ -203,6 +258,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) 
         })
     }
 
+
     private fun registerReceiver() {
         try {
             val filter = IntentFilter().apply {
@@ -213,6 +269,29 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout) 
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        if(!isHidden) {
+            if (viewModel.errorState)
+                toolbarFragmentViewModel?.hideDivider()
+            else
+                super.onHiddenChanged(hidden)
+        }
+    }
+
+    override fun onScrollChanged() {
+        if(!viewModel.errorState)
+            super.onScrollChanged()
+    }
+
+    override fun onPageReload() {
+        checkScroll()
+        viewModel.getNotifications(UserUtils.getUserIDTokenData()!!, false)
+    }
+
+    private fun clearToolbarDivider(){
+        toolbarFragmentViewModel?.hideDivider()
     }
 
 }

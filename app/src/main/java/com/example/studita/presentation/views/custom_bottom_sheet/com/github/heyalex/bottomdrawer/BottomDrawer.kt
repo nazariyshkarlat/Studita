@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.example.studita.R
 import com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior
+import com.example.studita.utils.ScreenUtils
 import com.example.studita.utils.postExt
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -25,8 +26,12 @@ import com.google.android.material.shape.ShapeAppearanceModel
 
 class BottomDrawer : FrameLayout {
 
+    var offsetTrigger: Float = 0.75F
+
     private var container: ViewGroup
     private val rect: Rect = Rect()
+
+    var isWrapContent = false
 
     private val cornerRadiusDrawable = GradientDrawable()
     private val cornerArray: FloatArray =
@@ -145,34 +150,36 @@ class BottomDrawer : FrameLayout {
     }
 
     fun onSlide(value: Float) {
-        if (value <= offsetTrigger) {
-            container.translationY = 0f
-            if (!shouldDrawUnderStatus) {
-                handleView?.translationY = 0f
-            }
-            translationUpdater?.updateTranslation(0f)
+        if (!isWrapContent) {
+            if (value <= offsetTrigger) {
+                container.translationY = 0f
+                if (!shouldDrawUnderStatus) {
+                    handleView?.translationY = 0f
+                }
+                translationUpdater?.updateTranslation(0f)
 
+                val fArr = cornerArray
+                fArr[3] = cornerRadius
+                fArr[2] = cornerRadius
+                fArr[1] = cornerRadius
+                fArr[0] = cornerRadius
+                cornerRadiusDrawable.cornerRadii = fArr
+                invalidate()
+                return
+            }
+            val offset = ((value - offsetTrigger) * (1f / (1f - offsetTrigger)))
+            translateViews(offset)
+            translationUpdater?.updateTranslation(offset)
+            val invert = 1.0f - offset
+            currentCornerRadius = cornerRadius * invert
             val fArr = cornerArray
-            fArr[3] = cornerRadius
-            fArr[2] = cornerRadius
-            fArr[1] = cornerRadius
-            fArr[0] = cornerRadius
+            fArr[3] = currentCornerRadius
+            fArr[2] = currentCornerRadius
+            fArr[1] = currentCornerRadius
+            fArr[0] = currentCornerRadius
             cornerRadiusDrawable.cornerRadii = fArr
             invalidate()
-            return
         }
-        val offset = ((value - offsetTrigger) * (1f / (1f - offsetTrigger)))
-        translateViews(offset)
-        translationUpdater?.updateTranslation(offset)
-        val invert = 1.0f - offset
-        currentCornerRadius = cornerRadius * invert
-        val fArr = cornerArray
-        fArr[3] = currentCornerRadius
-        fArr[2] = currentCornerRadius
-        fArr[1] = currentCornerRadius
-        fArr[0] = currentCornerRadius
-        cornerRadiusDrawable.cornerRadii = fArr
-        invalidate()
     }
 
     private fun translateViews(value: Float) {
@@ -308,7 +315,4 @@ class BottomDrawer : FrameLayout {
         invalidate()
     }
 
-    companion object {
-        const val offsetTrigger: Float = 0.75f
-    }
 }

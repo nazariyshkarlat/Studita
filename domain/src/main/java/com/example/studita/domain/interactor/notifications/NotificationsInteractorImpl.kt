@@ -3,6 +3,7 @@ package com.example.studita.domain.interactor.notifications
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.exception.NetworkConnectionException
 import com.example.studita.domain.exception.ServerUnavailableException
+import com.example.studita.domain.interactor.EditPrivacySettingsStatus
 import com.example.studita.domain.interactor.GetNotificationsStatus
 import com.example.studita.domain.interactor.SetNotificationsAreCheckedStatus
 import com.example.studita.domain.interactor.SubscribeEmailResultStatus
@@ -41,8 +42,7 @@ class NotificationsInteractorImpl(private val repository: NotificationsRepositor
                     } else
                         GetNotificationsStatus.ServiceUnavailable
                 } else {
-                    if (e is NetworkConnectionException)
-                        delay(retryDelay)
+                    delay(retryDelay)
                     getNotifications(
                         userIdTokenData,
                         perPage,
@@ -66,15 +66,16 @@ class NotificationsInteractorImpl(private val repository: NotificationsRepositor
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {
-                when {
-                    e is NetworkConnectionException -> {
+                if (retryCount == 0) {
+                    if(e is NetworkConnectionException) {
                         syncNotificationsAreChecked.scheduleCheckNotifications( userIdTokenData)
                         SetNotificationsAreCheckedStatus.NoConnection
-                    }
-                    retryCount == 0 -> SetNotificationsAreCheckedStatus.ServiceUnavailable
-                    else -> {
-                        setNotificationsAreChecked(userIdTokenData, retryCount - 1)
-                    }
+                    }else
+                        SetNotificationsAreCheckedStatus.ServiceUnavailable
+                }
+                else {
+                    delay(retryDelay)
+                    setNotificationsAreChecked(userIdTokenData, retryCount - 1)
                 }
             } else
                 SetNotificationsAreCheckedStatus.Failure

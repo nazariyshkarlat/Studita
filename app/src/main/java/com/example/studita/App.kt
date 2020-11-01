@@ -1,20 +1,21 @@
 package com.example.studita
 
 import android.app.Application
+import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.MutableLiveData
 import com.example.studita.di.DI
-import com.example.studita.di.data.*
-import com.example.studita.di.data.exercise.ExercisesModule
+import com.example.studita.di.data.AuthorizationModule
+import com.example.studita.di.data.CompleteExercisesModule
+import com.example.studita.di.data.UserDataModule
 import com.example.studita.domain.entity.UserDataData
 import com.example.studita.domain.entity.UserIdTokenData
 import com.example.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.example.studita.domain.interactor.UserDataStatus
-import com.example.studita.utils.PrefsUtils
-import com.example.studita.utils.TimeUtils
-import com.example.studita.utils.UserUtils
-import com.example.studita.utils.launchExt
+import com.example.studita.utils.*
 import kotlinx.coroutines.*
 import java.util.*
+
 
 class App : Application() {
 
@@ -34,40 +35,46 @@ class App : Application() {
             ) {
                 userDataData.streakDays = 0
                 userDataData.todayCompletedExercises = 0
-                GlobalScope.launch {
-                    UserDataModule.getUserDataInteractorImpl().saveUserData(userDataData)
-                }
+            }
+
+            GlobalScope.launch(Dispatchers.Main) {
+                UserDataModule.getUserDataInteractorImpl().saveUserData(userDataData)
             }
         }
 
-        fun getUserData() {
-            userDataDeferred = applicationScope.async {
+        fun getUserData(offlineOnly: Boolean = false) {
+            userDataDeferred = applicationScope.async(Dispatchers.Main) {
                 val userDataStatus = UserDataModule.getUserDataInteractorImpl()
-                    .getUserData(PrefsUtils.getUserId(), PrefsUtils.isOfflineModeEnabled())
+                    .getUserData(
+                        PrefsUtils.getUserId(),
+                        if (offlineOnly) true else PrefsUtils.isOfflineModeEnabled(),
+                        true
+                    )
 
-                withContext(Dispatchers.Main) {
                     if (userDataStatus is UserDataStatus.Success) {
                         initUserData(userDataStatus.result)
                     }
                     userDataStatus
-                }
             }
         }
 
         fun authenticate(userIdTokenData: UserIdTokenData?, isOfflineModeChanged: Boolean) {
-            authenticationState.value = CheckTokenIsCorrectStatus.Waiting to isOfflineModeChanged
-            if (PrefsUtils.isOfflineModeEnabled() || !UserUtils.isLoggedIn()) {
-
-                if(UserUtils.userDataIsNull())
-                    getUserData()
-                authenticationState.value = CheckTokenIsCorrectStatus.Correct to isOfflineModeChanged
-            } else {
-                authenticationJob = applicationScope.launchExt(authenticationJob) {
-                    val tokenIsCorrectStatus = AuthorizationModule.getAuthorizationInteractorImpl()
-                        .checkTokenIsCorrect(userIdTokenData!!)
-                    getUserData()
-                    authenticationState.postValue(tokenIsCorrectStatus to isOfflineModeChanged)
-                    userDataDeferred.await()
+            authenticationState.value =CheckTokenIsCorrectStatus.Waiting to isOfflineModeChanged
+                if (PrefsUtils.isOfflineModeEnabled() || !UserUtils.isLoggedIn()) {
+                    if(UserUtils.userDataIsNull())
+                        getUserData()
+                    authenticationState.value = CheckTokenIsCorrectStatus.Correct to isOfflineModeChanged
+                } else {
+                    authenticationJob = applicationScope.launchExt(authenticationJob) {
+                        authenticationState.value =CheckTokenIsCorrectStatus.Waiting to isOfflineModeChanged
+                        val tokenIsCorrectStatus = AuthorizationModule.getAuthorizationInteractorImpl()
+                            .checkTokenIsCorrect(userIdTokenData!!)
+                        authenticationState.value =tokenIsCorrectStatus to isOfflineModeChanged
+                        if(tokenIsCorrectStatus == CheckTokenIsCorrectStatus.Correct) {
+                            CompleteExercisesModule.getCompleteExercisesInteractorImpl().syncCompleteLocalExercises(UserUtils.getUserIDTokenData()!!)
+                            getUserData()
+                            userDataDeferred.await()
+                        }
                 }
             }
         }
@@ -76,26 +83,31 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         DI.initialize(this)
-        downloadCache()
         initDefPrefs()
 
-        authenticate(UserUtils.getUserIDTokenData(), false)
+        if(PrefsUtils.offlineDataIsCached())
+            authenticate(UserUtils.getUserIDTokenData(), false)
+
     }
 
-    private fun downloadCache() {
-        GlobalScope.launch {
-            LevelsModule.getLevelsInteractorImpl().downloadLevels()
-            ChapterModule.getChapterInteractorImpl().downloadChapters()
-            ExercisesModule.getExercisesInteractorImpl().downloadOfflineExercises()
-            InterestingModule.getInterestingInteractorImpl().downloadInterestingList()
-        }
-    }
 
     private fun initDefPrefs() {
         if (!PrefsUtils.containsOfflineMode())
             PrefsUtils.setOfflineMode(false)
         if (!PrefsUtils.containsNotificationsMode())
             PrefsUtils.setNotificationsMode(true)
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P){
+
+            if(!PrefsUtils.containsNightThemeOnPhoneIsEnabled()){
+                PrefsUtils.setTheme(
+                    ThemeUtils.Theme.DEFAULT, ThemeUtils.nightModeApiAbove28Enabled(
+                        resources
+                    )
+                )
+            }
+
+        }
+
     }
 
 }

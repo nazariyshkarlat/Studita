@@ -11,12 +11,12 @@ class CloudLevelsJsonDataStore(
     private val levelsService: LevelsService
 ) : LevelsJsonDataStore {
 
-    override suspend fun getLevelsJson(isLoggedIn: Boolean): String =
+    override suspend fun getLevelsJson(): String =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         } else {
             try {
-                val levels = levelsService.getLevels(isLoggedIn)
+                val levels = levelsService.getLevels()
                 levels.body()!!.toString()
             } catch (e: Exception) {
                 if (e is CancellationException)

@@ -7,7 +7,8 @@ import com.google.gson.annotations.SerializedName
 data class LogInResponseEntity(
     @SerializedName("user_id") val userId: Int,
     @SerializedName("user_token") val userToken: String,
-    @SerializedName("user_data") val userDataEntity: UserDataEntity
+    @SerializedName("user_data") val userDataEntity: UserDataEntity,
+    @SerializedName("is_after_sign_up") val isAfterSignUp: Boolean? = null
 )
 
 data class AuthorizationRequestEntity(
@@ -29,6 +30,7 @@ fun AuthorizationRequestData.toRawEntity() = AuthorizationRequestEntity(
 fun LogInResponseEntity.toBusinessEntity() = LogInResponseData(
     userId,
     userToken,
-    userDataEntity.toBusinessEntity()
+    userDataEntity.toBusinessEntity(),
+    isAfterSignUp == true
 )
 

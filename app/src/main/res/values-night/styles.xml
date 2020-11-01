@@ -2,15 +2,13 @@
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/black</item>
-        <item name="popupMenuStyle">@style/PopupMenu</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:navigationBarColor">@color/black</item>
         <item name="android:statusBarColor">@color/black</item>
-        <item name="android:colorEdgeEffect">@color/gray80</item>
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
         <item name="splash_screen_color">@color/black</item>
-        <item name="splash_screen_text_color">@color/white34</item>
+        <item name="splash_screen_text_color">@color/tertiary_gray_dark_theme_color</item>
         <item name="colorControlNormal">?secondary_color</item>
         <item name="switch_inactive_thumb_color">@color/gray8</item>
         <item name="switch_inactive_track_color">@color/white</item>

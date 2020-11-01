@@ -9,7 +9,6 @@ data class ExerciseReportRequestData(
 )
 
 data class ExerciseReportData(
-    val userId: Int?,
     val exerciseNumber: Int,
     val bugTypes: List<ExerciseReportType>
 )

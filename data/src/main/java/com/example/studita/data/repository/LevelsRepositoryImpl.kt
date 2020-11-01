@@ -14,30 +14,18 @@ class LevelsRepositoryImpl(
     private val connectionManager: ConnectionManager
 ) : LevelsRepository {
 
-    override suspend fun getLevels(isLoggedIn: Boolean, offlineMode: Boolean): List<LevelData> {
-        return LevelsDataStoreImpl(levelsDataStoreFactory.create(if (offlineMode || connectionManager.isNetworkAbsent()) LevelsJsonDataStoreFactory.Priority.CACHE else LevelsJsonDataStoreFactory.Priority.CLOUD)).getLevelsEntityList(
-            isLoggedIn
-        ).map { it.toBusinessEntity() }
+    override suspend fun getLevels(offlineMode: Boolean): List<LevelData> {
+        return LevelsDataStoreImpl(levelsDataStoreFactory.create(if (offlineMode) LevelsJsonDataStoreFactory.Priority.CACHE else LevelsJsonDataStoreFactory.Priority.CLOUD)).getLevelsEntityList().map { it.toBusinessEntity() }
     }
 
     override suspend fun downloadLevels(): Int {
         var code = 409
         val diskDataStore =
             (levelsDataStoreFactory.create(LevelsJsonDataStoreFactory.Priority.CACHE) as DiskLevelsJsonDataStore)
-        if (!diskDataStore.levelsAreCached(true)) {
+        if (!diskDataStore.levelsAreCached()) {
             val levelsJson =
-                (levelsDataStoreFactory.create(LevelsJsonDataStoreFactory.Priority.CLOUD) as CloudLevelsJsonDataStore).getLevelsJson(
-                    true
-                )
-            diskDataStore.saveLevelsJson(true, levelsJson)
-            code = 200
-        }
-        if (!diskDataStore.levelsAreCached(false)) {
-            val levelsJson =
-                (levelsDataStoreFactory.create(LevelsJsonDataStoreFactory.Priority.CLOUD) as CloudLevelsJsonDataStore).getLevelsJson(
-                    false
-                )
-            diskDataStore.saveLevelsJson(false, levelsJson)
+                (levelsDataStoreFactory.create(LevelsJsonDataStoreFactory.Priority.CLOUD) as CloudLevelsJsonDataStore).getLevelsJson()
+            diskDataStore.saveLevelsJson(levelsJson)
             code = 200
         }
         return code

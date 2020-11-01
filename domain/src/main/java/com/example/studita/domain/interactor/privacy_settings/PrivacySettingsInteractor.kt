@@ -12,23 +12,23 @@ interface PrivacySettingsInteractor {
 
     suspend fun getPrivacySettings(
         userIdTokenData: UserIdTokenData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): PrivacySettingsStatus
 
     suspend fun editPrivacySettings(
         privacySettingsRequestData: PrivacySettingsRequestData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): EditPrivacySettingsStatus
 
     suspend fun getPrivacyDuelsExceptionsList(
         userIdTokenData: UserIdTokenData,
         perPage: Int,
         pageNumber: Int,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): PrivacySettingsDuelsExceptionsStatus
 
     suspend fun editDuelsExceptions(
         editDuelsExceptionsRequestData: EditDuelsExceptionsRequestData,
-        retryCount: Int = 30
+        retryCount: Int = 3
     ): EditDuelsExceptionsStatus
 }

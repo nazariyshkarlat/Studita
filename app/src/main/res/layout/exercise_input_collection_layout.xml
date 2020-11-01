@@ -28,6 +28,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:digits="1234567890"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
             android:layout_marginTop="20dp"
             android:maxLength="1"
             android:textAlignment="center" />

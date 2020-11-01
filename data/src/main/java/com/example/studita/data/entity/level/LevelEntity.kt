@@ -27,7 +27,8 @@ sealed class LevelChildEntity {
 
     data class LevelSubscribeEntity(
         @SerializedName("title") val title: String,
-        @SerializedName("button") val button: List<String>
+        @SerializedName("button") val button: List<String>,
+        @SerializedName("is_logged_in") val isLoggedIn: Boolean
     ) : LevelChildEntity()
 }
 
@@ -49,5 +50,5 @@ fun LevelChildEntity.toBusinessEntity() = when (this) {
         subtitle,
         tags
     )
-    is LevelChildEntity.LevelSubscribeEntity -> LevelChildData.LevelSubscribeData(title, button)
+    is LevelChildEntity.LevelSubscribeEntity -> LevelChildData.LevelSubscribeData(title, button, isLoggedIn)
 }

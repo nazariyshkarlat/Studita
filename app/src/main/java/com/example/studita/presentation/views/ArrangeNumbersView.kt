@@ -23,7 +23,6 @@ import androidx.core.widget.TextViewCompat.setTextAppearance
 import com.example.studita.R
 import com.example.studita.utils.*
 import com.google.android.flexbox.*
-import java.lang.Math.abs
 
 
 class ArrangeNumbersView @JvmOverloads constructor(
@@ -66,12 +65,13 @@ class ArrangeNumbersView @JvmOverloads constructor(
         val flexbox = formFlexbox().apply {
             layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             setPadding(16F.dpToPx(), 16F.dpToPx(), 16F.dpToPx(), 16F.dpToPx())
-            background = ContextCompat.getDrawable(context, R.drawable.main_blocks_rectangle)
+            background = ContextCompat.getDrawable(context, R.drawable.blocks_rectangle)
         }
 
         variants.forEachIndexed { index,  numberText ->
             val item = TextView(context).apply {
                 setTextAppearance(this, R.style.Medium18)
+                setTextColor(ThemeUtils.getPrimaryColor(context))
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 gravity = Gravity.CENTER
                 text = numberText.toString()
@@ -96,6 +96,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
         correctAnswers.forEach {
             val item = TextView(context).apply {
                 setTextAppearance(this, R.style.Medium18)
+                setTextColor(ThemeUtils.getPrimaryColor(context))
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 gravity = Gravity.CENTER
                 background = ContextCompat.getDrawable(context, R.drawable.arrange_numbers_bottom_item_background)

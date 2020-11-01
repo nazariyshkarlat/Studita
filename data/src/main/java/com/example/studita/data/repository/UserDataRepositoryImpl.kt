@@ -14,12 +14,18 @@ class UserDataRepositoryImpl(
     private val connectionManager: ConnectionManager
 ) : UserDataRepository {
 
-    override suspend fun getUserData(userId: Int?, offlineMode: Boolean): Pair<Int, UserDataData> {
+    override suspend fun getUserData(userId: Int?, offlineMode: Boolean, isMyUserData: Boolean): Pair<Int, UserDataData> {
         val pair = userDataDataStoreFactory.create(
-            if (offlineMode || (userId == null) || connectionManager.isNetworkAbsent())
-                UserDataDataStoreFactory.Priority.CACHE else UserDataDataStoreFactory.Priority.CLOUD
+            if ((offlineMode && isMyUserData) || (userId == null && isMyUserData))
+                UserDataDataStoreFactory.Priority.CACHE
+            else
+                UserDataDataStoreFactory.Priority.CLOUD
         )
             .getUserDataEntity(userId)
+
+        if(isMyUserData)
+            saveUserData(pair.second.toBusinessEntity())
+
         return pair.first to pair.second.toBusinessEntity()
     }
 
