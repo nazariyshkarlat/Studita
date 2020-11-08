@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:gravity="bottom">
 
-        <com.example.studita.presentation.views.ErrorEditText
+        <com.studita.presentation.views.ErrorEditText
             android:id="@+id/authorizationEmailEditText"
             style="@style/EditText"
             android:layout_width="match_parent"
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.example.studita.presentation.views.ErrorEditText
+            <com.studita.presentation.views.ErrorEditText
                 android:id="@+id/authorizationPasswordEditText"
                 style="@style/EditText"
                 android:layout_width="match_parent"
@@ -66,7 +66,7 @@
 
         </FrameLayout>
 
-        <com.example.studita.presentation.views.press_view.PressTextView
+        <com.studita.presentation.views.press_view.PressTextView
             android:id="@+id/authorizationLogInButton"
             style="@style/Button"
             android:layout_marginStart="@dimen/defaultRLMargin"
@@ -76,7 +76,7 @@
             android:layout_marginTop="24dp"
             android:text="@string/sign_in" />
 
-        <com.example.studita.presentation.views.press_view.PressTextView
+        <com.studita.presentation.views.press_view.PressTextView
             android:id="@+id/authorizationForgotPassword"
             style="@style/BlueTextButton16"
             android:layout_width="wrap_content"
@@ -96,7 +96,7 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
-        <com.example.studita.presentation.views.press_view.PressTextView
+        <com.studita.presentation.views.press_view.PressTextView
             android:id="@+id/authorizationSignUpButton"
             style="@style/GreenButton"
             android:layout_width="match_parent"

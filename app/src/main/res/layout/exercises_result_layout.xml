@@ -44,7 +44,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="true" />
 
-            <com.example.studita.presentation.views.ProgressBar
+            <com.studita.presentation.views.ProgressBar
                 android:id="@+id/exercisesResultLayoutProgressBar"
                 style="@style/CircleProgressBarStyle"
                 android:layout_width="match_parent"

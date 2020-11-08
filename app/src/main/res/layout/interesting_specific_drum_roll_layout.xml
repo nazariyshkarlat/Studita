@@ -35,7 +35,7 @@
             android:text="@string/drum_roll_subtitle"
             android:textAlignment="center" />
 
-        <com.example.studita.presentation.views.press_view.PressImageView
+        <com.studita.presentation.views.press_view.PressImageView
             android:id="@+id/interestingSpecificDrumRollLayoutButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

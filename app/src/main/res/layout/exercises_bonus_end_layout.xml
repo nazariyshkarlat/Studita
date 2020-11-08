@@ -41,7 +41,7 @@
             android:textAlignment="center" />
     </LinearLayout>
 
-    <com.example.studita.presentation.views.press_view.PressTextView
+    <com.studita.presentation.views.press_view.PressTextView
         android:id="@+id/exercisesBonusEndLayoutButton"
         style="@style/Button"
         android:layout_width="match_parent"

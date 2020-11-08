@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.studita.presentation.views.AlphaGradientView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.studita.presentation.views.AlphaGradientView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp" />
 
-        <com.example.studita.presentation.views.ProgressBar
+        <com.studita.presentation.views.ProgressBar
             android:id="@+id/chapterItemProgressBar"
             style="@style/ProgressBarStyle"
             android:layout_width="match_parent"
@@ -43,4 +43,4 @@
             android:layout_marginTop="14dp" />
 
     </LinearLayout>
-</com.example.studita.presentation.views.AlphaGradientView>
+</com.studita.presentation.views.AlphaGradientView>

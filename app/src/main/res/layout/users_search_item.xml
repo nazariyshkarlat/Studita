@@ -12,7 +12,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp">
 
-        <EditText
+        <com.studita.presentation.views.NoEmojiEditText
             android:id="@+id/usersSearchItemEditText"
             style="@style/SearchEditText"
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             app:srcCompat="@drawable/ic_close_secondary" />
     </FrameLayout>
 
-    <com.example.studita.presentation.views.press_view.PressLinearLayout
+    <com.studita.presentation.views.press_view.PressLinearLayout
         android:id="@+id/usersSearchItemFilter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp" />
 
-    </com.example.studita.presentation.views.press_view.PressLinearLayout>
+    </com.studita.presentation.views.press_view.PressLinearLayout>
 
     <RadioGroup
         android:id="@+id/usersSearchItemSearchRadioGroup"

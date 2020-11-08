@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="@string/my_friends_empty" />
 
-    <com.example.studita.presentation.views.press_view.PressTextView
+    <com.studita.presentation.views.press_view.PressTextView
         android:id="@+id/myFriendsEmptyButton"
         style="@style/BlueTextButton16"
         android:layout_width="wrap_content"

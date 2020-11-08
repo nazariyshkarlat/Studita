@@ -15,7 +15,7 @@
         android:layout_gravity="center"
         tools:visibility="gone"/>
 
-    <com.example.studita.presentation.views.SlopeSwipeToRefresh
+    <com.studita.presentation.views.SlopeSwipeToRefresh
         android:id="@+id/profileLayoutSwipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -83,7 +83,7 @@
                             android:layout_gravity="center"
                             android:background="@drawable/avatar_oval" />
 
-                        <com.example.studita.presentation.views.SquareMinSizeTextView
+                        <com.studita.presentation.views.SquareMinSizeTextView
                             android:id="@+id/profileLayoutLevelOval"
                             style="@style/UserCurrentLevelSmall"
                             android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
                     android:layout_marginEnd="@dimen/defaultRLMargin"
                     android:orientation="vertical">
 
-                    <com.example.studita.presentation.views.press_view.PressTextView
+                    <com.studita.presentation.views.press_view.PressTextView
                         android:id="@+id/profileLayoutButton"
                         style="@style/Button"
                         android:layout_width="match_parent"
@@ -116,7 +116,7 @@
                         android:text="@string/cancel_friendship_request"
                         android:visibility="gone" />
 
-                    <com.example.studita.presentation.views.press_view.PressTextView
+                    <com.studita.presentation.views.press_view.PressTextView
                         android:id="@+id/profileLayoutTextButton"
                         style="@style/BlueTextButton16"
                         android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
                         android:visibility="gone" />
                 </LinearLayout>
 
-                <com.example.studita.presentation.views.ProfileHorizontalScrollView
+                <com.studita.presentation.views.ProfileHorizontalScrollView
                     android:id="@+id/profileHorizontalScrollView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -174,7 +174,7 @@
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp">
 
-                    <com.example.studita.presentation.views.press_view.PressTextView
+                    <com.studita.presentation.views.press_view.PressTextView
                         android:id="@+id/profileLayoutFriendsTitle"
                         style="@style/Medium20"
                         android:layout_width="wrap_content"
@@ -205,7 +205,7 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp" />
 
-                        <com.example.studita.presentation.views.press_view.PressTextView
+                        <com.studita.presentation.views.press_view.PressTextView
                             android:id="@+id/profileLayoutEmptyFriendsButton"
                             style="@style/BlueTextButton16"
                             android:layout_width="wrap_content"
@@ -218,7 +218,7 @@
 
                     </LinearLayout>
 
-                    <com.example.studita.presentation.views.press_view.PressTextView
+                    <com.studita.presentation.views.press_view.PressTextView
                         android:id="@+id/profileLayoutFriendsMoreButton"
                         style="@style/BlueTextButton16"
                         android:layout_width="wrap_content"
@@ -234,5 +234,5 @@
             </LinearLayout>
         </ScrollView>
 
-    </com.example.studita.presentation.views.SlopeSwipeToRefresh>
+    </com.studita.presentation.views.SlopeSwipeToRefresh>
 </FrameLayout>

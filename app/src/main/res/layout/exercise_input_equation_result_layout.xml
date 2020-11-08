@@ -63,7 +63,7 @@
 
     </LinearLayout>
 
-    <com.example.studita.presentation.views.ExercisesKeyboard
+    <com.studita.presentation.views.ExercisesKeyboard
         android:id="@+id/exerciseInputEquationResultLayoutKeyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
         android:layout_marginBottom="32dp" />
 
 
-    <com.example.studita.presentation.views.press_view.PressTextView
+    <com.studita.presentation.views.press_view.PressTextView
         android:id="@+id/exerciseInputEquationResultLayoutButton"
         style="@style/TransitionButton"
         android:layout_width="match_parent"

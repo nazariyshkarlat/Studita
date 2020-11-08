@@ -15,7 +15,7 @@
         android:text="@string/un_logged_statistics_text"
         android:textAlignment="center" />
 
-    <com.example.studita.presentation.views.press_view.PressTextView
+    <com.studita.presentation.views.press_view.PressTextView
         android:id="@+id/userStatUnLoggedLayoutButton"
         style="@style/Button"
         android:layout_width="match_parent"

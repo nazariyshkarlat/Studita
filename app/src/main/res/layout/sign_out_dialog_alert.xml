@@ -32,14 +32,14 @@
         android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
-        <com.example.studita.presentation.views.press_view.PressTextView
+        <com.studita.presentation.views.press_view.PressTextView
             android:id="@+id/signOutDialogLeftButton"
             style="@style/BlueTextButton16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel" />
 
-        <com.example.studita.presentation.views.press_view.PressTextView
+        <com.studita.presentation.views.press_view.PressTextView
             android:id="@+id/signOutDialogRightButton"
             style="@style/BlueTextButton16"
             android:layout_marginStart="4dp"

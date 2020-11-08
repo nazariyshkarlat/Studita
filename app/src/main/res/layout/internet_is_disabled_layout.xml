@@ -30,7 +30,7 @@
             android:textAlignment="center" />
     </LinearLayout>
 
-    <com.example.studita.presentation.views.CenterIconTextView
+    <com.studita.presentation.views.CenterIconTextView
         android:id="@+id/internetIsDisabledLayoutButton"
         style="@style/TryAgainButton"
         android:layout_width="match_parent"

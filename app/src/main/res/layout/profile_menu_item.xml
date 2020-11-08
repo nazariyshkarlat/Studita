@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.example.studita.presentation.views.press_view.PressLinearLayout
+    <com.studita.presentation.views.press_view.PressLinearLayout
         android:id="@+id/profileMenuItemLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,5 +34,5 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp" />
 
-    </com.example.studita.presentation.views.press_view.PressLinearLayout>
+    </com.studita.presentation.views.press_view.PressLinearLayout>
 </FrameLayout>

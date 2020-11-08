@@ -18,7 +18,7 @@
         android:orientation="vertical"
         android:translationY="@dimen/connectionSnackbarLayoutTranslationY">
 
-        <com.example.studita.presentation.views.press_view.PressFab
+        <com.studita.presentation.views.press_view.PressFab
             android:id="@+id/mainLayoutFAB"
             style="@style/FloatingActionButton"
             android:layout_width="wrap_content"

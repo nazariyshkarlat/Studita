@@ -41,7 +41,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/avatar_oval" />
 
-            <com.example.studita.presentation.views.press_view.PressTextView
+            <com.studita.presentation.views.press_view.PressTextView
                 android:id="@+id/editProfileLayoutSelectAvatar"
                 style="@style/BlueTextButton16"
                 android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
                 android:text="@string/new_photo"
                 app:with_min_click_interval="true" />
 
-            <com.example.studita.presentation.views.press_view.PressTextView
+            <com.studita.presentation.views.press_view.PressTextView
                 android:id="@+id/editProfileLayoutRemoveAvatar"
                 style="@style/RedTextButton16"
                 android:layout_width="wrap_content"
@@ -77,7 +77,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.example.studita.presentation.views.ErrorEditText
+                    <com.studita.presentation.views.ErrorEditText
                         android:id="@+id/editProfileLayoutUserNameEditText"
                         style="@style/EditText"
                         android:layout_width="match_parent"
@@ -136,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/editProfileLayoutName">
 
-                    <com.example.studita.presentation.views.NoEmojiEditText
+                    <com.studita.presentation.views.NoEmojiEditText
                         android:id="@+id/editProfileLayoutNameEditText"
                         style="@style/EditText"
                         android:layout_width="match_parent"

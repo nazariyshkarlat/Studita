@@ -25,7 +25,7 @@
         android:textAlignment="center"
         android:layout_marginTop="16dp"/>
 
-    <com.example.studita.presentation.views.press_view.PressTextView
+    <com.studita.presentation.views.press_view.PressTextView
         android:id="@+id/offlineModeDownloadErrorBottomSheetLayoutButton"
         style="@style/Button"
         android:text="@string/offline_mode_download_error_bottom_sheet_network_error_button_text"

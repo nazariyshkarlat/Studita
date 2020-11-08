@@ -9,7 +9,7 @@
     android:paddingStart="16dp"
     android:paddingEnd="13dp">
 
-    <com.example.studita.presentation.views.press_view.PressLinearLayout
+    <com.studita.presentation.views.press_view.PressLinearLayout
         android:id="@+id/mainMenuLayoutOfflineSwitchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             android:layout_marginStart="16dp"
             android:text="@string/offline_mode" />
 
-    </com.example.studita.presentation.views.press_view.PressLinearLayout>
+    </com.studita.presentation.views.press_view.PressLinearLayout>
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/mainMenuLayoutOfflineSwitch"

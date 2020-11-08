@@ -20,7 +20,7 @@
         android:background="@drawable/circle_background_16dp"
         android:padding="16dp"/>
 
-    <com.example.studita.presentation.views.ProgressBar
+    <com.studita.presentation.views.ProgressBar
         android:id="@+id/exerciseToolbarProgressBar"
         style="@style/ProgressBarStyle"
         android:layout_width="match_parent"

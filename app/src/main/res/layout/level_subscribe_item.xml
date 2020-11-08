@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center" />
 
-    <com.example.studita.presentation.views.press_view.PressTextView
+    <com.studita.presentation.views.press_view.PressTextView
         android:id="@+id/levelSubscribeItemButton"
         style="@style/BlueTextButton16"
         android:layout_width="wrap_content"

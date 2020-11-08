@@ -26,7 +26,7 @@
         android:layout_toStartOf="@+id/chapterPartItemButton"
         android:layout_toEndOf="@+id/chapterPartItemIcon" />
 
-    <com.example.studita.presentation.views.press_view.PressImageView
+    <com.studita.presentation.views.press_view.PressImageView
         android:id="@+id/chapterPartItemButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -44,7 +44,7 @@
                 android:text="@string/offline_mode_downloading"
                 android:textAlignment="center" />
 
-            <com.example.studita.presentation.views.ProgressBar
+            <com.studita.presentation.views.ProgressBar
                 android:id="@+id/offlineModeDownloadLayoutProgressBar"
                 style="@style/ProgressBarStyle"
                 android:layout_width="match_parent"

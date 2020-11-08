@@ -9,7 +9,7 @@
             <solid android:color="?page_background_color"/>
         </shape>
     </item>
-    <item android:gravity="top" android:top="8dp" android:left="8dp" android:right="8dp">
+    <item android:gravity="top" android:top="6dp" android:left="12dp" android:right="12dp">
         <shape android:shape="rectangle">
             <corners android:radius="999dp" />
             <solid android:color="?attr/disabled_background_color"/>

@@ -19,7 +19,7 @@
             android:soundEffectsEnabled="false"
             tools:ignore="UnusedAttribute" />
 
-        <com.example.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawer
+        <com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawer
             android:id="@+id/bottom_sheet_drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

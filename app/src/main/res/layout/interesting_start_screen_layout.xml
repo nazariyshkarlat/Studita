@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:text="@string/difficulty_level" />
 
-        <com.example.studita.presentation.views.CustomRatingBar
+        <com.studita.presentation.views.CustomRatingBar
             android:id="@+id/interestingStartScreenRatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

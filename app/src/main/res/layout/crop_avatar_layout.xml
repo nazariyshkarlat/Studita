@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="@dimen/toolbarHeight">
 
-    <com.example.studita.presentation.views.crop_view.CropView
+    <com.studita.presentation.views.crop_view.CropView
         android:id="@+id/cropAvatarFragmentCropView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

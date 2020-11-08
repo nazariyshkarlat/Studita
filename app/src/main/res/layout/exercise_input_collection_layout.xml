@@ -36,7 +36,7 @@
             android:textAlignment="center" />
     </LinearLayout>
 
-    <com.example.studita.presentation.views.ExercisesKeyboard
+    <com.studita.presentation.views.ExercisesKeyboard
         android:id="@+id/exerciseInputCollectionLayoutKeyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

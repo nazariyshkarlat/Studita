@@ -35,7 +35,7 @@
 
     </FrameLayout>
 
-    <com.example.studita.presentation.views.ProgressBar
+    <com.studita.presentation.views.ProgressBar
         android:id="@+id/chapterHeaderProgressBar"
         style="@style/ProgressBarStyle"
         android:layout_width="match_parent"

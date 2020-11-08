@@ -33,7 +33,7 @@
             android:paddingEnd="24dp" />
     </LinearLayout>
 
-    <com.example.studita.presentation.views.SnapHorizontalScrollView
+    <com.studita.presentation.views.SnapHorizontalScrollView
         android:id="@+id/exerciseScreenType5SnapHorizontalScrollView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

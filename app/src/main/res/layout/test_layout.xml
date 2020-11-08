@@ -5,7 +5,7 @@
     android:orientation="horizontal">
 
 
-    <com.example.studita.presentation.views.ExercisesKeyboard
+    <com.studita.presentation.views.ExercisesKeyboard
         android:id="@+id/exercisesKeyboardTest"
         android:layout_width="200dp"
         android:layout_height="300dp"/>

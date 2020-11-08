@@ -107,7 +107,7 @@
         </FrameLayout>
     </LinearLayout>
 
-    <com.example.studita.presentation.views.press_view.PressTextView
+    <com.studita.presentation.views.press_view.PressTextView
         android:id="@+id/exerciseReportBugLayoutButton"
         style="@style/Button"
         android:layout_width="match_parent"

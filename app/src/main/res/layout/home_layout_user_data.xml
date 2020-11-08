@@ -16,7 +16,7 @@
         android:background="@drawable/blocks_rectangle"
         android:padding="16dp">
 
-        <com.example.studita.presentation.views.SquareMinSizeTextView
+        <com.studita.presentation.views.SquareMinSizeTextView
             android:id="@+id/homeLayoutUserDataLevelLayoutCurrentLevel"
             style="@style/UserCurrentLevel"
             android:layout_width="wrap_content"
@@ -26,7 +26,7 @@
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp" />
 
-        <com.example.studita.presentation.views.SquareMinSizeTextView
+        <com.studita.presentation.views.SquareMinSizeTextView
             android:id="@+id/homeLayoutUserDataLevelLayoutNextLevel"
             style="@style/UserNextLevel"
             android:layout_width="wrap_content"
@@ -67,7 +67,7 @@
             android:layout_toStartOf="@+id/homeLayoutUserDataLevelLayoutNextLevel"
             android:layout_toEndOf="@+id/homeLayoutUserDataLevelLayoutCurrentLevel">
 
-            <com.example.studita.presentation.views.ProgressBar
+            <com.studita.presentation.views.ProgressBar
                 android:id="@+id/homeLayoutUserDataLevelLayoutProgressBar"
                 style="@style/ProgressBarStyle"
                 android:layout_width="match_parent"
@@ -108,7 +108,7 @@
             android:layout_toEndOf="@+id/homeLayoutUserDataXPLayoutFireIcon"
             android:singleLine="true" />
 
-        <com.example.studita.presentation.views.press_view.PressTextView
+        <com.studita.presentation.views.press_view.PressTextView
             android:id="@+id/homeLayoutUserDataXPLayoutMoreButton"
             style="@style/BlueTextButton16"
             android:layout_width="wrap_content"

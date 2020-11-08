@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="@dimen/defaultRLMargin"
+    android:layout_marginStart="@dimen/defaultRLMargin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center">
+        <TextView
+            style="@style/Medium24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/beta_test_title"
+            android:textAlignment="center" />
+        <TextView
+            style="@style/Regular16Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/beta_test_first_subtitle_part"
+            android:textAlignment="center" />
+        <TextView
+            style="@style/Regular16Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/beta_test_second_subtitle_part"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/defaultRLMargin">
+
+        <TextView
+            style="@style/Regular14Tertiary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:text="@string/beta_test_above_button_text"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:id="@+id/betaTestStartLayoutButton"
+            style="@style/Button"
+            android:text="@string/begin"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/buttonHeight"/>
+
+    </LinearLayout>
+
+</FrameLayout>

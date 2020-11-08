@@ -123,15 +123,15 @@
     <string name="exercises_XP_result">+%1$d XP</string>
     <string name="exercises_XP_bonus">+%1$d XP бонус</string>
     <string name="new_level">Уровень повышен</string>
-    <string name="server_client_id">100888478237-lldqud6eng1l50k3isp1ovkvl18ev34i.apps.googleusercontent.com</string>
-    <string name="custom_bottom_sheet_behavior" translatable="false">com.example.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior</string>
+    <string name="server_client_id">205245547424-behqlmr7iv98r04aboe3akaq18o1k8l8.apps.googleusercontent.com</string>
+    <string name="custom_bottom_sheet_behavior" translatable="false">com.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior</string>
     <string name="studita_account">&app_name;</string>
     <string name="exercise_snackbar_chapter_completed_reason">Поздравляем! Вы полностью завершили всю тему!</string>
     <string name="exercise_snackbar_bad_result_reason">Мы советуем пройти это задание ещё раз, чтобы закрепить свои знания</string>
     <string name="drum_roll_title">Барабанная дробь!</string>
     <string name="main_menu_bottom_text">© 2020 &app_name;. Сделано с любовью</string>
     <string name="drum_roll_subtitle">Воспроизвести барабанную дробь</string>
-    <string name="account_type" translatable="false">com.example.studita.authentication.StuditaAccount</string>
+    <string name="account_type" translatable="false">com.studita.authentication.StuditaAccount</string>
     <string name="network_absent">Нет подключения</string>
     <string name="back_online">Подключение восстановлено</string>
     <string name="today">Сегодня</string>
@@ -307,6 +307,12 @@
     <string name="download_progress_template">Загружено %1$s из %2$s мб</string>
     <string name="offline_mode_download_layout_bottom_info_text">Для начала работы нам нужно загрузить оффлайн режим. Это займёт немного времени.</string>
     <string name="enable_offline_mode_snackbar">Оффлайн режим включён. В дальнейшем вы можете отключить его в настройках</string>
+    <string name="shakebugs_api_client_id">vi7M29714PpnDB6OPnklJUryJFo5i8KYhwY6OAuI</string>
+    <string name="shakebugs_api_client_secret">W3G3L2CPUcAYEGmNNUhhJhjAKGUUNLHMbZI42A8A7yZ8OHlraytnAzz</string>
+    <string name="beta_test_above_button_text">Если вы готовы приступить к бета тестированию, нажмите кнопку ниже.</string>
+    <string name="beta_test_second_subtitle_part">Также мы ведём запись ваших действий в &app_name;. Это нужно для того, чтобы мы смогли увидеть причины ошибок и исправить их как можно скорее.</string>
+    <string name="beta_test_first_subtitle_part">Потрясите своё устройство для того, чтобы сообщить об ошибке.</string>
+    <string name="beta_test_title">Приветствуем вас!</string>
 
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>

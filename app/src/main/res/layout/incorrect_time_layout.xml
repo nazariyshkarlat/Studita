@@ -43,7 +43,7 @@
 
     </LinearLayout>
 
-    <com.example.studita.presentation.views.CenterIconTextView
+    <com.studita.presentation.views.CenterIconTextView
         android:id="@+id/incorrectTimeLayoutTryAgainButton"
         style="@style/TryAgainButton"
         android:layout_width="match_parent"
@@ -51,7 +51,7 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/buttonWithPaddingHeight" />
 
-    <com.example.studita.presentation.views.press_view.PressTextView
+    <com.studita.presentation.views.press_view.PressTextView
         android:id="@+id/incorrectTimeLayoutInSettingsButton"
         style="@style/Button"
         android:layout_width="match_parent"

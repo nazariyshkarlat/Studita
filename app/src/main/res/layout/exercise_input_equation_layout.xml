@@ -36,6 +36,7 @@
                 android:digits="0123456789+-*:÷×/"
                 android:textAlignment="center"
                 android:singleLine="true"
+                android:maxLength="16"
                 android:textAppearance="@style/Medium32" />
 
             <TextView
@@ -60,7 +61,7 @@
 
     </LinearLayout>
 
-    <com.example.studita.presentation.views.ExercisesKeyboard
+    <com.studita.presentation.views.ExercisesKeyboard
         android:id="@+id/exerciseInputEquationLayoutKeyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
