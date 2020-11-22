@@ -2,12 +2,11 @@ package com.studita.presentation.activities
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
 import com.studita.presentation.fragments.main.MainMenuFragment
 import com.studita.presentation.fragments.notifications.NotificationsFragment
-import com.studita.presentation.fragments.profile.ProfileMenuFragment
+import com.studita.presentation.fragments.main.ProfileMenuFragment
 import com.studita.presentation.fragments.ToolbarFragment
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.view_model.MainMenuActivityViewModel

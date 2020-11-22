@@ -257,7 +257,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
         when (view.id) {
             R.id.editProfileLayoutUserNameEditText -> {
                 if (charSequence?.length == 1) {
-                    if (editProfileViewModel.newProfileData.avatarLink == null)
+                    if (editProfileViewModel.newProfileData.avatarLink == null && editProfileViewModel.selectedImage == null)
                         AvaDrawer.drawAvatar(
                             editProfileLayoutAvatar,
                             charSequence.toString(),

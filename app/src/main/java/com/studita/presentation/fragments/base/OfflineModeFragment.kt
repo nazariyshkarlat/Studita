@@ -6,11 +6,9 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.studita.App
 import com.studita.R
-import com.studita.utils.PrefsUtils
-import com.studita.utils.navigateTo
-import com.studita.utils.removeFragment
-import com.studita.utils.replace
+import com.studita.utils.*
 import kotlinx.android.synthetic.main.offline_mode_layout.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
@@ -22,6 +20,8 @@ open class OfflineModeFragment(private val default: KClass<out Fragment>) : Navi
 
         offlineModeLayoutButton.setOnClickListener {
             PrefsUtils.setOfflineMode(false)
+
+            App.authenticate(UserUtils.getUserIDTokenData(), true)
 
             with((activity as AppCompatActivity)) {
                 removeFragment(this@OfflineModeFragment)

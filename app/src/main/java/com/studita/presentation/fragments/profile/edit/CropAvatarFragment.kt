@@ -12,6 +12,8 @@ import com.studita.R
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.view_model.CropAvatarFragmentViewModel
 import com.studita.presentation.view_model.ToolbarFragmentViewModel
+import com.studita.presentation.views.CustomSnackbar
+import com.studita.utils.ThemeUtils
 import kotlinx.android.synthetic.main.crop_avatar_layout.*
 
 class CropAvatarFragment : NavigatableFragment(R.layout.crop_avatar_layout) {
@@ -29,7 +31,18 @@ class CropAvatarFragment : NavigatableFragment(R.layout.crop_avatar_layout) {
 
             if (bitmap != null) {
                 cropAvatarFragmentCropView.post {
-                    cropAvatarFragmentCropView.setBitmap(bitmap, 0, false, false)
+                    if(cropAvatarFragmentCropView != null)
+                        cropAvatarFragmentCropView.setBitmap(bitmap, 0, false, false)
+                }
+            }else{
+                view.post {
+                    activity?.let {
+                        CustomSnackbar(it).show(
+                            it.resources.getString(R.string.select_photo_error),
+                            ThemeUtils.getRedColor(it)
+                        )
+                        it.onBackPressed()
+                    }
                 }
             }
         }

@@ -123,7 +123,7 @@
     <string name="exercises_XP_result">+%1$d XP</string>
     <string name="exercises_XP_bonus">+%1$d XP бонус</string>
     <string name="new_level">Уровень повышен</string>
-    <string name="server_client_id">205245547424-behqlmr7iv98r04aboe3akaq18o1k8l8.apps.googleusercontent.com</string>
+    <string name="server_client_id">568009941526-4te9dh9l7vnfo22bmi9hfdk9q5ae3eqp.apps.googleusercontent.com</string>
     <string name="custom_bottom_sheet_behavior" translatable="false">com.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior</string>
     <string name="studita_account">&app_name;</string>
     <string name="exercise_snackbar_chapter_completed_reason">Поздравляем! Вы полностью завершили всю тему!</string>
@@ -292,7 +292,7 @@
     <string name="competitions_promo_screen_first_subtitle">Место, где вы можете провести время с интересом, соревнуясь с друзьями и случайными игроками.</string>
     <string name="competitions_promo_screen_second_subtitle">Отвечайте на задания на скорость со своими друзьями, получая опыт и попадая в различные рейтинги.</string>
     <string name="competitions_promo_screen_third_subtitle">Проверьте свои знания по каждой из тем, решая разнообразные задания на время.</string>
-    <string name="competitions_promo_screen_forth_subtitle">Побеждайте в состязаниях, получайте XP, и попадайте в рейтинги. Люди в топе получают дополнительные призы.</string>
+    <string name="competitions_promo_screen_forth_subtitle">Побеждайте в состязаниях, получайте XP и попадайте в рейтинги. Люди в топе получают дополнительные призы.</string>
 
     <string name="achievements_promo_screen_first_subtitle">Место, где вы сможете выполнить интересные ачивки и получить за них дополнительные XP.</string>
     <string name="achievements_promo_screen_second_subtitle">Сотни различных ачивок на любой вкус. Находите интересные для себя и выполняйте их.</string>
@@ -307,12 +307,13 @@
     <string name="download_progress_template">Загружено %1$s из %2$s мб</string>
     <string name="offline_mode_download_layout_bottom_info_text">Для начала работы нам нужно загрузить оффлайн режим. Это займёт немного времени.</string>
     <string name="enable_offline_mode_snackbar">Оффлайн режим включён. В дальнейшем вы можете отключить его в настройках</string>
-    <string name="shakebugs_api_client_id">vi7M29714PpnDB6OPnklJUryJFo5i8KYhwY6OAuI</string>
-    <string name="shakebugs_api_client_secret">W3G3L2CPUcAYEGmNNUhhJhjAKGUUNLHMbZI42A8A7yZ8OHlraytnAzz</string>
+    <string name="shakebugs_api_client_id">3RZuEXr45OKALSBVroV3KRSD1yX0Gwt8RpDNF01y</string>
+    <string name="shakebugs_api_client_secret">zoI2l2eqc8BXObtGXZP398Jnl0vWap5988gdJ7BIJ5xRiUexIPRG6Di</string>
     <string name="beta_test_above_button_text">Если вы готовы приступить к бета тестированию, нажмите кнопку ниже.</string>
     <string name="beta_test_second_subtitle_part">Также мы ведём запись ваших действий в &app_name;. Это нужно для того, чтобы мы смогли увидеть причины ошибок и исправить их как можно скорее.</string>
     <string name="beta_test_first_subtitle_part">Потрясите своё устройство для того, чтобы сообщить об ошибке.</string>
     <string name="beta_test_title">Приветствуем вас!</string>
+    <string name="select_photo_error">При получении фотографии произошла ошбика</string>
 
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>

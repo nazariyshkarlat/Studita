@@ -3,17 +3,14 @@ package com.studita.presentation.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.Window
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import com.studita.App
 import com.studita.App.Companion.authenticate
 import com.studita.App.Companion.authenticationState
 import com.studita.App.Companion.recreateAppEvent
 import com.studita.R
 import com.studita.authenticator.AccountAuthenticator
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
-import com.studita.presentation.activities.MainActivity.Companion.startMainActivityNewTask
+import com.studita.presentation.activities.MainActivity.Companion.startMainActivityClearTop
 import com.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
 import com.studita.utils.PrefsUtils
 import com.studita.utils.ThemeUtils
@@ -43,7 +40,7 @@ open class DefaultActivity : AppCompatActivity(),
             }
         })
         recreateAppEvent.observe(this, {
-            this.startMainActivityNewTask()
+            this.startMainActivityClearTop()
         })
     }
 

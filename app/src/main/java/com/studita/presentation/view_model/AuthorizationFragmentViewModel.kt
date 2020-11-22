@@ -18,7 +18,10 @@ import com.studita.utils.UserUtils
 import com.studita.utils.launchBlock
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
+import com.studita.App.Companion.initLocalUserData
 import com.studita.App.Companion.initUserData
+import com.studita.domain.interactor.SignInWithGoogleStatus
+import com.studita.domain.interactor.UserDataStatus
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 
@@ -100,6 +103,7 @@ class AuthorizationFragmentViewModel : ViewModel() {
                             is LogInStatus.NoUserFound -> authorizationState.value =
                                 AuthorizationResult.NoUserFound
                             is LogInStatus.Success -> {
+                                App.userDataDeferred.complete(UserDataStatus.Success(result.result.userDataData))
                                 initUserData(result.result.userDataData)
 
                                 authorizationState.value =

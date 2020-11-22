@@ -1,3 +1,12 @@
+/*
+ * This is the source code of Telegram for Android v. 5.x.x
+ * It is licensed under GNU GPL v. 2 or later.
+ * You should have received a copy of the license in this archive (see LICENSE).
+ *
+ * Copyright Nikolai Kudashov, 2013-2018.
+ */
+
+
 package com.studita.presentation.views.crop_view;
 
 import android.animation.Animator;
@@ -627,10 +636,13 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     @Override
     protected Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
-        bundle.putParcelable("superState", super.onSaveInstanceState());
-        bundle.putParcelable("savedState", state);
-        state.cropWidth = getCropWidth();
-        return bundle;
+
+        if(state != null) {
+            bundle.putParcelable("superState", super.onSaveInstanceState());
+            bundle.putParcelable("savedState", state);
+            state.cropWidth = getCropWidth();
+        }
+        return super.onSaveInstanceState();
     }
 
     @Override

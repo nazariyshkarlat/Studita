@@ -267,7 +267,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                             ).setListener(object : AnimatorListenerAdapter(){
                                 override fun onAnimationEnd(animation: Animator?) {
                                     super.onAnimationEnd(animation)
-                                    exerciseBottomSnackbarIcon.isEnabled = true
+                                    if(exerciseBottomSnackbarIcon != null)
+                                        exerciseBottomSnackbarIcon.isEnabled = true
                                 }
                             })
                             .setInterpolator(FastOutSlowInInterpolator()).start()
@@ -395,7 +396,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             drawable.startTransition(if (animate) resources.getInteger(R.integer.button_transition_duration) else 0)
             exerciseLayoutButton.text = resources.getString(R.string.next)
             exerciseLayoutButton.setOnClickListener {
-                if(exercisesViewModel?.chapterPartIsFullyCompleted() == false) {
+                if(exercisesViewModel?.exercisesAreCompletedAndNoBonus == false) {
                     hideSnackBar()
                     changeButton(false, animate)
                 }

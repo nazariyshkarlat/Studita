@@ -3,16 +3,14 @@ package com.studita.presentation.view_model
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.studita.App
 import com.studita.di.data.UserDataModule
 import com.studita.di.data.UsersModule
 import com.studita.domain.entity.FriendActionRequestData
 import com.studita.domain.entity.UserData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.entity.UsersResponseData
-import com.studita.domain.interactor.FriendActionStatus
-import com.studita.domain.interactor.GetUsersStatus
-import com.studita.domain.interactor.IsMyFriendStatus
-import com.studita.domain.interactor.UserDataStatus
+import com.studita.domain.interactor.*
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
@@ -50,7 +48,11 @@ class ProfileFragmentViewModel(private val myId: Int, private val profileId: Int
 
         errorState = true
         getProfileDataJob = viewModelScope.launchExt(getProfileDataJob) {
-            val friendDataDeferred = async { getUserData(profileId, myId == profileId) }
+
+            if(App.userDataDeferred.isCompleted && App.userDataDeferred.await() !is UserDataStatus.Success)
+                App.authenticate(UserUtils.getUserIDTokenData(), true)
+
+            val friendDataDeferred = if(!App.userDataDeferred.isCompleted && myId == profileId) App.userDataDeferred else async { getUserData(profileId, myId == profileId) }
             val friendsDeferred = async { getFriendsAsync(profileId) }
             val checkMyFriendDeferred = if (profileId != myId) async {
                 checkIsMyFriend(
@@ -65,12 +67,25 @@ class ProfileFragmentViewModel(private val myId: Int, private val profileId: Int
                 userDataStatus is UserDataStatus.Success &&
                         (getFriendsStatus is GetUsersStatus.Success || getFriendsStatus is GetUsersStatus.NoUsersFound) &&
                         (checkMyFriendStatus == null || checkMyFriendStatus is IsMyFriendStatus.Success) -> {
-                    userDataState.value = userDataStatus
-                    friendsState.value = getFriendsStatus
-                    if(!isUpdate)
-                        progressState.value = false
-                    if (profileId != myId)
-                        isMyFriendState.value = checkMyFriendStatus as IsMyFriendStatus.Success
+
+                    when(App.userDataDeferred.await()) {
+                        is UserDataStatus.Success -> {
+                            userDataState.value = userDataStatus
+                            friendsState.value = getFriendsStatus
+                            if(!isUpdate)
+                                progressState.value = false
+                            if (profileId != myId)
+                                isMyFriendState.value = checkMyFriendStatus as IsMyFriendStatus.Success
+                        }
+                        is UserDataStatus.NoConnection -> {
+                            errorState = true
+                            errorEvent.value = true
+                        }
+                        else -> {
+                            errorState = true
+                            errorEvent.value = false
+                        }
+                    }
                 }
                 userDataStatus is UserDataStatus.NoConnection || getFriendsStatus is GetUsersStatus.NoConnection || checkMyFriendStatus is IsMyFriendStatus.NoConnection -> {
                     errorState = true

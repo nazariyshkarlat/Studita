@@ -1,8 +1,10 @@
 package com.studita
 
 import android.app.Application
+import android.util.Base64
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.studita.di.DI
 import com.studita.di.data.AuthorizationModule
@@ -15,7 +17,11 @@ import com.studita.domain.interactor.UserDataStatus
 import com.studita.presentation.view_model.SingleLiveEvent
 import com.studita.utils.*
 import com.shakebugs.shake.Shake
+import com.studita.presentation.view_model.LiveEvent
+import com.studita.utils.UserUtils.localUserDataLiveData
+import com.studita.utils.UserUtils.userDataLiveData
 import kotlinx.coroutines.*
+import java.nio.charset.StandardCharsets
 import java.util.*
 
 
@@ -26,25 +32,33 @@ class App : Application() {
         val authenticationState = MutableLiveData<Pair<CheckTokenIsCorrectStatus, Boolean>>()
         var authenticationJob: Job? = null
 
-        val offlineModeChangeEvent = SingleLiveEvent<Boolean>()
+        var offlineModeChangeEvent = SingleLiveEvent<Boolean>()
         var recreateAppEvent = SingleLiveEvent<Unit>()
 
         fun clearUserLiveData(){
             UserUtils.userDataEventsLiveData.removeSource(UserUtils.userDataLiveData)
             UserUtils.localUserDataLiveData.removeSource(UserUtils.userDataLiveData)
             UserUtils.userDataLiveData = MutableLiveData<UserDataData>()
-            UserUtils.userDataEventsLiveData.addSource(UserUtils.userDataLiveData) {
-                if(it != null)
-                    UserUtils.userDataEventsLiveData.value = it
+
+            UserUtils.userDataEventsLiveData = LiveEvent<UserDataData>().apply {
+                addSource(userDataLiveData) {
+                    if (it != null)
+                        UserUtils.userDataEventsLiveData.value = it
+                }
             }
-            UserUtils.localUserDataLiveData.addSource(UserUtils.userDataLiveData) {
-                if(it != null)
-                    UserUtils.localUserDataLiveData.value = it
+            UserUtils.localUserDataLiveData = MediatorLiveData<UserDataData>().apply {
+                addSource(userDataLiveData) {
+                    if (it != null)
+                        localUserDataLiveData.value = it
+                }
             }
         }
 
         fun initUserData(userDataData: UserDataData) {
             UserUtils.userDataLiveData.value = userDataData
+
+            if(!localUserDataLiveData.hasActiveObservers())
+                UserUtils.localUserDataLiveData.value = userDataData
 
             if ((TimeUtils.getCalendarDayCount(
                     userDataData.streakDatetime,
@@ -96,7 +110,7 @@ class App : Application() {
 
         fun authenticate(userIdTokenData: UserIdTokenData?, isOfflineModeChanged: Boolean) {
 
-            if(userDataDeferred.isCompleted)
+            if(userDataDeferred.isCompleted && UserUtils.isLoggedIn())
                 userDataDeferred = CompletableDeferred()
 
             if(isOfflineModeChanged && !PrefsUtils.isOfflineModeEnabled())
@@ -113,15 +127,30 @@ class App : Application() {
                 if (PrefsUtils.isOfflineModeEnabled() || !UserUtils.isLoggedIn()) {
                     if(UserUtils.userDataIsNull())
                         getUserData()
+                    else
+                        userDataDeferred.complete(UserDataStatus.Success(UserUtils.userData))
                     authenticationState.value =CheckTokenIsCorrectStatus.Correct to isOfflineModeChanged
                 } else {
                     val tokenIsCorrectStatus = AuthorizationModule.getAuthorizationInteractorImpl()
                         .checkTokenIsCorrect(userIdTokenData!!)
 
                     authenticationState.value =tokenIsCorrectStatus to isOfflineModeChanged
-                    if(tokenIsCorrectStatus == CheckTokenIsCorrectStatus.Correct) {
-                        CompleteExercisesModule.getCompleteExercisesInteractorImpl().syncCompleteLocalExercises(UserUtils.getUserIDTokenData()!!)
-                        getUserData()
+
+                    when(tokenIsCorrectStatus){
+                        is CheckTokenIsCorrectStatus.Correct -> {
+                            if(!PrefsUtils.isOfflineModeEnabled())
+                                CompleteExercisesModule.getCompleteExercisesInteractorImpl().syncCompleteLocalExercises(UserUtils.getUserIDTokenData()!!)
+                            getUserData()
+                        }
+                        is CheckTokenIsCorrectStatus.NoConnection -> {
+                            userDataDeferred.complete(UserDataStatus.NoConnection)
+                        }
+                        is CheckTokenIsCorrectStatus.ServiceUnavailable -> {
+                            userDataDeferred.complete(UserDataStatus.ServiceUnavailable)
+                        }
+                        is CheckTokenIsCorrectStatus.Failure -> {
+                            userDataDeferred.complete(UserDataStatus.Failure)
+                        }
                     }
             }
         }

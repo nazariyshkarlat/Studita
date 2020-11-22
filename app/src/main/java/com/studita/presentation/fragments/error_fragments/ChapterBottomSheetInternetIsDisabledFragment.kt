@@ -25,6 +25,7 @@ class ChapterBottomSheetInternetIsDisabledFragment : BaseFragment(R.layout.chapt
         super.onViewCreated(view, savedInstanceState)
 
         chapterBottomSheetInternetIsDisabledLayoutTryAgainButton.setOnSingleClickListener {
+            chapterBottomSheetInternetIsDisabledLayoutEnableOfflineModeButton.setOnClickListener {  }
             chapterBottomSheetInternetIsDisabledLayoutTryAgainButton.animateRefreshButton()
             lifecycleScope.launch(Dispatchers.Main) {
                 delay(400)
@@ -34,6 +35,7 @@ class ChapterBottomSheetInternetIsDisabledFragment : BaseFragment(R.layout.chapt
         }
 
         chapterBottomSheetInternetIsDisabledLayoutEnableOfflineModeButton.setOnClickListener {
+            chapterBottomSheetInternetIsDisabledLayoutTryAgainButton.setOnClickListener {  }
             PrefsUtils.setOfflineMode(true)
             removeFragmentWithAnimation(view)
 

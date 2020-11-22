@@ -88,7 +88,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
             })
 
         if (isMyProfile) {
-            UserUtils.userDataEventsLiveData.observe(
+            UserUtils.userDataEventsLiveData.observeNoNull(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer {
                     if (profileFragmentViewModel.userDataState.value != null) {

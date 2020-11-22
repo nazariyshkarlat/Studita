@@ -4,7 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.LinearLayout
+import androidx.core.view.OneShotPreDrawListener
 import androidx.core.view.children
 import com.studita.R
 import com.studita.utils.ScreenUtils
@@ -70,17 +72,20 @@ class ProfileHorizontalScrollView @JvmOverloads constructor(
     }
 
     private fun makeItemsSameHeight() {
-        contentView!!.post {
-            if (XPRatingItem!!.profileCompetitionsItemTitle.lineCount != levelRatingItem!!.profileCompetitionsItemTitle.lineCount) {
-                if (XPRatingItem!!.profileCompetitionsItemTitle.lineCount > levelRatingItem!!.profileCompetitionsItemTitle.lineCount) {
-                    levelRatingItem!!.profileCompetitionsItemTitle.text =
-                        resources.getString(R.string.profile_competitions_item_levels_rating_two_line_title)
-                } else {
-                    XPRatingItem!!.profileCompetitionsItemTitle.text =
-                        resources.getString(R.string.profile_competitions_item_XP_rating_two_line_title)
+        levelRatingItem!!.profileCompetitionsItemTitle.viewTreeObserver
+            .addOnGlobalLayoutListener {
+                if (levelRatingItem!!.profileCompetitionsItemTitle.lineCount > 0) {
+                    if (XPRatingItem!!.profileCompetitionsItemTitle.measuredHeight != levelRatingItem!!.profileCompetitionsItemTitle.measuredHeight) {
+                        if (XPRatingItem!!.profileCompetitionsItemTitle.measuredHeight > levelRatingItem!!.profileCompetitionsItemTitle.measuredHeight) {
+                            levelRatingItem!!.profileCompetitionsItemTitle.text =
+                                resources.getString(R.string.profile_competitions_item_levels_rating_two_line_title)
+                        } else {
+                            XPRatingItem!!.profileCompetitionsItemTitle.text =
+                                resources.getString(R.string.profile_competitions_item_XP_rating_two_line_title)
+                        }
+                    }
                 }
             }
-        }
     }
 
     private fun disableItems(){

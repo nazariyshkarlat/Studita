@@ -17,6 +17,7 @@ class AcceptFriendshipDialogAlertViewModel : ViewModel() {
 
     private val friendsInteractor = UsersModule.getUsersInteractorImpl()
     val addFriendStatus = SingleLiveEvent<UsersInteractor.FriendActionState>()
+    val errorEvent = SingleLiveEvent<Boolean>()
 
     private var addToFriendsJob: Job? = null
 
@@ -34,6 +35,9 @@ class AcceptFriendshipDialogAlertViewModel : ViewModel() {
                         userData.apply {
                             isMyFriendStatus = IsMyFriendStatus.Success.IsMyFriend(userId)
                         })
+            else if(result is FriendActionStatus.ServiceUnavailable || result is FriendActionStatus.Failure){
+                errorEvent.value = true
+            }
         }
         UserUtils.isMyFriendLiveData.value =
             UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(userData.apply {
@@ -55,6 +59,8 @@ class AcceptFriendshipDialogAlertViewModel : ViewModel() {
                         userData.apply {
                             isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
                         })
+            else if(result is FriendActionStatus.ServiceUnavailable || result is FriendActionStatus.Failure)
+                errorEvent.value = true
         }
         UserUtils.isMyFriendLiveData.value =
             UsersInteractor.FriendActionState.FriendshipRequestIsRejected(userData.apply {

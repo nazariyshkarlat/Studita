@@ -66,7 +66,6 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout), 
 
         friendsFragmentViewModel.searchResultState.observe(viewLifecycleOwner, Observer { pair ->
 
-            println(pair)
             val canBeMoreItems = pair.first
             val searchResultState = pair.second
 
@@ -106,6 +105,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout), 
                                 .toTypedArray(),
                             *(if (canBeMoreItems) arrayOf(UsersRecyclerUiModel.ProgressUiModel) else emptyArray())
                         )
+
                         friendsFragmentViewModel.recyclerItems?.addAll(newData)
 
                         adapter.notifyItemRangeInserted(1, newData.size)
@@ -113,6 +113,9 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout), 
                 }
                 is FriendsFragmentViewModel.SearchResultState.MyProfileEmptyFriends -> {
 
+                    friendsFragmentViewModel.globalSearchOnly = true
+                    (recyclerViewLayoutRecyclerView.adapter as? UsersAdapter)?.onSearchVisibilityChanged(false)
+                    activity?.hideKeyboard()
                     if (arguments?.getBoolean("GLOBAL_SEARCH_ONLY") == false) {
                         recyclerViewLayoutRecyclerView.visibility = View.GONE
                         (view as ViewGroup).addView(view.makeView(R.layout.my_friends_empty))

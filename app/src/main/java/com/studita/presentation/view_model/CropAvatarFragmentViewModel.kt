@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.studita.utils.IOUtils
 import com.studita.utils.ImageUtils.rotateIfRequired
@@ -15,11 +16,8 @@ class CropAvatarFragmentViewModel : ViewModel() {
 
     fun getBitmap(uri: Uri, context: Context): Bitmap? {
         return if (resultBitmap == null) {
-            var bitmap = if (uri.scheme?.contains("file") == true)
-                MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+            var bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
                     .rotateIfRequired(context, uri)
-            else
-                IOUtils.getBitmapFromUri(context, uri)?.rotateIfRequired(context, uri)
 
             if (bitmap != null) {
                 val scaleFactor = (bitmap.width / ScreenUtils.getScreenWidth()

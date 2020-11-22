@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
@@ -15,6 +14,7 @@ import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.friends.FriendsFragment
 import com.studita.presentation.fragments.friends.MyFriendsFragment
 import com.studita.presentation.fragments.friends.MyFriendsOfflineModeFragment
+import com.studita.presentation.fragments.main.ProfileMenuFragment
 import com.studita.presentation.fragments.notifications.NotificationsFragment
 import com.studita.presentation.fragments.notifications.NotificationsOfflineModeFragment
 import com.studita.presentation.fragments.privacy.PrivacySettingsFragment
@@ -32,10 +32,6 @@ import com.studita.utils.ScreenUtils
 import com.studita.utils.dpToPx
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),

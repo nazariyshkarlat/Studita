@@ -54,7 +54,7 @@ class ExercisesActivity : DefaultActivity() {
         val childFragment =
             supportFragmentManager.findFragmentById(R.id.exercisesEndLayoutFrameLayout)
         if (childFragment == null) {
-            if (exercisesViewModel?.exercisesResultSentToServer() == false && supportFragmentManager.findFragmentById(R.id.frameLayout) !is ExercisesLoadFragment)
+            if (exercisesViewModel?.exercisesResultSentToServer() == false && exercisesViewModel?.exerciseIndex != 0)
                 onBackClick()
             else
                 this.finish()

@@ -121,7 +121,6 @@ class PromoBottomSheetFragment : BottomDrawerFragment(){
 
                 view.background?.alpha =((1F - (slideOffset * 2F)).coerceAtLeast(0F)*255).toInt()
 
-                println(context)
                 if(context?.getCurrentTheme() == ThemeUtils.Theme.LIGHT && arguments!!.getInt(SCREEN_NUMBER_KEY) == 1) {
                     (bottomDrawerDialog?.drawer?.parent as ViewGroup?)
                         ?.findViewById<CoordinatorLayout>(R.id.bottom_sheet_coordinator)
@@ -149,6 +148,8 @@ class PromoBottomSheetFragment : BottomDrawerFragment(){
                 bottomDrawerDialog?.behavior?.isDraggable = false
             }
 
+            bottomDrawerDialog?.behavior?.isDraggable = state == CustomBottomSheetBehavior.STATE_COLLAPSED
+
 
             if(arguments!!.getInt(SCREEN_NUMBER_KEY) != 1)
                 dialog?.window?.decorView?.clearLightStatusBar()
@@ -170,7 +171,9 @@ class PromoBottomSheetFragment : BottomDrawerFragment(){
                         }
                        CustomBottomSheetBehavior.STATE_COLLAPSED -> {
                             bottomDrawerDialog?.behavior?.isHideable = false
-                        }
+                           bottomDrawerDialog?.behavior?.isDraggable = true
+                       }
+                        else -> {}
                     }
                 }
 

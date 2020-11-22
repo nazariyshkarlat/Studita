@@ -103,7 +103,7 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(), ReloadPageCallback{
         addBottomSheetCallback {
             onSlide { _, slideOffset ->
 
-                if (this@ChapterBottomSheetFragment.view != null) {
+                if (this@ChapterBottomSheetFragment.view != null && !(this@ChapterBottomSheetFragment.bottomDrawerDialog?.behavior?.state == CustomBottomSheetBehavior.STATE_EXPANDED && slideOffset != 1F)) {
                     if (slideOffset < -0.5F) {
                         CustomSnackbar.hide(chapterLayoutFrameLayout.parent.parent.parent.parent as ViewGroup)
                     }
@@ -116,7 +116,7 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(), ReloadPageCallback{
                     }
 
                     val titlePadding =
-                        ((if (factor > 0F) 16F.dpToPx() else 0) + (12F.dpToPx() * factor)).roundToInt()
+                        ((if (factor > 0F) 24F.dpToPx() else 0) + (8F.dpToPx() * factor)).roundToInt()
                     chapterHeaderTitle.updatePadding(left = titlePadding, right = titlePadding)
                     chapterHeaderCloseButton.alpha = factor
                     chapterHeaderCloseButton.isEnabled = factor > 0

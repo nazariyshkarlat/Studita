@@ -94,6 +94,8 @@ class PromoBottomSheetEndFragment : BottomDrawerFragment(){
                 bottomDrawerDialog?.behavior?.isDraggable = false
             }
 
+            bottomDrawerDialog?.behavior?.isDraggable = state == CustomBottomSheetBehavior.STATE_COLLAPSED
+
             addBottomSheetCallback(object : CustomBottomSheetBehavior.BottomSheetCallback(){
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     when (newState) {
@@ -106,6 +108,7 @@ class PromoBottomSheetEndFragment : BottomDrawerFragment(){
                         }
                         CustomBottomSheetBehavior.STATE_COLLAPSED -> {
                             bottomDrawerDialog?.behavior?.isHideable = false
+                            bottomDrawerDialog?.behavior?.isDraggable = true
                         }
                         else -> {}
                     }

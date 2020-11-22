@@ -197,11 +197,14 @@ class SearchViewHolder(
             (itemView as ViewGroup).makeView(R.layout.friends_filter_popup_layout) as ViewGroup
         (((contentView as ViewGroup).getChildAt(1) as ViewGroup).getChildAt(0) as ViewGroup).children.forEachIndexed { index, child ->
             child.setOnClickListener {
-                it.friendsFilterPopupLayoutItemCheckIcon.isSelected = false
-                selectedPos = index
-                (contentView as ViewGroup).setSelectedItem(selectedPos)
-                updateCallback.update(getSortBy(it))
-                dismiss()
+                if (selectedPos != index) {
+                    it.friendsFilterPopupLayoutItemCheckIcon.isSelected = false
+                    selectedPos = index
+                    (contentView as ViewGroup).setSelectedItem(selectedPos)
+                    updateCallback.update(getSortBy(it))
+                    dismiss()
+                }else
+                    dismiss()
             }
         }
         (contentView as ViewGroup).setSelectedItem(selectedPos)

@@ -83,8 +83,6 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
                         privacySettingsLayoutRatingsBlockShowRadio.jumpDrawablesToCurrentState()
                     }
 
-
-                    println(privacySettings.profileIsVisible)
                     if (privacySettings.profileIsVisible == true) {
                         privacySettingsLayoutVisibilityBlockShowRadio.isChecked = true
                         privacySettingsLayoutVisibilityBlockHideRadio.isChecked = false

@@ -92,8 +92,7 @@ object ImageUtils {
         val input: InputStream? = context.contentResolver.openInputStream(path)
 
         if(input != null && path.path != null) {
-            val ei =
-                if (Build.VERSION.SDK_INT > 23) ExifInterface(input) else ExifInterface(path.path!!)
+            val ei = ExifInterface(input)
             val orientation: Int = ei.getAttributeInt(
                 ExifInterface.TAG_ORIENTATION,
                 ExifInterface.ORIENTATION_UNDEFINED

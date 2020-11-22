@@ -20,7 +20,6 @@ class SyncExercisesReportsImpl : SyncExercisesReports {
     }
 
     override fun scheduleSendExerciseReport(exerciseReportRequestData: ExerciseReportRequestData) {
-        println("shedule 123")
         val json = serializeExerciseReportRequestData(exerciseReportRequestData)
         val data = Data.Builder()
         data.putString("EXERCISE_REPORT_DATA", json)

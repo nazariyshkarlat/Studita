@@ -15,7 +15,9 @@ import androidx.core.os.bundleOf
 import com.studita.R
 import com.studita.presentation.fragments.profile.edit.CropAvatarFragment
 import com.studita.presentation.fragments.base.BaseDialogFragment
+import com.studita.presentation.views.CustomSnackbar
 import com.studita.utils.ImageUtils.createImageFile
+import com.studita.utils.ThemeUtils
 import com.studita.utils.navigateTo
 import kotlinx.android.synthetic.main.change_avatar_dialog_alert.*
 import pub.devrel.easypermissions.EasyPermissions
@@ -31,6 +33,8 @@ class ChangeAvatarDialogAlertFragment : BaseDialogFragment(R.layout.change_avata
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        photoPath = savedInstanceState?.getString("PHOTO_PATH")
 
         changeAvatarDialogAlertTakePhoto.setOnClickListener {
             showCameraIntent(view.context)
@@ -94,37 +98,45 @@ class ChangeAvatarDialogAlertFragment : BaseDialogFragment(R.layout.change_avata
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        var selectedImagePath: Uri? = null
-        when (requestCode) {
-            0 -> {
-                if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            var selectedImagePath: Uri? = null
+            when (requestCode) {
+                0 -> {
                     photoPath?.let {
                         val file = File(it)
                         selectedImagePath = Uri.fromFile(file)
                     }
                 }
-            }
-            1 -> {
-                if (resultCode == RESULT_OK && data != null) {
-                    val selectedImageUri = data.data
-                    if (selectedImageUri != null)
-                        selectedImagePath = selectedImageUri
+                1 -> {
+                    if (data != null) {
+                        val selectedImageUri = data.data
+                        if (selectedImageUri != null)
+                            selectedImagePath = selectedImageUri
+                    }
                 }
             }
-        }
-        selectedImagePath?.let {
-            dismiss()
-            (activity as AppCompatActivity).navigateTo(
-                CropAvatarFragment()
-                    .apply {
-                this@ChangeAvatarDialogAlertFragment.targetFragment?.let {
-                    this.setTargetFragment(
-                        it,
-                        0
+            selectedImagePath?.let {
+                dismiss()
+                (activity as AppCompatActivity).navigateTo(
+                    CropAvatarFragment()
+                        .apply {
+                            this@ChangeAvatarDialogAlertFragment.targetFragment?.let {
+                                this.setTargetFragment(
+                                    it,
+                                    0
+                                )
+                            }
+                            arguments = bundleOf("SELECTED_IMAGE_URI" to it)
+                        }, R.id.doubleFrameLayoutFrameLayout
+                )
+            } ?: run {
+                activity?.let {
+                    CustomSnackbar(it).show(
+                        it.resources.getString(R.string.select_photo_error),
+                        ThemeUtils.getRedColor(it)
                     )
                 }
-                arguments = bundleOf("SELECTED_IMAGE_URI" to it)
-            }, R.id.doubleFrameLayoutFrameLayout)
+            }
         }
     }
 
@@ -150,6 +162,12 @@ class ChangeAvatarDialogAlertFragment : BaseDialogFragment(R.layout.change_avata
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState.apply {
+            putString("PHOTO_PATH", photoPath)
+        })
     }
 
 

@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.studita.App
 import com.studita.di.data.EditProfileModule
 import com.studita.di.data.UserDataModule
 import com.studita.domain.entity.EditProfileData
@@ -45,12 +46,27 @@ class EditProfileViewModel() : ViewModel() {
     fun getUserData(){
         progressState.value = true
         viewModelScope.launch {
-            when(val userData = userDataInteractor.getUserData(PrefsUtils.getUserId(), false, true)){
+
+            if(App.userDataDeferred.isCompleted && App.userDataDeferred.await() !is UserDataStatus.Success)
+                App.authenticate(UserUtils.getUserIDTokenData(), true)
+
+            when(val userData = if(!App.userDataDeferred.isCompleted) App.userDataDeferred.await() else userDataInteractor.getUserData(PrefsUtils.getUserId(), false, true)){
                 is UserDataStatus.NoConnection -> errorEvent.value = true
                 is UserDataStatus.ServiceUnavailable -> errorEvent.value = false
                 is UserDataStatus.Success -> {
-                    UserUtils.userDataLiveData.value = userData.result
-                    progressState.value = false
+
+                    when(App.userDataDeferred.await()) {
+                        is UserDataStatus.Success -> {
+                            UserUtils.userDataLiveData.value = userData.result
+                            progressState.value = false
+                        }
+                        is UserDataStatus.NoConnection -> {
+                            errorEvent.value = true
+                        }
+                        else -> {
+                            errorEvent.value = false
+                        }
+                    }
                 }
             }
         }

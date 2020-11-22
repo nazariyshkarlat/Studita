@@ -25,6 +25,7 @@ class ChapterBottomSheetServerProblemsFragment : BaseFragment(R.layout.chapter_b
         super.onViewCreated(view, savedInstanceState)
 
         chapterBottomSheetServerProblemsLayoutTryAgainButton.setOnSingleClickListener {
+            chapterBottomSheetServerProblemsLayoutEnableOfflineModeButton.setOnClickListener {  }
             chapterBottomSheetServerProblemsLayoutTryAgainButton.animateRefreshButton()
             lifecycleScope.launch(Dispatchers.Main) {
                 delay(400)
@@ -34,6 +35,7 @@ class ChapterBottomSheetServerProblemsFragment : BaseFragment(R.layout.chapter_b
         }
 
         chapterBottomSheetServerProblemsLayoutEnableOfflineModeButton.setOnClickListener {
+            chapterBottomSheetServerProblemsLayoutTryAgainButton.setOnClickListener {  }
             PrefsUtils.setOfflineMode(true)
             removeFragmentWithAnimation(view)
 

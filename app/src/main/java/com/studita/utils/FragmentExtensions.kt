@@ -52,6 +52,21 @@ fun Fragment.addFragment(fragment: Fragment, container: Int, addToBackStack: Boo
         .commit()
 }
 
+fun Fragment.addFragmentNow(fragment: Fragment, container: Int, addToBackStack: Boolean = false,
+                         startAnim: Int = 0,
+                         endAnim: Int = 0,
+                         backStartAnim: Int = 0,
+                         backEndAnim: Int = 0) {
+    childFragmentManager.beginTransaction()
+        .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
+        .add(container, fragment, fragment::class.java.name)
+        .apply {
+            if(addToBackStack) addToBackStack(null)
+        }
+        .commitNow()
+}
+
+
 fun FragmentManager.addFragment(fragment: Fragment, container: Int, addToBackStack: Boolean = false,
                                 startAnim: Int = 0,
                                 endAnim: Int = 0,
@@ -96,6 +111,12 @@ fun FragmentManager.removeFragment(fragment: Fragment) {
     beginTransaction()
         .remove(fragment)
         .commit()
+}
+
+fun FragmentManager.removeFragmentNow(fragment: Fragment) {
+    beginTransaction()
+        .remove(fragment)
+        .commitNow()
 }
 
 fun FragmentManager.removeFragmentAllowStateLoss(fragment: Fragment) {

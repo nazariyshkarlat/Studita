@@ -348,7 +348,6 @@ fun injectParts(context: Context, text: String, partsToInject: List<String>) : P
                 """[{}]""".toRegex(),
                 ""
             ).toInt()]
-        println(insideBrackets)
         textSpanParts.add(
             spanIndex + spanIndex-1,
             insideBrackets.createSpannableString(

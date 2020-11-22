@@ -52,7 +52,7 @@ class PressView(val view: View, var withMinClickInterval: Boolean = false) {
             }
 
             override fun onCancelTouchAction(x: Float, y: Float) {
-                if (view.isEnabled) {
+                if (view.isEnabled && view.isClickable){
                     onUp()
                 }
             }

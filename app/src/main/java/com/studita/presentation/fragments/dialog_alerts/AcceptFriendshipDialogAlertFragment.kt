@@ -91,6 +91,13 @@ class AcceptFriendshipDialogAlertFragment :
                 }
             }
         })
+
+        acceptFriendshipDialogAlertViewModel.errorEvent.observe(context, Observer {
+            CustomSnackbar(context).show(
+                context.resources.getString(R.string.server_temporarily_unavailable),
+                ThemeUtils.getRedColor(context),
+            )
+        })
     }
 
 

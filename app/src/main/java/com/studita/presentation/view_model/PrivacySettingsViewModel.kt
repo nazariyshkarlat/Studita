@@ -3,6 +3,7 @@ package com.studita.presentation.view_model
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.studita.App
 import com.studita.di.data.PrivacySettingsModule
 import com.studita.di.data.UsersModule
 import com.studita.domain.entity.PrivacySettingsData
@@ -11,6 +12,7 @@ import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.EditPrivacySettingsStatus
 import com.studita.domain.interactor.HasFriendsStatus
 import com.studita.domain.interactor.PrivacySettingsStatus
+import com.studita.domain.interactor.UserDataStatus
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import com.studita.utils.launchExt
@@ -27,22 +29,35 @@ class PrivacySettingsViewModel : ViewModel() {
     val errorEvent = SingleLiveEvent<Boolean>()
     val privacySettingsStatus = MutableLiveData<PrivacySettingsData>()
 
-    private var job: Job? = null
-
     init {
         getPrivacySettings(UserUtils.getUserIDTokenData()!!)
     }
 
     fun getPrivacySettings(userIdTokenData: UserIdTokenData) {
         viewModelScope.launch(Dispatchers.Main) {
+
+            if(App.userDataDeferred.isCompleted && App.userDataDeferred.await() !is UserDataStatus.Success)
+                App.authenticate(UserUtils.getUserIDTokenData(), true)
+
             val hasFriends = async { hasFriends() }
             when (val result = privacySettingsInteractor.getPrivacySettings(userIdTokenData)) {
                 is PrivacySettingsStatus.NoConnection -> errorEvent.value = true
                 is PrivacySettingsStatus.ServiceUnavailable -> errorEvent.value = false
                 is PrivacySettingsStatus.Success -> {
-                    this@PrivacySettingsViewModel.hasFriends =
-                        hasFriends.await() is HasFriendsStatus.HasFriends
-                    privacySettingsStatus.value = result.privacySettingsData
+
+                    when(App.userDataDeferred.await()) {
+                        is UserDataStatus.Success -> {
+                            this@PrivacySettingsViewModel.hasFriends =
+                                hasFriends.await() is HasFriendsStatus.HasFriends
+                            privacySettingsStatus.value = result.privacySettingsData
+                        }
+                        is UserDataStatus.NoConnection -> {
+                            errorEvent.value = true
+                        }
+                        else -> {
+                            errorEvent.value = false
+                        }
+                    }
                 }
             }
         }

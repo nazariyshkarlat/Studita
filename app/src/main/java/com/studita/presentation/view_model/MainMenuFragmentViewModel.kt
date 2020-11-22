@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.iid.FirebaseInstanceId
 import com.studita.App.Companion.initUserData
+import com.studita.domain.interactor.UserDataStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -91,6 +92,7 @@ class MainMenuFragmentViewModel : ViewModel() {
                                 if (result is SignInWithGoogleStatus.Success) {
                                     userStatisticsInteractor.clearUserStaticsRecords()
                                     initUserData((result as SignInWithGoogleStatus.Success).result.userDataData)
+                                    App.userDataDeferred.complete(UserDataStatus.Success((result as SignInWithGoogleStatus.Success).result.userDataData))
                                     AccountAuthenticator.addAccount(
                                         applicationRef,
                                         it.email.toString()

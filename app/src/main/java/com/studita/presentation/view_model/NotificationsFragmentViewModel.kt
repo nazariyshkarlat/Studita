@@ -4,10 +4,12 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.studita.App
 import com.studita.di.data.NotificationsModule
 import com.studita.domain.entity.NotificationData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.GetNotificationsStatus
+import com.studita.domain.interactor.UserDataStatus
 import com.studita.presentation.model.NotificationsUiModel
 import com.studita.presentation.model.toUiModel
 import com.studita.utils.UserUtils
@@ -48,6 +50,11 @@ class NotificationsFragmentViewModel : ViewModel() {
             currentPageNumber++
 
         getNotificationsJob = viewModelScope.launchExt(getNotificationsJob) {
+
+
+            if(App.userDataDeferred.isCompleted && App.userDataDeferred.await() !is UserDataStatus.Success)
+                App.authenticate(UserUtils.getUserIDTokenData(), true)
+
             when (val result = notificationsInteractor.getNotifications(
                 userIdTokenData,
                 perPage,
@@ -62,22 +69,49 @@ class NotificationsFragmentViewModel : ViewModel() {
                     errorEvent.value = false
                 }
                 is GetNotificationsStatus.NoNotificationsFound -> {
-                    progressState.value = false
-                    notificationsState.value = false to (if (currentPageNumber == 1) NotificationsResultState.NoResultsFound else NotificationsResultState.NoMoreResultsFound)
-                }
-                is GetNotificationsStatus.Success -> {
-                    val notificationsResultState =
-                        if (currentPageNumber == 1) NotificationsResultState.FirstResults(result.notificationsData) else NotificationsResultState.MoreResults(
-                            result.notificationsData
-                        )
-
-                    if (UserUtils.userDataNotNull() && !UserUtils.userData.notificationsAreChecked) {
-                        UserUtils.userDataLiveData.value = UserUtils.userData.apply {
-                            notificationsAreChecked = true
+                    when(App.userDataDeferred.await()) {
+                        is UserDataStatus.Success -> {
+                            progressState.value = false
+                            notificationsState.value = false to (if (currentPageNumber == 1) NotificationsResultState.NoResultsFound else NotificationsResultState.NoMoreResultsFound)
+                        }
+                        is UserDataStatus.NoConnection -> {
+                            errorState = true
+                            errorEvent.value = true
+                        }
+                        else -> {
+                            errorState = true
+                            errorEvent.value = false
                         }
                     }
-                    progressState.value = false
-                    notificationsState.value = canBeMoreItems(notificationsResultState) to notificationsResultState
+                }
+                is GetNotificationsStatus.Success -> {
+
+                    when(App.userDataDeferred.await()) {
+                        is UserDataStatus.Success -> {
+
+                            val notificationsResultState =
+                                if (currentPageNumber == 1) NotificationsResultState.FirstResults(result.notificationsData) else NotificationsResultState.MoreResults(
+                                    result.notificationsData
+                                )
+
+                            if (UserUtils.userDataNotNull() && !UserUtils.userData.notificationsAreChecked) {
+                                UserUtils.userDataLiveData.value = UserUtils.userData.apply {
+                                    notificationsAreChecked = true
+                                }
+                            }
+                            progressState.value = false
+                            notificationsState.value =
+                                canBeMoreItems(notificationsResultState) to notificationsResultState
+                        }
+                        is UserDataStatus.NoConnection -> {
+                            errorState = true
+                            errorEvent.value = true
+                        }
+                        else -> {
+                            errorState = true
+                            errorEvent.value = false
+                        }
+                    }
                 }
             }
         }

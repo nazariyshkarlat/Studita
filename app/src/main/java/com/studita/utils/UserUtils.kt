@@ -27,14 +27,14 @@ object UserUtils {
 
     var userDataLiveData = MutableLiveData<UserDataData>()
 
-    val localUserDataLiveData = MediatorLiveData<UserDataData>().apply {
+    var localUserDataLiveData = MediatorLiveData<UserDataData>().apply {
         addSource(userDataLiveData) {
             if(it != null)
                 this.value = it
         }
     }
 
-    val userDataEventsLiveData = LiveEvent<UserDataData>().apply {
+    var userDataEventsLiveData = LiveEvent<UserDataData>().apply {
         addSource(userDataLiveData) {
             if(it != null)
                 this.value = it

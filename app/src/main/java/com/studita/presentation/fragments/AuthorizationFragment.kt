@@ -18,12 +18,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import com.studita.App
 import com.studita.R
 import com.studita.authenticator.AccountAuthenticator
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
-import com.studita.presentation.activities.MainActivity
-import com.studita.presentation.activities.MainActivity.Companion.startMainActivityNewTask
+import com.studita.presentation.activities.MainActivity.Companion.startMainActivityClearTop
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.dialog_alerts.ProgressDialogAlertFragment
 import com.studita.presentation.listeners.OnViewSizeChangeListener
@@ -36,7 +34,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 
 class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout), TextWatcher,
@@ -86,7 +83,8 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
 
             viewModel.progressState.observe(viewLifecycleOwner, Observer {
                 if(it){
-                    ProgressDialogAlertFragment().show(fragmentManager!!, "PROGRESS_FRAGMENT")
+                    if(fragmentManager?.findFragmentByTag("PROGRESS_FRAGMENT") == null)
+                        ProgressDialogAlertFragment().show(fragmentManager!!, "PROGRESS_FRAGMENT")
                 }else{
                     (fragmentManager?.findFragmentByTag("PROGRESS_FRAGMENT") as? DialogFragment)?.dismiss()
                 }
@@ -129,7 +127,6 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                             AuthorizationFragmentViewModel.ErrorType.PasswordError
                         )
                         is AuthorizationFragmentViewModel.AuthorizationResult.SignUpSuccess -> {
-                            AccountAuthenticator.addAccount(view.context, result.email)
                             activity?.application?.let {
                                 viewModel.logIn(
                                     result.email to result.password,
@@ -140,7 +137,7 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
                         is AuthorizationFragmentViewModel.AuthorizationResult.LogInSuccess -> {
                             AccountAuthenticator.addAccount(view.context, result.email)
                             authenticationState.value = CheckTokenIsCorrectStatus.Correct to false
-                            activity?.startMainActivityNewTask(extras = bundleOf("IS_AFTER_SIGN_UP" to result.afterSignUp))
+                            activity?.startMainActivityClearTop(extras = bundleOf("IS_AFTER_SIGN_UP" to result.afterSignUp))
                         }
                     }
                 })

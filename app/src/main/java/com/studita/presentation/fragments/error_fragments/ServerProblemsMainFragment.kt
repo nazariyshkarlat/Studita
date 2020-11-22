@@ -30,6 +30,7 @@ class ServerProblemsMainFragment : BaseFragment(R.layout.server_problems_main_la
         }
 
         serverProblemsMainLayoutTryAgainButton.setOnSingleClickListener {
+            serverProblemsMainLayoutEnableOfflineModeButton.setOnClickListener {  }
             serverProblemsMainLayoutTryAgainButton.animateRefreshButton()
             lifecycleScope.launch(Dispatchers.Main) {
                 delay(400)
@@ -39,6 +40,7 @@ class ServerProblemsMainFragment : BaseFragment(R.layout.server_problems_main_la
         }
 
         serverProblemsMainLayoutEnableOfflineModeButton.setOnClickListener {
+            serverProblemsMainLayoutTryAgainButton.setOnClickListener {  }
             PrefsUtils.setOfflineMode(true)
             (parentFragment as? ReloadPageCallback)?.onPageReload()
             removeFragmentWithAnimation(view)

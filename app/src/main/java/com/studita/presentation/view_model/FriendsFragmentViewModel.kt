@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.studita.App
 import com.studita.R
 import com.studita.di.data.UsersModule
 import com.studita.domain.entity.FriendActionRequestData
@@ -12,6 +13,7 @@ import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.FriendActionStatus
 import com.studita.domain.interactor.GetUsersStatus
 import com.studita.domain.interactor.IsMyFriendStatus
+import com.studita.domain.interactor.UserDataStatus
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.domain.repository.UsersRepository
 import com.studita.presentation.model.UsersRecyclerUiModel
@@ -71,7 +73,7 @@ class FriendsFragmentViewModel : ViewModel() {
             currentPageNumber = 1
             progressState.value = true
         }
-        
+
         this.startsWith = startsWith
         this.isGlobalSearch = isGlobalSearch
 
@@ -79,6 +81,10 @@ class FriendsFragmentViewModel : ViewModel() {
             this.sortBy = sortBy
 
         searchUsersJob = viewModelScope.launchExt(searchUsersJob) {
+
+            if(App.userDataDeferred.isCompleted && App.userDataDeferred.await() !is UserDataStatus.Success)
+                App.authenticate(UserUtils.getUserIDTokenData(), true)
+
             var searchResultState: SearchResultState? = null
             val getUsersStatus = friendsInteractor.getUsers(
                 if (isGlobalSearch) null else profileId,
@@ -90,35 +96,59 @@ class FriendsFragmentViewModel : ViewModel() {
             )
             when (getUsersStatus) {
                 is GetUsersStatus.Success -> {
-                    searchResultState = if (currentPageNumber == 1) {
-                        userData = ArrayList(getUsersStatus.friendsResponseData.users)
-                        SearchResultState.ResultsFound(getUsersStatus.friendsResponseData.users)
-                    } else {
-                        userData?.addAll(getUsersStatus.friendsResponseData.users)
-                        SearchResultState.MoreResultsFound(getUsersStatus.friendsResponseData.users)
+                    when(App.userDataDeferred.await()) {
+                        is UserDataStatus.Success -> {
+                            searchResultState = if (currentPageNumber == 1) {
+                                userData = ArrayList(getUsersStatus.friendsResponseData.users)
+                                SearchResultState.ResultsFound(getUsersStatus.friendsResponseData.users)
+                            } else {
+                                userData?.addAll(getUsersStatus.friendsResponseData.users)
+                                SearchResultState.MoreResultsFound(getUsersStatus.friendsResponseData.users)
+                            }
+                        }
+                        is UserDataStatus.NoConnection -> {
+                            errorEvent.value = true
+                            errorState = true
+                        }
+                        else -> {
+                            errorEvent.value = false
+                            errorState = true
+                        }
                     }
                 }
                 is GetUsersStatus.NoUsersFound -> {
-                    if (!isGlobalSearch) {
-                        if (startsWith != null) {
-                            searchResultState = if (currentPageNumber == 1)
-                                SearchResultState.SearchFriendsNotFound
-                            else
-                                SearchResultState.NoMoreResults
-                        } else {
-                            if (currentPageNumber == 1) {
-                                if (isMyProfile)
-                                    searchResultState = SearchResultState.MyProfileEmptyFriends
+                    when(App.userDataDeferred.await()) {
+                        is UserDataStatus.Success -> {
+                            if (!isGlobalSearch) {
+                                if (startsWith != null) {
+                                    searchResultState = if (currentPageNumber == 1)
+                                        SearchResultState.SearchFriendsNotFound
+                                    else
+                                        SearchResultState.NoMoreResults
+                                } else {
+                                    if (currentPageNumber == 1) {
+                                        if (isMyProfile)
+                                            searchResultState = SearchResultState.MyProfileEmptyFriends
+                                    } else {
+                                        searchResultState = SearchResultState.NoMoreResults
+                                    }
+                                }
                             } else {
-                                searchResultState = SearchResultState.NoMoreResults
+                                searchResultState = if (currentPageNumber == 1)
+                                    SearchResultState.GlobalSearchNotFound
+                                else
+                                    SearchResultState.NoMoreResults
+
                             }
                         }
-                    } else {
-                        searchResultState = if (currentPageNumber == 1)
-                            SearchResultState.GlobalSearchNotFound
-                        else
-                            SearchResultState.NoMoreResults
-
+                        is UserDataStatus.NoConnection -> {
+                            errorEvent.value = true
+                            errorState = true
+                        }
+                        else -> {
+                            errorEvent.value = false
+                            errorState = true
+                        }
                     }
                 }
                 is GetUsersStatus.NoConnection -> {
@@ -144,6 +174,9 @@ class FriendsFragmentViewModel : ViewModel() {
         searchUsersJob?.cancel()
         searchResultState.value =
             (searchResultState.value?.first == true) to SearchResultState.GlobalSearchEnterText
+        isGlobalSearch = true
+        startsWith = ""
+        recyclerItems?.removeAll { it !is UsersRecyclerUiModel.SearchUiModel }
         progressState.value = false
     }
 

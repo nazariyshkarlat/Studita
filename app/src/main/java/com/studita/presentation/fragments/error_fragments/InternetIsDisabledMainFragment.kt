@@ -16,6 +16,7 @@ import com.studita.presentation.views.CustomSnackbar
 import com.studita.utils.*
 import kotlinx.android.synthetic.main.internet_is_disabled_layout.*
 import kotlinx.android.synthetic.main.internet_is_disabled_main_layout.*
+import kotlinx.android.synthetic.main.server_problems_main_layout.*
 import kotlinx.coroutines.*
 
 class InternetIsDisabledMainFragment : BaseFragment(R.layout.internet_is_disabled_main_layout){
@@ -28,6 +29,7 @@ class InternetIsDisabledMainFragment : BaseFragment(R.layout.internet_is_disable
         }
 
         internetIsDisabledMainLayoutTryAgainButton.setOnSingleClickListener {
+            internetIsDisabledMainLayoutEnableOfflineModeButton.setOnClickListener {  }
             internetIsDisabledMainLayoutTryAgainButton.animateRefreshButton()
             (parentFragment as HomeFragment).homeFragmentViewModel?.progressState?.value = true
             lifecycleScope.launch(Dispatchers.Main) {
@@ -38,6 +40,7 @@ class InternetIsDisabledMainFragment : BaseFragment(R.layout.internet_is_disable
         }
 
         internetIsDisabledMainLayoutEnableOfflineModeButton.setOnClickListener {
+            internetIsDisabledMainLayoutTryAgainButton.setOnClickListener {  }
             PrefsUtils.setOfflineMode(true)
             (parentFragment as? ReloadPageCallback)?.onPageReload()
             removeFragmentWithAnimation(view)

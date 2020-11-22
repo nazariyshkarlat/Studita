@@ -13,7 +13,7 @@ interface AuthorizationInteractor {
 
     suspend fun checkTokenIsCorrect(
         userIdTokenData: UserIdTokenData,
-        retryCount: Int = Int.MAX_VALUE
+        retryCount: Int = 3
     ): CheckTokenIsCorrectStatus
 
     suspend fun signUp(

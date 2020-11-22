@@ -1,15 +1,12 @@
 package com.studita.authenticator
 
 import android.accounts.AccountManager
-import android.accounts.OnAccountsUpdateListener
 import android.app.Service
 import android.content.Intent
 
 import android.os.IBinder
-import com.studita.App
 import com.studita.App.Companion.recreateAppEvent
 import com.studita.R
-import com.studita.presentation.activities.MainActivity.Companion.startMainActivityNewTask
 import com.studita.presentation.view_model.SingleLiveEvent
 import com.studita.utils.UserUtils
 

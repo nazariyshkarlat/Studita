@@ -64,8 +64,10 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
                 if(!isEnabled)
                     homeFragmentViewModel?.clearResults()
-                else if(!vm.results.isNullOrEmpty())
+                else {
+                    vm.errorEvent.value = ErrorState.NO_ERROR
                     vm.levelsJob?.cancel()
+                }
 
             })
 
@@ -76,6 +78,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
                 if (isOfflineModeChanged) {
 
+                    println(pair)
                     when (checkTokenIsCorrect) {
                         is CheckTokenIsCorrectStatus.Waiting -> {
                             if(!(PrefsUtils.isOfflineModeEnabled() && vm.results?.isNotEmpty() == true)) {
@@ -84,6 +87,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                         }
                         is CheckTokenIsCorrectStatus.Correct -> {
                             if(PrefsUtils.isOfflineModeEnabled()){
+                                println("enabled")
+                                println("${vm.results.isNullOrEmpty()}")
                                 if(vm.results.isNullOrEmpty()) {
                                     vm.getLevels()
                                 }else {
@@ -97,6 +102,12 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                                     homeFragmentViewModel?.progressState?.value = true
                                 }
                             }
+                        }
+                        is CheckTokenIsCorrectStatus.ServiceUnavailable, CheckTokenIsCorrectStatus.Failure -> {
+                           vm.errorEvent.value = ErrorState.SERVER_ERROR
+                        }
+                        is CheckTokenIsCorrectStatus.NoConnection -> {
+                            vm.errorEvent.value = ErrorState.CONNECTION_ERROR
                         }
 
                     }
@@ -136,13 +147,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                             )
                         homeLayoutRecyclerView.visibility = View.VISIBLE
 
-                        if(UserUtils.isLoggedIn())
-                            vm.initSubscribeEmailState()
-
-                        if(arguments?.containsKey("IS_AFTER_SIGN_UP") == true){
-                            vm.showLogInSnackbar(arguments!!.getBoolean("IS_AFTER_SIGN_UP"))
-                            arguments?.clear()
-                        }
+                        if(vm.errorEvent.value == ErrorState.NO_ERROR)
+                            showSnackbars()
                     } else {
 
                         if(!PrefsUtils.offlineDataIsCached())
@@ -159,26 +165,51 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             })
 
             vm.errorEvent.observe(viewLifecycleOwner, Observer { errorState->
-                println("error state ${errorState}")
+                val currentFragment = childFragmentManager.findFragmentById(R.id.homeLayoutFrameLayout)
                 when (errorState) {
-                    ErrorState.CONNECTION_ERROR -> {
-                        addFragment(
-                            InternetIsDisabledMainFragment(),
-                            R.id.homeLayoutFrameLayout,
-                            false
-                        )
+                    ErrorState.CONNECTION_ERROR-> {
+                        if(!PrefsUtils.isOfflineModeEnabled() && currentFragment !is InternetIsDisabledMainFragment) {
+                            if(currentFragment is ServerProblemsMainFragment){
+                                replace(
+                                    InternetIsDisabledMainFragment(),
+                                    R.id.homeLayoutFrameLayout,
+                                    addToBackStack = false
+                                )
+                            }else {
+                                addFragment(
+                                    InternetIsDisabledMainFragment(),
+                                    R.id.homeLayoutFrameLayout,
+                                    false
+                                )
+                            }
+                        }
                     }
                     ErrorState.SERVER_ERROR -> {
-                        addFragment(ServerProblemsMainFragment(), R.id.homeLayoutFrameLayout, false)
+                        if(!PrefsUtils.isOfflineModeEnabled() && currentFragment !is ServerProblemsMainFragment) {
+                            if(currentFragment is InternetIsDisabledMainFragment){
+                                replace(
+                                    ServerProblemsMainFragment(),
+                                    R.id.homeLayoutFrameLayout,
+                                    addToBackStack = false
+                                )
+                            }else {
+                                addFragment(
+                                    ServerProblemsMainFragment(),
+                                    R.id.homeLayoutFrameLayout,
+                                    false
+                                )
+                            }
+                        }
                     }
                     ErrorState.NO_ERROR -> {
-                        val currentFragment = childFragmentManager.findFragmentById(R.id.homeLayoutFrameLayout)
                         if(currentFragment is InternetIsDisabledMainFragment ||
                             currentFragment is ServerProblemsMainFragment){
                             childFragmentManager.removeFragment(
                                 currentFragment
                             )
                         }
+
+                        showSnackbars()
                     }
                     else -> {}
                 }
@@ -187,7 +218,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             UserUtils.userDataLiveData.observeNoNull(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { data ->
-                    if(vm.results != null && !(vm.resultsAreLocal && (!PrefsUtils.isOfflineModeEnabled() || UserUtils.isLoggedIn()))) {
+                    if(!vm.results.isNullOrEmpty() && !(vm.resultsAreLocal && (!PrefsUtils.isOfflineModeEnabled() || UserUtils.isLoggedIn()))) {
                         vm.errorEvent.value = ErrorState.NO_ERROR
 
                         if(vm.progressState.value == true)
@@ -229,6 +260,16 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
         mainFragmentViewModel?.showFab(true)
         homeLayoutRecyclerView.addOnScrollListener(FabRecyclerImpl(this))
+    }
+
+    private fun showSnackbars(){
+        if (UserUtils.isLoggedIn())
+            homeFragmentViewModel?.initSubscribeEmailState()
+
+        if (arguments?.containsKey("IS_AFTER_SIGN_UP") == true) {
+            homeFragmentViewModel?.showLogInSnackbar(arguments!!.getBoolean("IS_AFTER_SIGN_UP"))
+            arguments?.clear()
+        }
     }
 
     override fun onStart() {
@@ -368,11 +409,11 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         if(authenticationState.value?.first !is CheckTokenIsCorrectStatus.Correct) {
             authenticate(UserUtils.getUserIDTokenData(), false)
             hideProgress = false
-        }
-
-        if(UserUtils.userDataIsNull()) {
-            getUserData()
-            hideProgress = false
+        }else{
+            if(UserUtils.userDataIsNull()) {
+                getUserData()
+                hideProgress = false
+            }
         }
 
         if(!(PrefsUtils.isOfflineModeEnabled() && homeFragmentViewModel?.results?.isNotEmpty() == true)) {

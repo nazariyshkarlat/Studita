@@ -151,8 +151,9 @@ class UsersAdapter(
             }
             toolbarFragmentViewModel.setToolbarText(context.resources.getString(R.string.search))
         } else {
-            friendsFragmentViewModel.searchState =
-                FriendsFragmentViewModel.SearchState.NoSearch
+            if(friendsFragmentViewModel.searchState != FriendsFragmentViewModel.SearchState.NoSearch)
+                friendsFragmentViewModel.searchState =
+                    FriendsFragmentViewModel.SearchState.NoSearch
             toolbarFragmentViewModel.setToolbarText(context.resources.getString(if (userId == UserUtils.userData.userId) R.string.my_friends else R.string.friends))
         }
     }

@@ -18,6 +18,9 @@ import com.studita.presentation.view_model.ProfileFragmentViewModel
 import com.studita.presentation.view_model.UserStatisticsViewModel
 import com.studita.utils.*
 import com.google.gson.Gson
+import com.studita.App
+import com.studita.domain.entity.UserDataData
+import com.studita.domain.interactor.UserDataStatus
 import kotlinx.android.synthetic.main.user_stat_layout.*
 
 class UserStatFragment : NavigatableFragment(R.layout.user_stat_layout), ReloadPageCallback {

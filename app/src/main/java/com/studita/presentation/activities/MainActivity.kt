@@ -9,14 +9,11 @@ import com.studita.R
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.error_fragments.IncorrectTimeFragment
 import com.studita.presentation.fragments.first_open.BetaTestStartFragment
-import com.studita.presentation.fragments.first_open.OfflineModeDownloadFragment
 import com.studita.presentation.fragments.main.MainFragment
 import com.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.studita.utils.PrefsUtils
 import com.studita.utils.TimeUtils
 import com.studita.utils.addFragment
-import com.studita.utils.startActivity
-import dagger.internal.Beta
 
 class MainActivity : DefaultActivity() {
 
@@ -26,13 +23,12 @@ class MainActivity : DefaultActivity() {
 
     companion object {
         var needsRefresh = false
-        var needsRecreate = false
 
-        fun Activity.startMainActivityNewTask(extras: Bundle? = null) {
+        fun Activity.startMainActivityClearTop(extras: Bundle? = null) {
             val intent = Intent(this, MainActivity::class.java).apply {
                 extras?.let { this.putExtras(it) }
             }
-            finishAffinity()
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
 
@@ -60,10 +56,6 @@ class MainActivity : DefaultActivity() {
         if (needsRefresh) {
             this.recreate()
             needsRefresh = false
-        } else if (needsRecreate) {
-            startActivity<MainActivity>()
-            needsRecreate = false
-            this.finish()
         }
     }
 

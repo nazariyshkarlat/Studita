@@ -42,19 +42,17 @@ class HomeFragmentViewModel : ViewModel() {
     private var subscribeJob: Job? = null
 
     init {
-        println(this)
+        App.offlineModeChangeEvent = SingleLiveEvent()
         getLevels()
     }
 
     fun getLevels() {
         progressState.value = true
-        println("get levels")
         levelsJob = viewModelScope.launchExt(levelsJob) {
             val getLevelsStatus = levelsInteractor.getLevels(
                 UserUtils.isLoggedIn(),
                 PrefsUtils.isOfflineModeEnabled()
             )
-            println("status ${getLevelsStatus}")
             when (getLevelsStatus) {
                 is LevelsStatus.NoConnection -> {
                     errorEvent.value = ErrorState.CONNECTION_ERROR
@@ -71,9 +69,9 @@ class HomeFragmentViewModel : ViewModel() {
 
                     resultsAreLocal = PrefsUtils.isOfflineModeEnabled()
 
-                    println("active ${userDataDeferred.isActive}")
                     if(userDataDeferred.await() is UserDataStatus.Success && authenticationState.value?.first is CheckTokenIsCorrectStatus.Correct) {
 
+                        println("show")
                         progressState.value = false
                         errorEvent.value = ErrorState.NO_ERROR
                     }else{

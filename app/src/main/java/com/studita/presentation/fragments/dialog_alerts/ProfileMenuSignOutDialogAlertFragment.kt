@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.studita.R
 import com.studita.authenticator.AccountAuthenticator
-import com.studita.presentation.activities.MainActivity.Companion.startMainActivityNewTask
+import com.studita.presentation.activities.MainActivity.Companion.startMainActivityClearTop
 import com.studita.presentation.fragments.base.BaseDialogFragment
 import com.studita.utils.UserUtils
 import kotlinx.android.synthetic.main.dialog_alert_layout.*
@@ -26,7 +26,7 @@ class ProfileMenuSignOutDialogAlertFragment : BaseDialogFragment(R.layout.dialog
                 AccountAuthenticator.removeAccount(it)
             }
             dialog?.dismiss()
-            activity?.startMainActivityNewTask()
+            activity?.startMainActivityClearTop()
         }
     }
 

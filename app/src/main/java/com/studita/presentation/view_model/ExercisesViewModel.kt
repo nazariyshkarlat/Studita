@@ -71,6 +71,7 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
 
     var isBonusCompleted = true
     var isTraining = false
+    var exercisesAreCompletedAndNoBonus = false
     var exercisesAreCompleted = false
     private var exerciseResultSuccess = false
     var timeCounterIsPaused = true
@@ -82,7 +83,7 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
     var exercisesInChapterCount = 0
     private var arrayIndex = 0
     private var bonusIndex = 0
-    private var exerciseIndex = 0
+    var exerciseIndex = 0
     private var obtainedXP = 0
     var chapterName: String? = null
 
@@ -142,6 +143,13 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
                         exercises = ArrayList(exercisesResponseData.exercises)
 
                     if (answered.value == true) {
+                        val oldExercisesToRetry: ArrayList<ExerciseData> = exercisesToRetry.toMutableList() as ArrayList<ExerciseData>
+                        exercisesToRetry.clear()
+
+                        oldExercisesToRetry.forEach {old->
+                            exercisesToRetry.add(exercises.first { it.exerciseNumber ==  old.exerciseNumber})
+                        }
+
                         if ((exerciseData  as ExerciseData.ExerciseDataExercise).copy() == (getCurrentExerciseData() as ExerciseData.ExerciseDataExercise).copy()) {
                             exerciseData = getCurrentExerciseData()
                             checkExerciseResult()
@@ -178,7 +186,7 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
                 if(!PrefsUtils.isOfflineModeEnabled())
                     saveUserDataState.value = true to oldUserDataData
             }else -> {
-            if(!PrefsUtils.isOfflineModeEnabled())
+            if(!PrefsUtils.isOfflineModeEnabled() && showBadConnectionDialogAlertFragmentState.value != true)
                 showBadConnectionDialogAlertFragmentState.value = true
         }
         }
@@ -192,6 +200,16 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
                 PrefsUtils.isOfflineModeEnabled(),
                 true
             )
+
+            val data = CompletedExercisesData(
+                chapterNumber,
+                chapterPartInChapterNumber,
+                getAnswersPercent(),
+                Date(),
+                seconds,
+                correctBonusAnswers
+            )
+
             if (userDataStatus is UserDataStatus.Success) {
                 val currentUserData = userDataStatus.result.copy()
                 currentUserData.let {
@@ -251,15 +269,6 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
                             if (isTraining) 1 else null,
                             null
                         )
-                    )
-
-                    val data = CompletedExercisesData(
-                        chapterNumber,
-                        chapterPartInChapterNumber,
-                        getAnswersPercent(),
-                        Date(),
-                        seconds,
-                        correctBonusAnswers
                     )
 
                     if(PrefsUtils.isOfflineModeEnabled()) {
@@ -407,7 +416,7 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
     }
 
     fun exercisesResultSentToServer() =
-        saveObtainedExercisesDataJob?.isActive == true || saveObtainedExercisesDataJob?.isCompleted == true
+        saveUserDataState.value?.first == true
 
     private fun isBonusScreen() =
         exerciseIndex == getExercisesCount() && bonusExercises.isNotEmpty()
@@ -479,8 +488,12 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
                                     falseAnswers =
                                         exercisesToRetry.count { it is ExerciseData.ExerciseDataExercise }
 
-                                if (((getSplitExercisesAndBonuses().first.indexOf(exerciseData) == getSplitExercisesAndBonuses().first.lastIndex) || (arrayIndex  >= getSplitExercisesAndBonuses().first.size)) && exercisesToRetry.isEmpty())
+                                if (((getSplitExercisesAndBonuses().first.indexOf(exerciseData) == getSplitExercisesAndBonuses().first.lastIndex) || (arrayIndex  >= getSplitExercisesAndBonuses().first.size)) && exercisesToRetry.isEmpty()) {
                                     exercisesAreCompleted = true
+                                    if (isBonusCompleted)
+                                        exercisesAreCompletedAndNoBonus = true
+                                }
+
                                 arrayIndex++
                             }
                         }
@@ -489,8 +502,11 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
                     if (arrayIndex >= getSplitExercisesAndBonuses().first.size) {
                         exercisesToRetry.removeAt(0)
                     }
-                    if (((getSplitExercisesAndBonuses().first.indexOf(exerciseData) == getSplitExercisesAndBonuses().first.lastIndex) || (arrayIndex  >= getSplitExercisesAndBonuses().first.size)) && exercisesToRetry.isEmpty())
+                    if (((getSplitExercisesAndBonuses().first.indexOf(exerciseData) == getSplitExercisesAndBonuses().first.lastIndex) || (arrayIndex  >= getSplitExercisesAndBonuses().first.size)) && exercisesToRetry.isEmpty()) {
                         exercisesAreCompleted = true
+                        if (isBonusCompleted)
+                            exercisesAreCompletedAndNoBonus = true
+                    }
                     arrayIndex++
 
                     initFragment()
