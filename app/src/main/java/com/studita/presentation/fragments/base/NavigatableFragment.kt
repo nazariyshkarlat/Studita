@@ -32,6 +32,9 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId),
                 setRecyclerScrollListener()
             else
                 scrollingView?.viewTreeObserver?.addOnScrollChangedListener(this)
+
+            println("${scrollingView}")
+
             if (!isHidden) {
                 scrollingView?.let {
                     it.post {

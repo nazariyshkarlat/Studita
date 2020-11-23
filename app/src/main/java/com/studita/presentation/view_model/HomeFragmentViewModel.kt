@@ -70,8 +70,6 @@ class HomeFragmentViewModel : ViewModel() {
                     resultsAreLocal = PrefsUtils.isOfflineModeEnabled()
 
                     if(userDataDeferred.await() is UserDataStatus.Success && authenticationState.value?.first is CheckTokenIsCorrectStatus.Correct) {
-
-                        println("show")
                         progressState.value = false
                         errorEvent.value = ErrorState.NO_ERROR
                     }else{

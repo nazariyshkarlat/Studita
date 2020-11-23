@@ -78,7 +78,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
                 if (isOfflineModeChanged) {
 
-                    println(pair)
                     when (checkTokenIsCorrect) {
                         is CheckTokenIsCorrectStatus.Waiting -> {
                             if(!(PrefsUtils.isOfflineModeEnabled() && vm.results?.isNotEmpty() == true)) {
@@ -87,8 +86,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                         }
                         is CheckTokenIsCorrectStatus.Correct -> {
                             if(PrefsUtils.isOfflineModeEnabled()){
-                                println("enabled")
-                                println("${vm.results.isNullOrEmpty()}")
                                 if(vm.results.isNullOrEmpty()) {
                                     vm.getLevels()
                                 }else {

@@ -147,6 +147,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                     profileLayoutProgressBar.visibility = View.VISIBLE
                     profileLayoutScrollView.visibility = View.GONE
                 }else {
+                    checkScroll()
                     profileLayoutProgressBar.visibility = View.GONE
                     profileLayoutScrollView.visibility = View.VISIBLE
                 }
@@ -510,7 +511,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
         profileLayoutSwipeRefresh.setProgressViewOffset(
             false,
             0,
-            resources.getDimension(R.dimen.toolbarHeight).toInt()
+            resources.getDimension(R.dimen.toolbarHeight).toInt() + 8F.dpToPx()
         )
         profileLayoutSwipeRefresh.setOnRefreshListener(this)
         profileLayoutSwipeRefresh.isEnabled = false
@@ -532,7 +533,6 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
     }
 
     override fun onPageReload() {
-        checkScroll()
         profileFragmentViewModel.getProfileData()
         profileLayoutSwipeRefresh.isEnabled = false
     }

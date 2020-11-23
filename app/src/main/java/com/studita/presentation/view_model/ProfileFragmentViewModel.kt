@@ -46,7 +46,7 @@ class ProfileFragmentViewModel(private val myId: Int, private val profileId: Int
         if(!isUpdate)
             progressState.value = true
 
-        errorState = true
+        errorState = false
         getProfileDataJob = viewModelScope.launchExt(getProfileDataJob) {
 
             if(App.userDataDeferred.isCompleted && App.userDataDeferred.await() !is UserDataStatus.Success)
