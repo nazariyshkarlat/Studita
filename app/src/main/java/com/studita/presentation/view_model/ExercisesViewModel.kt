@@ -61,6 +61,7 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
     val buttonDividerState = SingleLiveEvent<Boolean>()
     val transparentLayoutsAreVisibleState = MutableLiveData<Boolean>()
     val exerciseBonusResultState = MutableLiveData<Boolean>()
+    val selectVariantEvent = SingleLiveEvent<Int>()
     val exerciseBonusNavigationState = SingleLiveEvent<Boolean>()
     val saveUserDataState = SingleLiveEvent<Pair<Boolean, UserDataData>>()
     val loadScreenBadConnectionState = MutableLiveData<Boolean>()
@@ -80,6 +81,7 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
     var chapterPartsInChapterCount = 0
     var chapterPartInChapterNumber = 0
     var chapterNumber = 0
+    var exerciseCountToSelect = 0
     var exercisesInChapterCount = 0
     private var arrayIndex = 0
     private var bonusIndex = 0
@@ -362,6 +364,9 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
                 }
                 setButtonEnabled(exerciseData !is ExerciseData.ExerciseDataExercise)
             }
+            if(!isInputExercise()){
+                exerciseCountToSelect = getVariantsToSelectCount()
+            }
 
             exerciseUiModel = exerciseData.toUiModel(app)
             val exerciseFragment = getFragmentToAdd(exerciseUiModel)
@@ -393,6 +398,9 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
         answered.value = false
         exerciseBonusResultState.value = null
         exerciseData = getCurrentBonusExerciseData()
+        if(!isInputExercise()){
+            exerciseCountToSelect = getVariantsToSelectCount()
+        }
         exerciseUiModel = exerciseData.toUiModel(app)
         bonusIndex++
         return getFragmentToAdd(exerciseUiModel)
@@ -578,6 +586,18 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int) : Vie
 
             is ExerciseUiModel.ExplanationUiModel -> ExerciseExplanation1Fragment()
         }
+
+    fun isInputExercise(): Boolean{
+        return (exerciseData is ExerciseData.ExerciseDataExercise.ExerciseType9Data) ||
+                (exerciseData is ExerciseData.ExerciseDataExercise.ExerciseType10Data) ||
+                (exerciseData is ExerciseData.ExerciseDataExercise.ExerciseType11Data) ||
+                (exerciseData is ExerciseData.ExerciseDataExercise.ExerciseType16Data) ||
+                (exerciseData is ExerciseData.ExerciseDataExercise.ExerciseType26Data)
+    }
+
+    private fun getVariantsToSelectCount(): Int {
+        return if(exerciseData is ExerciseData.ExerciseDataExercise.ExerciseType15Data) (exerciseData as ExerciseData.ExerciseDataExercise.ExerciseType15Data).correctCount else 1
+    }
 
     fun getDescriptionFragment(): ExercisesDescriptionFragment {
         return when (chapterPartNumber) {

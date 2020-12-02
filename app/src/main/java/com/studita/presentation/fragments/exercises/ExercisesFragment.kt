@@ -98,8 +98,26 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
 
             viewModel.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver())
 
+            viewModel.selectVariantEvent.observe(viewLifecycleOwner, Observer {
+                with(getButtonTextDuringExercise(it, exercisesViewModel!!.exerciseCountToSelect, exercisesViewModel!!.isInputExercise())){
+                    exerciseLayoutButton.text = this
+                    exercisesViewModel?.setButtonText(this)
+                }
+            })
+
             viewModel.buttonEnabledState.observe(viewLifecycleOwner, Observer { enabled ->
                 exerciseLayoutButton.isEnabled = enabled
+
+                if(enabled){
+                    exerciseLayoutButton.text = resources.getString(R.string.check)
+                    exercisesViewModel?.setButtonText(resources.getString(R.string.check))
+                }else if(exercisesViewModel!!.isInputExercise() || exercisesViewModel!!.exerciseCountToSelect <= 1){
+                    with(getButtonTextDuringExercise(0, exercisesViewModel!!.exerciseCountToSelect, exercisesViewModel!!.isInputExercise())){
+                        exerciseLayoutButton.text = this
+                        exercisesViewModel?.setButtonText(this)
+                    }
+                }
+
                 exerciseLayoutButton.setOnClickListener {
                     exercisesViewModel?.checkExerciseResult()
                 }
@@ -503,7 +521,11 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                     exerciseData is ExerciseData.ExerciseDataScreen.ScreenType4Data && exerciseData.isBonusStart -> {
                         resources.getString(R.string.begin)
                     }
-                    exerciseData is ExerciseData.ExerciseDataExercise -> resources.getString(R.string.check)
+                    exerciseData is ExerciseData.ExerciseDataExercise -> {
+                        getButtonTextDuringExercise(0, exercisesViewModel!!.exerciseCountToSelect,
+                            exercisesViewModel!!.isInputExercise()
+                        )
+                    }
                     exerciseData is ExerciseData.ExerciseDataScreen -> {
                         if (exerciseData.exerciseNumber == null)
                             resources.getString(R.string.continue_string)
@@ -559,6 +581,25 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                 )
             }
         }
+
+    private fun getButtonTextDuringExercise(selectedCount: Int, countToSelect: Int, isInputExercise: Boolean): String{
+        println(exercisesViewModel!!.buttonEnabledState.value)
+        return when {
+            exercisesViewModel!!.buttonEnabledState.value == true-> {
+                resources.getString(R.string.check)
+            }
+            isInputExercise -> {
+                resources.getString(R.string.input_answer)
+            }
+            else -> {
+                LanguageUtils.getResourcesRussianLocale(activity!!)!!.getQuantityString(
+                    if(selectedCount == 0) R.plurals.select_answer_plurals else R.plurals.select_more_answers_plurals,
+                    countToSelect-selectedCount,
+                    countToSelect-selectedCount
+                )
+            }
+        }
+    }
 
     private fun getSnackbarStateObserver() =
         Observer<Pair<ExerciseUiModel, ExerciseResponseData>?> { response ->

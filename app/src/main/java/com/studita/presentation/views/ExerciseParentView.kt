@@ -54,7 +54,7 @@ class ExerciseParentView @JvmOverloads constructor(
             }
             this.addView(helpView)
             hideView(withAnimation = false)
-            helpView.exercisesHelpLayoutButton.setOnClickListener {
+            helpView.exercisesHelpLayout.setOnClickListener {
                 if (helpViewState is HelpViewState.StateOpen)
                     closeView()
                 else

@@ -535,8 +535,8 @@
 
     <style name="FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="rippleColor">@android:color/transparent</item>
-        <item name="backgroundTint">?colorAccent</item>
-        <item name="tint">@color/white</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="tint">?colorAccent</item>
     </style>
 
     <style name="ChapterCardView" parent="Widget.MaterialComponents.CardView">

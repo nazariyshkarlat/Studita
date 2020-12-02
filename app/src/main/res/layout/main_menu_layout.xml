@@ -68,6 +68,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/mainMenuLayoutListParent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
@@ -75,33 +76,9 @@
                     android:orientation="vertical"
                     android:paddingTop="12dp">
 
-                    <include layout="@layout/settings_offline_mode_item" />
+                    <include layout="@layout/settings_switch_item" />
 
-                    <com.studita.presentation.views.press_view.PressLinearLayout
-                        android:id="@+id/mainMenuLayoutThemeView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:layout_marginBottom="12dp"
-                            app:srcCompat="@drawable/ic_palette_secondary" />
-
-                        <TextView
-                            style="@style/Medium16Secondary"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="@string/app_theme" />
-                    </com.studita.presentation.views.press_view.PressLinearLayout>
+                    <include layout="@layout/settings_switch_item" />
 
                     <com.studita.presentation.views.press_view.PressLinearLayout
                         android:id="@+id/mainMenuLayoutLanguageView"

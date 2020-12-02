@@ -70,6 +70,7 @@ class ExerciseInputEquationResultFragment : NavigatableFragment(R.layout.exercis
         }
 
         exerciseInputEquationResultLayoutButton.isEnabled = exerciseInputEquationResultLayoutResultEditText.text.isNotEmpty()
+        setButtonText()
     }
 
     override fun afterTextChanged(s: Editable?) { }
@@ -86,6 +87,8 @@ class ExerciseInputEquationResultFragment : NavigatableFragment(R.layout.exercis
                 ExerciseRequestData(str)
         }
         exerciseInputEquationResultLayoutButton.isEnabled = str.isNotEmpty()
+
+        setButtonText()
     }
 
     private fun animateBonusResultTextColor(context: Context, answerIsCorrect: Boolean) {
@@ -102,6 +105,14 @@ class ExerciseInputEquationResultFragment : NavigatableFragment(R.layout.exercis
             interpolator = FastOutSlowInInterpolator()
             duration = resources.getInteger(R.integer.bonus_text_color_change_duration).toLong()
             start()
+        }
+    }
+
+    private fun setButtonText(){
+        if(exerciseInputEquationResultLayoutButton.isEnabled){
+            exerciseInputEquationResultLayoutButton.text = resources.getString(R.string.check)
+        }else{
+            exerciseInputEquationResultLayoutButton.text = resources.getString(R.string.input_answer)
         }
     }
 

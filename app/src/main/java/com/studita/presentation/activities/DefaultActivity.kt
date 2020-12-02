@@ -11,7 +11,7 @@ import com.studita.R
 import com.studita.authenticator.AccountAuthenticator
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.studita.presentation.activities.MainActivity.Companion.startMainActivityClearTop
-import com.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
+import com.studita.presentation.fragments.main.MainMenuFragment
 import com.studita.utils.PrefsUtils
 import com.studita.utils.ThemeUtils
 import com.studita.utils.ThemeUtils.getDefaultTheme
@@ -20,7 +20,7 @@ import com.studita.utils.UserUtils
 
 @SuppressLint("Registered")
 open class DefaultActivity : AppCompatActivity(),
-    MainMenuThemeDialogAlertFragment.OnThemeChangeListener {
+    MainMenuFragment.OnThemeChangeListener {
 
     private var themeState = ThemeUtils.Theme.DARK
 

@@ -23,7 +23,7 @@
     <string name="no_user_with_mail">Данный аккаунт не найден, проверьте правильность ввода эл. почты</string>
     <string name="account_already_exists">Введите электронную почту</string>
     <string name="authorization_email_hint">Электронная почта</string>
-    <string name="user_name">Имя пользователя</string>
+    <string name="user_name">Никнейм</string>
     <string name="name">Имя</string>
     <string name="user_name_hint">Введите имя пользователя</string>
     <string name="name_hint">Введите имя</string>
@@ -80,8 +80,8 @@
     <string name="save">Сохранить</string>
     <string name="russian">Русский</string>
     <string name="english">English</string>
-    <string name="light_theme">Светлая</string>
-    <string name="dark_theme">Тёмная</string>
+    <string name="light_theme">Светлая тема</string>
+    <string name="dark_theme">Тёмная тема</string>
     <string name="exercise_type_1_title">%1$s=%2$s</string>
     <string name="exercise_type_2_3_title">%1$s=?</string>
     <string name="exercise_type_4_right_text">%1$s=%2$s</string>
@@ -314,19 +314,32 @@
     <string name="beta_test_first_subtitle_part">Потрясите своё устройство для того, чтобы сообщить об ошибке.</string>
     <string name="beta_test_title">Приветствуем вас!</string>
     <string name="select_photo_error">При получении фотографии произошла ошбика</string>
+    <string name="input_answer">Введите ответ</string>
 
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>
-        <item quantity="two">%1$d дня подряд</item>
         <item quantity="few">%1$d дня подряд</item>
         <item quantity="many">%1$d дней подряд</item>
         <item quantity="other">%1$d дней подряд</item>
     </plurals>
+    <plurals name="select_answer_plurals">
+        <item quantity="zero">Выберите ответ</item>
+        <item quantity="one">Выберите ответ</item>
+        <item quantity="few">Выберите %1$d ответа</item>
+        <item quantity="many">Выберите ответы</item>
+        <item quantity="other">Выберите ответы</item>
+    </plurals>
+    <plurals name="select_more_answers_plurals">
+        <item quantity="zero">Выберите ещё 1 ответ</item>
+        <item quantity="one">Выберите ещё 1 ответ</item>
+        <item quantity="few">Выберите ещё %1$d ответа</item>
+        <item quantity="many">Выберите ещё ответы</item>
+        <item quantity="other">Выберите ещё ответы</item>
+    </plurals>
     <plurals name="chapter_progress_plurals">
         <item quantity="zero">Прогресс: %1$d заданий из %2$d</item>
         <item quantity="one">Прогресс: %1$d задание из %2$d</item>
-        <item quantity="two">Прогресс: %1$d задания из %2$d</item>
         <item quantity="few">Прогресс: %1$d задания из %2$d</item>
         <item quantity="many">Прогресс: %1$d заданий из %2$d</item>
         <item quantity="other">%Прогресс: %1$d заданий из %2$d</item>
@@ -334,7 +347,6 @@
     <plurals name="seconds_ago_plurals">
         <item quantity="zero">секунд назад</item>
         <item quantity="one">секунду назад</item>
-        <item quantity="two">секунды назад</item>
         <item quantity="few">секунды назад</item>
         <item quantity="many">секунд назад</item>
         <item quantity="other">секунд назад</item>
@@ -342,7 +354,6 @@
     <plurals name="minutes_ago_plurals">
         <item quantity="zero">минут назад</item>
         <item quantity="one">минуту назад</item>
-        <item quantity="two">минуты назад</item>
         <item quantity="few">минуты назад</item>
         <item quantity="many">минут назад</item>
         <item quantity="other">минут назад</item>
@@ -350,7 +361,6 @@
     <plurals name="hours_ago_plurals">
         <item quantity="zero">часов назад</item>
         <item quantity="one">час назад</item>
-        <item quantity="two">часа назад</item>
         <item quantity="few">часа назад</item>
         <item quantity="many">часов назад</item>
         <item quantity="other">часов назад</item>
@@ -358,7 +368,6 @@
     <plurals name="days_ago_plurals">
         <item quantity="zero">дней назад</item>
         <item quantity="one">день назад</item>
-        <item quantity="two">дня назад</item>
         <item quantity="few">дня назад</item>
         <item quantity="many">дней назад</item>
         <item quantity="other">дней назад</item>
@@ -366,7 +375,6 @@
     <plurals name="weeks_ago_plurals">
         <item quantity="zero">недель назад</item>
         <item quantity="one">неделю назад</item>
-        <item quantity="two">недели назад</item>
         <item quantity="few">недели назад</item>
         <item quantity="many">недель назад</item>
         <item quantity="other">недель назад</item>
@@ -374,7 +382,6 @@
     <plurals name="months_ago_plurals">
         <item quantity="zero">месяцев назад</item>
         <item quantity="one">месяц назад</item>
-        <item quantity="two">месяца назад</item>
         <item quantity="few">месяца назад</item>
         <item quantity="many">месяцев назад</item>
         <item quantity="other">месяцев назад</item>
@@ -382,7 +389,6 @@
     <plurals name="years_ago_plurals">
         <item quantity="zero">лет назад</item>
         <item quantity="one">год назад</item>
-        <item quantity="two">года назад</item>
         <item quantity="few">года назад</item>
         <item quantity="many">лет назад</item>
         <item quantity="other">лет назад</item>
@@ -390,7 +396,6 @@
     <plurals name="exercises_bonus_end_layout_subtitle_plurals_template">
         <item quantity="zero">%1$d правильных ответов</item>
         <item quantity="one">%1$d правильный ответ</item>
-        <item quantity="two">%1$d правильных ответа</item>
         <item quantity="few">%1$d правильных ответа</item>
         <item quantity="many">%1$d правильных ответов</item>
         <item quantity="other">%1$d правильных ответов</item>

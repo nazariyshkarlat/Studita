@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.OneShotPreDrawListener
 import androidx.core.view.updatePadding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -228,9 +229,24 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(), ReloadPageCallback{
 
     override fun onStart() {
         super.onStart()
+        formTopOffset()
+    }
+
+    private fun formTopOffset(){
         bottomDrawerDialog?.behavior?.apply {
-            topOffset =
-                (resources.getDimension(R.dimen.homeLayoutToolbarHeight) + 24F.dpToPx()).toInt()
+            activity?.findViewById<View>(R.id.homeLayoutBar)?.let {
+                topOffset =
+                    ((if (it.measuredHeight == 0) resources.getDimension(R.dimen.homeLayoutToolbarHeight) else it.measuredHeight).toInt() + 24F.dpToPx()).toInt()
+
+                if (it.measuredHeight == 0) {
+                    OneShotPreDrawListener.add(it) {
+                        topOffset = it.measuredHeight + 24F.dpToPx()
+                    }
+                }
+            } ?: run {
+                topOffset =
+                    (resources.getDimension(R.dimen.homeLayoutToolbarHeight) + 24F.dpToPx()).toInt()
+            }
         }
     }
 

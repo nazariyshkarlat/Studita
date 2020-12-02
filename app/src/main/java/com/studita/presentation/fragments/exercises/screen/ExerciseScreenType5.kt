@@ -1,5 +1,6 @@
 package com.studita.presentation.fragments.exercises.screen
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Bundle
 import android.view.View
@@ -7,7 +8,12 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.children
+import androidx.core.view.marginEnd
+import androidx.core.view.marginStart
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.studita.R
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.model.ExerciseUiModel
@@ -15,6 +21,9 @@ import com.studita.presentation.view_model.ExercisesViewModel
 import com.studita.utils.dpToPx
 import com.studita.utils.makeView
 import kotlinx.android.synthetic.main.exercise_screen_type_5.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ExerciseScreenType5 : NavigatableFragment(R.layout.exercise_screen_type_5) {
 
@@ -44,6 +53,20 @@ class ExerciseScreenType5 : NavigatableFragment(R.layout.exercise_screen_type_5)
         }
 
         exerciseScreenType5SnapHorizontalScrollView.addView(contentView)
+        exerciseScreenType5SnapHorizontalScrollView.post {
+            lifecycleScope.launch(Dispatchers.Main) {
+                delay(500)
+                if (view != null) {
+                    ObjectAnimator.ofInt(
+                        exerciseScreenType5SnapHorizontalScrollView,
+                        "scrollX",
+                        getScrollEndPos()
+                    ).apply {
+                        interpolator = FastOutSlowInInterpolator()
+                    }.setDuration(2000).start()
+                }
+            }
+        }
 
         platesText.forEachIndexed { idx, text ->
             val plateView =
@@ -61,6 +84,15 @@ class ExerciseScreenType5 : NavigatableFragment(R.layout.exercise_screen_type_5)
             contentView.addView(plateView)
         }
 
+    }
+
+    private fun getScrollEndPos() : Int{
+        val lastChild = exerciseScreenType5SnapHorizontalScrollView.getChildAt(
+            exerciseScreenType5SnapHorizontalScrollView.childCount - 1
+        )
+        val bottom =
+            lastChild.right + exerciseScreenType5SnapHorizontalScrollView.paddingEnd
+        return bottom - (exerciseScreenType5SnapHorizontalScrollView.scrollX + exerciseScreenType5SnapHorizontalScrollView.width)
     }
 
 }

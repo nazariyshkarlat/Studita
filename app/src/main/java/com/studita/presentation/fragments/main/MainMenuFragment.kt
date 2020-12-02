@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.studita.R
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.studita.domain.interactor.SignInWithGoogleStatus
@@ -17,7 +18,6 @@ import com.studita.presentation.activities.MainActivity.Companion.startMainActiv
 import com.studita.presentation.fragments.AuthorizationFragment
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.dialog_alerts.MainMenuLanguageDialogAlertFragment
-import com.studita.presentation.fragments.dialog_alerts.MainMenuThemeDialogAlertFragment
 import com.studita.presentation.fragments.dialog_alerts.ProgressDialogAlertFragment
 import com.studita.presentation.view_model.MainMenuFragmentViewModel
 import com.studita.presentation.view_model.ToolbarFragmentViewModel
@@ -26,20 +26,33 @@ import com.studita.utils.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.studita.App.Companion.authenticate
 import com.studita.App.Companion.authenticationState
+import com.studita.presentation.activities.MainActivity
+import com.studita.presentation.view_model.MainMenuActivityViewModel
+import com.studita.utils.ThemeUtils.getCurrentTheme
 import kotlinx.android.synthetic.main.main_menu_layout.*
-import kotlinx.android.synthetic.main.settings_offline_mode_item.*
+import kotlinx.android.synthetic.main.settings_switch_item.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout) {
 
     private val RC_SIGN_IN: Int = 0
     private var mainMenuFragmentViewModel: MainMenuFragmentViewModel? = null
+    private var mainMenuActivityViewModel: MainMenuActivityViewModel? = null
+    private var changeThemeJob : Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mainMenuFragmentViewModel = activity?.run {
             ViewModelProviders.of(this).get(MainMenuFragmentViewModel::class.java)
+        }
+
+        mainMenuActivityViewModel = activity?.run {
+            ViewModelProviders.of(this).get(MainMenuActivityViewModel::class.java)
         }
 
         toolbarFragmentViewModel = activity?.run {
@@ -94,21 +107,36 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout) {
         }
 
 
-        mainMenuLayoutOfflineSwitch.isChecked = PrefsUtils.isOfflineModeEnabled()
+        with(mainMenuLayoutListParent.getChildAt(0) as ViewGroup) {
+            mainMenuLayoutSwitchItemSwitch.isChecked = PrefsUtils.isOfflineModeEnabled()
+            mainMenuLayoutSwitchItemIcon.setImageResource(R.drawable.ic_cloud_secondary)
+            mainMenuLayoutSwitchItemTextView.text = resources.getString(R.string.offline_mode)
 
-        mainMenuLayoutOfflineSwitchView.setOnClickListener {
-            PrefsUtils.setOfflineMode(!mainMenuLayoutOfflineSwitch.isChecked)
-            mainMenuLayoutOfflineSwitch.isChecked = !mainMenuLayoutOfflineSwitch.isChecked
+            mainMenuLayoutSwitchItemSwitchView.setOnClickListener {
+                PrefsUtils.setOfflineMode(!mainMenuLayoutSwitchItemSwitch.isChecked)
+                mainMenuLayoutSwitchItemSwitch.isChecked = !mainMenuLayoutSwitchItemSwitch.isChecked
 
-            authenticate(UserUtils.getUserIDTokenData(), true)
+                authenticate(UserUtils.getUserIDTokenData(), true)
+            }
         }
 
-        mainMenuLayoutThemeView.setWithMinClickInterval(true)
-        mainMenuLayoutThemeView.setOnClickListener {
-            MainMenuThemeDialogAlertFragment().show(
-                (activity as AppCompatActivity).supportFragmentManager,
-                null
-            )
+        with(mainMenuLayoutListParent.getChildAt(1) as ViewGroup) {
+            mainMenuLayoutSwitchItemSwitch.isChecked = activity!!.getCurrentTheme() == ThemeUtils.Theme.DARK
+            mainMenuLayoutSwitchItemIcon.setImageResource(R.drawable.ic_palette_secondary)
+            mainMenuLayoutSwitchItemTextView.text = resources.getString(R.string.dark_theme)
+
+            mainMenuLayoutSwitchItemSwitchView.setOnClickListener {
+
+                if(changeThemeJob == null ||
+                    changeThemeJob?.isActive == false) {
+                    mainMenuLayoutSwitchItemSwitch.isChecked =
+                        !mainMenuLayoutSwitchItemSwitch.isChecked
+                    changeThemeJob = lifecycleScope.launch(Dispatchers.Main) {
+                        delay(200)
+                        changeTheme(mainMenuLayoutSwitchItemSwitch.isChecked)
+                    }
+                }
+            }
         }
 
         mainMenuLayoutLanguageView.setWithMinClickInterval(true)
@@ -123,7 +151,7 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout) {
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        mainMenuLayoutOfflineSwitch.isChecked = PrefsUtils.isOfflineModeEnabled()
+        (mainMenuLayoutListParent.getChildAt(0) as ViewGroup).mainMenuLayoutSwitchItemSwitch.isChecked = PrefsUtils.isOfflineModeEnabled()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -140,6 +168,15 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout) {
                 }
             }
         }
+    }
+
+    private fun changeTheme(darkModeEnabled: Boolean) {
+        mainMenuActivityViewModel?.onThemeChangeListener?.onThemeChanged(ThemeUtils.Theme.values()[if(darkModeEnabled) 0 else 1])
+        MainActivity.needsRefresh = true
+    }
+
+    interface OnThemeChangeListener {
+        fun onThemeChanged(theme: ThemeUtils.Theme)
     }
 
 }

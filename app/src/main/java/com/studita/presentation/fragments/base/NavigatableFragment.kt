@@ -33,8 +33,6 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId),
             else
                 scrollingView?.viewTreeObserver?.addOnScrollChangedListener(this)
 
-            println("${scrollingView}")
-
             if (!isHidden) {
                 scrollingView?.let {
                     it.post {

@@ -76,6 +76,8 @@ open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(v
 
         if (correctCount == selectedPositions.size)
             exercisesViewModel?.setButtonEnabled(true)
+
+        exercisesViewModel?.selectVariantEvent?.value = selectedPositions.size
     }
 
     fun unSelectVariant(centerLayout: ViewGroup, position: Int) {
@@ -86,6 +88,8 @@ open class ExerciseMultipleVariantsFragment(viewId: Int) : NavigatableFragment(v
         exercisesViewModel?.setButtonEnabled(false)
         childView.isSelected = false
         selectedPositions.remove(position)
+
+        exercisesViewModel?.selectVariantEvent?.value = selectedPositions.size
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
