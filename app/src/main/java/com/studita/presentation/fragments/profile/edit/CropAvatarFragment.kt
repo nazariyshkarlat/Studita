@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
@@ -39,7 +40,8 @@ class CropAvatarFragment : NavigatableFragment(R.layout.crop_avatar_layout) {
                     activity?.let {
                         CustomSnackbar(it).show(
                             it.resources.getString(R.string.select_photo_error),
-                            ThemeUtils.getRedColor(it)
+                            ThemeUtils.getRedColor(it),
+                            ContextCompat.getColor(it, R.color.white)
                         )
                         it.onBackPressed()
                     }

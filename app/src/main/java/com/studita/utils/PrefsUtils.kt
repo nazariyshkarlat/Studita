@@ -17,6 +17,29 @@ object PrefsUtils {
         CacheModule.sharedPreferences.edit().putBoolean("OFFLINE_MODE", enabled).apply()
     }
 
+    fun setAppIsInForeground(isInForeground: Boolean){
+        CacheModule.sharedPreferences.edit().putBoolean("APP_IS_IN_FOREGROUND", isInForeground).apply()
+    }
+
+    fun getAppIsInForeground(): Boolean{
+        return CacheModule.sharedPreferences.getBoolean("APP_IS_IN_FOREGROUND", false)
+    }
+
+    fun getLocalNotificationsIds(): ArrayList<Int>{
+        return Gson().fromJson(CacheModule.sharedPreferences.getString("LOCAL_NOTIFICATIONS_IDS", "[]"), object : TypeToken<ArrayList<Int>>(){}.type)
+    }
+
+    fun clearLocalNotificationsIds(){
+        CacheModule.sharedPreferences.edit().remove("LOCAL_NOTIFICATIONS_IDS").apply()
+    }
+
+    fun setLocalNotificationId(id: Int){
+        return CacheModule.sharedPreferences.edit().putString("LOCAL_NOTIFICATIONS_IDS", Gson().toJson(getLocalNotificationsIds().apply {
+            add(id)
+        })).apply()
+    }
+
+
     fun makeCompletedChapterDialogWasNotShown(exercisesCount: Int, chapterName: String) {
         CacheModule.sharedPreferences.edit().putString("COMPLETED_CHAPTER_DIALOG", Gson().toJson(
             mapOf("EXERCISES_COUNT" to exercisesCount, "CHAPTER_NAME" to chapterName))).apply()

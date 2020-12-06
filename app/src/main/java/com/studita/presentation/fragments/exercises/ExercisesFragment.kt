@@ -583,7 +583,6 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
         }
 
     private fun getButtonTextDuringExercise(selectedCount: Int, countToSelect: Int, isInputExercise: Boolean): String{
-        println(exercisesViewModel!!.buttonEnabledState.value)
         return when {
             exercisesViewModel!!.buttonEnabledState.value == true-> {
                 resources.getString(R.string.check)

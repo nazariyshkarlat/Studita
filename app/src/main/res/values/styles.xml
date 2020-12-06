@@ -21,8 +21,8 @@
         <item name="modal_windows_color">@color/modal_windows_gray_light_theme_color</item>
         <item name="primary_color">@color/black</item>
         <item name="secondary_color">@color/secondary_gray_color_light_theme</item>
-        <item name="blue_transparent_button_color">@color/blue14_light_theme</item>
-        <item name="blue_transparent_button_ripple_color">@color/blue24_light_theme</item>
+        <item name="accent_lite_color">@color/blue14_light_theme</item>
+        <item name="accent_lite_pressed_color">@color/blue24_light_theme</item>
         <item name="colorControlHighlight">?disabled_background_color</item>
         <item name="android:colorEdgeEffect">#EDEDEE</item>
         <item name="gray_focused_color">@color/focused_gray_color_light_theme</item>
@@ -53,8 +53,8 @@
         <item name="android:statusBarColor">@color/black</item>
         <item name="page_background_color">@color/black</item>
         <item name="secondary_accent_color">@color/blue60_dark_theme</item>
-        <item name="blue_transparent_button_color">@color/blue18_dark_theme</item>
-        <item name="blue_transparent_button_ripple_color">@color/blue24_dark_theme</item>
+        <item name="accent_lite_color">@color/blue18_dark_theme</item>
+        <item name="accent_lite_pressed_color">@color/blue24_dark_theme</item>
         <item name="modal_windows_color">@color/modal_windows_gray_dark_theme_color</item>
         <item name="blocks_background_color">@color/background_gray_dark_theme</item>
         <item name="disabled_color">@color/disabled_gray_color_dark_theme</item>
@@ -534,7 +534,7 @@
     </style>
 
     <style name="FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="rippleColor">@android:color/transparent</item>
+        <item name="rippleColor">@color/disabled_background_gray_color_light_theme</item>
         <item name="backgroundTint">@color/white</item>
         <item name="tint">?colorAccent</item>
     </style>

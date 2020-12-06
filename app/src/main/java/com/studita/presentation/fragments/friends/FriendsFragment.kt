@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.marginTop
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -59,7 +61,8 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout), 
             if(it){
                 CustomSnackbar(context!!).show(
                     resources.getString(R.string.server_temporarily_unavailable),
-                    ThemeUtils.getRedColor(context!!)
+                    ThemeUtils.getRedColor(context!!),
+                    ContextCompat.getColor(context!!, R.color.white)
                 )
             }
         })
@@ -244,7 +247,11 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout), 
                     },
                     it.userData.userName
                 ),
-                ThemeUtils.getAccentColor(snackbar.context),
+                ColorUtils.compositeColors(
+                    ThemeUtils.getAccentLiteColor(snackbar.context),
+                    ContextCompat.getColor(snackbar.context, R.color.white)
+                ),
+                ContextCompat.getColor(snackbar.context, R.color.black),
                 duration = resources.getInteger(R.integer.add_remove_friend_snackbar_duration)
                     .toLong()
             )

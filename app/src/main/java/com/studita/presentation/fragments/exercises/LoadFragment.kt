@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.studita.R
@@ -83,7 +85,12 @@ open class LoadFragment : BaseFragment(R.layout.exercises_load_layout) {
         exercisesLoadLayoutButton.setOnClickListener {
             PrefsUtils.setOfflineMode(true)
             CustomSnackbar(context!!).show(
-                resources.getString(R.string.enable_offline_mode_snackbar), ThemeUtils.getAccentColor(context!!)
+                resources.getString(R.string.enable_offline_mode_snackbar),
+                ColorUtils.compositeColors(
+                    ThemeUtils.getAccentLiteColor(context!!),
+                    ContextCompat.getColor(context!!, R.color.white)
+                ),
+                ContextCompat.getColor(context!!, R.color.black)
             )
             onOfflineModeEnabled.invoke()
         }

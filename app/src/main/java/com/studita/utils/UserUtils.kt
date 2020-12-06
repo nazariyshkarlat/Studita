@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.*
 
 object UserUtils {
 
@@ -110,4 +111,7 @@ object UserUtils {
             }
         })
     }
+
+    fun streakActivated(streakDate: Date) =
+        TimeUtils.getCalendarDayCount(Date(), streakDate) == 0L
 }

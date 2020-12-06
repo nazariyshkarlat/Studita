@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -98,15 +100,33 @@
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
         <service
+            android:name=".notifications.service.MessageReceiverIntentService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <service
+            android:name=".notifications.local.LocalNotificationsService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <service
             android:name=".notifications.service.PushReceiverIntentService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <receiver
+            android:name=".notifications.local.LocalNotificationReceiver"
+            android:enabled="true"
+            android:exported="false" >
+        </receiver>
         <receiver
             android:name=".notifications.NotificationsActionsHandleBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="ACCEPT_FRIENDSHIP" />
                 <action android:name="REJECT_FRIENDSHIP" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".notifications.local.StartUpReceiver" android:enabled="true" android:exported="false" android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <meta-data

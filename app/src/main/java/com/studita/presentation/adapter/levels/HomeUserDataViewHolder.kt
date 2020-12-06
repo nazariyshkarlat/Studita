@@ -10,6 +10,7 @@ import com.studita.utils.*
 import com.studita.utils.LevelUtils.getLevelXP
 import com.studita.utils.LevelUtils.getNextLevel
 import com.studita.utils.UserUtils.observeNoNull
+import com.studita.utils.UserUtils.streakActivated
 import kotlinx.android.synthetic.main.home_layout_user_data.view.*
 import java.util.*
 
@@ -47,9 +48,5 @@ class HomeUserDataViewHolder(view: View, private val lifecycleOwner: LifecycleOw
             })
         }
     }
-
-    private fun streakActivated(streakDate: Date) =
-        TimeUtils.getCalendarDayCount(Date(), streakDate) == 0L
-
 
 }

@@ -6,8 +6,8 @@
         <item name="disabled_color">@color/disabled_gray_color_light_theme</item>
         <item name="disabled_background_color">@color/disabled_background_gray_color_light_theme</item>
         <item name="primary_color">@color/black</item>
-        <item name="blue_transparent_button_color">@color/blue14_light_theme</item>
-        <item name="blue_transparent_button_ripple_color">@color/blue24_light_theme</item>
+        <item name="accent_lite_color">@color/blue14_light_theme</item>
+        <item name="accent_lite_pressed_color">@color/blue24_light_theme</item>
         <item name="colorControlHighlight">?disabled_background_color</item>
         <item name="android:colorEdgeEffect">#EDEDEE</item>
         <item name="gray_focused_color">@color/focused_gray_color_light_theme</item>
@@ -42,8 +42,8 @@
         <item name="primary_color">@color/white</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="page_background_color">@color/black</item>
-        <item name="blue_transparent_button_color">@color/blue18_dark_theme</item>
-        <item name="blue_transparent_button_ripple_color">@color/blue24_dark_theme</item>
+        <item name="accent_lite_color">@color/blue18_dark_theme</item>
+        <item name="accent_lite_pressed_color">@color/blue24_dark_theme</item>
         <item name="blocks_background_color">@color/background_gray_dark_theme</item>
         <item name="disabled_color">@color/disabled_gray_color_dark_theme</item>
         <item name="disabled_background_color">@color/disabled_background_gray_color_dark_theme</item>

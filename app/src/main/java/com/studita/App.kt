@@ -1,11 +1,16 @@
 package com.studita
 
+import android.app.Activity
+import android.app.AlarmManager
 import android.app.Application
-import android.util.Base64
-import android.util.Log
-import android.view.inputmethod.InputMethodManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.shakebugs.shake.Shake
 import com.studita.di.DI
 import com.studita.di.data.AuthorizationModule
 import com.studita.di.data.CompleteExercisesModule
@@ -14,28 +19,30 @@ import com.studita.domain.entity.UserDataData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.studita.domain.interactor.UserDataStatus
+import com.studita.notifications.local.LocalNotificationReceiver
+import com.studita.notifications.local.StartUpReceiver.Companion.scheduleLocalNotifications
+import com.studita.presentation.activities.MainActivity
+import com.studita.presentation.view_model.LiveEvent
 import com.studita.presentation.view_model.SingleLiveEvent
 import com.studita.utils.*
-import com.shakebugs.shake.Shake
-import com.studita.presentation.view_model.LiveEvent
 import com.studita.utils.UserUtils.localUserDataLiveData
 import com.studita.utils.UserUtils.userDataLiveData
 import kotlinx.coroutines.*
-import java.nio.charset.StandardCharsets
 import java.util.*
 
 
-class App : Application() {
+class App : Application(), Application.ActivityLifecycleCallbacks {
 
     companion object {
         var userDataDeferred: CompletableDeferred<UserDataStatus> = CompletableDeferred()
         val authenticationState = MutableLiveData<Pair<CheckTokenIsCorrectStatus, Boolean>>()
         var authenticationJob: Job? = null
+        var userDataJob: Job? = null
 
         var offlineModeChangeEvent = SingleLiveEvent<Boolean>()
         var recreateAppEvent = SingleLiveEvent<Unit>()
 
-        fun clearUserLiveData(){
+        fun clearUserLiveData() {
             UserUtils.userDataEventsLiveData.removeSource(UserUtils.userDataLiveData)
             UserUtils.localUserDataLiveData.removeSource(UserUtils.userDataLiveData)
             UserUtils.userDataLiveData = MutableLiveData<UserDataData>()
@@ -57,7 +64,7 @@ class App : Application() {
         fun initUserData(userDataData: UserDataData) {
             UserUtils.userDataLiveData.value = userDataData
 
-            if(!localUserDataLiveData.hasActiveObservers())
+            if (!localUserDataLiveData.hasActiveObservers())
                 UserUtils.localUserDataLiveData.value = userDataData
 
             if ((TimeUtils.getCalendarDayCount(
@@ -76,7 +83,7 @@ class App : Application() {
 
         fun getUserData() {
 
-            GlobalScope.launch(Dispatchers.Main) {
+            userDataJob = GlobalScope.launchExt(userDataJob) {
                 val userDataStatus = UserDataModule.getUserDataInteractorImpl()
                     .getUserData(
                         PrefsUtils.getUserId(),
@@ -91,10 +98,11 @@ class App : Application() {
                     }
                 }
                 userDataDeferred.complete(userDataStatus)
+                println(userDataStatus)
             }
         }
 
-        fun initLocalUserData(){
+        fun initLocalUserData() {
             GlobalScope.launch(Dispatchers.Main) {
                 val userDataStatus = UserDataModule.getUserDataInteractorImpl()
                     .getUserData(
@@ -102,7 +110,7 @@ class App : Application() {
                         getFromLocalStorage = true,
                         isMyUserData = true
                     )
-                if(userDataStatus is UserDataStatus.Success) {
+                if (userDataStatus is UserDataStatus.Success) {
                     UserUtils.localUserDataLiveData.value = userDataStatus.result
                 }
             }
@@ -110,36 +118,40 @@ class App : Application() {
 
         fun authenticate(userIdTokenData: UserIdTokenData?, isOfflineModeChanged: Boolean) {
 
-            if(userDataDeferred.isCompleted && UserUtils.isLoggedIn())
+            if (userDataDeferred.isCompleted && UserUtils.isLoggedIn())
                 userDataDeferred = CompletableDeferred()
 
-            if(isOfflineModeChanged && !PrefsUtils.isOfflineModeEnabled())
+            if (isOfflineModeChanged && !PrefsUtils.isOfflineModeEnabled())
                 UserUtils.userDataLiveData.value = null
 
-            if(isOfflineModeChanged){
+            if (isOfflineModeChanged) {
                 offlineModeChangeEvent.value = PrefsUtils.isOfflineModeEnabled()
             }
-            authenticationState.value =CheckTokenIsCorrectStatus.Waiting to isOfflineModeChanged
+            authenticationState.value = CheckTokenIsCorrectStatus.Waiting to isOfflineModeChanged
 
             authenticationJob = GlobalScope.launchExt(
                 authenticationJob
             ) {
                 if (PrefsUtils.isOfflineModeEnabled() || !UserUtils.isLoggedIn()) {
-                    if(UserUtils.userDataIsNull())
+                    if (UserUtils.userDataIsNull())
                         getUserData()
                     else
                         userDataDeferred.complete(UserDataStatus.Success(UserUtils.userData))
-                    authenticationState.value =CheckTokenIsCorrectStatus.Correct to isOfflineModeChanged
+                    authenticationState.value =
+                        CheckTokenIsCorrectStatus.Correct to isOfflineModeChanged
                 } else {
                     val tokenIsCorrectStatus = AuthorizationModule.getAuthorizationInteractorImpl()
                         .checkTokenIsCorrect(userIdTokenData!!)
 
-                    authenticationState.value =tokenIsCorrectStatus to isOfflineModeChanged
+                    authenticationState.value = tokenIsCorrectStatus to isOfflineModeChanged
 
-                    when(tokenIsCorrectStatus){
+                    when (tokenIsCorrectStatus) {
                         is CheckTokenIsCorrectStatus.Correct -> {
-                            if(!PrefsUtils.isOfflineModeEnabled())
-                                CompleteExercisesModule.getCompleteExercisesInteractorImpl().syncCompleteLocalExercises(UserUtils.getUserIDTokenData()!!)
+                            if (!PrefsUtils.isOfflineModeEnabled())
+                                CompleteExercisesModule.getCompleteExercisesInteractorImpl()
+                                    .syncCompleteLocalExercises(
+                                        UserUtils.getUserIDTokenData()!!
+                                    )
                             getUserData()
                         }
                         is CheckTokenIsCorrectStatus.NoConnection -> {
@@ -148,12 +160,9 @@ class App : Application() {
                         is CheckTokenIsCorrectStatus.ServiceUnavailable -> {
                             userDataDeferred.complete(UserDataStatus.ServiceUnavailable)
                         }
-                        is CheckTokenIsCorrectStatus.Failure -> {
-                            userDataDeferred.complete(UserDataStatus.Failure)
-                        }
                     }
+                }
             }
-        }
         }
     }
 
@@ -163,12 +172,14 @@ class App : Application() {
         initDefPrefs()
         initLocalUserData()
 
-        if(PrefsUtils.offlineDataIsCached())
+        if (PrefsUtils.offlineDataIsCached())
             authenticate(
                 UserUtils.getUserIDTokenData(),
                 false
             )
 
+        registerActivityLifecycleCallbacks(this)
+        scheduleLocalNotifications(this)
         initShaker()
     }
 
@@ -178,9 +189,9 @@ class App : Application() {
             PrefsUtils.setOfflineMode(false)
         if (!PrefsUtils.containsNotificationsMode())
             PrefsUtils.setNotificationsMode(true)
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
 
-            if(!PrefsUtils.containsNightThemeOnPhoneIsEnabled()){
+            if (!PrefsUtils.containsNightThemeOnPhoneIsEnabled()) {
                 PrefsUtils.setTheme(
                     ThemeUtils.Theme.DEFAULT, ThemeUtils.nightModeApiAbove28Enabled(
                         resources
@@ -189,13 +200,39 @@ class App : Application() {
             }
 
         }
-
     }
 
-    private fun initShaker(){
+    private fun initShaker() {
         Shake.getReportConfiguration().isAutoVideoRecording = true
         Shake.getReportConfiguration().autoVideoRecordingClipDuration = 30
         Shake.start(this)
+    }
+
+
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        if (activity is MainActivity) {
+            PrefsUtils.setAppIsInForeground(true)
+            PrefsUtils.getLocalNotificationsIds().forEach {
+                NotificationManagerCompat.from(this).cancel(it)
+            }
+            PrefsUtils.clearLocalNotificationsIds()
+        }
+    }
+
+    override fun onActivityStarted(activity: Activity) {}
+
+    override fun onActivityResumed(activity: Activity) {}
+
+    override fun onActivityPaused(activity: Activity) {}
+
+    override fun onActivityStopped(activity: Activity) {}
+
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+
+    override fun onActivityDestroyed(activity: Activity) {
+        if (activity is MainActivity) {
+            PrefsUtils.setAppIsInForeground(false)
+        }
     }
 
 }

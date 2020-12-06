@@ -36,6 +36,10 @@ import com.studita.utils.addFragment
 import com.studita.utils.dpToPx
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.studita.data.entity.isNotificationType
+import com.studita.data.entity.toFirebaseMessageType
+import com.studita.domain.entity.MessageType
+import com.studita.notifications.service.MessageReceiverIntentService.Companion.BROADCAST_MESSAGE
 import kotlinx.android.synthetic.main.recyclerview_layout.*
 
 class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
@@ -47,55 +51,82 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
 
     private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val notificationData = GsonBuilder().apply {
-                registerTypeAdapter(
-                    IsMyFriendStatus.Success::class.java,
-                    IsMyFriendStatusDeserializer()
+
+            if (intent.getStringExtra("type")!!.first().isNotificationType()) {
+                val notificationData = GsonBuilder().apply {
+                    registerTypeAdapter(
+                        IsMyFriendStatus.Success::class.java,
+                        IsMyFriendStatusDeserializer()
+                    )
+                }.create().fromJson<NotificationData>(
+                    intent.getStringExtra("NOTIFICATION_DATA"),
+                    object : TypeToken<NotificationData>() {}.type
                 )
-            }.create().fromJson<NotificationData>(
-                intent.getStringExtra("NOTIFICATION_DATA"),
-                object : TypeToken<NotificationData>() {}.type
-            )
 
-            when (notificationData.notificationType) {
-                NotificationType.FRIENDSHIP_REQUEST -> {
-                    UserUtils.isMyFriendLiveData.postValue(
-                        UsersInteractor.FriendActionState.FriendshipRequestIsSent(
-                            UserData(
-                                notificationData.userId,
-                                notificationData.userName,
-                                notificationData.avatarLink,
-                                IsMyFriendStatus.Success.WaitingForFriendshipAccept(notificationData.userId)
+                when (notificationData.notificationType) {
+                    NotificationType.FRIENDSHIP_REQUEST -> {
+                        UserUtils.isMyFriendLiveData.postValue(
+                            UsersInteractor.FriendActionState.FriendshipRequestIsSent(
+                                UserData(
+                                    notificationData.userId,
+                                    notificationData.userName,
+                                    notificationData.avatarLink,
+                                    IsMyFriendStatus.Success.WaitingForFriendshipAccept(
+                                        notificationData.userId
+                                    )
+                                )
                             )
                         )
-                    )
-                }
-                NotificationType.ACCEPTED_FRIENDSHIP -> {
-                    UserUtils.isMyFriendLiveData.postValue(
-                        UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(
-                            UserData(
-                                notificationData.userId,
-                                notificationData.userName,
-                                notificationData.avatarLink,
-                                IsMyFriendStatus.Success.IsMyFriend(notificationData.userId)
+                    }
+                    NotificationType.ACCEPTED_FRIENDSHIP -> {
+                        UserUtils.isMyFriendLiveData.postValue(
+                            UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(
+                                UserData(
+                                    notificationData.userId,
+                                    notificationData.userName,
+                                    notificationData.avatarLink,
+                                    IsMyFriendStatus.Success.IsMyFriend(notificationData.userId)
+                                )
                             )
                         )
-                    )
-                }
-                else -> {}
-            }
-
-            viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
-            recyclerViewLayoutRecyclerView.adapter?.notifyItemInserted(1)
-
-            if (!isHidden) {
-                resultCode = Activity.RESULT_CANCELED
-
-                UserUtils.userDataLiveData.value = UserUtils.userData.apply {
-                    notificationsAreChecked = false
+                    }
+                    else -> {
+                    }
                 }
 
-                (view?.context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
+                viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
+                recyclerViewLayoutRecyclerView.adapter?.notifyItemInserted(1)
+
+                if (!isHidden) {
+                    resultCode = Activity.RESULT_CANCELED
+
+                    UserUtils.userDataLiveData.value = UserUtils.userData.apply {
+                        notificationsAreChecked = false
+                    }
+
+                    (view?.context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
+                }
+            }else{
+                when(intent.getStringExtra("type")!!.first().toFirebaseMessageType()){
+                    MessageType.FRIENDSHIP_REQUEST_CANCELLED -> {
+                        val elementsToRemove = ArrayList<NotificationsUiModel>()
+                        viewModel.recyclerItems?.forEach {notificationsUiModel ->
+                            if((notificationsUiModel is NotificationsUiModel.Notification) &&
+                                ((notificationsUiModel.notificationType == NotificationType.FRIENDSHIP_REQUEST)
+                                        && (notificationsUiModel.userData.userId == intent.getIntExtra("user_id", 0)))){
+                                elementsToRemove.add(notificationsUiModel)
+                            }
+                        }
+                        elementsToRemove.forEach {
+                            val removeIndex = viewModel.recyclerItems!!.indexOf(it)
+                            viewModel.recyclerItems?.remove(it)
+                            recyclerViewLayoutRecyclerView.adapter?.notifyItemRemoved(removeIndex)
+                        }
+                        if(viewModel.recyclerItems?.count { it is NotificationsUiModel.Notification } == 0){
+                            viewModel.notificationsState.value = false to NotificationsFragmentViewModel.NotificationsResultState.NoResultsFound
+                        }
+                    }
+                }
             }
         }
 
@@ -263,6 +294,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
         try {
             val filter = IntentFilter().apply {
                 addAction(PushReceiverIntentService.BROADCAST_NOTIFICATION)
+                addAction(BROADCAST_MESSAGE)
                 priority = 1
             }
             activity?.registerReceiver(notificationReceiver, filter)

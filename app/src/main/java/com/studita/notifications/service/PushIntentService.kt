@@ -35,6 +35,8 @@ import com.studita.utils.ThemeUtils
 import com.studita.utils.UserUtils
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.studita.utils.NotificationsUtils.buildDefaultNotification
+import com.studita.utils.NotificationsUtils.createNotificationChannel
 
 
 class PushIntentService : JobIntentService() {
@@ -137,17 +139,9 @@ class PushIntentService : JobIntentService() {
                 NotificationsActionsHandleBroadcastReceiver.NotificationAction.REJECT_FRIENDSHIP.toActionString()
         }, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val notification = NotificationCompat.Builder(
-            this,
-            CHANNEL_ID
-        )
-            .setSmallIcon(if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) R.drawable.notification_icon_below_pie else R.drawable.notification_icon)
+        val notification = buildDefaultNotification()
             .setContentIntent(openNotificationsPendingIntent)
             .setLargeIcon(largeIcon)
-            .setAutoCancel(true)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setColor(ContextCompat.getColor(this, if(ThemeUtils.getDefaultTheme(resources)== ThemeUtils.Theme.DARK) R.color.blue_dark_theme else R.color.blue_light_theme))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         when (notificationData.notificationType) {
             NotificationType.FRIENDSHIP_REQUEST -> {
@@ -223,17 +217,6 @@ class PushIntentService : JobIntentService() {
 
         if (PrefsUtils.notificationsAreEnabled())
             NotificationManagerCompat.from(this).notify(notificationId, notification.build())
-    }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = this.resources.getString(R.string.notifications_channel_name)
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(CHANNEL_ID, name, importance)
-            val notificationManager: NotificationManager =
-                this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
     }
 
 }

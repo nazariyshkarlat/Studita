@@ -10,6 +10,7 @@ import android.provider.MediaStore
 import android.provider.MediaStore.EXTRA_OUTPUT
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import com.studita.R
@@ -133,7 +134,8 @@ class ChangeAvatarDialogAlertFragment : BaseDialogFragment(R.layout.change_avata
                 activity?.let {
                     CustomSnackbar(it).show(
                         it.resources.getString(R.string.select_photo_error),
-                        ThemeUtils.getRedColor(it)
+                        ThemeUtils.getRedColor(it),
+                        ContextCompat.getColor(it, R.color.white)
                     )
                 }
             }

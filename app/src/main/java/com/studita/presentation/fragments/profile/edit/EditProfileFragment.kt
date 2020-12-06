@@ -8,6 +8,8 @@ import android.text.Editable
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
@@ -152,7 +154,11 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                     val snackbar = CustomSnackbar(view.context)
                     snackbar.show(
                         resources.getString(R.string.changes_are_saved),
-                        ThemeUtils.getAccentColor(snackbar.context),
+                        ColorUtils.compositeColors(
+                            ThemeUtils.getAccentLiteColor(snackbar.context),
+                            ContextCompat.getColor(snackbar.context, R.color.white)
+                        ),
+                        ContextCompat.getColor(snackbar.context, R.color.black),
                         delay = 500
                     )
                     super.onBackClick()

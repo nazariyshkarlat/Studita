@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -40,6 +41,7 @@ import com.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.studita.presentation.views.CustomSnackbar
 import com.studita.utils.*
 import com.studita.utils.UserUtils.observeNoNull
+import com.studita.utils.UserUtils.streakActivated
 import kotlinx.android.synthetic.main.profile_friend_item.view.*
 import kotlinx.android.synthetic.main.profile_layout.*
 import kotlinx.android.synthetic.main.profile_popup_menu_layout.view.*
@@ -201,7 +203,11 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                         },
                         it.userData.userName
                     ),
-                    ThemeUtils.getAccentColor(snackbar.context),
+                    ColorUtils.compositeColors(
+                        ThemeUtils.getAccentLiteColor(snackbar.context),
+                        ContextCompat.getColor(snackbar.context, R.color.white)
+                    ),
+                    ContextCompat.getColor(snackbar.context, R.color.black),
                     duration = resources.getInteger(R.integer.add_remove_friend_snackbar_duration)
                         .toLong()
                 )
@@ -211,7 +217,8 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
             if(it){
                 CustomSnackbar(context!!).show(
                     resources.getString(R.string.server_temporarily_unavailable),
-                    ThemeUtils.getRedColor(context!!)
+                    ThemeUtils.getRedColor(context!!),
+                    ContextCompat.getColor(context!!, R.color.white)
                 )
             }
         })
@@ -515,16 +522,11 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
         )
         profileLayoutSwipeRefresh.setOnRefreshListener(this)
         profileLayoutSwipeRefresh.isEnabled = false
-        profileLayoutSwipeRefresh.setColorSchemeColors(ThemeUtils.getSwipeRefreshIconColor(context))
+        profileLayoutSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(context, R.color.black))
         profileLayoutSwipeRefresh.setProgressBackgroundColorSchemeColor(
-            ThemeUtils.getSwipeRefreshBackgroundColor(
-                context
-            )
+            ContextCompat.getColor(context, R.color.white)
         )
     }
-
-    private fun streakActivated(streakDate: Date) =
-        TimeUtils.getCalendarDayCount(Date(), streakDate) == 0L
 
 
     override fun onScrollChanged() {

@@ -37,6 +37,13 @@ object ThemeUtils {
     }
 
     @ColorInt
+    fun getAccentLiteColor(context: Context): Int {
+        val typedValue = TypedValue()
+        context.theme.resolveAttribute(R.attr.accent_lite_color, typedValue, true)
+        return ContextCompat.getColor(context, typedValue.resourceId)
+    }
+
+    @ColorInt
     fun getPageBackgroundColor(context: Context): Int {
         val typedValue = TypedValue()
         context.theme.resolveAttribute(R.attr.page_background_color, typedValue, true)
@@ -95,28 +102,6 @@ object ThemeUtils {
         val typedValue = TypedValue()
         context.theme.resolveAttribute(R.attr.selectableItemBackgroundBorderless, typedValue, true)
         return ContextCompat.getDrawable(context, typedValue.resourceId)!!
-    }
-
-    @ColorInt
-    fun getSwipeRefreshBackgroundColor(context: Context): Int {
-        val typedValue = TypedValue()
-        context.theme.resolveAttribute(
-            R.attr.gray_focused_color,
-            typedValue,
-            true
-        )
-        return ColorUtils.compositeColors(getPageBackgroundColor(context), ContextCompat.getColor(context, typedValue.resourceId), 1F)
-    }
-
-    @ColorInt
-    fun getSwipeRefreshIconColor(context: Context): Int {
-        val typedValue = TypedValue()
-        context.theme.resolveAttribute(
-            R.attr.primary_color,
-            typedValue,
-            true
-        )
-        return ColorUtils.compositeColors(getPageBackgroundColor(context), ContextCompat.getColor(context, typedValue.resourceId), 1F)
     }
 
     fun getPressAlpha(context: Context): Float {

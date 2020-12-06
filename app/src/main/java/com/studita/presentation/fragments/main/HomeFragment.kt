@@ -1,10 +1,13 @@
 package com.studita.presentation.fragments.main
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils.compositeColors
 import androidx.core.view.OneShotPreDrawListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -101,10 +104,13 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                             }
                         }
                         is CheckTokenIsCorrectStatus.ServiceUnavailable, CheckTokenIsCorrectStatus.Failure -> {
-                           vm.errorEvent.value = ErrorState.SERVER_ERROR
+                            if(vm.errorEvent.value != ErrorState.SERVER_ERROR)
+                                vm.errorEvent.value = ErrorState.SERVER_ERROR
                         }
                         is CheckTokenIsCorrectStatus.NoConnection -> {
-                            vm.errorEvent.value = ErrorState.CONNECTION_ERROR
+                            println(vm.errorEvent.value)
+                            if(vm.errorEvent.value != ErrorState.CONNECTION_ERROR)
+                                vm.errorEvent.value = ErrorState.CONNECTION_ERROR
                         }
 
                     }
@@ -129,6 +135,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             vm.progressState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { isProgress ->
+                    println("is progress ${isProgress}")
                     if (!isProgress) {
                         homeLayoutBarLogInButton.isEnabled = true
                         homeLayoutProgressBar.visibility = View.GONE
@@ -163,6 +170,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
             vm.errorEvent.observe(viewLifecycleOwner, Observer { errorState->
                 val currentFragment = childFragmentManager.findFragmentById(R.id.homeLayoutFrameLayout)
+                println(errorState)
+                println(currentFragment)
                 when (errorState) {
                     ErrorState.CONNECTION_ERROR-> {
                         if(!PrefsUtils.isOfflineModeEnabled() && currentFragment !is InternetIsDisabledMainFragment) {
@@ -241,6 +250,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                     CustomSnackbar(context!!).show(
                         resources.getString(R.string.server_temporarily_unavailable),
                         ThemeUtils.getRedColor(context!!),
+                        ContextCompat.getColor(context!!, R.color.white),
                         bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
                             .toInt()
                     )
@@ -340,7 +350,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                             R.string.subscribe_email,
                             TextUtils.encryptEmail(status.result.email!!)
                         ),
-                        ThemeUtils.getAccentColor(snackbar.context),
+                        compositeColors(ThemeUtils.getAccentLiteColor(snackbar.context), ContextCompat.getColor(snackbar.context, R.color.white)),
+                        ContextCompat.getColor(snackbar.context, R.color.black),
                         resources.getInteger(R.integer.subscribe_email_snackbar_duration)
                             .toLong(),
                         bottomMarginExtra = getBottomMarginExtraSnackbar()
@@ -348,7 +359,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 } else {
                     snackbar.show(
                         resources.getString(R.string.unsubscribe_email),
-                        ThemeUtils.getAccentColor(snackbar.context),
+                        compositeColors(ThemeUtils.getAccentLiteColor(snackbar.context), ContextCompat.getColor(snackbar.context, R.color.white)),
+                        ContextCompat.getColor(snackbar.context, R.color.black),
                         resources.getInteger(R.integer.unsubscribe_email_snackbar_duration)
                             .toLong(),
                         bottomMarginExtra = getBottomMarginExtraSnackbar()
@@ -359,7 +371,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 if (!UserUtils.userData.isSubscribed) {
                     snackbar.show(
                         resources.getString(R.string.offline_subscribe_email),
-                        ThemeUtils.getAccentColor(snackbar.context),
+                        compositeColors(ThemeUtils.getAccentLiteColor(snackbar.context), ContextCompat.getColor(snackbar.context, R.color.white)),
+                        ContextCompat.getColor(snackbar.context, R.color.black),
                         resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
                             .toLong(),
                         bottomMarginExtra = getBottomMarginExtraSnackbar()
@@ -367,7 +380,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 } else {
                     snackbar.show(
                         resources.getString(R.string.offline_unsubscribe_email),
-                        ThemeUtils.getAccentColor(snackbar.context),
+                        compositeColors(ThemeUtils.getAccentLiteColor(snackbar.context), ContextCompat.getColor(snackbar.context, R.color.white)),
+                        ContextCompat.getColor(snackbar.context, R.color.black),
                         resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
                             .toLong(),
                         bottomMarginExtra = getBottomMarginExtraSnackbar()
@@ -381,7 +395,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         val snackbar = CustomSnackbar(context!!)
             snackbar.show(
                 if(isAfterSignUp) resources.getString(R.string.welcome) else resources.getString(R.string.welcome_back),
-                ThemeUtils.getGreenColor(context!!),
+                compositeColors(ThemeUtils.getAccentLiteColor(snackbar.context), ContextCompat.getColor(snackbar.context, R.color.white)),
+                ContextCompat.getColor(snackbar.context, R.color.black),
                 resources.getInteger(R.integer.log_in_snackbar_duration)
                 .toLong(),
                 bottomMarginExtra = getBottomMarginExtraSnackbar()
@@ -390,7 +405,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
     fun showEnableOfflineModeSnackbar(){
         CustomSnackbar(context!!).show(
-            resources.getString(R.string.enable_offline_mode_snackbar), ThemeUtils.getAccentColor(context!!),
+            resources.getString(R.string.enable_offline_mode_snackbar),
+            compositeColors(ThemeUtils.getAccentLiteColor(context!!), ContextCompat.getColor(context!!, R.color.white)),
+            ContextCompat.getColor(context!!, R.color.black),
             bottomMarginExtra = getBottomMarginExtraSnackbar()
         )
     }

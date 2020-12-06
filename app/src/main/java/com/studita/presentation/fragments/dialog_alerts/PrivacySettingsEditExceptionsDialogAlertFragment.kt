@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
@@ -126,12 +127,17 @@ class PrivacySettingsEditExceptionsDialogAlertFragment :
             if (it) {
                 CustomSnackbar(context).show(
                     context.resources.getString(R.string.changes_are_saved),
-                    ThemeUtils.getAccentColor(context)
+                    ColorUtils.compositeColors(
+                        ThemeUtils.getAccentLiteColor(context),
+                        ContextCompat.getColor(context, R.color.white)
+                    ),
+                    ContextCompat.getColor(context, R.color.black)
                 )
             }else{
                 CustomSnackbar(context).show(
                     resources.getString(R.string.server_temporarily_unavailable),
-                    ThemeUtils.getRedColor(context)
+                    ThemeUtils.getRedColor(context),
+                    ContextCompat.getColor(context, R.color.white)
                 )
             }
         })

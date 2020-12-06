@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -53,7 +54,8 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
                 if(it){
                     CustomSnackbar(context).show(
                         context.resources.getString(R.string.server_temporarily_unavailable),
-                        ThemeUtils.getRedColor(context)
+                        ThemeUtils.getRedColor(context),
+                        ContextCompat.getColor(context, R.color.white)
                     )
                 }
             })

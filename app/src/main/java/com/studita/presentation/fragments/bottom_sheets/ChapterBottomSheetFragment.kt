@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.OneShotPreDrawListener
 import androidx.core.view.updatePadding
 import androidx.lifecycle.Observer
@@ -171,7 +173,11 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(), ReloadPageCallback{
 
                 snackbar.show(
                     text,
-                    ThemeUtils.getGreenColor(snackbar.context),
+                    ColorUtils.compositeColors(
+                        ThemeUtils.getAccentLiteColor(snackbar.context),
+                        ContextCompat.getColor(snackbar.context, R.color.white)
+                    ),
+                    ContextCompat.getColor(snackbar.context, R.color.black),
                     contentView = chapterLayoutFrameLayout.parent.parent.parent.parent as ViewGroup,
                     duration = 5000L,
                     delay = 1000L

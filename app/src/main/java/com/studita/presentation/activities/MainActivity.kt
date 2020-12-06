@@ -1,6 +1,7 @@
 package com.studita.presentation.activities
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,7 +16,7 @@ import com.studita.utils.PrefsUtils
 import com.studita.utils.TimeUtils
 import com.studita.utils.addFragment
 
-class MainActivity : DefaultActivity() {
+class MainActivity : DefaultActivity(){
 
     private val navigationViewModel: MainActivityNavigationViewModel by lazy {
         ViewModelProviders.of(this).get(MainActivityNavigationViewModel::class.java)

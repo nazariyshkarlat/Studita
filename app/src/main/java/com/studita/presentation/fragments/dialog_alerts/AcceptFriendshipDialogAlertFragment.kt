@@ -3,6 +3,8 @@ package com.studita.presentation.fragments.dialog_alerts
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
@@ -77,8 +79,12 @@ class AcceptFriendshipDialogAlertFragment :
                             R.string.friend_added_snackbar,
                             userData?.userName
                         ),
-                        ThemeUtils.getAccentColor(context)
-                    )
+                        ColorUtils.compositeColors(
+                            ThemeUtils.getAccentLiteColor(context),
+                            ContextCompat.getColor(context, R.color.white)
+                        ),
+                        ContextCompat.getColor(context, R.color.black)
+                        )
                 }
                 is UsersInteractor.FriendActionState.FriendshipRequestIsRejected -> {
                     CustomSnackbar(context).show(
@@ -86,7 +92,11 @@ class AcceptFriendshipDialogAlertFragment :
                             R.string.friendship_request_is_rejected_snackbar,
                             userData?.userName
                         ),
-                        ThemeUtils.getAccentColor(context)
+                        ColorUtils.compositeColors(
+                            ThemeUtils.getAccentLiteColor(context),
+                            ContextCompat.getColor(context, R.color.white)
+                        ),
+                        ContextCompat.getColor(context, R.color.black)
                     )
                 }
             }
@@ -96,6 +106,7 @@ class AcceptFriendshipDialogAlertFragment :
             CustomSnackbar(context).show(
                 context.resources.getString(R.string.server_temporarily_unavailable),
                 ThemeUtils.getRedColor(context),
+                ContextCompat.getColor(context, R.color.white)
             )
         })
     }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -97,6 +98,7 @@ class MainMenuFragment : NavigatableFragment(R.layout.main_menu_layout) {
                         CustomSnackbar(context!!).show(
                             resources.getString(R.string.sign_in_with_google_error_text),
                             ThemeUtils.getRedColor(context!!),
+                            ContextCompat.getColor(context!!, R.color.white),
                             contentView = view.parent as ViewGroup,
                             duration = resources.getInteger(R.integer.error_snackbar_duration).toLong()
                         )

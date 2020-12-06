@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.studita.R
+import com.studita.presentation.activities.MainActivity
 import com.studita.presentation.fragments.base.BaseFragment
 import com.studita.presentation.fragments.main.MainFragment
 import com.studita.utils.TimeUtils
@@ -50,6 +51,6 @@ class IncorrectTimeFragment : BaseFragment(R.layout.incorrect_time_layout) {
 
     private fun checkIfTimeIsAutomatically(context: Context) {
         if (TimeUtils.timeIsAutomatically(context))
-            (activity as AppCompatActivity).replace(MainFragment(), R.id.frameLayout, addToBackStack = false)
+            (activity as AppCompatActivity).replace(MainActivity.getFragmentToAdd(context), R.id.frameLayout, addToBackStack = false)
     }
 }

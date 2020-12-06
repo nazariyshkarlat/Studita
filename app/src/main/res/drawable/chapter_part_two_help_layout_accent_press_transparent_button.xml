@@ -3,5 +3,5 @@
     <corners
         android:bottomLeftRadius="@dimen/defRadius"
         android:topLeftRadius="@dimen/defRadius" />
-    <solid android:color="?blue_transparent_button_color" />
+    <solid android:color="?attr/accent_lite_color" />
 </shape>

@@ -3,6 +3,8 @@ package com.studita.presentation.fragments.error_fragments
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.lifecycleScope
 import com.studita.R
 import com.studita.presentation.fragments.base.BaseFragment
@@ -43,7 +45,11 @@ class ChapterBottomSheetInternetIsDisabledFragment : BaseFragment(R.layout.chapt
 
             CustomSnackbar(context!!).show(
                 resources.getString(R.string.enable_offline_mode_snackbar),
-                ThemeUtils.getAccentColor(context!!),
+                ColorUtils.compositeColors(
+                    ThemeUtils.getAccentLiteColor(context!!),
+                    ContextCompat.getColor(context!!, R.color.white)
+                ),
+                ContextCompat.getColor(context!!, R.color.black),
                 contentView = parentFragment?.chapterLayoutFrameLayout?.parent?.parent?.parent?.parent as ViewGroup
                 )
         }

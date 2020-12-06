@@ -70,7 +70,6 @@ class CustomSnackbar @JvmOverloads constructor(
     private var textHeight = 0
     private var text: String = ""
     private var textPaint = TextPaint().apply {
-        color = ContextCompat.getColor(context, R.color.white)
         textSize = 16F.dpToPx().toFloat()
         textAlign = Paint.Align.LEFT
         isAntiAlias = true
@@ -105,10 +104,11 @@ class CustomSnackbar @JvmOverloads constructor(
     fun show(
         text: String,
         @ColorInt color: Int,
+        @ColorInt textColor: Int,
         duration: Long = 3000L,
         delay: Long = 0L,
         bottomMarginExtra: Int = 0,
-        contentView: ViewGroup? = null
+        contentView: ViewGroup? = null,
     ) {
         this.bottomMarginExtra = bottomMarginExtra
         val rootView = contentView
@@ -118,7 +118,7 @@ class CustomSnackbar @JvmOverloads constructor(
             rootView.removeView(it)
         }
         if (!rootView.contains(this)) {
-            initView(text, color)
+            initView(text, color, textColor)
             this.id = R.id.customSnackbar
             rootView.addView(this)
             startAnimation(duration, delay = delay) {
@@ -128,11 +128,14 @@ class CustomSnackbar @JvmOverloads constructor(
         }
     }
 
-    private fun initView(text: String, @ColorInt color: Int) {
+    private fun initView(text: String, @ColorInt color: Int, @ColorInt textColor: Int) {
         this.background = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             cornerRadius = radius
             setColor(color)
+        }
+        textPaint.apply {
+            this.color = textColor
         }
         this.text = text
         setViewParams()

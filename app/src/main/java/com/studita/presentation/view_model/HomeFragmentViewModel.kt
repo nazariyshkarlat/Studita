@@ -55,10 +55,13 @@ class HomeFragmentViewModel : ViewModel() {
             )
             when (getLevelsStatus) {
                 is LevelsStatus.NoConnection -> {
-                    errorEvent.value = ErrorState.CONNECTION_ERROR
+                    println(errorEvent.value)
+                    if(errorEvent.value != ErrorState.CONNECTION_ERROR)
+                        errorEvent.value = ErrorState.CONNECTION_ERROR
                 }
                 is LevelsStatus.ServiceUnavailable -> {
-                    errorEvent.value = ErrorState.SERVER_ERROR
+                    if(errorEvent.value != ErrorState.SERVER_ERROR)
+                        errorEvent.value = ErrorState.SERVER_ERROR
                 }
                 is LevelsStatus.Failure -> {
 
@@ -69,6 +72,7 @@ class HomeFragmentViewModel : ViewModel() {
 
                     resultsAreLocal = PrefsUtils.isOfflineModeEnabled()
 
+                    println(userDataDeferred.await())
                     if(userDataDeferred.await() is UserDataStatus.Success && authenticationState.value?.first is CheckTokenIsCorrectStatus.Correct) {
                         progressState.value = false
                         errorEvent.value = ErrorState.NO_ERROR

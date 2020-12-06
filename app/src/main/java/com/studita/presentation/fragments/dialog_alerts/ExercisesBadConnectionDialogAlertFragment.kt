@@ -3,6 +3,8 @@ package com.studita.presentation.fragments.dialog_alerts
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
 import com.studita.presentation.fragments.base.BaseDialogFragment
@@ -47,7 +49,12 @@ class ExercisesBadConnectionDialogAlertFragment :
             exercisesViewModel?.let {
                 PrefsUtils.setOfflineMode(true)
                 CustomSnackbar(context!!).show(
-                    resources.getString(R.string.enable_offline_mode_snackbar), ThemeUtils.getAccentColor(context!!)
+                    resources.getString(R.string.enable_offline_mode_snackbar),
+                    ColorUtils.compositeColors(
+                        ThemeUtils.getAccentLiteColor(context!!),
+                        ContextCompat.getColor(context!!, R.color.white)
+                    ),
+                    ContextCompat.getColor(context!!, R.color.black),
                 )
 
                 if(exercisesViewModel?.chapterPartIsFullyCompleted() == true)
