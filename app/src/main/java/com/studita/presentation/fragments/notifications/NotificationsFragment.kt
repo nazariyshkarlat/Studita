@@ -11,6 +11,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.contains
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.TextViewCompat
 import androidx.lifecycle.Observer
@@ -44,6 +45,19 @@ import kotlinx.android.synthetic.main.recyclerview_layout.*
 
 class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
     ReloadPageCallback {
+
+    private val emptyView: View by lazy {
+        TextView(context).apply {
+            TextViewCompat.setTextAppearance(this, R.style.Regular16Secondary)
+            text = resources.getString(R.string.notifications_are_empty)
+
+            post {
+                updateLayoutParams {
+                    gravity = Gravity.CENTER
+                }
+            }
+        }
+    }
 
     val viewModel: NotificationsFragmentViewModel by lazy {
         ViewModelProviders.of(this).get(NotificationsFragmentViewModel::class.java)
@@ -96,6 +110,9 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
 
                 viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
                 recyclerViewLayoutRecyclerView.adapter?.notifyItemInserted(1)
+                viewModel.notificationsState.value = false to NotificationsFragmentViewModel.NotificationsResultState.MoreResults(
+                    emptyList()
+                )
 
                 if (!isHidden) {
                     resultCode = Activity.RESULT_CANCELED
@@ -170,34 +187,36 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
                     }
                     is NotificationsFragmentViewModel.NotificationsResultState.MoreResults -> {
 
-                        if (recyclerViewLayoutRecyclerView.adapter != null) {
+                        if(notificationsResultState.results.isNotEmpty()) {
+                            if (recyclerViewLayoutRecyclerView.adapter != null) {
 
-                            val items = listOf(
-                                *notificationsResultState.results.map { it.toUiModel(view.context) }
-                                    .toTypedArray(),
-                                *(if (canBeMoreItems) arrayOf(NotificationsUiModel.ProgressUiModel) else emptyArray())
-                            )
+                                val items = listOf(
+                                    *notificationsResultState.results.map { it.toUiModel(view.context) }
+                                        .toTypedArray(),
+                                    *(if (canBeMoreItems) arrayOf(NotificationsUiModel.ProgressUiModel) else emptyArray())
+                                )
 
-                            val adapter =
-                                recyclerViewLayoutRecyclerView.adapter as NotificationsAdapter
+                                val adapter =
+                                    recyclerViewLayoutRecyclerView.adapter as NotificationsAdapter
 
-                            val removePos = adapter.items.lastIndex
-                            adapter.items.removeAt(removePos)
-                            adapter.notifyItemRemoved(removePos)
+                                val removePos = adapter.items.lastIndex
+                                adapter.items.removeAt(removePos)
+                                adapter.notifyItemRemoved(removePos)
 
-                            val insertIndex = adapter.items.size
-                            adapter.items.addAll(items)
-                            adapter.notifyItemRangeInserted(
-                                insertIndex,
-                                items.size
-                            )
-                        } else {
-                            val adapter = NotificationsAdapter(
-                                context!!,
-                                viewModel.recyclerItems!!,
-                                viewModel
-                            )
-                            recyclerViewLayoutRecyclerView.adapter = adapter
+                                val insertIndex = adapter.items.size
+                                adapter.items.addAll(items)
+                                adapter.notifyItemRangeInserted(
+                                    insertIndex,
+                                    items.size
+                                )
+                            } else {
+                                val adapter = NotificationsAdapter(
+                                    context!!,
+                                    viewModel.recyclerItems!!,
+                                    viewModel
+                                )
+                                recyclerViewLayoutRecyclerView.adapter = adapter
+                            }
                         }
                     }
                     is NotificationsFragmentViewModel.NotificationsResultState.NoMoreResultsFound -> {
@@ -223,6 +242,11 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
                     is NotificationsFragmentViewModel.NotificationsResultState.NoResultsFound -> {
                         showEmptyView()
                     }
+                }
+
+                if(pair.second != NotificationsFragmentViewModel.NotificationsResultState.NoResultsFound &&
+                    (view as ViewGroup).contains(emptyView)){
+                    (view as ViewGroup).removeView(emptyView)
                 }
             })
 
@@ -273,20 +297,12 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
     }
 
     private fun showEmptyView() {
+        viewModel.recyclerItems = arrayListOf(NotificationsUiModel.NotificationsSwitch)
         recyclerViewLayoutRecyclerView.adapter =
             NotificationsAdapter(context!!,
-                arrayListOf(NotificationsUiModel.NotificationsSwitch),
-                null)
-        (view as ViewGroup).addView(TextView(context).apply {
-            TextViewCompat.setTextAppearance(this, R.style.Regular16Secondary)
-            text = resources.getString(R.string.notifications_are_empty)
-
-            post {
-                updateLayoutParams {
-                    gravity = Gravity.CENTER
-                }
-            }
-        })
+                viewModel.recyclerItems!!,
+                viewModel)
+        (view as ViewGroup).addView(emptyView)
     }
 
 
