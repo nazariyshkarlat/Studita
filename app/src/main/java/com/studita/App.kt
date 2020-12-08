@@ -1,25 +1,16 @@
 package com.studita
 
-import android.app.Activity
-import android.app.AlarmManager
 import android.app.Application
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
+import android.util.Log
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.shakebugs.shake.Shake
 import com.studita.di.DI
-import com.studita.di.data.AuthorizationModule
-import com.studita.di.data.CompleteExercisesModule
-import com.studita.di.data.UserDataModule
+import com.studita.di.data.*
 import com.studita.domain.entity.UserDataData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.studita.domain.interactor.UserDataStatus
-import com.studita.notifications.local.LocalNotificationReceiver
 import com.studita.notifications.local.StartUpReceiver.Companion.scheduleLocalNotifications
 import com.studita.presentation.activities.MainActivity
 import com.studita.presentation.view_model.LiveEvent
@@ -31,7 +22,7 @@ import kotlinx.coroutines.*
 import java.util.*
 
 
-class App : Application(), Application.ActivityLifecycleCallbacks {
+class App : Application(), LifecycleObserver {
 
     companion object {
         var userDataDeferred: CompletableDeferred<UserDataStatus> = CompletableDeferred()
@@ -178,7 +169,7 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
                 false
             )
 
-        registerActivityLifecycleCallbacks(this)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         scheduleLocalNotifications(this)
         initShaker()
     }
@@ -208,31 +199,19 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
         Shake.start(this)
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun onAppForeground() {
+        PrefsUtils.setAppIsInForeground(true)
 
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        if (activity is MainActivity) {
-            PrefsUtils.setAppIsInForeground(true)
-            PrefsUtils.getLocalNotificationsIds().forEach {
-                NotificationManagerCompat.from(this).cancel(it)
-            }
-            PrefsUtils.clearLocalNotificationsIds()
+        PrefsUtils.getLocalNotificationsIds().forEach {
+            NotificationManagerCompat.from(this).cancel(it)
         }
+        PrefsUtils.clearLocalNotificationsIds()
     }
 
-    override fun onActivityStarted(activity: Activity) {}
-
-    override fun onActivityResumed(activity: Activity) {}
-
-    override fun onActivityPaused(activity: Activity) {}
-
-    override fun onActivityStopped(activity: Activity) {}
-
-    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
-
-    override fun onActivityDestroyed(activity: Activity) {
-        if (activity is MainActivity) {
-            PrefsUtils.setAppIsInForeground(false)
-        }
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun onAppBackground() {
+        PrefsUtils.setAppIsInForeground(false)
     }
 
 }

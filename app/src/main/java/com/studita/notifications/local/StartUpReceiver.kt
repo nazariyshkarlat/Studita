@@ -18,16 +18,16 @@ class StartUpReceiver : BroadcastReceiver(){
         fun scheduleLocalNotifications(context: Context) {
             val now = Calendar.getInstance()
             val morningCalendar = Calendar.getInstance().apply {
-                this[Calendar.HOUR_OF_DAY] = 14
-                this[Calendar.MINUTE] = 30
+                this[Calendar.HOUR_OF_DAY] = 11
+                this[Calendar.MINUTE] = 45
                 this[Calendar.SECOND] = 0
                 if (now.after(this)) {
                     this.add(Calendar.DATE, 1)
                 }
             }
             val eveningCalendar = Calendar.getInstance().apply {
-                this[Calendar.HOUR_OF_DAY] = 15
-                this[Calendar.MINUTE] = 0
+                this[Calendar.HOUR_OF_DAY] = 11
+                this[Calendar.MINUTE] = 47
                 this[Calendar.SECOND] = 0
                 if (now.after(this)) {
                     this.add(Calendar.DATE, 1)

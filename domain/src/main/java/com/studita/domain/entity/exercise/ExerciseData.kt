@@ -311,6 +311,11 @@ fun Char.toOperator() = when (this) {
     else -> throw UnsupportedOperationException("unknown operator")
 }
 
+fun Char.isOperator() = this == Operator.PLUS.toCharacter() ||
+        this == Operator.MINUS.toCharacter() ||
+        this == Operator.DIVIDE.toCharacter() ||
+        this == Operator.MULTIPLY.toCharacter()
+
 fun Operator.toCharacter() = when (this) {
     Operator.PLUS -> '+'
     Operator.MINUS -> '-'

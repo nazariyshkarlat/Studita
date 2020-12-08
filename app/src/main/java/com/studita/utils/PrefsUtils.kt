@@ -1,5 +1,6 @@
 package com.studita.utils
 
+import android.annotation.SuppressLint
 import com.studita.data.cache.authentication.LogInCacheImpl
 import com.studita.di.CacheModule
 import com.studita.presentation.activities.DefaultActivity

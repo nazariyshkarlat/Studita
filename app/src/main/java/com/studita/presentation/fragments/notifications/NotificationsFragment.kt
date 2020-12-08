@@ -108,7 +108,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
                 }
             }else{
                 when(intent.getStringExtra("type")!!.first().toFirebaseMessageType()){
-                    MessageType.FRIENDSHIP_REQUEST_CANCELLED -> {
+                    MessageType.FRIENDSHIP_REQUEST_CANCELLED, MessageType.FRIENDSHIP_REMOVED -> {
                         val elementsToRemove = ArrayList<NotificationsUiModel>()
                         viewModel.recyclerItems?.forEach {notificationsUiModel ->
                             if((notificationsUiModel is NotificationsUiModel.Notification) &&

@@ -7,6 +7,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.studita.App
 import com.studita.R
+import com.studita.di.data.PrivacySettingsModule
+import com.studita.di.data.SubscribeEmailModule
 import com.studita.di.data.UserDataModule
 import com.studita.domain.entity.UserDataData
 import com.studita.domain.interactor.UserDataStatus
@@ -19,6 +21,7 @@ import com.studita.utils.UserUtils
 import com.studita.utils.UserUtils.streakActivated
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class LocalNotificationsService : JobIntentService(){
@@ -29,26 +32,29 @@ class LocalNotificationsService : JobIntentService(){
 
     override fun onHandleWork(intent: Intent) {
 
-        GlobalScope.launch {
-            val userData = App.userDataDeferred.await()
-            if(userData is UserDataStatus.Success) {
-                if (PrefsUtils.notificationsAreEnabled() && !PrefsUtils.getAppIsInForeground())
-                    showNotification(
-                        UserUtils.userData,
-                        intent.getBooleanExtra("IS_MORNING_NOTIFICATION", true)
-                    )
-            }else {
-                val localUserData = UserDataModule.getUserDataInteractorImpl().getUserData(
-                    PrefsUtils.getUserId(),
-                    true,
-                    isMyUserData = true
-                )
-                if(localUserData is UserDataStatus.Success) {
-                    if (PrefsUtils.notificationsAreEnabled() && !PrefsUtils.getAppIsInForeground())
+        runBlocking {
+            GlobalScope.launch {
+                val userData = App.userDataDeferred.await()
+                if (userData is UserDataStatus.Success) {
+                    if (PrefsUtils.notificationsAreEnabled() && !PrefsUtils.getAppIsInForeground()) {
                         showNotification(
-                            localUserData.result,
+                            UserUtils.userData,
                             intent.getBooleanExtra("IS_MORNING_NOTIFICATION", true)
                         )
+                    }
+                } else {
+                    val localUserData = UserDataModule.getUserDataInteractorImpl().getUserData(
+                        PrefsUtils.getUserId(),
+                        true,
+                        isMyUserData = true
+                    )
+                    if (localUserData is UserDataStatus.Success) {
+                        if (PrefsUtils.notificationsAreEnabled() && !PrefsUtils.getAppIsInForeground())
+                            showNotification(
+                                localUserData.result,
+                                intent.getBooleanExtra("IS_MORNING_NOTIFICATION", true)
+                            )
+                    }
                 }
             }
         }

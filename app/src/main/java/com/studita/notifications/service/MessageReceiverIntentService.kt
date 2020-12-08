@@ -35,7 +35,7 @@ class MessageReceiverIntentService : JobIntentService() {
         )
 
         when (intent.getStringExtra("type")!!.first().toFirebaseMessageType()) {
-            MessageType.FRIENDSHIP_REQUEST_CANCELLED -> {
+            MessageType.FRIENDSHIP_REQUEST_CANCELLED, MessageType.FRIENDSHIP_REMOVED -> {
                 UserUtils.isMyFriendLiveData.postValue(
                     UsersInteractor.FriendActionState.FriendshipRequestIsCanceled(
                         UserData(
@@ -49,18 +49,6 @@ class MessageReceiverIntentService : JobIntentService() {
                 sendBroadcastToDeleteNotification(intent.apply {
                     putExtra("user_id", userId)
                 }.extras!!)
-            }
-            MessageType.FRIENDSHIP_REMOVED -> {
-                UserUtils.isMyFriendLiveData.postValue(
-                    UsersInteractor.FriendActionState.RemovedFromFriends(
-                        UserData(
-                            userData.userId,
-                            userData.userName,
-                            userData.avatarLink,
-                            IsMyFriendStatus.Success.IsNotMyFriend(userData.userId)
-                        )
-                    )
-                )
             }
         }
     }

@@ -3,7 +3,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('D:\\Android Studio Projects\\CERTIFICATES\\stud\\stud.jks')
+            storeFile file('/Users/nazarijskarlat/StudioProjects/CERTIFICATES/stud/stud.jks')
             storePassword 'jxNw&gKZE=*V8S*}'
             keyAlias = 'upload'
             keyPassword 'jxNw&gKZE=*V8S*}'

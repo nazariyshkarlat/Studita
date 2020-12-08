@@ -2,6 +2,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: "$rootProject.projectDir/android-library.gradle"
+android {
+    buildToolsVersion '30.0.2'
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

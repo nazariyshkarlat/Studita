@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <TextView
+            <com.studita.presentation.views.MathLineBreakingTextView
                 style="@style/Regular16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

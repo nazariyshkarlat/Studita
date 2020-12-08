@@ -22,11 +22,11 @@ object NetworkUtils {
             networkLiveData.value = false
 
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network?) {
+            override fun onAvailable(network: Network) {
                 networkLiveData.postValue( true)
             }
 
-            override fun onLost(network: Network?) {
+            override fun onLost(network: Network) {
                 networkLiveData.postValue( false)
             }
         }
