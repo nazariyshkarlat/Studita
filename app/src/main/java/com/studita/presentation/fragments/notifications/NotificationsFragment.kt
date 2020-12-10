@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.view.contains
 import androidx.core.view.updateLayoutParams
@@ -41,26 +42,24 @@ import com.studita.data.entity.isNotificationType
 import com.studita.data.entity.toFirebaseMessageType
 import com.studita.domain.entity.MessageType
 import com.studita.notifications.service.MessageReceiverIntentService.Companion.BROADCAST_MESSAGE
+import com.studita.presentation.view_model.FriendsFragmentViewModel
 import kotlinx.android.synthetic.main.recyclerview_layout.*
 
 class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
     ReloadPageCallback {
 
-    private val emptyView: View by lazy {
-        TextView(context).apply {
-            TextViewCompat.setTextAppearance(this, R.style.Regular16Secondary)
-            text = resources.getString(R.string.notifications_are_empty)
-
-            post {
-                updateLayoutParams {
-                    gravity = Gravity.CENTER
-                }
-            }
-        }
-    }
-
     val viewModel: NotificationsFragmentViewModel by lazy {
         ViewModelProviders.of(this).get(NotificationsFragmentViewModel::class.java)
+    }
+
+    private val emptyView: View by lazy { TextView(context).apply {
+        TextViewCompat.setTextAppearance(this, R.style.Regular16Secondary)
+        text = resources.getString(R.string.notifications_are_empty)
+
+        layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+            gravity = Gravity.CENTER
+        }
+    }
     }
 
     private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -110,9 +109,9 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
 
                 viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
                 recyclerViewLayoutRecyclerView.adapter?.notifyItemInserted(1)
+
                 viewModel.notificationsState.value = false to NotificationsFragmentViewModel.NotificationsResultState.MoreResults(
-                    emptyList()
-                )
+                    emptyList())
 
                 if (!isHidden) {
                     resultCode = Activity.RESULT_CANCELED
@@ -187,7 +186,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
                     }
                     is NotificationsFragmentViewModel.NotificationsResultState.MoreResults -> {
 
-                        if(notificationsResultState.results.isNotEmpty()) {
+                        if(!notificationsResultState.results.isNullOrEmpty()) {
                             if (recyclerViewLayoutRecyclerView.adapter != null) {
 
                                 val items = listOf(
@@ -243,10 +242,9 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
                         showEmptyView()
                     }
                 }
-
-                if(pair.second != NotificationsFragmentViewModel.NotificationsResultState.NoResultsFound &&
+                if(pair.second !is NotificationsFragmentViewModel.NotificationsResultState.NoResultsFound &&
                     (view as ViewGroup).contains(emptyView)){
-                    (view as ViewGroup).removeView(emptyView)
+                    view.removeView(emptyView)
                 }
             })
 
@@ -297,11 +295,10 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
     }
 
     private fun showEmptyView() {
-        viewModel.recyclerItems = arrayListOf(NotificationsUiModel.NotificationsSwitch)
         recyclerViewLayoutRecyclerView.adapter =
             NotificationsAdapter(context!!,
-                viewModel.recyclerItems!!,
-                viewModel)
+                arrayListOf(NotificationsUiModel.NotificationsSwitch),
+                null)
         (view as ViewGroup).addView(emptyView)
     }
 

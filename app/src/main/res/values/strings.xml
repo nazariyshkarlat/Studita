@@ -214,8 +214,8 @@
     <string name="global_search_no_results">Результатов не найдено. Попробуйте ввести другое имя</string>
     <string name="friends_not_found">Результатов среди ваших друзей не найдено. Поробуйте ввести другое имя</string>
     <string name="notifications_are_empty">Список ваших уведомлений пуст</string>
-    <string name="friend_removed_snackbar">\@%1$s был удалён из ваших друзей</string>
-    <string name="friend_added_snackbar">\@%1$s был добавлен в ваши друзья</string>
+    <string name="friend_removed_snackbar">\@%1$s был удалён из списка ваших друзей</string>
+    <string name="friend_added_snackbar">\@%1$s был добавлен в список ваших друзей</string>
     <string name="feedback_snackbar">Спасибо за ваш отзыв!</string>
     <string name="friendship_request_is_sent_snackbar">Запрос в друзья \@%1$s был отправлен</string>
     <string name="friendship_request_is_canceled_snackbar">Запрос в друзья \@%1$s был отменён</string>

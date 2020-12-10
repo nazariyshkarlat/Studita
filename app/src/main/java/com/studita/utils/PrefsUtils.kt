@@ -18,14 +18,6 @@ object PrefsUtils {
         CacheModule.sharedPreferences.edit().putBoolean("OFFLINE_MODE", enabled).apply()
     }
 
-    fun setAppIsInForeground(isInForeground: Boolean){
-        CacheModule.sharedPreferences.edit().putBoolean("APP_IS_IN_FOREGROUND", isInForeground).apply()
-    }
-
-    fun getAppIsInForeground(): Boolean{
-        return CacheModule.sharedPreferences.getBoolean("APP_IS_IN_FOREGROUND", false)
-    }
-
     fun getLocalNotificationsIds(): ArrayList<Int>{
         return Gson().fromJson(CacheModule.sharedPreferences.getString("LOCAL_NOTIFICATIONS_IDS", "[]"), object : TypeToken<ArrayList<Int>>(){}.type)
     }

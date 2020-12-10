@@ -11,6 +11,7 @@ import com.studita.domain.entity.UserDataData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.studita.domain.interactor.UserDataStatus
+import com.studita.notifications.local.LocalNotificationsService
 import com.studita.notifications.local.StartUpReceiver.Companion.scheduleLocalNotifications
 import com.studita.presentation.activities.MainActivity
 import com.studita.presentation.view_model.LiveEvent
@@ -19,6 +20,8 @@ import com.studita.utils.*
 import com.studita.utils.UserUtils.localUserDataLiveData
 import com.studita.utils.UserUtils.userDataLiveData
 import kotlinx.coroutines.*
+import okhttp3.*
+import java.io.IOException
 import java.util.*
 
 
@@ -201,7 +204,7 @@ class App : Application(), LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onAppForeground() {
-        PrefsUtils.setAppIsInForeground(true)
+        LocalNotificationsService.APP_IS_IN_FOREGROUND.set(true)
 
         PrefsUtils.getLocalNotificationsIds().forEach {
             NotificationManagerCompat.from(this).cancel(it)
@@ -211,7 +214,7 @@ class App : Application(), LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackground() {
-        PrefsUtils.setAppIsInForeground(false)
+        LocalNotificationsService.APP_IS_IN_FOREGROUND.set(false)
     }
 
 }

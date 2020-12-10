@@ -22,12 +22,16 @@ import com.studita.utils.UserUtils.streakActivated
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import okhttp3.*
+import java.io.IOException
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class LocalNotificationsService : JobIntentService(){
 
     companion object{
         const val JOB_ID = 67454
+        val APP_IS_IN_FOREGROUND = AtomicBoolean(false)
     }
 
     override fun onHandleWork(intent: Intent) {
@@ -36,7 +40,7 @@ class LocalNotificationsService : JobIntentService(){
             GlobalScope.launch {
                 val userData = App.userDataDeferred.await()
                 if (userData is UserDataStatus.Success) {
-                    if (PrefsUtils.notificationsAreEnabled() && !PrefsUtils.getAppIsInForeground()) {
+                    if (PrefsUtils.notificationsAreEnabled() && !APP_IS_IN_FOREGROUND.get()) {
                         showNotification(
                             UserUtils.userData,
                             intent.getBooleanExtra("IS_MORNING_NOTIFICATION", true)
@@ -49,7 +53,7 @@ class LocalNotificationsService : JobIntentService(){
                         isMyUserData = true
                     )
                     if (localUserData is UserDataStatus.Success) {
-                        if (PrefsUtils.notificationsAreEnabled() && !PrefsUtils.getAppIsInForeground())
+                        if (PrefsUtils.notificationsAreEnabled() && !APP_IS_IN_FOREGROUND.get())
                             showNotification(
                                 localUserData.result,
                                 intent.getBooleanExtra("IS_MORNING_NOTIFICATION", true)

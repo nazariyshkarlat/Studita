@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.core.app.JobIntentService
 import com.studita.di.data.PrivacySettingsModule
 import com.studita.di.data.SubscribeEmailModule
+import com.studita.notifications.local.StartUpReceiver.Companion.scheduleLocalNotifications
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import kotlinx.coroutines.GlobalScope
@@ -21,5 +22,6 @@ class LocalNotificationReceiver : BroadcastReceiver() {
             LocalNotificationsService.JOB_ID,
             intent
         )
+        scheduleLocalNotifications(context)
     }
 }

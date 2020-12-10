@@ -5,6 +5,12 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.os.LocaleList
+import android.util.Log
+import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import java.io.IOException
 import java.util.*
 
 class StartUpReceiver : BroadcastReceiver(){
@@ -49,13 +55,11 @@ class StartUpReceiver : BroadcastReceiver(){
                 },
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
-            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setRepeating(
-                AlarmManager.RTC_WAKEUP, morningCalendar.timeInMillis,
-                1000 * 60 * 60 * 24.toLong(), morningPendingIntent
+            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).set(
+                AlarmManager.RTC_WAKEUP, morningCalendar.timeInMillis, morningPendingIntent
             )
-            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setRepeating(
-                AlarmManager.RTC_WAKEUP, eveningCalendar.timeInMillis,
-                1000 * 60 * 60 * 24.toLong(), eveningPendingIntent
+            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).set(
+                AlarmManager.RTC_WAKEUP, eveningCalendar.timeInMillis, eveningPendingIntent
             )
         }
     }
