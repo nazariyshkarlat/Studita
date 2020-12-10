@@ -295,9 +295,11 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
     }
 
     private fun showEmptyView() {
+        viewModel.recyclerItems =
+            arrayListOf(NotificationsUiModel.NotificationsSwitch)
         recyclerViewLayoutRecyclerView.adapter =
             NotificationsAdapter(context!!,
-                arrayListOf(NotificationsUiModel.NotificationsSwitch),
+                viewModel.recyclerItems!!,
                 null)
         (view as ViewGroup).addView(emptyView)
     }
