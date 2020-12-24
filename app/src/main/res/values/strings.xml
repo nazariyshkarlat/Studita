@@ -27,10 +27,11 @@
     <string name="name">Имя</string>
     <string name="user_name_hint">Введите имя пользователя</string>
     <string name="name_hint">Введите имя</string>
+    <string name="bio_hint">Введите что-нибудь о себе</string>
     <string name="authorization_password_hint">Пароль</string>
     <string name="navigation_bar_first">Обучение</string>
     <string name="navigation_bar_second">Состязания</string>
-    <string name="navigation_bar_third">Ачивки</string>
+    <string name="navigation_bar_third">Достижения</string>
     <string name="settings">Настройки</string>
     <string name="app_theme">Тема приложения</string>
     <string name="offline_mode">Оффлайн режим</string>
@@ -43,6 +44,7 @@
     <string name="tasks_toolbar_title">Задания</string>
     <string name="level_number">%1$d Уровень</string>
     <string name="level">Уровень</string>
+    <string name="level_small_letter">уровень</string>
     <string name="current_level_XP">Опыт: %1$d/%2$d</string>
     <string name="true_answer">Вы ответили верно!</string>
     <string name="false_answer">Правильный ответ:</string>
@@ -107,7 +109,7 @@
     <string name="user_stat_title2">Потрачено времени</string>
     <string name="user_stat_title3">Пройдено уроков</string>
     <string name="user_stat_title4">Количество тренировок</string>
-    <string name="user_stat_title5">Выполнено ачивок</string>
+    <string name="user_stat_title5">Достижения</string>
     <string name="answers_percent">%1$d%% правильных ответов</string>
     <string name="share">Поделиться</string>
     <string name="division_by_0">Деление на ноль невозможно</string>
@@ -141,6 +143,7 @@
     <string name="account">Аккаунт</string>
     <string name="edit_profile">Редактировать профиль</string>
     <string name="cancel_friendship_request">Отменить запрос</string>
+    <string name="reject_friendship_request">Отклонить запрос в друзья</string>
     <string name="profile">Профиль</string>
     <string name="my_profile">Мой профиль</string>
     <string name="user_name_template">\@%1$s</string>
@@ -202,7 +205,7 @@
     <string name="go_to_profile">Перейти в профиль</string>
     <string name="add_to_friends">Добавить в друзья</string>
     <string name="add">Добавить</string>
-    <string name="accept_friendship_request">Принять запрос</string>
+    <string name="accept_friendship_request">Принять запрос в друзья</string>
     <string name="accept">Принять</string>
     <string name="share_profile">Поделиться профлем</string>
     <string name="my_friends">Мои друзья</string>
@@ -278,7 +281,7 @@
     <string name="competitions_promo_screen_third_title">Знания</string>
     <string name="competitions_promo_screen_forth_title">Рейтинги</string>
     
-    <string name="achievements_promo_screen_first_title">Добро пожаловать в ачивки!</string>
+    <string name="achievements_promo_screen_first_title">Добро пожаловать в достижения!</string>
     <string name="achievements_promo_screen_second_title">Увлекательность</string>
     <string name="achievements_promo_screen_third_title">Дополнительные XP</string>
     <string name="achievements_promo_screen_forth_title">Мотивация</string>
@@ -294,10 +297,10 @@
     <string name="competitions_promo_screen_third_subtitle">Проверьте свои знания по каждой из тем, решая разнообразные задания на время.</string>
     <string name="competitions_promo_screen_forth_subtitle">Побеждайте в состязаниях, получайте XP и попадайте в рейтинги. Люди в топе получают дополнительные призы.</string>
 
-    <string name="achievements_promo_screen_first_subtitle">Место, где вы сможете выполнить интересные ачивки и получить за них дополнительные XP.</string>
+    <string name="achievements_promo_screen_first_subtitle">Место, где вы сможете выполнить интересные достижения и получить за них дополнительные XP.</string>
     <string name="achievements_promo_screen_second_subtitle">Сотни различных ачивок на любой вкус. Находите интересные для себя и выполняйте их.</string>
-    <string name="achievements_promo_screen_third_subtitle">Получайте дополнительные XP выполняя ачивки, и повышайте свой уровень.</string>
-    <string name="achievements_promo_screen_forth_subtitle">Различные ачивки будут мотивировать выполнять больше заданий, а следовательно, вы будете получать больше знаний.</string>
+    <string name="achievements_promo_screen_third_subtitle">Получайте дополнительные XP выполняя достижения, и повышайте свой уровень.</string>
+    <string name="achievements_promo_screen_forth_subtitle">Различные достижения будут мотивировать выполнять больше заданий, а следовательно, вы будете получать больше знаний.</string>
 
     <!-- LOCAL NOTIFICATIONS -->
     <string name="local_notification_no_streak_title">Привет!</string>
@@ -325,8 +328,16 @@
     <string name="beta_test_title">Приветствуем вас!</string>
     <string name="select_photo_error">При получении фотографии произошла ошбика</string>
     <string name="input_answer">Введите ответ</string>
+    <string name="bio">Биография</string>
 
     <plurals name="streak_plurals">
+        <item quantity="zero">%1$d дней подряд</item>
+        <item quantity="one">%1$d день подряд</item>
+        <item quantity="few">%1$d дня подряд</item>
+        <item quantity="many">%1$d дней подряд</item>
+        <item quantity="other">%1$d дней подряд</item>
+    </plurals>
+    <plurals name="streak_plurals_without_number">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>
         <item quantity="few">%1$d дня подряд</item>

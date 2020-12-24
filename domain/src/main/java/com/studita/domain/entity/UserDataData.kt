@@ -7,6 +7,7 @@ data class UserDataData(
     val userId: Int?,
     var userName: String?,
     var name: String?,
+    var bio: String?,
     var userPublicId: String?,
     var avatarLink: String?,
     var currentLevel: Int,

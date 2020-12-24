@@ -52,7 +52,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
             }else {
                 if (savedInstanceState == null) {
                     editProfileViewModel.oldProfileData =
-                        EditProfileData(UserUtils.userData.userName, UserUtils.userData.name, UserUtils.userData.avatarLink)
+                        EditProfileData(UserUtils.userData.userName, UserUtils.userData.name, UserUtils.userData.bio, UserUtils.userData.avatarLink)
                     editProfileViewModel.newProfileData = editProfileViewModel.oldProfileData.copy()
                     fillEditTexts(editProfileViewModel.newProfileData)
                 }
@@ -184,11 +184,26 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                 editProfileLayoutNameEditText
             )
         )
+        editProfileLayoutBioEditText.setGenericTextWatcher(
+            GenericTextWatcherImpl(
+                this,
+                editProfileLayoutBioEditText
+            )
+        )
 
         editProfileLayoutUserNameEditText.limitLength(EditProfileInteractor.USER_NAME_MAX_LENGTH)
         editProfileLayoutNameEditText.limitLength(EditProfileInteractor.NAME_MAX_LENGTH)
+        editProfileLayoutBioEditText.limitLength(EditProfileInteractor.BIO_MAX_LENGTH)
+
+        editProfileLayoutBioEditText.setHorizontallyScrolling(false)
+        editProfileLayoutBioEditText.maxLines = Integer.MAX_VALUE
 
         editProfileLayoutNameEditText.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus)
+                (v as EditText).setSelection(v.text.length)
+        }
+
+        editProfileLayoutBioEditText.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus)
                 (v as EditText).setSelection(v.text.length)
         }
@@ -208,6 +223,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
     private fun fillEditTexts(editProfileData: EditProfileData) {
         editProfileLayoutUserNameEditText.setText(editProfileData.userName)
         editProfileLayoutNameEditText.setText(editProfileData.name)
+        editProfileLayoutBioEditText.setText(editProfileData.bio)
     }
 
     private fun fillCounters(editProfileData: EditProfileData) {
@@ -218,6 +234,10 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
         editProfileLayoutUserNameCounter.text = resources.getString(
             R.string.edit_text_counter_template, editProfileData.userName?.length
                 ?: 0, EditProfileInteractor.USER_NAME_MAX_LENGTH
+        )
+        editProfileLayoutBioCounter.text = resources.getString(
+            R.string.edit_text_counter_template, editProfileData.bio?.length
+                ?: 0, EditProfileInteractor.BIO_MAX_LENGTH
         )
     }
 
@@ -279,6 +299,10 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
             }
             R.id.editProfileLayoutNameEditText -> {
                 editProfileViewModel.formNewName(charSequence)
+                editProfileViewModel.checkShowSaveButton()
+            }
+            R.id.editProfileLayoutBioEditText -> {
+                editProfileViewModel.formNewBio(charSequence)
                 editProfileViewModel.checkShowSaveButton()
             }
         }

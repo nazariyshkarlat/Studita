@@ -38,26 +38,26 @@ object TimeUtils {
     fun Long.secondsToAgoString(context: Context): String {
         return when {
             this < justNow -> context.resources.getString(R.string.just_now)
-            this < minuteInSeconds -> "$this ${getResourcesRussianLocale(context)?.getQuantityString(
+            this < minuteInSeconds -> "$this ${getResourcesRussianLocale(context).getQuantityString(
                 R.plurals.seconds_ago_plurals,
                 this.toInt()
             )}"
             this < hourInSeconds -> "${(this / minuteInSeconds).toInt()} ${getResourcesRussianLocale(
                 context
-            )?.getQuantityString(R.plurals.minutes_ago_plurals, (this / minuteInSeconds).toInt())}"
+            ).getQuantityString(R.plurals.minutes_ago_plurals, (this / minuteInSeconds).toInt())}"
             this < dayInSeconds -> "${(this / hourInSeconds).toInt()} ${getResourcesRussianLocale(
                 context
-            )?.getQuantityString(R.plurals.hours_ago_plurals, (this / hourInSeconds).toInt())}"
+            ).getQuantityString(R.plurals.hours_ago_plurals, (this / hourInSeconds).toInt())}"
             this < weekInSeconds -> "${(this / dayInSeconds).toInt()} ${getResourcesRussianLocale(
                 context
-            )?.getQuantityString(R.plurals.days_ago_plurals, (this / dayInSeconds).toInt())}"
+            ).getQuantityString(R.plurals.days_ago_plurals, (this / dayInSeconds).toInt())}"
             this < monthInSeconds -> "${(this / weekInSeconds).toInt()} ${getResourcesRussianLocale(
                 context
-            )?.getQuantityString(R.plurals.weeks_ago_plurals, (this / weekInSeconds).toInt())}"
+            ).getQuantityString(R.plurals.weeks_ago_plurals, (this / weekInSeconds).toInt())}"
             this < yearInSeconds -> "${(this / monthInSeconds).toInt()} ${getResourcesRussianLocale(
                 context
-            )?.getQuantityString(R.plurals.months_ago_plurals, (this / monthInSeconds).toInt())}"
-            else -> "${(this / yearInSeconds).toInt()} ${getResourcesRussianLocale(context)?.getQuantityString(
+            ).getQuantityString(R.plurals.months_ago_plurals, (this / monthInSeconds).toInt())}"
+            else -> "${(this / yearInSeconds).toInt()} ${getResourcesRussianLocale(context).getQuantityString(
                 R.plurals.years_ago_plurals,
                 (this / yearInSeconds).toInt()
             )}"

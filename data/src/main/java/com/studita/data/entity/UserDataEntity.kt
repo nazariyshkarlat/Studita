@@ -16,6 +16,8 @@ data class UserDataEntity(
     @SerializedName("user_name") val userName: String? = null,
     @ColumnInfo(name = "name")
     @SerializedName("name") val name: String? = null,
+    @ColumnInfo(name = "bio")
+    @SerializedName("bio") val bio: String? = null,
     @ColumnInfo(name = "user_public_id")
     @SerializedName("user_public_id") val userPublicId: String? = null,
     @ColumnInfo(name = "avatar_link")
@@ -47,15 +49,11 @@ data class UserDataEntity(
     var userLocalId: Long = 1
 }
 
-data class SaveUserDataRequest(
-    @SerializedName("auth_data") val userIdToken: UserIdToken,
-    @SerializedName("user_data") val userDataEntity: UserDataEntity
-)
-
 fun UserDataData.toRawEntity() = UserDataEntity(
     userId,
     userName,
     name,
+    bio,
     userPublicId,
     avatarLink,
     currentLevel,
@@ -71,6 +69,7 @@ fun UserDataEntity.toBusinessEntity() = UserDataData(
     userId,
     userName,
     name,
+    bio,
     userPublicId,
     avatarLink,
     currentLevel,

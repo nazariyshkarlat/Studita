@@ -45,5 +45,7 @@
     <dimen name="exercisesHelpViewMarginTop">72dp</dimen>
     <dimen name="dialogAlertMaxWidth">556dp</dimen>
     <dimen name="fireIconSize">26dp</dimen>
+    <dimen name="buttonIconPadding">16dp</dimen>
+    <dimen name="buttonIconTextPadding">-40dp</dimen>
     <item name="bars_alpha" format="float" type="dimen">0.98</item>
 </resources>

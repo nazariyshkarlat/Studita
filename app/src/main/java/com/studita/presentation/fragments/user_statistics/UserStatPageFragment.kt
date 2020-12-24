@@ -44,6 +44,7 @@ open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout) {
         }
         userStatPageLayoutLessonsSubtitle.text = userStatisticsData.obtainedExercises.toString()
         userStatPageLayoutTrainingsSubtitle.text = userStatisticsData.obtainedTrainings.toString()
+        userStatPageLayoutAchievementsSubtitle.text = userStatisticsData.obtainedAchievements.toString()
         userStatPageContentView.visibility = View.VISIBLE
     }
 

@@ -92,7 +92,6 @@ class App : Application(), LifecycleObserver {
                     }
                 }
                 userDataDeferred.complete(userDataStatus)
-                println(userDataStatus)
             }
         }
 

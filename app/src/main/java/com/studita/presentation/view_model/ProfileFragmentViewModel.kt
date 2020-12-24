@@ -157,6 +157,27 @@ class ProfileFragmentViewModel(private val myId: Int, private val profileId: Int
         UserUtils.isMyFriendLiveData.value = newValue
     }
 
+    fun rejectFriendshipRequest(userIdToken: UserIdTokenData, userData: UserData) {
+        val newValue = UsersInteractor.FriendActionState.FriendshipRequestIsRejected(
+            userData.apply {
+                isMyFriendStatus = IsMyFriendStatus.Success.IsNotMyFriend(userId)
+            })
+
+        addToFriendsJob = GlobalScope.launchExt(addToFriendsJob) {
+            val result = friendsInteractor.rejectFriendship(
+                FriendActionRequestData(
+                    userIdToken,
+                    userData.userId
+                )
+            )
+            if (result == FriendActionStatus.Success)
+                addFriendStatus.value = newValue
+            else if(result == FriendActionStatus.ServiceUnavailable)
+                errorSnackbarEvent.value = true
+        }
+        UserUtils.isMyFriendLiveData.value = newValue
+    }
+
     fun cancelFriendshipRequest(userIdToken: UserIdTokenData, userData: UserData) {
         val newValue = UsersInteractor.FriendActionState.FriendshipRequestIsCanceled(
             userData.apply {

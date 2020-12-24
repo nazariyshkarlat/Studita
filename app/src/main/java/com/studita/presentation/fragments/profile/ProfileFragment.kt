@@ -4,14 +4,17 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -26,7 +29,6 @@ import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.domain.interactor.UserDataStatus
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.presentation.activities.promo.CompetitionsActivity
-import com.studita.presentation.activities.promo.TrainingsActivity
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.error_fragments.InternetIsDisabledFragment
 import com.studita.presentation.fragments.error_fragments.ServerProblemsFragment
@@ -35,7 +37,6 @@ import com.studita.presentation.fragments.friends.MyFriendsFragment
 import com.studita.presentation.fragments.profile.edit.EditProfileFragment
 import com.studita.presentation.fragments.user_statistics.UserStatFragment
 import com.studita.presentation.listeners.ReloadPageCallback
-import com.studita.presentation.view_model.ExercisesViewModel
 import com.studita.presentation.view_model.ProfileFragmentViewModel
 import com.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.studita.presentation.views.CustomSnackbar
@@ -45,9 +46,8 @@ import com.studita.utils.UserUtils.streakActivated
 import kotlinx.android.synthetic.main.profile_friend_item.view.*
 import kotlinx.android.synthetic.main.profile_layout.*
 import kotlinx.android.synthetic.main.profile_popup_menu_layout.view.*
-import kotlinx.android.synthetic.main.recyclerview_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
-import java.util.*
+import java.lang.StringBuilder
 
 open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
     SwipeRefreshLayout.OnRefreshListener, ReloadPageCallback {
@@ -268,8 +268,8 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
 
         profileLayoutAvatar.fillAvatar(userData.avatarLink, userData.userName!!, userData.userId!!)
         fillText(userData)
-        fillStreakBlock(userData, context)
-        fillCompetitionsBlock(userData)
+        fillStreakLevelBlock(userData, context)
+        //fillCompetitionsBlock(userData)
         profileLayoutSwipeRefresh.isEnabled = true
         profileLayoutSwipeRefresh.isRefreshing = false
     }
@@ -283,12 +283,14 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                 profileLayoutTextButton.visibility = View.VISIBLE
                 profileLayoutButton.background =
                     ContextCompat.getDrawable(context, R.drawable.button_green_8)
+                profileLayoutTextButton.text = resources.getString(R.string.remove_from_friends)
                 profileLayoutTextButton.setOnClickListener {
                     profileFragmentViewModel.removeFriend(
                         UserUtils.getUserIDTokenData()!!,
                         userData
                     )
                 }
+                profileLayoutButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_emoji_events_white, 0)
                 profileLayoutButton.setOnClickListener {
                     activity?.startActivity<CompetitionsActivity>()
                 }
@@ -299,6 +301,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                 profileLayoutButton.text = resources.getString(R.string.add_to_friends)
                 profileLayoutButton.background =
                     ContextCompat.getDrawable(context, R.drawable.button_accent_8)
+                profileLayoutButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_person_add_white, 0)
                 profileLayoutTextButton.visibility = View.GONE
                 profileLayoutButton.setOnClickListener {
                     profileFragmentViewModel.sendFriendshipRequest(
@@ -324,9 +327,23 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                 profileLayoutButton.text = resources.getString(R.string.accept_friendship_request)
                 profileLayoutButton.background =
                     ContextCompat.getDrawable(context, R.drawable.button_accent_8)
-                profileLayoutTextButton.visibility = View.GONE
+                profileLayoutButton.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.ic_done_white,
+                    0
+                )
                 profileLayoutButton.setOnClickListener {
                     profileFragmentViewModel.acceptFriendshipRequest(
+                        UserUtils.getUserIDTokenData()!!,
+                        userData
+                    )
+                }
+                profileLayoutTextButton.visibility = View.VISIBLE
+                profileLayoutTextButton.text =
+                    resources.getString(R.string.reject_friendship_request)
+                profileLayoutTextButton.setOnClickListener {
+                    profileFragmentViewModel.rejectFriendshipRequest(
                         UserUtils.getUserIDTokenData()!!,
                         userData
                     )
@@ -336,28 +353,108 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
     }
 
     private fun fillText(userDataData: UserDataData) {
-        profileLayoutUserName.text =
-            resources.getString(R.string.user_name_template, userDataData.userName)
+        profileLayoutUserName.text = userDataData.userName
+        fillName(userDataData)
+        fillBio(userDataData)
+        adjustTextBottomMargin(userDataData)
+    }
+
+    private fun fillName(userDataData: UserDataData){
         if (userDataData.name != null) {
             profileLayoutName.text = userDataData.name
             profileLayoutName.visibility = View.VISIBLE
         } else
             profileLayoutName.visibility = View.GONE
-        profileLayoutLevelOval.text = userDataData.currentLevel.toString()
     }
 
-    private fun fillStreakBlock(userDataData: UserDataData, context: Context) {
-        profileLayoutStreakText.text =
-            LanguageUtils.getResourcesRussianLocale(context)?.getQuantityString(
+    private fun fillBio(userDataData: UserDataData){
+        if (userDataData.bio != null) {
+            profileLayoutBio.text = userDataData.bio
+            profileLayoutBio.visibility = View.VISIBLE
+        } else
+            profileLayoutBio.visibility = View.GONE
+    }
+
+    private fun adjustTextBottomMargin(userDataData: UserDataData){
+        when{
+            userDataData.bio == null && userDataData.name != null -> {
+                profileLayoutUserName.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = 8F.dpToPx()
+                }
+                profileLayoutName.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = 0
+                }
+            }
+            userDataData.bio == null && userDataData.name == null -> {
+                profileLayoutUserName.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = 0
+                }
+            }
+            userDataData.bio != null && userDataData.name == null -> {
+                profileLayoutUserName.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = 8F.dpToPx()
+                }
+            }
+            else -> {
+                profileLayoutUserName.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = 8F.dpToPx()
+                }
+                profileLayoutName.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = 14F.dpToPx()
+                }
+            }
+        }
+    }
+
+
+    private fun fillStreakLevelBlock(userDataData: UserDataData, context: Context) {
+        profileLayoutStreakText.text = formStreakText(userDataData, context)
+        profileLayoutLevelText.text = formLevelText(userDataData, context)
+    }
+
+    private fun formLevelText(userDataData: UserDataData, context: Context): SpannableStringBuilder{
+        val string = StringBuilder()
+            .append(userDataData.currentLevel.toString())
+            .append("\n")
+            .append(resources.getString(R.string.level_small_letter))
+        val indexOfLevel= string.indexOf(userDataData.currentLevel.toString())
+        val levelLength = userDataData.currentLevel.toString().length
+
+        return SpannableStringBuilder()
+            .append(string.substring(0, indexOfLevel))
+            .append(string.substring(indexOfLevel, indexOfLevel+levelLength).createSpannableString(
+                ThemeUtils.getPrimaryColor(context),
+                16F,
+                ResourcesCompat.getFont(context, R.font.roboto_medium)
+            ))
+            .append(string.substring(indexOfLevel+levelLength))
+    }
+
+
+    private fun formStreakText(userDataData: UserDataData, context: Context): SpannableStringBuilder{
+        val string = StringBuilder()
+            .append(if(streakActivated(userDataData.streakDatetime)) "[img src=ic_whatshot_profile_activated/]" else "[img src=ic_whatshot_profile/]")
+            .append(LanguageUtils.getResourcesRussianLocale(context).getQuantityString(
                 R.plurals.streak_plurals,
                 userDataData.streakDays,
                 userDataData.streakDays
-            )
-        profileLayoutStreakIcon.isActivated = streakActivated(userDataData.streakDatetime)
+            ))
+        val indexOfDays = string.indexOf(userDataData.streakDays.toString())
+        val daysLength = userDataData.streakDays.toString().length
+        string.insert(indexOfDays+daysLength, "\n")
+
+        return SpannableStringBuilder()
+            .append(string.substring(0, indexOfDays))
+            .append(string.substring(indexOfDays, indexOfDays+daysLength).createSpannableString(
+                ThemeUtils.getPrimaryColor(context),
+                16F,
+                ResourcesCompat.getFont(context, R.font.roboto_medium)
+            ))
+            .append(string.substring(indexOfDays+daysLength))
     }
 
     private fun fillCompetitionsBlock(userDataData: UserDataData) {
-        val isMyProfile = userDataData.userId == UserUtils.userData.userId
+        /*val isMyProfile = userDataData.userId == UserUtils.userData.userId
 
         profileHorizontalScrollView.setLevelRatingSubtitle(
             resources.getString(
@@ -393,7 +490,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                     resources.getString(R.string.unavailable),
                 )
             )
-        }
+        }*/
     }
 
     private fun fillFriends(friendsResponseData: UsersResponseData) {

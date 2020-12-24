@@ -61,7 +61,7 @@ class ExercisesBonusEndScreenFragment : NavigatableFragment(R.layout.exercises_b
                 it.getInt("OBTAINED_XP")
             )
             exercisesBonusEndLayoutSubtitle.text =
-                LanguageUtils.getResourcesRussianLocale(view.context)?.getQuantityString(
+                LanguageUtils.getResourcesRussianLocale(view.context).getQuantityString(
                     R.plurals.exercises_bonus_end_layout_subtitle_plurals_template,
                     it.getInt("CORRECT_ANSWERS_COUNT"),
                     it.getInt("CORRECT_ANSWERS_COUNT")

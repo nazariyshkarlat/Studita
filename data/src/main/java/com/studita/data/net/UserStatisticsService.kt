@@ -1,6 +1,5 @@
 package com.studita.data.net
 
-import com.studita.data.entity.SaveUserStatisticsRequest
 import com.google.gson.JsonArray
 import okhttp3.ResponseBody
 import retrofit2.Response

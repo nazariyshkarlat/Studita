@@ -11,6 +11,7 @@ interface EditProfileInteractor {
 
     companion object{
         const val NAME_MIN_LENGTH = 0
+        const val BIO_MAX_LENGTH = 150
         const val NAME_MAX_LENGTH = 30
         const val USER_NAME_MIN_LENGTH = 0
         const val USER_NAME_MAX_LENGTH = 25

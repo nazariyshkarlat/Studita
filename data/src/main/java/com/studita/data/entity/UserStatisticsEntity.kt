@@ -36,10 +36,6 @@ data class UserStatisticsRowEntity(
     var recordId: Int = 0
 }
 
-data class SaveUserStatisticsRequest(
-    @SerializedName("auth_data") val userIdToken: UserIdToken,
-    @SerializedName("user_statistics") val userStatisticsRowEntity: UserStatisticsRowEntity
-)
 
 fun UserStatisticsEntity.toBusinessEntity() = UserStatisticsData(
     obtainedXP,

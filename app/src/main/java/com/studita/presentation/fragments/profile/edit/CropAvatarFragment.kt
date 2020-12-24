@@ -59,7 +59,7 @@ class CropAvatarFragment : NavigatableFragment(R.layout.crop_avatar_layout) {
                     targetFragment?.onActivityResult(345, RESULT_OK, Intent().apply {
                         putExtra(
                             "SELECTED_IMAGE",
-                            Bitmap.createScaledBitmap(resultPhoto, 128, 128, false)
+                            Bitmap.createScaledBitmap(resultPhoto, 144, 144, false)
                         )
                     })
                 })

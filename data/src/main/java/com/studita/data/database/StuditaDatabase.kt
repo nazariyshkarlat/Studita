@@ -25,7 +25,7 @@ abstract class StuditaDatabase : RoomDatabase() {
     abstract fun getUserStatisticsDao(): UserStatisticsDao
 
     companion object {
-        const val DB_VERSION = 1
+        const val DB_VERSION = 2
         const val DB_NAME = "studita_database"
     }
 }

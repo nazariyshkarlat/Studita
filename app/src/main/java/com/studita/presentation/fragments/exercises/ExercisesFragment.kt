@@ -591,7 +591,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                 resources.getString(R.string.input_answer)
             }
             else -> {
-                LanguageUtils.getResourcesRussianLocale(activity!!)!!.getQuantityString(
+                LanguageUtils.getResourcesRussianLocale(activity!!).getQuantityString(
                     if(selectedCount == 0) R.plurals.select_answer_plurals else R.plurals.select_more_answers_plurals,
                     countToSelect-selectedCount,
                     countToSelect-selectedCount

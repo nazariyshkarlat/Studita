@@ -26,7 +26,7 @@ object LevelUtils {
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
         if ((completedParts != chapterPartsCount) or (chapterPartsCount == 0)) {
-            val text = LanguageUtils.getResourcesRussianLocale(context)?.getQuantityString(
+            val text = LanguageUtils.getResourcesRussianLocale(context).getQuantityString(
                 R.plurals.chapter_progress_plurals,
                 completedParts,
                 completedParts,

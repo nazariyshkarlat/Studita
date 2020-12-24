@@ -179,9 +179,14 @@ class EditProfileViewModel() : ViewModel() {
         newProfileData.name = charSequence?.toString()?.takeIf { it.isNotEmpty() }
     }
 
+    fun formNewBio(charSequence: CharSequence?) {
+        newProfileData.bio = charSequence?.toString()?.takeIf { it.isNotEmpty() }
+    }
+
     private fun applyLocalChanges(avatarLink: String?) {
         UserUtils.userData.userName = newProfileData.userName
         UserUtils.userData.name = newProfileData.name
+        UserUtils.userData.bio = newProfileData.bio
         UserUtils.userData.avatarLink = avatarLink
         UserUtils.userDataLiveData.value = UserUtils.userData
         GlobalScope.launch(Dispatchers.Main){

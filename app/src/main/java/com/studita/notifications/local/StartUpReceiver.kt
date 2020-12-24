@@ -22,6 +22,7 @@ class StartUpReceiver : BroadcastReceiver(){
 
     companion object {
         fun scheduleLocalNotifications(context: Context) {
+
             val now = Calendar.getInstance()
             val morningCalendar = Calendar.getInstance().apply {
                 this[Calendar.HOUR_OF_DAY] = 8
@@ -45,7 +46,7 @@ class StartUpReceiver : BroadcastReceiver(){
                 Intent(context, LocalNotificationReceiver::class.java).apply {
                     putExtra("IS_MORNING_NOTIFICATION", true)
                 },
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_CANCEL_CURRENT
             )
             val eveningPendingIntent = PendingIntent.getBroadcast(
                 context,
@@ -53,12 +54,12 @@ class StartUpReceiver : BroadcastReceiver(){
                 Intent(context, LocalNotificationReceiver::class.java).apply {
                     putExtra("IS_MORNING_NOTIFICATION", false)
                 },
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_CANCEL_CURRENT
             )
-            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).set(
+            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP, morningCalendar.timeInMillis, morningPendingIntent
             )
-            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).set(
+            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP, eveningCalendar.timeInMillis, eveningPendingIntent
             )
         }

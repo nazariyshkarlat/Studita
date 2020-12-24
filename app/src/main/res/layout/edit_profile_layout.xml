@@ -85,7 +85,7 @@
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_."
                         android:hint="@string/user_name_hint"
                         android:imeOptions="actionNext|flagForceAscii"
-                        android:paddingEnd="48dp"
+                        android:paddingEnd="48sp"
                         android:singleLine="true" />
 
                     <TextView
@@ -142,13 +142,60 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/name_hint"
-                        android:imeOptions="actionDone"
+                        android:imeOptions="actionNext"
                         android:inputType="textPersonName|textCapWords"
-                        android:paddingEnd="48dp"
+                        android:paddingEnd="48sp"
                         android:singleLine="true" />
 
                     <TextView
                         android:id="@+id/editProfileLayoutNameCounter"
+                        style="@style/Regular14Secondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical" />
+                </FrameLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/blocks_rectangle"
+                android:orientation="vertical"
+                android:padding="@dimen/defaultBlockPadding">
+
+                <TextView
+                    android:id="@+id/editProfileLayoutBio"
+                    style="@style/Medium16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bio" />
+
+                <TextView
+                    style="@style/Regular14Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/editProfileLayoutBio"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="2dp"
+                    android:text="@string/optional" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editProfileLayoutBio">
+
+                    <EditText
+                        android:id="@+id/editProfileLayoutBioEditText"
+                        style="@style/EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/bio_hint"
+                        android:inputType="text"
+                        android:paddingEnd="64sp"/>
+
+                    <TextView
+                        android:id="@+id/editProfileLayoutBioCounter"
                         style="@style/Regular14Secondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -38,7 +38,7 @@ class HomeUserDataViewHolder(view: View, private val lifecycleOwner: LifecycleOw
                 )
                 homeLayoutUserDataLevelLayoutProgressBar.currentProgress = it.currentLevelXP / getLevelXP(it.currentLevel).toFloat()
                 homeLayoutUserDataXPLayoutStreakDays.text =
-                    LanguageUtils.getResourcesRussianLocale(itemView.context)?.getQuantityString(
+                    LanguageUtils.getResourcesRussianLocale(itemView.context).getQuantityString(
                         R.plurals.streak_plurals,
                         it.streakDays,
                         it.streakDays

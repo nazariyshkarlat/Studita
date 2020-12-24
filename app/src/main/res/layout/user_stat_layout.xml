@@ -21,13 +21,18 @@
             <com.studita.presentation.views.CustomTabLayout
                 android:id="@+id/userStatLayoutTabs"
                 android:layout_width="match_parent"
+                android:layout_marginStart="@dimen/defaultRLMargin"
+                android:layout_marginEnd="@dimen/defaultRLMargin"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/blocks_rectangle"
                 android:layout_height="wrap_content" />
 
             <com.studita.presentation.views.press_view.PressLinearLayout
                 android:id="@+id/userStatLayoutProfileInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="-4dp"
                 android:orientation="horizontal"
                 app:press_alpha="?press_view_press_alpha"
                 android:visibility="gone">
@@ -57,7 +62,7 @@
                 android:id="@+id/userStatLayoutViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:clipToPadding="false" />
 
         </LinearLayout>

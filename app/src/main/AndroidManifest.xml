@@ -29,9 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".presentation.activities.MainActivity"
-            android:screenOrientation="portrait"
-            android:resizeableActivity="false">
+        <activity android:name=".presentation.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,33 +39,19 @@
         <activity
             android:name=".presentation.activities.MainMenuActivity"
             android:parentActivityName=".presentation.activities.MainActivity"
-            android:screenOrientation="portrait"
-            android:resizeableActivity="false"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".presentation.activities.ExercisesActivity"
-            android:screenOrientation="portrait"
-            android:resizeableActivity="false"/>
+            android:name=".presentation.activities.ExercisesActivity"/>
         <activity
-            android:name=".presentation.activities.promo.TrainingsActivity"
-            android:screenOrientation="portrait"
-            android:resizeableActivity="false"/>
+            android:name=".presentation.activities.promo.TrainingsActivity"/>
         <activity
-            android:name=".presentation.activities.promo.CompetitionsActivity"
-            android:screenOrientation="portrait"
-            android:resizeableActivity="false"/>
+            android:name=".presentation.activities.promo.CompetitionsActivity"/>
         <activity
-            android:name=".presentation.activities.promo.AchievementsActivity"
-            android:screenOrientation="portrait"
-            android:resizeableActivity="false"/>
+            android:name=".presentation.activities.promo.AchievementsActivity"/>
         <activity
             android:name=".presentation.activities.InterestingActivity"
-            android:screenOrientation="portrait"
-            android:resizeableActivity="false"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".presentation.activities.UserStatActivity"
-            android:screenOrientation="portrait"
-            android:resizeableActivity="false"/>
+        <activity android:name=".presentation.activities.UserStatActivity"/>
         <service
             android:name=".authenticator.AuthenticatorService"
             android:exported="false">

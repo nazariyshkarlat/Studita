@@ -108,7 +108,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                                 vm.errorEvent.value = ErrorState.SERVER_ERROR
                         }
                         is CheckTokenIsCorrectStatus.NoConnection -> {
-                            println(vm.errorEvent.value)
                             if(vm.errorEvent.value != ErrorState.CONNECTION_ERROR)
                                 vm.errorEvent.value = ErrorState.CONNECTION_ERROR
                         }
@@ -135,7 +134,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             vm.progressState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { isProgress ->
-                    println("is progress ${isProgress}")
                     if (!isProgress) {
                         homeLayoutBarLogInButton.isEnabled = true
                         homeLayoutProgressBar.visibility = View.GONE
@@ -170,8 +168,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
             vm.errorEvent.observe(viewLifecycleOwner, Observer { errorState->
                 val currentFragment = childFragmentManager.findFragmentById(R.id.homeLayoutFrameLayout)
-                println(errorState)
-                println(currentFragment)
                 when (errorState) {
                     ErrorState.CONNECTION_ERROR-> {
                         if(!PrefsUtils.isOfflineModeEnabled() && currentFragment !is InternetIsDisabledMainFragment) {
