@@ -1,17 +1,13 @@
 package com.studita.notifications.service
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.os.Build
 import androidx.core.app.JobIntentService
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
@@ -20,7 +16,6 @@ import com.studita.R
 import com.studita.domain.entity.NotificationData
 import com.studita.domain.entity.NotificationType
 import com.studita.domain.entity.UserData
-import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.studita.domain.entity.serializer.IsMyFriendStatusSerializer
 import com.studita.domain.entity.toStatus
 import com.studita.domain.interactor.IsMyFriendStatus
@@ -31,12 +26,13 @@ import com.studita.presentation.activities.MainMenuActivity
 import com.studita.presentation.draw.AvaDrawer
 import com.studita.utils.IDUtils.createID
 import com.studita.utils.PrefsUtils
-import com.studita.utils.ThemeUtils
 import com.studita.utils.UserUtils
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.studita.utils.NotificationsUtils.buildDefaultNotification
 import com.studita.utils.NotificationsUtils.createNotificationChannel
+import com.studita.utils.NotificationsUtils.setText
 
 
 class PushIntentService : JobIntentService() {
@@ -146,14 +142,10 @@ class PushIntentService : JobIntentService() {
         when (notificationData.notificationType) {
             NotificationType.FRIENDSHIP_REQUEST -> {
                 notification
-                    .setContentTitle(this.resources.getString(R.string.notification_friend_reqest_title))
-                    .setContentText(
-                        "${this.resources.getString(
-                            R.string.user_name_template,
-                            notificationData.userName
-                        )} " +
+                    .setText(this.resources.getString(R.string.notification_friend_reqest_title),
+                        "${this.resources.getString(R.string.user_name_template, notificationData.userName)} " +
                                 this.resources.getString(R.string.notification_type_request_friendship)
-                    )
+                        )
                     .addAction(
                         0,
                         this.resources.getString(R.string.accept) as CharSequence,
@@ -177,23 +169,15 @@ class PushIntentService : JobIntentService() {
             }
             NotificationType.DUEL_REQUEST -> {
                 notification
-                    .setContentTitle(this.resources.getString(R.string.notification_duel_missed_call_title))
-                    .setContentText(
-                        "${this.resources.getString(
-                            R.string.user_name_template,
-                            notificationData.userName
-                        )} " +
-                                this.resources.getString(R.string.notification_duel_missed_call_subtitle)
+                    .setText(this.resources.getString(R.string.notification_duel_missed_call_title),
+                        "${this.resources.getString(R.string.user_name_template, notificationData.userName)} " +
+                        this.resources.getString(R.string.notification_duel_missed_call_subtitle)
                     )
             }
             NotificationType.ACCEPTED_FRIENDSHIP -> {
                 notification
-                    .setContentTitle(this.resources.getString(R.string.notification_friendship_request_accepted_title))
-                    .setContentText(
-                        "${this.resources.getString(
-                            R.string.user_name_template,
-                            notificationData.userName
-                        )} " +
+                    .setText(this.resources.getString(R.string.notification_friendship_request_accepted_title),
+                        "${this.resources.getString(R.string.user_name_template, notificationData.userName)} " +
                                 this.resources.getString(R.string.notification_type_accepted_friendship)
                     )
                 UserUtils.isMyFriendLiveData.postValue(

@@ -53,7 +53,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
 
         exercisesViewModel?.let { viewModel ->
 
-            viewModel.navigationState.observe(viewLifecycleOwner, Observer { pair ->
+            viewModel.navigationEvent.observe(viewLifecycleOwner, Observer { pair ->
 
                 when (pair.first) {
                     ExercisesViewModel.ExercisesNavigationState.FIRST -> {
@@ -96,7 +96,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                 setButtonText()
             })
 
-            viewModel.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver())
+            viewModel.snackbarEvent.observe(viewLifecycleOwner, getSnackbarStateObserver())
 
             viewModel.selectVariantEvent.observe(viewLifecycleOwner, Observer {
                 with(getButtonTextDuringExercise(it, exercisesViewModel!!.exerciseCountToSelect, exercisesViewModel!!.isInputExercise())){
@@ -123,7 +123,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                 }
             })
 
-            viewModel.toolbarProgressBarAnimEvent.value?.let {
+            viewModel.getToolbarProgressBarAnimEvent()?.let {
                 viewModel.setProgressBarVisibility(it)
             }
 
@@ -131,17 +131,17 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                 exerciseLayoutButton.text = text
             })
 
-            viewModel.toolbarDividerState.observe(viewLifecycleOwner, Observer { show ->
-                exerciseLayoutToolbar.background = if (show) resources.getDrawable(
-                    R.drawable.divider_bottom_drawable,
-                    exerciseLayoutToolbar.context.theme
+            viewModel.toolbarDividerEvent.observe(viewLifecycleOwner, Observer { show ->
+                exerciseLayoutToolbar.background = if (show) ContextCompat.getDrawable(
+                    context!!,
+                    R.drawable.divider_bottom_drawable
                 ) else null
             })
 
-            viewModel.buttonDividerState.observe(viewLifecycleOwner, Observer { show ->
-                exerciseLayoutButtonFrameLayout.background = if (show) resources.getDrawable(
+            viewModel.buttonDividerEvent.observe(viewLifecycleOwner, Observer { show ->
+                exerciseLayoutButtonFrameLayout.background = if (show) ContextCompat.getDrawable(
+                    context!!,
                     R.drawable.divider_top_drawable,
-                    exerciseLayoutToolbar.context.theme
                 ) else null
             })
 
@@ -164,7 +164,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                 exerciseToolbarProgressBar.alpha = if (isVisible) 1F else 0F
             })
 
-            viewModel.progressState.observe(viewLifecycleOwner, getProgressStateObserver(viewModel))
+            viewModel.progressEvent.observe(viewLifecycleOwner, getProgressStateObserver(viewModel))
 
             viewModel.exercisesProgress.observe(viewLifecycleOwner, Observer { state ->
                 when (state) {
@@ -172,7 +172,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                         exerciseLayoutButton.setOnClickListener {
                             exercisesViewModel?.startSecondsCounter()
                             exercisesViewModel?.timeCounterIsPaused = false
-                            if (viewModel.exercisesResponseData.exercisesDescription != null) {
+                            if (viewModel.exercisesResponseData!!.exercisesDescription != null) {
                                 viewModel.setExercisesProgress(ExercisesViewModel.ExercisesState.DESCRIPTION)
                             } else {
                                 onExerciseButtonStartExercisesClick()
@@ -201,13 +201,13 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                 }
             })
 
-            viewModel.showBadConnectionDialogAlertFragmentState.observe(
+            viewModel.showBadConnectionDialogAlertFragmentEvent.observe(
                 viewLifecycleOwner,
                 Observer { show ->
                     if (show && activity?.supportFragmentManager?.findFragmentByTag(ExercisesBadConnectionDialogAlertFragment.BAG_CONNECTION_DIALOG) == null) {
                         activity?.supportFragmentManager?.let {
-                            viewModel.snackbarState.removeObservers(viewLifecycleOwner)
-                            viewModel.progressState.removeObservers(viewLifecycleOwner)
+                            viewModel.snackbarEvent.removeObservers(viewLifecycleOwner)
+                            viewModel.progressEvent.removeObservers(viewLifecycleOwner)
                             val dialogFragment = ExercisesBadConnectionDialogAlertFragment()
                                 .apply {
                                     setTargetFragment(this@ExercisesFragment, 5325)
@@ -231,7 +231,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             if (exercisesViewModel?.answered?.value == true) {
                 OneShotPreDrawListener.add(exerciseLayoutSnackbar) {
                     setSnackbarTranslationY()
-                    showSnackbar(exercisesViewModel?.snackbarState?.value, animate = false)
+                    showSnackbar(exercisesViewModel?.getSnackbarState(), animate = false)
                 }
             }
         }
@@ -253,9 +253,9 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
             if (it.chapterPartIsFullyCompleted()) {
                 it.saveObtainedExercisesResult()
             } else {
-                it.snackbarState.observe(viewLifecycleOwner, getSnackbarStateObserver())
+                it.snackbarEvent.observe(viewLifecycleOwner, getSnackbarStateObserver())
             }
-            it.progressState.observe(
+            it.progressEvent.observe(
                 viewLifecycleOwner,
                 getProgressStateObserver(it)
             )
@@ -561,7 +561,7 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
 
             if (last) {
                 exerciseLayoutButton.setOnClickListener {}
-                exercisesViewModel.saveUserDataState.observe(
+                exercisesViewModel.saveUserDataEvent.observe(
                     viewLifecycleOwner,
                     Observer {
                         val saved = it.first

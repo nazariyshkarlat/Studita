@@ -14,7 +14,9 @@ import com.studita.domain.interactor.PrivacySettingsDuelsExceptionsStatus
 import com.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
 import com.studita.presentation.model.toUiModel
 import com.studita.utils.UserUtils
+import com.studita.utils.launchExt
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class PrivacySettingsDuelsExceptionsViewModel : ViewModel() {
@@ -34,6 +36,8 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel() {
     val perPage = 20
     var currentPageNumber = 1
 
+    var duelsExceptionsJob: Job? = null
+
     init {
         getPrivacySettingsDuelsExceptions(UserUtils.getUserIDTokenData()!!, false)
     }
@@ -45,7 +49,7 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel() {
         else
             currentPageNumber = 1
 
-        viewModelScope.launch {
+        duelsExceptionsJob = viewModelScope.launchExt(duelsExceptionsJob) {
             when (val result = privacySettingsInteractor.getPrivacyDuelsExceptionsList(
                 userIdTokenData,
                 perPage,
@@ -81,6 +85,7 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel() {
         (((duelsExceptionsResultState is DuelsExceptionsResultState.FirstResults) && duelsExceptionsResultState.results.size == perPage) ||
                 ((duelsExceptionsResultState is DuelsExceptionsResultState.MoreResults) && duelsExceptionsResultState.results.size == perPage))
 
+
     fun editDuelsExceptions() {
         GlobalScope.launch {
             if (editedDuelsExceptionsData.isNotEmpty()) {
@@ -99,6 +104,7 @@ class PrivacySettingsDuelsExceptionsViewModel : ViewModel() {
         }
     }
 
+    fun duelsExceptionsRequestIsPending() = duelsExceptionsJob?.isActive == true
 
     fun getRecyclerItems(
         usersItems: List<PrivacyDuelsExceptionData>,

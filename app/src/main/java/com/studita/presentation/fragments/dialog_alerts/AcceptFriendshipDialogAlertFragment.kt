@@ -9,8 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
 import com.studita.domain.entity.UserData
-import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
-import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.presentation.fragments.base.BaseDialogFragment
 import com.studita.presentation.view_model.AcceptFriendshipDialogAlertViewModel
@@ -19,6 +17,8 @@ import com.studita.utils.ThemeUtils
 import com.studita.utils.UserUtils
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
+import com.studita.domain.interactor.IsMyFriendStatus
 import kotlinx.android.synthetic.main.dialog_alert_layout.*
 
 class AcceptFriendshipDialogAlertFragment :

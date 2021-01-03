@@ -8,12 +8,12 @@ import com.studita.di.data.NotificationsModule
 import com.studita.di.data.UsersModule
 import com.studita.domain.entity.FriendActionRequestData
 import com.studita.domain.entity.UserData
-import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.utils.UserUtils
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

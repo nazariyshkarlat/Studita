@@ -11,7 +11,6 @@ import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.dialog_alerts.ExercisesBadConnectionDialogAlertFragment
 import com.studita.presentation.view_model.ExercisesViewModel
 import com.studita.utils.LanguageUtils
-import com.studita.utils.navigateTo
 import com.studita.utils.replace
 import kotlinx.android.synthetic.main.exercises_bonus_end_layout.*
 
@@ -31,12 +30,12 @@ class ExercisesBonusEndScreenFragment : NavigatableFragment(R.layout.exercises_b
         super.onViewCreated(view, savedInstanceState)
 
         exercisesViewModel?.let { vm ->
-            vm.progressState.observe(
+            vm.progressEvent.observe(
                 viewLifecycleOwner,
                 getProgressStateObserver(vm)
             )
 
-            vm.showBadConnectionDialogAlertFragmentState.observe(
+            vm.showBadConnectionDialogAlertFragmentEvent.observe(
                 viewLifecycleOwner,
                 Observer { show ->
                     if (show && activity?.supportFragmentManager?.findFragmentByTag(
@@ -87,7 +86,7 @@ class ExercisesBonusEndScreenFragment : NavigatableFragment(R.layout.exercises_b
             val last = pair.second
             if (last) {
                 exercisesBonusEndLayoutButton.setOnClickListener {  }
-                exercisesViewModel.saveUserDataState.observe(viewLifecycleOwner, Observer {
+                exercisesViewModel.saveUserDataEvent.observe(viewLifecycleOwner, Observer {
                     val saved = it.first
                     if (saved) {
                         (activity as AppCompatActivity).replace(

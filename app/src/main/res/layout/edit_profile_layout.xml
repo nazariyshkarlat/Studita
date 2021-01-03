@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="visible"
-        tools:visibility="gone" />
+        tools:visibility="gone"/>
 
     <ScrollView
         android:id="@+id/editProfileLayoutScrollView"
@@ -48,6 +48,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="@string/new_photo"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 app:with_min_click_interval="true" />
 
             <com.studita.presentation.views.press_view.PressTextView

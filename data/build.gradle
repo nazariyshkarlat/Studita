@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply from: "$rootProject.projectDir/android-library.gradle"
 android {
-    buildToolsVersion '30.0.2'
+    buildToolsVersion '30.0.3'
 }
 
 dependencies {
@@ -19,7 +19,7 @@ dependencies {
 
     //okhttp
     api "com.squareup.okhttp3:okhttp:$okhttp_version"
-    api "com.squareup.okhttp3:logging-interceptor:$interceptor_version"
+    api "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
     // Room components
     api "androidx.room:room-runtime:$room_version"

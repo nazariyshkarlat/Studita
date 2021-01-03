@@ -16,6 +16,7 @@ import com.studita.presentation.activities.MainActivity
 import com.studita.utils.IDUtils.createID
 import com.studita.utils.NotificationsUtils.buildDefaultNotification
 import com.studita.utils.NotificationsUtils.createNotificationChannel
+import com.studita.utils.NotificationsUtils.setText
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import com.studita.utils.UserUtils.streakActivated
@@ -79,34 +80,22 @@ class LocalNotificationsService : JobIntentService(){
         val notification = when  {
             userData.streakDays == 0 -> {
                  buildDefaultNotification()
-                    .setContentTitle(resources.getString(R.string.local_notification_no_streak_title))
-                     .setContentText(resources.getString(R.string.local_notification_no_streak_content))
-                     .setContentIntent(intent)
-                     .setStyle(
-                         NotificationCompat.BigTextStyle()
-                             .bigText(null)
-                     )
+                     .setText(resources.getString(R.string.local_notification_no_streak_title),
+                         resources.getString(R.string.local_notification_no_streak_content)
+                     ).setContentIntent(intent)
             }
             !streakActivated(userData.streakDatetime) -> {
 
                 if(isMorningNotification) {
                     buildDefaultNotification()
-                        .setContentTitle(resources.getString(R.string.local_notification_streak_morning_title))
-                        .setContentText(resources.getString(R.string.local_notification_streak_morning_content))
-                        .setContentIntent(intent)
-                        .setStyle(
-                            NotificationCompat.BigTextStyle()
-                                .bigText(null)
-                        )
+                        .setText(resources.getString(R.string.local_notification_streak_morning_title),
+                            resources.getString(R.string.local_notification_streak_morning_content)
+                        ).setContentIntent(intent)
                 }else{
                     buildDefaultNotification()
-                        .setContentTitle(resources.getString(R.string.local_notification_streak_evening_title))
-                        .setContentText(resources.getString(R.string.local_notification_streak_evening_content))
-                        .setContentIntent(intent)
-                        .setStyle(
-                            NotificationCompat.BigTextStyle()
-                                .bigText(null)
-                        )
+                        .setText(resources.getString(R.string.local_notification_streak_evening_title),
+                            resources.getString(R.string.local_notification_streak_evening_content)
+                        ).setContentIntent(intent)
                 }
             }
             else -> null

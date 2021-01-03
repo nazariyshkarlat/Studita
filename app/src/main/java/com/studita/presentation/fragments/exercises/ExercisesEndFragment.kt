@@ -35,7 +35,7 @@ class ExercisesEndFragment : NavigatableFragment(R.layout.exercises_end_layout) 
         }
 
         exercisesViewModel?.let {
-            it.endButtonState.observe(viewLifecycleOwner, Observer { show ->
+            it.endButtonEvent.observe(viewLifecycleOwner, Observer { show ->
                 exercisesEndLayoutTextButton.visibility = if (show) View.VISIBLE else View.GONE
             })
         }

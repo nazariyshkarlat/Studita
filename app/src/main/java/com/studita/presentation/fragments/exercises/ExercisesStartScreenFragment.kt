@@ -18,7 +18,7 @@ class ExercisesStartScreenFragment : BaseFragment(R.layout.exercises_start_scree
             ViewModelProviders.of(this).get(ExercisesViewModel::class.java)
         }
         exercisesViewModel?.let {
-            val startScreenModel = it.exercisesResponseData.exercisesStartScreen
+            val startScreenModel = it.exercisesResponseData!!.exercisesStartScreen
             exercisesStartScreenLayoutTitle.text = startScreenModel.title
             exercisesStartScreenLayoutSubtitle.text = startScreenModel.subtitle
         }

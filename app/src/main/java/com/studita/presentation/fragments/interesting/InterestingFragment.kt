@@ -2,23 +2,17 @@ package com.studita.presentation.fragments.interesting
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.studita.App
 import com.studita.R
 import com.studita.presentation.fragments.base.BaseFragment
 import com.studita.presentation.view_model.InterestingViewModel
 import com.studita.utils.*
 import kotlinx.android.synthetic.main.exercise_layout.*
 import kotlinx.android.synthetic.main.exercise_toolbar.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.io.IOException
-import java.lang.Exception
 
 class InterestingFragment : BaseFragment(R.layout.exercise_layout) {
 
@@ -32,7 +26,7 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout) {
 
         interestingViewModel?.let { viewModel ->
 
-            viewModel.navigationState.observe(viewLifecycleOwner, Observer { pair ->
+            viewModel.navigationEvent.observe(viewLifecycleOwner, Observer { pair ->
                 when (pair.first) {
                     InterestingViewModel.InterestingNavigationState.NAVIGATE -> {
                         replace(
@@ -59,21 +53,21 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout) {
                 setBackButtonIcon(pair.second)
             })
 
-            viewModel.toolbarDividerState.observe(viewLifecycleOwner, Observer { show ->
-                exerciseLayoutToolbar.background = if (show) resources.getDrawable(
+            viewModel.showToolbarDividerEvent.observe(viewLifecycleOwner, Observer { show ->
+                exerciseLayoutToolbar.background = if(show) ContextCompat.getDrawable(
+                    context!!,
                     R.drawable.divider_bottom_drawable,
-                    exerciseLayoutToolbar.context.theme
                 ) else null
             })
 
-            viewModel.buttonDividerState.observe(viewLifecycleOwner, Observer { show ->
-                exerciseLayoutButtonFrameLayout.background = if (show) resources.getDrawable(
+            viewModel.showButtonDividerEvent.observe(viewLifecycleOwner, Observer { show ->
+                exerciseLayoutButtonFrameLayout.background = if (show) ContextCompat.getDrawable(
+                    context!!,
                     R.drawable.divider_top_drawable,
-                    exerciseLayoutToolbar.context.theme
                 ) else null
             })
 
-            viewModel.progressBarState.observe(viewLifecycleOwner, Observer { pair ->
+            viewModel.progressBarAnimationEvent.observe(viewLifecycleOwner, Observer { pair ->
                 val percent = pair.first
                 exerciseToolbarProgressBar.animateProgress(
                     toPercent = percent,
@@ -100,7 +94,7 @@ class InterestingFragment : BaseFragment(R.layout.exercise_layout) {
             })
 
             exerciseLayoutButton.setOnClickListener {
-                val isLastFragment = viewModel.progressBarState.value?.second == true
+                val isLastFragment = viewModel.getProgressBarState().second
                 if (!isLastFragment)
                     viewModel.initFragment()
                 else

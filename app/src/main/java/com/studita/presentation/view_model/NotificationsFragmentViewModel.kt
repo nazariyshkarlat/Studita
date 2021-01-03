@@ -117,6 +117,8 @@ class NotificationsFragmentViewModel : ViewModel() {
         }
     }
 
+    fun notificationsRequestIsPending() = getNotificationsJob?.isActive == true
+
     fun setNotificationsAreChecked(userIdTokenData: UserIdTokenData) {
         notificationsAreCheckedJob = GlobalScope.launchExt(notificationsAreCheckedJob) {
             notificationsInteractor.setNotificationsAreChecked(userIdTokenData)

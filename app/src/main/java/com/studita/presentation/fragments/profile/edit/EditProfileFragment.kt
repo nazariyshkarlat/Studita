@@ -50,20 +50,24 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                 editProfileLayoutProgressBar.visibility = View.VISIBLE
                 editProfileLayoutScrollView.visibility = View.GONE
             }else {
-                if (savedInstanceState == null) {
+                if(editProfileViewModel.oldProfileData == null || editProfileViewModel.newProfileData == null){
                     editProfileViewModel.oldProfileData =
                         EditProfileData(UserUtils.userData.userName, UserUtils.userData.name, UserUtils.userData.bio, UserUtils.userData.avatarLink)
-                    editProfileViewModel.newProfileData = editProfileViewModel.oldProfileData.copy()
-                    fillEditTexts(editProfileViewModel.newProfileData)
+                    editProfileViewModel.newProfileData = editProfileViewModel.oldProfileData!!.copy()
+                    fillEditTexts(editProfileViewModel.newProfileData!!)
+                    editProfileLayoutSelectAvatar.requestFocus()
+                    this.hideKeyboard()
                 }
 
+                setTextWatchers()
+
                 fillAvatar()
-                fillCounters(editProfileViewModel.newProfileData)
+                fillCounters(editProfileViewModel.newProfileData!!)
                 editProfileLayoutProgressBar.visibility = View.GONE
                 editProfileLayoutScrollView.visibility = View.VISIBLE
 
                 editProfileLayoutRemoveAvatar.setOnClickListener {
-                    if (editProfileViewModel.newProfileData.avatarLink != null || editProfileViewModel.selectedImage != null) {
+                    if (editProfileViewModel.newProfileData!!.avatarLink != null || editProfileViewModel.selectedImage != null) {
                         EditProfileRemovePhotoDialogAlertFragment().apply {
                             setTargetFragment(this@EditProfileFragment, 23)
                         }.show((activity as AppCompatActivity).supportFragmentManager, null)
@@ -172,28 +176,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
             }
         })
 
-        editProfileLayoutUserNameEditText.setGenericTextWatcher(
-            GenericTextWatcherImpl(
-                this,
-                editProfileLayoutUserNameEditText
-            )
-        )
-        editProfileLayoutNameEditText.setGenericTextWatcher(
-            GenericTextWatcherImpl(
-                this,
-                editProfileLayoutNameEditText
-            )
-        )
-        editProfileLayoutBioEditText.setGenericTextWatcher(
-            GenericTextWatcherImpl(
-                this,
-                editProfileLayoutBioEditText
-            )
-        )
-
-        editProfileLayoutUserNameEditText.limitLength(EditProfileInteractor.USER_NAME_MAX_LENGTH)
-        editProfileLayoutNameEditText.limitLength(EditProfileInteractor.NAME_MAX_LENGTH)
-        editProfileLayoutBioEditText.limitLength(EditProfileInteractor.BIO_MAX_LENGTH)
+        limitEditTextsLength()
 
         editProfileLayoutBioEditText.setHorizontallyScrolling(false)
         editProfileLayoutBioEditText.maxLines = Integer.MAX_VALUE
@@ -221,7 +204,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
     }
 
     private fun fillEditTexts(editProfileData: EditProfileData) {
-        editProfileLayoutUserNameEditText.setText(editProfileData.userName)
+        editProfileLayoutUserNameEditText.setText(resources.getString(R.string.user_name_template, editProfileData.userName))
         editProfileLayoutNameEditText.setText(editProfileData.name)
         editProfileLayoutBioEditText.setText(editProfileData.bio)
     }
@@ -241,6 +224,39 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
         )
     }
 
+    private fun setTextWatchers(){
+        editProfileLayoutUserNameEditText.setGenericTextWatcher(
+            GenericTextWatcherImpl(
+                this,
+                editProfileLayoutUserNameEditText
+            )
+        )
+        editProfileLayoutNameEditText.setGenericTextWatcher(
+            GenericTextWatcherImpl(
+                this,
+                editProfileLayoutNameEditText
+            )
+        )
+        editProfileLayoutBioEditText.setGenericTextWatcher(
+            GenericTextWatcherImpl(
+                this,
+                editProfileLayoutBioEditText
+            )
+        )
+    }
+
+    private fun clearFocus(){
+        editProfileLayoutUserNameEditText.clearFocus()
+        editProfileLayoutName.clearFocus()
+        editProfileLayoutBioEditText.clearFocus()
+    }
+
+    private fun limitEditTextsLength(){
+        editProfileLayoutUserNameEditText.limitLength(EditProfileInteractor.USER_NAME_MAX_LENGTH+1)
+        editProfileLayoutNameEditText.limitLength(EditProfileInteractor.NAME_MAX_LENGTH)
+        editProfileLayoutBioEditText.limitLength(EditProfileInteractor.BIO_MAX_LENGTH)
+    }
+
     private fun fillAvatar() {
         if ((UserUtils.userData.avatarLink == null || editProfileViewModel.avaChanged) && editProfileViewModel.selectedImage == null) {
             Glide
@@ -248,7 +264,9 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                 .clear(editProfileLayoutAvatar)
             AvaDrawer.drawAvatar(
                 editProfileLayoutAvatar,
-                editProfileViewModel.newProfileData.userName!!,
+                if((editProfileViewModel.newProfileData!!.userName?.length ?: 0 > 1))
+                    editProfileViewModel.newProfileData!!.userName!!
+                else " ",
                 PrefsUtils.getUserId()!!
             )
         } else {
@@ -282,14 +300,17 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
         editProfileViewModel.saveChangesButtonVisibleState.value = false
         when (view.id) {
             R.id.editProfileLayoutUserNameEditText -> {
-                if (charSequence?.length == 1) {
-                    if (editProfileViewModel.newProfileData.avatarLink == null && editProfileViewModel.selectedImage == null)
-                        AvaDrawer.drawAvatar(
-                            editProfileLayoutAvatar,
-                            charSequence.toString(),
-                            PrefsUtils.getUserId()!!
-                        )
+                if(charSequence.isNullOrEmpty() || charSequence.first() != '@'){
+                    editProfileLayoutUserNameEditText.setText(resources.getString(R.string.user_name_template, editProfileLayoutUserNameEditText.text))
+                    editProfileLayoutUserNameEditText.setSelection(editProfileLayoutUserNameEditText.text!!.length)
+                    return
                 }
+                if (editProfileViewModel.newProfileData!!.avatarLink == null && editProfileViewModel.selectedImage == null)
+                    AvaDrawer.drawAvatar(
+                        editProfileLayoutAvatar,
+                        if(charSequence.length > 1) charSequence.substring(1, charSequence.length) else " ",
+                        PrefsUtils.getUserId()!!
+                    )
 
                 editProfileViewModel.formNewUserName(charSequence)
 
@@ -306,7 +327,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                 editProfileViewModel.checkShowSaveButton()
             }
         }
-        fillCounters(editProfileViewModel.newProfileData)
+        fillCounters(editProfileViewModel.newProfileData!!)
     }
 
     private fun showSaveChangesButton() {
@@ -349,13 +370,13 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
             if (data?.extras?.containsKey("SELECTED_IMAGE") == true) {
                 editProfileViewModel.selectedImage = data.extras?.get("SELECTED_IMAGE") as Bitmap?
                 if (editProfileViewModel.selectedImage == null) {
-                    editProfileViewModel.newProfileData.avatarLink = null
+                    editProfileViewModel.newProfileData!!.avatarLink = null
                     editProfileLayoutRemoveAvatar.isEnabled = false
                 }else{
                     editProfileLayoutRemoveAvatar.isEnabled = true
                 }
             }
-            editProfileViewModel.avaChanged = (editProfileViewModel.newProfileData.avatarLink != editProfileViewModel.oldProfileData.avatarLink) || editProfileViewModel.selectedImage != null
+            editProfileViewModel.avaChanged = (editProfileViewModel.newProfileData!!.avatarLink != editProfileViewModel.oldProfileData!!.avatarLink) || editProfileViewModel.selectedImage != null
             editProfileViewModel.checkShowSaveButton()
             fillAvatar()
         }

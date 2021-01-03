@@ -2,40 +2,49 @@ package com.studita.presentation.view_model
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.studita.R
 import com.studita.di.data.InterestingModule
 import com.studita.domain.entity.InterestingLikeData
 import com.studita.domain.entity.InterestingLikeRequestData
-import com.studita.domain.entity.exercise.ExerciseRequestData
 import com.studita.domain.interactor.InterestingStatus
 import com.studita.presentation.fragments.interesting.*
 import com.studita.presentation.model.InterestingUiModelScreen
 import com.studita.presentation.model.toInterestingUiModel
-import com.studita.utils.PrefsUtils
-import com.studita.utils.UserUtils
-import com.studita.utils.launchExt
+import com.studita.utils.*
 import kotlinx.coroutines.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-class InterestingViewModel(val interestingNumber: Int) : ViewModel() {
+class InterestingViewModel(private val interestingNumber: Int, private val handle: SavedStateHandle) : ViewModel() {
 
-    val interestingState = MutableLiveData<Boolean>()
-    val progressBarState = SingleLiveEvent<Pair<Float, Boolean>>()
+    companion object{
+        const val FEEDBACK_STATE = "FEEDBACK_STATE"
+        const val PROGRESS_BAR_STATE = "PROGRESS_BAR_STATE"
+        const val INTERESTING_PROGRESS = "INTERESTING_PROGRESS"
+        const val CURRENT_SCREEN = "CURRENT_SCREEN"
+        const val INTERESTING_SCREENS = "INTERESTING_SCREENS"
+        const val CURRENT_SCREEN_POSITION = "CURRENT_SCREEN_POSITION"
+    }
+
+    val interestingDataReceivedEvent = SingleLiveEvent<Boolean>()
+    val progressBarAnimationEvent = SingleLiveEvent<Pair<Float, Boolean>>()
     var interestingProgress = MutableLiveData<InterestingState>(InterestingState.START_SCREEN)
     var feedbackState = MutableLiveData<FeedbackState>(FeedbackState.NO_FEEDBACK)
     var feedbackEvent = MutableLiveData<Boolean>()
-    var toolbarDividerState = SingleLiveEvent<Boolean>()
-    var buttonDividerState = SingleLiveEvent<Boolean>()
-    val navigationState = SingleLiveEvent<Pair<InterestingNavigationState, Fragment>>()
+    var showToolbarDividerEvent = SingleLiveEvent<Boolean>()
+    var showButtonDividerEvent = SingleLiveEvent<Boolean>()
+    val navigationEvent = SingleLiveEvent<Pair<InterestingNavigationState, Fragment>>()
     val loadScreenBadConnectionState = MutableLiveData<Boolean>()
 
     private val connectionTimeout = 3000L
 
-    private var currentScreenPosition = -1
+    private var currentScreenPosition: Int = -1
     var interestingScreens: List<InterestingUiModelScreen>? = null
 
-    lateinit var currentScreen: InterestingUiModelScreen
+    var currentScreen: InterestingUiModelScreen? = null
 
     private val interestingInteractor = InterestingModule.getInterestingInteractorImpl()
 
@@ -43,9 +52,11 @@ class InterestingViewModel(val interestingNumber: Int) : ViewModel() {
     var badConnectionJob: Job? = null
 
     init {
-        getInteresting()
-    }
+        restoreState()
 
+        if(interestingScreens == null)
+            getInteresting()
+    }
 
     fun getInteresting() {
 
@@ -59,7 +70,7 @@ class InterestingViewModel(val interestingNumber: Int) : ViewModel() {
                 is InterestingStatus.NoConnection -> loadScreenBadConnectionState.value = true
                 is InterestingStatus.ServiceUnavailable -> loadScreenBadConnectionState.value = true
                 is InterestingStatus.Success -> {
-                    interestingState.value = true
+                    interestingDataReceivedEvent.value = true
                     interestingScreens = status.result.toInterestingUiModel().screens
                 }
             }
@@ -69,8 +80,8 @@ class InterestingViewModel(val interestingNumber: Int) : ViewModel() {
     fun initFragment() {
         currentScreenPosition++
         currentScreen = interestingScreens!![currentScreenPosition]
-        navigationState.value = getFragmentToAdd(currentScreen)
-        executeInterestingProgress(currentScreen)
+        navigationEvent.value = getFragmentToAdd(currentScreen!!)
+        executeInterestingProgress(currentScreen!!)
         setProgressPercent(getProgressPercent())
     }
 
@@ -88,7 +99,7 @@ class InterestingViewModel(val interestingNumber: Int) : ViewModel() {
     fun onBackClick(){
         currentScreenPosition--
         currentScreen = interestingScreens!![currentScreenPosition]
-        executeInterestingProgress(currentScreen)
+        executeInterestingProgress(currentScreen!!)
         setProgressPercent(getProgressPercent())
     }
 
@@ -126,16 +137,26 @@ class InterestingViewModel(val interestingNumber: Int) : ViewModel() {
     }
 
 
+    fun getProgressBarState() : Pair<Float, Boolean>{
+        return if(progressBarAnimationEvent.value == null){
+            savedStateProgressBarListToPair()
+        }else
+            progressBarAnimationEvent.value!!
+    }
+
+    private fun savedStateProgressBarListToPair() = handle.get<List<Any>>(PROGRESS_BAR_STATE)!![0] as Float to handle.get<List<Any>>(PROGRESS_BAR_STATE)!![1] as Boolean
+
+
     fun showToolbarDivider(show: Boolean) {
-        toolbarDividerState.value = show
+        showToolbarDividerEvent.value = show
     }
 
     fun showButtonDivider(show: Boolean) {
-        buttonDividerState.value = show
+        showButtonDividerEvent.value = show
     }
 
     private fun setProgressPercent(percent: Float) {
-        progressBarState.value = percent to (percent == 1F)
+        progressBarAnimationEvent.value = percent to (percent == 1F)
     }
 
     private fun setInterestingProgress(state: InterestingState) {
@@ -175,6 +196,56 @@ class InterestingViewModel(val interestingNumber: Int) : ViewModel() {
         NO_FEEDBACK,
         LIKE,
         DISLIKE
+    }
+
+    fun saveState(){
+        interestingScreens?.let {
+            handle.set(
+                INTERESTING_SCREENS,
+                Json.encodeToString(it)
+            )
+        }
+        if(currentScreenPosition != -1)
+            handle.set(CURRENT_SCREEN_POSITION, currentScreenPosition)
+        currentScreen?.let {
+            handle.set(
+                CURRENT_SCREEN,
+                Json.encodeToString(it)
+            )
+        }
+        progressBarAnimationEvent.value?.let {
+            handle.set(
+                PROGRESS_BAR_STATE,
+                listOf<Any>(
+                    it.first,
+                    it.second
+                )
+            )
+        }
+        interestingProgress.value?.let {
+            handle.set(INTERESTING_PROGRESS, it.ordinal)
+        }
+        feedbackState.value?.let{
+            handle.set(FEEDBACK_STATE, it.ordinal)
+        }
+    }
+
+    private fun restoreState(){
+        handle.get<String>(CURRENT_SCREEN)?.let{
+            currentScreen = Json.decodeFromString<InterestingUiModelScreen>(it)
+        }
+        handle.get<String>(INTERESTING_SCREENS)?.let{
+            interestingScreens = Json.decodeFromString<List<InterestingUiModelScreen>>(it)
+        }
+        handle.get<Int>(CURRENT_SCREEN_POSITION)?.let{
+            currentScreenPosition = it
+        }
+        handle.get<Int>(INTERESTING_PROGRESS)?.let{
+            interestingProgress.value = InterestingState.values()[it]
+        }
+        handle.get<Int>(FEEDBACK_STATE)?.let{
+            feedbackState.value = FeedbackState.values()[it]
+        }
     }
 
 }

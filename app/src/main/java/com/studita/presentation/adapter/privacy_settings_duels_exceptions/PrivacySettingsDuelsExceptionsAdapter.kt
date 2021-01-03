@@ -4,9 +4,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.studita.R
+import com.studita.data.entity.PrivacyDuelsExceptionsEntity
 import com.studita.domain.entity.EditDuelsExceptionsData
 import com.studita.presentation.model.NotificationsUiModel
 import com.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
+import com.studita.presentation.model.UsersRecyclerUiModel
 import com.studita.presentation.view_model.PrivacySettingsDuelsExceptionsViewModel
 import com.studita.utils.UserUtils
 import com.studita.utils.makeView
@@ -38,9 +40,10 @@ class PrivacySettingsDuelsExceptionsAdapter(
         holder: PrivacySettingsDuelsExceptionsViewHolder<out PrivacySettingsDuelsExceptionsRecyclerUiModel>,
         position: Int
     ) {
-        if ((position % privacySettingsDuelsExceptionsViewModel.perPage == privacySettingsDuelsExceptionsViewModel.perPage / 2) &&
+        if (((position % privacySettingsDuelsExceptionsViewModel.perPage == privacySettingsDuelsExceptionsViewModel.perPage / 2) &&
             (position+privacySettingsDuelsExceptionsViewModel.perPage > itemCount) &&
-            items.any { it is PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel} )
+            items.any { it is PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel})  ||
+            (items[position] == PrivacySettingsDuelsExceptionsRecyclerUiModel.ProgressUiModel && !privacySettingsDuelsExceptionsViewModel.duelsExceptionsRequestIsPending()))
             requestMoreItems()
         holder.bind(items[position])
     }

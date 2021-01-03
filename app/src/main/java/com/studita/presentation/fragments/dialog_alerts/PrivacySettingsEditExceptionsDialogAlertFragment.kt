@@ -19,7 +19,9 @@ import com.studita.presentation.view_model.PrivacySettingsDuelsExceptionsViewMod
 import com.studita.presentation.views.CustomSnackbar
 import com.studita.utils.ThemeUtils
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.privacy_duels_exceptions_dialog_alert.*
+import kotlinx.android.synthetic.main.recyclerview_layout.*
 
 class PrivacySettingsEditExceptionsDialogAlertFragment :
     BaseDialogFragment(R.layout.privacy_duels_exceptions_dialog_alert) {
@@ -29,6 +31,8 @@ class PrivacySettingsEditExceptionsDialogAlertFragment :
 
         val viewModel =
             ViewModelProviders.of(this).get(PrivacySettingsDuelsExceptionsViewModel::class.java)
+
+        privacyDuelsExceptionsRecyclerView.isSaveEnabled = false
 
         viewModel.privacySettingsDuelsExceptionsState.observe(
             viewLifecycleOwner,
@@ -52,7 +56,6 @@ class PrivacySettingsEditExceptionsDialogAlertFragment :
                         )
                         privacyDuelsExceptionsRecyclerView.adapter = adapter
                         viewModel.recyclerItems = adapter.items
-
                     }
                     is PrivacySettingsDuelsExceptionsViewModel.DuelsExceptionsResultState.MoreResults -> {
 

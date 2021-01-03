@@ -635,24 +635,30 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     @Nullable
     @Override
     protected Parcelable onSaveInstanceState() {
-        Bundle bundle = new Bundle();
-
-        if(state != null) {
-            bundle.putParcelable("superState", super.onSaveInstanceState());
-            bundle.putParcelable("savedState", state);
-            state.cropWidth = getCropWidth();
-        }
-        return super.onSaveInstanceState();
+        state.cropWidth = getCropWidth();
+        CropViewSavedState savedState = new CropViewSavedState(super.onSaveInstanceState());
+        savedState.width = state.width;
+        savedState.height = state.height;
+        savedState.rotation = state.rotation;
+        savedState.x = state.x;
+        savedState.y = state.y;
+        savedState.scale = state.scale;
+        savedState.minimumScale = state.minimumScale;
+        savedState.baseRotation = state.baseRotation;
+        savedState.orientation = state.orientation;
+        savedState.matrix = state.matrix;
+        savedState.cropWidth = state.cropWidth;
+        return savedState;
     }
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof Bundle) {
-            Bundle bundle = (Bundle) state;
-            state = bundle.getParcelable("superState");
-            this.state = bundle.getParcelable("savedState");
-        }
-        super.onRestoreInstanceState(state);
+        System.out.println(state instanceof CropViewSavedState);
+        if (state instanceof CropViewSavedState) {
+            this.state = new CropState(((CropViewSavedState) state).width, ((CropViewSavedState) state).height, ((CropViewSavedState) state).rotation, ((CropViewSavedState) state).x, ((CropViewSavedState) state).y, ((CropViewSavedState) state).scale, ((CropViewSavedState) state).minimumScale, ((CropViewSavedState) state).baseRotation, ((CropViewSavedState) state).orientation, ((CropViewSavedState) state).matrix, ((CropViewSavedState) state).cropWidth);
+            super.onRestoreInstanceState(((CropViewSavedState) state).getSuperState());
+        }else
+            super.onRestoreInstanceState(state);
     }
 
     public interface CropViewListener {
@@ -661,19 +667,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         void onAspectLock(boolean enabled);
     }
 
-    private class CropState implements Parcelable {
-        @SuppressWarnings("unused")
-        public final Parcelable.Creator<CropState> CREATOR = new Parcelable.Creator<CropState>() {
-            @Override
-            public CropState createFromParcel(Parcel in) {
-                return new CropState(in);
-            }
-
-            @Override
-            public CropState[] newArray(int size) {
-                return new CropState[size];
-            }
-        };
+    private class CropState  {
         private float width;
         private float height;
         private float rotation;
@@ -686,6 +680,20 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         private Matrix matrix;
         private float cropWidth;
 
+        private CropState(float width, float height, float rotation, float x, float y, float scale, float minimumScale, float baseRotation, float orientation, Matrix matrix, float cropWidth){
+            this.width = width;
+            this.height = height;
+            this.rotation = rotation;
+            this.x = x;
+            this.y = y;
+            this.scale = scale;
+            this.minimumScale = minimumScale;
+            this.baseRotation = baseRotation;
+            this.orientation = orientation;
+            this.matrix = matrix;
+            this.cropWidth = cropWidth;
+        }
+
         private CropState(Bitmap bitmap, int bRotation) {
             width = bitmap.getWidth();
             height = bitmap.getHeight();
@@ -696,23 +704,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             baseRotation = bRotation;
             rotation = 0.0f;
             matrix = new Matrix();
-        }
-
-        protected CropState(Parcel in) {
-            width = in.readFloat();
-            height = in.readFloat();
-            rotation = in.readFloat();
-            x = in.readFloat();
-            y = in.readFloat();
-            scale = in.readFloat();
-            minimumScale = in.readFloat();
-            baseRotation = in.readFloat();
-            orientation = in.readFloat();
-            float[] matrixValues = new float[9];
-            in.readFloatArray(matrixValues);
-            matrix = new Matrix();
-            matrix.setValues(matrixValues);
-            cropWidth = in.readFloat();
         }
 
         private void updateBitmap(Bitmap bitmap, int rotation) {
@@ -834,28 +825,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             Matrix m = new Matrix();
             m.set(matrix);
             return m;
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeFloat(width);
-            dest.writeFloat(height);
-            dest.writeFloat(rotation);
-            dest.writeFloat(x);
-            dest.writeFloat(y);
-            dest.writeFloat(scale);
-            dest.writeFloat(minimumScale);
-            dest.writeFloat(baseRotation);
-            dest.writeFloat(orientation);
-            float[] matrixValues = new float[9];
-            matrix.getValues(matrixValues);
-            dest.writeFloatArray(matrixValues);
-            dest.writeFloat(cropWidth);
         }
     }
 

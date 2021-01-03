@@ -1,17 +1,12 @@
 package com.studita.presentation.fragments.exercises
 
-import android.animation.Animator
-import android.animation.AnimatorInflater
-import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
 import com.studita.presentation.view_model.ExercisesViewModel
-import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import com.studita.utils.replace
 import kotlinx.android.synthetic.main.exercises_load_layout.*
@@ -30,7 +25,7 @@ class ExercisesLoadFragment : LoadFragment() {
         exercisesViewModel?.let { viewModel ->
 
 
-            viewModel.exercisesState.observe(
+            viewModel.exercisesEvent.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer<Boolean> { done ->
                     if (done) {

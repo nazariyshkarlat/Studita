@@ -24,8 +24,8 @@ class EditProfileViewModel() : ViewModel() {
     private val userDataInteractor = UserDataModule.getUserDataInteractorImpl()
     private var job: Job? = null
 
-    lateinit var oldProfileData: EditProfileData
-    lateinit var newProfileData: EditProfileData
+    var oldProfileData: EditProfileData? = null
+    var newProfileData: EditProfileData? = null
     var selectedImage: Bitmap? = null
 
     var avaChanged = false
@@ -78,7 +78,7 @@ class EditProfileViewModel() : ViewModel() {
             when (val result = editProfileInteractor.editProfile(
                 EditProfileRequestData(
                     UserUtils.getUserIDTokenData()!!,
-                    newProfileData
+                    newProfileData!!
                 ), UserUtils.userData, selectedImage
             )) {
                 is EditProfileStatus.Success -> {
@@ -106,7 +106,7 @@ class EditProfileViewModel() : ViewModel() {
 
     private fun checkUserNameAvailable() {
         job = viewModelScope.launchExt(job) {
-            when (editProfileInteractor.isUserNameAvailable(newProfileData.userName!!)) {
+            when (editProfileInteractor.isUserNameAvailable(newProfileData!!.userName!!)) {
                 is UserNameAvailableStatus.Available -> userNameAvailableState.value =
                     UserNameAvailable.Available
 
@@ -126,8 +126,8 @@ class EditProfileViewModel() : ViewModel() {
 
     fun checkCorrectUserName() {
         if (editProfileInteractor.isProfileDataChanged(
-                oldProfileData,
-                newProfileData,
+                oldProfileData!!,
+                newProfileData!!,
                 avaChanged
             )
         ) {
@@ -138,15 +138,15 @@ class EditProfileViewModel() : ViewModel() {
 
     fun backClick() {
         backClickState.value = if ((progressState.value == false) && editProfileInteractor.isProfileDataChanged(
-                oldProfileData,
-                newProfileData,
+                oldProfileData!!,
+                newProfileData!!,
                 avaChanged
             )) BackClickState.SHOW_DIALOG else BackClickState.CLOSE
     }
 
     fun verifyUserName() {
-        if (editProfileInteractor.isUserNameChanged(oldProfileData, newProfileData)) {
-            if (editProfileInteractor.isValidUserNameLength(newProfileData)) {
+        if (editProfileInteractor.isUserNameChanged(oldProfileData!!, newProfileData!!)) {
+            if (editProfileInteractor.isValidUserNameLength(newProfileData!!)) {
                 countersErrorState.value = false
                 checkUserNameAvailable()
             } else {
@@ -163,8 +163,8 @@ class EditProfileViewModel() : ViewModel() {
 
     fun checkShowSaveButton() {
         saveChangesButtonVisibleState.value = editProfileInteractor.isValidData(
-            oldProfileData,
-            newProfileData,
+            oldProfileData!!,
+            newProfileData!!,
             avaChanged
         ) && userNameAvailable()
     }
@@ -172,21 +172,21 @@ class EditProfileViewModel() : ViewModel() {
     private fun userNameAvailable() = userNameAvailableState.value == UserNameAvailable.Available
 
     fun formNewUserName(charSequence: CharSequence?) {
-        newProfileData.userName = charSequence?.toString()?.takeIf { it.isNotEmpty() }
+        newProfileData!!.userName = charSequence?.substring(1, charSequence.length)?.takeIf { it.isNotEmpty() }
     }
 
     fun formNewName(charSequence: CharSequence?) {
-        newProfileData.name = charSequence?.toString()?.takeIf { it.isNotEmpty() }
+        newProfileData!!.name = charSequence?.toString()?.takeIf { it.isNotEmpty() }
     }
 
     fun formNewBio(charSequence: CharSequence?) {
-        newProfileData.bio = charSequence?.toString()?.takeIf { it.isNotEmpty() }
+        newProfileData!!.bio = charSequence?.toString()?.takeIf { it.isNotEmpty() }
     }
 
     private fun applyLocalChanges(avatarLink: String?) {
-        UserUtils.userData.userName = newProfileData.userName
-        UserUtils.userData.name = newProfileData.name
-        UserUtils.userData.bio = newProfileData.bio
+        UserUtils.userData.userName = newProfileData!!.userName
+        UserUtils.userData.name = newProfileData!!.name
+        UserUtils.userData.bio = newProfileData!!.bio
         UserUtils.userData.avatarLink = avatarLink
         UserUtils.userDataLiveData.value = UserUtils.userData
         GlobalScope.launch(Dispatchers.Main){

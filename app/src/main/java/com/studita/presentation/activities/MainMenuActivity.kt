@@ -66,8 +66,11 @@ class MainMenuActivity : DefaultActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         if (intent.getIntExtra("REQUEST_CODE", 0) == NOTIFICATIONS_REQUEST_CODE) {
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.doubleFrameLayoutFrameLayout)
             if (supportFragmentManager.findFragmentById(R.id.doubleFrameLayoutFrameLayout) !is NotificationsFragment)
                 navigateTo(NotificationsFragment(), R.id.doubleFrameLayoutFrameLayout)
+            else
+                (currentFragment as NotificationsFragment).scrollRecyclerToTop()
         }
     }
 

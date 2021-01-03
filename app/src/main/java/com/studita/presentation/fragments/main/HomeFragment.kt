@@ -40,6 +40,7 @@ import com.studita.App.Companion.getUserData
 import com.studita.App.Companion.offlineModeChangeEvent
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.home_layout_bar.*
+import kotlinx.android.synthetic.main.recyclerview_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -56,6 +57,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        homeLayoutRecyclerView.isSaveEnabled = false
 
         mainFragmentViewModel = activity?.run {
             ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
@@ -148,7 +151,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                                 viewLifecycleOwner
                             )
                         homeLayoutRecyclerView.visibility = View.VISIBLE
-
                         if(vm.errorEvent.value == ErrorState.NO_ERROR)
                             showSnackbars()
                     } else {

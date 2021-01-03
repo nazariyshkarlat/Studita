@@ -3,7 +3,6 @@ package com.studita.presentation.fragments.exercises
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
@@ -52,7 +51,7 @@ class ExercisesBonusFragment : NavigatableFragment(R.layout.exercise_bonus_layou
 
             })
 
-            viewModel.exerciseBonusNavigationState.observe(viewLifecycleOwner, Observer {
+            viewModel.exerciseBonusNavigationEvent.observe(viewLifecycleOwner, Observer {
                 val bonusFragment = viewModel.initBonusFragment()
                 if (bonusFragment !is ExercisesBonusEndScreenFragment) {
                     (activity as AppCompatActivity).replace(

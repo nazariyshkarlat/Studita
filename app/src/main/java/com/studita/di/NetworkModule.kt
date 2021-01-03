@@ -44,7 +44,7 @@ object NetworkModule {
     fun <T> getService(className: Class<T>, retrofit: Retrofit): T = retrofit.create(className)
 
     private fun getConnectivityManager(context: Context) =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     fun getProgressRetrofit(): ProgressRetrofit {
         val progressInterceptor = getProgressInterceptor()

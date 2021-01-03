@@ -19,6 +19,7 @@ class NotificationsAdapter(
 ) :
     RecyclerView.Adapter<NotificationsViewHolder<*>>(), NotificationViewHolder.LastNotificationCheckCallback {
 
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -37,9 +38,10 @@ class NotificationsAdapter(
     ) {
 
         if(notificationsFragmentViewModel != null) {
-            if ((position % notificationsFragmentViewModel.perPage == notificationsFragmentViewModel.perPage / 2) &&
+            if (((position % notificationsFragmentViewModel.perPage == notificationsFragmentViewModel.perPage / 2) &&
                 (position+notificationsFragmentViewModel.perPage > itemCount) &&
-                items.any { it is NotificationsUiModel.ProgressUiModel} )
+                items.any { it is NotificationsUiModel.ProgressUiModel}) ||
+                (items[position] == NotificationsUiModel.ProgressUiModel && !notificationsFragmentViewModel.notificationsRequestIsPending()) )
                 if(!notificationsFragmentViewModel.errorState)
                     requestMoreItems()
         }

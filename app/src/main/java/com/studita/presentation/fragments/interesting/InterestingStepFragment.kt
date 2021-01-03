@@ -18,6 +18,7 @@ class InterestingStepFragment : NavigatableFragment(R.layout.interesting_step_la
         interestingViewModel = activity?.run {
             ViewModelProviders.of(this).get(InterestingViewModel::class.java)
         }
+
         interestingViewModel?.let {
             val stepScreenModel =
                 it.currentScreen as InterestingUiModelScreen.InterestingUiModelStepScreen

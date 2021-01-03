@@ -48,7 +48,7 @@ class ChangeAvatarDialogAlertFragment : BaseDialogFragment(R.layout.change_avata
     private fun showCameraIntent(context: Context) {
         requestPermissions(2, context) {
             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                takePictureIntent.resolveActivity(context.packageManager)?.also {
+                try {
                     val photoFile: File? = try {
                         createImageFile(context)
                     } catch (ex: IOException) {
@@ -65,6 +65,8 @@ class ChangeAvatarDialogAlertFragment : BaseDialogFragment(R.layout.change_avata
                         takePictureIntent.putExtra(EXTRA_OUTPUT, photoURI)
                         startActivityForResult(takePictureIntent, 0)
                     }
+                }catch (e: java.lang.Exception){
+                    e.printStackTrace()
                 }
             }
         }
@@ -79,8 +81,7 @@ class ChangeAvatarDialogAlertFragment : BaseDialogFragment(R.layout.change_avata
 
     private fun requestPermissions(requestCode: Int, context: Context, granted: () -> Unit) {
         val galleryPermissions = arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.READ_EXTERNAL_STORAGE
         )
         try {
             if (!EasyPermissions.hasPermissions(context, *galleryPermissions)) {

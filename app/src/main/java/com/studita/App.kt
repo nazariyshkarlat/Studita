@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.*
-import com.shakebugs.shake.Shake
 import com.studita.di.DI
 import com.studita.di.data.*
 import com.studita.domain.entity.UserDataData
@@ -173,7 +172,6 @@ class App : Application(), LifecycleObserver {
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         scheduleLocalNotifications(this)
-        initShaker()
     }
 
 
@@ -193,12 +191,6 @@ class App : Application(), LifecycleObserver {
             }
 
         }
-    }
-
-    private fun initShaker() {
-        Shake.getReportConfiguration().isAutoVideoRecording = true
-        Shake.getReportConfiguration().autoVideoRecordingClipDuration = 30
-        Shake.start(this)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

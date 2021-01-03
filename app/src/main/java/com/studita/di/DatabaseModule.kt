@@ -14,6 +14,6 @@ object DatabaseModule {
             app.applicationContext,
             StuditaDatabase::class.java,
             StuditaDatabase.DB_NAME
-        ).build()
+        ).addMigrations(StuditaDatabase.MIGRATION_1_2).build()
     }
 }

@@ -9,8 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.marginTop
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.studita.R
@@ -24,6 +23,7 @@ import com.studita.presentation.listeners.ReloadPageCallback
 import com.studita.presentation.model.UsersRecyclerUiModel
 import com.studita.presentation.model.toUserItemUiModel
 import com.studita.presentation.view_model.FriendsFragmentViewModel
+import com.studita.presentation.view_model.InterestingViewModel
 import com.studita.presentation.views.CustomSnackbar
 import com.studita.utils.*
 import kotlinx.android.synthetic.main.home_layout.*
@@ -34,11 +34,18 @@ import kotlinx.android.synthetic.main.recyclerview_layout.*
 open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout), ReloadPageCallback {
 
     val friendsFragmentViewModel: FriendsFragmentViewModel by lazy {
-        ViewModelProviders.of(this).get(FriendsFragmentViewModel::class.java)
+        ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return FriendsFragmentViewModel(arguments!!.getInt("USER_ID")!!) as T
+            }
+        })[FriendsFragmentViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        recyclerViewLayoutRecyclerView.isSaveEnabled = false
 
         recyclerViewLayoutRecyclerView.setPadding(
             0,
@@ -271,19 +278,6 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout), 
                 recyclerViewLayoutRecyclerView.adapter?.notifyItemChanged(itemIndex, Unit)
             }
         })
-
-
-        if (savedInstanceState == null) {
-            arguments?.getInt("USER_ID")?.let {
-                friendsFragmentViewModel.getUsers(
-                    it,
-                    friendsFragmentViewModel.sortBy,
-                    false,
-                    null,
-                    false
-                )
-            }
-        }
 
         recyclerViewLayoutRecyclerView.layoutManager = object : LinearLayoutManager(view.context) {
             override fun requestChildRectangleOnScreen(

@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.studita.R
 import com.studita.domain.repository.UsersRepository
+import com.studita.presentation.model.NotificationsUiModel
 import com.studita.presentation.model.UsersRecyclerUiModel
 import com.studita.presentation.view_model.FriendsFragmentViewModel
 import com.studita.presentation.view_model.ToolbarFragmentViewModel
@@ -60,9 +61,10 @@ class UsersAdapter(
         position: Int
     ) {
 
-        if ((position % friendsFragmentViewModel.perPage == friendsFragmentViewModel.perPage / 2) &&
+        if (((position % friendsFragmentViewModel.perPage == friendsFragmentViewModel.perPage / 2) &&
             (position+friendsFragmentViewModel.perPage > itemCount) &&
-                items.any { it is UsersRecyclerUiModel.ProgressUiModel }) {
+                items.any { it is UsersRecyclerUiModel.ProgressUiModel }) ||
+                    ((items.size > position) && (items[position] == UsersRecyclerUiModel.ProgressUiModel && !friendsFragmentViewModel.friendsRequestIsPending()))) {
 
             if(!friendsFragmentViewModel.errorState)
                 requestMoreItems()

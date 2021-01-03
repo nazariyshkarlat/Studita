@@ -26,7 +26,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class FriendsFragmentViewModel : ViewModel() {
+class FriendsFragmentViewModel(private val userId: Int) : ViewModel() {
 
     private val friendsInteractor = UsersModule.getUsersInteractorImpl()
     val addFriendStatus = SingleLiveEvent<UsersInteractor.FriendActionState>()
@@ -55,6 +55,16 @@ class FriendsFragmentViewModel : ViewModel() {
     var isGlobalSearch: Boolean = false
 
     val perPage: Int = 20
+
+    init {
+        getUsers(
+            userId,
+            sortBy,
+            false,
+            null,
+            false
+        )
+    }
 
     fun getUsers(
         profileId: Int,
@@ -259,6 +269,8 @@ class FriendsFragmentViewModel : ViewModel() {
         }
         UserUtils.isMyFriendLiveData.value = newValue
     }
+
+    fun friendsRequestIsPending() = searchUsersJob?.isActive == true
 
     fun getRecyclerItems(
         searchUiModel: UsersRecyclerUiModel.SearchUiModel,

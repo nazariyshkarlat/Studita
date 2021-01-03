@@ -2,7 +2,6 @@ package com.studita.presentation.fragments.interesting
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -25,7 +24,7 @@ class InterestingLoadFragment : LoadFragment() {
         interestingViewModel?.let {
 
 
-            it.interestingState.observe(
+            it.interestingDataReceivedEvent.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer<Boolean> { done ->
                     if (done) {

@@ -1,5 +1,6 @@
 package com.studita.utils
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -33,4 +34,12 @@ object NotificationsUtils {
         .setColor(ContextCompat.getColor(this, if(ThemeUtils.getDefaultTheme(resources)== ThemeUtils.Theme.DARK) R.color.blue_dark_theme else R.color.blue_light_theme))
         .setPriority(NotificationCompat.PRIORITY_HIGH)
 
+    fun NotificationCompat.Builder.setText(title: String, content: String): NotificationCompat.Builder{
+        return this
+            .setContentTitle(title)
+            .setContentText(content)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(null))
+    }
 }

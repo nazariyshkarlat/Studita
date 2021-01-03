@@ -20,7 +20,7 @@ open class ExercisesDescriptionFragment(viewId: Int) : ExercisesScrollableFragme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exercisesViewModel?.let {
-            exercisesDescriptionModel = it.exercisesResponseData.exercisesDescription
+            exercisesDescriptionModel = it.exercisesResponseData!!.exercisesDescription
         }
     }
 }

@@ -3,7 +3,9 @@ package com.studita.presentation.model
 import android.content.Context
 import android.graphics.drawable.Drawable
 import com.studita.domain.entity.exercise.*
+import kotlinx.serialization.Serializable
 
+@Serializable
 sealed class ExerciseUiModel {
 
     sealed class ExerciseUiModelExercise : ExerciseUiModel() {

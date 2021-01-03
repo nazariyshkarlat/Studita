@@ -16,6 +16,11 @@ class LevelsAdapter(
 ) :
     RecyclerView.Adapter<LevelsViewHolder<*>>() {
 
+
+    init {
+        this.stateRestorationPolicy = StateRestorationPolicy.PREVENT
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

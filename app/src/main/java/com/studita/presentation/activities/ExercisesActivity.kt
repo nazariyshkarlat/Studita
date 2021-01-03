@@ -2,8 +2,7 @@ package com.studita.presentation.activities
 
 import android.os.Bundle
 import android.view.MotionEvent
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import com.studita.R
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.dialog_alerts.ExercisesCloseDialogAlertFragment
@@ -27,10 +26,14 @@ class ExercisesActivity : DefaultActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.frame_layout)
 
-        exercisesViewModel =  ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+        exercisesViewModel =  ViewModelProviders.of(this, object : AbstractSavedStateViewModelFactory(this, null) {
             @Suppress("UNCHECKED_CAST")
-            override fun <T : androidx.lifecycle.ViewModel?> create(modelClass: Class<T>): T {
-                return ExercisesViewModel(application, intent!!.extras!!.getInt("CHAPTER_PART_NUMBER")) as T
+            override fun <T : ViewModel?> create(
+                key: String,
+                modelClass: Class<T>,
+                handle: SavedStateHandle
+            ): T {
+                return ExercisesViewModel(application, intent!!.extras!!.getInt("CHAPTER_PART_NUMBER"), handle) as T
             }
         })[ExercisesViewModel::class.java]
 
@@ -76,6 +79,12 @@ class ExercisesActivity : DefaultActivity() {
                 exercisesViewModel?.stopSecondsCounter()
             }
         }
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        exercisesViewModel?.saveState()
+        super.onSaveInstanceState(outState)
     }
 
     private fun onBackClick() {

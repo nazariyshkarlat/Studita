@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.view.contains
-import androidx.core.view.updateLayoutParams
 import androidx.core.widget.TextViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -21,7 +20,6 @@ import com.studita.R
 import com.studita.domain.entity.NotificationData
 import com.studita.domain.entity.NotificationType
 import com.studita.domain.entity.UserData
-import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.notifications.service.PushReceiverIntentService
@@ -41,8 +39,9 @@ import com.google.gson.reflect.TypeToken
 import com.studita.data.entity.isNotificationType
 import com.studita.data.entity.toFirebaseMessageType
 import com.studita.domain.entity.MessageType
+import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.studita.notifications.service.MessageReceiverIntentService.Companion.BROADCAST_MESSAGE
-import com.studita.presentation.view_model.FriendsFragmentViewModel
+import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.recyclerview_layout.*
 
 class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
@@ -113,7 +112,9 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
                 viewModel.notificationsState.value = false to NotificationsFragmentViewModel.NotificationsResultState.MoreResults(
                     emptyList())
 
-                if (!isHidden) {
+
+                val maxScrollWithoutPush = resources.getDimension(R.dimen.toolbarHeight)
+                if (!isHidden && (recyclerViewLayoutRecyclerView.computeVerticalScrollOffset() < maxScrollWithoutPush)) {
                     resultCode = Activity.RESULT_CANCELED
 
                     UserUtils.userDataLiveData.value = UserUtils.userData.apply {
@@ -148,8 +149,14 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
 
     }
 
+    fun scrollRecyclerToTop(){
+        recyclerViewLayoutRecyclerView.smoothScrollToPosition(0)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        recyclerViewLayoutRecyclerView.isSaveEnabled = false
 
         recyclerViewLayoutRecyclerView.setPadding(
             0,
@@ -183,6 +190,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
                         )
                         recyclerViewLayoutRecyclerView.adapter = adapter
                         viewModel.recyclerItems = adapter.items
+
                     }
                     is NotificationsFragmentViewModel.NotificationsResultState.MoreResults -> {
 
@@ -301,7 +309,8 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
             NotificationsAdapter(context!!,
                 viewModel.recyclerItems!!,
                 null)
-        (view as ViewGroup).addView(emptyView)
+        if(!(view as ViewGroup).contains(emptyView))
+                (view as ViewGroup).addView(emptyView)
     }
 
 

@@ -49,7 +49,7 @@ public class TextViewWithImages extends androidx.appcompat.widget.AppCompatTextV
             int id = context.getResources().getIdentifier(resname, "drawable", context.getPackageName());
             if (set) {
                 hasChanges = true;
-                spannable.setSpan( new ImageSpan(context, id, ImageSpan.ALIGN_CENTER),
+                spannable.setSpan(new CenteredImageSpan(context, id),
                         matcher.start(),
                         matcher.end(),
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

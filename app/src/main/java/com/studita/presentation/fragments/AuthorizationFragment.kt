@@ -27,7 +27,6 @@ import com.studita.presentation.fragments.dialog_alerts.ProgressDialogAlertFragm
 import com.studita.presentation.listeners.OnViewSizeChangeListener
 import com.studita.presentation.view_model.AuthorizationFragmentViewModel
 import com.studita.utils.setOnViewSizeChangeListener
-import com.shakebugs.shake.Shake
 import com.studita.App.Companion.authenticationState
 import kotlinx.android.synthetic.main.authorization_layout.*
 import kotlinx.coroutines.Dispatchers
@@ -169,8 +168,6 @@ class AuthorizationFragment : NavigatableFragment(R.layout.authorization_layout)
         OneShotPreDrawListener.add(authorizationBottomSection) {
             initErrorSnackbar()
         }
-
-        Shake.addPrivateView(authorizationPasswordEditText)
     }
 
     override fun afterTextChanged(s: Editable?) {

@@ -52,7 +52,7 @@ class ExerciseReportBugBottomSheetFragment : BottomDrawerFragment(){
             viewModel.isThxLayout = exercisesViewModel.feedbackWasSent
         }
 
-        if(exercisesViewModel?.snackbarState?.value?.second?.exerciseResult == true){
+        if(exercisesViewModel?.getSnackbarState()?.second?.exerciseResult == true){
             exerciseReportBugLayoutMyAnswerIsCorrect.visibility = View.GONE
         }else
             exerciseReportBugLayoutMyAnswerIsIncorrect.visibility = View.GONE

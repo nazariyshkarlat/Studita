@@ -353,7 +353,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
     }
 
     private fun fillText(userDataData: UserDataData) {
-        profileLayoutUserName.text = userDataData.userName
+        profileLayoutUserName.text = resources.getString(R.string.user_name_template, userData.userName)
         fillName(userDataData)
         fillBio(userDataData)
         adjustTextBottomMargin(userDataData)

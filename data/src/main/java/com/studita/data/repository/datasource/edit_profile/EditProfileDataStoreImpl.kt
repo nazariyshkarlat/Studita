@@ -9,8 +9,11 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CancellationException
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class EditProfileDataStoreImpl(
@@ -58,12 +61,12 @@ class EditProfileDataStoreImpl(
         }
 
     private fun File.toBodyPart(): MultipartBody.Part {
-        val reqFile = RequestBody.create(MediaType.parse("image/*"), this)
+        val reqFile = this.asRequestBody("image/*".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData("avatar", this.name, reqFile)
     }
 
     private fun EditProfileRequest.toRequestBody() =
-        RequestBody.create(MediaType.parse("application/json"), Gson().toJson(this))
+        Gson().toJson(this).toRequestBody("application/json".toMediaTypeOrNull())
 
 
 }

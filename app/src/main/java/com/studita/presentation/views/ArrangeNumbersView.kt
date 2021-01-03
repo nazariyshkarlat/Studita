@@ -23,7 +23,7 @@ import androidx.core.widget.TextViewCompat.setTextAppearance
 import com.studita.R
 import com.studita.utils.*
 import com.google.android.flexbox.*
-
+import kotlinx.android.parcel.Parcelize
 
 class ArrangeNumbersView @JvmOverloads constructor(
     context: Context,
@@ -308,51 +308,20 @@ class ArrangeNumbersView @JvmOverloads constructor(
 
     private fun isFalseAnswer(index: Int) = answers[index] != null && (correctAnswers[index] != answers[index])
 
-    @Suppress("UNCHECKED_CAST")
-    private class SavedState : BaseSavedState {
-        var variants: List<Int> = emptyList()
-        var answers = arrayOfNulls<Int?>(10)
+    @Parcelize
+    class SavedState(private val superViewState: Parcelable?, val variants: List<Int>, val answers: Array<Int?>) : BaseSavedState(superViewState)
 
-        internal constructor(superState: Parcelable?) : super(superState) {}
-        private constructor(`in`: Parcel) : super(`in`) {
-            `in`.readList(variants, variants.javaClass.classLoader)
-            answers = `in`.readArray(answers.javaClass.classLoader) as Array<Int?>
-        }
-
-        override fun writeToParcel(out: Parcel, flags: Int) {
-            super.writeToParcel(out, flags)
-            out.writeList(variants)
-            out.writeArray(answers)
-        }
-
-        companion object {
-            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
-                override fun createFromParcel(`in`: Parcel): SavedState? {
-                    return SavedState(`in`)
-                }
-
-                override fun newArray(size: Int): Array<SavedState?> {
-                    return arrayOfNulls(size)
-                }
-            }
-        }
-    }
-
-    override fun onSaveInstanceState(): Parcelable? {
-        return SavedState(super.onSaveInstanceState()).apply {
-            variants = this@ArrangeNumbersView.variants
-            answers = this@ArrangeNumbersView.answers
-        }
+    override fun onSaveInstanceState(): Parcelable {
+        return SavedState(super.onSaveInstanceState(), variants, answers)
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {
-        super.onRestoreInstanceState(state)
 
-        val savedState = state as SavedState
-        super.onRestoreInstanceState(savedState.superState)
+        state as SavedState
+        super.onRestoreInstanceState(state.superState)
 
-        variants = savedState.variants
-        answers = savedState.answers
+        variants = state.variants
+        answers = state.answers
 
         updateAllTopChildren(answers)
         updateAllBottomChildren()

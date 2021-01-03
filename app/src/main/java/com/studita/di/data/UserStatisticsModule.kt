@@ -62,6 +62,6 @@ object UserStatisticsModule {
     private fun getDiskUserStatisticsDataStore() =
         DiskUserStatisticsRecordsDataStore(getUserStatisticsDao())
 
-    private fun getUserStatisticsDao() = DatabaseModule.studitaDatabase!!.getUserStatisticsDao()
+    private fun getUserStatisticsDao() = DatabaseModule.studitaDatabase.getUserStatisticsDao()
 
 }
