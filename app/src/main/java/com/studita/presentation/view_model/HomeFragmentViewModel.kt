@@ -1,20 +1,17 @@
 package com.studita.presentation.view_model
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.studita.App
 import com.studita.App.Companion.authenticationState
 import com.studita.App.Companion.userDataDeferred
-import com.studita.R
-import com.studita.di.data.LevelsModule
-import com.studita.di.data.SubscribeEmailModule
-import com.studita.di.data.UserDataModule
-import com.studita.domain.entity.UserDataData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.studita.domain.interactor.LevelsStatus
 import com.studita.domain.interactor.SubscribeEmailResultStatus
 import com.studita.domain.interactor.UserDataStatus
+import com.studita.domain.interactor.levels.LevelsInteractor
+import com.studita.domain.interactor.subscribe_email.SubscribeEmailInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.presentation.model.ErrorState
 import com.studita.presentation.model.HomeRecyclerUiModel
 import com.studita.presentation.model.toHomeRecyclerItems
@@ -23,6 +20,7 @@ import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import com.studita.utils.launchExt
 import kotlinx.coroutines.*
+import org.koin.core.context.GlobalContext
 
 class HomeFragmentViewModel : ViewModel() {
 
@@ -35,8 +33,8 @@ class HomeFragmentViewModel : ViewModel() {
     var results: List<HomeRecyclerUiModel>? = null
     var resultsAreLocal = false
 
-    private val levelsInteractor = LevelsModule.getLevelsInteractorImpl()
-    private val subscribeEmailInteractor = SubscribeEmailModule.getSubscribeEmailInteractorImpl()
+    private val levelsInteractor = GlobalContext.get().get<LevelsInteractor>()
+    private val subscribeEmailInteractor =GlobalContext.get().get<SubscribeEmailInteractor>()
 
     var levelsJob: Job? = null
     private var subscribeJob: Job? = null

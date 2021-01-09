@@ -5,23 +5,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.studita.App
-import com.studita.di.data.NotificationsModule
 import com.studita.domain.entity.NotificationData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.GetNotificationsStatus
 import com.studita.domain.interactor.UserDataStatus
+import com.studita.domain.interactor.notifications.NotificationsInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.presentation.model.NotificationsUiModel
 import com.studita.presentation.model.toUiModel
 import com.studita.utils.UserUtils
 import com.studita.utils.launchExt
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import org.koin.core.context.GlobalContext
 
 class NotificationsFragmentViewModel : ViewModel() {
 
-    private val notificationsInteractor = NotificationsModule.getNotificationsInteractorImpl()
+    private val notificationsInteractor = GlobalContext.get().get<NotificationsInteractor>()
 
     val notificationsState = MutableLiveData<Pair<Boolean, NotificationsResultState>>()
     val progressState = MutableLiveData<Boolean>()

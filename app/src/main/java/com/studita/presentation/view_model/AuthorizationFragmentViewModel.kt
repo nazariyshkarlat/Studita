@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.studita.App
 import com.studita.R
-import com.studita.di.data.AuthorizationModule
-import com.studita.di.data.UserStatisticsModule
 import com.studita.domain.entity.PushTokenData
 import com.studita.domain.entity.authorization.AuthorizationRequestData
 import com.studita.domain.entity.authorization.LogInResponseData
@@ -18,12 +16,16 @@ import com.studita.utils.UserUtils
 import com.studita.utils.launchBlock
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
-import com.studita.App.Companion.initLocalUserData
 import com.studita.App.Companion.initUserData
-import com.studita.domain.interactor.SignInWithGoogleStatus
 import com.studita.domain.interactor.UserDataStatus
+import com.studita.domain.interactor.authorization.AuthorizationInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
+import com.studita.domain.interactor.user_statistics.UserStatisticsInteractor
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import org.koin.core.context.GlobalContext
+import org.koin.core.context.GlobalContext.get
+
 
 class AuthorizationFragmentViewModel : ViewModel() {
 
@@ -35,8 +37,8 @@ class AuthorizationFragmentViewModel : ViewModel() {
 
     private var job: Job? = null
 
-    private val userStatisticsInteractor = UserStatisticsModule.getUserStatisticsInteractorImpl()
-    private val authorizationInteractor = AuthorizationModule.getAuthorizationInteractorImpl()
+    private val userStatisticsInteractor: UserStatisticsInteractor by get().inject()
+    private val authorizationInteractor = GlobalContext.get().get<AuthorizationInteractor>()
 
     fun setPasswordEmpty(password: String) {
         passwordFieldIsEmptyState.value = password.isEmpty()

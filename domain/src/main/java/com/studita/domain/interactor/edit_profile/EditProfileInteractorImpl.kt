@@ -82,7 +82,7 @@ class EditProfileInteractorImpl(
         oldProfileData: EditProfileData,
         newProfileData: EditProfileData,
         avaChanged: Boolean
-    ): Boolean = avaChanged or (oldProfileData != newProfileData)
+    ): Boolean = avaChanged || (oldProfileData != newProfileData)
 
     override fun isUserNameChanged(
         oldProfileData: EditProfileData,

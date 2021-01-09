@@ -9,11 +9,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.studita.R
-import com.studita.di.data.CompleteExercisesModule
-import com.studita.di.data.UserDataModule
-import com.studita.di.data.UserStatisticsModule
-import com.studita.di.data.exercise.ExerciseResultModule
-import com.studita.di.data.exercise.ExercisesModule
 import com.studita.domain.entity.CompleteExercisesRequestData
 import com.studita.domain.entity.CompletedExercisesData
 import com.studita.domain.entity.UserDataData
@@ -35,10 +30,16 @@ import com.studita.presentation.model.toUiModel
 import com.studita.utils.*
 import com.google.gson.Gson
 import com.studita.domain.entity.exercise.*
+import com.studita.domain.interactor.complete_chapter_part.CompleteExercisesInteractor
+import com.studita.domain.interactor.exercises.ExerciseResultInteractor
+import com.studita.domain.interactor.exercises.ExercisesInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
+import com.studita.domain.interactor.user_statistics.UserStatisticsInteractor
 import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.koin.core.context.GlobalContext
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -173,12 +174,11 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int, priva
     private var bonusExercises = emptyList<ExerciseData>()
     private val exercisesToRetry = ArrayList<ExerciseData>()
 
-    private val userStatisticsInteractor = UserStatisticsModule.getUserStatisticsInteractorImpl()
-    private val userDataInteractor = UserDataModule.getUserDataInteractorImpl()
-    private val completeExercisesInteractor =
-        CompleteExercisesModule.getCompleteExercisesInteractorImpl()
-    private val exercisesInteractor = ExercisesModule.getExercisesInteractorImpl()
-    private val exerciseResultInteractor = ExerciseResultModule.getExerciseResultInteractorImpl()
+    private val userStatisticsInteractor: UserStatisticsInteractor by GlobalContext.get().inject()
+    private val userDataInteractor = GlobalContext.get().get<UserDataInteractor>()
+    private val completeExercisesInteractor = GlobalContext.get().get<CompleteExercisesInteractor>()
+    private val exercisesInteractor = GlobalContext.get().get<ExercisesInteractor>()
+    private val exerciseResultInteractor = GlobalContext.get().get<ExerciseResultInteractor>()
 
     private var secondsCounter: Timer? = null
 

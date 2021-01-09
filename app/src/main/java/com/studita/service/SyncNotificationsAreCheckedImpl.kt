@@ -2,13 +2,12 @@ package com.studita.service
 
 import android.content.Context
 import androidx.work.*
-import com.studita.di.NetworkModule
-import com.studita.di.data.AuthorizationModule
-import com.studita.di.data.NotificationsModule
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.service.SyncNotificationsAreChecked
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.studita.domain.interactor.notifications.NotificationsInteractor
+import org.koin.core.context.GlobalContext
 
 class SyncNotificationsAreCheckedImpl : SyncNotificationsAreChecked {
 
@@ -28,7 +27,7 @@ class SyncNotificationsAreCheckedImpl : SyncNotificationsAreChecked {
             .setConstraints(constraints)
             .setInputData(data.build())
             .build()
-        val workManager = WorkManager.getInstance(NetworkModule.context)
+        val workManager = WorkManager.getInstance(GlobalContext.get().get())
         workManager.enqueueUniqueWork("$SYNC_NOTIFICATIONS_ARE_CHECKED_ID ${userIdTokenData.userId}", ExistingWorkPolicy.REPLACE, work)
     }
 
@@ -40,7 +39,7 @@ class SyncNotificationsAreCheckedImpl : SyncNotificationsAreChecked {
             if (json != null) {
                 val userIdTokenData =
                     deserializeUserIdTokenData(json)
-                NotificationsModule.getNotificationsInteractorImpl().setNotificationsAreChecked(userIdTokenData)
+                GlobalContext.get().get<NotificationsInteractor>().setNotificationsAreChecked(userIdTokenData)
             }
 
             return Result.success()

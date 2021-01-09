@@ -3,7 +3,7 @@ package com.studita.data.repository.datasource.complete_exercises
 import com.studita.data.entity.CompleteExercisesRequest
 import com.studita.data.entity.CompletedExercisesEntity
 
-interface CompleteExercisesPartDataStore {
+interface CompleteExercisesDataStore {
 
     suspend fun completeExercises(completeExercisesRequest: CompleteExercisesRequest): Int
 

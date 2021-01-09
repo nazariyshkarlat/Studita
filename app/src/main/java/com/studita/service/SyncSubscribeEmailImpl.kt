@@ -2,15 +2,15 @@ package com.studita.service
 
 import android.content.Context
 import androidx.work.*
-import com.studita.di.NetworkModule
-import com.studita.di.data.SubscribeEmailModule
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.SubscribeEmailResultStatus
 import com.studita.domain.service.SyncSubscribeEmail
 import com.studita.presentation.view_model.SingleLiveEvent
-import com.studita.utils.UserUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.studita.domain.interactor.subscribe_email.SubscribeEmailInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
+import org.koin.core.context.GlobalContext
 
 class SyncSubscribeEmailImpl : SyncSubscribeEmail {
 
@@ -32,7 +32,7 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail {
             .setConstraints(constraints)
             .setInputData(data.build())
             .build()
-        val workManager = WorkManager.getInstance(NetworkModule.context)
+        val workManager = WorkManager.getInstance(GlobalContext.get().get())
         workManager.enqueueUniqueWork("$SYNC_SUBSCRIBE_EMAIL_ID ${userIdTokenData.userId}", ExistingWorkPolicy.REPLACE, work)
     }
 
@@ -44,13 +44,15 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail {
 
             val userIdToken = json?.let { deserializeUserIdTokenData(it) }
             userIdToken?.let {
-                val result = if (subscribe)
-                    SubscribeEmailModule.getSubscribeEmailInteractorImpl().subscribe(it)
-                else
-                    SubscribeEmailModule.getSubscribeEmailInteractorImpl().unsubscribe(it)
+                with(GlobalContext.get().get<SubscribeEmailInteractor>()) {
+                    val result = if (subscribe)
+                        subscribe(it)
+                    else
+                        unsubscribe(it)
 
-                SubscribeEmailModule.getSubscribeEmailInteractorImpl().saveSyncedResult(result)
-                syncSubscribeEmailLiveData.postValue(result)
+                    saveSyncedResult(result)
+                    syncSubscribeEmailLiveData.postValue(result)
+                }
             }
 
             return Result.success()

@@ -41,7 +41,6 @@
             android:name=".presentation.activities.MainMenuActivity"
             android:parentActivityName=".presentation.activities.MainActivity"
             android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait"
             android:resizeableActivity="false"/>
         <activity
             android:name=".presentation.activities.ExercisesActivity"

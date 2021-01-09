@@ -2,12 +2,13 @@ package com.studita.service
 
 import android.content.Context
 import androidx.work.*
-import com.studita.di.NetworkModule
-import com.studita.di.data.UsersModule
 import com.studita.domain.entity.FriendActionRequestData
 import com.studita.domain.service.SyncFriendship
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.studita.domain.interactor.user_data.UserDataInteractor
+import com.studita.domain.interactor.users.UsersInteractor
+import org.koin.core.context.GlobalContext
 
 class SyncFriendshipImpl : SyncFriendship {
 
@@ -34,7 +35,7 @@ class SyncFriendshipImpl : SyncFriendship {
             .setConstraints(constraints)
             .setInputData(data.build())
             .build()
-        val workManager = WorkManager.getInstance(NetworkModule.context)
+        val workManager = WorkManager.getInstance(GlobalContext.get().get())
         workManager.enqueueUniqueWork("$SYNC_FRIENDSHIP_ID${friendActionRequestData.userIdToken.userId} ${friendActionRequestData.friendId}", ExistingWorkPolicy.REPLACE, work)
     }
 
@@ -48,17 +49,24 @@ class SyncFriendshipImpl : SyncFriendship {
 
             val friendActionRequestData = json?.let { deserializeFriendActionRequestData(it) }
             friendActionRequestData?.let {
-                when (friendActionType) {
-                    SyncFriendship.FriendActionType.ADD -> UsersModule.getUsersInteractorImpl()
-                        .sendFriendship(friendActionRequestData)
-                    SyncFriendship.FriendActionType.REMOVE -> UsersModule.getUsersInteractorImpl()
-                        .removeFriend(friendActionRequestData)
-                    SyncFriendship.FriendActionType.ACCEPT_REQUEST -> UsersModule.getUsersInteractorImpl()
-                        .acceptFriendship(friendActionRequestData)
-                    SyncFriendship.FriendActionType.REJECT_REQUEST -> UsersModule.getUsersInteractorImpl()
-                        .rejectFriendship(friendActionRequestData)
-                    SyncFriendship.FriendActionType.CANCEL_REQUEST -> UsersModule.getUsersInteractorImpl()
-                        .cancelFriendship(friendActionRequestData)
+                with(GlobalContext.get().get<UsersInteractor>()) {
+                    when (friendActionType) {
+                        SyncFriendship.FriendActionType.ADD -> sendFriendship(
+                            friendActionRequestData
+                        )
+                        SyncFriendship.FriendActionType.REMOVE -> removeFriend(
+                            friendActionRequestData
+                        )
+                        SyncFriendship.FriendActionType.ACCEPT_REQUEST -> acceptFriendship(
+                            friendActionRequestData
+                        )
+                        SyncFriendship.FriendActionType.REJECT_REQUEST -> rejectFriendship(
+                            friendActionRequestData
+                        )
+                        SyncFriendship.FriendActionType.CANCEL_REQUEST -> cancelFriendship(
+                            friendActionRequestData
+                        )
+                    }
                 }
             }
 

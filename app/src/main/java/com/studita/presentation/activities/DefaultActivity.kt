@@ -9,18 +9,23 @@ import com.studita.App.Companion.authenticationState
 import com.studita.App.Companion.recreateAppEvent
 import com.studita.R
 import com.studita.authenticator.AccountAuthenticator
+import com.studita.data.net.connection.ConnectionManager
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.studita.presentation.activities.MainActivity.Companion.startMainActivityClearTop
 import com.studita.presentation.fragments.main.MainMenuFragment
+import com.studita.presentation.view_model.MainFragmentViewModel
 import com.studita.utils.PrefsUtils
 import com.studita.utils.ThemeUtils
 import com.studita.utils.ThemeUtils.getDefaultTheme
 import com.studita.utils.UserUtils
+import org.koin.android.ext.android.inject
 
 
 @SuppressLint("Registered")
 open class DefaultActivity : AppCompatActivity(),
     MainMenuFragment.OnThemeChangeListener {
+
+    private val myViewModel : MainFragmentViewModel by inject()
 
     private var themeState = ThemeUtils.Theme.DARK
 

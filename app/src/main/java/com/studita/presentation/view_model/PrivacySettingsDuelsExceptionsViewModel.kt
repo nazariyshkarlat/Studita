@@ -4,13 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.studita.R
-import com.studita.di.data.PrivacySettingsModule
 import com.studita.domain.entity.EditDuelsExceptionsData
 import com.studita.domain.entity.EditDuelsExceptionsRequestData
 import com.studita.domain.entity.PrivacyDuelsExceptionData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.EditDuelsExceptionsStatus
 import com.studita.domain.interactor.PrivacySettingsDuelsExceptionsStatus
+import com.studita.domain.interactor.privacy_settings.PrivacySettingsInteractor
 import com.studita.presentation.model.PrivacySettingsDuelsExceptionsRecyclerUiModel
 import com.studita.presentation.model.toUiModel
 import com.studita.utils.UserUtils
@@ -18,10 +18,11 @@ import com.studita.utils.launchExt
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.core.context.GlobalContext
 
 class PrivacySettingsDuelsExceptionsViewModel : ViewModel() {
 
-    private val privacySettingsInteractor = PrivacySettingsModule.getPrivacySettingsInteractorImpl()
+    private val privacySettingsInteractor = GlobalContext.get().get<PrivacySettingsInteractor>()
 
     val privacySettingsDuelsExceptionsState =
         MutableLiveData<Pair<Boolean, DuelsExceptionsResultState>>()

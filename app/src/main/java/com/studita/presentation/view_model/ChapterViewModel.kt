@@ -3,17 +3,16 @@ package com.studita.presentation.view_model
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.studita.R
-import com.studita.di.data.ChapterModule
 import com.studita.domain.entity.ChapterData
 import com.studita.domain.entity.ChapterPartData
 import com.studita.domain.interactor.ChapterStatus
-import com.studita.presentation.model.ChapterPartUiModel
-import com.studita.presentation.model.ChapterUiModel
+import com.studita.domain.interactor.chapter.ChapterInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import com.studita.utils.launchExt
 import kotlinx.coroutines.Job
+import org.koin.core.context.GlobalContext
 
 class ChapterViewModel(private val chapterNumber: Int) : ViewModel() {
 
@@ -21,7 +20,7 @@ class ChapterViewModel(private val chapterNumber: Int) : ViewModel() {
     val errorEvent= SingleLiveEvent<Boolean>()
 
     lateinit var chapterData: ChapterData
-    private val interactor = ChapterModule.getChapterInteractorImpl()
+    private val interactor = GlobalContext.get().get<ChapterInteractor>()
 
     private var job: Job? = null
 

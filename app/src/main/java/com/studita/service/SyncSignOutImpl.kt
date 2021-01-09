@@ -2,12 +2,13 @@ package com.studita.service
 
 import android.content.Context
 import androidx.work.*
-import com.studita.di.NetworkModule
-import com.studita.di.data.AuthorizationModule
 import com.studita.domain.entity.SignOutRequestData
 import com.studita.domain.service.SyncSignOut
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.studita.domain.interactor.authorization.AuthorizationInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
+import org.koin.core.context.GlobalContext
 
 class SyncSignOutImpl : SyncSignOut {
 
@@ -27,7 +28,7 @@ class SyncSignOutImpl : SyncSignOut {
             .setConstraints(constraints)
             .setInputData(data.build())
             .build()
-        val workManager = WorkManager.getInstance(NetworkModule.context)
+        val workManager = WorkManager.getInstance(GlobalContext.get().get())
         workManager.enqueueUniqueWork(SYNC_SIGN_OUT_ID, ExistingWorkPolicy.REPLACE, work)
     }
 
@@ -39,7 +40,7 @@ class SyncSignOutImpl : SyncSignOut {
             if (json != null) {
                 val signOutRequestData =
                     deserializeSignOutData(json)
-                AuthorizationModule.getAuthorizationInteractorImpl().signOut(signOutRequestData)
+                GlobalContext.get().get<AuthorizationInteractor>().signOut(signOutRequestData)
             }
 
             return Result.success()

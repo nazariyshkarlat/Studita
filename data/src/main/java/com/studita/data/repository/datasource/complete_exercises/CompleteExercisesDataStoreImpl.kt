@@ -13,7 +13,7 @@ class CompleteExercisesDataStoreImpl(
     private val connectionManager: ConnectionManager,
     private val completeExercisesService: CompleteExercisesService,
     private val completedExercisesDao: CompletedExercisesDao
-) : CompleteExercisesPartDataStore {
+) : CompleteExercisesDataStore {
     override suspend fun completeExercises(completeExercisesRequest: CompleteExercisesRequest): Int {
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()

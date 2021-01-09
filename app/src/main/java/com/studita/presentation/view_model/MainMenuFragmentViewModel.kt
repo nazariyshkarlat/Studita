@@ -3,14 +3,11 @@ package com.studita.presentation.view_model
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.studita.App
 import com.studita.R
 import com.studita.authenticator.AccountAuthenticator
-import com.studita.di.data.AuthorizationModule
-import com.studita.di.data.UserStatisticsModule
 import com.studita.domain.entity.PushTokenData
 import com.studita.domain.entity.authorization.SignInWithGoogleRequestData
 import com.studita.domain.interactor.SignInWithGoogleStatus
@@ -27,9 +24,11 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.iid.FirebaseInstanceId
 import com.studita.App.Companion.initUserData
 import com.studita.domain.interactor.UserDataStatus
-import kotlinx.coroutines.Dispatchers
+import com.studita.domain.interactor.authorization.AuthorizationInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
+import com.studita.domain.interactor.user_statistics.UserStatisticsInteractor
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import org.koin.core.context.GlobalContext
 
 class MainMenuFragmentViewModel : ViewModel() {
 
@@ -37,8 +36,8 @@ class MainMenuFragmentViewModel : ViewModel() {
     val googleSignInState = SingleLiveEvent<SignInWithGoogleStatus>()
     val progressState = SingleLiveEvent<Boolean>()
 
-    private val userStatisticsInteractor = UserStatisticsModule.getUserStatisticsInteractorImpl()
-    private val authorizationInteractor = AuthorizationModule.getAuthorizationInteractorImpl()
+    private val userStatisticsInteractor: UserStatisticsInteractor by GlobalContext.get().inject()
+    private val authorizationInteractor = GlobalContext.get().get<AuthorizationInteractor>()
 
     private var signInJob: Job? = null
 

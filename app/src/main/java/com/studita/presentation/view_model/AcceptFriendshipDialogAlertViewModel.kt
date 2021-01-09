@@ -1,21 +1,22 @@
 package com.studita.presentation.view_model
 
 import androidx.lifecycle.ViewModel
-import com.studita.di.data.UsersModule
 import com.studita.domain.entity.FriendActionRequestData
 import com.studita.domain.entity.UserData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.FriendActionStatus
 import com.studita.domain.interactor.IsMyFriendStatus
+import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.utils.UserUtils
 import com.studita.utils.launchExt
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import org.koin.core.context.GlobalContext
 
 class AcceptFriendshipDialogAlertViewModel : ViewModel() {
 
-    private val friendsInteractor = UsersModule.getUsersInteractorImpl()
+    private val friendsInteractor = GlobalContext.get().get<UsersInteractor>()
     val addFriendStatus = SingleLiveEvent<UsersInteractor.FriendActionState>()
     val errorEvent = SingleLiveEvent<Boolean>()
 

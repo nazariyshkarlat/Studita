@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.studita.di.data.InterestingModule
 import com.studita.domain.entity.InterestingLikeData
 import com.studita.domain.entity.InterestingLikeRequestData
 import com.studita.domain.interactor.InterestingStatus
+import com.studita.domain.interactor.interesting.InterestingInteractor
 import com.studita.presentation.fragments.interesting.*
 import com.studita.presentation.model.InterestingUiModelScreen
 import com.studita.presentation.model.toInterestingUiModel
@@ -17,6 +17,7 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.koin.core.context.GlobalContext
 
 class InterestingViewModel(private val interestingNumber: Int, private val handle: SavedStateHandle) : ViewModel() {
 
@@ -46,7 +47,7 @@ class InterestingViewModel(private val interestingNumber: Int, private val handl
 
     var currentScreen: InterestingUiModelScreen? = null
 
-    private val interestingInteractor = InterestingModule.getInterestingInteractorImpl()
+    private val interestingInteractor = GlobalContext.get().get<InterestingInteractor>()
 
     private var job: Job? = null
     var badConnectionJob: Job? = null

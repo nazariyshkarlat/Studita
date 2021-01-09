@@ -4,18 +4,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.studita.App
-import com.studita.di.data.UserStatisticsModule
 import com.studita.domain.entity.UserStatisticsData
 import com.studita.domain.interactor.UserDataStatus
 import com.studita.domain.interactor.UserStatisticsStatus
+import com.studita.domain.interactor.user_statistics.UserStatisticsInteractor
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import com.studita.utils.launchExt
 import kotlinx.coroutines.Job
+import org.koin.core.context.GlobalContext
 
 class UserStatisticsViewModel(val userId: Int) : ViewModel() {
 
-    private val userStatisticsInteractor = UserStatisticsModule.getUserStatisticsInteractorImpl()
+    private val userStatisticsInteractor: UserStatisticsInteractor by GlobalContext.get().inject()
 
     val errorEvent = SingleLiveEvent<Boolean>()
     val userStatisticsState = MutableLiveData<List<UserStatisticsData>>()

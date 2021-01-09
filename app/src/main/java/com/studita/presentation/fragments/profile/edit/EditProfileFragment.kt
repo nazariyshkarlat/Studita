@@ -56,6 +56,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                     editProfileViewModel.newProfileData = editProfileViewModel.oldProfileData!!.copy()
                     fillEditTexts(editProfileViewModel.newProfileData!!)
                     editProfileLayoutSelectAvatar.requestFocus()
+                    editProfileViewModel.verifyUserName()
                     this.hideKeyboard()
                 }
 
@@ -243,12 +244,6 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                 editProfileLayoutBioEditText
             )
         )
-    }
-
-    private fun clearFocus(){
-        editProfileLayoutUserNameEditText.clearFocus()
-        editProfileLayoutName.clearFocus()
-        editProfileLayoutBioEditText.clearFocus()
     }
 
     private fun limitEditTextsLength(){

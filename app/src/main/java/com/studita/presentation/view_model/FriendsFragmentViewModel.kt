@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.studita.App
 import com.studita.R
-import com.studita.di.data.UsersModule
 import com.studita.domain.entity.FriendActionRequestData
 import com.studita.domain.entity.UserData
 import com.studita.domain.entity.UserIdTokenData
@@ -14,6 +13,7 @@ import com.studita.domain.interactor.FriendActionStatus
 import com.studita.domain.interactor.GetUsersStatus
 import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.domain.interactor.UserDataStatus
+import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.domain.repository.UsersRepository
 import com.studita.presentation.model.UsersRecyclerUiModel
@@ -25,10 +25,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.core.context.GlobalContext
 
 class FriendsFragmentViewModel(private val userId: Int) : ViewModel() {
 
-    private val friendsInteractor = UsersModule.getUsersInteractorImpl()
+    private val friendsInteractor = GlobalContext.get().get<UsersInteractor>()
     val addFriendStatus = SingleLiveEvent<UsersInteractor.FriendActionState>()
 
     val errorEvent = SingleLiveEvent<Boolean>()

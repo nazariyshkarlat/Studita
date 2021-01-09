@@ -1,6 +1,6 @@
 package com.studita.data.repository.datasource.user_data
 
-class UserDataJsonDataStoreFactoryImpl(
+class UserDataDataStoreFactoryImpl(
     private val cloudUserDataDataStore: CloudUserDataDataStore,
     private val diskUserDataDataStore: DiskUserDataDataStore
 ) : UserDataDataStoreFactory {

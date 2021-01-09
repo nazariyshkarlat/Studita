@@ -3,15 +3,12 @@ package com.studita.notifications.local
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.JobIntentService
-import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.studita.App
 import com.studita.R
-import com.studita.di.data.PrivacySettingsModule
-import com.studita.di.data.SubscribeEmailModule
-import com.studita.di.data.UserDataModule
 import com.studita.domain.entity.UserDataData
 import com.studita.domain.interactor.UserDataStatus
+import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.presentation.activities.MainActivity
 import com.studita.utils.IDUtils.createID
 import com.studita.utils.NotificationsUtils.buildDefaultNotification
@@ -23,8 +20,7 @@ import com.studita.utils.UserUtils.streakActivated
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.*
-import java.io.IOException
+import org.koin.core.context.GlobalContext
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -48,7 +44,7 @@ class LocalNotificationsService : JobIntentService(){
                         )
                     }
                 } else {
-                    val localUserData = UserDataModule.getUserDataInteractorImpl().getUserData(
+                    val localUserData = GlobalContext.get().get<UserDataInteractor>().getUserData(
                         PrefsUtils.getUserId(),
                         true,
                         isMyUserData = true

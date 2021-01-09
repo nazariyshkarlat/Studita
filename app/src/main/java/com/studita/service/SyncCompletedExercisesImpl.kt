@@ -2,12 +2,13 @@ package com.studita.service
 
 import android.content.Context
 import androidx.work.*
-import com.studita.di.NetworkModule
-import com.studita.di.data.CompleteExercisesModule
 import com.studita.domain.entity.CompleteExercisesRequestData
 import com.studita.domain.service.SyncCompletedExercises
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.studita.domain.interactor.complete_chapter_part.CompleteExercisesInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
+import org.koin.core.context.GlobalContext
 
 class SyncCompletedExercisesImpl : SyncCompletedExercises {
 
@@ -27,7 +28,7 @@ class SyncCompletedExercisesImpl : SyncCompletedExercises {
             .setConstraints(constraints)
             .setInputData(data.build())
             .build()
-        val workManager = WorkManager.getInstance(NetworkModule.context)
+        val workManager = WorkManager.getInstance(GlobalContext.get().get())
         workManager.enqueueUniqueWork(SYNC_COMPLETED_EXERCISES_ID, ExistingWorkPolicy.APPEND, work)
     }
 
@@ -37,7 +38,7 @@ class SyncCompletedExercisesImpl : SyncCompletedExercises {
             val json = inputData.getString("COMPLETED_EXERCISES_REQUEST_DATA")
 
             if (json != null)
-                CompleteExercisesModule.getCompleteExercisesInteractorImpl().completeExercises(
+                GlobalContext.get().get<CompleteExercisesInteractor>().completeExercises(
                     deserializeCompleteExercisesRequest(json)
                 )
 

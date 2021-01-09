@@ -3,16 +3,17 @@ package com.studita.presentation.view_model
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.studita.App
 import com.studita.App.Companion.authenticate
-import com.studita.di.data.OfflineDataModule
 import com.studita.domain.interactor.*
+import com.studita.domain.interactor.offline_data.OfflineDataInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import com.studita.utils.launchExt
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import org.koin.core.context.GlobalContext
+import org.koin.core.parameter.parametersOf
 
 class OfflineModeDownloadFragmentViewModel : ViewModel(){
 
@@ -21,7 +22,7 @@ class OfflineModeDownloadFragmentViewModel : ViewModel(){
 
     val errorState = MutableLiveData<Boolean>()
 
-    val interactor = OfflineDataModule.getOfflineDataInteractorImpl(downloadProgressLiveData)
+    val interactor = GlobalContext.get().get<OfflineDataInteractor>{ parametersOf(downloadProgressLiveData)}
 
     var job : Job? = null
 

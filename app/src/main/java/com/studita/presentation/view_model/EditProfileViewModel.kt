@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.studita.App
-import com.studita.di.data.EditProfileModule
-import com.studita.di.data.UserDataModule
 import com.studita.domain.entity.EditProfileData
 import com.studita.domain.entity.EditProfileRequestData
 import com.studita.domain.interactor.*
+import com.studita.domain.interactor.edit_profile.EditProfileInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import com.studita.utils.launchExt
@@ -17,11 +17,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.core.context.GlobalContext
 
 class EditProfileViewModel() : ViewModel() {
 
-    private val editProfileInteractor = EditProfileModule.getEditProfileInteractorImpl()
-    private val userDataInteractor = UserDataModule.getUserDataInteractorImpl()
+    private val editProfileInteractor = GlobalContext.get().get<EditProfileInteractor>()
+    private val userDataInteractor = GlobalContext.get().get<UserDataInteractor>()
     private var job: Job? = null
 
     var oldProfileData: EditProfileData? = null
@@ -162,6 +163,7 @@ class EditProfileViewModel() : ViewModel() {
 
 
     fun checkShowSaveButton() {
+        println(userNameAvailableState.value)
         saveChangesButtonVisibleState.value = editProfileInteractor.isValidData(
             oldProfileData!!,
             newProfileData!!,

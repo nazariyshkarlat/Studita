@@ -2,8 +2,11 @@ package com.studita.di
 
 import android.app.Application
 import com.studita.di.data.*
-import com.studita.di.data.exercise.ExerciseResultModule
-import com.studita.di.data.exercise.ExercisesModule
+import com.studita.di.data.exercise.createExerciseResultModule
+import com.studita.di.data.exercise.createExercisesModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 object DI {
 
@@ -13,25 +16,28 @@ object DI {
         object TEST : Config()
     }
 
-    fun initialize(app: Application, configuration: Config = DI.Config.RELEASE) {
-        NetworkModule.initialize(app)
-        DatabaseModule.initialize(app)
-        CacheModule.initialize(app)
-        LevelsModule.initialize(configuration)
-        ChapterModule.initialize(configuration)
-        AuthorizationModule.initialize(configuration)
-        ExercisesModule.initialize(configuration)
-        ExerciseResultModule.initialize(configuration)
-        UserDataModule.initialize(configuration)
-        UserStatisticsModule.initialize(configuration)
-        InterestingModule.initialize(configuration)
-        SubscribeEmailModule.initialize(configuration)
-        CompleteExercisesModule.initialize(configuration)
-        EditProfileModule.initialize(configuration, app)
-        PrivacySettingsModule.initialize(configuration)
-        UsersModule.initialize(configuration)
-        NotificationsModule.initialize(configuration)
-        OfflineDataModule.initialize(configuration)
+    fun initialize(application: Application, configuration: Config = DI.Config.RELEASE) {
+        startKoin{
+            androidLogger()
+            androidContext(application)
+            modules(networkModule, cacheModule, databaseModule,
+                createLevelsModule(configuration),
+                createChapterModule(configuration),
+                createAuthorizationModule(configuration),
+                createExercisesModule(configuration),
+                createExerciseResultModule(configuration),
+                createUserDataModule(configuration),
+                createUserStatisticsModule(configuration),
+                createInterestingModule(configuration),
+                createSubscribeEmailModule(configuration),
+                createCompleteExercisesModule(configuration),
+                createEditProfileModule(configuration),
+                createPrivacySettingsModule(configuration),
+                createUsersModule(configuration),
+                createNotificationsModule(configuration),
+                createOfflineDataModule(configuration)
+            )
+        }
     }
 
 }

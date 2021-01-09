@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import com.studita.App
 import com.studita.R
-import com.studita.di.NetworkModule
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.studita.domain.interactor.SubscribeEmailResultStatus
 import com.studita.presentation.activities.MainMenuActivity
@@ -38,12 +37,14 @@ import com.studita.App.Companion.authenticate
 import com.studita.App.Companion.authenticationState
 import com.studita.App.Companion.getUserData
 import com.studita.App.Companion.offlineModeChangeEvent
+import com.studita.data.net.connection.ConnectionManager
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.home_layout_bar.*
 import kotlinx.android.synthetic.main.recyclerview_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.core.context.GlobalContext.get
 
 class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetChangedListener,
     FabScrollListener, ReloadPageCallback {
@@ -411,7 +412,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
     }
 
     private fun getBottomMarginExtraSnackbar() = resources.getDimension(R.dimen.bottomNavigationHeight).toInt() +
-            if(NetworkModule.connectionManager.isNetworkAbsent())  resources.getDimension(R.dimen.connectionSnackbarHeight).toInt()
+            if(get().get<ConnectionManager>().isNetworkAbsent())  resources.getDimension(R.dimen.connectionSnackbarHeight).toInt()
             else 0
 
     override fun onPageReload() {

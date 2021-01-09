@@ -4,23 +4,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.studita.App
-import com.studita.di.data.UserDataModule
-import com.studita.di.data.UsersModule
 import com.studita.domain.entity.FriendActionRequestData
 import com.studita.domain.entity.UserData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.entity.UsersResponseData
 import com.studita.domain.interactor.*
+import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import com.studita.utils.launchExt
 import kotlinx.coroutines.*
+import org.koin.core.context.GlobalContext
 
 class ProfileFragmentViewModel(private val myId: Int, private val profileId: Int) : ViewModel() {
 
-    private val friendsInteractor = UsersModule.getUsersInteractorImpl()
-    private val userDataInteractor = UserDataModule.getUserDataInteractorImpl()
+    private val friendsInteractor = GlobalContext.get().get<UsersInteractor>()
+    private val userDataInteractor = GlobalContext.get().get<UserDataInteractor>()
 
     val addFriendStatus = SingleLiveEvent<UsersInteractor.FriendActionState>()
 

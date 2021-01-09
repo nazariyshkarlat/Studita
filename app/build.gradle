@@ -65,4 +65,10 @@ dependencies {
     implementation "com.google.firebase:firebase-crashlytics"
 
     implementation 'nl.dionsegijn:konfetti:1.2.4'
+
+    //koin
+    implementation "org.koin:koin-core:$koin_version"
+    testImplementation "org.koin:koin-test:$koin_version"
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-android-viewmodel:$koin_version"
 }

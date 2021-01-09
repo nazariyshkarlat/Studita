@@ -2,13 +2,13 @@ package com.studita.service
 
 import android.content.Context
 import androidx.work.*
-import com.studita.di.NetworkModule
-import com.studita.di.data.PrivacySettingsModule
 import com.studita.domain.entity.EditDuelsExceptionsRequestData
 import com.studita.domain.entity.PrivacySettingsRequestData
 import com.studita.domain.service.SyncPrivacySettings
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.studita.domain.interactor.privacy_settings.PrivacySettingsInteractor
+import org.koin.core.context.GlobalContext
 
 class SyncPrivacySettingsImpl : SyncPrivacySettings {
 
@@ -31,7 +31,7 @@ class SyncPrivacySettingsImpl : SyncPrivacySettings {
             .setConstraints(constraints)
             .setInputData(data.build())
             .build()
-        val workManager = WorkManager.getInstance(NetworkModule.context)
+        val workManager = WorkManager.getInstance(GlobalContext.get().get())
         workManager.enqueueUniqueWork(
             SYNC_EDIT_PRIVACY_SETTINGS_ID,
             ExistingWorkPolicy.REPLACE,
@@ -53,7 +53,7 @@ class SyncPrivacySettingsImpl : SyncPrivacySettings {
             .setConstraints(constraints)
             .setInputData(data.build())
             .build()
-        val workManager = WorkManager.getInstance(NetworkModule.context)
+        val workManager = WorkManager.getInstance(GlobalContext.get().get())
         workManager.enqueueUniqueWork(
             SYNC_EDIT_DUELS_EXCEPTIONS_ID,
             ExistingWorkPolicy.APPEND,
@@ -69,7 +69,7 @@ class SyncPrivacySettingsImpl : SyncPrivacySettings {
             val editPrivacySettingsRequestData =
                 json?.let { deserializeEditPrivacySettingsRequestData(it) }
             editPrivacySettingsRequestData?.let {
-                PrivacySettingsModule.getPrivacySettingsInteractorImpl().editPrivacySettings(it)
+                GlobalContext.get().get<PrivacySettingsInteractor>().editPrivacySettings(it)
             }
 
             return Result.success()
@@ -89,7 +89,7 @@ class SyncPrivacySettingsImpl : SyncPrivacySettings {
             val editDuelsExceptionsRequestData =
                 json?.let { deserializeEditDuelsExceptionsRequestData(it) }
             editDuelsExceptionsRequestData?.let {
-                PrivacySettingsModule.getPrivacySettingsInteractorImpl().editDuelsExceptions(it)
+                GlobalContext.get().get<PrivacySettingsInteractor>().editDuelsExceptions(it)
             }
 
             return Result.success()

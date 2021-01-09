@@ -1,18 +1,19 @@
 package com.studita
 
 import android.app.Application
-import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.*
-import com.studita.di.DI
+import com.studita.di.*
 import com.studita.di.data.*
 import com.studita.domain.entity.UserDataData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.studita.domain.interactor.UserDataStatus
+import com.studita.domain.interactor.authorization.AuthorizationInteractor
+import com.studita.domain.interactor.complete_chapter_part.CompleteExercisesInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.notifications.local.LocalNotificationsService
 import com.studita.notifications.local.StartUpReceiver.Companion.scheduleLocalNotifications
-import com.studita.presentation.activities.MainActivity
 import com.studita.presentation.view_model.LiveEvent
 import com.studita.presentation.view_model.SingleLiveEvent
 import com.studita.utils.*
@@ -20,11 +21,15 @@ import com.studita.utils.UserUtils.localUserDataLiveData
 import com.studita.utils.UserUtils.userDataLiveData
 import kotlinx.coroutines.*
 import okhttp3.*
-import java.io.IOException
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.GlobalContext
+import org.koin.core.context.startKoin
 import java.util.*
 
 
 class App : Application(), LifecycleObserver {
+
 
     companion object {
         var userDataDeferred: CompletableDeferred<UserDataStatus> = CompletableDeferred()
@@ -70,14 +75,14 @@ class App : Application(), LifecycleObserver {
             }
 
             GlobalScope.launch(Dispatchers.Main) {
-                UserDataModule.getUserDataInteractorImpl().saveUserData(userDataData)
+                GlobalContext.get().get<UserDataInteractor>().saveUserData(userDataData)
             }
         }
 
         fun getUserData() {
 
             userDataJob = GlobalScope.launchExt(userDataJob) {
-                val userDataStatus = UserDataModule.getUserDataInteractorImpl()
+                val userDataStatus = GlobalContext.get().get<UserDataInteractor>()
                     .getUserData(
                         PrefsUtils.getUserId(),
                         PrefsUtils.isOfflineModeEnabled(),
@@ -96,7 +101,7 @@ class App : Application(), LifecycleObserver {
 
         fun initLocalUserData() {
             GlobalScope.launch(Dispatchers.Main) {
-                val userDataStatus = UserDataModule.getUserDataInteractorImpl()
+                val userDataStatus = GlobalContext.get().get<UserDataInteractor>()
                     .getUserData(
                         PrefsUtils.getUserId(),
                         getFromLocalStorage = true,
@@ -132,7 +137,7 @@ class App : Application(), LifecycleObserver {
                     authenticationState.value =
                         CheckTokenIsCorrectStatus.Correct to isOfflineModeChanged
                 } else {
-                    val tokenIsCorrectStatus = AuthorizationModule.getAuthorizationInteractorImpl()
+                    val tokenIsCorrectStatus = GlobalContext.get().get<AuthorizationInteractor>()
                         .checkTokenIsCorrect(userIdTokenData!!)
 
                     authenticationState.value = tokenIsCorrectStatus to isOfflineModeChanged
@@ -140,7 +145,7 @@ class App : Application(), LifecycleObserver {
                     when (tokenIsCorrectStatus) {
                         is CheckTokenIsCorrectStatus.Correct -> {
                             if (!PrefsUtils.isOfflineModeEnabled())
-                                CompleteExercisesModule.getCompleteExercisesInteractorImpl()
+                                GlobalContext.get().get<CompleteExercisesInteractor>()
                                     .syncCompleteLocalExercises(
                                         UserUtils.getUserIDTokenData()!!
                                     )

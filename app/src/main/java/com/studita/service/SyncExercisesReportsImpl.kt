@@ -2,16 +2,14 @@ package com.studita.service
 
 import android.content.Context
 import androidx.work.*
-import com.studita.di.NetworkModule
-import com.studita.di.data.CompleteExercisesModule
-import com.studita.di.data.exercise.ExerciseResultModule
-import com.studita.domain.entity.CompleteExercisesRequestData
-import com.studita.domain.entity.exercise.ExerciseReportData
 import com.studita.domain.entity.exercise.ExerciseReportRequestData
-import com.studita.domain.service.SyncCompletedExercises
 import com.studita.domain.service.SyncExercisesReports
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.studita.domain.interactor.exercises.ExerciseResultInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
+import org.koin.core.context.GlobalContext
+import org.koin.core.context.GlobalContext.get
 
 class SyncExercisesReportsImpl : SyncExercisesReports {
 
@@ -31,7 +29,7 @@ class SyncExercisesReportsImpl : SyncExercisesReports {
             .setConstraints(constraints)
             .setInputData(data.build())
             .build()
-        val workManager = WorkManager.getInstance(NetworkModule.context)
+        val workManager = WorkManager.getInstance(get().get())
         workManager.enqueueUniqueWork(SYNC_EXERCISES_REPORTS_ID, ExistingWorkPolicy.APPEND, work)
     }
 
@@ -41,7 +39,7 @@ class SyncExercisesReportsImpl : SyncExercisesReports {
             val json = inputData.getString("EXERCISE_REPORT_DATA")
 
             if (json != null)
-                ExerciseResultModule.getExerciseResultInteractorImpl().sendExerciseReport(deserializeExerciseReportRequestData(json))
+                GlobalContext.get().get<ExerciseResultInteractor>().sendExerciseReport(deserializeExerciseReportRequestData(json))
 
             return Result.success()
         }

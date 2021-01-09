@@ -4,8 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.studita.App
-import com.studita.di.data.PrivacySettingsModule
-import com.studita.di.data.UsersModule
 import com.studita.domain.entity.PrivacySettingsData
 import com.studita.domain.entity.PrivacySettingsRequestData
 import com.studita.domain.entity.UserIdTokenData
@@ -13,15 +11,18 @@ import com.studita.domain.interactor.EditPrivacySettingsStatus
 import com.studita.domain.interactor.HasFriendsStatus
 import com.studita.domain.interactor.PrivacySettingsStatus
 import com.studita.domain.interactor.UserDataStatus
+import com.studita.domain.interactor.privacy_settings.PrivacySettingsInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
+import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
-import com.studita.utils.launchExt
 import kotlinx.coroutines.*
+import org.koin.core.context.GlobalContext
 
 class PrivacySettingsViewModel : ViewModel() {
 
-    private val privacySettingsInteractor = PrivacySettingsModule.getPrivacySettingsInteractorImpl()
-    private val usersInteractor = UsersModule.getUsersInteractorImpl()
+    private val privacySettingsInteractor = GlobalContext.get().get<PrivacySettingsInteractor>()
+    private val usersInteractor = GlobalContext.get().get<UsersInteractor>()
 
     var hasFriends: Boolean = false
 

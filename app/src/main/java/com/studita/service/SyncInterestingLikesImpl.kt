@@ -2,14 +2,12 @@ package com.studita.service
 
 import android.content.Context
 import androidx.work.*
-import com.studita.di.NetworkModule
-import com.studita.di.data.InterestingModule
-import com.studita.di.data.exercise.ExerciseResultModule
 import com.studita.domain.entity.InterestingLikeRequestData
-import com.studita.domain.entity.exercise.ExerciseReportRequestData
 import com.studita.domain.service.SyncInterestingLikes
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.studita.domain.interactor.interesting.InterestingInteractor
+import org.koin.core.context.GlobalContext
 
 class SyncInterestingLikesImpl : SyncInterestingLikes {
 
@@ -29,7 +27,7 @@ class SyncInterestingLikesImpl : SyncInterestingLikes {
             .setConstraints(constraints)
             .setInputData(data.build())
             .build()
-        val workManager = WorkManager.getInstance(NetworkModule.context)
+        val workManager = WorkManager.getInstance(GlobalContext.get().get())
         workManager.enqueueUniqueWork(SYNC_INTERESTING_LIKES_ID, ExistingWorkPolicy.APPEND, work)
     }
 
@@ -39,7 +37,7 @@ class SyncInterestingLikesImpl : SyncInterestingLikes {
             val json = inputData.getString("INTERESTING_LIKE_DATA")
 
             if (json != null)
-                InterestingModule.getInterestingInteractorImpl().sendInterestingLike(deserializeInterestingLikeRequestData(json))
+                GlobalContext.get().get<InterestingInteractor>().sendInterestingLike(deserializeInterestingLikeRequestData(json))
 
             return Result.success()
         }

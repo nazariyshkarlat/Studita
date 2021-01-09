@@ -1,27 +1,25 @@
 package com.studita.utils
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.studita.App
 import com.studita.App.Companion.authenticate
 import com.studita.App.Companion.clearUserLiveData
-import com.studita.authenticator.AccountAuthenticator
-import com.studita.di.data.AuthorizationModule
-import com.studita.di.data.CompleteExercisesModule
-import com.studita.di.data.UserDataModule
 import com.studita.domain.entity.SignOutRequestData
 import com.studita.domain.entity.UserDataData
 import com.studita.domain.entity.UserIdTokenData
+import com.studita.domain.interactor.authorization.AuthorizationInteractor
+import com.studita.domain.interactor.complete_chapter_part.CompleteExercisesInteractor
+import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.presentation.view_model.LiveEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.koin.core.context.GlobalContext
 import java.util.*
 
 object UserUtils {
@@ -77,8 +75,8 @@ object UserUtils {
     fun deviceSignOut() {
         runBlocking {
             GlobalScope.launch {
-                UserDataModule.getUserDataInteractorImpl().deleteUserData()
-                CompleteExercisesModule.getCompleteExercisesInteractorImpl().clearLocalCompletedExercises()
+                GlobalContext.get().get<UserDataInteractor>().deleteUserData()
+                GlobalContext.get().get<CompleteExercisesInteractor>().clearLocalCompletedExercises()
             }
             clearUserIdToken()
             clearUserLiveData()
@@ -90,7 +88,7 @@ object UserUtils {
         val userIdTokenData = UserUtils.getUserIDTokenData()!!
 
         GlobalScope.launch(Dispatchers.Main) {
-            AuthorizationModule.getAuthorizationInteractorImpl().signOut(
+            GlobalContext.get().get<AuthorizationInteractor>().signOut(
                 SignOutRequestData(
                     userIdTokenData,
                     DeviceUtils.getDeviceId(application)

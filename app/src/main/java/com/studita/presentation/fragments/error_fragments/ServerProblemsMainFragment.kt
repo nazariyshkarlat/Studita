@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.studita.App
 import com.studita.R
-import com.studita.di.NetworkModule
 import com.studita.presentation.fragments.base.BaseFragment
 import com.studita.presentation.fragments.main.HomeFragment
 import com.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
