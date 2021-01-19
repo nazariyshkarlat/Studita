@@ -23,10 +23,8 @@ import com.studita.presentation.listeners.ReloadPageCallback
 import com.studita.presentation.model.UsersRecyclerUiModel
 import com.studita.presentation.model.toUserItemUiModel
 import com.studita.presentation.view_model.FriendsFragmentViewModel
-import com.studita.presentation.view_model.InterestingViewModel
 import com.studita.presentation.views.CustomSnackbar
 import com.studita.utils.*
-import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.my_friends_empty.*
 import kotlinx.android.synthetic.main.recyclerview_layout.*
 
@@ -49,9 +47,9 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout), 
 
         recyclerViewLayoutRecyclerView.setPadding(
             0,
-            resources.getDimension(R.dimen.toolbarHeight).toInt() + 10F.dpToPx(),
+            resources.getDimension(R.dimen.toolbarHeight).toInt() + 10F.dp,
             0,
-            10F.dpToPx()
+            10F.dp
         )
 
         friendsFragmentViewModel.errorEvent.observe(viewLifecycleOwner, Observer { isNetworkError->
@@ -345,7 +343,7 @@ open class FriendsFragment : NavigatableFragment(R.layout.recyclerview_layout), 
 
     private fun setProgressMargin() {
         val param = recyclerViewLayoutProgressBar.layoutParams as ViewGroup.MarginLayoutParams
-        param.setMargins(0, 64F.dpToPx(), 0, 0)
+        param.setMargins(0, 64F.dp, 0, 0)
         recyclerViewLayoutProgressBar.layoutParams = param
     }
 

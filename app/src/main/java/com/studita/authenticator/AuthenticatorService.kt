@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.IBinder
 import com.studita.App.Companion.recreateAppEvent
 import com.studita.R
+import com.studita.presentation.view_model.LiveEvent
 import com.studita.presentation.view_model.SingleLiveEvent
 import com.studita.utils.UserUtils
 
@@ -27,7 +28,7 @@ class AuthenticatorService : Service() {
             if(removed && UserUtils.isLoggedIn()) {
                 UserUtils.signOut(application)
                 recreateAppEvent.value = Unit
-                recreateAppEvent = SingleLiveEvent()
+                recreateAppEvent = LiveEvent()
             }
 
         }, null, true)

@@ -191,6 +191,7 @@
     <string name="sort_by_old_new">От старых к новым</string>
     <string name="show_all">Показать всех</string>
     <string name="friends_count_template">Друзья (%1$d)</string>
+    <string name="achievements_count_template">Достижения (%1$d)</string>
     <string name="profile_competitions_item_levels_rating_title">Недельный рейтинг уровней</string>
     <string name="profile_competitions_item_XP_rating_title">Недельный рейтинг опыта</string>
     <string name="profile_competitions_item_levels_rating_two_line_title">Недельный рейтинг\nуровней</string>
@@ -258,9 +259,11 @@
     <string name="enable_offline_mode">Включить оффлайн режим</string>
     <string name="server_problems_layout_text">Мы испытываем небольшие неполадки. Попробуйте вернуться сюда позже.</string>
     <string name="server_problems_layout_second_text_part">Попробуйте вернуться сюда позже.</string>
-    <string name="internet_is_disabled_main_layout_subtitle">Доступ к интернету отсутсвует. Проверьте соединение или включите оффлайн режим.</string>
     <string name="internet_is_disabled_chapter_bottom_sheet_layout_subtitle">Доступ к интернету отсутсвует. Проверьте соединение или включите оффлайн режим.</string>
-    <string name="server_problems_main_layout_subtitle">Сервер временно недоступен. Включите оффлайн режим или вернитесь сюда позже.</string>
+    <string name="server_problems_home_layout_subtitle">Мы испытываем небольшие неполадки. Включите оффлайн режим или попробуйте снова.</string>
+    <string name="internet_is_disabled_home_layout_subtitle">Доступ к интернету отсутствует. Проверьте соединение или включите оффлайн режим.</string>
+    <string name="server_problems_achievements_layout_subtitle">Мы испытываем небольшие неполадки. Попробуйте снова или вернитесь сюда позже.</string>
+    <string name="internet_is_disabled_achievements_layout_subtitle">Доступ к интернету отсутствует. Проверьте соединение или попробуйте снова.</string>
     <string name="server_problems_chapter_bottom_sheet_layout_subtitle">Сервер временно недоступен. Включите оффлайн режим или вернитесь сюда позже.</string>
     <string name="offline_mode_download_error_bottom_sheet_title">Ошибка загрузки</string>
     <string name="offline_mode_download_error_bottom_sheet_network_error_subtitle">Из-за отсутствуия интернета загрузка была прервана. Попробовать снова?</string>
@@ -268,6 +271,7 @@
     <string name="offline_mode_download_error_bottom_sheet_network_error_button_text">Попробовать снова</string>
     <string name="offline_mode_download_error_bottom_sheet_server_error_button_text">Попробовать снова</string>
     <string name="sign_in_with_google_error_text">Вы испытываете неполадки с подключением к интернету. Попробуйте авторизоваться ещё раз.</string>
+    <string name="progress">Прогресс</string>
 
     <!-- PROMO SCREENS -->
 
@@ -298,7 +302,7 @@
     <string name="competitions_promo_screen_forth_subtitle">Побеждайте в состязаниях, получайте XP и попадайте в рейтинги. Люди в топе получают дополнительные призы.</string>
 
     <string name="achievements_promo_screen_first_subtitle">Место, где вы сможете выполнить интересные достижения и получить за них дополнительные XP.</string>
-    <string name="achievements_promo_screen_second_subtitle">Сотни различных ачивок на любой вкус. Находите интересные для себя и выполняйте их.</string>
+    <string name="achievements_promo_screen_second_subtitle">Сотни различных достижений на любой вкус. Находите интересные для себя и выполняйте их.</string>
     <string name="achievements_promo_screen_third_subtitle">Получайте дополнительные XP выполняя достижения, и повышайте свой уровень.</string>
     <string name="achievements_promo_screen_forth_subtitle">Различные достижения будут мотивировать выполнять больше заданий, а следовательно, вы будете получать больше знаний.</string>
 
@@ -329,6 +333,18 @@
     <string name="select_photo_error">При получении фотографии произошла ошбика</string>
     <string name="input_answer">Введите ответ</string>
     <string name="bio">Биография</string>
+    <string name="achievement_level">Уровень медали</string>
+    <string name="double_dots_placeholder">%1$s: %2$s</string>
+    <string name="of_template">%1$d из %2$d</string>
+    <string name="is_completed">"Выполнено "</string>
+    <string name="is_not_completed">Не выполнено</string>
+    <string name="achievements">Достижения</string>
+    <string name="improvable_achievement_tab">Улучшаемые</string>
+    <string name="non_improvable_achievement_tab">Обычные</string>
+    <string name="achievements_layout_bar_log_in_block_text">Войдите в аккаунт, чтобы получить доступ к достижениям. Вы будете получать медали и XP за их выполнение</string>
+    <string name="achievements_layout_bar_log_in_block_button_text">Войти в аккаунт</string>
+    <string name="main_layout_offline_mode_error_text">Данная функция не работает в оффлайн режиме. Вы можете его отключить</string>
+    <string name="main_layout_offline_mode_error_button_text">Отключить оффлайн режим</string>
 
     <plurals name="streak_plurals">
         <item quantity="zero">%1$d дней подряд</item>

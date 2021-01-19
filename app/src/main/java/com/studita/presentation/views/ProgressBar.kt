@@ -1,6 +1,5 @@
 package com.studita.presentation.views
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -11,9 +10,10 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.Animation
+import androidx.annotation.FloatRange
 import com.studita.R
 import com.studita.presentation.animations.ProgressBarAnimation
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 
 
 class ProgressBar @JvmOverloads constructor(
@@ -24,12 +24,13 @@ class ProgressBar @JvmOverloads constructor(
     View(context, attrs, defStyleAttr) {
     private var viewWidth = 0
     private var viewHeight = 0
+    @FloatRange(from = 0.0, to = 1.0)
     var currentProgress = 0F
         set(value) {
             field = value
             invalidate()
         }
-    private var strokeWidth: Int = 8F.dpToPx()
+    private var strokeWidth: Int = 8F.dp
     private val animationDuration: Long = 400
     private var isCircleStyle = false
     private var roundedCorners = true
@@ -54,7 +55,7 @@ class ProgressBar @JvmOverloads constructor(
             attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "layout_height")
                 .toCharArray().filter { !it.isLetter() }.joinToString(
                     ""
-                ).toFloat().dpToPx().toFloat()
+                ).toFloat().dp.toFloat()
         ).toInt()
 
 

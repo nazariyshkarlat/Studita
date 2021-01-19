@@ -3,7 +3,9 @@ package com.studita.presentation.views
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.drawable.InsetDrawable
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -12,15 +14,15 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.OneShotPreDrawListener
-import androidx.core.view.children
-import androidx.core.view.setPadding
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.studita.R
+import com.studita.presentation.views.press_view.PressTextView
 import com.studita.utils.ThemeUtils
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 
 
 class CustomTabLayout @JvmOverloads constructor(
@@ -35,8 +37,8 @@ class CustomTabLayout @JvmOverloads constructor(
         private const val TAB_UN_SELECT_DRAGGING_DURATION = 200L
     }
 
-    private val itemsPadding = 6F.dpToPx()
-    private val contentPadding = 2F.dpToPx()
+    private val itemsPadding = 6F.dp
+    private val contentMargin = 2F.dp
     private val textColor = ThemeUtils.getPrimaryColor(context)
     private val typeface = ResourcesCompat.getFont(context, R.font.roboto_regular)
     private val textSize = 14F
@@ -49,27 +51,36 @@ class CustomTabLayout @JvmOverloads constructor(
 
     private val contentLayout: LinearLayout by lazy {
         LinearLayout(context).apply {
-            layoutParams = ViewGroup.LayoutParams(
+            layoutParams = FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+            ).apply {
+                rightMargin = contentMargin
+                leftMargin = contentMargin
+                topMargin = contentMargin
+                bottomMargin = contentMargin
+            }
             orientation = LinearLayout.HORIZONTAL
         }
     }
 
     private val indicatorView: View by lazy {
         View(context).apply {
-            background = ContextCompat.getDrawable(context, R.drawable.tab_layout_indicator)
             layoutParams = FrameLayout.LayoutParams(
-                contentLayout.measuredWidth / items.size,
-                contentLayout.measuredHeight
-            )
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = Gravity.CENTER_VERTICAL
+                rightMargin = contentMargin
+                leftMargin = contentMargin
+            }
+            background = ContextCompat.getDrawable(context, R.drawable.tab_layout_indicator)
         }
     }
 
     private var fragments: List<Fragment>? = null
 
-    private var viewPager: ViewPager? = null
+    var viewPager: ViewPager? = null
     private var selectedPos = 0
     private var isClick: Boolean = false
     private var viewPagerState = ViewPager.SCROLL_STATE_IDLE
@@ -78,34 +89,67 @@ class CustomTabLayout @JvmOverloads constructor(
     private var items: List<String> = emptyList<String>()
 
     init {
-        setPadding(contentPadding)
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         addView(contentLayout)
+
+        background = InsetDrawable(
+            ContextCompat.getDrawable(context, R.drawable.blocks_rectangle),
+            paddingLeft,
+            paddingTop,
+            paddingRight,
+            paddingBottom
+        )
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        indicatorView.updateLayoutParams<FrameLayout.LayoutParams> {
+            height = contentLayout.measuredHeight
+            width = if(items.isEmpty()) 0 else contentLayout.measuredWidth/items.size
+        }
+    }
+
+    override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
+        super.setPadding(left, top, right, bottom)
+        background = InsetDrawable(
+            ContextCompat.getDrawable(context, R.drawable.blocks_rectangle),
+            left,
+            top,
+            right,
+            bottom
+        )
     }
 
     fun setItems(items: List<String>) {
         this.items = items
-        for (item in items) {
+        items.forEachIndexed { index, item ->
 
-            val textView = TextView(context)
+            val textView = PressTextView(context).apply {
 
-            textView.textSize = textSize
-            textView.typeface = typeface
-            textView.setTextColor(textColor)
-            textView.textAlignment = TEXT_ALIGNMENT_CENTER
+                textSize = this@CustomTabLayout.textSize
+               typeface = this@CustomTabLayout.typeface
+                setTextColor(this@CustomTabLayout.textColor)
+                textAlignment = TEXT_ALIGNMENT_CENTER
 
-            textView.text = item
+                text = item
 
-            textView.setPadding(0, itemsPadding, 0, itemsPadding)
+                setPadding(0, itemsPadding, 0, itemsPadding)
 
-            textView.layoutParams = LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                weight = 1.0F
+                setOnClickListener {
+                    isClick = true
+                    viewPager?.currentItem = index
+                }
+
+                layoutParams = LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    weight = 1.0F
+                }
             }
 
             contentLayout.addView(textView)
@@ -113,16 +157,10 @@ class CustomTabLayout @JvmOverloads constructor(
     }
 
     fun syncWithViewPager(viewPager: ViewPager, fragmentManager: FragmentManager) {
-        this.viewPager = viewPager
-        viewPager.adapter = TabsPagerAdapter(fragmentManager)
-        viewPager.addOnPageChangeListener(this)
-        OneShotPreDrawListener.add(contentLayout) {
-            contentLayout.children.forEachIndexed { index, child ->
-                (child as TextView).setOnClickListener {
-                    isClick = true
-                    viewPager.currentItem = index
-                }
-            }
+        if(this.viewPager == null) {
+            this.viewPager = viewPager
+            viewPager.adapter = TabsPagerAdapter(fragmentManager)
+            viewPager.addOnPageChangeListener(this)
             this.addView(indicatorView, 0)
             selectedPos = viewPager.currentItem
             onPageSelected(selectedPos)
@@ -186,7 +224,11 @@ class CustomTabLayout @JvmOverloads constructor(
         currentItemIsAnimatingToUnselectedState = true
         currentItemIsAnimatingToSelectedState = false
         val prevItemColorAnimation =
-            ValueAnimator.ofObject(ArgbEvaluator(), (contentLayout.getChildAt(lastPos) as TextView).currentTextColor, tabColor.first)
+            ValueAnimator.ofObject(
+                ArgbEvaluator(),
+                (contentLayout.getChildAt(lastPos) as TextView).currentTextColor,
+                tabColor.first
+            )
         prevItemColorAnimation.duration = if(isDragging) TAB_UN_SELECT_DRAGGING_DURATION else TAB_UN_SELECT_DURATION
         prevItemColorAnimation.addUpdateListener { animator ->
             (contentLayout.getChildAt(lastPos) as TextView).setTextColor(
@@ -201,7 +243,11 @@ class CustomTabLayout @JvmOverloads constructor(
         currentItemIsAnimatingToSelectedState = true
         currentItemIsAnimatingToUnselectedState = false
         val newItemColorAnimation =
-            ValueAnimator.ofObject(ArgbEvaluator(), (contentLayout.getChildAt(position) as TextView).currentTextColor, tabColor.second)
+            ValueAnimator.ofObject(
+                ArgbEvaluator(),
+                (contentLayout.getChildAt(position) as TextView).currentTextColor,
+                tabColor.second
+            )
         newItemColorAnimation.duration = if(isDragging) TAB_SELECT_DRAGGING_DURATION else TAB_SELECT_DURATION
         newItemColorAnimation.addUpdateListener { animator ->
             (contentLayout.getChildAt(position) as TextView).setTextColor(

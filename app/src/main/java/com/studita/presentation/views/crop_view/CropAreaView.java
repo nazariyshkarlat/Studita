@@ -40,7 +40,7 @@ public class CropAreaView extends View {
     Paint handlePaint;
     Paint framePaint;
     Paint strokePaint;
-    int strokeWidth =  NumberExtensionsKt.dpToPx(2);
+    int strokeWidth =  NumberExtensionsKt.getDp(2);
     AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
     private RectF topLeftCorner = new RectF();
     private RectF topRightCorner = new RectF();
@@ -77,8 +77,8 @@ public class CropAreaView extends View {
         frameVisible = true;
         dimVisibile = true;
 
-        sidePadding = NumberExtensionsKt.dpToPx(16);
-        minWidth = NumberExtensionsKt.dpToPx(32);
+        sidePadding = NumberExtensionsKt.getDp(16);
+        minWidth = NumberExtensionsKt.getDp(32);
 
         gridType = GridType.NONE;
 
@@ -88,12 +88,12 @@ public class CropAreaView extends View {
         shadowPaint = new Paint();
         shadowPaint.setStyle(Paint.Style.FILL);
         shadowPaint.setColor(0x1a000000);
-        shadowPaint.setStrokeWidth(NumberExtensionsKt.dpToPx(2));
+        shadowPaint.setStrokeWidth(NumberExtensionsKt.getDp(2));
 
         linePaint = new Paint();
         linePaint.setStyle(Paint.Style.FILL);
         linePaint.setColor(0xffffffff);
-        linePaint.setStrokeWidth(NumberExtensionsKt.dpToPx(1));
+        linePaint.setStrokeWidth(NumberExtensionsKt.getDp(1));
 
         handlePaint = new Paint();
         handlePaint.setStyle(Paint.Style.FILL);
@@ -118,8 +118,8 @@ public class CropAreaView extends View {
         frameVisible = true;
         dimVisibile = true;
 
-        sidePadding = NumberExtensionsKt.dpToPx(16);
-        minWidth = NumberExtensionsKt.dpToPx(32);
+        sidePadding = NumberExtensionsKt.getDp(16);
+        minWidth = NumberExtensionsKt.getDp(32);
 
         gridType = GridType.NONE;
 
@@ -129,12 +129,12 @@ public class CropAreaView extends View {
         shadowPaint = new Paint();
         shadowPaint.setStyle(Paint.Style.FILL);
         shadowPaint.setColor(0x1a000000);
-        shadowPaint.setStrokeWidth(NumberExtensionsKt.dpToPx(2));
+        shadowPaint.setStrokeWidth(NumberExtensionsKt.getDp(2));
 
         linePaint = new Paint();
         linePaint.setStyle(Paint.Style.FILL);
         linePaint.setColor(0xffffffff);
-        linePaint.setStrokeWidth(NumberExtensionsKt.dpToPx(1));
+        linePaint.setStrokeWidth(NumberExtensionsKt.getDp(1));
 
         handlePaint = new Paint();
         handlePaint.setStyle(Paint.Style.FILL);
@@ -218,9 +218,9 @@ public class CropAreaView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         if (freeform) {
-            int lineThickness = NumberExtensionsKt.dpToPx(2);
-            int handleSize = NumberExtensionsKt.dpToPx(16);
-            int handleThickness = NumberExtensionsKt.dpToPx(3);
+            int lineThickness = NumberExtensionsKt.getDp(2);
+            int handleSize = NumberExtensionsKt.getDp(16);
+            int handleThickness = NumberExtensionsKt.getDp(3);
 
             int originX = (int) actualRect.left - lineThickness;
             int originY = (int) actualRect.top - lineThickness;
@@ -318,7 +318,7 @@ public class CropAreaView extends View {
     }
 
     private void updateTouchAreas() {
-        int touchPadding = NumberExtensionsKt.dpToPx(16);
+        int touchPadding = NumberExtensionsKt.getDp(16);
 
         topLeftCorner.set(actualRect.left - touchPadding, actualRect.top - touchPadding, actualRect.left + touchPadding, actualRect.top + touchPadding);
         topRightCorner.set(actualRect.right - touchPadding, actualRect.top - touchPadding, actualRect.right + touchPadding, actualRect.top + touchPadding);

@@ -13,7 +13,7 @@ import com.studita.R
 import com.studita.domain.repository.UsersRepository
 import com.studita.presentation.model.UsersRecyclerUiModel
 import com.studita.presentation.view_model.FriendsFragmentViewModel
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 import com.studita.utils.getAppCompatActivity
 import com.studita.utils.makeView
 import com.studita.utils.showKeyboard
@@ -47,7 +47,7 @@ class SearchViewHolder(
             formPopUp().showAsDropDown(
                 itemView.usersSearchItemFilter,
                 0,
-                (-4F).dpToPx(),
+                (-4F).dp,
                 Gravity.START
             )
         }
@@ -224,7 +224,7 @@ class SearchViewHolder(
     private fun setSearchMargin() {
         val param =
             itemView.usersSearchItemSearchLayout.layoutParams as ViewGroup.MarginLayoutParams
-        param.setMargins(0, 0, 0, 8F.dpToPx())
+        param.setMargins(0, 0, 0, 8F.dp)
         itemView.usersSearchItemSearchLayout.layoutParams = param
     }
 

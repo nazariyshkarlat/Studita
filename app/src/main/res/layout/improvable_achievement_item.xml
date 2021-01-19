@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/defaultRLMargin"
+    android:layout_marginEnd="@dimen/defaultRLMargin"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/blocks_rectangle"
+    android:padding="@dimen/defaultBlockPadding"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/improvableAchievementItemNextLevelIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerCrop"/>
+
+        <LinearLayout
+            android:id="@+id/improvableAchievementItemTitleExerciseBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/improvableAchievementItemTitle"
+                style="@style/Medium16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/improvableAchievementItemExercise"
+                style="@style/Regular14Secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/improvableAchievementItemDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?gray_focused_color"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/improvableAchievementItemReward"
+        style="@style/Regular14Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"/>
+
+    <TextView
+        android:id="@+id/improvableAchievementItemAchievementLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/improvableAchievementItemProgressBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="12dp">
+        <ImageView
+            android:id="@+id/improvableAchievementItemCurrentLevelIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0"
+            android:scaleType="centerCrop"/>
+
+        <com.studita.presentation.views.ProgressBar
+            android:id="@+id/improvableAchievementItemAchievementProgress"
+            style="@style/ProgressBarStyle"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/improvableAchievementItemNextLevelSmallIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="0"
+            android:scaleType="centerCrop"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/improvableAchievementItemAchievementProgressText"
+        style="@style/Regular12Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"/>
+
+</LinearLayout>

@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
-import com.studita.presentation.fragments.base.BaseFragment
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.model.ExerciseImagesRowUiModel
 import com.studita.presentation.model.ExerciseUiModel
 import com.studita.presentation.view_model.ExercisesViewModel
-import com.studita.utils.dpToPx
 import com.google.android.flexbox.FlexboxLayout
+import com.studita.utils.dp
 import kotlinx.android.synthetic.main.exercise_screen_type_1.*
 
 class ExerciseScreenType1 : NavigatableFragment(R.layout.exercise_screen_type_1) {
@@ -44,8 +43,8 @@ class ExerciseScreenType1 : NavigatableFragment(R.layout.exercise_screen_type_1)
                 FlexboxLayout.LayoutParams.WRAP_CONTENT,
                 FlexboxLayout.LayoutParams.WRAP_CONTENT
             )
-            params.height = 24F.dpToPx()
-            params.width = 24F.dpToPx()
+            params.height = 24F.dp
+            params.width = 24F.dp
             shapeView.layoutParams = params
             shapeView.background = imagesRowUiModel.image
             exerciseScreenType1FlexboxLayout.addView(shapeView)

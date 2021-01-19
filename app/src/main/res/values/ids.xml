@@ -4,4 +4,6 @@
     <item name="customSnackbar" type="id"/>
     <item name="promoBottomSheetPeeckView" type="id"/>
     <item name="promoEndBottomSheetCloseButton" type="id"/>
+    <item name="improvableAchievementsRecyclerView" type="id"/>
+    <item name="nonImprovableAchievementsRecyclerView" type="id"/>
 </resources>

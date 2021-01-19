@@ -12,8 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import coil.util.CoilUtils
 import com.studita.R
 import com.studita.domain.entity.EditProfileData
 import com.studita.domain.interactor.edit_profile.EditProfileInteractor
@@ -254,9 +253,7 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
 
     private fun fillAvatar() {
         if ((UserUtils.userData.avatarLink == null || editProfileViewModel.avaChanged) && editProfileViewModel.selectedImage == null) {
-            Glide
-                .with(this)
-                .clear(editProfileLayoutAvatar)
+            CoilUtils.clear(editProfileLayoutAvatar)
             AvaDrawer.drawAvatar(
                 editProfileLayoutAvatar,
                 if((editProfileViewModel.newProfileData!!.userName?.length ?: 0 > 1))
@@ -265,12 +262,10 @@ class EditProfileFragment : NavigatableFragment(R.layout.edit_profile_layout), G
                 PrefsUtils.getUserId()!!
             )
         } else {
-            Glide
-                .with(this)
-                .load(editProfileViewModel.selectedImage ?: UserUtils.userData.avatarLink)
-                .centerCrop()
-                .apply(RequestOptions.circleCropTransform())
-                .into(editProfileLayoutAvatar)
+            if(editProfileViewModel.selectedImage == null)
+                editProfileLayoutAvatar.loadUrlAvatar(UserUtils.userData.avatarLink!!)
+            else
+                editProfileLayoutAvatar.loadAvatarBitmap(editProfileViewModel.selectedImage!!)
         }
     }
 

@@ -12,8 +12,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.view.View
-import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
+import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*

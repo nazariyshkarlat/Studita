@@ -15,11 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            android:orientation="vertical"
             app:elevation="0dp">
 
             <include
                 android:id="@+id/homeLayoutBar"
                 layout="@layout/home_layout_bar" />
+
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView

@@ -10,7 +10,7 @@ import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.view_model.ExercisesEndFragmentViewModel
 import com.studita.presentation.view_model.ExercisesViewModel
 import com.studita.utils.TimeUtils
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 import kotlinx.android.synthetic.main.exercises_detailed_stat_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
@@ -80,11 +80,11 @@ class ExercisesDetailedStatFragment : NavigatableFragment(R.layout.exercises_det
                     exercisesDetailedStatLayoutScrollView.paddingLeft,
                     exercisesDetailedStatLayoutScrollView.paddingTop,
                     exercisesDetailedStatLayoutScrollView.paddingRight,
-                    16F.dpToPx()
+                    16F.dp
                 )
                 exercisesEndFragmentViewModel?.setScrollViewDividerAndPadding(
                     R.drawable.divider_top_drawable,
-                    16F.dpToPx()
+                    16F.dp
                 )
             }
         }

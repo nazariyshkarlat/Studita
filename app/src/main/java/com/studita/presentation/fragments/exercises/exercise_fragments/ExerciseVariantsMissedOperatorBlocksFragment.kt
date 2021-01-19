@@ -1,22 +1,13 @@
 package com.studita.presentation.fragments.exercises.exercise_fragments
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
-import android.os.Handler
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.OneShotPreDrawListener
 import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
-import androidx.lifecycle.Observer
 import com.studita.R
-import com.studita.domain.entity.exercise.ExerciseData
 import com.studita.domain.entity.exercise.ExerciseRequestData
 import com.studita.presentation.model.ExerciseUiModel
 import com.studita.utils.*
@@ -48,7 +39,7 @@ class ExerciseVariantsMissedOperatorBlocksFragment : ExerciseVariantsFragment(R.
             exerciseVariantsMissedOperatorBlocksLayoutVariantsLinearLayout.updateLayoutParams<FrameLayout.LayoutParams> {
                 height = exerciseVariantsMissedOperatorBlocksLayoutVariantsLinearLayout.measuredHeight+
                         exerciseVariantsMissedOperatorBlocksLayoutTopLinearLayout.measuredHeight +
-                        32F.dpToPx()
+                        32F.dp
             }
         }
     }

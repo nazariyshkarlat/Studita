@@ -1,14 +1,16 @@
-package com.studita.presentation.fragments
+package com.studita.presentation.bars
 
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
+import com.studita.presentation.fragments.AuthorizationFragment
 import com.studita.presentation.fragments.base.BaseFragment
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.friends.FriendsFragment
@@ -29,7 +31,7 @@ import com.studita.presentation.fragments.user_statistics.UserStatUnLoggedInFrag
 import com.studita.presentation.view_model.FriendsFragmentViewModel
 import com.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.studita.utils.ScreenUtils
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.android.synthetic.main.toolbar_layout.view.*
 
@@ -58,9 +60,9 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
             it.toolbarDividerState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { show ->
-                    toolbarLayout.background = if (show) resources.getDrawable(
-                        R.drawable.divider_bottom_drawable,
-                        toolbarLayoutTitle.context.theme
+                    toolbarLayout.background = if (show) ContextCompat.getDrawable(
+                        toolbarLayoutTitle.context,
+                        R.drawable.divider_bottom_drawable
                     ) else null
                 })
 
@@ -159,7 +161,7 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
             > ScreenUtils.getScreenWidth()) {
             toolbarLayoutTitle.updateLayoutParams<FrameLayout.LayoutParams> {
                 leftMargin = toolbarLayoutBackButton.measuredWidth
-                rightMargin = if(toolbarLayoutRightButton.visibility == View.VISIBLE || toolbarLayoutRightButtonProgress.visibility == View.VISIBLE) toolbarLayoutRightButton.measuredWidth - 8F.dpToPx() else 16F.dpToPx()
+                rightMargin = if(toolbarLayoutRightButton.visibility == View.VISIBLE || toolbarLayoutRightButtonProgress.visibility == View.VISIBLE) toolbarLayoutRightButton.measuredWidth - 8F.dp else 16F.dp
                 gravity = Gravity.START or Gravity.CENTER_VERTICAL
             }
         }else{

@@ -4,6 +4,7 @@ import com.studita.domain.entity.*
 import com.studita.domain.entity.authorization.LogInResponseData
 import com.studita.domain.entity.exercise.ExerciseResponseData
 import com.studita.domain.entity.exercise.ExercisesResponseData
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 
@@ -265,6 +266,21 @@ sealed class DownloadOfflineDataStatus{
     object IsCached : DownloadOfflineDataStatus()
     object Success : DownloadOfflineDataStatus()
     object Failure : DownloadOfflineDataStatus()
+}
+
+sealed class GetAchievementsStatus{
+    object ServiceUnavailable : GetAchievementsStatus()
+    object NoConnection : GetAchievementsStatus()
+    object NoAchievements : GetAchievementsStatus()
+    class Success(val achievements: List<AchievementData>) : GetAchievementsStatus()
+    object Failure : GetAchievementsStatus()
+}
+
+sealed class GetAchievementsDataStatus{
+    object ServiceUnavailable : GetAchievementsDataStatus()
+    object NoConnection : GetAchievementsDataStatus()
+    class Success(val achievements: List<AchievementDataData>) : GetAchievementsDataStatus()
+    object Failure : GetAchievementsDataStatus()
 }
 
 

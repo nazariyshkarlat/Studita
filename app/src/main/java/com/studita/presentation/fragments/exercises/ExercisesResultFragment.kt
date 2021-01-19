@@ -73,13 +73,13 @@ class ExercisesResultFragment : BaseFragment(R.layout.exercises_result_layout) {
             if (isScrollable) {
                 exercisesEndFragmentViewModel?.setScrollViewDividerAndPadding(
                     R.drawable.divider_top_drawable,
-                    8F.dpToPx()
+                    8F.dp
                 )
                 exercisesResultLayoutScrollView.setPadding(
                     exercisesResultLayoutScrollView.paddingLeft,
-                    16F.dpToPx(),
+                    16F.dp,
                     exercisesResultLayoutScrollView.paddingRight,
-                    16F.dpToPx()
+                    16F.dp
                 )
             }
         }

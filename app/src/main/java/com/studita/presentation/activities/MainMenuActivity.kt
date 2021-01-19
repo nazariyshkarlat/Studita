@@ -7,7 +7,7 @@ import com.studita.R
 import com.studita.presentation.fragments.main.MainMenuFragment
 import com.studita.presentation.fragments.notifications.NotificationsFragment
 import com.studita.presentation.fragments.main.ProfileMenuFragment
-import com.studita.presentation.fragments.ToolbarFragment
+import com.studita.presentation.bars.ToolbarFragment
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.view_model.MainMenuActivityViewModel
 import com.studita.utils.UserUtils

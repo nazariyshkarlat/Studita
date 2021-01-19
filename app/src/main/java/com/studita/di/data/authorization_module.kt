@@ -22,18 +22,18 @@ import org.koin.dsl.bind
 fun createAuthorizationModule(config: DI.Config) = configModule(configuration = config){
 
     single {
-        AuthorizationRepositoryImpl(
-            get()
-        )
-    } bind (AuthorizationRepository::class)
-
-    single {
         AuthorizationInteractorImpl(
             get(),
             get(),
             SyncSignOutImpl()
         )
     } bind (AuthorizationInteractor::class)
+
+    single {
+        AuthorizationRepositoryImpl(
+            get()
+        )
+    } bind (AuthorizationRepository::class)
 
     single{
         AuthorizationDataStoreImpl(

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:paddingStart="@dimen/defaultRLMargin"
+    android:paddingEnd="@dimen/defaultRLMargin"
+    android:background="?page_background_color"
+    android:layout_gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/internetIsDisabledMainLayoutTitle"
+        style="@style/Regular18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/main_layout_offline_mode_error_text"
+        android:textAlignment="center" />
+
+    <com.studita.presentation.views.CenterIconTextView
+        android:id="@+id/mainLayoutOfflineModeErrorDisableOfflineModeButton"
+        style="@style/SmallBlueTransparentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/main_layout_offline_mode_error_button_text"/>
+
+</LinearLayout>

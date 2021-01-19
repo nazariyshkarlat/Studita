@@ -24,7 +24,6 @@
                 android:layout_marginStart="@dimen/defaultRLMargin"
                 android:layout_marginEnd="@dimen/defaultRLMargin"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/blocks_rectangle"
                 android:layout_height="wrap_content" />
 
             <com.studita.presentation.views.press_view.PressLinearLayout
@@ -41,9 +40,9 @@
                     android:id="@+id/userStatLayoutProfileInfoAvatar"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
+                    android:scaleType="centerCrop"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/avatar_oval" />
+                    android:layout_marginStart="16dp" />
 
                 <TextView
                     android:id="@+id/userStatLayoutProfileInfoUserName"

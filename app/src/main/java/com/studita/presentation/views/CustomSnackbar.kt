@@ -10,8 +10,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.Shape
 import android.text.StaticLayout
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -20,13 +18,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.contains
 import com.studita.R
 import com.studita.presentation.draw.draw
 import com.studita.presentation.draw.getMultilineTextLayout
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 import com.studita.utils.getAlphaAnimator
 import com.studita.utils.getScaleAnimator
 import kotlinx.coroutines.Dispatchers
@@ -60,9 +57,9 @@ class CustomSnackbar @JvmOverloads constructor(
 
     private val rectF = RectF()
     private var desiredHeight = 0
-    private val radius = 8F.dpToPx().toFloat()
-    private val innerPadding = 16F.dpToPx()
-    private val margin = 8F.dpToPx()
+    private val radius = 8F.dp.toFloat()
+    private val innerPadding = 16F.dp
+    private val margin = 8F.dp
     private var bottomMarginExtra = 0
 
     private lateinit var textLayout: StaticLayout
@@ -70,7 +67,7 @@ class CustomSnackbar @JvmOverloads constructor(
     private var textHeight = 0
     private var text: String = ""
     private var textPaint = TextPaint().apply {
-        textSize = 16F.dpToPx().toFloat()
+        textSize = 16F.dp.toFloat()
         textAlign = Paint.Align.LEFT
         isAntiAlias = true
         typeface = ResourcesCompat.getFont(context, R.font.roboto_regular)

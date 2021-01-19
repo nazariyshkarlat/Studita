@@ -1,5 +1,6 @@
 package com.studita.presentation.fragments.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -8,29 +9,53 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.OneShotPreDrawListener
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.studita.R
+import com.studita.data.net.connection.ConnectionManager
 import com.studita.presentation.activities.promo.TrainingsActivity
 import com.studita.presentation.fragments.base.BaseFragment
 import com.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.studita.presentation.view_model.MainFragmentViewModel
+import com.studita.presentation.views.CustomSnackbar
 import com.studita.utils.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.koin.core.context.GlobalContext
 
 class MainFragment : BaseFragment(R.layout.main_layout) {
 
     private var navigationViewModel: MainActivityNavigationViewModel? = null
     private var mainFragmentViewModel: MainFragmentViewModel? = null
     private var transValue = 0F
+
+    companion object{
+        fun getBottomMarginExtraSnackbar(context: Context) = context.resources.getDimension(R.dimen.bottomNavigationHeight).toInt() +
+                if(GlobalContext.get().get<ConnectionManager>().isNetworkAbsent())  context.resources.getDimension(R.dimen.connectionSnackbarHeight).toInt()
+                else 0
+
+        fun showEnableOfflineModeSnackbar(context: Context){
+            CustomSnackbar(context).show(
+                context.resources.getString(R.string.enable_offline_mode_snackbar),
+                ColorUtils.compositeColors(
+                    ThemeUtils.getAccentLiteColor(context),
+                    ContextCompat.getColor(context, R.color.white)
+                ),
+                ContextCompat.getColor(context, R.color.black),
+                bottomMarginExtra = getBottomMarginExtraSnackbar(context)
+            )
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

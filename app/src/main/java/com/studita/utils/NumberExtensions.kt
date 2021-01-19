@@ -4,7 +4,8 @@ import android.content.res.Resources
 import java.math.BigDecimal
 
 fun Int.pxToDp(): Float = (this / Resources.getSystem().displayMetrics.density)
-fun Float.dpToPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+val Float.dp: Int
+get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 fun Int.pxToSp(): Float = (this / Resources.getSystem().displayMetrics.scaledDensity)
 fun Float.spToPx(): Int = (this * Resources.getSystem().displayMetrics.scaledDensity).toInt()
 

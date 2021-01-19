@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.annotation.LayoutRes
-import androidx.core.view.OneShotPreDrawListener
 import androidx.fragment.app.DialogFragment
 import com.studita.R
 import com.studita.utils.ScreenUtils
-import com.studita.utils.dpToPx
 import kotlinx.android.synthetic.main.dialog_alert_layout.*
 
 

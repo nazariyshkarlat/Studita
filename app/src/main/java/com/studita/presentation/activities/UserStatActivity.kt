@@ -3,7 +3,7 @@ package com.studita.presentation.activities
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.studita.R
-import com.studita.presentation.fragments.ToolbarFragment
+import com.studita.presentation.bars.ToolbarFragment
 import com.studita.presentation.fragments.user_statistics.UserStatFragment
 import com.studita.presentation.fragments.user_statistics.UserStatOfflineModeFragment
 import com.studita.presentation.fragments.user_statistics.UserStatUnLoggedInFragment

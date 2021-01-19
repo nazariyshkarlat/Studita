@@ -1,7 +1,6 @@
 package com.studita.presentation.activities
 
 import android.app.Activity
-import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.studita.R
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.error_fragments.IncorrectTimeFragment
-import com.studita.presentation.fragments.first_open.BetaTestStartFragment
+import com.studita.presentation.fragments.first_open.OfflineModeDownloadFragment
 import com.studita.presentation.fragments.main.MainFragment
 import com.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.studita.utils.PrefsUtils
@@ -35,7 +34,7 @@ class MainActivity : DefaultActivity(){
 
         fun getFragmentToAdd(context: Context) = when {
             !TimeUtils.timeIsAutomatically(context) -> IncorrectTimeFragment()
-            !PrefsUtils.offlineDataIsCached() -> BetaTestStartFragment()
+            !PrefsUtils.offlineDataIsCached() -> OfflineModeDownloadFragment()
             else -> MainFragment()
         }
     }
@@ -61,14 +60,10 @@ class MainActivity : DefaultActivity(){
     }
 
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount == 0){
-            finish()
-        }else {
-            when (val currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)) {
-                is NavigatableFragment -> currentFragment.onBackClick()
-                is MainFragment -> navigationViewModel.onBackPressed()
-                else -> super.onBackPressed()
-            }
+        when (val currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)) {
+            is NavigatableFragment -> currentFragment.onBackClick()
+            is MainFragment -> navigationViewModel.onBackPressed()
+            else -> super.onBackPressed()
         }
     }
 

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import com.studita.presentation.model.NotificationsUiModel
 import com.studita.utils.PrefsUtils
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 import kotlinx.android.synthetic.main.notifications_layout_switch_item.view.*
 
 class NotificationsSwitchViewHolder(view: View) :
@@ -22,7 +22,7 @@ class NotificationsSwitchViewHolder(view: View) :
                 PrefsUtils.setNotificationsMode(notificationsLayoutSwitchItemSwitch.isChecked)
             }
             updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                this.bottomMargin = 12F.dpToPx()
+                this.bottomMargin = 12F.dp
             }
         }
     }

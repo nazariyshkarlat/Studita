@@ -26,7 +26,8 @@
                 android:layout_width="@dimen/profileMenuAvatarSize"
                 android:layout_height="@dimen/profileMenuAvatarSize"
                 android:layout_margin="12dp"
-                android:background="@drawable/avatar_oval" />
+                android:scaleType="centerCrop"
+                android:background="@drawable/avatar_placeholder_darker" />
 
             <TextView
                 android:id="@+id/profileMenuLayoutUserName"

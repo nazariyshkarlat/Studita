@@ -10,6 +10,7 @@ import com.studita.presentation.fragments.main.HomeFragment
 import com.studita.presentation.fragments.promo_fragments.AchievementsPromoFragment
 import com.studita.presentation.fragments.promo_fragments.CompetitionsPromoFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.studita.presentation.fragments.achievements.AchievementsFragment
 
 class MainActivityNavigationViewModel : ViewModel(),
     BottomNavigationView.OnNavigationItemSelectedListener {
@@ -27,37 +28,37 @@ class MainActivityNavigationViewModel : ViewModel(),
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-/*        val lastId = backStack.last().first
-        if (item.itemId != lastId) {
-            val fragmentTag: String
-            navigationState.value = BottomNavigationEnum.HIDE to backStack.last().second
-
-            if (backStack.map { it.first }.contains(item.itemId)) {
-                val pairToRemove = backStack[backStack.map { it.first }.indexOf(item.itemId)]
-                fragmentTag = pairToRemove.second
-                navigationState.value = BottomNavigationEnum.SHOW to fragmentTag
-                backStack.remove(pairToRemove)
-            } else {
-                fragmentTag = getFragmentToAdd(item.itemId)
-                navigationState.value = BottomNavigationEnum.ADD to fragmentTag
-            }
-            backStack.add(item.itemId to fragmentTag)
-        }*/
 
         if(item.itemId == R.id.bottomNavigationSecondItem){
             startActivityState.value = CompetitionsActivity::class.java
-        }else if(item.itemId == R.id.bottomNavigationThirdItem){
-            startActivityState.value = AchievementsActivity::class.java
+            return false
+        }else {
+            val lastId = backStack.last().first
+            if (item.itemId != lastId) {
+                val fragmentTag: String
+                navigationState.value = BottomNavigationEnum.HIDE to backStack.last().second
+
+                if (backStack.map { it.first }.contains(item.itemId)) {
+                    val pairToRemove = backStack[backStack.map { it.first }.indexOf(item.itemId)]
+                    fragmentTag = pairToRemove.second
+                    navigationState.value = BottomNavigationEnum.SHOW to fragmentTag
+                    backStack.remove(pairToRemove)
+                } else {
+                    fragmentTag = getFragmentToAdd(item.itemId)
+                    navigationState.value = BottomNavigationEnum.ADD to fragmentTag
+                }
+                backStack.add(item.itemId to fragmentTag)
+            }
+            return true
         }
 
-        return item.itemId == R.id.bottomNavigationFirstItem
     }
 
     private fun getFragmentToAdd(itemId: Int): String {
         return when (itemId) {
             R.id.bottomNavigationFirstItem -> HomeFragment::class.java.name
             R.id.bottomNavigationSecondItem -> CompetitionsPromoFragment::class.java.name
-            R.id.bottomNavigationThirdItem -> AchievementsPromoFragment::class.java.name
+            R.id.bottomNavigationThirdItem -> AchievementsFragment::class.java.name
             else -> throw UnsupportedOperationException("unknown item id")
         }
     }

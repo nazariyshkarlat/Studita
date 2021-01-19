@@ -18,6 +18,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp">
         <TextView
+            android:id="@+id/internetIsDisabledMainLayoutTitle"
             style="@style/Medium24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,11 +26,11 @@
             android:text="@string/you_are_offline"
             android:textAlignment="center" />
         <TextView
+            android:id="@+id/internetIsDisabledMainLayoutSubtitle"
             style="@style/Regular16Secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/internet_is_disabled_main_layout_subtitle"
             android:textAlignment="center" />
 
         <com.studita.presentation.views.CenterIconTextView
@@ -37,7 +38,6 @@
             style="@style/SmallTryAgainButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawablePadding="12dp"
             android:layout_marginTop="24dp"
             android:text="@string/try_again"/>
 

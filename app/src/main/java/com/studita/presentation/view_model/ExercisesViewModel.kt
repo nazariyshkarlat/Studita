@@ -477,8 +477,6 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int, priva
         if(!isInputExercise()){
             exerciseCountToSelect = getVariantsToSelectCount()
         }
-        println(bonusIndex)
-        println(bonusExercises)
         exerciseUiModel = exerciseData!!.toUiModel(app)
         bonusIndex++
         return getFragmentToAdd(exerciseUiModel!!)

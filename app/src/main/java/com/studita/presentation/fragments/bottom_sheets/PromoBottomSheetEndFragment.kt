@@ -13,7 +13,7 @@ import com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bot
 import com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawerFragment
 import com.studita.utils.ThemeUtils
 import com.studita.utils.clearLightStatusBar
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 
 class PromoBottomSheetEndFragment : BottomDrawerFragment(){
 
@@ -119,7 +119,7 @@ class PromoBottomSheetEndFragment : BottomDrawerFragment(){
                 }
 
             })
-            peekHeight = 48F.dpToPx()
+            peekHeight = 48F.dp
         }
     }
 

@@ -25,25 +25,19 @@
 package com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.handle
 
 import android.content.Context
-import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
+import com.studita.utils.dp
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import androidx.annotation.FloatRange
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
 import com.studita.R
 import com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.TranslationUpdater
-import com.studita.utils.ColorUtils
-import com.studita.utils.ThemeUtils
-import com.studita.utils.dpToPx
-import java.lang.Exception
 
 class BottomDrawerHandleView : View, TranslationUpdater {
 
@@ -53,7 +47,7 @@ class BottomDrawerHandleView : View, TranslationUpdater {
     private var tempRect: RectF = RectF()
 
     private var paint = Paint()
-    private var thickness = 6F.dpToPx().toFloat()
+    private var thickness = 6F.dp.toFloat()
 
     constructor(context: Context) : this(context, null)
 

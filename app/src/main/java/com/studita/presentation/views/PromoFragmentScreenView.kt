@@ -11,12 +11,11 @@ import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.view.updateLayoutParams
 import androidx.core.widget.TextViewCompat
 import com.studita.R
 import com.studita.presentation.views.press_view.PressTextView
 import com.studita.utils.ScreenUtils
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 
 abstract class PromoFragmentScreenView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -37,7 +36,7 @@ abstract class PromoFragmentScreenView @JvmOverloads constructor(
                 FrameLayout.LayoutParams.MATCH_PARENT
             ).apply {
                 height =
-                    ScreenUtils.getScreenHeight() - ((this@PromoFragmentScreenView.screenNumber - 1) * 24F.dpToPx() + resources.getDimension(
+                    ScreenUtils.getScreenHeight() - ((this@PromoFragmentScreenView.screenNumber - 1) * 24F.dp + resources.getDimension(
                         R.dimen.toolbarHeight
                     )
                         .toInt() + resources.getDimension(R.dimen.statusBarHeight).toInt())
@@ -51,9 +50,9 @@ abstract class PromoFragmentScreenView @JvmOverloads constructor(
                     FrameLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
                     this.gravity = Gravity.CENTER
-                    marginStart = 32F.dpToPx()
-                    marginEnd = 32F.dpToPx()
-                    bottomMargin = 48F.dpToPx()/2
+                    marginStart = 32F.dp
+                    marginEnd = 32F.dp
+                    bottomMargin = 48F.dp/2
                 }
 
                 orientation = LinearLayout.VERTICAL
@@ -63,7 +62,7 @@ abstract class PromoFragmentScreenView @JvmOverloads constructor(
                     addView(
                         ImageView(context!!).apply {
                             setImageResource(image)
-                            layoutParams = LinearLayout.LayoutParams(48F.dpToPx(), 48F.dpToPx())
+                            layoutParams = LinearLayout.LayoutParams(48F.dp, 48F.dp)
                         }
                     )
                 }
@@ -75,7 +74,7 @@ abstract class PromoFragmentScreenView @JvmOverloads constructor(
                             LinearLayout.LayoutParams.WRAP_CONTENT
                         ).apply {
                             if(image != null) {
-                                topMargin = 16F.dpToPx()
+                                topMargin = 16F.dp
                             }
                         }
                         TextViewCompat.setTextAppearance(this, if(!isEndBottomSheet) R.style.Medium24 else R.style.Medium24White)
@@ -90,7 +89,7 @@ abstract class PromoFragmentScreenView @JvmOverloads constructor(
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT
                         ).apply {
-                            topMargin = 14F.dpToPx()
+                            topMargin = 14F.dp
                         }
                         TextViewCompat.setTextAppearance(this, if(!isEndBottomSheet) R.style.Regular16Secondary else R.style.Regular16White)
                         textAlignment = View.TEXT_ALIGNMENT_CENTER
@@ -108,9 +107,9 @@ abstract class PromoFragmentScreenView @JvmOverloads constructor(
                         FrameLayout.LayoutParams.WRAP_CONTENT
                     ).apply {
                         gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
-                        bottomMargin  = 24F.dpToPx() + 48F.dpToPx()
-                        marginStart = 32F.dpToPx()
-                        marginEnd = 32F.dpToPx()
+                        bottomMargin  = 24F.dp + 48F.dp
+                        marginStart = 32F.dp
+                        marginEnd = 32F.dp
                     }
                     textAlignment = TEXT_ALIGNMENT_CENTER
                     TextViewCompat.setTextAppearance(this, R.style.Regular14Tertiary)
@@ -128,9 +127,9 @@ abstract class PromoFragmentScreenView @JvmOverloads constructor(
                     ).apply {
                         gravity = Gravity.BOTTOM
                         height = resources.getDimension(R.dimen.buttonHeight).toInt()
-                        bottomMargin  = 16F.dpToPx()
-                        marginStart = 16F.dpToPx()
-                        marginEnd = 16F.dpToPx()
+                        bottomMargin  = 16F.dp
+                        marginStart = 16F.dp
+                        marginEnd = 16F.dp
                     }
                     text = resources.getString(R.string.close)
 
@@ -159,7 +158,7 @@ abstract class PromoFragmentScreenView @JvmOverloads constructor(
                 FrameLayout.LayoutParams.WRAP_CONTENT
             ).apply {
                 gravity = Gravity.TOP
-                height = 48F.dpToPx()
+                height = 48F.dp
             }
 
             addView(
@@ -182,10 +181,10 @@ abstract class PromoFragmentScreenView @JvmOverloads constructor(
                         FrameLayout.LayoutParams.WRAP_CONTENT
                     ).apply {
                         gravity = Gravity.CENTER_VERTICAL or Gravity.END
-                        rightMargin = 8F.dpToPx()
+                        rightMargin = 8F.dp
                     }
                     setImageResource(if(!isEndBottomSheet) R.drawable.ic_expand_less else R.drawable.ic_expand_less_secondary_dark_theme)
-                    setPadding(12F.dpToPx(), 12F.dpToPx(), 12F.dpToPx(), 12F.dpToPx())
+                    setPadding(12F.dp, 12F.dp, 12F.dp, 12F.dp)
                 }
             )
 

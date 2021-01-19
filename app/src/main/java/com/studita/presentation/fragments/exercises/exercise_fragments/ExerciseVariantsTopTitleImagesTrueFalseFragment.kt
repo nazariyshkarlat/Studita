@@ -1,23 +1,16 @@
 package com.studita.presentation.fragments.exercises.exercise_fragments
 
-import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.children
-import androidx.lifecycle.Observer
 import com.studita.R
-import com.studita.domain.entity.exercise.ExerciseData
 import com.studita.domain.entity.exercise.ExerciseRequestData
 import com.studita.presentation.model.ExerciseImagesRowUiModel
 import com.studita.presentation.model.ExerciseUiModel
 import com.studita.presentation.views.SquareView
-import com.studita.utils.dpToPx
-import com.studita.utils.postExt
-import kotlinx.android.synthetic.main.exercise_variants_title_layout.*
+import com.studita.utils.dp
 import kotlinx.android.synthetic.main.exercise_variants_title_with_images_true_false.*
 
 class ExerciseVariantsTopTitleImagesTrueFalseFragment :
@@ -73,8 +66,8 @@ class ExerciseVariantsTopTitleImagesTrueFalseFragment :
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            params.height = 32F.dpToPx()
-            params.width = 32F.dpToPx()
+            params.height = 32F.dp
+            params.width = 32F.dp
             emojiView.layoutParams = params
             emojiView.background = exerciseImagesRowUiModel.image
             exerciseVariantsTitleWithImagesTrueFalseFlexboxLayout.addView(emojiView)

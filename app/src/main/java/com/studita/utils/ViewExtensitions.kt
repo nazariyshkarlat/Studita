@@ -7,6 +7,7 @@ import android.animation.PropertyValuesHolder
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.graphics.Bitmap
 import android.graphics.Rect
 import android.graphics.drawable.RotateDrawable
 import android.os.Build
@@ -16,28 +17,30 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.Placeholder
 import androidx.core.view.*
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.load
+import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
+import coil.util.CoilUtils
 import com.studita.R
 import com.studita.presentation.draw.AvaDrawer
 import com.studita.presentation.listeners.FabScrollImpl
 import com.studita.presentation.listeners.FabScrollListener
 import com.studita.presentation.listeners.OnViewSizeChangeListener
 import com.studita.presentation.listeners.OnViewSizeChangeListenerImpl
-import com.studita.presentation.views.ProgressBar
-import org.w3c.dom.Text
 import java.util.regex.Pattern
 import kotlin.reflect.KClass
 
@@ -217,19 +220,40 @@ fun <T : View> ViewGroup.getAllViewsOfTypeT(type: KClass<T>): List<T> {
 
 inline fun <reified T : View> ViewGroup.getAllViewsOfTypeT() = getAllViewsOfTypeT<T>(T::class)
 
-fun ImageView.fillAvatar(avatarLink: String?, userName: String, userId: Int) {
+fun ImageView.fillAvatar(avatarLink: String?, userName: String, userId: Int, withPlaceholder: Boolean = true, isDarkerPlaceholder: Boolean = false) {
     if (avatarLink == null) {
-        Glide
-            .with(this.context)
-            .clear(this)
+        CoilUtils.clear(this)
         AvaDrawer.drawAvatar(this, userName, userId)
     } else {
-        Glide
-            .with(this)
-            .load(avatarLink)
-            .centerCrop()
-            .apply(RequestOptions.circleCropTransform())
-            .into(this)
+        loadUrlAvatar(avatarLink, withPlaceholder, isDarkerPlaceholder)
+    }
+}
+
+fun ImageView.loadUrlAvatar(avatarLink: String, withPlaceholder: Boolean = true, isDarkerPlaceholder: Boolean = false) {
+    val request = ImageRequest.Builder(this.context)
+        .data(avatarLink)
+        .target(this)
+        .apply {
+            if(withPlaceholder) placeholder(if(!isDarkerPlaceholder) R.drawable.avatar_placeholder else R.drawable.avatar_placeholder_darker)
+        }
+        .transformations(CircleCropTransformation())
+        .build()
+    ImageLoader(context).enqueue(request)
+}
+
+fun ImageView.loadAvatarDrawable(@DrawableRes drawable: Int) {
+    this.load(drawable) {
+        crossfade(true)
+        placeholder(R.drawable.avatar_placeholder)
+        transformations(CircleCropTransformation())
+    }
+}
+
+fun ImageView.loadAvatarBitmap(bitmap: Bitmap) {
+    this.load(bitmap) {
+        crossfade(true)
+        placeholder(R.drawable.avatar_placeholder)
+        transformations(CircleCropTransformation())
     }
 }
 
@@ -361,3 +385,35 @@ fun injectParts(context: Context, text: String, partsToInject: List<String>) : P
 }
 
 fun View.isClick(event: MotionEvent) = event.action == MotionEvent.ACTION_UP && kotlin.math.abs(translationX) <= 5F && kotlin.math.abs(translationY) <= 5F && (event.eventTime - event.downTime) < 500F
+
+fun ImageView.loadSVG(url: String, @DrawableRes placeholder: Int){
+    val imageLoader = ImageLoader.Builder(context)
+        .componentRegistry {
+            add(SvgDecoder(context))
+        }
+        .build()
+    val request = ImageRequest.Builder(this.context)
+        .data(url)
+        .placeholder(placeholder)
+        .target(this)
+        .build()
+    imageLoader.enqueue(request)
+}
+
+fun loadSVGIntoMultipleTargets(imageViews: List<ImageView>, url: String, @DrawableRes placeholder: Int){
+    val imageLoader = ImageLoader.Builder(imageViews.first().context)
+        .componentRegistry {
+            add(SvgDecoder(imageViews.first().context))
+        }
+        .build()
+    val request = ImageRequest.Builder(imageViews.first().context)
+        .data(url)
+        .placeholder(placeholder)
+        .target {drawable->
+            imageViews.forEach {
+                it.setImageDrawable(drawable)
+            }
+        }
+        .build()
+    imageLoader.enqueue(request)
+}

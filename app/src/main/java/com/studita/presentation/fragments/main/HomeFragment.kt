@@ -38,6 +38,7 @@ import com.studita.App.Companion.authenticationState
 import com.studita.App.Companion.getUserData
 import com.studita.App.Companion.offlineModeChangeEvent
 import com.studita.data.net.connection.ConnectionManager
+import com.studita.presentation.fragments.main.MainFragment.Companion.getBottomMarginExtraSnackbar
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.home_layout_bar.*
 import kotlinx.android.synthetic.main.recyclerview_layout.*
@@ -129,7 +130,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                         homeLayoutBarAccountImageView.fillAvatar(
                             it.avatarLink,
                             it.userName!!,
-                            it.userId!!
+                            it.userId!!,
+                            withPlaceholder = false
                         )
                     }
                 })
@@ -232,7 +234,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
                     if (UserUtils.isLoggedIn() && data != null) {
                         homeLayoutBarAccountNotificationsIndicator.asNotificationIndicator(data.notificationsAreChecked)
-                        homeLayoutBarAccountImageView.fillAvatar(data.avatarLink, data.userName!!, data.userId!!)
+                        homeLayoutBarAccountImageView.fillAvatar(data.avatarLink, data.userName!!, data.userId!!,
+                            withPlaceholder = false
+                        )
                     }
                 })
 
@@ -308,12 +312,12 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
     override fun onScroll(
         scrollY: Int
     ) {
-        homeLayoutBar.background =
-            if (scrollY != 0) context?.getDrawable(R.drawable.divider_bottom_drawable) else null
+        homeLayoutAppBar.background =
+            if (scrollY != 0) ContextCompat.getDrawable(context!!, R.drawable.divider_bottom_drawable) else null
     }
 
     private fun clearAppBarDivider(){
-        homeLayoutBar.background = null
+        homeLayoutAppBar.background = null
     }
 
     override fun show() {
@@ -325,8 +329,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
-        homeLayoutAppBar.alpha =
-            (homeLayoutAppBar.height + verticalOffset * 2) / homeLayoutAppBar.height.toFloat()
+        homeLayoutBar.alpha =
+            (homeLayoutBar.height + verticalOffset * 2) / homeLayoutBar.height.toFloat()
     }
 
 
@@ -353,7 +357,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                         ContextCompat.getColor(snackbar.context, R.color.black),
                         resources.getInteger(R.integer.subscribe_email_snackbar_duration)
                             .toLong(),
-                        bottomMarginExtra = getBottomMarginExtraSnackbar()
+                        bottomMarginExtra = getBottomMarginExtraSnackbar(context)
                     )
                 } else {
                     snackbar.show(
@@ -362,7 +366,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                         ContextCompat.getColor(snackbar.context, R.color.black),
                         resources.getInteger(R.integer.unsubscribe_email_snackbar_duration)
                             .toLong(),
-                        bottomMarginExtra = getBottomMarginExtraSnackbar()
+                        bottomMarginExtra = getBottomMarginExtraSnackbar(context)
                     )
                 }
             }
@@ -374,7 +378,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                         ContextCompat.getColor(snackbar.context, R.color.black),
                         resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
                             .toLong(),
-                        bottomMarginExtra = getBottomMarginExtraSnackbar()
+                        bottomMarginExtra = getBottomMarginExtraSnackbar(context)
                     )
                 } else {
                     snackbar.show(
@@ -383,7 +387,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                         ContextCompat.getColor(snackbar.context, R.color.black),
                         resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
                             .toLong(),
-                        bottomMarginExtra = getBottomMarginExtraSnackbar()
+                        bottomMarginExtra = getBottomMarginExtraSnackbar(context)
                     )
                 }
             }
@@ -398,22 +402,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 ContextCompat.getColor(snackbar.context, R.color.black),
                 resources.getInteger(R.integer.log_in_snackbar_duration)
                 .toLong(),
-                bottomMarginExtra = getBottomMarginExtraSnackbar()
+                bottomMarginExtra = getBottomMarginExtraSnackbar(context!!)
         )
     }
-
-    fun showEnableOfflineModeSnackbar(){
-        CustomSnackbar(context!!).show(
-            resources.getString(R.string.enable_offline_mode_snackbar),
-            compositeColors(ThemeUtils.getAccentLiteColor(context!!), ContextCompat.getColor(context!!, R.color.white)),
-            ContextCompat.getColor(context!!, R.color.black),
-            bottomMarginExtra = getBottomMarginExtraSnackbar()
-        )
-    }
-
-    private fun getBottomMarginExtraSnackbar() = resources.getDimension(R.dimen.bottomNavigationHeight).toInt() +
-            if(get().get<ConnectionManager>().isNetworkAbsent())  resources.getDimension(R.dimen.connectionSnackbarHeight).toInt()
-            else 0
 
     override fun onPageReload() {
 

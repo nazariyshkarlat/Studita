@@ -40,7 +40,7 @@ class HomeFragmentViewModel : ViewModel() {
     private var subscribeJob: Job? = null
 
     init {
-        App.offlineModeChangeEvent = SingleLiveEvent()
+        App.offlineModeChangeEvent = LiveEvent()
         getLevels()
     }
 

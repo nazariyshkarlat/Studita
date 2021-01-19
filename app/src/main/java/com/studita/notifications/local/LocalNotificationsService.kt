@@ -33,29 +33,27 @@ class LocalNotificationsService : JobIntentService(){
 
     override fun onHandleWork(intent: Intent) {
 
-        runBlocking {
-            GlobalScope.launch {
-                val userData = App.userDataDeferred.await()
-                if (userData is UserDataStatus.Success) {
-                    if (PrefsUtils.notificationsAreEnabled() && !APP_IS_IN_FOREGROUND.get()) {
+        GlobalScope.launch {
+            val userData = App.userDataDeferred.await()
+            if (userData is UserDataStatus.Success) {
+                if (PrefsUtils.notificationsAreEnabled() && !APP_IS_IN_FOREGROUND.get()) {
+                    showNotification(
+                        UserUtils.userData,
+                        intent.getBooleanExtra("IS_MORNING_NOTIFICATION", true)
+                    )
+                }
+            } else {
+                val localUserData = GlobalContext.get().get<UserDataInteractor>().getUserData(
+                    PrefsUtils.getUserId(),
+                    true,
+                    isMyUserData = true
+                )
+                if (localUserData is UserDataStatus.Success) {
+                    if (PrefsUtils.notificationsAreEnabled() && !APP_IS_IN_FOREGROUND.get())
                         showNotification(
-                            UserUtils.userData,
+                            localUserData.result,
                             intent.getBooleanExtra("IS_MORNING_NOTIFICATION", true)
                         )
-                    }
-                } else {
-                    val localUserData = GlobalContext.get().get<UserDataInteractor>().getUserData(
-                        PrefsUtils.getUserId(),
-                        true,
-                        isMyUserData = true
-                    )
-                    if (localUserData is UserDataStatus.Success) {
-                        if (PrefsUtils.notificationsAreEnabled() && !APP_IS_IN_FOREGROUND.get())
-                            showNotification(
-                                localUserData.result,
-                                intent.getBooleanExtra("IS_MORNING_NOTIFICATION", true)
-                            )
-                    }
                 }
             }
         }

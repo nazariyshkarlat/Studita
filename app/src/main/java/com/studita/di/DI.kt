@@ -35,7 +35,9 @@ object DI {
                 createPrivacySettingsModule(configuration),
                 createUsersModule(configuration),
                 createNotificationsModule(configuration),
-                createOfflineDataModule(configuration)
+                createOfflineDataModule(configuration),
+                createAchievementsModule(configuration),
+                achievementsViewModel
             )
         }
     }

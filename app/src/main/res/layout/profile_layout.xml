@@ -43,8 +43,7 @@
                 <ImageView
                     android:id="@+id/profileLayoutAvatar"
                     android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:background="@drawable/avatar_oval"/>
+                    android:layout_height="72dp"/>
 
                 <TextView
                     android:id="@+id/profileLayoutUserName"
@@ -137,6 +136,45 @@
                         android:layout_weight="1"/>
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/profileLayoutAchievementsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/blocks_rectangle"
+                    android:orientation="vertical"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:visibility="gone">
+
+                    <com.studita.presentation.views.press_view.PressTextView
+                        android:id="@+id/profileLayoutAchievementsTitle"
+                        style="@style/Medium20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        app:press_alpha="?press_view_press_alpha"/>
+
+                    <com.studita.presentation.views.SnapHorizontalScrollView
+                        android:id="@+id/profileLayoutAchievementsScrollView"
+                        android:layout_width="match_parent"
+                        android:paddingStart="@dimen/defaultRLMargin"
+                        android:paddingEnd="@dimen/defaultRLMargin"
+                        android:layout_marginTop="16dp"
+                        android:clipToPadding="false"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/profileLayoutAchievementsScrollViewContent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"/>
+
+                    </com.studita.presentation.views.SnapHorizontalScrollView>
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/profileLayoutFriendsLayout"

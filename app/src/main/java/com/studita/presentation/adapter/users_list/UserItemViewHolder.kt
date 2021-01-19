@@ -6,7 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
-import com.bumptech.glide.Glide
+import coil.util.CoilUtils
 import com.studita.R
 import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.presentation.fragments.profile.MyProfileFragment
@@ -74,8 +74,7 @@ class UserItemViewHolder(
     }
 
     private fun clearAvatar() {
-        Glide.with(itemView.context)
-            .clear(itemView.friendItemAvatar)
+        CoilUtils.clear(itemView.friendItemAvatar)
     }
 
     interface AddToFriendsCallback {

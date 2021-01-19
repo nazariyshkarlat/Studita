@@ -38,7 +38,7 @@ public class CropGestureDetector {
         final ViewConfiguration configuration = ViewConfiguration
                 .get(context);
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
-        mTouchSlop = NumberExtensionsKt.dpToPx(1);
+        mTouchSlop = NumberExtensionsKt.getDp(1);
 
         this.mActivePointerId = INVALID_POINTER_ID;
         this.mActivePointerIndex = 0;

@@ -38,7 +38,7 @@ open class DefaultActivity : AppCompatActivity(),
             when (pair.first) {
                 CheckTokenIsCorrectStatus.Incorrect -> {
                     AccountAuthenticator.removeAccount(this)
-                    UserUtils.deviceSignOut()
+                    UserUtils.deviceSignOut(this)
                     authenticate(UserUtils.getUserIDTokenData(), false)
                     startLogInActivityStack()
                 }

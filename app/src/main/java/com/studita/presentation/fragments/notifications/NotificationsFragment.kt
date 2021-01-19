@@ -33,7 +33,6 @@ import com.studita.presentation.model.toUiModel
 import com.studita.presentation.view_model.NotificationsFragmentViewModel
 import com.studita.utils.UserUtils
 import com.studita.utils.addFragment
-import com.studita.utils.dpToPx
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.studita.data.entity.isNotificationType
@@ -41,6 +40,7 @@ import com.studita.data.entity.toFirebaseMessageType
 import com.studita.domain.entity.MessageType
 import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.studita.notifications.service.MessageReceiverIntentService.Companion.BROADCAST_MESSAGE
+import com.studita.utils.dp
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.recyclerview_layout.*
 
@@ -160,9 +160,9 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
 
         recyclerViewLayoutRecyclerView.setPadding(
             0,
-            resources.getDimension(R.dimen.toolbarHeight).toInt() + 12F.dpToPx(),
+            resources.getDimension(R.dimen.toolbarHeight).toInt() + 12F.dp,
             0,
-            12F.dpToPx()
+            12F.dp
         )
 
         viewModel.notificationsState.observe(

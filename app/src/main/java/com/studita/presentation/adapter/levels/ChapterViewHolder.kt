@@ -15,7 +15,7 @@ import com.studita.presentation.views.AlphaGradientView
 import com.studita.utils.LevelUtils
 import com.studita.utils.UserUtils
 import com.studita.utils.UserUtils.observeNoNull
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 import kotlinx.android.synthetic.main.chapter_item.view.*
 
 class ChapterViewHolder(view: View, val count: Int, private val lifecycleOwner: LifecycleOwner) :
@@ -84,7 +84,7 @@ class ChapterViewHolder(view: View, val count: Int, private val lifecycleOwner: 
                 chapterItemParentView.chapterItemProgressText.visibility = View.VISIBLE
                 chapterItemParentView.chapterItemProgressBar.visibility = View.VISIBLE
                 chapterItemParentView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = 8F.dpToPx()
+                    bottomMargin = 8F.dp
                 }
                 chapterItemParentView.isClickable = true
                 fadeTop = false

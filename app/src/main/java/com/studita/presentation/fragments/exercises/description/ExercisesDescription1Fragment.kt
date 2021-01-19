@@ -1,8 +1,6 @@
 package com.studita.presentation.fragments.exercises.description
 
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -11,12 +9,9 @@ import androidx.core.view.OneShotPreDrawListener
 import androidx.core.view.children
 import com.studita.R
 import com.studita.domain.entity.exercise.ExercisesDescriptionData
-import com.studita.utils.ThemeUtils
-import com.studita.utils.createSpannableString
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 import com.studita.utils.injectParts
 import kotlinx.android.synthetic.main.exercises_description_1_layout.*
-import java.util.regex.Pattern
 
 
 class ExercisesDescription1Fragment :
@@ -59,10 +54,10 @@ class ExercisesDescription1Fragment :
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            params.height = 24F.dpToPx()
-            params.width = 24F.dpToPx()
+            params.height = 24F.dp
+            params.width = 24F.dp
             if (i != imgCount - 1)
-                params.marginEnd = 12F.dpToPx()
+                params.marginEnd = 12F.dp
             shapeView.layoutParams = params
             shapeView.background =
                 ContextCompat.getDrawable(child.context, R.drawable.slightly_smiling_face)

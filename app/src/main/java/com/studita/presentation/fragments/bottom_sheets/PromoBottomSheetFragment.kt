@@ -1,6 +1,5 @@
 package com.studita.presentation.fragments.bottom_sheets
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
@@ -10,7 +9,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import com.studita.R
-import com.studita.presentation.fragments.bottom_sheets.PromoBottomSheetFragment.Companion.formCloseButton
 import com.studita.presentation.views.PromoFragmentScreenView
 import com.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior
 import com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawerDialog
@@ -19,7 +17,7 @@ import com.studita.utils.ColorUtils
 import com.studita.utils.ThemeUtils
 import com.studita.utils.ThemeUtils.getCurrentTheme
 import com.studita.utils.clearLightStatusBar
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 
 class PromoBottomSheetFragment : BottomDrawerFragment(){
 
@@ -57,7 +55,7 @@ class PromoBottomSheetFragment : BottomDrawerFragment(){
                     }
 
                     setBackgroundResource(R.drawable.circle_background_16dp)
-                    setPadding(16F.dpToPx(),16F.dpToPx(), 16F.dpToPx(), 16F.dpToPx())
+                    setPadding(16F.dp,16F.dp, 16F.dp, 16F.dp)
                     setImageResource(R.drawable.ic_close_white)
 
                     if(this@formCloseButton.context!!.getCurrentTheme() == ThemeUtils.Theme.LIGHT && arguments?.getInt(SCREEN_NUMBER_KEY) == 1)
@@ -182,7 +180,7 @@ class PromoBottomSheetFragment : BottomDrawerFragment(){
                 }
 
             })
-            peekHeight = 48F.dpToPx()
+            peekHeight = 48F.dp
         }
     }
 

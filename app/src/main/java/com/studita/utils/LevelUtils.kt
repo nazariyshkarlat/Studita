@@ -2,6 +2,7 @@ package com.studita.utils
 
 import android.content.Context
 import android.text.SpannableStringBuilder
+import androidx.annotation.FloatRange
 import com.studita.R
 import com.studita.domain.entity.UserDataData
 import com.studita.presentation.model.ExerciseResultAnimation
@@ -53,6 +54,7 @@ object LevelUtils {
 
     fun getNextLevel(currentLevelNumber: Int) = currentLevelNumber + 1
 
+    @FloatRange(from = 0.0, to = 1.0)
     fun getChapterProgressPercent(completedParts: Int, chapterPartsCount: Int) =
         completedParts / chapterPartsCount.toFloat()
 

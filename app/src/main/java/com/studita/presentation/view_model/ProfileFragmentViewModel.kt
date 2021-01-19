@@ -4,23 +4,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.studita.App
-import com.studita.domain.entity.FriendActionRequestData
-import com.studita.domain.entity.UserData
-import com.studita.domain.entity.UserIdTokenData
-import com.studita.domain.entity.UsersResponseData
+import com.studita.domain.entity.*
 import com.studita.domain.interactor.*
+import com.studita.domain.interactor.achievements.AchievementsInteractor
 import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.domain.interactor.users.UsersInteractor
+import com.studita.presentation.model.AchievementUiModel
+import com.studita.presentation.model.toUiModels
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import com.studita.utils.launchExt
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import org.koin.core.context.GlobalContext
 
 class ProfileFragmentViewModel(private val myId: Int, private val profileId: Int) : ViewModel() {
 
     private val friendsInteractor = GlobalContext.get().get<UsersInteractor>()
     private val userDataInteractor = GlobalContext.get().get<UserDataInteractor>()
+    private val achievementsInteractor = GlobalContext.get().get<AchievementsInteractor>()
 
     val addFriendStatus = SingleLiveEvent<UsersInteractor.FriendActionState>()
 
@@ -31,6 +33,7 @@ class ProfileFragmentViewModel(private val myId: Int, private val profileId: Int
     var errorState = false
 
     val userDataState = MutableLiveData<UserDataStatus>()
+    val achievementsState = MutableLiveData<List<AchievementUiModel>>()
 
     val progressState = MutableLiveData<Boolean>()
     private var getProfileDataJob: Job? = null
@@ -63,15 +66,27 @@ class ProfileFragmentViewModel(private val myId: Int, private val profileId: Int
             val userDataStatus = friendDataDeferred.await()
             val getFriendsStatus = friendsDeferred.await()
             val checkMyFriendStatus = checkMyFriendDeferred?.await()
+            var getAchievementsStatus: GetAchievementsStatus? = null
+            achievementsInteractor.getAchievements(
+                profileId
+            ).collect {
+                getAchievementsStatus = it
+            }
             when {
                 userDataStatus is UserDataStatus.Success &&
                         (getFriendsStatus is GetUsersStatus.Success || getFriendsStatus is GetUsersStatus.NoUsersFound) &&
-                        (checkMyFriendStatus == null || checkMyFriendStatus is IsMyFriendStatus.Success) -> {
+                        (checkMyFriendStatus == null || checkMyFriendStatus is IsMyFriendStatus.Success) &&
+                        (getAchievementsStatus is GetAchievementsStatus.Success || getAchievementsStatus == GetAchievementsStatus.NoAchievements) -> {
 
                     when(App.userDataDeferred.await()) {
                         is UserDataStatus.Success -> {
                             userDataState.value = userDataStatus
                             friendsState.value = getFriendsStatus
+                            achievementsState.value =
+                                if(getAchievementsStatus is GetAchievementsStatus.Success)
+                                    (getAchievementsStatus as GetAchievementsStatus.Success).achievements.toUiModels()
+                            else
+                                emptyList<AchievementUiModel>()
                             if(!isUpdate)
                                 progressState.value = false
                             if (profileId != myId)

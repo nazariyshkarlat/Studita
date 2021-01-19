@@ -8,7 +8,7 @@ import android.view.View
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.studita.R
 import com.studita.presentation.listeners.ViewOnTouch
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 import kotlin.math.ceil
 
 
@@ -20,9 +20,9 @@ class CustomRatingBar @JvmOverloads constructor(
 
     private val starsCount = 5
 
-    private val starHeight = 20F.dpToPx()
-    private val starWidth = 20F.dpToPx()
-    private val starMargin = 2F.dpToPx()
+    private val starHeight = 20F.dp
+    private val starWidth = 20F.dp
+    private val starMargin = 2F.dp
 
     private val viewHeight = starHeight
     private val viewWidth = starWidth * starsCount + (starMargin * 2) * (starsCount - 1)

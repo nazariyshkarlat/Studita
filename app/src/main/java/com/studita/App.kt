@@ -37,8 +37,8 @@ class App : Application(), LifecycleObserver {
         var authenticationJob: Job? = null
         var userDataJob: Job? = null
 
-        var offlineModeChangeEvent = SingleLiveEvent<Boolean>()
-        var recreateAppEvent = SingleLiveEvent<Unit>()
+        var offlineModeChangeEvent = LiveEvent<Boolean>()
+        var recreateAppEvent = LiveEvent<Unit>()
 
         fun clearUserLiveData() {
             UserUtils.userDataEventsLiveData.removeSource(UserUtils.userDataLiveData)

@@ -2,8 +2,11 @@ package com.studita.utils
 
 import android.graphics.Typeface
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
+import androidx.annotation.FontRes
+import androidx.core.text.buildSpannedString
 import com.studita.presentation.views.CustomTypefaceSpan
 
 fun String.createSpannableString(
@@ -26,5 +29,6 @@ fun String.createSpannableString(
     color?.let {
         span.setSpan(ForegroundColorSpan(color), 0, span.length, 0)
     }
+
     return span
 }

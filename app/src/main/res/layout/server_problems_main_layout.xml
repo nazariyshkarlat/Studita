@@ -18,6 +18,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp">
         <TextView
+            android:id="@+id/serverProblemsMainLayoutTitle"
             style="@style/Medium24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,11 +26,11 @@
             android:text="@string/server_unavailable"
             android:textAlignment="center" />
         <TextView
+            android:id="@+id/serverProblemsMainLayoutSubtitle"
             style="@style/Regular16Secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/server_problems_main_layout_subtitle"
             android:textAlignment="center" />
 
         <com.studita.presentation.views.CenterIconTextView

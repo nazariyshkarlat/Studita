@@ -403,14 +403,17 @@
         <item name="android:text">@string/try_again</item>
     </style>
 
-    <style name="SmallTryAgainButton" parent="ButtonBlueTransparent">
+    <style name="SmallBlueTransparentButton" parent="ButtonBlueTransparent">
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/Medium16Blue</item>
-        <item name="android:drawableStart">@drawable/refresh_animation</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
+    </style>
+
+    <style name="SmallTryAgainButton" parent="SmallBlueTransparentButton">
+        <item name="android:drawableStart">@drawable/refresh_animation</item>
         <item name="android:drawablePadding">12dp</item>
         <item name="android:text">@string/try_again</item>
     </style>
@@ -553,9 +556,9 @@
         <item name="android:foreground">?selectableItemBackground</item>
         <item name="itemRippleColor">?colorControlHighlight</item>
         <item name="menu">@menu/bottom_navigation_bar_menu</item>
-        <item name="itemIconTint">@color/secondary_accent_color</item>
+        <item name="itemIconTint">@color/primary_accent_color</item>
         <item name="elevation">0dp</item>
-        <item name="itemTextColor">@color/secondary_accent_color</item>
+        <item name="itemTextColor">@color/primary_accent_color</item>
     </style>
 
     <style name="RatingBar" parent="@android:style/Widget.RatingBar">

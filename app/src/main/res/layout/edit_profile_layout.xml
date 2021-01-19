@@ -38,8 +38,7 @@
                 android:id="@+id/editProfileLayoutAvatar"
                 android:layout_width="@dimen/editProfileLayoutAvatarSize"
                 android:layout_height="@dimen/editProfileLayoutAvatarSize"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/avatar_oval" />
+                android:layout_marginTop="12dp"/>
 
             <com.studita.presentation.views.press_view.PressTextView
                 android:id="@+id/editProfileLayoutSelectAvatar"

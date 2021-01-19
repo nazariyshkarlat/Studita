@@ -94,7 +94,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
     private fun fillUserData(userDataData: UserDataData) {
         profileMenuLayoutUserName.text =
             resources.getString(R.string.user_name_template, userDataData.userName)
-        profileMenuLayoutAvatar.fillAvatar(userDataData.avatarLink, userDataData.userName!!, userDataData.userId!!)
+        profileMenuLayoutAvatar.fillAvatar(userDataData.avatarLink, userDataData.userName!!, userDataData.userId!!, withPlaceholder = false)
     }
 
     private fun getProfileMenuItems() = listOf(
@@ -157,8 +157,8 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
                                 this@ItemView.profileMenuItemIconLayout.post {
                                     this.updateLayoutParams<FrameLayout.LayoutParams> {
                                         gravity = Gravity.TOP or Gravity.END
-                                        height = 12F.dpToPx()
-                                        width = 12F.dpToPx()
+                                        height = 12F.dp
+                                        width = 12F.dp
                                     }
                                 }
                             }
@@ -177,7 +177,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
 
     private fun View.setListDividers(position: Int) {
         if (position == ListItems.MY_PROFILE.ordinal || position == ListItems.PRIVACY.ordinal) {
-            setPadding(0, 12F.dpToPx(), 0, 0)
+            setPadding(0, 12F.dp, 0, 0)
             background =
                 androidx.core.content.ContextCompat.getDrawable(
                     context,
@@ -185,7 +185,7 @@ class ProfileMenuFragment : NavigatableFragment(R.layout.profile_menu_layout) {
                 )
         }
         if (position == ListItems.FRIENDS.ordinal) {
-            setPadding(0, 0, 0, 12F.dpToPx())
+            setPadding(0, 0, 0, 12F.dp)
         }
     }
 

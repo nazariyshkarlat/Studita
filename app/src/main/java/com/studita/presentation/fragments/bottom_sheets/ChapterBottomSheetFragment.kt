@@ -1,6 +1,5 @@
 package com.studita.presentation.fragments.bottom_sheets
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.Gravity
@@ -16,25 +15,19 @@ import androidx.core.view.updatePadding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import com.studita.R
 import com.studita.domain.entity.ChapterData
 import com.studita.domain.entity.UserDataData
 import com.studita.presentation.activities.ExercisesActivity
 import com.studita.presentation.fragments.error_fragments.ChapterBottomSheetInternetIsDisabledFragment
 import com.studita.presentation.fragments.error_fragments.ChapterBottomSheetServerProblemsFragment
-import com.studita.presentation.fragments.error_fragments.InternetIsDisabledFragment
-import com.studita.presentation.fragments.error_fragments.ServerProblemsFragment
 import com.studita.presentation.listeners.ReloadPageCallback
 import com.studita.presentation.model.ChapterUiModel
 import com.studita.presentation.model.toChapterPartUiModel
 import com.studita.presentation.model.toChapterUiModel
 import com.studita.presentation.view_model.ChapterViewModel
-import com.studita.presentation.view_model.ExerciseReportBugBottomSheetFragmentViewModel
 import com.studita.presentation.views.CustomSnackbar
-import com.studita.presentation.views.CustomSnackbar.Companion.hide
 import com.studita.presentation.views.custom_bottom_sheet.CustomBottomSheetBehavior
-import com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawer
 import com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawerDialog
 import com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawerFragment
 import com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.handle.BottomDrawerHandleView
@@ -43,11 +36,7 @@ import com.studita.utils.UserUtils.observeNoNull
 import kotlinx.android.synthetic.main.chapter_layout.*
 import kotlinx.android.synthetic.main.chapter_layout_header.*
 import kotlinx.android.synthetic.main.chapter_part_item.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.IOException
-import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.roundToInt
 
 
@@ -119,7 +108,7 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(), ReloadPageCallback{
                     }
 
                     val titlePadding =
-                        ((if (factor > 0F) 24F.dpToPx() else 0) + (8F.dpToPx() * factor)).roundToInt()
+                        ((if (factor > 0F) 24F.dp else 0) + (8F.dp * factor)).roundToInt()
                     chapterHeaderTitle.updatePadding(left = titlePadding, right = titlePadding)
                     chapterHeaderCloseButton.alpha = factor
                     chapterHeaderCloseButton.isEnabled = factor > 0
@@ -242,16 +231,16 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(), ReloadPageCallback{
         bottomDrawerDialog?.behavior?.apply {
             activity?.findViewById<View>(R.id.homeLayoutBar)?.let {
                 topOffset =
-                    ((if (it.measuredHeight == 0) resources.getDimension(R.dimen.homeLayoutToolbarHeight) else it.measuredHeight).toInt() + 24F.dpToPx()).toInt()
+                    ((if (it.measuredHeight == 0) resources.getDimension(R.dimen.homeLayoutToolbarHeight) else it.measuredHeight).toInt() + 24F.dp).toInt()
 
                 if (it.measuredHeight == 0) {
                     OneShotPreDrawListener.add(it) {
-                        topOffset = it.measuredHeight + 24F.dpToPx()
+                        topOffset = it.measuredHeight + 24F.dp
                     }
                 }
             } ?: run {
                 topOffset =
-                    (resources.getDimension(R.dimen.homeLayoutToolbarHeight) + 24F.dpToPx()).toInt()
+                    (resources.getDimension(R.dimen.homeLayoutToolbarHeight) + 24F.dp).toInt()
             }
         }
     }

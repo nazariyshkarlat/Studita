@@ -3,16 +3,13 @@ package com.studita.presentation.fragments.promo_fragments
 import android.os.Bundle
 import android.view.*
 import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import com.studita.R
 import com.studita.presentation.fragments.bottom_sheets.PromoBottomSheetEndFragment
 import com.studita.presentation.fragments.bottom_sheets.PromoBottomSheetFragment
 import com.studita.presentation.views.PromoFragmentScreenView
 import com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawerFragment
-import com.studita.utils.dpToPx
 
 abstract class PromoFragment : Fragment(), PromoBottomSheetFragment.BottomSheetExpandCallback {
 

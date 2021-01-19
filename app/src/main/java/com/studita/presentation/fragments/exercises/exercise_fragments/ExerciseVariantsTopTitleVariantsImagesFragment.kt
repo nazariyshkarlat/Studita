@@ -2,17 +2,15 @@ package com.studita.presentation.fragments.exercises.exercise_fragments
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import com.studita.R
 import com.studita.domain.entity.exercise.ExerciseRequestData
 import com.studita.presentation.model.ExerciseImagesRowUiModel
 import com.studita.presentation.model.ExerciseUiModel
 import com.studita.presentation.views.SquareView
-import com.studita.utils.dpToPx
 import com.studita.utils.makeView
-import com.studita.utils.postExt
 import com.google.android.flexbox.FlexboxLayout
+import com.studita.utils.dp
 import kotlinx.android.synthetic.main.exercise_variant_text_item.view.*
 import kotlinx.android.synthetic.main.exercise_variants_title_layout.*
 
@@ -57,8 +55,8 @@ class ExerciseVariantsTopTitleVariantsImagesFragment :
                         FlexboxLayout.LayoutParams.WRAP_CONTENT,
                         FlexboxLayout.LayoutParams.WRAP_CONTENT
                     )
-                    params.height = 24F.dpToPx()
-                    params.width = 24F.dpToPx()
+                    params.height = 24F.dp
+                    params.width = 24F.dp
                     emojiView.layoutParams = params
                     emojiView.background = variant.image
                     variantView.addView(emojiView)

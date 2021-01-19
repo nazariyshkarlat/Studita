@@ -11,19 +11,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/defaultRLMargin"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/learning"
         android:layout_gravity="center_vertical"/>
 
     <com.studita.presentation.views.press_view.PressTextView
         android:id="@+id/homeLayoutBarLogInButton"
-        style="@style/BlueTextButton16"
+        style="@style/Medium16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="6dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/sign_in"
-        android:textAllCaps="true"
+        android:gravity="center_vertical"
+        android:drawablePadding="6dp"
+        android:drawableEnd="@drawable/ic_person_outline"
         android:layout_gravity="center_vertical|end"/>
 
     <com.studita.presentation.views.press_view.PressFrameLayout
@@ -42,7 +44,8 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_margin="4dp"
-            android:background="@drawable/avatar_oval" />
+            android:scaleType="centerCrop"
+            android:background="@drawable/avatar_placeholder" />
 
         <View
             android:id="@+id/homeLayoutBarAccountNotificationsIndicator"

@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
-import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.Gravity
@@ -64,7 +63,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
 
         val flexbox = formFlexbox().apply {
             layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            setPadding(16F.dpToPx(), 16F.dpToPx(), 16F.dpToPx(), 16F.dpToPx())
+            setPadding(16F.dp, 16F.dp, 16F.dp, 16F.dp)
             background = ContextCompat.getDrawable(context, R.drawable.blocks_rectangle)
         }
 
@@ -75,7 +74,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 gravity = Gravity.CENTER
                 text = numberText.toString()
-                setPadding(16F.dpToPx(), 14F.dpToPx(), 16F.dpToPx(), 14F.dpToPx())
+                setPadding(16F.dp, 14F.dp, 16F.dp, 14F.dp)
                 this.formTopChildItem(answers, index)
             }
             flexbox.addView(item)
@@ -90,7 +89,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
         val flexbox = formFlexbox().apply {
             alignContent = AlignContent.FLEX_END
             alignItems = AlignItems.FLEX_END
-            setPadding(16F.dpToPx(), 32F.dpToPx(), 16F.dpToPx(), 0)
+            setPadding(16F.dp, 32F.dp, 16F.dp, 0)
         }
 
         correctAnswers.forEach {
@@ -100,7 +99,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 gravity = Gravity.CENTER
                 background = ContextCompat.getDrawable(context, R.drawable.arrange_numbers_bottom_item_background)
-                setPadding(16F.dpToPx(), 14F.dpToPx(), 16F.dpToPx(), 14F.dpToPx())
+                setPadding(16F.dp, 14F.dp, 16F.dp, 14F.dp)
                 text = it.toString()
                 setChildOnTouch()
             }
@@ -301,7 +300,7 @@ class ArrangeNumbersView @JvmOverloads constructor(
         clipToPadding = false
         justifyContent = JustifyContent.CENTER
         setDividerDrawable(GradientDrawable().apply {
-            setSize(16F.dpToPx(), 16F.dpToPx())
+            setSize(16F.dp, 16F.dp)
         })
         setShowDivider(FlexboxLayout.SHOW_DIVIDER_MIDDLE)
     }

@@ -8,6 +8,8 @@ import android.text.SpannableStringBuilder
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -28,6 +30,7 @@ import com.studita.domain.interactor.GetUsersStatus
 import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.domain.interactor.UserDataStatus
 import com.studita.domain.interactor.users.UsersInteractor
+import com.studita.presentation.activities.promo.AchievementsActivity
 import com.studita.presentation.activities.promo.CompetitionsActivity
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.error_fragments.InternetIsDisabledFragment
@@ -186,6 +189,36 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
 
                 }
             })
+
+        profileFragmentViewModel.achievementsState.observe(
+            viewLifecycleOwner
+        ){
+            if(it.isNotEmpty() && (profileLayoutAchievementsScrollViewContent.childCount != it.size)){
+                profileLayoutAchievementsScrollViewContent.removeAllViews()
+                if(isMyProfile)
+                    profileLayoutAchievementsTitle.setOnClickListener {
+                        activity?.startActivity<AchievementsActivity>()
+                    }
+                profileLayoutAchievementsTitle.text = resources.getString(R.string.achievements_count_template, it.size)
+                profileLayoutAchievementsLayout.visibility = View.VISIBLE
+
+                it.forEachIndexed {idx, uiModel ->
+                    val achievementView = ImageView(view.context).apply {
+                        layoutParams = LinearLayout.LayoutParams(40F.dp, 40F.dp).apply {
+                            if(idx != 0)
+                                leftMargin = 8F.dp
+                            if(idx != it.size-1)
+                                rightMargin = 8F.dp
+                        }
+                        scaleType = ImageView.ScaleType.CENTER_CROP
+                    }
+                    achievementView.loadSVG(uiModel.iconUrl, R.drawable.achievement_placeholder)
+                    profileLayoutAchievementsScrollViewContent.addView(
+                        achievementView
+                    )
+                }
+            }
+        }
 
         profileFragmentViewModel.addFriendStatus.observe(
             viewLifecycleOwner,
@@ -379,7 +412,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
         when{
             userDataData.bio == null && userDataData.name != null -> {
                 profileLayoutUserName.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = 8F.dpToPx()
+                    bottomMargin = 8F.dp
                 }
                 profileLayoutName.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     bottomMargin = 0
@@ -392,15 +425,15 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
             }
             userDataData.bio != null && userDataData.name == null -> {
                 profileLayoutUserName.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = 8F.dpToPx()
+                    bottomMargin = 8F.dp
                 }
             }
             else -> {
                 profileLayoutUserName.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = 8F.dpToPx()
+                    bottomMargin = 8F.dp
                 }
                 profileLayoutName.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = 14F.dpToPx()
+                    bottomMargin = 14F.dp
                 }
             }
         }
@@ -523,7 +556,8 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                     profileFriendItemAvatar.fillAvatar(
                         friendData.avatarLink,
                         friendData.userName,
-                        friendData.userId
+                        friendData.userId,
+                        isDarkerPlaceholder = true
                     )
                     profileFriendItemUserName.text =
                         resources.getString(R.string.user_name_template, friendData.userName)
@@ -534,7 +568,8 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                             profileFriendItemAvatar.fillAvatar(
                                 it.avatarLink,
                                 it.userName!!,
-                                it.userId!!
+                                it.userId!!,
+                                isDarkerPlaceholder = true
                             )
                             profileFriendItemUserName.text =
                                 resources.getString(R.string.user_name_template, it.userName)
@@ -589,8 +624,8 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
                     popupWidth = contentView.measuredWidth
                 }.showAsDropDown(
                     activity?.toolbarLayoutRightButton,
-                    -popupWidth - 16F.dpToPx(),
-                    (-12F).dpToPx(),
+                    -popupWidth - 16F.dp,
+                    (-12F).dp,
                     Gravity.END
                 )
             })
@@ -615,7 +650,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
         profileLayoutSwipeRefresh.setProgressViewOffset(
             false,
             0,
-            resources.getDimension(R.dimen.toolbarHeight).toInt() + 8F.dpToPx()
+            resources.getDimension(R.dimen.toolbarHeight).toInt() + 8F.dp
         )
         profileLayoutSwipeRefresh.setOnRefreshListener(this)
         profileLayoutSwipeRefresh.isEnabled = false

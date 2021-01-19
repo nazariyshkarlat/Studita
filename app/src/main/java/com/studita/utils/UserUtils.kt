@@ -1,10 +1,13 @@
 package com.studita.utils
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.studita.App.Companion.authenticate
 import com.studita.App.Companion.clearUserLiveData
 import com.studita.domain.entity.SignOutRequestData
@@ -72,15 +75,17 @@ object UserUtils {
         PrefsUtils.clearUserIdToken()
     }
 
-    fun deviceSignOut() {
-        runBlocking {
-            GlobalScope.launch {
-                GlobalContext.get().get<UserDataInteractor>().deleteUserData()
-                GlobalContext.get().get<CompleteExercisesInteractor>().clearLocalCompletedExercises()
-            }
-            clearUserIdToken()
-            clearUserLiveData()
+    fun deviceSignOut(context: Context) {
+        GlobalScope.launch {
+            GlobalContext.get().get<UserDataInteractor>().deleteUserData()
+            GlobalContext.get().get<CompleteExercisesInteractor>().clearLocalCompletedExercises()
+
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+            val googleSignInClient = GoogleSignIn.getClient(context, gso)
+            googleSignInClient.signOut()
         }
+        clearUserIdToken()
+        clearUserLiveData()
     }
 
     fun signOut(application: Application){
@@ -96,7 +101,7 @@ object UserUtils {
             )
         }
 
-        deviceSignOut()
+        deviceSignOut(application)
         authenticate(null, false)
     }
 

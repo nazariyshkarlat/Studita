@@ -4,14 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.LinearLayout
-import androidx.core.view.OneShotPreDrawListener
 import androidx.core.view.children
 import com.studita.R
 import com.studita.utils.ScreenUtils
 import com.studita.utils.disableAllItems
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 import com.studita.utils.makeView
 import kotlinx.android.synthetic.main.profile_competitions_item.view.*
 
@@ -49,9 +47,9 @@ class ProfileHorizontalScrollView @JvmOverloads constructor(
         contentView.children.forEachIndexed { index, view ->
             val params = view.layoutParams as MarginLayoutParams
             if (index != 0)
-                params.marginStart = 8F.dpToPx()
+                params.marginStart = 8F.dp
             if (index != contentView.childCount - 1)
-                params.marginEnd = 8F.dpToPx()
+                params.marginEnd = 8F.dp
             params.width = (ScreenUtils.getScreenWidth() * 0.75).toInt()
             view.layoutParams = params
         }

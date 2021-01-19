@@ -163,7 +163,6 @@ class EditProfileViewModel() : ViewModel() {
 
 
     fun checkShowSaveButton() {
-        println(userNameAvailableState.value)
         saveChangesButtonVisibleState.value = editProfileInteractor.isValidData(
             oldProfileData!!,
             newProfileData!!,

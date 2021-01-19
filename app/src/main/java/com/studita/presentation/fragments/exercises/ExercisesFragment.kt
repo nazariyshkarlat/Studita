@@ -363,8 +363,8 @@ class ExercisesFragment : BaseFragment(R.layout.exercise_layout), DialogInterfac
                 FlexboxLayout.LayoutParams.WRAP_CONTENT,
                 FlexboxLayout.LayoutParams.WRAP_CONTENT
             )
-            params.height = 24F.dpToPx()
-            params.width = 24F.dpToPx()
+            params.height = 24F.dp
+            params.width = 24F.dp
             shapeView.layoutParams = params
             shapeView.background = imagesRowUiModel.image
             exerciseBottomSnackbarFlexbox.addView(shapeView)

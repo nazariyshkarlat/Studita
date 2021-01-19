@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 
-private const val BASE_URL = "http://10.0.2.2:5000"
+private const val BASE_URL = "http://37.53.93.223:34867"
 
 val networkModule = module {
 
@@ -91,7 +91,7 @@ private fun provideHttpClient(loggingInterceptor: okhttp3.Interceptor) =
         .connectTimeout(2, TimeUnit.SECONDS)
         .build()
 
-private fun provideProgressHttpClient(loggingInterceptor: okhttp3.Interceptor, progressInterceptor: Interceptor) =
+private fun provideProgressHttpClient(loggingInterceptor: okhttp3.Interceptor, progressInterceptor: ProgressInterceptor) =
     OkHttpClient().newBuilder()
         .addInterceptor(loggingInterceptor)
         .addNetworkInterceptor(progressInterceptor)

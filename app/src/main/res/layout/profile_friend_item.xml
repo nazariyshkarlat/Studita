@@ -13,7 +13,7 @@
         android:id="@+id/profileFriendItemAvatar"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:background="@drawable/avatar_oval" />
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/profileFriendItemUserName"

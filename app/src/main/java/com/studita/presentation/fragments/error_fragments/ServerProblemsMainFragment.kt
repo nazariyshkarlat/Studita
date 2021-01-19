@@ -6,11 +6,16 @@ import android.graphics.drawable.RotateDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.lifecycleScope
 import com.studita.App
 import com.studita.R
+import com.studita.presentation.fragments.achievements.AchievementsFragment
 import com.studita.presentation.fragments.base.BaseFragment
 import com.studita.presentation.fragments.main.HomeFragment
+import com.studita.presentation.fragments.main.MainFragment.Companion.getBottomMarginExtraSnackbar
+import com.studita.presentation.fragments.main.MainFragment.Companion.showEnableOfflineModeSnackbar
 import com.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
 import com.studita.presentation.listeners.ReloadPageCallback
 import com.studita.presentation.views.CustomSnackbar
@@ -25,7 +30,16 @@ class ServerProblemsMainFragment : BaseFragment(R.layout.server_problems_main_la
         super.onViewCreated(view, savedInstanceState)
 
         if(savedInstanceState == null) {
-            (parentFragment as HomeFragment).homeFragmentViewModel?.getOfflineLevels()
+            (parentFragment as? HomeFragment)?.homeFragmentViewModel?.getOfflineLevels()
+        }
+
+        when (parentFragment) {
+            is HomeFragment -> {
+                serverProblemsMainLayoutSubtitle.text = resources.getString(R.string.server_problems_home_layout_subtitle)
+            }
+            is AchievementsFragment -> {
+                serverProblemsMainLayoutSubtitle.text = resources.getString(R.string.server_problems_achievements_layout_subtitle)
+            }
         }
 
         serverProblemsMainLayoutTryAgainButton.setOnSingleClickListener {
@@ -38,12 +52,16 @@ class ServerProblemsMainFragment : BaseFragment(R.layout.server_problems_main_la
             }
         }
 
-        serverProblemsMainLayoutEnableOfflineModeButton.setOnClickListener {
-            serverProblemsMainLayoutTryAgainButton.setOnClickListener {  }
-            PrefsUtils.setOfflineMode(true)
-            (parentFragment as? ReloadPageCallback)?.onPageReload()
-            removeFragmentWithAnimation(view)
-            (parentFragment as? HomeFragment)?.showEnableOfflineModeSnackbar()
+        if(parentFragment is HomeFragment) {
+            serverProblemsMainLayoutEnableOfflineModeButton.setOnClickListener {
+                serverProblemsMainLayoutTryAgainButton.setOnClickListener { }
+                PrefsUtils.setOfflineMode(true)
+                (parentFragment as? ReloadPageCallback)?.onPageReload()
+                removeFragmentWithAnimation(view)
+                showEnableOfflineModeSnackbar(context!!)
+            }
+        }else{
+            serverProblemsMainLayoutEnableOfflineModeButton.visibility = View.GONE
         }
 
         view.setOnTouchListener { _, _ ->  true}

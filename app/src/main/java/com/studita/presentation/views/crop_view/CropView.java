@@ -653,7 +653,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        System.out.println(state instanceof CropViewSavedState);
         if (state instanceof CropViewSavedState) {
             this.state = new CropState(((CropViewSavedState) state).width, ((CropViewSavedState) state).height, ((CropViewSavedState) state).rotation, ((CropViewSavedState) state).x, ((CropViewSavedState) state).y, ((CropViewSavedState) state).scale, ((CropViewSavedState) state).minimumScale, ((CropViewSavedState) state).baseRotation, ((CropViewSavedState) state).orientation, ((CropViewSavedState) state).matrix, ((CropViewSavedState) state).cropWidth);
             super.onRestoreInstanceState(((CropViewSavedState) state).getSuperState());

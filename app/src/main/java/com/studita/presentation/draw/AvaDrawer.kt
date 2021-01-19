@@ -6,12 +6,12 @@ import android.graphics.drawable.BitmapDrawable
 import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
 import com.studita.R
-import com.studita.utils.dpToPx
+import com.studita.utils.dp
 import com.studita.utils.spToPx
 
 
 object AvaDrawer {
-    private val imageSize = 56F.dpToPx()
+    private val imageSize = 56F.dp
     private val textSize = 28F.spToPx()
     private val textPaint = Paint()
     private val circlePaint = Paint()

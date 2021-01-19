@@ -25,9 +25,9 @@ import org.koin.dsl.bind
 fun createOfflineDataModule(config: DI.Config) =  configModule(configuration = config){
 
     single {
-            (repository: OfflineDataRepository, downloadListenerLiveData: MutableLiveData<Triple<Float, Float, Boolean>>) ->
-        provideOfflineDataInteractor(repository, downloadListenerLiveData)
-    }
+            (downloadListenerLiveData: MutableLiveData<Triple<Float, Float, Boolean>>) ->
+        provideOfflineDataInteractor(get(), downloadListenerLiveData)
+    } bind (OfflineDataInteractor::class)
 
     single{
         OfflineDataRepositoryImpl(
