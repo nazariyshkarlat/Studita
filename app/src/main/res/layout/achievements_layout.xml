@@ -32,12 +32,17 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/achievementsLayoutViewPager"
+        <com.studita.presentation.views.SlopeSwipeToRefresh
+            android:id="@+id/achievementsLayoutSwipeRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="-8dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/achievementsLayoutViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="-8dp" />
+        </com.studita.presentation.views.SlopeSwipeToRefresh>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

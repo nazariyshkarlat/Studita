@@ -107,11 +107,18 @@ class CustomTabLayout @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        indicatorView.updateLayoutParams<FrameLayout.LayoutParams> {
-            height = contentLayout.measuredHeight
-            width = if(items.isEmpty()) 0 else contentLayout.measuredWidth/items.size
+        val newHeight = contentLayout.measuredHeight
+        val newWidth =  if (items.isEmpty()) 0 else contentLayout.measuredWidth / items.size
+        if(indicatorView.measuredHeight != newHeight &&
+                indicatorView.measuredWidth !=  newWidth) {
+            indicatorView.updateLayoutParams<FrameLayout.LayoutParams> {
+                height = newHeight
+                width = newWidth
+            }
+            measure(widthMeasureSpec, heightMeasureSpec)
         }
     }
+
 
     override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
         super.setPadding(left, top, right, bottom)

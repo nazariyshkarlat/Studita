@@ -39,6 +39,7 @@ import com.studita.App.Companion.getUserData
 import com.studita.App.Companion.offlineModeChangeEvent
 import com.studita.data.net.connection.ConnectionManager
 import com.studita.presentation.fragments.main.MainFragment.Companion.getBottomMarginExtraSnackbar
+import com.studita.presentation.model.toHomeRecyclerItems
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.home_layout_bar.*
 import kotlinx.android.synthetic.main.recyclerview_layout.*
@@ -146,11 +147,11 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
                         homeLayoutRecyclerView.adapter =
                             LevelsAdapter(
-                                vm.getRecyclerItems(
+                                ArrayList(vm.getRecyclerItems(
                                     HomeRecyclerUiModel.HomeUserDataUiModel,
-                                    vm.results!!,
-                                ),
-                                vm,
+                                    vm.results!!.map { it.toHomeRecyclerItems() }.flatten(),
+                                )),
+                                homeFragmentViewModel!!,
                                 viewLifecycleOwner
                             )
                         homeLayoutRecyclerView.visibility = View.VISIBLE
@@ -215,7 +216,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                                 currentFragment
                             )
                         }
-
                         showSnackbars()
                     }
                     else -> {}
@@ -243,21 +243,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
             vm.subscribeEmailState.observe(
                 viewLifecycleOwner,
                 androidx.lifecycle.Observer { status ->
-                    showSnackbar(status, view.context)
+                    showSubscribeEmailSnackbar(status, view.context, true)
                 })
 
-
-            vm.subscribeErrorEvent.observe(
-                viewLifecycleOwner,
-                androidx.lifecycle.Observer {
-                    CustomSnackbar(context!!).show(
-                        resources.getString(R.string.server_temporarily_unavailable),
-                        ThemeUtils.getRedColor(context!!),
-                        ContextCompat.getColor(context!!, R.color.white),
-                        bottomMarginExtra = resources.getDimension(R.dimen.bottomNavigationHeight)
-                            .toInt()
-                    )
-                })
 
             if (UserUtils.isLoggedIn()) {
                 homeLayoutBarLogInButton.visibility = View.GONE
@@ -270,6 +258,10 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
 
         mainFragmentViewModel?.showFab(true)
         homeLayoutRecyclerView.addOnScrollListener(FabRecyclerImpl(this))
+
+        homeLayoutBarTitle.setOnClickListener {
+            activity?.supportFragmentManager?.addFragment(SelectCourseFragment(), R.id.frameLayout)
+        }
     }
 
     private fun showSnackbars(){
@@ -329,6 +321,10 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+        if(verticalOffset == 0){
+            mainFragmentViewModel?.showFab(true)
+        }
+
         homeLayoutBar.alpha =
             (homeLayoutBar.height + verticalOffset * 2) / homeLayoutBar.height.toFloat()
     }
@@ -341,57 +337,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
                 return false
             }
         })
-    }
-
-    private fun showSnackbar(status: SubscribeEmailResultStatus, context: Context) {
-        val snackbar = CustomSnackbar(context)
-        when (status) {
-            is SubscribeEmailResultStatus.Success -> {
-                if (status.result.subscribe) {
-                    snackbar.show(
-                        resources.getString(
-                            R.string.subscribe_email,
-                            TextUtils.encryptEmail(status.result.email!!)
-                        ),
-                        compositeColors(ThemeUtils.getAccentLiteColor(snackbar.context), ContextCompat.getColor(snackbar.context, R.color.white)),
-                        ContextCompat.getColor(snackbar.context, R.color.black),
-                        resources.getInteger(R.integer.subscribe_email_snackbar_duration)
-                            .toLong(),
-                        bottomMarginExtra = getBottomMarginExtraSnackbar(context)
-                    )
-                } else {
-                    snackbar.show(
-                        resources.getString(R.string.unsubscribe_email),
-                        compositeColors(ThemeUtils.getAccentLiteColor(snackbar.context), ContextCompat.getColor(snackbar.context, R.color.white)),
-                        ContextCompat.getColor(snackbar.context, R.color.black),
-                        resources.getInteger(R.integer.unsubscribe_email_snackbar_duration)
-                            .toLong(),
-                        bottomMarginExtra = getBottomMarginExtraSnackbar(context)
-                    )
-                }
-            }
-            is SubscribeEmailResultStatus.NoConnection -> {
-                if (!UserUtils.userData.isSubscribed) {
-                    snackbar.show(
-                        resources.getString(R.string.offline_subscribe_email),
-                        compositeColors(ThemeUtils.getAccentLiteColor(snackbar.context), ContextCompat.getColor(snackbar.context, R.color.white)),
-                        ContextCompat.getColor(snackbar.context, R.color.black),
-                        resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
-                            .toLong(),
-                        bottomMarginExtra = getBottomMarginExtraSnackbar(context)
-                    )
-                } else {
-                    snackbar.show(
-                        resources.getString(R.string.offline_unsubscribe_email),
-                        compositeColors(ThemeUtils.getAccentLiteColor(snackbar.context), ContextCompat.getColor(snackbar.context, R.color.white)),
-                        ContextCompat.getColor(snackbar.context, R.color.black),
-                        resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
-                            .toLong(),
-                        bottomMarginExtra = getBottomMarginExtraSnackbar(context)
-                    )
-                }
-            }
-        }
     }
 
     private fun showLogInSnackbar(isAfterSignUp: Boolean){

@@ -25,6 +25,4 @@ dependencies {
     api "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     api "androidx.room:room-ktx:$room_version"
-
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 }

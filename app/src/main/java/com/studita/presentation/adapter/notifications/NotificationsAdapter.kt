@@ -52,7 +52,7 @@ class NotificationsAdapter(
     override fun getItemViewType(position: Int): Int =
         when (items[position]) {
             is NotificationsUiModel.NotificationsSwitch -> NotificationsViewType.SWITCH.ordinal
-            is NotificationsUiModel.Notification -> NotificationsViewType.NOTIFICATION.ordinal
+            is NotificationsUiModel.NotificationFromUser, is NotificationsUiModel.AchievementNotification -> NotificationsViewType.NOTIFICATION.ordinal
             is NotificationsUiModel.ProgressUiModel -> NotificationsViewType.ITEMS_LOAD.ordinal
         }
 

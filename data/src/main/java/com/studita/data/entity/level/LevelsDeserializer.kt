@@ -21,25 +21,19 @@ class LevelsDeserializer : JsonDeserializer<LevelEntity> {
 
         val children = jsonObject.get("children").asJsonArray
 
-        return LevelEntity(jsonObject.get("level_number").asInt, ArrayList(children.map {
-            it as JsonObject
-            when (it.get("type").asString) {
-                "chapter" -> context.deserialize<LevelChildEntity.LevelChapterEntity>(
-                    it,
-                    LevelChildEntity.LevelChapterEntity::class.java
-                )
-                "interesting" -> context.deserialize<LevelChildEntity.LevelInterestingEntity>(
-                    it,
-                    LevelChildEntity.LevelInterestingEntity::class.java
-                )
-                "subscribe" -> context.deserialize<LevelChildEntity.LevelSubscribeEntity>(
-                    it,
-                    LevelChildEntity.LevelSubscribeEntity::class.java
-                )
-                else -> {
-                    throw IOException("Unexpected type")
+        return LevelEntity(jsonObject.get("level_number").asInt,
+            jsonObject.get("level_name").asString,
+            ArrayList(children.map {
+                it as JsonObject
+                when (it.get("type").asString) {
+                    "chapter" -> context.deserialize<LevelChildEntity.LevelChapterEntity>(
+                        it,
+                        LevelChildEntity.LevelChapterEntity::class.java
+                    )
+                    else -> {
+                        throw IOException("Unexpected type")
+                    }
                 }
-            }
-        }))
+            }))
     }
 }

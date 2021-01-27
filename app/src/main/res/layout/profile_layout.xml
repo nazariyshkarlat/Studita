@@ -64,7 +64,7 @@
 
                 <TextView
                     android:id="@+id/profileLayoutBio"
-                    style="@style/Regular14Secondary"
+                    style="@style/Regular14SecondaryOpaque"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
@@ -145,8 +145,7 @@
                     android:background="@drawable/blocks_rectangle"
                     android:orientation="vertical"
                     android:paddingTop="16dp"
-                    android:paddingBottom="16dp"
-                    android:visibility="gone">
+                    android:paddingBottom="16dp">
 
                     <com.studita.presentation.views.press_view.PressTextView
                         android:id="@+id/profileLayoutAchievementsTitle"
@@ -155,6 +154,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         app:press_alpha="?press_view_press_alpha"/>
+
+                    <TextView
+                        android:id="@+id/profileLayoutAchievementsEmptyAchievementsTextView"
+                        style="@style/Regular16Secondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="14dp"/>
 
                     <com.studita.presentation.views.SnapHorizontalScrollView
                         android:id="@+id/profileLayoutAchievementsScrollView"

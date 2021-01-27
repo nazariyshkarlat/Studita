@@ -2,57 +2,45 @@ package com.studita.presentation.model
 
 import com.studita.domain.entity.LevelChildData
 import com.studita.domain.entity.LevelData
+import com.studita.utils.PrefsUtils
 
 sealed class HomeRecyclerUiModel {
     object HomeUserDataUiModel : HomeRecyclerUiModel()
     data class HomeRecyclerLevelViewModel(
+        val levelName: String,
         val levelNumber: Int,
-        val chaptersBounds: Pair<Int, Int>,
-        val chapterPartsCount: Int
+        val chaptersCount: Int,
+        var isExpanded: Boolean
     ) : HomeRecyclerUiModel()
 
     data class LevelChapterUiModel(
+        val levelNumber: Int,
         val chapterNumber: Int,
         val chapterTitle: String,
         val chapterSubtitle: String,
         val chapterPartsCount: Int
     ) : HomeRecyclerUiModel()
-
-    data class LevelInterestingUiModel(
-        val interestingNumber: Int,
-        val title: String,
-        val subtitle: String,
-        val tags: List<String>
-    ) : HomeRecyclerUiModel()
-
-    data class LevelSubscribeUiModel(
-        val title: String,
-        val button: List<String>
-    ) : HomeRecyclerUiModel()
 }
 
-fun LevelData.toHomeRecyclerItems() = listOf(
-    HomeRecyclerUiModel.HomeRecyclerLevelViewModel(levelNumber,
-        levelChildren.filterIsInstance<LevelChildData.LevelChapterData>()
-            .first().chapterNumber - 1 to levelChildren.filterIsInstance<LevelChildData.LevelChapterData>()
-            .last().chapterNumber - 1,
-        levelChildren.filterIsInstance<LevelChildData.LevelChapterData>()
-            .map { it.chapterPartsCount }.sum()
-    ), *levelChildren.map { it.toHomeRecyclerUiModel() }.toTypedArray()
-)
+@OptIn(ExperimentalStdlibApi::class)
+fun LevelData.toHomeRecyclerItems(): List<HomeRecyclerUiModel> = PrefsUtils.getHomeLayoutCollapsedLevels().contains(levelNumber to true).let {
+    buildList<HomeRecyclerUiModel> {
+        add(HomeRecyclerUiModel.HomeRecyclerLevelViewModel(
+            levelName,
+            levelNumber,
+            levelChildren.size,
+            !it
+        ))
+        if(!it) addAll(levelChildren.map {child-> child.toHomeRecyclerUiModel(levelNumber) })
+    }
+}
 
-fun LevelChildData.toHomeRecyclerUiModel() = when (this) {
+fun LevelChildData.toHomeRecyclerUiModel(levelNumber: Int) = when (this) {
     is LevelChildData.LevelChapterData -> HomeRecyclerUiModel.LevelChapterUiModel(
+        levelNumber,
         chapterNumber,
         chapterTitle,
         chapterSubtitle,
         chapterPartsCount
     )
-    is LevelChildData.LevelInterestingData -> HomeRecyclerUiModel.LevelInterestingUiModel(
-        interestingNumber,
-        title,
-        subtitle,
-        tags
-    )
-    is LevelChildData.LevelSubscribeData -> HomeRecyclerUiModel.LevelSubscribeUiModel(title, button)
 }

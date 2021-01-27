@@ -74,12 +74,10 @@
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/usersSearchItemFriendsRadioButton"
+            style="@style/RadioButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@null"
             android:fontFamily="@font/roboto_regular"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:paddingStart="4dp"
             android:text="@string/friends"
             android:textColor="?primary_color"
@@ -87,13 +85,11 @@
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/usersSearchItemGlobalSearchRadioButton"
+            style="@style/RadioButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:background="@null"
             android:fontFamily="@font/roboto_regular"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:paddingStart="4dp"
             android:text="@string/global_search"
             android:textColor="?primary_color"

@@ -343,9 +343,10 @@ class ExercisesViewModel(val app: Application, val chapterPartNumber: Int, priva
                             Date(),
                             obtainedXP,
                             seconds,
-                            if (!isTraining) 1 else null,
-                            if (isTraining) 1 else null,
-                            null
+                            if (!isTraining) 1 else 0,
+                            if (isTraining) 1 else 0,
+                            UserUtils.userData.streakDays.toLong(),
+                            if(chapterPartsInChapterCount == chapterNumber) 1 else 0
                         )
                     )
 

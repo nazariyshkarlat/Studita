@@ -24,7 +24,8 @@ import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.Placeholder
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.*
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -36,11 +37,14 @@ import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import coil.util.CoilUtils
 import com.studita.R
+import com.studita.domain.interactor.SubscribeEmailResultStatus
 import com.studita.presentation.draw.AvaDrawer
+import com.studita.presentation.fragments.main.MainFragment
 import com.studita.presentation.listeners.FabScrollImpl
 import com.studita.presentation.listeners.FabScrollListener
 import com.studita.presentation.listeners.OnViewSizeChangeListener
 import com.studita.presentation.listeners.OnViewSizeChangeListenerImpl
+import com.studita.presentation.views.CustomSnackbar
 import java.util.regex.Pattern
 import kotlin.reflect.KClass
 
@@ -356,6 +360,22 @@ fun TextView.animateRefreshButton() {
     anim.start()
 }
 
+fun TextView.animateExpandIcon(backwards: Boolean = false) {
+    val refreshDrawable = (this.compoundDrawables[0] as RotateDrawable)
+
+    refreshDrawable.mutate()
+
+    val anim = ObjectAnimator.ofPropertyValuesHolder(
+        refreshDrawable,
+        if(!backwards) PropertyValuesHolder.ofInt("level", refreshDrawable.level, 10000)
+        else PropertyValuesHolder.ofInt("level", refreshDrawable.level, 0)
+    ).setDuration(resources.getInteger(R.integer.select_course_scene_duration).toLong())
+
+    anim.interpolator = FastOutSlowInInterpolator()
+    anim.setAutoCancel(true)
+    anim.start()
+}
+
 fun injectParts(context: Context, text: String, partsToInject: List<String>) : Pair<CharSequence, String?> {
     var insideBrackets: String? = null
     val m =
@@ -408,12 +428,85 @@ fun loadSVGIntoMultipleTargets(imageViews: List<ImageView>, url: String, @Drawab
         .build()
     val request = ImageRequest.Builder(imageViews.first().context)
         .data(url)
-        .placeholder(placeholder)
-        .target {drawable->
-            imageViews.forEach {
-                it.setImageDrawable(drawable)
-            }
-        }
+        .target(
+            onStart = {
+                imageViews.forEach {
+                    it.setImageResource(placeholder)
+                }
+            },
+            onError = {
+                      imageViews.forEach{
+                          it.setImageResource(0)
+                      }
+            },
+            onSuccess = {drawable->
+                imageViews.forEach {
+                    it.setImageDrawable(drawable)
+                }
+        })
         .build()
     imageLoader.enqueue(request)
+}
+
+fun showSubscribeEmailSnackbar(status: SubscribeEmailResultStatus, context: Context, onMainLayout: Boolean) {
+    val snackbar = CustomSnackbar(context)
+    when (status) {
+        is SubscribeEmailResultStatus.Success -> {
+            if (status.result.subscribe) {
+                snackbar.show(
+                    context.resources.getString(
+                        R.string.subscribe_email,
+                        com.studita.utils.TextUtils.encryptEmail(status.result.email!!)
+                    ),
+                    ColorUtils.compositeColors(
+                        ThemeUtils.getAccentLiteColor(snackbar.context),
+                        ContextCompat.getColor(snackbar.context, R.color.white)
+                    ),
+                    ContextCompat.getColor(snackbar.context, R.color.black),
+                    context.resources.getInteger(R.integer.subscribe_email_snackbar_duration)
+                        .toLong(),
+                    bottomMarginExtra = if(onMainLayout) MainFragment.getBottomMarginExtraSnackbar(context) else 0
+                )
+            } else {
+                snackbar.show(
+                    context.resources.getString(R.string.unsubscribe_email),
+                    ColorUtils.compositeColors(
+                        ThemeUtils.getAccentLiteColor(snackbar.context),
+                        ContextCompat.getColor(snackbar.context, R.color.white)
+                    ),
+                    ContextCompat.getColor(snackbar.context, R.color.black),
+                    context.resources.getInteger(R.integer.unsubscribe_email_snackbar_duration)
+                        .toLong(),
+                    bottomMarginExtra = if(onMainLayout) MainFragment.getBottomMarginExtraSnackbar(context) else 0
+                )
+            }
+        }
+        is SubscribeEmailResultStatus.NoConnection -> {
+            if (!UserUtils.userData.isSubscribed) {
+                snackbar.show(
+                    context.resources.getString(R.string.offline_subscribe_email),
+                    ColorUtils.compositeColors(
+                        ThemeUtils.getAccentLiteColor(snackbar.context),
+                        ContextCompat.getColor(snackbar.context, R.color.white)
+                    ),
+                    ContextCompat.getColor(snackbar.context, R.color.black),
+                    context.resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
+                        .toLong(),
+                    bottomMarginExtra = if(onMainLayout) MainFragment.getBottomMarginExtraSnackbar(context) else 0
+                )
+            } else {
+                snackbar.show(
+                    context.resources.getString(R.string.offline_unsubscribe_email),
+                    ColorUtils.compositeColors(
+                        ThemeUtils.getAccentLiteColor(snackbar.context),
+                        ContextCompat.getColor(snackbar.context, R.color.white)
+                    ),
+                    ContextCompat.getColor(snackbar.context, R.color.black),
+                    context.resources.getInteger(R.integer.offline_subscribe_email_snackbar_duration)
+                        .toLong(),
+                    bottomMarginExtra = if(onMainLayout) MainFragment.getBottomMarginExtraSnackbar(context) else 0
+                )
+            }
+        }
+    }
 }

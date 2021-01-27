@@ -70,13 +70,11 @@
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/privacySettingsLayoutDuelsBlockMyFriendsRadio"
+                        style="@style/RadioButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:background="@null"
-                        android:clickable="false"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp" />
+                        android:clickable="false"/>
                 </FrameLayout>
 
                 <FrameLayout
@@ -98,13 +96,11 @@
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/privacySettingsLayoutDuelsBlockNobodyRadio"
+                        style="@style/RadioButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:background="@null"
-                        android:clickable="false"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp" />
+                        android:clickable="false"/>
                 </FrameLayout>
 
                 <FrameLayout
@@ -128,13 +124,11 @@
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/privacySettingsLayoutDuelsBlockExceptRadio"
+                        style="@style/RadioButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:background="@null"
-                        android:clickable="false"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp" />
+                        android:clickable="false" />
                 </FrameLayout>
 
                 <com.studita.presentation.views.press_view.PressTextView
@@ -187,13 +181,11 @@
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/privacySettingsLayoutRatingsBlockShowRadio"
+                        style="@style/RadioButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:background="@null"
-                        android:clickable="false"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp" />
+                        android:clickable="false"/>
                 </FrameLayout>
 
                 <FrameLayout
@@ -215,13 +207,11 @@
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/privacySettingsLayoutRatingsBlockHideRadio"
+                        style="@style/RadioButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:background="@null"
-                        android:clickable="false"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp" />
+                        android:clickable="false" />
                 </FrameLayout>
 
             </LinearLayout>
@@ -265,13 +255,11 @@
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/privacySettingsLayoutVisibilityBlockShowRadio"
+                        style="@style/RadioButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:background="@null"
-                        android:clickable="false"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp" />
+                        android:clickable="false" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -293,13 +281,11 @@
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/privacySettingsLayoutVisibilityBlockHideRadio"
+                        style="@style/RadioButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:background="@null"
-                        android:clickable="false"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp" />
+                        android:clickable="false"/>
                 </FrameLayout>
 
             </LinearLayout>

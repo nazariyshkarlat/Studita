@@ -25,4 +25,5 @@ class AchievementsRepositoryImpl(private val achievementsDataStoreFactory: Achie
                 it.toBusinessEntity()
             }
         }
-    }
+
+}

@@ -131,7 +131,7 @@
     <string name="exercise_snackbar_chapter_completed_reason">Поздравляем! Вы полностью завершили всю тему!</string>
     <string name="exercise_snackbar_bad_result_reason">Мы советуем пройти это задание ещё раз, чтобы закрепить свои знания</string>
     <string name="drum_roll_title">Барабанная дробь!</string>
-    <string name="main_menu_bottom_text">© 2020 &app_name;. Сделано с любовью</string>
+    <string name="main_menu_bottom_text">© 2021 &app_name;. Сделано с любовью</string>
     <string name="drum_roll_subtitle">Воспроизвести барабанную дробь</string>
     <string name="account_type" translatable="false">com.studita.authentication.StuditaAccount</string>
     <string name="network_absent">Нет подключения</string>
@@ -156,6 +156,9 @@
     <string name="offline_subscribe_email">Мы получили ваш запрос на подписку. Как только вы подключитесь к интернету, вы получите дополнительное оповещение об успешности</string>
     <string name="offline_unsubscribe_email">Мы получили ваш запрос на отмену рассылки. Как только вы подключитесь к интернету, вы получите дополнительное оповещение об успешности</string>
     <string name="unsubscribe_email">Вы отписались от рассылки на почту</string>
+    <string name="subscribe_email_text">Новые курсы будут добавлены в ближайшее время</string>
+    <string name="subscribe_email_button_text">Подписаться на обновления</string>
+    <string name="unsubscribe_email_button_text">Отписаться от обновлений</string>
     <string name="changes_are_saved">Внесённые изменения сохранены</string>
     <string name="un_logged_statistics_text">Войдите, чтобы получить доступ к статистике и другим функциям</string>
     <string name="offline_mode_layout_text">Данная функция не работает в оффлайн режиме. Вы можете его отключить</string>
@@ -345,20 +348,41 @@
     <string name="achievements_layout_bar_log_in_block_button_text">Войти в аккаунт</string>
     <string name="main_layout_offline_mode_error_text">Данная функция не работает в оффлайн режиме. Вы можете его отключить</string>
     <string name="main_layout_offline_mode_error_button_text">Отключить оффлайн режим</string>
-
-    <plurals name="streak_plurals">
+    <string name="select_course_button_text">Перейти к курсу</string>
+    <string name="select_course_title">Выберите курс, с которого вы хотите начать</string>
+    <string name="select_course_subtitle">Вы сможете переключиться на другой курс в любое время</string>
+    <string name="math">Математика</string>
+    <string name="soon">Скоро</string>
+    <string name="history">История</string>
+    <string name="art">Искусство</string>
+    <string name="physics">Физика</string>
+    <string name="chemistry">Химия</string>
+    <string name="courses">Курсы</string>
+    <string name="collapse">Свернуть</string>
+    <string name="expand">Развернуть</string>
+    <string name="select_course_sign_in_text">Войдите в аккаунт, чтобы сохранить свой прогресс</string>
+    <string name="profile_empty_achievements">Список достижений пока пуст</string>
+    <string name="my_profile_empty_achievements">Список ваших достижений пока пуст</string>
+    <plurals name="streak_plurals_with_placeholder">
         <item quantity="zero">%1$d дней подряд</item>
         <item quantity="one">%1$d день подряд</item>
         <item quantity="few">%1$d дня подряд</item>
         <item quantity="many">%1$d дней подряд</item>
         <item quantity="other">%1$d дней подряд</item>
     </plurals>
-    <plurals name="streak_plurals_without_number">
-        <item quantity="zero">%1$d дней подряд</item>
-        <item quantity="one">%1$d день подряд</item>
-        <item quantity="few">%1$d дня подряд</item>
-        <item quantity="many">%1$d дней подряд</item>
-        <item quantity="other">%1$d дней подряд</item>
+    <plurals name="streak_plurals">
+        <item quantity="zero">дней подряд</item>
+        <item quantity="one">день подряд</item>
+        <item quantity="few">дня подряд</item>
+        <item quantity="many">дней подряд</item>
+        <item quantity="other">дней подряд</item>
+    </plurals>
+    <plurals name="collapsed_exercises_count">
+        <item quantity="zero">%1$d глав были скрыты</item>
+        <item quantity="one">%1$d глава была скрыто</item>
+        <item quantity="few">%1$d главы были скрыты</item>
+        <item quantity="many">%1$d глав были скрыты</item>
+        <item quantity="other">%1$d глав были скрыты</item>
     </plurals>
     <plurals name="select_answer_plurals">
         <item quantity="zero">Выберите ответ</item>

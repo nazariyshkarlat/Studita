@@ -19,7 +19,7 @@ import com.studita.utils.ThemeUtils
 import com.studita.utils.replace
 import kotlinx.android.synthetic.main.offline_mode_download_layout.*
 
-class OfflineModeDownloadFragment : BaseFragment(R.layout.offline_mode_download_layout){
+class OfflineModeDownloadFragment : NavigatableFragment(R.layout.offline_mode_download_layout){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

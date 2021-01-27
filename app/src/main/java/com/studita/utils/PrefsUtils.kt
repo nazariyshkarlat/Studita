@@ -4,6 +4,9 @@ import android.content.SharedPreferences
 import com.studita.data.cache.authentication.LogInCacheImpl
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.koin.core.context.GlobalContext
 
 object PrefsUtils {
@@ -59,6 +62,37 @@ object PrefsUtils {
     fun clearUserIdToken() {
         GlobalContext.get().get<SharedPreferences>().edit().remove(LogInCacheImpl.TOKEN_PREFS)
             .remove(LogInCacheImpl.USER_ID_PREFS).apply()
+    }
+
+    fun saveHomeLayoutCollapsedLevel(levelNumber: Int){
+        GlobalContext.get().get<SharedPreferences>().edit().putString("COLLAPSED_LEVELS",
+            Json.encodeToString(
+                Json.decodeFromString<MutableMap<String, Boolean>>(
+                    GlobalContext.get().get<SharedPreferences>()
+                        .getString("COLLAPSED_LEVELS", "{}")!!
+                )
+                    .apply {
+                        put("$levelNumber", true)
+                    }
+            )
+        ).apply()
+    }
+
+    fun getHomeLayoutCollapsedLevels() =
+        Json.decodeFromString<MutableMap<String, Boolean>>(
+            GlobalContext.get().get<SharedPreferences>().getString("COLLAPSED_LEVELS", "{}")!!
+        ).map{ it.key.toInt() to it.value }
+
+    fun removeHomeLayoutCollapsedLevel(levelNumber: Int){
+            GlobalContext.get().get<SharedPreferences>().edit().putString("COLLAPSED_LEVELS",
+                Json.encodeToString(
+                    Json.decodeFromString<MutableMap<String, Boolean>>(
+                        GlobalContext.get().get<SharedPreferences>().getString("COLLAPSED_LEVELS", "{}")!!)
+                        .apply {
+                            remove("$levelNumber")
+                        }
+                )
+            ).apply()
     }
 
     fun getUserId(): Int? {

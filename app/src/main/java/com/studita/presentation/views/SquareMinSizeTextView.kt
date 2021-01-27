@@ -9,7 +9,11 @@ class SquareMinSizeTextView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        minHeight = measuredHeight
-        minWidth = measuredHeight
+
+        if(measuredWidth < measuredHeight){
+            minHeight = measuredHeight
+            minWidth = measuredHeight
+            measure(widthMeasureSpec, heightMeasureSpec)
+        }
     }
 }

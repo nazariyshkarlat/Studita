@@ -11,20 +11,23 @@ import com.google.gson.annotations.SerializedName
 data class UserStatisticsEntity(
     @SerializedName("time_type") val timeType: String,
     @SerializedName("obtained_XP") val obtainedXP: Int,
-    @SerializedName("obtained_time") val obtainedTime: Long,
-    @SerializedName("obtained_exercises") val obtainedExercises: Int,
-    @SerializedName("obtained_trainings") val obtainedTrainings: Int,
-    @SerializedName("obtained_achievements") val obtainedAchievements: Int
+    @SerializedName("time_spent") val timeSpent: Long,
+    @SerializedName("completed_exercises") val completedExercises: Int,
+    @SerializedName("completed_trainings") val completedTrainings: Int,
+    @SerializedName("obtained_achievements") val obtainedAchievements: Int,
+    @SerializedName("max_days_streak") val maxDaysStreak: Long,
+    @SerializedName("completed_chapters") val completedChapters: Int
 )
 
 @Entity(tableName = UserStatisticsRowEntity.TABLE_NAME)
 data class UserStatisticsRowEntity(
     @SerializedName("datetime") val datetime: String = "1900-01-01 00:00:00",
-    @SerializedName("obtained_XP") val obtainedXP: Int? = null,
-    @SerializedName("obtained_time") val obtainedTime: Long? = null,
-    @SerializedName("obtained_exercises") val obtainedExercises: Int? = null,
-    @SerializedName("obtained_trainings") val obtainedTrainings: Int? = null,
-    @SerializedName("obtained_achievements") val obtainedAchievements: Int? = null
+    @SerializedName("obtained_XP") val obtainedXP: Int = 0,
+    @SerializedName("time_spent") val obtainedTime: Long = 0,
+    @SerializedName("completed_exercises") val completedExercises: Int = 0,
+    @SerializedName("completed_trainings") val completedTrainings: Int = 0,
+    @SerializedName("days_streak") val daysStreak: Long = 0,
+    @SerializedName("completed_chapters") val completedChapters: Int = 0
 ) {
     companion object {
         const val TABLE_NAME = "user_statistics"
@@ -39,26 +42,30 @@ data class UserStatisticsRowEntity(
 
 fun UserStatisticsEntity.toBusinessEntity() = UserStatisticsData(
     obtainedXP,
-    obtainedTime,
-    obtainedExercises,
-    obtainedTrainings,
-    obtainedAchievements
+    timeSpent,
+    completedExercises,
+    completedTrainings,
+    obtainedAchievements,
+    maxDaysStreak,
+    completedChapters
 )
 
 fun UserStatisticsRowEntity.toBusinessEntity() = UserStatisticsRowData(
     DateTimeFormat().parse(datetime)!!,
     obtainedXP,
     obtainedTime,
-    obtainedExercises,
-    obtainedTrainings,
-    obtainedAchievements
+    completedExercises,
+    completedTrainings,
+    daysStreak,
+    completedChapters
 )
 
 fun UserStatisticsRowData.toRawEntity() = UserStatisticsRowEntity(
     DateTimeFormat().format(datetime),
     obtainedXP,
-    obtainedTime,
-    obtainedExercises,
-    obtainedTrainings,
-    obtainedAchievements
+    timeSpent,
+    completedExercises,
+    completedTrainings,
+    daysStreak,
+    completedChapters
 )

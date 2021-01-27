@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName
 
 data class LevelEntity(
     val levelNumber: Int,
+    val levelName: String,
     val levelChildren: List<LevelChildEntity>
 )
 
@@ -17,23 +18,11 @@ sealed class LevelChildEntity {
         @SerializedName("subtitle") val chapterSubtitle: String,
         @SerializedName("chapter_parts_count") val chapterPartsCount: Int
     ) : LevelChildEntity()
-
-    data class LevelInterestingEntity(
-        @SerializedName("interesting_number") val interestingNumber: Int,
-        @SerializedName("title") val title: String,
-        @SerializedName("subtitle") val subtitle: String,
-        @SerializedName("tags") val tags: List<String>
-    ) : LevelChildEntity()
-
-    data class LevelSubscribeEntity(
-        @SerializedName("title") val title: String,
-        @SerializedName("button") val button: List<String>,
-        @SerializedName("is_logged_in") val isLoggedIn: Boolean
-    ) : LevelChildEntity()
 }
 
 fun LevelEntity.toBusinessEntity() = LevelData(
     levelNumber,
+    levelName,
     levelChildren.map { it.toBusinessEntity() }
 )
 
@@ -44,11 +33,4 @@ fun LevelChildEntity.toBusinessEntity() = when (this) {
         chapterSubtitle,
         chapterPartsCount
     )
-    is LevelChildEntity.LevelInterestingEntity -> LevelChildData.LevelInterestingData(
-        interestingNumber,
-        title,
-        subtitle,
-        tags
-    )
-    is LevelChildEntity.LevelSubscribeEntity -> LevelChildData.LevelSubscribeData(title, button, isLoggedIn)
 }

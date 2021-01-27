@@ -65,6 +65,8 @@
     <color name="bottom_sheet_gray_dark_theme_color">#1D1D1D</color>
     <color name="tertiary_gray_light_theme_color">#613C3C43</color>
     <color name="tertiary_gray_dark_theme_color">#61EBEBF5</color>
+    <color name="secondary_color_opaque_light_theme">#8A8A8E</color>
+    <color name="secondary_color_opaque_dark_theme">#8D8D93</color>
 
     <color name="black6">#0F000000</color>
     <color name="black8">#14000000</color>

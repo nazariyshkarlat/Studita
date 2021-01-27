@@ -1,6 +1,8 @@
 package com.studita.presentation.adapter.levels
 
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.text.buildSpannedString
 import androidx.lifecycle.LifecycleOwner
 import com.studita.R
 import com.studita.domain.entity.UserData
@@ -29,8 +31,6 @@ class HomeUserDataViewHolder(view: View, private val lifecycleOwner: LifecycleOw
             UserUtils.userDataLiveData.observeNoNull(lifecycleOwner, androidx.lifecycle.Observer {
                 homeLayoutUserDataLevelLayoutCurrentLevel.text =
                     it.currentLevel.toString()
-                homeLayoutUserDataLevelLayoutNextLevel.text =
-                    getNextLevel(it.currentLevel).toString()
                 homeLayoutUserDataLevelLayoutXP.text = itemView.context.resources.getString(
                     R.string.current_level_XP,
                     it.currentLevelXP,
@@ -38,11 +38,17 @@ class HomeUserDataViewHolder(view: View, private val lifecycleOwner: LifecycleOw
                 )
                 homeLayoutUserDataLevelLayoutProgressBar.currentProgress = it.currentLevelXP / getLevelXP(it.currentLevel).toFloat()
                 homeLayoutUserDataXPLayoutStreakDays.text =
-                    LanguageUtils.getResourcesRussianLocale(itemView.context).getQuantityString(
-                        R.plurals.streak_plurals,
-                        it.streakDays,
-                        it.streakDays
-                    )
+
+                    buildSpannedString {
+                        append("${it.streakDays} ".createSpannableString(typeFace = ResourcesCompat.getFont(
+                            context,
+                            R.font.roboto_medium
+                        )))
+                        append(LanguageUtils.getResourcesRussianLocale(itemView.context).getQuantityString(
+                            R.plurals.streak_plurals,
+                            it.streakDays
+                        ))
+                    }
                 homeLayoutUserDataXPLayoutFireIcon.isActivated =
                     streakActivated(it.streakDatetime)
             })

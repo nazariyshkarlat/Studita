@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.os.bundleOf
 import androidx.core.view.OneShotPreDrawListener
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
@@ -162,6 +163,11 @@ class MainFragment : BaseFragment(R.layout.main_layout) {
         (activity as AppCompatActivity).addFragment(
             addFragment.apply {
                 this.arguments = this@MainFragment.arguments
+
+                if(arguments == null)
+                    this.arguments = bundleOf("IS_NAVIGATION" to false)
+                else
+                    this.arguments?.putBoolean("IS_NAVIGATION", false)
             },
             R.id.mainLayoutFrameLayout
         )

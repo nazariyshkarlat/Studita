@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.studita.R
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.error_fragments.IncorrectTimeFragment
-import com.studita.presentation.fragments.first_open.OfflineModeDownloadFragment
+import com.studita.presentation.fragments.first_open.SelectCourseStartFragment
 import com.studita.presentation.fragments.main.MainFragment
 import com.studita.presentation.view_model.MainActivityNavigationViewModel
 import com.studita.utils.PrefsUtils
@@ -34,7 +34,7 @@ class MainActivity : DefaultActivity(){
 
         fun getFragmentToAdd(context: Context) = when {
             !TimeUtils.timeIsAutomatically(context) -> IncorrectTimeFragment()
-            !PrefsUtils.offlineDataIsCached() -> OfflineModeDownloadFragment()
+            !PrefsUtils.offlineDataIsCached() -> SelectCourseStartFragment()
             else -> MainFragment()
         }
     }

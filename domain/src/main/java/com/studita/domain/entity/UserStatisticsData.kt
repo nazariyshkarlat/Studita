@@ -4,20 +4,23 @@ import java.util.*
 
 data class UserStatisticsData(
     val obtainedXP: Int,
-    val obtainedTime: Long,
-    val obtainedExercises: Int,
-    val obtainedTrainings: Int,
-    val obtainedAchievements: Int
+    val timeSpent: Long,
+    val completedExercises: Int,
+    val completedTrainings: Int,
+    val obtainedAchievements: Int,
+    val maxDaysStreak: Long,
+    val completedChapters: Int
 )
 
 
 data class UserStatisticsRowData(
     val datetime: Date,
-    val obtainedXP: Int?,
-    val obtainedTime: Long?,
-    val obtainedExercises: Int?,
-    val obtainedTrainings: Int?,
-    val obtainedAchievements: Int?
+    val obtainedXP: Int,
+    val timeSpent: Long,
+    val completedExercises: Int,
+    val completedTrainings: Int,
+    val daysStreak: Long,
+    val completedChapters: Int
 )
 
 enum class UserStatisticsTime {

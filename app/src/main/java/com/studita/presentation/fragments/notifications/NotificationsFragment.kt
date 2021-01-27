@@ -16,6 +16,7 @@ import androidx.core.view.contains
 import androidx.core.widget.TextViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.gson.Gson
 import com.studita.R
 import com.studita.domain.entity.NotificationData
 import com.studita.domain.entity.NotificationType
@@ -37,12 +38,15 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.studita.data.entity.isNotificationType
 import com.studita.data.entity.toFirebaseMessageType
+import com.studita.data.entity.toNotificationType
 import com.studita.domain.entity.MessageType
 import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.studita.notifications.service.MessageReceiverIntentService.Companion.BROADCAST_MESSAGE
 import com.studita.utils.dp
-import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.recyclerview_layout.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import java.lang.UnsupportedOperationException
 
 class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
     ReloadPageCallback {
@@ -64,49 +68,48 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
     private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
 
-            if (intent.getStringExtra("type")!!.first().isNotificationType()) {
-                val notificationData = GsonBuilder().apply {
-                    registerTypeAdapter(
-                        IsMyFriendStatus.Success::class.java,
-                        IsMyFriendStatusDeserializer()
-                    )
-                }.create().fromJson<NotificationData>(
-                    intent.getStringExtra("NOTIFICATION_DATA"),
-                    object : TypeToken<NotificationData>() {}.type
-                )
+            val type = intent.getStringExtra("type")!!
+                if (type.isNotificationType()) {
+                    if(type.toNotificationType() !is NotificationType.Achievement) {
 
-                when (notificationData.notificationType) {
-                    NotificationType.FRIENDSHIP_REQUEST -> {
-                        UserUtils.isMyFriendLiveData.postValue(
-                            UsersInteractor.FriendActionState.FriendshipRequestIsSent(
-                                UserData(
-                                    notificationData.userId,
-                                    notificationData.userName,
-                                    notificationData.avatarLink,
-                                    IsMyFriendStatus.Success.WaitingForFriendshipAccept(
-                                        notificationData.userId
+                        val notificationData = Json.decodeFromString<NotificationData.NotificationFromUser>(intent.getStringExtra("NOTIFICATION_DATA")!!)
+                        when (notificationData.notificationType) {
+                            NotificationType.FriendshipRequest -> {
+                                UserUtils.isMyFriendLiveData.postValue(
+                                    UsersInteractor.FriendActionState.FriendshipRequestIsSent(
+                                        UserData(
+                                            notificationData.userId,
+                                            notificationData.userName,
+                                            notificationData.imageLink,
+                                            IsMyFriendStatus.Success.WaitingForFriendshipAccept(
+                                                notificationData.userId
+                                            )
+                                        )
                                     )
                                 )
-                            )
-                        )
-                    }
-                    NotificationType.ACCEPTED_FRIENDSHIP -> {
-                        UserUtils.isMyFriendLiveData.postValue(
-                            UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(
-                                UserData(
-                                    notificationData.userId,
-                                    notificationData.userName,
-                                    notificationData.avatarLink,
-                                    IsMyFriendStatus.Success.IsMyFriend(notificationData.userId)
+                            }
+                            NotificationType.AcceptedFriendship -> {
+                                UserUtils.isMyFriendLiveData.postValue(
+                                    UsersInteractor.FriendActionState.FriendshipRequestIsAccepted(
+                                        UserData(
+                                            notificationData.userId,
+                                            notificationData.userName,
+                                            notificationData.imageLink,
+                                            IsMyFriendStatus.Success.IsMyFriend(notificationData.userId)
+                                        )
+                                    )
                                 )
-                            )
-                        )
+                            }
+                            else -> {
+                                throw UnsupportedOperationException("unknown image type for NotificaionFromUser")
+                            }
+                        }
+                        viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
+                    }else{
+                        val notificationData = Json.decodeFromString<NotificationData.AchievementNotification>(intent.getStringExtra("NOTIFICATION_DATA")!!)
+                        viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
                     }
-                    else -> {
-                    }
-                }
 
-                viewModel.recyclerItems?.add(1, notificationData.toUiModel(context))
                 recyclerViewLayoutRecyclerView.adapter?.notifyItemInserted(1)
 
                 viewModel.notificationsState.value = false to NotificationsFragmentViewModel.NotificationsResultState.MoreResults(
@@ -124,12 +127,12 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
                     (view?.context?.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
                 }
             }else{
-                when(intent.getStringExtra("type")!!.first().toFirebaseMessageType()){
+                when(type.toFirebaseMessageType()){
                     MessageType.FRIENDSHIP_REQUEST_CANCELLED, MessageType.FRIENDSHIP_REMOVED -> {
                         val elementsToRemove = ArrayList<NotificationsUiModel>()
                         viewModel.recyclerItems?.forEach {notificationsUiModel ->
-                            if((notificationsUiModel is NotificationsUiModel.Notification) &&
-                                ((notificationsUiModel.notificationType == NotificationType.FRIENDSHIP_REQUEST)
+                            if((notificationsUiModel is NotificationsUiModel.NotificationFromUser) &&
+                                ((notificationsUiModel.notificationType == NotificationType.FriendshipRequest)
                                         && (notificationsUiModel.userData.userId == intent.getIntExtra("user_id", 0)))){
                                 elementsToRemove.add(notificationsUiModel)
                             }
@@ -139,7 +142,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
                             viewModel.recyclerItems?.remove(it)
                             recyclerViewLayoutRecyclerView.adapter?.notifyItemRemoved(removeIndex)
                         }
-                        if(viewModel.recyclerItems?.count { it is NotificationsUiModel.Notification } == 0){
+                        if(viewModel.recyclerItems?.count { it is NotificationsUiModel.NotificationFromUser } == 0){
                             viewModel.notificationsState.value = false to NotificationsFragmentViewModel.NotificationsResultState.NoResultsFound
                         }
                     }
@@ -277,8 +280,8 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
 
         UserUtils.isMyFriendLiveData.observe(viewLifecycleOwner, Observer {
             viewModel.recyclerItems?.forEachIndexed { index, notificationsUiModel ->
-                if ((notificationsUiModel is NotificationsUiModel.Notification) && notificationsUiModel.userData.userId == it.userData.userId) {
-                    (viewModel.recyclerItems?.get(index) as NotificationsUiModel.Notification).userData.isMyFriendStatus =
+                if ((notificationsUiModel is NotificationsUiModel.NotificationFromUser) && notificationsUiModel.userData.userId == it.userData.userId) {
+                    (viewModel.recyclerItems?.get(index) as NotificationsUiModel.NotificationFromUser).userData.isMyFriendStatus =
                         it.userData.isMyFriendStatus
                     recyclerViewLayoutRecyclerView.adapter?.notifyItemChanged(index, Unit)
                 }

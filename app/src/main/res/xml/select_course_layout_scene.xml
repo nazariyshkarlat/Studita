@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/selectCourseBackgroundLayout"
+            android:layout_width="match_parent"
+            android:layout_height="1px">
+        </Constraint>
+        <Constraint android:id="@+id/selectCourseLayoutTopDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_marginEnd="@dimen/defaultRLMargin"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutTitle"/>
+        <Constraint android:id="@+id/selectCourseLayoutRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutTopDivider"/>
+        <Constraint android:id="@+id/selectCourseLayoutFirstItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutRadioButton"/>
+        <Constraint android:id="@+id/selectCourseLayoutSecondItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutFirstItem"/>
+        <Constraint android:id="@+id/selectCourseLayoutThirdItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutSecondItem"/>
+        <Constraint android:id="@+id/selectCourseLayoutForthItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutThirdItem"/>
+        <Constraint android:id="@+id/selectCourseLayoutBottomDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_marginEnd="@dimen/defaultRLMargin"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutForthItem"/>
+        <Constraint
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/selectCourseLayoutTopDivider"
+            android:layout_width="wrap_content"
+            android:id="@+id/selectCourseExpandLogInButton"
+            app:layout_constraintTop_toTopOf="@+id/selectCourseLayoutTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@+id/selectCourseBackgroundLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </Constraint>
+        <Constraint android:id="@+id/selectCourseLayoutTopDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_marginEnd="@dimen/defaultRLMargin"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutTitle"/>
+        <Constraint android:id="@+id/selectCourseLayoutRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutTopDivider"/>
+        <Constraint android:id="@+id/selectCourseLayoutFirstItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutRadioButton"/>
+        <Constraint android:id="@+id/selectCourseLayoutSecondItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutFirstItem" />
+        <Constraint android:id="@+id/selectCourseLayoutThirdItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutSecondItem"/>
+        <Constraint android:id="@+id/selectCourseLayoutForthItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutThirdItem"/>
+        <Constraint android:id="@+id/selectCourseLayoutBottomDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_marginEnd="@dimen/defaultRLMargin"
+            app:layout_constraintTop_toBottomOf="@+id/selectCourseLayoutForthItem"/>
+
+    </ConstraintSet>
+
+    <Transition
+        app:duration="@integer/select_course_scene_duration"
+        app:motionInterpolator="@interpolator/fast_out_slow_in"
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@+id/start" >
+
+        <KeyFrameSet>
+
+            <KeyAttribute
+                app:framePosition="0"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutTopDivider"/>
+            <KeyAttribute
+                app:framePosition="0"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutRadioButton"/>
+            <KeyAttribute
+                app:framePosition="0"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutFirstItem"/>
+            <KeyAttribute
+                app:framePosition="0"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutSecondItem"/>
+            <KeyAttribute
+                app:framePosition="0"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutThirdItem"/>
+            <KeyAttribute
+                app:framePosition="0"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutForthItem"/>
+            <KeyAttribute
+                app:framePosition="0"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutBottomDivider"/>
+
+            <KeyAttribute
+                app:framePosition="40"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutTopDivider"/>
+            <KeyAttribute
+                app:framePosition="40"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutRadioButton"/>
+            <KeyAttribute
+                app:framePosition="50"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutFirstItem"/>
+            <KeyAttribute
+                app:framePosition="60"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutSecondItem"/>
+            <KeyAttribute
+                app:framePosition="70"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutThirdItem"/>
+            <KeyAttribute
+                app:framePosition="80"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutForthItem"/>
+            <KeyAttribute
+                app:framePosition="80"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutBottomDivider"/>
+
+            <KeyAttribute
+                app:framePosition="60"
+                android:alpha="1"
+                app:motionTarget="@+id/selectCourseLayoutTopDivider"/>
+            <KeyAttribute
+                app:framePosition="60"
+                android:alpha="1"
+                app:motionTarget="@+id/selectCourseLayoutRadioButton"/>
+            <KeyAttribute
+                app:framePosition="70"
+                android:alpha="1"
+                app:motionTarget="@+id/selectCourseLayoutFirstItem"/>
+            <KeyAttribute
+                app:framePosition="80"
+                android:alpha="1"
+                app:motionTarget="@+id/selectCourseLayoutSecondItem"/>
+            <KeyAttribute
+                app:framePosition="90"
+                android:alpha="1"
+                app:motionTarget="@+id/selectCourseLayoutThirdItem"/>
+            <KeyAttribute
+                app:framePosition="100"
+                android:alpha="1"
+                app:motionTarget="@+id/selectCourseLayoutForthItem"/>
+            <KeyAttribute
+                app:framePosition="100"
+                android:alpha="1"
+                app:motionTarget="@+id/selectCourseLayoutBottomDivider"/>
+        </KeyFrameSet>
+
+        <KeyFrameSet>
+            <KeyAttribute
+                app:framePosition="0"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutTitle"/>
+            <KeyAttribute
+                app:framePosition="20"
+                android:alpha="1"
+                app:motionTarget="@+id/selectCourseLayoutTitle"/>
+        </KeyFrameSet>
+
+        <KeyFrameSet>
+            <KeyAttribute
+                app:framePosition="0"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutButton"/>
+            <KeyAttribute
+                app:framePosition="80"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutButton"/>
+            <KeyAttribute
+                app:framePosition="100"
+                android:alpha="1"
+                app:motionTarget="@+id/selectCourseLayoutButton"/>
+
+            <KeyAttribute
+                app:framePosition="0"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutSubscribeBlock"/>
+            <KeyAttribute
+                app:framePosition="80"
+                android:alpha="0"
+                app:motionTarget="@+id/selectCourseLayoutSubscribeBlock"/>
+            <KeyAttribute
+                app:framePosition="100"
+                android:alpha="1"
+                app:motionTarget="@+id/selectCourseLayoutSubscribeBlock"/>
+        </KeyFrameSet>
+    </Transition>
+
+</MotionScene>

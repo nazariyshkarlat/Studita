@@ -4,7 +4,6 @@ import com.studita.data.entity.CompleteExercisesRequest
 import com.studita.data.entity.exercise.*
 import com.studita.data.net.ExerciseResultService
 import com.studita.data.net.connection.ConnectionManager
-import com.studita.data.repository.datasource.interesting.result.InterestingResultDataStore
 import com.studita.domain.exception.NetworkConnectionException
 import com.studita.domain.exception.ServerUnavailableException
 import com.google.gson.Gson

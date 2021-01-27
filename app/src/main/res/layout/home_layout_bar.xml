@@ -5,15 +5,17 @@
     android:layout_height="wrap_content"
     app:layout_scrollFlags="scroll|snap|enterAlways">
 
-    <TextView
+    <com.studita.presentation.views.press_view.PressTextView
         android:id="@+id/homeLayoutBarTitle"
         style="@style/Bold28"
+        android:drawablePadding="4dp"
+        app:drawableStartCompat="@drawable/ic_expand_more_36dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/defaultRLMargin"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
-        android:text="@string/learning"
+        android:text="@string/math"
         android:layout_gravity="center_vertical"/>
 
     <com.studita.presentation.views.press_view.PressTextView

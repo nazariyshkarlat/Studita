@@ -17,11 +17,12 @@
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
+        <item name="secondary_color_opaque">@color/secondary_color_opaque_light_theme</item>
         <item name="android:navigationBarColor">@color/white</item>
         <item name="modal_windows_color">@color/modal_windows_gray_light_theme_color</item>
         <item name="press_view_press_alpha">0.64</item>
         <item name="press_view_press_alpha_lighter">0.3</item>
-        <item name="switch_inactive_thumb_color">#8A8A8E</item>
+        <item name="switch_inactive_thumb_color">@color/secondary_color_opaque_light_theme</item>
         <item name="switch_inactive_track_color">#A4A4A4</item>
         <item name="android:scrollbarThumbHorizontal">?attr/gray_focused_color</item>
         <item name="android:scrollbarThumbVertical">?attr/gray_focused_color</item>
@@ -46,6 +47,7 @@
         <item name="accent_lite_pressed_color">@color/blue24_dark_theme</item>
         <item name="blocks_background_color">@color/background_gray_dark_theme</item>
         <item name="disabled_color">@color/disabled_gray_color_dark_theme</item>
+        <item name="secondary_color_opaque">@color/secondary_color_opaque_dark_theme</item>
         <item name="disabled_background_color">@color/disabled_background_gray_color_dark_theme</item>
         <item name="bottom_navigation_color">@color/bottom_navigation_gray_dark_theme_color</item>
         <item name="gray_focused_color">@color/focused_gray_color_dark_theme</item>
@@ -57,7 +59,7 @@
         <item name="android:navigationBarColor">@color/black</item>
         <item name="press_view_press_alpha">0.68</item>
         <item name="press_view_press_alpha_lighter">0.34</item>
-        <item name="switch_inactive_thumb_color">#8D8D93</item>
+        <item name="switch_inactive_thumb_color">@color/secondary_color_opaque_dark_theme</item>
         <item name="switch_inactive_track_color">#A8A8A8</item>
         <item name="android:scrollbarThumbHorizontal">?attr/gray_focused_color</item>
         <item name="android:scrollbarThumbVertical">?attr/gray_focused_color</item>

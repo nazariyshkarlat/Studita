@@ -28,29 +28,20 @@ public class NoEmojiEditText extends androidx.appcompat.widget.AppCompatEditText
     }
 
     private class EmojiExcludeFilter implements InputFilter {
+
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            boolean keepOriginal = true;
-            StringBuilder sb = new StringBuilder(end - start);
-            for (int index = start; index < end; index++) {
-                int type = Character.getType(source.charAt(index));
-                if (type == Character.SURROGATE || type == Character.OTHER_SYMBOL) {
-                    return "";
-                }
-                char c = source.charAt(index);
-                sb.append(c);
-            }
-            if (keepOriginal)
-                return null;
-            else {
-                if (source instanceof Spanned) {
-                    SpannableString sp = new SpannableString(sb);
-                    TextUtils.copySpansFrom((Spanned) source, start, sb.length(), null, sp, 0);
-                    return sp;
-                } else {
-                    return sb;
+            StringBuilder result = new StringBuilder();
+            for (int i = start; i < end; i++) {
+                int type = Character.getType(source.charAt(i));
+                if (!(type == Character.SURROGATE || type == Character.OTHER_SYMBOL)) {
+                    result.append(source.charAt(i));
                 }
             }
+            if(result.length() != source.length())
+                return result.toString().replaceAll("[^\\x00-\\x7F]", "");
+            else
+            return null;
         }
     }
 }

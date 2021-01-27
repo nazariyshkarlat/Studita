@@ -8,8 +8,12 @@ import com.studita.domain.service.SyncSubscribeEmail
 import com.studita.presentation.view_model.SingleLiveEvent
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.studita.App
+import com.studita.domain.interactor.UserDataStatus
 import com.studita.domain.interactor.subscribe_email.SubscribeEmailInteractor
 import com.studita.domain.interactor.user_data.UserDataInteractor
+import com.studita.utils.PrefsUtils
+import com.studita.utils.UserUtils
 import org.koin.core.context.GlobalContext
 
 class SyncSubscribeEmailImpl : SyncSubscribeEmail {
@@ -50,8 +54,21 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail {
                     else
                         unsubscribe(it)
 
-                    saveSyncedResult(result)
-                    syncSubscribeEmailLiveData.postValue(result)
+                    if(result is SubscribeEmailResultStatus.Success){
+                        val localUserData = GlobalContext.get().get<UserDataInteractor>().getUserData(it.userId, getFromLocalStorage = true, true)
+                        if(localUserData is UserDataStatus.Success)
+                            GlobalContext.get().get<UserDataInteractor>().saveUserData(
+                                localUserData.result.apply {
+                                    isSubscribed = subscribe
+                                }
+                            )
+                    }
+
+                    if(syncSubscribeEmailLiveData.hasActiveObservers())
+                        syncSubscribeEmailLiveData.postValue(result)
+                    else {
+                        saveSyncedResult(result)
+                    }
                 }
             }
 

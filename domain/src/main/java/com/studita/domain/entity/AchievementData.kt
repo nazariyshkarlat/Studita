@@ -43,14 +43,13 @@ enum class AchievementLevel(val levelNumber: Int) {
     NO_LEVEL(0)
 }
 
-enum class AchievementType{
-    TYPE_STREAK,
-    TYPE_EXERCISES,
-    TYPE_TRAININGS,
-    TYPE_CHAPTERS,
-    TYPE_LEVELS,
-    TYPE_FRIEND_ADD,
-    TYPE_SET_AVATAR,
-    TYPE_SET_BIO,
-    TYPE_SET_NAME
+enum class AchievementType(val typeNumber: Int){
+    TYPE_STREAK(1),
+    TYPE_EXERCISES(2),
+    TYPE_TRAININGS(3),
+    TYPE_CHAPTERS(4),
+    TYPE_FRIEND_ADD(5),
+    TYPE_SET_AVATAR(6),
+    TYPE_SET_BIO(7),
+    TYPE_SET_NAME(8)
 }

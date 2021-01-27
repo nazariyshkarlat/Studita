@@ -7,6 +7,7 @@
     <attr name="accent_lite_color" format="reference" />
     <attr name="accent_lite_pressed_color" format="reference"/>
     <attr name="secondary_color" format="reference" />
+    <attr name="secondary_color_opaque" format="reference"/>
     <attr name="primary_color" format="reference" />
     <attr name="blocks_background_color" format="reference" />
     <attr name="splash_screen_color" format="reference" />

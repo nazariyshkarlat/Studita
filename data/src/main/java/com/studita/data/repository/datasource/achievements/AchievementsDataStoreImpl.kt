@@ -34,7 +34,6 @@ class AchievementsDataStoreImpl(
             throw NetworkConnectionException()
         }
         try {
-            println("get achievements dasdasd")
             emit(achievementsService.getAchievementsData(userId).body()!!)
         }catch (e: Exception){
             e.printStackTrace()

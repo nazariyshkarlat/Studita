@@ -23,28 +23,22 @@ class ChapterViewHolder(view: View, val count: Int, private val lifecycleOwner: 
 
     override fun bind(model: HomeRecyclerUiModel) {
         model as HomeRecyclerUiModel.LevelChapterUiModel
-        with(itemView.chapterItemParentView) {
+        with(itemView) {
             chapterItemTitle.text = model.chapterTitle
             chapterItemSubtitle.text = model.chapterSubtitle
-            if (model.chapterNumber == count) {
-                formClosedChapter()
-            } else {
-                formOpenChapter()
-
-                UserUtils.userDataLiveData.observeNoNull(lifecycleOwner, Observer {
-                    chapterItemProgressText.text = LevelUtils.getProgressText(
-                        it.completedParts[model.chapterNumber - 1],
-                        model.chapterPartsCount,
-                        context
-                    )
-                    chapterItemProgressBar.currentProgress  = LevelUtils.getChapterProgressPercent(
-                        it.completedParts[model.chapterNumber - 1],
-                        model.chapterPartsCount
-                    )
-                })
-                setOnSingleClickListener {
-                    initBottomSheetFragment(model.chapterNumber, context)
-                }
+            UserUtils.userDataLiveData.observeNoNull(lifecycleOwner, Observer {
+                chapterItemProgressText.text = LevelUtils.getProgressText(
+                    it.completedParts[model.chapterNumber - 1],
+                    model.chapterPartsCount,
+                    context
+                )
+                chapterItemProgressBar.currentProgress  = LevelUtils.getChapterProgressPercent(
+                    it.completedParts[model.chapterNumber - 1],
+                    model.chapterPartsCount
+                )
+            })
+            setOnSingleClickListener {
+                initBottomSheetFragment(model.chapterNumber, context)
             }
         }
     }
@@ -59,37 +53,6 @@ class ChapterViewHolder(view: View, val count: Int, private val lifecycleOwner: 
             (context as AppCompatActivity).supportFragmentManager,
             null
         )
-    }
-
-    private fun formClosedChapter() {
-        itemView as AlphaGradientView
-        if (!itemView.fadeTop) {
-            with(itemView) {
-                chapterItemParentView.chapterItemProgressText.visibility = View.GONE
-                chapterItemParentView.chapterItemProgressBar.visibility = View.GONE
-                chapterItemParentView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = 0
-                }
-                chapterItemParentView.isClickable = false
-                fadeTop = true
-                setGradientSizeTop(0)
-            }
-        }
-    }
-
-    private fun formOpenChapter() {
-        itemView as AlphaGradientView
-        if (itemView.fadeTop) {
-            with(itemView){
-                chapterItemParentView.chapterItemProgressText.visibility = View.VISIBLE
-                chapterItemParentView.chapterItemProgressBar.visibility = View.VISIBLE
-                chapterItemParentView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = 8F.dp
-                }
-                chapterItemParentView.isClickable = true
-                fadeTop = false
-            }
-        }
     }
 
 }

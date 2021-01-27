@@ -40,6 +40,7 @@ import com.studita.presentation.fragments.friends.MyFriendsFragment
 import com.studita.presentation.fragments.profile.edit.EditProfileFragment
 import com.studita.presentation.fragments.user_statistics.UserStatFragment
 import com.studita.presentation.listeners.ReloadPageCallback
+import com.studita.presentation.model.AchievementUiModel
 import com.studita.presentation.view_model.ProfileFragmentViewModel
 import com.studita.presentation.view_model.ToolbarFragmentViewModel
 import com.studita.presentation.views.CustomSnackbar
@@ -193,31 +194,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
         profileFragmentViewModel.achievementsState.observe(
             viewLifecycleOwner
         ){
-            if(it.isNotEmpty() && (profileLayoutAchievementsScrollViewContent.childCount != it.size)){
-                profileLayoutAchievementsScrollViewContent.removeAllViews()
-                if(isMyProfile)
-                    profileLayoutAchievementsTitle.setOnClickListener {
-                        activity?.startActivity<AchievementsActivity>()
-                    }
-                profileLayoutAchievementsTitle.text = resources.getString(R.string.achievements_count_template, it.size)
-                profileLayoutAchievementsLayout.visibility = View.VISIBLE
-
-                it.forEachIndexed {idx, uiModel ->
-                    val achievementView = ImageView(view.context).apply {
-                        layoutParams = LinearLayout.LayoutParams(40F.dp, 40F.dp).apply {
-                            if(idx != 0)
-                                leftMargin = 8F.dp
-                            if(idx != it.size-1)
-                                rightMargin = 8F.dp
-                        }
-                        scaleType = ImageView.ScaleType.CENTER_CROP
-                    }
-                    achievementView.loadSVG(uiModel.iconUrl, R.drawable.achievement_placeholder)
-                    profileLayoutAchievementsScrollViewContent.addView(
-                        achievementView
-                    )
-                }
-            }
+            fillAchievements(isMyProfile, it)
         }
 
         profileFragmentViewModel.addFriendStatus.observe(
@@ -294,6 +271,44 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
 
     override fun onRefresh() {
         profileFragmentViewModel.getProfileData(true)
+    }
+
+
+    private fun fillAchievements(isMyProfile: Boolean, achievements: List<AchievementUiModel>){
+        if(achievements.isNotEmpty() && (profileLayoutAchievementsScrollViewContent.childCount != achievements.size)) {
+            profileLayoutAchievementsScrollView.visibility = View.VISIBLE
+            profileLayoutAchievementsEmptyAchievementsTextView.visibility = View.GONE
+            profileLayoutAchievementsScrollViewContent.removeAllViews()
+            if (isMyProfile)
+                profileLayoutAchievementsTitle.setOnClickListener {
+                    activity?.startActivity<AchievementsActivity>()
+                }
+            profileLayoutAchievementsTitle.text =
+                resources.getString(R.string.achievements_count_template, achievements.size)
+            profileLayoutAchievementsLayout.visibility = View.VISIBLE
+
+            achievements.forEachIndexed { idx, uiModel ->
+                val achievementView = ImageView(view!!.context).apply {
+                    layoutParams = LinearLayout.LayoutParams(40F.dp, 40F.dp).apply {
+                        if (idx != 0)
+                            leftMargin = 8F.dp
+                        if (idx != achievements.size - 1)
+                            rightMargin = 8F.dp
+                    }
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                }
+                achievementView.loadSVG(uiModel.iconUrl, R.drawable.achievement_placeholder)
+                profileLayoutAchievementsScrollViewContent.addView(
+                    achievementView
+                )
+            }
+        }else if(achievements.isEmpty()){
+            profileLayoutAchievementsTitle.text =
+                resources.getString(R.string.achievements)
+            profileLayoutAchievementsScrollView.visibility = View.GONE
+            profileLayoutAchievementsEmptyAchievementsTextView.text = resources.getString(if(isMyProfile) R.string.my_profile_empty_achievements else R.string.profile_empty_achievements)
+            profileLayoutAchievementsEmptyAchievementsTextView.visibility = View.VISIBLE
+        }
     }
 
     private fun fillData(userData: UserDataData, context: Context) {
@@ -468,7 +483,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
         val string = StringBuilder()
             .append(if(streakActivated(userDataData.streakDatetime)) "[img src=ic_whatshot_profile_activated/]" else "[img src=ic_whatshot_profile/]")
             .append(LanguageUtils.getResourcesRussianLocale(context).getQuantityString(
-                R.plurals.streak_plurals,
+                R.plurals.streak_plurals_with_placeholder,
                 userDataData.streakDays,
                 userDataData.streakDays
             ))

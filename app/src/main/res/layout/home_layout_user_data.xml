@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/defaultRLMargin"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="4dp"
     android:layout_marginEnd="@dimen/defaultRLMargin"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="16dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -22,27 +22,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp" />
-
-        <com.studita.presentation.views.SquareMinSizeTextView
-            android:id="@+id/homeLayoutUserDataLevelLayoutNextLevel"
-            style="@style/UserNextLevel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp" />
+            android:layout_alignParentTop="true"/>
 
         <TextView
             android:id="@+id/homeLayoutUserDataLevelLayoutLevelTextView"
             style="@style/Medium16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/homeLayoutUserDataLevelLayoutCurrentLevel"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center_vertical"
+            android:layout_alignTop="@+id/homeLayoutUserDataLevelLayoutCurrentLevel"
+            android:layout_alignBottom="@+id/homeLayoutUserDataLevelLayoutCurrentLevel"
+            android:layout_toEndOf="@+id/homeLayoutUserDataLevelLayoutCurrentLevel"
             android:text="@string/level" />
 
         <TextView
@@ -50,31 +41,20 @@
             style="@style/Regular14Secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_alignTop="@+id/homeLayoutUserDataLevelLayoutLevelTextView"
             android:layout_alignBottom="@+id/homeLayoutUserDataLevelLayoutLevelTextView"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="0dp" />
+            android:layout_alignParentEnd="true" />
 
-        <FrameLayout
+
+        <com.studita.presentation.views.ProgressBar
+            android:id="@+id/homeLayoutUserDataLevelLayoutProgressBar"
+            style="@style/ProgressBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/homeLayoutUserDataLevelLayoutNextLevel"
-            android:layout_alignBottom="@+id/homeLayoutUserDataLevelLayoutNextLevel"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="0dp"
-            android:layout_toStartOf="@+id/homeLayoutUserDataLevelLayoutNextLevel"
-            android:layout_toEndOf="@+id/homeLayoutUserDataLevelLayoutCurrentLevel">
-
-            <com.studita.presentation.views.ProgressBar
-                android:id="@+id/homeLayoutUserDataLevelLayoutProgressBar"
-                style="@style/ProgressBarStyle"
-                android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:layout_gravity="center_vertical"/>
-
-        </FrameLayout>
+            android:layout_height="6dp"
+            android:layout_below="@+id/homeLayoutUserDataLevelLayoutCurrentLevel"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="14dp" />
 
     </RelativeLayout>
 
@@ -89,8 +69,8 @@
 
         <ImageView
             android:id="@+id/homeLayoutUserDataXPLayoutFireIcon"
-            android:layout_width="@dimen/fireIconSize"
-            android:layout_height="@dimen/fireIconSize"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginTop="16dp"
@@ -99,25 +79,25 @@
 
         <TextView
             android:id="@+id/homeLayoutUserDataXPLayoutStreakDays"
-            style="@style/Regular16"
+            style="@style/Regular14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="6dp"
             android:layout_toStartOf="@+id/homeLayoutUserDataXPLayoutMoreButton"
             android:layout_toEndOf="@+id/homeLayoutUserDataXPLayoutFireIcon"
             android:singleLine="true" />
 
         <com.studita.presentation.views.press_view.PressTextView
             android:id="@+id/homeLayoutUserDataXPLayoutMoreButton"
-            style="@style/BlueTextButton16"
+            style="@style/BlueTextButton14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:clickable="true"
             android:focusable="true"
-            android:text="@string/more" />
+            android:text="@string/stat" />
 
     </RelativeLayout>
 </LinearLayout>

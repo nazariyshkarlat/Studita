@@ -34,7 +34,7 @@ class MessageReceiverIntentService : JobIntentService() {
             IsMyFriendStatus.Success.IsNotMyFriend(userId)
         )
 
-        when (intent.getStringExtra("type")!!.first().toFirebaseMessageType()) {
+        when (intent.getStringExtra("type")!!.toFirebaseMessageType()) {
             MessageType.FRIENDSHIP_REQUEST_CANCELLED, MessageType.FRIENDSHIP_REMOVED -> {
                 UserUtils.isMyFriendLiveData.postValue(
                     UsersInteractor.FriendActionState.FriendshipRequestIsCanceled(

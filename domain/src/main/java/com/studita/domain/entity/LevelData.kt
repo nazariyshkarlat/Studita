@@ -2,6 +2,7 @@ package com.studita.domain.entity
 
 data class LevelData(
     val levelNumber: Int,
+    val levelName: String,
     val levelChildren: List<LevelChildData>
 )
 
@@ -13,16 +14,4 @@ sealed class LevelChildData {
         val chapterPartsCount: Int
     ) : LevelChildData()
 
-    data class LevelInterestingData(
-        val interestingNumber: Int,
-        val title: String,
-        val subtitle: String,
-        val tags: List<String>
-    ) : LevelChildData()
-
-    data class LevelSubscribeData(
-        val title: String,
-        val button: List<String>,
-        val isLoggedIn: Boolean
-    ) : LevelChildData()
 }

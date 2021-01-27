@@ -28,7 +28,6 @@ object DI {
                 createExerciseResultModule(configuration),
                 createUserDataModule(configuration),
                 createUserStatisticsModule(configuration),
-                createInterestingModule(configuration),
                 createSubscribeEmailModule(configuration),
                 createCompleteExercisesModule(configuration),
                 createEditProfileModule(configuration),
@@ -37,7 +36,8 @@ object DI {
                 createNotificationsModule(configuration),
                 createOfflineDataModule(configuration),
                 createAchievementsModule(configuration),
-                achievementsViewModel
+                achievementsViewModel,
+                selectCourseFragmentViewModel
             )
         }
     }

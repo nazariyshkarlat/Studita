@@ -1,13 +1,42 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout
+        android:id="@+id/levelItemTopBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/divider_top_margin_drawable"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/levelItemLevelName"
+            style="@style/Medium20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <com.studita.presentation.views.press_view.PressTextView
+            android:id="@+id/levelItemButton"
+            style="@style/BlueTextButton16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_gravity="center_vertical|end"/>
+    </FrameLayout>
 
     <TextView
-        android:id="@+id/levelItemLevel"
-        style="@style/Level"
+        android:id="@+id/levelItemSubtitle"
+        style="@style/Regular16Secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp" />
-</FrameLayout>
+        android:layout_marginStart="@dimen/defaultRLMargin"
+        android:layout_marginBottom="16dp"/>
+</LinearLayout>

@@ -4,6 +4,8 @@ import androidx.lifecycle.*
 import com.studita.App
 import com.studita.App.Companion.authenticationState
 import com.studita.App.Companion.userDataDeferred
+import com.studita.domain.entity.LevelChildData
+import com.studita.domain.entity.LevelData
 import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.CheckTokenIsCorrectStatus
 import com.studita.domain.interactor.LevelsStatus
@@ -26,18 +28,16 @@ class HomeFragmentViewModel : ViewModel() {
 
     val progressState = MutableLiveData<Boolean>()
     val errorEvent = SingleLiveEvent<ErrorState>()
-    val subscribeEmailState = SingleLiveEvent<SubscribeEmailResultStatus>()
-    val subscribeErrorEvent = SingleLiveEvent<Boolean>()
     val logInSnackbarEvent = SingleLiveEvent<Boolean>()
 
-    var results: List<HomeRecyclerUiModel>? = null
+    var results: List<LevelData>? = null
     var resultsAreLocal = false
 
     private val levelsInteractor = GlobalContext.get().get<LevelsInteractor>()
     private val subscribeEmailInteractor =GlobalContext.get().get<SubscribeEmailInteractor>()
 
     var levelsJob: Job? = null
-    private var subscribeJob: Job? = null
+    val subscribeEmailState = SingleLiveEvent<SubscribeEmailResultStatus>()
 
     init {
         App.offlineModeChangeEvent = LiveEvent()
@@ -65,7 +65,7 @@ class HomeFragmentViewModel : ViewModel() {
                 }
                 else -> {
                     getLevelsStatus as LevelsStatus.Success
-                    results = getLevelsStatus.result.map { it.toHomeRecyclerItems() }.flatten()
+                    results = getLevelsStatus.result
 
                     resultsAreLocal = PrefsUtils.isOfflineModeEnabled()
 
@@ -88,28 +88,8 @@ class HomeFragmentViewModel : ViewModel() {
             )
             if (getLevelsStatus is LevelsStatus.Success) {
                 resultsAreLocal = true
-                results = getLevelsStatus.result.map { it.toHomeRecyclerItems() }.flatten()
+                results = getLevelsStatus.result
                 progressState.value = false
-            }
-        }
-    }
-
-
-    fun subscribeEmail(userIdTokenData: UserIdTokenData, subscribe: Boolean) {
-        subscribeJob = GlobalScope.launchExt(subscribeJob) {
-            when (val status = if (subscribe)
-                subscribeEmailInteractor.subscribe(userIdTokenData)
-            else
-                subscribeEmailInteractor.unsubscribe(userIdTokenData)) {
-                is SubscribeEmailResultStatus.NoConnection -> {
-                    subscribeEmailState.value = status
-                }
-                is SubscribeEmailResultStatus.Success -> {
-                    subscribeEmailState.value = status
-                }
-                else -> {
-                    subscribeErrorEvent.value = true
-                }
             }
         }
     }

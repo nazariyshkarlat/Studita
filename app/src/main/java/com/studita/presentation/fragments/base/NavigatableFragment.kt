@@ -72,9 +72,7 @@ open class NavigatableFragment(viewId: Int) : BaseFragment(viewId),
 
 
     private fun animateAlpha(view: View) {
-        if ((arguments?.getBoolean("IS_NAVIGATION", false) == true && (view.parent as ViewGroup).childCount > 1) ||
-            arguments == null ||
-            !arguments!!.getBoolean("IS_NAVIGATION", false)) {
+        if (arguments?.getBoolean("IS_NAVIGATION", true) != false) {
             view.alpha = 0F
             view.animate().alpha(1F).setDuration(
                 resources.getInteger(

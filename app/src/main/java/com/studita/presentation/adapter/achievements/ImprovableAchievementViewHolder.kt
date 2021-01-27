@@ -2,16 +2,15 @@ package com.studita.presentation.adapter.achievements
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.buildSpannedString
+import androidx.core.view.updateLayoutParams
 import coil.util.CoilUtils
 import com.studita.R
 import com.studita.domain.entity.AchievementDataData
 import com.studita.domain.entity.AchievementLevel
-import com.studita.utils.ThemeUtils
-import com.studita.utils.createSpannableString
-import com.studita.utils.loadSVG
-import com.studita.utils.loadSVGIntoMultipleTargets
+import com.studita.utils.*
 import kotlinx.android.synthetic.main.improvable_achievement_item.view.*
 
 class ImprovableAchievementViewHolder(view: View) :
@@ -28,6 +27,20 @@ class ImprovableAchievementViewHolder(view: View) :
             itemView.improvableAchievementItemProgressBlock.visibility = View.VISIBLE
         }else{
             itemView.improvableAchievementItemProgressBlock.visibility = View.GONE
+        }
+
+        formMargin()
+    }
+
+    private fun formMargin(){
+        if(absoluteAdapterPosition == 0){
+            itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = 0
+            }
+        }else{
+            itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = 8F.dp
+            }
         }
     }
 

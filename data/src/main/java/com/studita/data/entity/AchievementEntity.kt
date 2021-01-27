@@ -61,11 +61,10 @@ fun Int.toAchievementType() = when(this){
     2 -> AchievementType.TYPE_EXERCISES
     3 -> AchievementType.TYPE_TRAININGS
     4 -> AchievementType.TYPE_CHAPTERS
-    5 -> AchievementType.TYPE_LEVELS
-    6 -> AchievementType.TYPE_FRIEND_ADD
-    7 -> AchievementType.TYPE_SET_AVATAR
-    8 -> AchievementType.TYPE_SET_BIO
-    9 -> AchievementType.TYPE_SET_NAME
+    5 -> AchievementType.TYPE_FRIEND_ADD
+    6 -> AchievementType.TYPE_SET_AVATAR
+    7 -> AchievementType.TYPE_SET_BIO
+    8 -> AchievementType.TYPE_SET_NAME
     else -> throw UnsupportedOperationException("unknown achievement type")
 }
 

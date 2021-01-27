@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
 import com.studita.presentation.fragments.AuthorizationFragment
+import com.studita.presentation.fragments.achievements.AchievementsFragment
 import com.studita.presentation.fragments.base.BaseFragment
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.friends.FriendsFragment
@@ -125,6 +126,7 @@ class ToolbarFragment : BaseFragment(R.layout.toolbar_layout),
                     )
                     is MyProfileFragment, is MyProfileOfflineModeFragment -> resources.getString(R.string.my_profile)
                     is ProfileFragment -> resources.getString(R.string.profile)
+                    is AchievementsFragment -> resources.getString(R.string.achievements)
                     is MyFriendsFragment, is MyFriendsOfflineModeFragment -> {
 
                         if (fragment is MyFriendsFragment) {

@@ -93,15 +93,6 @@ sealed class UserStatisticsStatus {
     data class Success(val results: List<UserStatisticsData>) : UserStatisticsStatus()
 }
 
-sealed class InterestingStatus {
-    object ServiceUnavailable : InterestingStatus()
-    object NoConnection : InterestingStatus()
-    object NoInterestingFound : InterestingStatus()
-    object Failure : InterestingStatus()
-
-    data class Success(val result: InterestingData) : InterestingStatus()
-}
-
 sealed class InterestingCacheStatus {
     object ServiceUnavailable : InterestingCacheStatus()
     object NoConnection : InterestingCacheStatus()

@@ -8,8 +8,6 @@ import com.studita.data.repository.datasource.exercises.result.ExerciseResultDat
 import com.studita.data.repository.datasource.exercises.result.ExerciseResultDataStoreFactory
 import com.studita.data.repository.datasource.exercises.result.ExerciseResultDataStoreFactoryImpl
 import com.studita.data.repository.datasource.exercises.result.ExerciseResultDataStoreImpl
-import com.studita.data.repository.datasource.interesting.result.InterestingResultDataStoreFactoryImpl
-import com.studita.data.repository.datasource.interesting.result.InterestingResultDataStoreImpl
 import com.studita.data.repository.exercise.ExerciseResultRepositoryImpl
 import com.studita.di.DI
 import com.studita.di.configModule

@@ -2,12 +2,15 @@ package com.studita.presentation.adapter.achievements
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.buildSpannedString
+import androidx.core.view.updateLayoutParams
 import com.studita.R
 import com.studita.domain.entity.AchievementDataData
 import com.studita.utils.ThemeUtils
 import com.studita.utils.createSpannableString
+import com.studita.utils.dp
 import com.studita.utils.loadSVG
 import kotlinx.android.synthetic.main.non_improvable_achievement_item.view.*
 
@@ -21,6 +24,19 @@ class NonImprovableAchievementViewHolder(view: View) :
             R.drawable.achievement_placeholder
         )
         fillText(itemView, model)
+        formMargin()
+    }
+
+    private fun formMargin(){
+        if(absoluteAdapterPosition == 0){
+            itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = 0
+            }
+        }else{
+            itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = 8F.dp
+            }
+        }
     }
 
     private fun fillText(itemView: View, model: AchievementDataData.NonImprovableAchievementData) {

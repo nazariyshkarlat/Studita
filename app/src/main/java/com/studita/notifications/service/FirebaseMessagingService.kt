@@ -14,7 +14,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         val intent = Intent(this, PushReceiverIntentService::class.java)
         intent.putExtras(bundleOf(*p0.data.map { it.key to it.value }.toTypedArray()))
 
-        if(intent.getStringExtra("type")!!.first().isNotificationType())
+        if(intent.getStringExtra("type")!!.isNotificationType())
             PushReceiverIntentService.enqueueWork(this, intent)
         else
             MessageReceiverIntentService.enqueueWork(this, intent)

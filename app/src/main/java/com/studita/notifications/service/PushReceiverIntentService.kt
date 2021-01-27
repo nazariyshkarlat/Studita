@@ -14,6 +14,9 @@ import com.studita.domain.entity.serializer.IsMyFriendStatusSerializer
 import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.notifications.PushReceiver
 import com.google.gson.GsonBuilder
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.lang.UnsupportedOperationException
 
 
 class PushReceiverIntentService : JobIntentService() {
@@ -31,40 +34,54 @@ class PushReceiverIntentService : JobIntentService() {
     override fun onHandleWork(intent: Intent) {
 
         val notificationType =
-            (intent.getStringExtra("type") as String).first().toNotificationType()
+            (intent.getStringExtra("type") as String).toNotificationType()
 
-        val isMyFriendData = when (notificationType) {
-            NotificationType.FRIENDSHIP_REQUEST -> IsMyFriendData(
-                friendshipRequestFromMe = false,
-                friendshipRequestToMe = true,
-                isMyFriend = false
-            )
-            NotificationType.DUEL_REQUEST -> IsMyFriendData(
-                friendshipRequestFromMe = false,
-                friendshipRequestToMe = false,
-                isMyFriend = true
-            )
-            NotificationType.ACCEPTED_FRIENDSHIP -> IsMyFriendData(
-                friendshipRequestFromMe = false,
-                friendshipRequestToMe = false,
-                isMyFriend = true
-            )
+        when (notificationType) {
+            !is NotificationType.Achievement -> {
+                val isMyFriendData = when (notificationType) {
+                    NotificationType.FriendshipRequest -> IsMyFriendData(
+                        friendshipRequestFromMe = false,
+                        friendshipRequestToMe = true,
+                        isMyFriend = false
+                    )
+                    NotificationType.DuelRequest -> IsMyFriendData(
+                        friendshipRequestFromMe = false,
+                        friendshipRequestToMe = false,
+                        isMyFriend = true
+                    )
+                    NotificationType.AcceptedFriendship -> IsMyFriendData(
+                        friendshipRequestFromMe = false,
+                        friendshipRequestToMe = false,
+                        isMyFriend = true
+                    )
+                    else -> throw UnsupportedOperationException("incorrect notification type")
+                }
+                val notificationData: NotificationData.NotificationFromUser = NotificationData.NotificationFromUser(
+                    (intent.getStringExtra("user_id") as String).toInt(),
+                    notificationType,
+                    0,
+                    (intent.getStringExtra("user_name") as String),
+                    isMyFriendData,
+                    intent.getStringExtra("avatar_link"),
+                )
+                sendNotification(bundleOf(
+                    "NOTIFICATION_DATA" to Json.encodeToString(notificationData),
+                    "type" to intent.getStringExtra("type")!!))
+            }
+            else -> {
+                val notificationData: NotificationData.AchievementNotification = NotificationData.AchievementNotification(
+                    (intent.getStringExtra("user_id") as String).toInt(),
+                    notificationType,
+                    0,
+                    (intent.getStringExtra("title") as String),
+                    (intent.getStringExtra("subtitle") as String),
+                    (intent.getStringExtra("image_url") as String),
+                )
+                sendNotification(bundleOf(
+                    "NOTIFICATION_DATA" to Json.encodeToString(notificationData),
+                    "type" to intent.getStringExtra("type")!!))
+            }
         }
-
-        val notificationData = NotificationData(
-
-            (intent.getStringExtra("user_id") as String).toInt(),
-            (intent.getStringExtra("user_name") as String),
-            intent.getStringExtra("avatar_link"),
-            notificationType,
-            0,
-            isMyFriendData
-        )
-
-        sendNotification(bundleOf("NOTIFICATION_DATA" to GsonBuilder().apply {
-            registerTypeAdapter(IsMyFriendStatus.Success::class.java, IsMyFriendStatusSerializer())
-        }.create().toJson(notificationData), "type" to intent.getStringExtra("type")!!))
-
     }
 
     private fun sendNotification(extras: Bundle) {

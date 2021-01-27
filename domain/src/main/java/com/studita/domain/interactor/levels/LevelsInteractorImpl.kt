@@ -23,7 +23,7 @@ class LevelsInteractorImpl(
     ): LevelsStatus =
         try {
             val results = repository.getLevels(offlineMode)
-            LevelsStatus.Success(results.map { LevelData(it.levelNumber, it.levelChildren.filter { (it is LevelChildData.LevelSubscribeData && it.isLoggedIn == isLoggedIn) || (it !is LevelChildData.LevelSubscribeData) })   })
+            LevelsStatus.Success(results.map {LevelData(it.levelNumber,it.levelName, it.levelChildren)   })
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is NetworkConnectionException || e is ServerUnavailableException) {

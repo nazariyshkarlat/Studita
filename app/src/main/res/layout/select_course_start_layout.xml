@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="24dp">
+        <TextView
+            style="@style/Medium24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:layout_marginEnd="32dp"
+            android:text="@string/select_course_title"/>
+        <TextView
+            style="@style/Regular16Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="@dimen/defaultRLMargin"
+            android:text="@string/select_course_subtitle"
+            android:layout_marginBottom="24dp" />
+
+        <include
+            layout="@layout/courses_list_layout"/>
+
+    </LinearLayout>
+
+    <com.studita.presentation.views.press_view.PressTextView
+        android:id="@+id/selectCourseStartLayoutButton"
+        style="@style/Button"
+        android:layout_gravity="bottom"
+        android:text="@string/select_course_button_text"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/buttonRLMargin"
+        android:layout_height="@dimen/buttonHeight"/>
+
+</FrameLayout>

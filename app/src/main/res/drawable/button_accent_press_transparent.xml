@@ -7,10 +7,5 @@
             <corners android:radius="@dimen/defRadius" />
         </shape>
     </item>
-    <item>
-        <shape>
-            <corners android:radius="@dimen/defRadius" />
-            <solid android:color="?attr/accent_lite_color" />
-        </shape>
-    </item>
+    <item android:drawable="@drawable/accent_lite_background"/>
 </ripple>

@@ -1,3 +1,4 @@
+/*
 package com.studita.presentation.view_model
 
 import androidx.fragment.app.Fragment
@@ -5,13 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.studita.domain.entity.InterestingLikeData
-import com.studita.domain.entity.InterestingLikeRequestData
-import com.studita.domain.interactor.InterestingStatus
-import com.studita.domain.interactor.interesting.InterestingInteractor
 import com.studita.presentation.fragments.interesting.*
-import com.studita.presentation.model.InterestingUiModelScreen
-import com.studita.presentation.model.toInterestingUiModel
 import com.studita.utils.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
@@ -249,4 +244,4 @@ class InterestingViewModel(private val interestingNumber: Int, private val handl
         }
     }
 
-}
+}*/

@@ -3,7 +3,6 @@ package com.studita.di.data
 import androidx.lifecycle.MutableLiveData
 import com.studita.data.cache.chapter.ChaptersCacheImpl
 import com.studita.data.cache.exercises.ExercisesCacheImpl
-import com.studita.data.cache.interesting.InterestingCacheImpl
 import com.studita.data.cache.levels.LevelsCacheImpl
 import com.studita.data.database.StuditaDatabase
 import com.studita.data.entity.ProgressRetrofit
@@ -44,8 +43,7 @@ fun createOfflineDataModule(config: DI.Config) =  configModule(configuration = c
         DiskOfflineDataDataStore(
             LevelsCacheImpl(GlobalContext.get().get()),
             ChaptersCacheImpl(GlobalContext.get().get()),
-            ExercisesCacheImpl(GlobalContext.get().get()),
-            InterestingCacheImpl(GlobalContext.get().get())
+            ExercisesCacheImpl(GlobalContext.get().get())
         )
     }
 }

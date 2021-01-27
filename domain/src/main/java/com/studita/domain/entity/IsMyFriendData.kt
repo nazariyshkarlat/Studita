@@ -1,7 +1,9 @@
 package com.studita.domain.entity
 
 import com.studita.domain.interactor.IsMyFriendStatus
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class IsMyFriendData(
     val isMyFriend: Boolean = false,
     val friendshipRequestFromMe: Boolean = false,

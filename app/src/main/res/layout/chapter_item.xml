@@ -1,46 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.studita.presentation.views.AlphaGradientView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/defaultBlockPadding"
+    android:layout_marginStart="@dimen/defaultRLMargin"
+    android:layout_marginEnd="@dimen/defaultRLMargin"
+    android:layout_marginBottom="16dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/chapter_background">
 
-    <LinearLayout
-        android:id="@+id/chapterItemParentView"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/chapterItemTitle"
+        style="@style/Medium18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/chapterItemSubtitle"
+        style="@style/Regular14"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/defaultBlockPadding"
-        android:layout_marginStart="@dimen/defaultRLMargin"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="@dimen/defaultRLMargin"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/chapter_background">
+        android:layout_marginTop="8dp" />
 
-        <TextView
-            android:id="@+id/chapterItemTitle"
-            style="@style/Medium18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/chapterItemProgressText"
+        style="@style/Regular13Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" />
 
-        <TextView
-            android:id="@+id/chapterItemSubtitle"
-            style="@style/Regular14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+    <com.studita.presentation.views.ProgressBar
+        android:id="@+id/chapterItemProgressBar"
+        style="@style/ProgressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginTop="14dp" />
 
-        <TextView
-            android:id="@+id/chapterItemProgressText"
-            style="@style/Regular13Secondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
-
-        <com.studita.presentation.views.ProgressBar
-            android:id="@+id/chapterItemProgressBar"
-            style="@style/ProgressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_marginTop="14dp" />
-
-    </LinearLayout>
-</com.studita.presentation.views.AlphaGradientView>
+</LinearLayout>
