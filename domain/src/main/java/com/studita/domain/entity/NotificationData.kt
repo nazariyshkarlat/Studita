@@ -27,6 +27,7 @@ sealed class NotificationData{
         val title: String,
         val subtitle: String,
         val iconLink: String,
+        val xpReward: Int
     ): NotificationData()
 }
 

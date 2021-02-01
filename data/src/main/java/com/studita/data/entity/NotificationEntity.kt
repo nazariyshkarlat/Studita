@@ -11,8 +11,9 @@ data class NotificationEntity(
     @SerializedName("image_url") val imageLink: String?,
     @SerializedName("notification_type") val notificationType: String,
     @SerializedName("seconds_ago") val secondsAgo: Long,
-    @SerializedName("friendship") val isMyFriendEntity: IsMyFriendEntity?
-)
+    @SerializedName("friendship") val isMyFriendEntity: IsMyFriendEntity?,
+    @SerializedName("xp_reward") val xpReward: Int?,
+    )
 
 fun NotificationEntity.toBusinessEntity() =
     if(notificationType.toNotificationType() is NotificationType.Achievement){
@@ -22,7 +23,8 @@ fun NotificationEntity.toBusinessEntity() =
             secondsAgo,
             title!!,
             subtitle!!,
-            imageLink!!
+            imageLink!!,
+            xpReward!!
         )
     }else{
         NotificationData.NotificationFromUser(

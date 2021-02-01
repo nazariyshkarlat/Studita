@@ -16,7 +16,8 @@ data class AuthorizationRequestEntity(
     @SerializedName("user_password") val userPassword: String,
     @SerializedName("user_data") val userDataEntity: UserDataEntity?,
     @SerializedName("user_statistics") val userStatisticsRowEntity: List<UserStatisticsRowEntity>?,
-    @SerializedName("push_data") val pushTokenEntity: PushTokenEntity?
+    @SerializedName("push_data") val pushTokenEntity: PushTokenEntity?,
+    @SerializedName("is_first_log_in") val isFirstLogIn: Boolean = false
 )
 
 fun AuthorizationRequestData.toRawEntity() = AuthorizationRequestEntity(
@@ -24,7 +25,8 @@ fun AuthorizationRequestData.toRawEntity() = AuthorizationRequestEntity(
     userPassword,
     userDataData?.toRawEntity(),
     userStatistics?.map { it.toRawEntity() },
-    pushTokenData?.toRawEntity()
+    pushTokenData?.toRawEntity(),
+    isFirstLogIn
 )
 
 fun LogInResponseEntity.toBusinessEntity() = LogInResponseData(

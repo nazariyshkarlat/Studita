@@ -23,7 +23,9 @@ class ImprovableAchievementViewHolder(view: View) :
 
         if(!achievementIsCompleted(model.currentLevel, model.maxLevel)) {
             itemView.improvableAchievementItemAchievementProgress.currentProgress =
-                model.currentProgress.toFloat() / model.maxProgress
+                if(UserUtils.isLoggedIn())
+                    model.currentProgress.toFloat() / model.maxProgress
+                else 0F
             itemView.improvableAchievementItemProgressBlock.visibility = View.VISIBLE
         }else{
             itemView.improvableAchievementItemProgressBlock.visibility = View.GONE
@@ -73,7 +75,10 @@ class ImprovableAchievementViewHolder(view: View) :
                 improvableAchievementItemReward.text = model.reward
                 improvableAchievementItemAchievementProgressText.text = resources.getString(
                     R.string.double_dots_placeholder,
-                    model.progressType, resources.getString(R.string.of_template, model.currentProgress, model.maxProgress))
+                    model.progressType,
+                    if(UserUtils.isLoggedIn()) resources.getString(R.string.of_template, model.currentProgress, model.maxProgress)
+                    else context.resources.getString(R.string.unavailable)
+                )
             }else{
                 improvableAchievementItemReward.visibility = View.GONE
                 improvableAchievementItemAchievementProgressText.visibility = View.GONE
@@ -95,7 +100,7 @@ class ImprovableAchievementViewHolder(view: View) :
                 )
             )
             append(
-                context.resources.getString(R.string.of_template, currentLevel.levelNumber, maxLevel.levelNumber)
+                if(UserUtils.isLoggedIn()) context.resources.getString(R.string.of_template, currentLevel.levelNumber, maxLevel.levelNumber) else context.resources.getString(R.string.unavailable)
                     .createSpannableString(
                         color = if(!achievementIsCompleted(currentLevel, maxLevel)) ThemeUtils.getSecondaryColor(context) else ThemeUtils.getAccentColor(context),
                         fontSize = 14F,

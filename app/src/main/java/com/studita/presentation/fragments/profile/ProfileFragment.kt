@@ -32,6 +32,7 @@ import com.studita.domain.interactor.UserDataStatus
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.presentation.activities.promo.AchievementsActivity
 import com.studita.presentation.activities.promo.CompetitionsActivity
+import com.studita.presentation.fragments.achievements.AchievementsFragment
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.error_fragments.InternetIsDisabledFragment
 import com.studita.presentation.fragments.error_fragments.ServerProblemsFragment
@@ -281,7 +282,7 @@ open class ProfileFragment : NavigatableFragment(R.layout.profile_layout),
             profileLayoutAchievementsScrollViewContent.removeAllViews()
             if (isMyProfile)
                 profileLayoutAchievementsTitle.setOnClickListener {
-                    activity?.startActivity<AchievementsActivity>()
+                    (activity as AppCompatActivity).navigateTo(AchievementsFragment(), R.id.doubleFrameLayoutFrameLayout)
                 }
             profileLayoutAchievementsTitle.text =
                 resources.getString(R.string.achievements_count_template, achievements.size)

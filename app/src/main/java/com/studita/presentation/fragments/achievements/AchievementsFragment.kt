@@ -3,13 +3,10 @@ package com.studita.presentation.fragments.achievements
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.OneShotPreDrawListener
-import androidx.core.view.ViewCompat
-import androidx.core.view.children
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -18,7 +15,6 @@ import com.studita.App
 import com.studita.R
 import com.studita.presentation.activities.MainActivity
 import com.studita.presentation.activities.MainMenuActivity
-import com.studita.presentation.fragments.base.BaseFragment
 import com.studita.presentation.fragments.base.NavigatableFragment
 import com.studita.presentation.fragments.error_fragments.InternetIsDisabledMainFragment
 import com.studita.presentation.fragments.error_fragments.MainLayoutOfflineModeErrorFragment
@@ -31,9 +27,6 @@ import com.studita.utils.UserUtils.observeNoNull
 import kotlinx.android.synthetic.main.achievements_layout.*
 import kotlinx.android.synthetic.main.achievements_layout_bar.*
 import kotlinx.android.synthetic.main.achievements_layout_bar.view.*
-import kotlinx.android.synthetic.main.home_layout.*
-import kotlinx.android.synthetic.main.home_layout_bar.*
-import kotlinx.android.synthetic.main.profile_layout.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.serialization.decodeFromString
@@ -150,7 +143,6 @@ class AchievementsFragment : NavigatableFragment(R.layout.achievements_layout), 
         lifecycleScope.launchWhenStarted {
             achievementsViewModel.viewPagerNavigateToPageEvent.collect {
                 achievementsLayoutViewPager.currentItem = it
-                println(it)
             }
         }
 

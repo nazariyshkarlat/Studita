@@ -45,7 +45,6 @@ class SelectCourseFragmentViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        println("on cleared")
     }
 
 }

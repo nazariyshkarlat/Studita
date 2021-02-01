@@ -94,7 +94,8 @@ class AuthorizationFragmentViewModel : ViewModel() {
                                         it,
                                         DeviceUtils.getDeviceId(applicationRef)
                                     )
-                                }
+                                },
+                                afterSignUp
                             )
                         )) {
                             is LogInStatus.NoConnection -> errorEvent.value = R.string.no_connection
@@ -105,6 +106,7 @@ class AuthorizationFragmentViewModel : ViewModel() {
                             is LogInStatus.NoUserFound -> authorizationState.value =
                                 AuthorizationResult.NoUserFound
                             is LogInStatus.Success -> {
+                                userStatisticsInteractor.clearUserStaticsRecords()
                                 App.userDataDeferred.complete(UserDataStatus.Success(result.result.userDataData))
                                 initUserData(result.result.userDataData)
 
@@ -150,7 +152,6 @@ class AuthorizationFragmentViewModel : ViewModel() {
                     is SignUpStatus.UserAlreadyExists -> authorizationState.value =
                         AuthorizationResult.UserAlreadyExists
                     is SignUpStatus.Success -> {
-                        userStatisticsInteractor.clearUserStaticsRecords()
                         authorizationState.value =
                             AuthorizationResult.SignUpSuccess(
                                 dates.first,

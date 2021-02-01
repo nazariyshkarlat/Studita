@@ -8,10 +8,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.view.updateLayoutParams
 import com.studita.R
 import com.studita.domain.entity.AchievementDataData
-import com.studita.utils.ThemeUtils
-import com.studita.utils.createSpannableString
-import com.studita.utils.dp
-import com.studita.utils.loadSVG
+import com.studita.utils.*
 import kotlinx.android.synthetic.main.non_improvable_achievement_item.view.*
 
 class NonImprovableAchievementViewHolder(view: View) :
@@ -61,7 +58,13 @@ class NonImprovableAchievementViewHolder(view: View) :
                 )
             )
             append(
-                context.resources.getString(if(!isCompleted) R.string.is_not_completed else R.string.is_completed)
+                context.resources.getString(
+                    when {
+                        !UserUtils.isLoggedIn() -> R.string.unavailable
+                        !isCompleted -> R.string.is_not_completed
+                        else -> R.string.is_completed
+                    }
+                )
                     .createSpannableString(
                         color = if(!isCompleted) ThemeUtils.getSecondaryColor(context) else ThemeUtils.getAccentColor(context),
                         fontSize = 14F,

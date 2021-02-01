@@ -14,8 +14,17 @@ import com.studita.domain.entity.serializer.IsMyFriendStatusSerializer
 import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.notifications.PushReceiver
 import com.google.gson.GsonBuilder
+import com.studita.domain.interactor.GetUsersStatus
+import com.studita.domain.interactor.UserDataStatus
+import com.studita.domain.interactor.user_data.UserDataInteractor
+import com.studita.utils.LevelUtils
+import com.studita.utils.PrefsUtils
+import com.studita.utils.UserUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.koin.core.context.GlobalContext
 import java.lang.UnsupportedOperationException
 
 
@@ -76,10 +85,37 @@ class PushReceiverIntentService : JobIntentService() {
                     (intent.getStringExtra("title") as String),
                     (intent.getStringExtra("subtitle") as String),
                     (intent.getStringExtra("image_url") as String),
-                )
+                    (intent.getStringExtra("xp_reward") as String).toInt(),
+                    )
+                updateUserXpAndLevelByXpReward((intent.getStringExtra("xp_reward") as String).toInt())
                 sendNotification(bundleOf(
                     "NOTIFICATION_DATA" to Json.encodeToString(notificationData),
                     "type" to intent.getStringExtra("type")!!))
+            }
+        }
+    }
+
+
+    private fun updateUserXpAndLevelByXpReward(xpReward: Int){
+        (GlobalContext.get().get<UserDataInteractor>()).let {
+            GlobalScope.launch {
+                val userData = it.getUserData(PrefsUtils.getUserId(), true, true)
+                if(userData is UserDataStatus.Success) {
+                    val newUserData = userData.result.apply {
+                        currentLevel =
+                            UserUtils.userData.currentLevel + LevelUtils.getNewLevelsCount(
+                                UserUtils.userData,
+                                xpReward
+                            )
+                        currentLevelXP = LevelUtils.getNewLevelXP(
+                            UserUtils.userData,
+                            xpReward
+                        )
+                    }
+                    it.saveUserData(newUserData)
+                    if (!UserUtils.userDataIsNull())
+                        UserUtils.userDataLiveData.postValue(newUserData)
+                }
             }
         }
     }

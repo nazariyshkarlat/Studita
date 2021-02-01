@@ -9,5 +9,6 @@ data class AuthorizationRequestData(
     val userPassword: String,
     val userDataData: UserDataData?,
     val userStatistics: List<UserStatisticsRowData>?,
-    val pushTokenData: PushTokenData?
+    val pushTokenData: PushTokenData?,
+    val isFirstLogIn: Boolean = false
 )
