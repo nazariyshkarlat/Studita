@@ -1,7 +1,10 @@
 package com.studita.domain.entity
 
+import com.studita.domain.entity.serializer.DateSerializer
+import kotlinx.serialization.Serializable
 import java.util.*
 
+@Serializable
 data class UserStatisticsData(
     val obtainedXP: Int,
     val timeSpent: Long,
@@ -12,8 +15,9 @@ data class UserStatisticsData(
     val completedChapters: Int
 )
 
-
+@Serializable
 data class UserStatisticsRowData(
+    @Serializable(with = DateSerializer::class)
     val datetime: Date,
     val obtainedXP: Int,
     val timeSpent: Long,

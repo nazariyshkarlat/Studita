@@ -1,31 +1,33 @@
 package com.studita.data.entity
-
-import com.google.gson.annotations.SerializedName
 import com.studita.domain.entity.AchievementData
 import com.studita.domain.entity.AchievementDataData
 import com.studita.domain.entity.AchievementLevel
 import com.studita.domain.entity.AchievementType
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.lang.UnsupportedOperationException
 
-data class AchievementEntity(@SerializedName("type") val type: Int,
-                             @SerializedName("level") val level: Int,
-                             @SerializedName("icon_url") val iconUrl: String,
-                             @SerializedName("improvable") val improvable: Boolean)
+@Serializable
+data class AchievementEntity(@SerialName("type") val type: Int,
+                             @SerialName("level") val level: Int,
+                             @SerialName("icon_url") val iconUrl: String,
+                             @SerialName("improvable") val improvable: Boolean)
 
-data class AchievementDataEntity(@SerializedName("type") val type: Int,
-                                 @SerializedName("improvable") val improvable: Boolean,
-                                 @SerializedName("exercise") val exercise: String,
-                                 @SerializedName("reward") val reward: String?,
-                                  @SerializedName("title") val title: String,
-                                  @SerializedName("current_level") val currentLevel: Int?,
-                                 @SerializedName("current_level_icon") val currentLevelIcon: String?,
-                                 @SerializedName("next_level_icon") val nextLevelIcon: String?,
-                                 @SerializedName("icon_url") val iconUrl: String?,
-                                 @SerializedName("progress_type") val progressType: String?,
-                                 @SerializedName("max_level") val maxLevel: Int?,
-                                 @SerializedName("completed") val completed: Boolean?,
-                                 @SerializedName("current_progress") val currentProgress: Int?,
-                                 @SerializedName("max_progress") val maxProgress: Int?)
+@Serializable
+data class AchievementDataEntity(@SerialName("type") val type: Int,
+                                 @SerialName("improvable") val improvable: Boolean,
+                                 @SerialName("exercise") val exercise: String,
+                                 @SerialName("reward") val reward: String? = null,
+                                 @SerialName("title") val title: String,
+                                 @SerialName("current_level") val currentLevel: Int? = null,
+                                 @SerialName("current_level_icon") val currentLevelIcon: String? = null,
+                                 @SerialName("next_level_icon") val nextLevelIcon: String? = null,
+                                 @SerialName("icon_url") val iconUrl: String? = null,
+                                 @SerialName("progress_type") val progressType: String? = null,
+                                 @SerialName("max_level") val maxLevel: Int? = null,
+                                 @SerialName("completed") val completed: Boolean? = null,
+                                 @SerialName("current_progress") val currentProgress: Int? = null,
+                                 @SerialName("max_progress") val maxProgress: Int? = null)
 
 fun AchievementDataEntity.toBusinessEntity() =
     if(improvable)

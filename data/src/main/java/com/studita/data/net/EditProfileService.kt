@@ -1,6 +1,6 @@
 package com.studita.data.net
 
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response

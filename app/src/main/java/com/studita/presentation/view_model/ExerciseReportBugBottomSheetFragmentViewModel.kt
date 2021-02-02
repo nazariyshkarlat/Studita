@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.studita.domain.entity.exercise.ExerciseReportData
 import com.studita.domain.entity.exercise.ExerciseReportRequestData
 import com.studita.domain.entity.exercise.ExerciseReportType
-import com.studita.domain.interactor.exercises.ExerciseResultInteractor
-import com.studita.domain.interactor.user_data.UserDataInteractor
+import com.studita.domain.interactor.exercises.ExerciseReportnteractor
 import com.studita.utils.UserUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -14,7 +13,7 @@ import org.koin.core.context.GlobalContext
 
 class ExerciseReportBugBottomSheetFragmentViewModel(private val exerciseNumber: Int) : ViewModel(){
 
-    private val exerciseResultInteractor = GlobalContext.get().get<ExerciseResultInteractor>()
+    private val exerciseResultInteractor = GlobalContext.get().get<ExerciseReportnteractor>()
 
     var isThxLayout = false
 

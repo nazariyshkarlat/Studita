@@ -1,6 +1,9 @@
 package com.studita.domain.entity
 
+import kotlinx.serialization.Serializable
 
+
+@Serializable
 data class PrivacySettingsData(
     var duelsInvitesFrom: DuelsInvitesFrom? = null,
     var showInRatings: Boolean? = null,
@@ -14,6 +17,7 @@ enum class DuelsInvitesFrom {
     EXCEPT
 }
 
+@Serializable
 data class PrivacySettingsRequestData(
     val userIdTokenData: UserIdTokenData,
     val privacySettingsEntity: PrivacySettingsData

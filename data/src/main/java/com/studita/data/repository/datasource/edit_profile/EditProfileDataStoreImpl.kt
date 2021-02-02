@@ -5,9 +5,10 @@ import com.studita.data.net.EditProfileService
 import com.studita.data.net.connection.ConnectionManager
 import com.studita.domain.exception.NetworkConnectionException
 import com.studita.domain.exception.ServerUnavailableException
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CancellationException
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -32,12 +33,10 @@ class EditProfileDataStoreImpl(
                     editProfileRequest.toRequestBody(),
                     newAvatarFile?.toBodyPart()
                 )
-                val avatarLink = Gson().fromJson<HashMap<String, String?>>(
-                    result.body().toString(),
-                    object : TypeToken<HashMap<String, String?>>() {}.type
-                )["avatar_link"]
+                val avatarLink = Json.decodeFromString<HashMap<String, String?>>(result.body().toString())["avatar_link"]
                 avatarLink to result.code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -53,6 +52,7 @@ class EditProfileDataStoreImpl(
                 val response = editProfileService.isUserNameAvailable(userName)
                 response.code() to response.body()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -66,7 +66,7 @@ class EditProfileDataStoreImpl(
     }
 
     private fun EditProfileRequest.toRequestBody() =
-        Gson().toJson(this).toRequestBody("application/json".toMediaTypeOrNull())
+        Json.encodeToString(this).toRequestBody("application/json".toMediaTypeOrNull())
 
 
 }

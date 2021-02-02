@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.studita.R
 import com.studita.domain.entity.exercise.ExerciseReportType
 import com.studita.presentation.view_model.ExerciseReportBugBottomSheetFragmentViewModel
-import com.studita.presentation.view_model.ExercisesViewModel
 import com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawerDialog
 import com.studita.presentation.views.custom_bottom_sheet.com.github.heyalex.bottomdrawer.BottomDrawerFragment
 import com.studita.utils.makeView
@@ -21,7 +20,7 @@ import java.lang.UnsupportedOperationException
 
 class ExerciseReportBugBottomSheetFragment : BottomDrawerFragment(){
 
-    private val viewModel: ExerciseReportBugBottomSheetFragmentViewModel by lazy {
+/*    private val viewModel: ExerciseReportBugBottomSheetFragmentViewModel by lazy {
         ViewModelProviders.of(this, object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : androidx.lifecycle.ViewModel?> create(modelClass: Class<T>): T {
@@ -131,5 +130,5 @@ class ExerciseReportBugBottomSheetFragment : BottomDrawerFragment(){
 
         (view as ViewGroup).addView(thxLayout)
 
-    }
+    }*/
 }

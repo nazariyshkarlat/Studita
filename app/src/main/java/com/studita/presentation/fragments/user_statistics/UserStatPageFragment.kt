@@ -6,9 +6,9 @@ import com.studita.R
 import com.studita.domain.entity.UserStatisticsData
 import com.studita.presentation.fragments.base.BaseFragment
 import com.studita.utils.TimeUtils
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.user_stat_page_layout.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout) {
 
@@ -16,7 +16,7 @@ open class UserStatPageFragment : BaseFragment(R.layout.user_stat_page_layout) {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let{
-            formView(Gson().fromJson(it.getString("USER_STAT"), object : TypeToken<UserStatisticsData>(){}.type))
+            formView(Json.decodeFromString(it.getString("USER_STAT")!!))
         }
 
     }

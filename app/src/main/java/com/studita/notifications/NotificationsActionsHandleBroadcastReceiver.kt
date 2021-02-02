@@ -9,14 +9,12 @@ import com.studita.domain.entity.UserData
 import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.domain.interactor.users.UsersInteractor
 import com.studita.utils.UserUtils
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.studita.domain.interactor.notifications.NotificationsInteractor
-import com.studita.domain.interactor.user_data.UserDataInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import org.koin.core.context.GlobalContext
 
 
@@ -25,14 +23,8 @@ class NotificationsActionsHandleBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val notificationId = intent.getIntExtra("NOTIFICATION_ID", 0)
-        val userData = GsonBuilder().apply {
-            registerTypeAdapter(
-                IsMyFriendStatus.Success::class.java,
-                IsMyFriendStatusDeserializer()
-            )
-        }.create().fromJson<UserData>(
-            intent.getStringExtra("USER_DATA"),
-            object : TypeToken<UserData>() {}.type
+        val userData = Json.decodeFromString<UserData>(
+            intent.getStringExtra("USER_DATA")!!
         )
 
         when (intent.action?.toNotificationAction()) {

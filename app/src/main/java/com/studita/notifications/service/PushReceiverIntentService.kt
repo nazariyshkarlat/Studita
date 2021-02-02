@@ -10,11 +10,7 @@ import com.studita.data.entity.toNotificationType
 import com.studita.domain.entity.IsMyFriendData
 import com.studita.domain.entity.NotificationData
 import com.studita.domain.entity.NotificationType
-import com.studita.domain.entity.serializer.IsMyFriendStatusSerializer
-import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.notifications.PushReceiver
-import com.google.gson.GsonBuilder
-import com.studita.domain.interactor.GetUsersStatus
 import com.studita.domain.interactor.UserDataStatus
 import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.utils.LevelUtils
@@ -71,7 +67,7 @@ class PushReceiverIntentService : JobIntentService() {
                     0,
                     (intent.getStringExtra("user_name") as String),
                     isMyFriendData,
-                    intent.getStringExtra("avatar_link"),
+                    intent.getStringExtra("image_url"),
                 )
                 sendNotification(bundleOf(
                     "NOTIFICATION_DATA" to Json.encodeToString(notificationData),

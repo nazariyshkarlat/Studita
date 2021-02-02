@@ -1,18 +1,19 @@
 package com.studita.data.entity
-
-import com.google.gson.annotations.SerializedName
 import com.studita.domain.entity.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class NotificationEntity(
-    @SerializedName("user_id") val userId: Int,
-    @SerializedName("user_name") val userName: String?,
-    @SerializedName("subtitle") val subtitle: String?,
-    @SerializedName("title") val title: String?,
-    @SerializedName("image_url") val imageLink: String?,
-    @SerializedName("notification_type") val notificationType: String,
-    @SerializedName("seconds_ago") val secondsAgo: Long,
-    @SerializedName("friendship") val isMyFriendEntity: IsMyFriendEntity?,
-    @SerializedName("xp_reward") val xpReward: Int?,
+    @SerialName("user_id") val userId: Int,
+    @SerialName("user_name") val userName: String? = null,
+    @SerialName("subtitle") val subtitle: String? = null,
+    @SerialName("title") val title: String? = null,
+    @SerialName("image_url") val imageLink: String? = null,
+    @SerialName("notification_type") val notificationType: String,
+    @SerialName("seconds_ago") val secondsAgo: Long,
+    @SerialName("friendship") val isMyFriendEntity: IsMyFriendEntity? = null,
+    @SerialName("xp_reward") val xpReward: Int? = null,
     )
 
 fun NotificationEntity.toBusinessEntity() =

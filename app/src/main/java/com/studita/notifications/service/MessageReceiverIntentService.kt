@@ -30,7 +30,7 @@ class MessageReceiverIntentService : JobIntentService() {
         val userData = UserData(
             userId,
             intent.getStringExtra("user_name")!!,
-            intent.getStringExtra("avatar_link"),
+            intent.getStringExtra("image_url"),
             IsMyFriendStatus.Success.IsNotMyFriend(userId)
         )
 

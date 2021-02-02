@@ -21,6 +21,7 @@ class SubscribeEmailDataStoreImpl(
                 val body = result.body()!!
                 result.code() to SubscribeEmailResultEntity(true, body["user_email"])
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -37,6 +38,7 @@ class SubscribeEmailDataStoreImpl(
                 result.code() to result.body()
                     ?.let { SubscribeEmailResultEntity(false, it["user_email"]) }
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else

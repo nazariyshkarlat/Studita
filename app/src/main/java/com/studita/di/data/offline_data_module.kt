@@ -2,9 +2,7 @@ package com.studita.di.data
 
 import androidx.lifecycle.MutableLiveData
 import com.studita.data.cache.chapter.ChaptersCacheImpl
-import com.studita.data.cache.exercises.ExercisesCacheImpl
 import com.studita.data.cache.levels.LevelsCacheImpl
-import com.studita.data.database.StuditaDatabase
 import com.studita.data.entity.ProgressRetrofit
 import com.studita.data.entity.setProgressRetrofitListener
 import com.studita.data.net.OfflineDataService
@@ -17,7 +15,6 @@ import com.studita.domain.interactor.offline_data.OfflineDataInteractorImpl
 import com.studita.domain.repository.OfflineDataRepository
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.GlobalContext.get
-import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 
@@ -42,8 +39,7 @@ fun createOfflineDataModule(config: DI.Config) =  configModule(configuration = c
     single {
         DiskOfflineDataDataStore(
             LevelsCacheImpl(GlobalContext.get().get()),
-            ChaptersCacheImpl(GlobalContext.get().get()),
-            ExercisesCacheImpl(GlobalContext.get().get())
+            ChaptersCacheImpl(GlobalContext.get().get())
         )
     }
 }

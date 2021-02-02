@@ -2,9 +2,9 @@ package com.studita.domain.interactor
 
 import com.studita.domain.entity.*
 import com.studita.domain.entity.authorization.LogInResponseData
-import com.studita.domain.entity.exercise.ExerciseResponseData
-import com.studita.domain.entity.exercise.ExercisesResponseData
-import kotlinx.coroutines.flow.Flow
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.*
 
 
@@ -61,22 +61,6 @@ sealed class ChaptersCacheStatus {
     object IsCached : ChaptersCacheStatus()
     object Failure : ChaptersCacheStatus()
     object Success : ChaptersCacheStatus()
-}
-
-sealed class ExercisesStatus {
-    object ServiceUnavailable : ExercisesStatus()
-    object Failure : ExercisesStatus()
-    object NoConnection : ExercisesStatus()
-    object NoChapterPartFound : ExercisesStatus()
-    data class Success(val result: ExercisesResponseData) : ExercisesStatus()
-}
-
-sealed class ExerciseResultStatus {
-    object ServiceUnavailable : ExerciseResultStatus()
-    object NoConnection : ExerciseResultStatus()
-    object NoExerciseFound : ExerciseResultStatus()
-    object Failure : ExerciseResultStatus()
-    data class Success(val result: ExerciseResponseData) : ExerciseResultStatus()
 }
 
 sealed class UserDataStatus {
@@ -170,15 +154,27 @@ sealed class GetUsersStatus {
 
 sealed class IsMyFriendStatus {
 
-    sealed class Success(@Transient open val userId: Int) : IsMyFriendStatus() {
-        class IsMyFriend(override val userId: Int) : Success(userId)
-        class IsNotMyFriend(override val userId: Int) : Success(userId)
-        class GotMyFriendshipRequest(override val userId: Int) : Success(userId)
-        class WaitingForFriendshipAccept(override val userId: Int) : Success(userId)
+    @Serializable
+    sealed class Success : IsMyFriendStatus() {
+        abstract val userId: Int
+        @Serializable
+        @SerialName("is_my_friend")
+        class IsMyFriend(override val userId: Int) : Success()
+        @Serializable
+        @SerialName("is_not_my_friend")
+        class IsNotMyFriend(override val userId: Int) : Success()
+        @Serializable
+        @SerialName("got_my_friendship_request")
+        class GotMyFriendshipRequest(override val userId: Int) : Success()
+        @Serializable
+        @SerialName("waiting_for_friendship_accept")
+        class WaitingForFriendshipAccept(override val userId: Int) : Success()
     }
 
     object ServiceUnavailable : IsMyFriendStatus()
+
     object NoConnection : IsMyFriendStatus()
+
     object Failure : IsMyFriendStatus()
 }
 

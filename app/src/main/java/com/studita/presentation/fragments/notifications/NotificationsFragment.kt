@@ -16,7 +16,6 @@ import androidx.core.view.contains
 import androidx.core.widget.TextViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.gson.Gson
 import com.studita.R
 import com.studita.domain.entity.NotificationData
 import com.studita.domain.entity.NotificationType
@@ -30,18 +29,15 @@ import com.studita.presentation.fragments.error_fragments.InternetIsDisabledFrag
 import com.studita.presentation.fragments.error_fragments.ServerProblemsFragment
 import com.studita.presentation.listeners.ReloadPageCallback
 import com.studita.presentation.model.NotificationsUiModel
-import com.studita.presentation.model.toUiModel
 import com.studita.presentation.view_model.NotificationsFragmentViewModel
 import com.studita.utils.UserUtils
 import com.studita.utils.addFragment
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import com.studita.data.entity.isNotificationType
 import com.studita.data.entity.toFirebaseMessageType
 import com.studita.data.entity.toNotificationType
 import com.studita.domain.entity.MessageType
-import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.studita.notifications.service.MessageReceiverIntentService.Companion.BROADCAST_MESSAGE
+import com.studita.presentation.model.toUiModel
 import com.studita.utils.dp
 import kotlinx.android.synthetic.main.recyclerview_layout.*
 import kotlinx.serialization.decodeFromString
@@ -72,7 +68,7 @@ class NotificationsFragment : NavigatableFragment(R.layout.recyclerview_layout),
                 if (type.isNotificationType()) {
                     if(type.toNotificationType() !is NotificationType.Achievement) {
 
-                        val notificationData = Json.decodeFromString<NotificationData.NotificationFromUser>(intent.getStringExtra("NOTIFICATION_DATA")!!)
+                        val notificationData:NotificationData.NotificationFromUser  = Json.decodeFromString(intent.getStringExtra("NOTIFICATION_DATA")!!)
                         when (notificationData.notificationType) {
                             NotificationType.FriendshipRequest -> {
                                 UserUtils.isMyFriendLiveData.postValue(

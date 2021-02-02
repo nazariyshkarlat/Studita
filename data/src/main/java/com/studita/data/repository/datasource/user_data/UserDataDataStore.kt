@@ -19,7 +19,8 @@ interface UserDataDataStore {
             false,
             listOf(0, 0, 0, 0),
             DateUtils.getDefaultDateSting(),
-            0
+            0,
+            true
         )
     }
 

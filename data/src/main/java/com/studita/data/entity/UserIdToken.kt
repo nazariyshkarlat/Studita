@@ -1,11 +1,13 @@
 package com.studita.data.entity
 
 import com.studita.domain.entity.UserIdTokenData
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class UserIdToken(
-    @SerializedName("user_id") val userId: Int,
-    @SerializedName("user_token") val userToken: String
+    @SerialName("user_id") val userId: Int,
+    @SerialName("user_token") val userToken: String
 )
 
 fun UserIdTokenData.toRawEntity() = UserIdToken(userId, userToken)

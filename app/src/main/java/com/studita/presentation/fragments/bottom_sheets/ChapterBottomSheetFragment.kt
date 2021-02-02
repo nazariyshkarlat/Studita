@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.studita.R
 import com.studita.domain.entity.ChapterData
 import com.studita.domain.entity.UserDataData
-import com.studita.presentation.activities.ExercisesActivity
 import com.studita.presentation.fragments.error_fragments.ChapterBottomSheetInternetIsDisabledFragment
 import com.studita.presentation.fragments.error_fragments.ChapterBottomSheetServerProblemsFragment
 import com.studita.presentation.listeners.ReloadPageCallback
@@ -205,7 +204,7 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(), ReloadPageCallback{
                     setItemEnabled(childItem)
 
                 childItem.chapterPartItemButton.setOnClickListener {
-                    (activity as AppCompatActivity).startActivity<ExercisesActivity>(
+/*                    (activity as AppCompatActivity).startActivity<ExercisesActivity>(
                         "CHAPTER_NUMBER" to chapterData.chapterNumber,
                         "CHAPTER_PART_NUMBER" to part.number,
                         "CHAPTER_PARTS_IN_CHAPTER_COUNT" to chapterData.parts.size,
@@ -213,7 +212,7 @@ class ChapterBottomSheetFragment : BottomDrawerFragment(), ReloadPageCallback{
                         "EXERCISES_IN_CHAPTER_COUNT" to chapterData.exercisesCount,
                         "CHAPTER_PART_IN_CHAPTER_NUMBER" to chapterPartInChapterNumber,
                         "IS_TRAINING" to (chapterPartInChapterNumber - 1 != UserUtils.userData.completedParts[chapterData.chapterNumber - 1])
-                    )
+                    )*/
                 }
             }else{
                 setItemDisabled(childItem)

@@ -1,9 +1,12 @@
 package com.studita.domain.entity
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class AchievementData(val type: AchievementType, val level: AchievementLevel, val iconUrl: String, val isImprovable: Boolean)
 
+@Serializable
 sealed class AchievementDataData{
 
     abstract val type: AchievementType
@@ -11,6 +14,8 @@ sealed class AchievementDataData{
     abstract val reward: String?
     abstract  val title: String
 
+    @Serializable
+    @SerialName("improvable")
     data class ImprovableAchievementData(
         override val type: AchievementType,
         override val exercise: String,
@@ -25,6 +30,8 @@ sealed class AchievementDataData{
         val maxProgress: Int
     ) : AchievementDataData()
 
+    @Serializable
+    @SerialName("non_improvable")
     data class NonImprovableAchievementData(
         override val type: AchievementType,
         override val exercise: String,

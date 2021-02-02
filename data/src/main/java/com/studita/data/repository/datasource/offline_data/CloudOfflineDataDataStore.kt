@@ -24,6 +24,7 @@ class CloudOfflineDataDataStore(private val connectionManager: ConnectionManager
                 val body = result.body()!!
                 result.code() to OfflineDataEntity(body["levels"].toString(), body["chapters"].toString(), body["offline_exercises"].toString())
             } catch (e: Exception) {
+                e.printStackTrace()
                 when {
                     connectionManager.isNetworkAbsent() -> throw NetworkConnectionException()
                     e is CancellationException -> throw e

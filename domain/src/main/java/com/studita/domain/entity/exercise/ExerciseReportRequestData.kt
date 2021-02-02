@@ -1,13 +1,15 @@
 package com.studita.domain.entity.exercise
 
 import com.studita.domain.entity.UserIdTokenData
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ExerciseReportRequestData(
     val userIdTokenData: UserIdTokenData?,
     val exerciseReportData: ExerciseReportData
 )
 
+@Serializable
 data class ExerciseReportData(
     val exerciseNumber: Int,
     val bugTypes: List<ExerciseReportType>

@@ -2,22 +2,25 @@ package com.studita.data.entity
 
 import com.studita.domain.entity.authorization.AuthorizationRequestData
 import com.studita.domain.entity.authorization.LogInResponseData
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class LogInResponseEntity(
-    @SerializedName("user_id") val userId: Int,
-    @SerializedName("user_token") val userToken: String,
-    @SerializedName("user_data") val userDataEntity: UserDataEntity,
-    @SerializedName("is_after_sign_up") val isAfterSignUp: Boolean? = null
+    @SerialName("user_id") val userId: Int,
+    @SerialName("user_token") val userToken: String,
+    @SerialName("user_data") val userDataEntity: UserDataEntity,
+    @SerialName("is_after_sign_up") val isAfterSignUp: Boolean? = null
 )
 
+@Serializable
 data class AuthorizationRequestEntity(
-    @SerializedName("user_email") val userEmail: String,
-    @SerializedName("user_password") val userPassword: String,
-    @SerializedName("user_data") val userDataEntity: UserDataEntity?,
-    @SerializedName("user_statistics") val userStatisticsRowEntity: List<UserStatisticsRowEntity>?,
-    @SerializedName("push_data") val pushTokenEntity: PushTokenEntity?,
-    @SerializedName("is_first_log_in") val isFirstLogIn: Boolean = false
+    @SerialName("user_email") val userEmail: String,
+    @SerialName("user_password") val userPassword: String,
+    @SerialName("user_data") val userDataEntity: UserDataEntity?,
+    @SerialName("user_statistics") val userStatisticsRowEntity: List<UserStatisticsRowEntity>?,
+    @SerialName("push_data") val pushTokenEntity: PushTokenEntity?,
+    @SerialName("is_first_log_in") val isFirstLogIn: Boolean = false
 )
 
 fun AuthorizationRequestData.toRawEntity() = AuthorizationRequestEntity(

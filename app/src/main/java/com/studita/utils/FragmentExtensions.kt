@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.studita.R
+import com.studita.presentation.fragments.main.HomeFragment
 
 fun AppCompatActivity.addFragment(fragment: Fragment, container: Int, addToBackStack: Boolean = false,
                                   startAnim: Int = 0,
@@ -17,7 +18,7 @@ fun AppCompatActivity.addFragment(fragment: Fragment, container: Int, addToBackS
                                   backEndAnim: Int = 0) {
     supportFragmentManager.beginTransaction()
         .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
-        .add(container, fragment, fragment::class.java.name)
+        .add(container, fragment, fragment::class.java.canonicalName)
         .apply {
             if(addToBackStack) addToBackStack(null)
         }
@@ -31,7 +32,7 @@ fun AppCompatActivity.addFragmentAllowStateLoss(fragment: Fragment, container: I
                                   backEndAnim: Int = 0) {
     supportFragmentManager.beginTransaction()
         .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
-        .add(container, fragment, fragment::class.java.name)
+        .add(container, fragment, fragment::class.java.canonicalName)
         .apply {
             if(addToBackStack) addToBackStack(null)
         }
@@ -45,7 +46,7 @@ fun Fragment.addFragment(fragment: Fragment, container: Int, addToBackStack: Boo
                          backEndAnim: Int = 0) {
     childFragmentManager.beginTransaction()
         .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
-        .add(container, fragment, fragment::class.java.name)
+        .add(container, fragment, fragment::class.java.canonicalName)
         .apply {
             if(addToBackStack) addToBackStack(null)
         }
@@ -59,7 +60,7 @@ fun Fragment.addFragmentNow(fragment: Fragment, container: Int, addToBackStack: 
                          backEndAnim: Int = 0) {
     childFragmentManager.beginTransaction()
         .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
-        .add(container, fragment, fragment::class.java.name)
+        .add(container, fragment, fragment::class.java.canonicalName)
         .apply {
             if(addToBackStack) addToBackStack(null)
         }
@@ -74,7 +75,7 @@ fun FragmentManager.addFragment(fragment: Fragment, container: Int, addToBackSta
                                 backEndAnim: Int = 0) {
     beginTransaction()
         .setCustomAnimations(startAnim, endAnim, backStartAnim, backEndAnim)
-        .add(container, fragment, fragment::class.java.name)
+        .add(container, fragment, fragment::class.java.canonicalName)
         .apply {
             if(addToBackStack) addToBackStack(null)
         }

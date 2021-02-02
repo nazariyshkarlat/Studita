@@ -21,6 +21,7 @@ class CloudChapterJsonDataStore(
                 val chapter = chapterService.getChapter(chapterNumber)
                 return chapter.code() to chapter.body()!!.toString()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -37,6 +38,7 @@ class CloudChapterJsonDataStore(
                 val chapter = chaptersService.getChapters()
                 return chapter.body()!!.toString()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else

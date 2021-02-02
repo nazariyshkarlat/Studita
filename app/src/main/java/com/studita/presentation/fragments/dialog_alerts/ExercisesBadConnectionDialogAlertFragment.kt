@@ -8,7 +8,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
 import com.studita.presentation.fragments.base.BaseDialogFragment
-import com.studita.presentation.view_model.ExercisesViewModel
 import com.studita.presentation.views.CustomSnackbar
 import com.studita.utils.PrefsUtils
 import com.studita.utils.ThemeUtils
@@ -22,9 +21,7 @@ class ExercisesBadConnectionDialogAlertFragment :
         const val BAG_CONNECTION_DIALOG = "BAG_CONNECTION_DIALOG"
     }
 
-    var exercisesViewModel: ExercisesViewModel? = null
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+   /* override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setText(resources.getString(R.string.exercises_bad_connection_dialog_alert_title),
@@ -69,6 +66,6 @@ class ExercisesBadConnectionDialogAlertFragment :
         super.onDismiss(dialog)
         if (activity?.isDestroyed == false)
             (targetFragment as? DialogInterface.OnDismissListener)?.onDismiss(dialog)
-    }
+    }*/
 
 }

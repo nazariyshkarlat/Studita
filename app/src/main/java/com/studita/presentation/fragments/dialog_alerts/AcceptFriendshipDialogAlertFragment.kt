@@ -15,11 +15,10 @@ import com.studita.presentation.view_model.AcceptFriendshipDialogAlertViewModel
 import com.studita.presentation.views.CustomSnackbar
 import com.studita.utils.ThemeUtils
 import com.studita.utils.UserUtils
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
 import com.studita.domain.interactor.IsMyFriendStatus
 import kotlinx.android.synthetic.main.dialog_alert_layout.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 class AcceptFriendshipDialogAlertFragment :
     BaseDialogFragment(R.layout.dialog_alert_layout) {
@@ -39,12 +38,7 @@ class AcceptFriendshipDialogAlertFragment :
         val json = arguments?.getString("USER_DATA")
 
         val userData = json?.let {
-            GsonBuilder().apply {
-                registerTypeAdapter(
-                    IsMyFriendStatus.Success::class.java,
-                    IsMyFriendStatusDeserializer()
-                )
-            }.create().fromJson<UserData>(json, object : TypeToken<UserData>() {}.type)
+            Json.decodeFromString<UserData>(it)
         }
 
         if (userData != null) {

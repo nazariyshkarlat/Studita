@@ -5,13 +5,12 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.studita.R
 import com.studita.presentation.fragments.base.BaseDialogFragment
-import com.studita.presentation.view_model.ExercisesViewModel
 import kotlinx.android.synthetic.main.dialog_alert_layout.*
 
 class ExercisesCloseDialogAlertFragment :
     BaseDialogFragment(R.layout.dialog_alert_layout) {
 
-    var exercisesViewModel: ExercisesViewModel? = null
+  /*  var exercisesViewModel: ExercisesViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,6 +27,6 @@ class ExercisesCloseDialogAlertFragment :
             dismiss()
             activity?.finish()
         }
-    }
+    }*/
 
 }

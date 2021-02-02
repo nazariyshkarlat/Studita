@@ -287,15 +287,16 @@ class HomeFragment : BaseFragment(R.layout.home_layout), AppBarLayout.OnOffsetCh
         if(PrefsUtils.isCompletedChapterDialogWasNotShown()){
             homeFragmentViewModel?.viewModelScope?.launch (Dispatchers.Main){
                 delay(500L)
-                val dialogData = PrefsUtils.getCompletedChapterDialogData()
-                activity?.supportFragmentManager?.let {
-                    ChapterCompletedDialogAlertFragment.getInstance(
-                        dialogData.first,
-                        dialogData.second
-                    ).show(
-                        it, null
-                    )
-                    PrefsUtils.makeCompletedChapterDialogWasShown()
+                PrefsUtils.getCompletedChapterDialogData()?.let {pair->
+                    activity?.supportFragmentManager?.let {
+                        ChapterCompletedDialogAlertFragment.getInstance(
+                            pair.first,
+                            pair.second
+                        ).show(
+                            it, null
+                        )
+                        PrefsUtils.makeCompletedChapterDialogWasShown()
+                    }
                 }
             }
         }

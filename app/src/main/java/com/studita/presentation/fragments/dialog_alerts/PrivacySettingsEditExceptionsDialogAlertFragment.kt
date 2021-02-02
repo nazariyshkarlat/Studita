@@ -18,10 +18,12 @@ import com.studita.presentation.model.toUiModel
 import com.studita.presentation.view_model.PrivacySettingsDuelsExceptionsViewModel
 import com.studita.presentation.views.CustomSnackbar
 import com.studita.utils.ThemeUtils
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.home_layout.*
 import kotlinx.android.synthetic.main.privacy_duels_exceptions_dialog_alert.*
 import kotlinx.android.synthetic.main.recyclerview_layout.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class PrivacySettingsEditExceptionsDialogAlertFragment :
     BaseDialogFragment(R.layout.privacy_duels_exceptions_dialog_alert) {
@@ -155,7 +157,7 @@ class PrivacySettingsEditExceptionsDialogAlertFragment :
                 if (viewModel.editedDuelsExceptionsData.isNotEmpty())
                     putExtra(
                         "CHANGED_EXCEPTIONS",
-                        Gson().toJson(viewModel.editedDuelsExceptionsData)
+                        Json.encodeToString(viewModel.editedDuelsExceptionsData)
                     )
             })
             dismiss()

@@ -2,16 +2,19 @@ package com.studita.data.entity
 
 import com.studita.domain.entity.EditDuelsExceptionsData
 import com.studita.domain.entity.EditDuelsExceptionsRequestData
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class EditDuelsExceptionsRequest(
-    @SerializedName("auth_data") val userIdToken: UserIdToken,
-    @SerializedName("exceptions_data") val editDuelsExceptionsEntities: List<EditDuelsExceptionsEntity>
+    @SerialName("auth_data") val userIdToken: UserIdToken,
+    @SerialName("exceptions_data") val editDuelsExceptionsEntities: List<EditDuelsExceptionsEntity>
 )
 
+@Serializable
 data class EditDuelsExceptionsEntity(
-    @SerializedName("delete") val deleteFromExceptions: Boolean,
-    @SerializedName("exception_id") val exceptionId: Int
+    @SerialName("delete") val deleteFromExceptions: Boolean,
+    @SerialName("exception_id") val exceptionId: Int
 )
 
 

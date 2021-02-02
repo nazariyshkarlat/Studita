@@ -4,8 +4,6 @@ import android.content.Context
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.util.AttributeSet
-import com.studita.domain.entity.exercise.isOperator
-import com.studita.presentation.model.fromUiToDomainOperator
 import java.lang.Exception
 
 class MathLineBreakingTextView @JvmOverloads constructor(
@@ -49,4 +47,36 @@ class MathLineBreakingTextView @JvmOverloads constructor(
         }
     }
 
+    fun Char.toOperator() = when (this) {
+        '+' -> Operator.PLUS
+        '-' -> Operator.MINUS
+        '*' -> Operator.MULTIPLY
+        '/' -> Operator.DIVIDE
+        else -> throw UnsupportedOperationException("unknown operator")
+    }
+
+    fun Char.isOperator() = this == Operator.PLUS.toCharacter() ||
+            this == Operator.MINUS.toCharacter() ||
+            this == Operator.DIVIDE.toCharacter() ||
+            this == Operator.MULTIPLY.toCharacter()
+
+    fun Operator.toCharacter() = when (this) {
+        Operator.PLUS -> '+'
+        Operator.MINUS -> '-'
+        Operator.MULTIPLY -> '*'
+        Operator.DIVIDE -> '/'
+    }
+
+    enum class Operator {
+        PLUS,
+        MINUS,
+        MULTIPLY,
+        DIVIDE
+    }
+    
+    private fun Char.fromUiToDomainOperator() = when {
+        this == '÷' -> Operator.DIVIDE.toCharacter()
+        this == '×' -> Operator.MULTIPLY.toCharacter()
+        else -> this
+    }
 }

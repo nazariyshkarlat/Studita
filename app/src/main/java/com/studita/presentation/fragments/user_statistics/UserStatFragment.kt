@@ -14,14 +14,11 @@ import com.studita.presentation.fragments.error_fragments.InternetIsDisabledFrag
 import com.studita.presentation.fragments.error_fragments.ServerProblemsFragment
 import com.studita.presentation.fragments.profile.ProfileFragment
 import com.studita.presentation.listeners.ReloadPageCallback
-import com.studita.presentation.view_model.ProfileFragmentViewModel
 import com.studita.presentation.view_model.UserStatisticsViewModel
 import com.studita.utils.*
-import com.google.gson.Gson
-import com.studita.App
-import com.studita.domain.entity.UserDataData
-import com.studita.domain.interactor.UserDataStatus
 import kotlinx.android.synthetic.main.user_stat_layout.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class UserStatFragment : NavigatableFragment(R.layout.user_stat_layout), ReloadPageCallback {
 
@@ -92,7 +89,7 @@ class UserStatFragment : NavigatableFragment(R.layout.user_stat_layout), ReloadP
             UserStatPageFragment().apply {
                 arguments = bundleOf(
                     "USER_ID" to this@UserStatFragment.arguments?.get("USER_ID"),
-                    "USER_STAT" to Gson().toJson(userStat[it])
+                    "USER_STAT" to Json.encodeToString(userStat[it])
                 )
             }
         }

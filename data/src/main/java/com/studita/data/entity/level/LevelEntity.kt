@@ -2,21 +2,25 @@ package com.studita.data.entity.level
 
 import com.studita.domain.entity.LevelChildData
 import com.studita.domain.entity.LevelData
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-
+@Serializable
 data class LevelEntity(
-    val levelNumber: Int,
-    val levelName: String,
-    val levelChildren: List<LevelChildEntity>
+    @SerialName("level_number")val levelNumber: Int,
+    @SerialName("level_name")val levelName: String,
+    @SerialName("children")val levelChildren: List<LevelChildEntity>
 )
 
+@Serializable
 sealed class LevelChildEntity {
+    @Serializable
+    @SerialName("chapter")
     data class LevelChapterEntity(
-        @SerializedName("chapter_number") val chapterNumber: Int,
-        @SerializedName("title") val chapterTitle: String,
-        @SerializedName("subtitle") val chapterSubtitle: String,
-        @SerializedName("chapter_parts_count") val chapterPartsCount: Int
+        @SerialName("chapter_number") val chapterNumber: Int,
+        @SerialName("title") val chapterTitle: String,
+        @SerialName("subtitle") val chapterSubtitle: String,
+        @SerialName("chapter_parts_count") val chapterPartsCount: Int
     ) : LevelChildEntity()
 }
 

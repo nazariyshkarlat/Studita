@@ -6,14 +6,12 @@ import com.studita.domain.entity.UserIdTokenData
 import com.studita.domain.interactor.SubscribeEmailResultStatus
 import com.studita.domain.service.SyncSubscribeEmail
 import com.studita.presentation.view_model.SingleLiveEvent
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.studita.App
 import com.studita.domain.interactor.UserDataStatus
 import com.studita.domain.interactor.subscribe_email.SubscribeEmailInteractor
 import com.studita.domain.interactor.user_data.UserDataInteractor
-import com.studita.utils.PrefsUtils
-import com.studita.utils.UserUtils
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.koin.core.context.GlobalContext
 
 class SyncSubscribeEmailImpl : SyncSubscribeEmail {
@@ -27,7 +25,7 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail {
     override fun scheduleSubscribeEmail(subscribe: Boolean, userIdTokenData: UserIdTokenData) {
         val data = Data.Builder()
         data.putBoolean("SUBSCRIBE", subscribe)
-        data.putString("USER_ID_TOKEN_DATA", serializeUserIdTokenData(userIdTokenData))
+        data.putString("USER_ID_TOKEN_DATA", Json.encodeToString(userIdTokenData))
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -46,7 +44,7 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail {
             val json = inputData.getString("USER_ID_TOKEN_DATA")
             val subscribe = inputData.getBoolean("SUBSCRIBE", false)
 
-            val userIdToken = json?.let { deserializeUserIdTokenData(it) }
+            val userIdToken = json?.let { Json.decodeFromString<UserIdTokenData>(it) }
             userIdToken?.let {
                 with(GlobalContext.get().get<SubscribeEmailInteractor>()) {
                     val result = if (subscribe)
@@ -75,15 +73,5 @@ class SyncSubscribeEmailImpl : SyncSubscribeEmail {
             return Result.success()
         }
 
-        private fun deserializeUserIdTokenData(json: String): UserIdTokenData {
-            return Gson().fromJson(json, TypeToken.get(UserIdTokenData::class.java).type)
-        }
-
     }
-
-    private fun serializeUserIdTokenData(userIdTokenData: UserIdTokenData): String {
-        return Gson().toJson(userIdTokenData)
-    }
-
-
 }

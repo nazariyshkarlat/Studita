@@ -9,6 +9,8 @@ import com.studita.domain.entity.authorization.AuthorizationRequestData
 import com.studita.domain.entity.authorization.LogInResponseData
 import com.studita.domain.entity.authorization.SignInWithGoogleRequestData
 import com.studita.domain.repository.AuthorizationRepository
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class AuthorizationRepositoryImpl(private val authorizationDataStoreFactory: AuthorizationDataStoreFactoryImpl) :
     AuthorizationRepository {

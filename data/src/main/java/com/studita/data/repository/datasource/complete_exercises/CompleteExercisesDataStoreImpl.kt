@@ -23,6 +23,7 @@ class CompleteExercisesDataStoreImpl(
                     completeExercisesService.completeExercises(completeExercisesRequest)
                 return response.code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else

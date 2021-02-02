@@ -156,6 +156,7 @@ class LevelUtilsTest {
         "",
         "",
         null,
+        null,
         3,
         currentLevelXP,
         0,
@@ -163,7 +164,7 @@ class LevelUtilsTest {
         arrayListOf(2, 0, 0, 0),
         Date(),
         1,
-        true
+        true,
     )
 
 }

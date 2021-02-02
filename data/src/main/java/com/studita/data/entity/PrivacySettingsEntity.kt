@@ -4,19 +4,22 @@ import com.studita.domain.entity.DuelsInvitesFrom
 import com.studita.domain.entity.PrivacySettingsData
 import com.studita.domain.entity.PrivacySettingsRequestData
 import com.studita.domain.entity.asChar
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.io.IOException
 
+@Serializable
 data class PrivacySettingsRequest(
-    @SerializedName("auth_data") val userIdToken: UserIdToken,
-    @SerializedName("privacy_settings") val privacySettingsEntity: PrivacySettingsEntity
+    @SerialName("auth_data") val userIdToken: UserIdToken,
+    @SerialName("privacy_settings") val privacySettingsEntity: PrivacySettingsEntity
 )
 
+@Serializable
 data class PrivacySettingsEntity(
-    @SerializedName("duels_invites_from") val duelsInvitesFrom: Char?,
-    @SerializedName("show_in_ratings") val showInRatings: Boolean?,
-    @SerializedName("profile_is_visible") val profileIsVisible: Boolean?,
-    @SerializedName("duels_exceptions") val duelsExceptions: List<String>?
+    @SerialName("duels_invites_from") val duelsInvitesFrom: Char?,
+    @SerialName("show_in_ratings") val showInRatings: Boolean?,
+    @SerialName("profile_is_visible") val profileIsVisible: Boolean?,
+    @SerialName("duels_exceptions") val duelsExceptions: List<String>?
 )
 
 fun PrivacySettingsData.toRawEntity() = PrivacySettingsEntity(

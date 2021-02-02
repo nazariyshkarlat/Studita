@@ -19,6 +19,7 @@ class CloudLevelsJsonDataStore(
                 val levels = levelsService.getLevels()
                 levels.body()!!.toString()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else

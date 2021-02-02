@@ -36,6 +36,7 @@ class UsersDataStoreImpl(
                 )
                 return result.code() to result.body()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -52,6 +53,7 @@ class UsersDataStoreImpl(
                 val result = usersService.checkIsMyFriend(myId, userId)
                 return result.code() to result.body()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -68,6 +70,7 @@ class UsersDataStoreImpl(
                 val result = usersService.sendFriendship(friendActionRequest)
                 return result.code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -84,6 +87,7 @@ class UsersDataStoreImpl(
                 val result = usersService.removeFriend(friendActionRequest)
                 return result.code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -100,6 +104,7 @@ class UsersDataStoreImpl(
                 val result = usersService.acceptFriendship(friendActionRequest)
                 return result.code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -116,6 +121,7 @@ class UsersDataStoreImpl(
                 val result = usersService.rejectFriendship(friendActionRequest)
                 return result.code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -132,6 +138,7 @@ class UsersDataStoreImpl(
                 val result = usersService.cancelFriendship(friendActionRequest)
                 return result.code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -148,6 +155,7 @@ class UsersDataStoreImpl(
                 val result = usersService.hasFriends(userId)
                 return result.code() to result.body()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else

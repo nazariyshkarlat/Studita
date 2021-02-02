@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.work.*
 import com.studita.domain.entity.CompleteExercisesRequestData
 import com.studita.domain.service.SyncCompletedExercises
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.studita.domain.interactor.complete_chapter_part.CompleteExercisesInteractor
-import com.studita.domain.interactor.user_data.UserDataInteractor
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.koin.core.context.GlobalContext
 
 class SyncCompletedExercisesImpl : SyncCompletedExercises {
@@ -17,7 +17,7 @@ class SyncCompletedExercisesImpl : SyncCompletedExercises {
     }
 
     override fun scheduleCompleteExercises(completedExercisesRequestData: CompleteExercisesRequestData) {
-        val json = serializeCompleteExercisesRequest(completedExercisesRequestData)
+        val json = Json.encodeToString(completedExercisesRequestData)
         val data = Data.Builder()
         data.putString("COMPLETED_EXERCISES_REQUEST_DATA", json)
 
@@ -39,23 +39,12 @@ class SyncCompletedExercisesImpl : SyncCompletedExercises {
 
             if (json != null)
                 GlobalContext.get().get<CompleteExercisesInteractor>().completeExercises(
-                    deserializeCompleteExercisesRequest(json)
+                    Json.decodeFromString(json)
                 )
 
             return Result.success()
         }
 
-        private fun deserializeCompleteExercisesRequest(json: String): CompleteExercisesRequestData {
-            return Gson().fromJson(
-                json,
-                TypeToken.get(CompleteExercisesRequestData::class.java).type
-            )
-        }
-
-    }
-
-    private fun serializeCompleteExercisesRequest(completeExercisesRequestData: CompleteExercisesRequestData): String {
-        return Gson().toJson(completeExercisesRequestData)
     }
 
 }

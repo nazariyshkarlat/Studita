@@ -6,38 +6,41 @@ import androidx.room.PrimaryKey
 import com.studita.data.entity.UserDataEntity.Companion.TABLE_NAME
 import com.studita.domain.date.DateTimeFormat
 import com.studita.domain.entity.UserDataData
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
+@Serializable
 @Entity(tableName = TABLE_NAME)
 data class UserDataEntity(
     @ColumnInfo(name = "user_id")
-    @SerializedName("user_id") val userId: Int? = null,
+    @SerialName("user_id") val userId: Int? = null,
     @ColumnInfo(name = "user_name")
-    @SerializedName("user_name") val userName: String? = null,
+    @SerialName("user_name") val userName: String? = null,
     @ColumnInfo(name = "name")
-    @SerializedName("name") val name: String? = null,
+    @SerialName("name") val name: String? = null,
     @ColumnInfo(name = "bio")
-    @SerializedName("bio") val bio: String? = null,
+    @SerialName("bio") val bio: String? = null,
     @ColumnInfo(name = "user_public_id")
-    @SerializedName("user_public_id") val userPublicId: String? = null,
+    @SerialName("user_public_id") val userPublicId: String? = null,
     @ColumnInfo(name = "avatar_link")
-    @SerializedName("avatar_link") val avatarLink: String? = null,
+    @SerialName("avatar_link") val avatarLink: String? = null,
     @ColumnInfo(name = "current_level")
-    @SerializedName("current_level") val currentLevel: Int = 0,
+    @SerialName("current_level") val currentLevel: Int = 0,
     @ColumnInfo(name = "current_level_XP")
-    @SerializedName("current_level_XP") val currentLevelXP: Int = 0,
+    @SerialName("current_level_XP") val currentLevelXP: Int = 0,
     @ColumnInfo(name = "streak_days")
-    @SerializedName("streak_days") val streakDays: Int = 0,
+    @SerialName("streak_days") val streakDays: Int = 0,
     @ColumnInfo(name = "subscribed")
-    @SerializedName("subscribed") val isSubscribed: Boolean = false,
+    @SerialName("subscribed") val isSubscribed: Boolean = false,
     @ColumnInfo(name = "completed_parts")
-    @SerializedName("completed_parts") val completedParts: List<Int> = listOf(),
+    @SerialName("completed_parts") val completedParts: List<Int> = listOf(),
     @ColumnInfo(name = "streak_datetime")
-    @SerializedName("streak_datetime") val streakDatetime: String = "1900-01-01 00:00:00",
+    @SerialName("streak_datetime") val streakDatetime: String = "1900-01-01 00:00:00",
     @ColumnInfo(name = "today_completed_exercises")
-    @SerializedName("today_completed_exercises") val todayCompletedExercises: Int = 0,
+    @SerialName("today_completed_exercises") val todayCompletedExercises: Int = 0,
     @ColumnInfo(name = "notifications_are_checked")
-    @SerializedName("notifications_are_checked") val notificationsAreChecked: Boolean = true
+    @SerialName("notifications_are_checked") val notificationsAreChecked: Boolean = true
 ) {
     companion object {
         const val TABLE_NAME = "user_data"
@@ -62,7 +65,8 @@ fun UserDataData.toRawEntity() = UserDataEntity(
     isSubscribed,
     ArrayList(completedParts),
     DateTimeFormat().format(streakDatetime),
-    todayCompletedExercises
+    todayCompletedExercises,
+    notificationsAreChecked
 )
 
 fun UserDataEntity.toBusinessEntity() = UserDataData(

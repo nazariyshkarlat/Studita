@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.work.*
 import com.studita.domain.entity.FriendActionRequestData
 import com.studita.domain.service.SyncFriendship
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.studita.domain.interactor.user_data.UserDataInteractor
 import com.studita.domain.interactor.users.UsersInteractor
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.koin.core.context.GlobalContext
 
 class SyncFriendshipImpl : SyncFriendship {
@@ -25,7 +25,7 @@ class SyncFriendshipImpl : SyncFriendship {
         data.putInt("FRIEND_ACTION_TYPE", friendActionType.ordinal)
         data.putString(
             "FRIEND_ACTION_REQUEST_DATA",
-            serializeFriendActionRequestData(friendActionRequestData)
+            Json.encodeToString(friendActionRequestData)
         )
 
         val constraints = Constraints.Builder()
@@ -47,7 +47,7 @@ class SyncFriendshipImpl : SyncFriendship {
             val friendActionType =
                 SyncFriendship.FriendActionType.values()[inputData.getInt("FRIEND_ACTION_TYPE", 0)]
 
-            val friendActionRequestData = json?.let { deserializeFriendActionRequestData(it) }
+            val friendActionRequestData = json?.let { Json.decodeFromString<FriendActionRequestData>(it) }
             friendActionRequestData?.let {
                 with(GlobalContext.get().get<UsersInteractor>()) {
                     when (friendActionType) {
@@ -73,14 +73,6 @@ class SyncFriendshipImpl : SyncFriendship {
             return Result.success()
         }
 
-        private fun deserializeFriendActionRequestData(json: String): FriendActionRequestData {
-            return Gson().fromJson(json, TypeToken.get(FriendActionRequestData::class.java).type)
-        }
-
-    }
-
-    private fun serializeFriendActionRequestData(friendActionRequestData: FriendActionRequestData): String {
-        return Gson().toJson(friendActionRequestData)
     }
 
 }

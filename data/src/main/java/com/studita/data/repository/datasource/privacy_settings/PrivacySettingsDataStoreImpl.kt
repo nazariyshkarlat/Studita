@@ -19,6 +19,7 @@ class PrivacySettingsDataStoreImpl(
                 val result = privacySettingsService.getPrivacySettings(userIdToken)
                 return result.code() to result.body()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -34,6 +35,7 @@ class PrivacySettingsDataStoreImpl(
             try {
                 return privacySettingsService.editPrivacySettings(privacySettingsRequest).code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -58,6 +60,7 @@ class PrivacySettingsDataStoreImpl(
                 )
                 return result.code() to result.body()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -74,6 +77,7 @@ class PrivacySettingsDataStoreImpl(
                 val result = privacySettingsService.editDuelsExceptions(editDuelsExceptionsRequest)
                 return result.code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 throw ServerUnavailableException()
             }
         }

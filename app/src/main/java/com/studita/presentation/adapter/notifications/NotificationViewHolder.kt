@@ -6,14 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import com.studita.R
 import com.studita.domain.entity.NotificationType
-import com.studita.domain.entity.serializer.IsMyFriendStatusSerializer
 import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.presentation.fragments.profile.ProfileFragment
 import com.studita.presentation.fragments.dialog_alerts.AcceptFriendshipDialogAlertFragment
 import com.studita.presentation.listeners.OnSingleClickListener.Companion.setOnSingleClickListener
 import com.studita.presentation.model.NotificationsUiModel
-import com.google.gson.GsonBuilder
-import com.studita.domain.entity.NotificationData
 import com.studita.presentation.fragments.achievements.AchievementsFragment
 import com.studita.utils.*
 import kotlinx.android.synthetic.main.notifications_layout_item.view.*
@@ -53,12 +50,7 @@ class NotificationViewHolder(view: View, private val lastNotificationCheckCallba
                                     this.getAppCompatActivity()?.supportFragmentManager?.let {
                                         AcceptFriendshipDialogAlertFragment().apply {
                                             arguments =
-                                                bundleOf("USER_DATA" to GsonBuilder().apply {
-                                                    registerTypeAdapter(
-                                                        IsMyFriendStatus.Success::class.java,
-                                                        IsMyFriendStatusSerializer()
-                                                    )
-                                                }.create().toJson(model.userData))
+                                                bundleOf("USER_DATA" to Json.encodeToString(model.userData))
                                         }.show(it, null)
                                     }
                                 }

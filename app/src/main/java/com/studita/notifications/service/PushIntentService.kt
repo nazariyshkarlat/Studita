@@ -13,16 +13,11 @@ import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import coil.target.Target
 import coil.transform.CircleCropTransformation
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import com.studita.R
 import com.studita.data.entity.toNotificationType
 import com.studita.domain.entity.NotificationData
 import com.studita.domain.entity.NotificationType
 import com.studita.domain.entity.UserData
-import com.studita.domain.entity.serializer.IsMyFriendStatusDeserializer
-import com.studita.domain.entity.serializer.IsMyFriendStatusSerializer
 import com.studita.domain.entity.toStatus
 import com.studita.domain.interactor.IsMyFriendStatus
 import com.studita.domain.interactor.users.UsersInteractor
@@ -37,6 +32,7 @@ import com.studita.utils.NotificationsUtils.setText
 import com.studita.utils.PrefsUtils
 import com.studita.utils.UserUtils
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 
@@ -171,12 +167,7 @@ class PushIntentService : JobIntentService() {
             )
 
             actionIntent.putExtra("NOTIFICATION_ID", notificationId)
-            actionIntent.putExtra("USER_DATA", GsonBuilder().apply {
-                registerTypeAdapter(
-                    IsMyFriendStatus.Success::class.java,
-                    IsMyFriendStatusSerializer()
-                )
-            }.create().toJson(userData))
+            actionIntent.putExtra("USER_DATA", Json.encodeToString(userData))
 
             val openNotificationsPendingIntent = PendingIntent.getActivity(
                 this, MainMenuActivity.NOTIFICATIONS_REQUEST_CODE,

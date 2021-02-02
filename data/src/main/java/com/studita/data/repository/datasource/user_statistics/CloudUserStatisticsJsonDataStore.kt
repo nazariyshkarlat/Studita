@@ -26,6 +26,7 @@ class CloudUserStatisticsJsonDataStore(
                 val statusCode = userStatistics.code()
                 statusCode to userStatisticsJson
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else

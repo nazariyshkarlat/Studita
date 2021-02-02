@@ -2,13 +2,10 @@ package com.studita.presentation.view_model
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
-import com.studita.presentation.fragments.exercises.ExercisesDetailedStatFragment
-import com.studita.presentation.fragments.exercises.ExercisesEndFragment
-import com.studita.presentation.fragments.exercises.ExercisesResultFragment
 
 class ExercisesEndFragmentViewModel : ViewModel() {
 
-    val buttonsLayoutDividerPadding = SingleLiveEvent<Pair<Int, Int>>()
+/*    val buttonsLayoutDividerPadding = SingleLiveEvent<Pair<Int, Int>>()
 
     fun setScrollViewDividerAndPadding(res: Int, paddingTop: Int) {
         buttonsLayoutDividerPadding.value = res to paddingTop
@@ -45,6 +42,6 @@ class ExercisesEndFragmentViewModel : ViewModel() {
                 fragment.arguments = bundle
             }
             fragment
-        }
+        }*/
 
 }

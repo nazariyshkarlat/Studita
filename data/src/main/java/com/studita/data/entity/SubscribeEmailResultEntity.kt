@@ -1,11 +1,13 @@
 package com.studita.data.entity
 
 import com.studita.domain.entity.SubscribeEmailResultData
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class SubscribeEmailResultEntity(
-    @SerializedName("subscribe") val subscribe: Boolean,
-    @SerializedName("email") val email: String?
+    @SerialName("subscribe") val subscribe: Boolean,
+    @SerialName("email") val email: String?
 )
 
 fun SubscribeEmailResultEntity.toBusinessEntity() = SubscribeEmailResultData(subscribe, email)

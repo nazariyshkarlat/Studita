@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.work.*
 import com.studita.domain.entity.SignOutRequestData
 import com.studita.domain.service.SyncSignOut
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.studita.domain.interactor.authorization.AuthorizationInteractor
-import com.studita.domain.interactor.user_data.UserDataInteractor
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.koin.core.context.GlobalContext
 
 class SyncSignOutImpl : SyncSignOut {
@@ -19,7 +19,7 @@ class SyncSignOutImpl : SyncSignOut {
 
     override fun scheduleSignOut(signOutRequestData: SignOutRequestData) {
         val data = Data.Builder()
-        data.putString("SIGN_OUT_DATA", serializeSignOutData(signOutRequestData))
+        data.putString("SIGN_OUT_DATA", Json.encodeToString(signOutRequestData))
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -39,21 +39,12 @@ class SyncSignOutImpl : SyncSignOut {
             val json = inputData.getString("SIGN_OUT_DATA")
             if (json != null) {
                 val signOutRequestData =
-                    deserializeSignOutData(json)
+                    Json.decodeFromString<SignOutRequestData>(json)
                 GlobalContext.get().get<AuthorizationInteractor>().signOut(signOutRequestData)
             }
 
             return Result.success()
         }
-
-        private fun deserializeSignOutData(json: String): SignOutRequestData {
-            return Gson().fromJson(json, TypeToken.get(SignOutRequestData::class.java).type)
-        }
-
-    }
-
-    private fun serializeSignOutData(signOutRequestData: SignOutRequestData): String {
-        return Gson().toJson(signOutRequestData)
     }
 
 }

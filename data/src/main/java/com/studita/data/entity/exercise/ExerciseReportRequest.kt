@@ -4,13 +4,17 @@ import com.studita.data.entity.UserIdToken
 import com.studita.data.entity.toRawEntity
 import com.studita.domain.entity.exercise.ExerciseReportData
 import com.studita.domain.entity.exercise.ExerciseReportRequestData
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-data class ExerciseReportRequest(@SerializedName("auth_data")val userIdToken: UserIdToken?, @SerializedName("report_data") val exerciseReportEntity: ExerciseReportEntity)
+@Serializable
+data class ExerciseReportRequest(@SerialName("auth_data")val userIdToken: UserIdToken?,
+                                 @SerialName("report_data") val exerciseReportEntity: ExerciseReportEntity)
 
+@Serializable
 data class ExerciseReportEntity(
-    @SerializedName("exercise_number") val exerciseNumber: Int,
-    @SerializedName("bugs") val bugs: List<Int>
+    @SerialName("exercise_number") val exerciseNumber: Int,
+    @SerialName("bugs") val bugs: List<Int>
 )
 
 fun ExerciseReportRequestData.toRawEntity() = ExerciseReportRequest(userIdTokenData?.toRawEntity(), exerciseReportData.toRawEntity())

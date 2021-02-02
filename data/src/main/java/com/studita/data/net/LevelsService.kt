@@ -1,9 +1,8 @@
 package com.studita.data.net
 
-import com.google.gson.JsonArray
+import kotlinx.serialization.json.JsonArray
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface LevelsService {
 

@@ -1,11 +1,13 @@
 package com.studita.data.entity
 
 import com.studita.domain.entity.FriendActionRequestData
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class FriendActionRequest(
-    @SerializedName("auth_data") val userIdToken: UserIdToken,
-    @SerializedName("friend_id") val friendId: Int
+    @SerialName("auth_data") val userIdToken: UserIdToken,
+    @SerialName("friend_id") val friendId: Int
 )
 
 fun FriendActionRequest.toBusinessEntity() =

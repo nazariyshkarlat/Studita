@@ -1,4 +1,4 @@
-package com.studita.di.data
+package com.studita.di.data.exercise
 
 import com.studita.data.database.StuditaDatabase
 import com.studita.data.net.CompleteExercisesService

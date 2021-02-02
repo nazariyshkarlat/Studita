@@ -1,11 +1,13 @@
 package com.studita.data.entity
 
 import com.studita.domain.entity.PushTokenData
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PushTokenEntity(
-    @SerializedName("token") val token: String,
-    @SerializedName("device_id") val deviceId: String
+    @SerialName("token") val token: String,
+    @SerialName("device_id") val deviceId: String
 )
 
 fun PushTokenEntity.toBusinessEntity() = PushTokenData(token, deviceId)

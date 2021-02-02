@@ -62,6 +62,7 @@ class AuthorizationDataStoreImpl(
                 val signUp = authorizationService.signUp(authorizationRequestEntity)
                 signUp.code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -76,6 +77,7 @@ class AuthorizationDataStoreImpl(
             try {
                 return authorizationService.signOut(signOutRequestEntity).code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -101,6 +103,7 @@ class AuthorizationDataStoreImpl(
                 val statusCode = signIn.code()
                 statusCode to signInResult
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else

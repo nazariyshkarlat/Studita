@@ -30,6 +30,7 @@ class NotificationsDataStoreImpl(
                 )
                 result.code() to result.body()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else
@@ -45,6 +46,7 @@ class NotificationsDataStoreImpl(
                 val result = notificationsService.setNotificationsAreChecked(userIdToken)
                 result.code()
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else

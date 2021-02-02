@@ -19,7 +19,7 @@ class OfflineDataRepositoryImpl(
         var code = 409
         if (!diskOfflineDataDataStore.offlineDataIsCached()) {
             val offlineDataPair = cloudOfflineDataDataStore.getOfflineDataJson(this)
-            diskOfflineDataDataStore.saveOfflineDataJson(offlineDataPair.second.levelsData, offlineDataPair.second.chaptersData, offlineDataPair.second.exercisesData)
+            diskOfflineDataDataStore.saveOfflineDataJson(offlineDataPair.second.levelsData, offlineDataPair.second.chaptersData)
             code = offlineDataPair.first
         }
         return code

@@ -1,18 +1,14 @@
 package com.studita.data.repository.datasource.user_statistics
 
 import com.studita.data.entity.UserStatisticsEntity
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 class UserStatisticsDataStoreImpl(private val useStatisticsJsonDataStore: UserStatisticsJsonDataStore) :
     UserStatisticsDataStore {
-
-    private val type: Type = object : TypeToken<List<UserStatisticsEntity>>() {}.type
-
-    override suspend fun getUserStatisticsEntity(userId: Int): Pair<Int, List<UserStatisticsEntity>> {
-        val pair = useStatisticsJsonDataStore.getUserStatisticsJson(userId)
-        return pair.first to Gson().fromJson(pair.second, type)
-    }
-
+    
+    override suspend fun getUserStatisticsEntity(userId: Int) =
+        useStatisticsJsonDataStore.getUserStatisticsJson(userId).let {
+            it.first to (it.second?.let {it1-> Json.decodeFromString<List<UserStatisticsEntity>>(it1) } ?: emptyList())
+        }
 }

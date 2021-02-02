@@ -24,9 +24,9 @@ import com.studita.presentation.listeners.ReloadPageCallback
 import com.studita.presentation.view_model.PrivacySettingsViewModel
 import com.studita.presentation.views.CustomSnackbar
 import com.studita.utils.*
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.privacy_settings_layout.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 
 class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_layout), ReloadPageCallback {
@@ -272,9 +272,8 @@ class PrivacySettingsFragment : NavigatableFragment(R.layout.privacy_settings_la
         if (resultCode == RESULT_OK && requestCode == 345) {
             if (data?.extras?.containsKey("CHANGED_EXCEPTIONS") == true) {
                 val json = data.getStringExtra("CHANGED_EXCEPTIONS") as String
-                val changedExceptions = Gson().fromJson<ArrayList<EditDuelsExceptionsData>>(
-                    json,
-                    object : TypeToken<ArrayList<EditDuelsExceptionsData>>() {}.type
+                val changedExceptions = Json.decodeFromString<ArrayList<EditDuelsExceptionsData>>(
+                    json
                 )
 
                 val privacySettingsData = privacySettingsViewModel.privacySettingsStatus.value

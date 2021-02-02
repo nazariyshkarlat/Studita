@@ -8,6 +8,8 @@ import com.studita.domain.date.DateTimeFormat
 import com.studita.domain.exception.NetworkConnectionException
 import com.studita.domain.exception.ServerUnavailableException
 import kotlinx.coroutines.CancellationException
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.util.*
 
 class CloudUserDataDataStore(
@@ -29,6 +31,7 @@ class CloudUserDataDataStore(
                 val entity = userDataAsync.body()!!
                 return userDataAsync.code() to entity
             } catch (e: Exception) {
+                e.printStackTrace()
                 if (e is CancellationException)
                     throw e
                 else

@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.work.*
 import com.studita.domain.entity.exercise.ExerciseReportRequestData
 import com.studita.domain.service.SyncExercisesReports
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.studita.domain.interactor.exercises.ExerciseResultInteractor
-import com.studita.domain.interactor.user_data.UserDataInteractor
+import com.studita.domain.interactor.exercises.ExerciseReportnteractor
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.GlobalContext.get
 
@@ -18,7 +18,7 @@ class SyncExercisesReportsImpl : SyncExercisesReports {
     }
 
     override fun scheduleSendExerciseReport(exerciseReportRequestData: ExerciseReportRequestData) {
-        val json = serializeExerciseReportRequestData(exerciseReportRequestData)
+        val json = Json.encodeToString(exerciseReportRequestData)
         val data = Data.Builder()
         data.putString("EXERCISE_REPORT_DATA", json)
 
@@ -39,22 +39,10 @@ class SyncExercisesReportsImpl : SyncExercisesReports {
             val json = inputData.getString("EXERCISE_REPORT_DATA")
 
             if (json != null)
-                GlobalContext.get().get<ExerciseResultInteractor>().sendExerciseReport(deserializeExerciseReportRequestData(json))
+                GlobalContext.get().get<ExerciseReportnteractor>().sendExerciseReport(Json.decodeFromString(json))
 
             return Result.success()
         }
 
-        private fun deserializeExerciseReportRequestData(json: String): ExerciseReportRequestData {
-            return Gson().fromJson(
-                json,
-                TypeToken.get(ExerciseReportRequestData::class.java).type
-            )
-        }
-
     }
-
-    private fun serializeExerciseReportRequestData(exerciseReportRequestData: ExerciseReportRequestData): String {
-        return Gson().toJson(exerciseReportRequestData)
-    }
-
 }

@@ -2,8 +2,6 @@ package com.studita.utils
 
 import android.content.SharedPreferences
 import com.studita.data.cache.authentication.LogInCacheImpl
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -21,7 +19,9 @@ object PrefsUtils {
     }
 
     fun getLocalNotificationsIds(): ArrayList<Int>{
-        return Gson().fromJson(GlobalContext.get().get<SharedPreferences>().getString("LOCAL_NOTIFICATIONS_IDS", "[]"), object : TypeToken<ArrayList<Int>>(){}.type)
+        return GlobalContext.get().get<SharedPreferences>().getString("LOCAL_NOTIFICATIONS_IDS", "[]")?.let {
+            Json.decodeFromString<ArrayList<Int>>(it)
+        } ?: ArrayList()
     }
 
     fun clearLocalNotificationsIds(){
@@ -29,14 +29,14 @@ object PrefsUtils {
     }
 
     fun setLocalNotificationId(id: Int){
-        return GlobalContext.get().get<SharedPreferences>().edit().putString("LOCAL_NOTIFICATIONS_IDS", Gson().toJson(getLocalNotificationsIds().apply {
+        return GlobalContext.get().get<SharedPreferences>().edit().putString("LOCAL_NOTIFICATIONS_IDS", Json.encodeToString(getLocalNotificationsIds().apply {
             add(id)
         })).apply()
     }
 
 
     fun makeCompletedChapterDialogWasNotShown(exercisesCount: Int, chapterName: String) {
-        GlobalContext.get().get<SharedPreferences>().edit().putString("COMPLETED_CHAPTER_DIALOG", Gson().toJson(
+        GlobalContext.get().get<SharedPreferences>().edit().putString("COMPLETED_CHAPTER_DIALOG", Json.encodeToString(
             mapOf("EXERCISES_COUNT" to exercisesCount, "CHAPTER_NAME" to chapterName))).apply()
     }
 
@@ -46,9 +46,11 @@ object PrefsUtils {
 
     fun isCompletedChapterDialogWasNotShown() = GlobalContext.get().get<SharedPreferences>().contains("COMPLETED_CHAPTER_DIALOG")
 
-    fun getCompletedChapterDialogData() : Pair<Int, String> {
-        return with(Gson().fromJson<Map<String, Any>>(GlobalContext.get().get<SharedPreferences>().getString("COMPLETED_CHAPTER_DIALOG", null), object : TypeToken<Map<String, Any>>() { }.type)){
-            (this["EXERCISES_COUNT"] as Double).toInt() to this["CHAPTER_NAME"] as String
+    fun getCompletedChapterDialogData() : Pair<Int, String>? {
+        return GlobalContext.get().get<SharedPreferences>().getString("COMPLETED_CHAPTER_DIALOG", null)?.let {
+            with(Json.decodeFromString<Map<String, Any>>(it)) {
+                (this["EXERCISES_COUNT"] as Double).toInt() to this["CHAPTER_NAME"] as String
+            }
         }
     }
 
