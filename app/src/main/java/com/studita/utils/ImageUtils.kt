@@ -1,20 +1,22 @@
 package com.studita.utils
 
+import android.R.array
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
+import android.graphics.*
 import android.graphics.Bitmap.CompressFormat
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Matrix
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.VectorDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.view.View
-import androidx.exifinterface.media.ExifInterface
-import androidx.annotation.RequiresApi
+import androidx.annotation.ColorInt
 import androidx.core.content.FileProvider
+import androidx.core.graphics.get
+import androidx.exifinterface.media.ExifInterface
+import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable
+import com.studita.utils.ImageUtils.toBooleanArray
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -172,5 +174,44 @@ object ImageUtils {
         return inSampleSize
     }
 
+    fun Drawable.getBitmap(): Bitmap {
+        val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        setBounds(0, 0, canvas.width, canvas.height)
+        draw(canvas)
+        return bitmap
+    }
 
+    fun Bitmap.toBooleanArray(): Array<Array<Boolean>>{
+        val booleanArray = Array(this.height){Array(this.width){false} }
+        for(x: Int in 0 until width){
+            for(y: Int in 0 until height){
+                if(this[x, y] != Color.TRANSPARENT)
+                    booleanArray[y][x] = true
+            }
+        }
+        return booleanArray
+    }
+
+    @ColorInt
+    fun Bitmap.getOrNull(x: Int, y: Int): Int?{
+        return if((y < 0 || x < 0)  || (height <= y || width <= x)) null
+        else this[x, y]
+    }
+
+    fun Array<Array<Boolean>>.toBitmap(@ColorInt strokeColor: Int): Bitmap{
+        val bitmap = Bitmap.createBitmap(this[0].size, this.size, Bitmap.Config.ARGB_8888)
+        val intArray = IntArray(this.size*this[0].size)
+        for(y: Int in this.indices){
+            for(x: Int in this[y].indices){
+                intArray[x+y*this[y].size] = if(this[y][x]) strokeColor else Color.TRANSPARENT
+            }
+        }
+        bitmap.setPixels(intArray, 0, this[0].size, 0, 0, this[0].size, this.size)
+        return bitmap
+    }
+
+    val Bitmap.lastXIndex get() = width-1
+    val Bitmap.lastYIndex get() = height-1
 }
